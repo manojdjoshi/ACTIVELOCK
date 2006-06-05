@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xsd:schema targetNamespace="DTPicker" elementFormDefault="qualified" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="DTPicker" xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense" vs:friendlyname="DateTimPicker" vs:iscasesensitive="false" vs:requireattributequotes="false">
+	<xsd:annotation>
+		<xsd:documentation>
+    		DateTimPicker Schema
+    		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:element name="DateTimePicker">
+		<xsd:complexType>
+			<xsd:sequence />
+			<xsd:attributeGroup ref="DateTimePickerAttributes" />
+		</xsd:complexType>
+	</xsd:element>
+	<!-- <ttc:DriveSpaceCtrl attributes > -->
+	<xsd:attributeGroup name="DateTimePickerAttributes" vs:noambientcontentmodel="true">
+		<xsd:attribute name="FormatType">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="SHORT" />
+					<xsd:enumeration value="LONG" />
+			</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="SelectedDate" type="xsd:string" />
+		<xsd:attributeGroup ref="WebControlAttributes" />
+	</xsd:attributeGroup>
+	<!-- < WebControl attributes > -->
+	<xsd:attributeGroup name="WebControlAttributes">
+		<xsd:attribute name="Width" type="ui4" />
+		<xsd:attribute name="style" type="xsd:string" />
+		
+		<xsd:attribute name="Runat">
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="server" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attributeGroup ref="ControlAttributes" />
+	</xsd:attributeGroup>
+	<!-- < Control attributes > -->
+	<xsd:attributeGroup name="ControlAttributes">
+		<xsd:attribute name="Visible" type="xsd:boolean" />
+		<xsd:attribute name="ID" type="xsd:string" />
+		<xsd:attribute name="OnLoad" vs:omtype="event" />
+		<xsd:attribute name="OnDataBinding" vs:omtype="event" />
+		<xsd:attribute name="OnPreRender" vs:omtype="event" />
+		<xsd:attribute name="OnInit" vs:omtype="event" />
+		<xsd:attribute name="OnUnload" vs:omtype="event" />
+		<xsd:attribute name="OnDisposed" vs:omtype="event" />
+	</xsd:attributeGroup>
+</xsd:schema>
