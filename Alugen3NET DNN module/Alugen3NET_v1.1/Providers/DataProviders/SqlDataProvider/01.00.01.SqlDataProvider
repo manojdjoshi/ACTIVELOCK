@@ -1,0 +1,435 @@
+﻿/************************************************************/
+/*****              SQLDataProvider                     *****/
+/*****              Alugen3NET               *****/
+/*****                                                  *****/
+/***** Note: To manually execute this script you must   *****/
+/*****       perform a search and replace operation     *****/
+/*****       for {databaseOwner} and {objectQualifier}  *****/
+/*****                                                  *****/
+/************************************************************/
+
+/* Insert here the code to create tables and stored procs   */
+
+/************************************************************/
+/***               CASCADE UPDATE & DELETE                ***/
+/************************************************************/
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCode_Modules_FK') and OBJECTPROPERTY(id, N'IsForeignKey') = 1)
+ALTER TABLE {databaseOwner}{objectQualifier}AlugenCode DROP CONSTRAINT {objectQualifier}AlugenCode_Modules_FK
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCustomers_Modules_FK') and OBJECTPROPERTY(id, N'IsForeignKey') = 1)
+ALTER TABLE {databaseOwner}{objectQualifier}AlugenCustomers DROP CONSTRAINT {objectQualifier}AlugenCustomers_Modules_FK
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenProducts_Modules_FK') and OBJECTPROPERTY(id, N'IsForeignKey') = 1)
+ALTER TABLE {databaseOwner}{objectQualifier}AlugenProducts DROP CONSTRAINT {objectQualifier}AlugenProducts_Modules_FK
+
+ALTER TABLE {databaseOwner}{objectQualifier}AlugenCode 
+    ADD CONSTRAINT {objectQualifier}AlugenCode_Modules_FK FOREIGN KEY 
+	(
+		[ModuleID]
+	) REFERENCES {databaseOwner}{objectQualifier}Modules (
+		[ModuleID]
+	) ON DELETE CASCADE  ON UPDATE CASCADE 
+
+ALTER TABLE {databaseOwner}{objectQualifier}AlugenCustomers 
+    ADD CONSTRAINT {objectQualifier}AlugenCustomers_Modules_FK FOREIGN KEY 
+	(
+		[ModuleID]
+	) REFERENCES {databaseOwner}{objectQualifier}Modules (
+		[ModuleID]
+	) ON DELETE CASCADE  ON UPDATE CASCADE 
+
+ALTER TABLE {databaseOwner}{objectQualifier}AlugenProducts ADD 
+	CONSTRAINT {objectQualifier}AlugenProducts_Modules_FK FOREIGN KEY 
+	(
+		[ModuleID]
+	) REFERENCES {databaseOwner}{objectQualifier}Modules (
+		[ModuleID]
+	) ON DELETE CASCADE  ON UPDATE CASCADE 
+GO
+
+/************************************************************/
+/***   Adding GenByCustomer column to AlugenCode table    ***/
+/************************************************************/
+
+ALTER TABLE {databaseOwner}{objectQualifier}AlugenCode
+	DROP CONSTRAINT {objectQualifier}AlugenCode_Modules_FK
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCode_TMP') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table {databaseOwner}{objectQualifier}AlugenCode_TMP
+GO
+
+CREATE TABLE {databaseOwner}{objectQualifier}AlugenCode_TMP
+	(
+	CodeID int NOT NULL IDENTITY (1, 1),
+	PortalID int NOT NULL,
+	ModuleID int NOT NULL,
+	CustomerID int NOT NULL,
+	ProductID int NOT NULL,
+	CodeUserName varchar(100) NOT NULL,
+	CodeInstalationCode varchar(250) NOT NULL,
+	CodeActivationCode varchar(500) NOT NULL,
+	CodeLicenseType int NOT NULL,
+	CodeExpireDate datetime NOT NULL,
+	CodeDays int NOT NULL,
+	CodeRegisteredLevel int NOT NULL,
+	GenByCustomer bit NOT NULL,
+	CreatedByUser nvarchar(100) NULL,
+	CreatedDate datetime NULL
+	)  ON [PRIMARY]
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}AlugenCode_TMP ADD CONSTRAINT
+	{objectQualifier}AlugenCode_CodeDays_DF DEFAULT (0) FOR CodeDays
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}AlugenCode_TMP ADD CONSTRAINT
+	{objectQualifier}AlugenCode_GenByCustomer_DF DEFAULT 0 FOR GenByCustomer
+GO
+SET IDENTITY_INSERT {databaseOwner}{objectQualifier}AlugenCode_TMP ON
+GO
+IF EXISTS(SELECT * FROM {databaseOwner}{objectQualifier}AlugenCode)
+	 EXEC('INSERT INTO {databaseOwner}{objectQualifier}AlugenCode_TMP (CodeID, PortalID, ModuleID, CustomerID, ProductID, CodeUserName, CodeInstalationCode, CodeActivationCode, CodeLicenseType, CodeExpireDate, CodeDays, CodeRegisteredLevel, CreatedByUser, CreatedDate)
+		SELECT CodeID, PortalID, ModuleID, CustomerID, ProductID, CodeUserName, CodeInstalationCode, CodeActivationCode, CodeLicenseType, CodeExpireDate, CodeDays, CodeRegisteredLevel, CreatedByUser, CreatedDate FROM {databaseOwner}{objectQualifier}AlugenCode TABLOCKX')
+GO
+SET IDENTITY_INSERT {databaseOwner}{objectQualifier}AlugenCode_TMP OFF
+GO
+DROP TABLE {databaseOwner}{objectQualifier}AlugenCode
+GO
+EXECUTE sp_rename N'{databaseOwner}{objectQualifier}AlugenCode_TMP', N'{objectQualifier}AlugenCode', 'OBJECT'
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}AlugenCode ADD CONSTRAINT
+	[PK_fs_AlugenCode] PRIMARY KEY CLUSTERED 
+	(
+	CodeID
+	) ON [PRIMARY]
+
+GO
+ALTER TABLE {databaseOwner}{objectQualifier}AlugenCode WITH NOCHECK ADD CONSTRAINT
+	{objectQualifier}AlugenCode_Modules_FK FOREIGN KEY
+	(
+	ModuleID
+	) REFERENCES {databaseOwner}{objectQualifier}Modules
+	(
+	ModuleID
+	) ON UPDATE CASCADE
+	 ON DELETE CASCADE
+	
+GO
+
+/************************************************************/
+/*** Update sp for AlugenCode mod by GenByCustomer new col **/
+/************************************************************/
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCodeAdd') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenCodeAdd
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCodeGet') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenCodeGet
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCodeList') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenCodeList
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCodeListByCustomer') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenCodeListByCustomer
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCodeListByProduct') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenCodeListByProduct
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCodeListFull') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenCodeListFull
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCodeUpdate') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenCodeUpdate
+GO
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenCodeAdd
+	@PortalID int,
+	@ModuleID int,
+	@CustomerID int,
+	@ProductID int,
+	@CodeUserName varchar(100),
+	@CodeInstalationCode varchar(250),
+	@CodeActivationCode varchar(500),
+	@CodeLicenseType int,
+	@CodeExpireDate datetime,
+	@CodeDays int,
+	@CodeRegisteredLevel int,
+	@GenByCustomer bit,
+	@UserName nvarchar(100),
+	@CreatedDate datetime
+AS
+
+INSERT INTO  {objectQualifier}AlugenCode (
+	CreatedByUser,
+	CreatedDate,
+	[PortalID],
+	[ModuleID],
+	[CustomerID],
+	[ProductID],
+	[CodeUserName],
+	[CodeInstalationCode],
+	[CodeActivationCode],
+	[CodeLicenseType],
+	[CodeExpireDate],
+	[CodeDays],
+	[CodeRegisteredLevel],
+	[GenByCustomer]
+) VALUES (
+	@UserName,
+	@CreatedDate,
+	@PortalID,
+	@ModuleID,
+	@CustomerID,
+	@ProductID,
+	@CodeUserName,
+	@CodeInstalationCode,
+	@CodeActivationCode,
+	@CodeLicenseType,
+	@CodeExpireDate,
+	@CodeDays,
+	@CodeRegisteredLevel,
+	@GenByCustomer
+)
+
+select SCOPE_IDENTITY()
+GO
+
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenCodeGet
+	@CodeID int
+AS
+
+SELECT
+	[CodeID],
+	[CreatedDate],
+	[CreatedByUser],
+	[PortalID],
+	[ModuleID],
+	[CustomerID],
+	[ProductID],
+	[CodeUserName],
+	[CodeInstalationCode],
+	[CodeActivationCode],
+	[CodeLicenseType],
+	[CodeExpireDate],
+	[CodeDays],
+	[CodeRegisteredLevel],
+	[GenByCustomer]
+FROM  {objectQualifier}AlugenCode
+WHERE
+	[CodeID] = @CodeID
+GO
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenCodeList
+	@PortalID int,
+	@ModuleID int
+
+AS
+
+SELECT
+	[CodeID],
+	[CreatedDate],
+	[CreatedByUser],
+	[PortalID],
+	[ModuleID],
+	[CustomerID],
+	[ProductID],
+	[CodeUserName],
+	[CodeInstalationCode],
+	[CodeActivationCode],
+	[CodeLicenseType],
+	[CodeExpireDate],
+	[CodeDays],
+	[CodeRegisteredLevel],
+	[GenByCustomer]
+FROM  {objectQualifier}AlugenCode
+
+WHERE
+	[PortalID] = @portalID AND
+	[ModuleID] = @ModuleID
+GO
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenCodeListByCustomer
+	@PortalID int,
+	@ModuleID int,
+	@CustomerID int
+
+AS
+
+SELECT
+	[CodeID],
+	[CreatedDate],
+	[CreatedByUser],
+	[PortalID],
+	[ModuleID],
+	[CustomerID],
+	[ProductID],
+	[CodeUserName],
+	[CodeInstalationCode],
+	[CodeActivationCode],
+	[CodeLicenseType],
+	[CodeExpireDate],
+	[CodeDays],
+	[CodeRegisteredLevel],
+	[GenByCustomer]
+FROM  {objectQualifier}AlugenCode
+
+WHERE
+	[PortalID] = @portalID AND
+	[ModuleID] = @ModuleID AND
+	[CustomerID] = @CustomerID
+GO
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenCodeListByProduct
+	@PortalID int,
+	@ModuleID int,
+	@ProductID int
+
+AS
+
+SELECT
+	[CodeID],
+	[CreatedDate],
+	[CreatedByUser],
+	[PortalID],
+	[ModuleID],
+	[CustomerID],
+	[ProductID],
+	[CodeUserName],
+	[CodeInstalationCode],
+	[CodeActivationCode],
+	[CodeLicenseType],
+	[CodeExpireDate],
+	[CodeDays],
+	[CodeRegisteredLevel],
+	[GenByCustomer]
+FROM  {objectQualifier}AlugenCode
+
+WHERE
+	[PortalID] = @portalID AND
+	[ModuleID] = @ModuleID AND
+	[ProductID] = @ProductID
+GO
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenCodeListFull
+	@PortalID int,
+	@ModuleID int
+
+AS
+
+SELECT
+	A.[CodeID],
+	A.[CreatedDate],
+	A.[CreatedByUser],
+	A.[PortalID],
+	A.[ModuleID],
+	A.[CustomerID],
+	A.[ProductID],
+	A.[CodeUserName],
+	A.[CodeInstalationCode],
+	A.[CodeActivationCode],
+	A.[CodeLicenseType],
+	A.[CodeExpireDate],
+	A.[CodeDays],
+	A.[CodeRegisteredLevel],
+	A.[GenByCustomer],
+	B.[CustomerName],
+	C.[ProductName],
+	C.[ProductVersion]
+FROM  {objectQualifier}AlugenCode A
+INNER JOIN {objectQualifier}AlugenCustomers B
+ON A.CustomerID = B.CustomerID
+INNER JOIN {objectQualifier}AlugenProducts C
+ON A.ProductID = C.ProductID
+
+WHERE
+	A.[PortalID] = @portalID AND
+	A.[ModuleID] = @ModuleID
+GO
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenCodeUpdate
+	@CodeID int, 
+	@PortalID int, 
+	@ModuleID int, 
+	@CustomerID int, 
+	@ProductID int, 
+	@CodeUserName varchar(100), 
+	@CodeInstalationCode varchar(250), 
+	@CodeActivationCode varchar(500), 
+	@CodeLicenseType int, 
+	@CodeExpireDate datetime, 
+	@CodeDays int,
+	@CodeRegisteredLevel int ,
+	@GenByCustomer bit,
+	@UserName  nvarchar(100),
+	@CreatedDate datetime
+AS
+
+UPDATE  {objectQualifier}AlugenCode SET
+	[PortalID] = @PortalID,
+	[ModuleID] = @ModuleID,
+	[CustomerID] = @CustomerID,
+	[ProductID] = @ProductID,
+	[CodeUserName] = @CodeUserName,
+	[CodeInstalationCode] = @CodeInstalationCode,
+	[CodeActivationCode] = @CodeActivationCode,
+	[CodeLicenseType] = @CodeLicenseType,
+	[CodeExpireDate] = @CodeExpireDate,
+	[CodeDays] = @CodeDays,
+	[CodeRegisteredLevel] = @CodeRegisteredLevel,
+	[GenByCustomer] = @GenByCustomer,
+	[CreatedByUser] = @UserName,
+	[CreatedDate] = 	@CreatedDate
+WHERE
+	[CodeID] = @CodeID
+GO
+
+/************************************************************/
+/***  create sp AlugenCodeListFullForUser                 ***/
+/************************************************************/
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCodeListFullForUser') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenCodeListFullForUser
+GO
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenCodeListFullForUser
+	@ForUser nvarchar(100),
+	@PortalID int,
+	@ModuleID int
+
+AS
+
+SELECT
+	A.[CodeID],
+	A.[CreatedDate],
+	A.[CreatedByUser],
+	A.[PortalID],
+	A.[ModuleID],
+	A.[CustomerID],
+	A.[ProductID],
+	A.[CodeUserName],
+	A.[CodeInstalationCode],
+	A.[CodeActivationCode],
+	A.[CodeLicenseType],
+	A.[CodeExpireDate],
+	A.[CodeDays],
+	A.[CodeRegisteredLevel],
+	A.[GenByCustomer],
+	B.[CustomerName],
+	C.[ProductName],
+	C.[ProductVersion]
+FROM  {objectQualifier}AlugenCode A
+INNER JOIN {objectQualifier}AlugenCustomers B
+ON A.CustomerID = B.CustomerID
+INNER JOIN {objectQualifier}AlugenProducts C
+ON A.ProductID = C.ProductID
+
+WHERE
+	A.[PortalID] = @portalID AND
+	A.[ModuleID] = @ModuleID AND
+	B.[AssociatedUser] = @ForUser

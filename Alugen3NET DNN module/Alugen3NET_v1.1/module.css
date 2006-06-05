@@ -1,0 +1,174 @@
+/* ================================
+    CSS STYLES FOR Module Alugen3NET
+   ================================
+*/
+/* Sortable tables */
+table.sortable a.sortheader {
+    background-color:#eee;
+    color:#333333;
+    font-weight: bold;
+    text-decoration: none;
+    display: block;
+    padding-left: 3px;
+    border: solid 1px #c0c0c0;
+    margin: 1px 1px 1px 1px;
+    height: 18px;
+}
+table.sortable span.sortarrow {
+    color: green;
+    text-decoration: none;
+}
+table.sortable a:hover 
+{
+	color:green;
+	border: solid 1px orange;
+	background-color: white; 
+}
+table.sortable
+{
+	border: solid 0px red;
+}
+
+.thbody
+{
+	border: solid 1px #c0c0c0;
+	padding: 0px;
+	height: 18px;
+}
+
+.tdbody
+{
+	border: solid 1px #c0c0c0;
+	margin-left: 10px;
+	padding: 0px;
+	padding-left: 3px;
+	padding-right: 2px;
+	padding-top: 1px;
+}
+
+.multipage{
+    color: #505050;
+    font-weight: bold;
+    text-decoration: none;
+    text-align:center;
+    border: solid 1px #c0c0c0;
+    border-bottom: solid 1px #909090;
+    font-family: Tahoma, Arial, Helvetica;
+    font-size: 11px;
+    font-weight: bold;
+}
+.multipagehover{
+    color: green;
+    background-color: #f0f0f0;
+    font-weight: bold;
+    text-decoration: none;
+    text-align:center;
+    border: solid 1px orange;
+    cursor:pointer;
+    cursor:hand;
+    border-bottom: solid 1px #909090;
+    font-family: Tahoma, Arial, Helvetica;
+    font-size: 11px;
+    font-weight: bold;
+}
+.multipageactive{
+    color: #101010;
+    font-weight: bold;
+    text-decoration: none;
+    text-align:center;
+    border-top: solid 1px #909090;
+    border-left: solid 1px #909090;
+    border-right: solid 1px #909090;
+    border-bottom: solid 0px #909090;
+    font-family: Tahoma, Arial, Helvetica;
+    font-size: 11px;
+    font-weight: bold;
+}
+.tdspace
+{
+	font-family: Tahoma, Arial, Helvetica;
+  font-size:  11px;
+  font-weight:    bold;
+  color: #003366;
+	border-bottom: solid 1px #909090;
+}
+.bodytable
+{
+	border-top:solid 0px;
+  border-left: solid 1px #909090;
+  border-right: solid 1px #909090;
+  border-bottom: solid 1px #909090;
+}
+.combo
+{
+	border: solid 1px #909090;
+	background-color:Transparent;
+	color:Maroon;
+	margin: 0px 0px 0px 0px;
+}
+.tablemessage
+{
+	background-color: #EEEEEE;
+	border: solid 1px #AEAEAE;
+	margin-bottom: 5px;
+}
+.messagevalid
+{
+	color: green;
+}
+.messageerror
+{
+	color: #FF3030;
+}
+
+.popupdivtable
+{
+	background-color:Yellow;
+	border: solid 1px black;
+	text-align:center; 
+	width: 100%;
+	height: 100%;
+	vertical-align:middle;
+	font-weight:bold;
+	font-family: Tahoma, Arial, Helvetica;
+	font-size:small;
+	z-index:auto;
+	margin: 0px 0px 0px 0px;
+}
+.popupdivtitle
+{
+	background-color:navy;
+	color:White;
+	padding:2px  2px 2px 2px;
+	border: solid 0px navy;
+	text-align:left; 
+	width: 100%;
+	vertical-align:middle;
+	font-weight:bold;
+	font-family: Tahoma, Arial, Helvetica;
+	font-size:smaller;
+	cursor:move;
+}
+.popupdivcontent
+{
+	background-color:Yellow;
+	border: none 0px black;
+	text-align:center; 
+	width: 100%;
+	height: 100%;
+	vertical-align:middle;
+	font-weight:bold;
+	font-family: Tahoma, Arial, Helvetica;
+	font-size:small;
+}
+
+.textenabled
+{
+	background-color:#FFFFFF;
+	color:#000000;
+}
+.textdisabled
+{
+	background-color:#DBDBDB;
+	color:#424242;
+}

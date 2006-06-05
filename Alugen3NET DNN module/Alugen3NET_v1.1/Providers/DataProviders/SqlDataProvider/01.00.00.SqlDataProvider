@@ -1,0 +1,869 @@
+﻿/************************************************************/
+/*****              SQLDataProvider                     *****/
+/*****              Alugen3NET               *****/
+/*****                                                  *****/
+/***** Note: To manually execute this script you must   *****/
+/*****       perform a search and replace operation     *****/
+/*****       for {databaseOwner} and {objectQualifier}  *****/
+/*****                                                  *****/
+/************************************************************/
+
+/* Insert here the code to create tables and stored procs   */
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCodeAdd') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenCodeAdd
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCodeListByCustomer') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenCodeListByCustomer
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCodeListByProduct') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenCodeListByProduct
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCodeListFull') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenCodeListFull
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCodeUpdate') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenCodeUpdate
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCustomersAdd') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenCustomersAdd
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCustomersDelete') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenCustomersDelete
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCustomersGet') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenCustomersGet
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCustomersList') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenCustomersList
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCustomersUpdate') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenCustomersUpdate
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenProductsAdd') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenProductsAdd
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenProductsDelete') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenProductsDelete
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenProductsGet') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenProductsGet
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenProductsList') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenProductsList
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenProductsListFull') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenProductsListFull
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenProductsUpdate') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenProductsUpdate
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCodeDelete') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenCodeDelete
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCodeGet') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenCodeGet
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCodeList') and OBJECTPROPERTY(id, N'IsProcedure') = 1)
+drop procedure {databaseOwner}{objectQualifier}AlugenCodeList
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCode') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table {databaseOwner}{objectQualifier}AlugenCode
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenCustomers') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table {databaseOwner}{objectQualifier}AlugenCustomers
+GO
+
+if exists (select * from dbo.sysobjects where id = object_id(N'{databaseOwner}{objectQualifier}AlugenProducts') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table {databaseOwner}{objectQualifier}AlugenProducts
+GO
+
+CREATE TABLE {databaseOwner}{objectQualifier}AlugenCode (
+	[CodeID] [int] IDENTITY (1, 1) NOT NULL ,
+	[PortalID] [int] NOT NULL ,
+	[ModuleID] [int] NOT NULL ,
+	[CustomerID] [int] NOT NULL ,
+	[ProductID] [int] NOT NULL ,
+	[CodeUserName] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[CodeInstalationCode] [varchar] (250) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[CodeActivationCode] [varchar] (500) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[CodeLicenseType] [int] NOT NULL ,
+	[CodeExpireDate] [datetime] NOT NULL ,
+	[CodeDays] [int] NOT NULL ,
+	[CodeRegisteredLevel] [int] NOT NULL ,
+	[CreatedByUser] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[CreatedDate] [datetime] NULL 
+) ON [PRIMARY]
+GO
+
+CREATE TABLE {databaseOwner}{objectQualifier}AlugenCustomers (
+	[CustomerID] [int] IDENTITY (1, 1) NOT NULL ,
+	[PortalID] [int] NOT NULL ,
+	[ModuleID] [int] NOT NULL ,
+	[CustomerName] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[CustomerAddress] [varchar] (150) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[CustomerContactPerson] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[CustomerPhone] [varchar] (30) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[CustomerEmail] [varchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[CreatedByUser] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[CreatedDate] [datetime] NULL ,
+	[AssociatedUser] [nvarchar] (50) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[UseUserEmail] [bit] NOT NULL 
+) ON [PRIMARY]
+GO
+
+CREATE TABLE {databaseOwner}{objectQualifier}AlugenProducts (
+	[ProductID] [int] IDENTITY (1, 1) NOT NULL ,
+	[PortalID] [int] NOT NULL ,
+	[ModuleID] [int] NOT NULL ,
+	[ProductName] [varchar] (80) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[ProductVersion] [varchar] (20) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[ProductVCode] [varchar] (300) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[ProductGCode] [varchar] (600) COLLATE SQL_Latin1_General_CP1_CI_AS NOT NULL ,
+	[ProductPrice] [decimal](18, 6) NOT NULL ,
+	[CreatedByUser] [nvarchar] (100) COLLATE SQL_Latin1_General_CP1_CI_AS NULL ,
+	[CreatedDate] [datetime] NULL 
+) ON [PRIMARY]
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}AlugenCode WITH NOCHECK ADD 
+	CONSTRAINT [PK_fs_AlugenCode] PRIMARY KEY  CLUSTERED 
+	(
+		[CodeID]
+	)  ON [PRIMARY] 
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}AlugenCustomers WITH NOCHECK ADD 
+	CONSTRAINT [PK_fs_AlugenCustomers] PRIMARY KEY  CLUSTERED 
+	(
+		[CustomerID]
+	)  ON [PRIMARY] 
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}AlugenProducts WITH NOCHECK ADD 
+	CONSTRAINT [PK_Alugen3NET] PRIMARY KEY  CLUSTERED 
+	(
+		[ProductID]
+	)  ON [PRIMARY] 
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}AlugenCode ADD 
+	CONSTRAINT [DF_dnn_AlugenCode_CodeDays] DEFAULT (0) FOR [CodeDays]
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}AlugenCustomers ADD 
+	CONSTRAINT [DF_dnn_AlugenCustomers_UseUserEmail] DEFAULT (0) FOR [UseUserEmail]
+GO
+
+ALTER TABLE {databaseOwner}{objectQualifier}AlugenProducts ADD 
+	CONSTRAINT [DF_Alugen3NET_ProductPrice] DEFAULT (0) FOR [ProductPrice]
+GO
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenCodeDelete
+	@CodeID int
+AS
+
+DELETE FROM  {objectQualifier}AlugenCode
+WHERE
+	[CodeID] = @CodeID
+
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenCodeGet
+	@CodeID int
+AS
+
+SELECT
+	[CodeID],
+	[CreatedDate],
+	[CreatedByUser],
+	[PortalID],
+	[ModuleID],
+	[CustomerID],
+	[ProductID],
+	[CodeUserName],
+	[CodeInstalationCode],
+	[CodeActivationCode],
+	[CodeLicenseType],
+	[CodeExpireDate],
+	[CodeDays],
+	[CodeRegisteredLevel]
+FROM  {objectQualifier}AlugenCode
+WHERE
+	[CodeID] = @CodeID
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+
+
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenCodeList
+	@PortalID int,
+	@ModuleID int
+
+AS
+
+SELECT
+	[CodeID],
+	[CreatedDate],
+	[CreatedByUser],
+	[PortalID],
+	[ModuleID],
+	[CustomerID],
+	[ProductID],
+	[CodeUserName],
+	[CodeInstalationCode],
+	[CodeActivationCode],
+	[CodeLicenseType],
+	[CodeExpireDate],
+	[CodeDays],
+	[CodeRegisteredLevel]
+FROM  {objectQualifier}AlugenCode
+
+WHERE
+	[PortalID] = @portalID AND
+	[ModuleID] = @ModuleID
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenCodeAdd
+	@PortalID int,
+	@ModuleID int,
+	@CustomerID int,
+	@ProductID int,
+	@CodeUserName varchar(100),
+	@CodeInstalationCode varchar(250),
+	@CodeActivationCode varchar(500),
+	@CodeLicenseType int,
+	@CodeExpireDate datetime,
+	@CodeDays int,
+	@CodeRegisteredLevel int,
+	@UserName nvarchar(100),
+	@CreatedDate datetime
+AS
+
+INSERT INTO  {objectQualifier}AlugenCode (
+	CreatedByUser,
+	CreatedDate,
+	[PortalID],
+	[ModuleID],
+	[CustomerID],
+	[ProductID],
+	[CodeUserName],
+	[CodeInstalationCode],
+	[CodeActivationCode],
+	[CodeLicenseType],
+	[CodeExpireDate],
+	[CodeDays],
+	[CodeRegisteredLevel]
+) VALUES (
+	@UserName,
+	@CreatedDate,
+	@PortalID,
+	@ModuleID,
+	@CustomerID,
+	@ProductID,
+	@CodeUserName,
+	@CodeInstalationCode,
+	@CodeActivationCode,
+	@CodeLicenseType,
+	@CodeExpireDate,
+	@CodeDays,
+	@CodeRegisteredLevel
+)
+
+select SCOPE_IDENTITY()
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenCodeListByCustomer
+	@PortalID int,
+	@ModuleID int,
+	@CustomerID int
+
+AS
+
+SELECT
+	[CodeID],
+	[CreatedDate],
+	[CreatedByUser],
+	[PortalID],
+	[ModuleID],
+	[CustomerID],
+	[ProductID],
+	[CodeUserName],
+	[CodeInstalationCode],
+	[CodeActivationCode],
+	[CodeLicenseType],
+	[CodeExpireDate],
+	[CodeDays],
+	[CodeRegisteredLevel]
+FROM  {objectQualifier}AlugenCode
+
+WHERE
+	[PortalID] = @portalID AND
+	[ModuleID] = @ModuleID AND
+	[CustomerID] = @CustomerID
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenCodeListByProduct
+	@PortalID int,
+	@ModuleID int,
+	@ProductID int
+
+AS
+
+SELECT
+	[CodeID],
+	[CreatedDate],
+	[CreatedByUser],
+	[PortalID],
+	[ModuleID],
+	[CustomerID],
+	[ProductID],
+	[CodeUserName],
+	[CodeInstalationCode],
+	[CodeActivationCode],
+	[CodeLicenseType],
+	[CodeExpireDate],
+	[CodeDays],
+	[CodeRegisteredLevel]
+FROM  {objectQualifier}AlugenCode
+
+WHERE
+	[PortalID] = @portalID AND
+	[ModuleID] = @ModuleID AND
+	[ProductID] = @ProductID
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenCodeListFull
+	@PortalID int,
+	@ModuleID int
+
+AS
+
+SELECT
+	A.[CodeID],
+	A.[CreatedDate],
+	A.[CreatedByUser],
+	A.[PortalID],
+	A.[ModuleID],
+	A.[CustomerID],
+	A.[ProductID],
+	A.[CodeUserName],
+	A.[CodeInstalationCode],
+	A.[CodeActivationCode],
+	A.[CodeLicenseType],
+	A.[CodeExpireDate],
+	A.[CodeDays],
+	A.[CodeRegisteredLevel],
+	B.[CustomerName],
+	C.[ProductName],
+	C.[ProductVersion]
+FROM  {objectQualifier}AlugenCode A
+INNER JOIN {objectQualifier}AlugenCustomers B
+ON A.CustomerID = B.CustomerID
+INNER JOIN {objectQualifier}AlugenProducts C
+ON A.ProductID = C.ProductID
+
+WHERE
+	A.[PortalID] = @portalID AND
+	A.[ModuleID] = @ModuleID
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenCodeUpdate
+	@CodeID int, 
+	@PortalID int, 
+	@ModuleID int, 
+	@CustomerID int, 
+	@ProductID int, 
+	@CodeUserName varchar(100), 
+	@CodeInstalationCode varchar(250), 
+	@CodeActivationCode varchar(500), 
+	@CodeLicenseType int, 
+	@CodeExpireDate datetime, 
+	@CodeDays int,
+	@CodeRegisteredLevel int ,
+	@UserName  nvarchar(100),
+	@CreatedDate datetime
+AS
+
+UPDATE  {objectQualifier}AlugenCode SET
+	[PortalID] = @PortalID,
+	[ModuleID] = @ModuleID,
+	[CustomerID] = @CustomerID,
+	[ProductID] = @ProductID,
+	[CodeUserName] = @CodeUserName,
+	[CodeInstalationCode] = @CodeInstalationCode,
+	[CodeActivationCode] = @CodeActivationCode,
+	[CodeLicenseType] = @CodeLicenseType,
+	[CodeExpireDate] = @CodeExpireDate,
+	[CodeDays] = @CodeDays,
+	[CodeRegisteredLevel] = @CodeRegisteredLevel,
+	[CreatedByUser] = @UserName,
+	[CreatedDate] = 	@CreatedDate
+WHERE
+	[CodeID] = @CodeID
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenCustomersAdd
+	@PortalID int,
+	@ModuleID int,
+	@CustomerName varchar(100),
+	@CustomerAddress varchar(150),
+	@CustomerContactPerson varchar(100),
+	@CustomerPhone varchar(30),
+	@CustomerEmail varchar(100),
+	@AssociatedUser nvarchar(50),
+	@UseUserEmail bit
+AS
+
+INSERT INTO  {objectQualifier}AlugenCustomers (
+	[PortalID],
+	[ModuleID],
+	[CustomerName],
+	[CustomerAddress],
+	[CustomerContactPerson],
+	[CustomerPhone],
+	[CustomerEmail],
+	[AssociatedUser],
+	[UseUserEmail]
+) VALUES (
+	@PortalID,
+	@ModuleID,
+	@CustomerName,
+	@CustomerAddress,
+	@CustomerContactPerson,
+	@CustomerPhone,
+	@CustomerEmail,
+	@AssociatedUser,
+	@UseUserEmail
+)
+
+select SCOPE_IDENTITY()
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenCustomersDelete
+	@CustomerID int
+AS
+
+DELETE FROM  {objectQualifier}AlugenCustomers
+WHERE
+	[CustomerID] = @CustomerID
+
+
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenCustomersGet
+	@CustomerID int
+AS
+
+SELECT
+	[CustomerID],
+	[PortalID],
+	[ModuleID],
+	[CustomerName],
+	[CustomerAddress],
+	[CustomerContactPerson],
+	[CustomerPhone],
+	[CustomerEmail],
+	[AssociatedUser],
+	[UseUserEmail]
+FROM  {objectQualifier}AlugenCustomers
+WHERE
+	[CustomerID] = @CustomerID
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenCustomersList
+	@PortalID int,
+	@ModuleID int
+
+AS
+
+SELECT
+	[CustomerID],
+	[PortalID],
+	[ModuleID],
+	[CustomerName],
+	[CustomerAddress],
+	[CustomerContactPerson],
+	[CustomerPhone],
+	[CustomerEmail],
+	[AssociatedUser],
+	[UseUserEmail]
+FROM  {objectQualifier}AlugenCustomers
+WHERE
+	[PortalID] = @portalID AND
+	[ModuleID] = @ModuleID
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER ON 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenCustomersUpdate
+	@CustomerID int, 
+	@PortalID int, 
+	@ModuleID int, 
+	@CustomerName varchar(100), 
+	@CustomerAddress varchar(150), 
+	@CustomerContactPerson varchar(100), 
+	@CustomerPhone varchar(30), 
+	@CustomerEmail varchar(100) ,
+	@AssociatedUser nvarchar(50),
+	@UseUserEmail bit
+AS
+
+UPDATE  {objectQualifier}AlugenCustomers SET
+	[PortalID] = @PortalID,
+	[ModuleID] = @ModuleID,
+	[CustomerName] = @CustomerName,
+	[CustomerAddress] = @CustomerAddress,
+	[CustomerContactPerson] = @CustomerContactPerson,
+	[CustomerPhone] = @CustomerPhone,
+	[CustomerEmail] = @CustomerEmail,
+	[AssociatedUser] = @AssociatedUser,
+	[UseUserEmail] = @UseUserEmail
+WHERE
+	[CustomerID] = @CustomerID
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+CREATE PROCEDURE {databaseOwner}{objectQualifier}AlugenProductsAdd
+	@PortalID int,
+	@ModuleID int,
+	@UserName nvarchar(100),
+	@ProductName varchar(80),
+	@ProductVersion varchar(20),
+	@ProductVCode varchar(300),
+	@ProductGCode varchar(600),
+	@ProductPrice decimal(18, 6)
+AS
+
+INSERT INTO  {objectQualifier}AlugenProducts (
+	CreatedByUser,
+	CreatedDate,
+	[PortalID],
+	[ModuleID],
+	[ProductName],
+	[ProductVersion],
+	[ProductVCode],
+	[ProductGCode],
+	[ProductPrice]
+) VALUES (
+	@UserName,
+	getdate(),
+	@PortalID,
+	@ModuleID,
+	@ProductName,
+	@ProductVersion,
+	@ProductVCode,
+	@ProductGCode,
+	@ProductPrice
+)
+
+select SCOPE_IDENTITY()
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenProductsDelete
+	@ProductID int
+AS
+
+DELETE FROM  {objectQualifier}AlugenProducts
+WHERE
+	[ProductID] = @ProductID
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenProductsGet
+	@ProductID int
+AS
+
+SELECT
+	[ProductID],
+	[CreatedDate],
+	[CreatedByUser],
+	[PortalID],
+	[ModuleID],
+	[ProductName],
+	[ProductVersion],
+	[ProductVCode],
+	[ProductGCode],
+	[ProductPrice]
+FROM  {objectQualifier}AlugenProducts
+WHERE
+	[ProductID] = @ProductID
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenProductsList
+	@PortalID int,
+	@ModuleID int
+AS
+
+SELECT
+	[ProductID],
+	[CreatedDate],
+	[CreatedByUser],
+	[PortalID],
+	[ModuleID],
+	[ProductName],
+	[ProductVersion],
+	[ProductVCode],
+	[ProductGCode],
+	[ProductPrice]
+FROM  {objectQualifier}AlugenProducts
+WHERE
+	[PortalID] = @portalID AND
+	[ModuleID] = @ModuleID
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenProductsListFull
+	@PortalID int,
+	@ModuleID int
+AS
+
+SELECT
+	[ProductID],
+	[CreatedDate],
+	[CreatedByUser],
+	[PortalID],
+	[ModuleID],
+	[ProductName],
+	[ProductVersion],
+	[ProductVCode],
+	[ProductGCode],
+	[ProductPrice],
+	[ProductName] + ' - ' + [ProductVersion] as ProductNameVersion
+FROM  {objectQualifier}AlugenProducts
+WHERE
+	[PortalID] = @portalID AND
+	[ModuleID] = @ModuleID
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS OFF 
+GO
+
+CREATE PROCEDURE  {databaseOwner}{objectQualifier}AlugenProductsUpdate
+	@ProductID int,
+	@PortalID int, 
+	@ModuleID int, 
+	@ProductName varchar(80), 
+	@ProductVersion varchar(20), 
+	@ProductVCode varchar(300), 
+	@ProductGCode varchar(600), 
+	@ProductPrice decimal(18, 6) ,
+	@UserName  nvarchar(100)
+AS
+
+UPDATE  {objectQualifier}AlugenProducts SET
+	[PortalID] = @PortalID,
+	[ModuleID] = @ModuleID,
+	[ProductName] = @ProductName,
+	[ProductVersion] = @ProductVersion,
+	[ProductVCode] = @ProductVCode,
+	[ProductGCode] = @ProductGCode,
+	[ProductPrice] = @ProductPrice,
+	[CreatedByUser] = @UserName,
+	[CreatedDate] = getdate()
+WHERE
+	[ProductID] = @ProductID
+GO
+SET QUOTED_IDENTIFIER OFF 
+GO
+SET ANSI_NULLS ON 
+GO
+

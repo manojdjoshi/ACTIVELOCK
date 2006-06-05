@@ -1,0 +1,396 @@
+<VisualStudioProject>
+    <VisualBasic
+        ProjectType = "Local"
+        ProductVersion = "7.10.3077"
+        SchemaVersion = "2.0"
+        ProjectGuid = "{7AB942FD-6F86-491D-9CFC-4931C49D5754}"
+    >
+        <Build>
+            <Settings
+                ApplicationIcon = ""
+                AssemblyKeyContainerName = ""
+                AssemblyName = "FriendSoftware.DNN.Modules.Alugen3NET"
+                AssemblyOriginatorKeyFile = ""
+                AssemblyOriginatorKeyMode = "None"
+                DefaultClientScript = "JScript"
+                DefaultHTMLPageLayout = "Grid"
+                DefaultTargetSchema = "IE50"
+                DelaySign = "false"
+                OutputType = "Library"
+                OptionCompare = "Binary"
+                OptionExplicit = "On"
+                OptionStrict = "On"
+                RootNamespace = ""
+                StartupObject = ""
+            >
+                <Config
+                    Name = "Debug"
+                    BaseAddress = "285212672"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = ""
+                    DefineDebug = "true"
+                    DefineTrace = "true"
+                    DebugSymbols = "true"
+                    IncrementalBuild = "true"
+                    Optimize = "false"
+                    OutputPath = "bin\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "1"
+                />
+                <Config
+                    Name = "Release"
+                    BaseAddress = "285212672"
+                    ConfigurationOverrideFile = ""
+                    DefineConstants = ""
+                    DefineDebug = "false"
+                    DefineTrace = "true"
+                    DebugSymbols = "false"
+                    IncrementalBuild = "false"
+                    Optimize = "true"
+                    OutputPath = "bin\"
+                    RegisterForComInterop = "false"
+                    RemoveIntegerChecks = "false"
+                    TreatWarningsAsErrors = "false"
+                    WarningLevel = "1"
+                />
+            </Settings>
+            <References>
+                <Reference
+                    Name = "System"
+                    AssemblyName = "System"
+                />
+                <Reference
+                    Name = "System.Data"
+                    AssemblyName = "System.Data"
+                />
+                <Reference
+                    Name = "System.Drawing"
+                    AssemblyName = "System.Drawing"
+                />
+                <Reference
+                    Name = "System.Web"
+                    AssemblyName = "System.Web"
+                />
+                <Reference
+                    Name = "System.XML"
+                    AssemblyName = "System.Xml"
+                />
+                <Reference
+                    Name = "System.Design"
+                    AssemblyName = "System.Design"
+                    HintPath = "..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Design.dll"
+                />
+                <Reference
+                    Name = "DotNetNuke.WebUtility"
+                    Project = "{4912F062-F8A8-4F9D-8F8E-244EBEE1ACBD}"
+                    Package = "{F184B08F-C81C-45F6-A57F-5ABD9991F28F}"
+                />
+                <Reference
+                    Name = "Microsoft.VisualBasic.Compatibility"
+                    AssemblyName = "Microsoft.VisualBasic.Compatibility"
+                    HintPath = "..\..\bin\Microsoft.VisualBasic.Compatibility.dll"
+                />
+                <Reference
+                    Name = "DotNetNuke"
+                    Project = "{79D3BA0F-F76F-4A84-AE7F-C6A01EC247F9}"
+                    Package = "{F184B08F-C81C-45F6-A57F-5ABD9991F28F}"
+                />
+                <Reference
+                    Name = "Nini"
+                    AssemblyName = "Nini"
+                    HintPath = "Nini.dll"
+                />
+                <Reference
+                    Name = "ActiveLock3NET"
+                    AssemblyName = "ActiveLock3NET"
+                    HintPath = "..\..\..\..\Program Files\Activelock3VBNET\Src_v3\Activelock3.NET\ActiveLock3NET.dll"
+                />
+            </References>
+            <Imports>
+                <Import Namespace = "Microsoft.VisualBasic" />
+                <Import Namespace = "System" />
+                <Import Namespace = "System.Collections" />
+                <Import Namespace = "System.Configuration" />
+                <Import Namespace = "System.Data" />
+                <Import Namespace = "System.Drawing" />
+                <Import Namespace = "System.Web" />
+                <Import Namespace = "System.Web.UI" />
+                <Import Namespace = "System.Web.UI.HtmlControls" />
+                <Import Namespace = "System.Web.UI.WebControls" />
+                <Import Namespace = "DotNetNuke.Services.Localization" />
+                <Import Namespace = "DotNetNuke" />
+                <Import Namespace = "DotNetNuke.Common" />
+                <Import Namespace = "DotNetNuke.Common.Utilities" />
+                <Import Namespace = "DotNetNuke.Data" />
+                <Import Namespace = "DotNetNuke.Entities.Users" />
+                <Import Namespace = "DotNetNuke.Framework" />
+                <Import Namespace = "DotNetNuke.Services.Exceptions" />
+                <Import Namespace = "DotNetNuke.UI" />
+            </Imports>
+        </Build>
+        <Files>
+            <Include>
+                <File
+                    RelPath = "activelock_logo.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "alugen3netMain.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "AlugenCodesClientEdit.ascx"
+                    SubType = "Form"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "AlugenCodesClientEdit.ascx.vb"
+                    DependentUpon = "AlugenCodesClientEdit.ascx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AlugenCodesClientEdit.ascx.resx"
+                    DependentUpon = "AlugenCodesClientEdit.ascx.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "AlugenCodesEdit.ascx"
+                    SubType = "Form"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "AlugenCodesEdit.ascx.vb"
+                    DependentUpon = "AlugenCodesEdit.ascx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AlugenCodesEdit.ascx.resx"
+                    DependentUpon = "AlugenCodesEdit.ascx.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "AlugenCustomersEdit.ascx"
+                    SubType = "Form"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "AlugenCustomersEdit.ascx.vb"
+                    DependentUpon = "AlugenCustomersEdit.ascx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AlugenCustomersEdit.ascx.resx"
+                    DependentUpon = "AlugenCustomersEdit.ascx.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "AlugenMain.ascx"
+                    SubType = "Form"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "AlugenMain.ascx.vb"
+                    DependentUpon = "AlugenMain.ascx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AlugenMain.ascx.resx"
+                    DependentUpon = "AlugenMain.ascx.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "AlugenMainClient.ascx"
+                    SubType = "Form"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "AlugenMainClient.ascx.vb"
+                    DependentUpon = "AlugenMainClient.ascx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AlugenMainClient.ascx.resx"
+                    DependentUpon = "AlugenMainClient.ascx.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "AlugenProductsEdit.ascx"
+                    SubType = "Form"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "AlugenProductsEdit.ascx.vb"
+                    DependentUpon = "AlugenProductsEdit.ascx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "AlugenProductsEdit.ascx.resx"
+                    DependentUpon = "AlugenProductsEdit.ascx.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "AssemblyInfo.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "CRC32.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "friendsoftware_logo.JPG"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "icon_Alugen3NET_32px.gif"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "modActiveGlobals3.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "modActiveLock.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "modALUGEN.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "modBase64.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "modMD5.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "module.css"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "popup.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Settings.ascx"
+                    SubType = "Form"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Settings.ascx.vb"
+                    DependentUpon = "Settings.ascx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Settings.ascx.resx"
+                    DependentUpon = "Settings.ascx.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "SettingsClient.ascx"
+                    SubType = "Form"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "SettingsClient.ascx.vb"
+                    DependentUpon = "SettingsClient.ascx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "SettingsClient.ascx.resx"
+                    DependentUpon = "SettingsClient.ascx.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
+                    RelPath = "sorttable.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "tablefilter.js"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "App_LocalResources\AlugenCodesClientEdit.ascx.resx"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "App_LocalResources\AlugenCodesEdit.ascx.resx"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "App_LocalResources\AlugenCustomersEdit.ascx.resx"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "App_LocalResources\AlugenMain.ascx.resx"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "App_LocalResources\AlugenMainClient.ascx.resx"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "App_LocalResources\AlugenProductsEdit.ascx.resx"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "App_LocalResources\Settings.ascx.resx"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "App_LocalResources\SettingsClient.ascx.resx"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Components\Alugen3NETController.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\Alugen3NETInfo.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\aluGenerator.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Components\DataProvider.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <Folder RelPath = "Documentation\" />
+                <File
+                    RelPath = "Installation\Alugen3NET.dnn"
+                    BuildAction = "None"
+                />
+                <File
+                    RelPath = "Installation\Alugen3NET.zip"
+                    BuildAction = "None"
+                />
+                <Folder RelPath = "Providers\" />
+            </Include>
+        </Files>
+    </VisualBasic>
+</VisualStudioProject>
+

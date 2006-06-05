@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" />
+							<xsd:attribute name="type" type="xsd:string" />
+							<xsd:attribute name="mimetype" type="xsd:string" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="ResMimeType">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="Version">
+		<value>1.0.0.0</value>
+	</resheader>
+	<resheader name="Reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="Writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<data name="ControlTitle_edit.Text">
+		<value>Edit Alugen3NET Products</value>
+	</data>
+	<data name="plProductName.Text">
+		<value>Product Name</value>
+	</data>
+	<data name="plProductName.Help">
+		<value>Please enter product name</value>
+	</data>
+	<data name="plProductVersion.Text">
+		<value>Product version</value>
+	</data>
+	<data name="plProductVersion.Help">
+		<value>Please enter product version </value>
+	</data>
+	<data name="DeleteItem.Text">
+		<value>Are you sure you want to delete the product?</value>
+	</data>
+	<data name="plProductVCode.Text">
+		<value>VCode</value>
+	</data>
+	<data name="plProductVCode.Help">
+		<value>Calculated VCOde for this product</value>
+	</data>
+	<data name="plProductGCode.Text">
+		<value>GCode</value>
+	</data>
+	<data name="plProductGCode.Help">
+		<value>Calculated GCode for this product</value>
+	</data>
+	<data name="plProductPrice.Text">
+		<value>Product price</value>
+	</data>
+	<data name="plProductPrice.Help">
+		<value>Please enter the product price</value>
+	</data>
+	<data name="ModuleHelp.Text">
+		<value>&lt;h1&gt;About The Alugen3NET&lt;/h1&gt;
+&lt;table width="100%" border="0" cellpadding="0" cellspacing="0"&gt;
+	&lt;tr&gt;
+		&lt;td valign=top align=left class="Normal"&gt;
+			This module has been developed by &lt;a href="http://www.friendsoftware.ro"&gt;FRIEND 
+				SOFTWARE SRL&lt;/a&gt;&lt;br&gt; under &lt;a href="http://www.opensource.org/licenses/lgpl-license.php"&gt;
+				Lesser General Public License&lt;/a&gt; ©2006
+		&lt;/td&gt;
+		&lt;td align=right valign=top class="Normal"&gt;
+		&lt;a href="http://www.friendsoftware.ro"&gt;
+			&lt;img src="http://www.friendsoftware.ro/images/friendsoftware_logo.JPG" border=0 alt="Friend Software"&gt;
+		&lt;/a&gt;
+		&lt;/td&gt;
+	&lt;/tr&gt;
+	&lt;tr&gt;
+		&lt;td valign=top align=left class="Normal"&gt;
+			&lt;p&gt;The Alugen3NET Module is usefull to manage product keys, customers and 
+	generated codes&lt;br&gt; based on ActiveLock for .NET from &lt;a href="http://www.activelocksoftware.com" /&gt;
+	www.activelocksoftware.com&lt;/a&gt; .&lt;/p&gt;
+		&lt;/td&gt;
+		&lt;td align=right valign=top class="Normal"&gt;
+		&lt;a href="http://www.activelocksoftware.com"&gt;
+			&lt;img src="http://www.friendsoftware.ro/images/activelock_logo.gif" border=0 alt="ActiveLockSoftware"&gt;
+		&lt;/a&gt;
+		&lt;/td&gt;
+	&lt;/tr&gt;
+&lt;/table&gt;
+&lt;br&gt;
+&lt;h1&gt;Add Alugen3NET Product&lt;/h1&gt;
+&lt;ol&gt;
+	&lt;li&gt;
+		Add a &lt;b&gt;Alugen3NET&lt;/b&gt; module, or go to an existing &lt;b&gt;Alugen3NET&lt;/b&gt; module.&lt;/li&gt;
+	&lt;li&gt;
+		Click &lt;b&gt;Add new product&lt;/b&gt;.
+	&lt;li&gt;
+		At &lt;b&gt;Product Name&lt;/b&gt;, enter the product name.
+	&lt;li&gt;
+		At &lt;b&gt;Product version&lt;/b&gt;, enter version of this product.
+	&lt;li&gt;
+		Press &lt;b&gt;Generate new codes&lt;/b&gt;
+	button to generate new pair of Vcode and Gcode.
+	&lt;li&gt;
+		If something goes wrong press &lt;b&gt;Clear codes&lt;/b&gt;
+	button to clear existing codes.
+	&lt;li&gt;
+		Alternately you can verify if existing codes are valid by pressing &lt;b&gt;Validate&lt;/b&gt;
+	button.
+	&lt;li&gt;
+		Alternately, generated Vcode can be copied into clipboard by pressing &lt;b&gt;Copy 
+			VCode&lt;/b&gt;
+	button (icon).
+	&lt;li&gt;
+		Alternately, generated Gcode can be copied into clipboard by pressing &lt;b&gt;Copy 
+			GCode&lt;/b&gt;
+	button (icon).
+	&lt;li&gt;
+	Optional we can enter a price for this product.
+&lt;/ol&gt;
+&lt;h1&gt;Add Alugen3NET Customer&lt;/h1&gt;
+&lt;ol&gt;
+	&lt;li&gt;
+		Add a &lt;b&gt;Alugen3NET&lt;/b&gt; module, or go to an existing &lt;b&gt;Alugen3NET&lt;/b&gt; module.&lt;/li&gt;
+	&lt;li&gt;
+		Click &lt;b&gt;Add new customer&lt;/b&gt;.
+	&lt;li&gt;
+		At &lt;b&gt;Customer Name&lt;/b&gt;, enter the name of customer company or name.
+	&lt;li&gt;
+		At &lt;b&gt;Customer Adress&lt;/b&gt;
+	enter the adress of this customer.
+	&lt;li&gt;
+		At &lt;b&gt;Contact Name&lt;/b&gt;
+	enter the contact person name for this customer.
+	&lt;li&gt;
+		At &lt;b&gt;Customer phone&lt;/b&gt;
+	enter the phone number contact of this customer.
+	&lt;li&gt;
+		At &lt;b&gt;Customer email&lt;/b&gt;
+	enter the email adress of this customer. This email adress will be used in Edit 
+	License Code section to email activation code to customer.
+&lt;/ol&gt;
+&lt;h1&gt;Add Alugen3NET Code&lt;/h1&gt;
+&lt;ol&gt;
+	&lt;li&gt;
+		Add a &lt;b&gt;Alugen3NET&lt;/b&gt; module, or go to an existing &lt;b&gt;Alugen3NET&lt;/b&gt; module.&lt;/li&gt;
+	&lt;li&gt;
+		Click &lt;b&gt;Add new license code&lt;/b&gt;.
+	&lt;li&gt;
+		At &lt;b&gt;Product&lt;/b&gt;, select an existing product from the dropdown list.
+	&lt;li&gt;
+		At &lt;b&gt;Customer&lt;/b&gt;, select an existing customer from the dropdown list.
+	&lt;li&gt;
+		At &lt;b&gt;License type&lt;/b&gt;
+, select an existing licensing type from the dropdown list. Based on this 
+selection thw folowing text boxes may appear.
+&lt;ol&gt;
+	&lt;li&gt;
+		If license type is &lt;b&gt;Time locked&lt;/b&gt; a text box named &lt;b&gt;Exp Date&lt;/b&gt;
+	will be visible. Here we must enter expiration date of generated code.
+	&lt;li&gt;
+		If license type is &lt;b&gt;Periodic&lt;/b&gt; a text box named &lt;b&gt;Days&lt;/b&gt;
+	will be visible. Here we must enter days of validity of generated code.
+	&lt;li&gt;
+		If license type is &lt;b&gt;Permanent&lt;/b&gt;
+	there will be no other text box available.
+&lt;/ol&gt;
+&lt;li&gt;
+	At &lt;b&gt;Instalation code&lt;/b&gt;, enter instalation code received from customer in 
+the activation process.
+&lt;li&gt;
+	Alternativelly if code is already in clipboard it can be pasted by pressing &lt;b&gt;Paste 
+		Install Code&lt;/b&gt;
+button (icon).
+&lt;li&gt;
+	Press &lt;b&gt;Generate&lt;/b&gt;
+button to generate activation code.
+&lt;li&gt;
+	Alternativelly, generated code can be copied into clipboard by pressing &lt;b&gt;Copy 
+		Activation Code&lt;/b&gt;
+button (icon) or.
+&lt;li&gt;
+	Alternativelly, generated code can be emailed to selected customer by pressing &lt;b&gt;
+		Email Activation Code&lt;/b&gt; button (icon). &lt;/ol&gt;
+	&lt;br&gt;
+	&lt;br&gt;
+	This module has been developed by &lt;a href="http://www.friendsoftware.ro"&gt;FRIEND 
+		SOFTWARE SRL&lt;/a&gt; under &lt;a href="http://www.opensource.org/licenses/lgpl-license.php"&gt;
+		Lesser General Public License&lt;/a&gt; ©2006
+	&lt;br&gt;
+It can be used at your own risk at no cost with no responsabilities.
+</value>
+	</data>
+	<data name="chkDirectCodeEdit.Text">
+		<value>Enable direct code editing</value>
+	</data>
+</root>
