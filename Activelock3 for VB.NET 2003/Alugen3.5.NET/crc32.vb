@@ -30,6 +30,7 @@
 ' This is v2 of the VB CRC32 algorithm provided by Paul
 ' (wpsjr1@succeed.net) - much quicker than the nasty
 ' original version I posted.  Excellent work!
+
 Public Class CRC32
   Private crc32Table() As Integer
   Private Const BUFFER_SIZE As Integer = 1024
