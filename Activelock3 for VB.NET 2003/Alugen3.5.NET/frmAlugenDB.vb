@@ -34,6 +34,9 @@
 ' *      Salvatore La Porta              *
 ' *     mjlapo23@hotmail.com             *
 ' ****************************************
+Option Strict On
+Option Explicit On 
+
 Imports System.Data
 Imports System.Data.OleDb
 Imports System.Windows.Forms
@@ -575,7 +578,12 @@ Public Class frmAlugenDb
     Dim currrowindex As Integer
     If Me.grdLicenses.VisibleRowCount <> 0 Then
       currrowindex = Me.grdLicenses.CurrentRowIndex
-      Dim licenseDetails As New frmAlugendb_details(Me.grdLicenses.Item(currrowindex, 1), Me.grdLicenses.Item(currrowindex, 2), Me.grdLicenses.Item(currrowindex, 3), Me.grdLicenses.Item(currrowindex, 4), Me.grdLicenses.Item(currrowindex, 5), Me.grdLicenses.Item(currrowindex, 6), Me.grdLicenses.Item(currrowindex, 7), Me.grdLicenses.Item(currrowindex, 8), Me.grdLicenses.Item(currrowindex, 9), Me.grdLicenses.Item(currrowindex, 10))
+      Dim licenseDetails As New frmAlugendb_details(CType(Me.grdLicenses.Item(currrowindex, 1), String), _
+              CType(Me.grdLicenses.Item(currrowindex, 2), String), CType(Me.grdLicenses.Item(currrowindex, 3), String), _
+              CType(Me.grdLicenses.Item(currrowindex, 4), String), CType(Me.grdLicenses.Item(currrowindex, 5), String), _
+              CType(Me.grdLicenses.Item(currrowindex, 6), String), CType(Me.grdLicenses.Item(currrowindex, 7), String), _
+              CType(Me.grdLicenses.Item(currrowindex, 8), String), CType(Me.grdLicenses.Item(currrowindex, 9), String), _
+              CType(Me.grdLicenses.Item(currrowindex, 10), String))
       licenseDetails.ShowDialog()
     End If
   End Sub
@@ -584,7 +592,12 @@ Public Class frmAlugenDb
     Dim currrowindex As Integer
     If Me.grdLicenses.VisibleRowCount <> 0 Then
       currrowindex = Me.grdLicenses.CurrentRowIndex
-      Dim licenseDetails As New frmAlugendb_details(Me.grdLicenses.Item(currrowindex, 1), Me.grdLicenses.Item(currrowindex, 2), Me.grdLicenses.Item(currrowindex, 3), Me.grdLicenses.Item(currrowindex, 4), Me.grdLicenses.Item(currrowindex, 5), Me.grdLicenses.Item(currrowindex, 6), Me.grdLicenses.Item(currrowindex, 7), Me.grdLicenses.Item(currrowindex, 8), Me.grdLicenses.Item(currrowindex, 9), Me.grdLicenses.Item(currrowindex, 10))
+      Dim licenseDetails As New frmAlugendb_details(CType(Me.grdLicenses.Item(currrowindex, 1), String), _
+                CType(Me.grdLicenses.Item(currrowindex, 2), String), CType(Me.grdLicenses.Item(currrowindex, 3), String), _
+                CType(Me.grdLicenses.Item(currrowindex, 4), String), CType(Me.grdLicenses.Item(currrowindex, 5), String), _
+                CType(Me.grdLicenses.Item(currrowindex, 6), String), CType(Me.grdLicenses.Item(currrowindex, 7), String), _
+                CType(Me.grdLicenses.Item(currrowindex, 8), String), CType(Me.grdLicenses.Item(currrowindex, 9), String), _
+                CType(Me.grdLicenses.Item(currrowindex, 10), String))
       licenseDetails.ShowDialog()
     End If
   End Sub
@@ -612,7 +625,7 @@ Public Class frmAlugenDb
     ''setting parameters
     'daPrintDocument.SetParameters(hashParameters)
     ''daPrintDocument.DocumentName = "Licenses list"
-    Dim xds As DataTable = grdLicenses.DataSource
+    Dim xds As DataTable = CType(grdLicenses.DataSource, DataTable)
     daPrintDocument.AddData(xds)
 
     'print preview
@@ -648,70 +661,70 @@ Public Class frmAlugenDb
     Dim Progname As New DataGridTextBoxColumn
     Progname.MappingName = "Progname"
     Progname.HeaderText = "Program"
-    Progname.Width = (Me.grdLicenses.Width - Me.grdLicenses.RowHeaderWidth - scarto) / 100 * 10
+    Progname.Width = CType((Me.grdLicenses.Width - Me.grdLicenses.RowHeaderWidth - scarto) / 100 * 10, Integer)
     Progname.NullText = ""
     TableStylegrdLicenses.GridColumnStyles.Add(Progname)
 
     Dim Ver As New DataGridTextBoxColumn
     Ver.MappingName = "progver"
     Ver.HeaderText = "Ver"
-    Ver.Width = (Me.grdLicenses.Width - Me.grdLicenses.RowHeaderWidth - scarto) / 100 * 3
+    Ver.Width = CType((Me.grdLicenses.Width - Me.grdLicenses.RowHeaderWidth - scarto) / 100 * 3, Integer)
     Ver.NullText = ""
     TableStylegrdLicenses.GridColumnStyles.Add(Ver)
 
     Dim RegDate As New DataGridTextBoxColumn
     RegDate.MappingName = "RegDate"
     RegDate.HeaderText = "Registered"
-    RegDate.Width = (Me.grdLicenses.Width - Me.grdLicenses.RowHeaderWidth - scarto) / 100 * 9
+    RegDate.Width = CType((Me.grdLicenses.Width - Me.grdLicenses.RowHeaderWidth - scarto) / 100 * 9, Integer)
     RegDate.NullText = ""
     TableStylegrdLicenses.GridColumnStyles.Add(RegDate)
 
     Dim ExpDate As New DataGridTextBoxColumn
     ExpDate.MappingName = "ExpDate"
     ExpDate.HeaderText = "Expire"
-    ExpDate.Width = (Me.grdLicenses.Width - Me.grdLicenses.RowHeaderWidth - scarto) / 100 * 9
+    ExpDate.Width = CType((Me.grdLicenses.Width - Me.grdLicenses.RowHeaderWidth - scarto) / 100 * 9, Integer)
     ExpDate.NullText = ""
     TableStylegrdLicenses.GridColumnStyles.Add(ExpDate)
 
     Dim LicType As New DataGridTextBoxColumn
     LicType.MappingName = "LicType"
     LicType.HeaderText = "LicType"
-    LicType.Width = (Me.grdLicenses.Width - Me.grdLicenses.RowHeaderWidth - scarto) / 100 * 7
+    LicType.Width = CType((Me.grdLicenses.Width - Me.grdLicenses.RowHeaderWidth - scarto) / 100 * 7, Integer)
     LicType.NullText = ""
     TableStylegrdLicenses.GridColumnStyles.Add(LicType)
 
     Dim LockType As New DataGridTextBoxColumn
     LockType.MappingName = "LockType"
     LockType.HeaderText = "LockType"
-    LockType.Width = (Me.grdLicenses.Width - Me.grdLicenses.RowHeaderWidth - scarto) / 100 * 5
+    LockType.Width = CType((Me.grdLicenses.Width - Me.grdLicenses.RowHeaderWidth - scarto) / 100 * 5, Integer)
     LockType.NullText = ""
     TableStylegrdLicenses.GridColumnStyles.Add(LockType)
 
     Dim RegLevel As New DataGridTextBoxColumn
     RegLevel.MappingName = "RegLevel"
     RegLevel.HeaderText = "Level"
-    RegLevel.Width = (Me.grdLicenses.Width - Me.grdLicenses.RowHeaderWidth - scarto) / 100 * 7
+    RegLevel.Width = CType((Me.grdLicenses.Width - Me.grdLicenses.RowHeaderWidth - scarto) / 100 * 7, Integer)
     RegLevel.NullText = ""
     TableStylegrdLicenses.GridColumnStyles.Add(RegLevel)
 
     Dim InstCode As New DataGridTextBoxColumn
     InstCode.MappingName = "InstCode"
     InstCode.HeaderText = "InstCode"
-    InstCode.Width = (Me.grdLicenses.Width - Me.grdLicenses.RowHeaderWidth - scarto) / 100 * 13
+    InstCode.Width = CType((Me.grdLicenses.Width - Me.grdLicenses.RowHeaderWidth - scarto) / 100 * 13, Integer)
     InstCode.NullText = ""
     TableStylegrdLicenses.GridColumnStyles.Add(InstCode)
 
     Dim UserName As New DataGridTextBoxColumn
     UserName.MappingName = "UserName"
     UserName.HeaderText = "UserName"
-    UserName.Width = (Me.grdLicenses.Width - Me.grdLicenses.RowHeaderWidth - scarto) / 100 * 10
+    UserName.Width = CType((Me.grdLicenses.Width - Me.grdLicenses.RowHeaderWidth - scarto) / 100 * 10, Integer)
     UserName.NullText = ""
     TableStylegrdLicenses.GridColumnStyles.Add(UserName)
 
     Dim LibCode As New DataGridTextBoxColumn
     LibCode.MappingName = "LibCode"
     LibCode.HeaderText = "LibCode"
-    LibCode.Width = (Me.grdLicenses.Width - Me.grdLicenses.RowHeaderWidth - scarto) / 100 * 25
+    LibCode.Width = CType((Me.grdLicenses.Width - Me.grdLicenses.RowHeaderWidth - scarto) / 100 * 25, Integer)
     LibCode.TextBox.Font = New Font("Courier New", 8)
     LibCode.NullText = ""
     TableStylegrdLicenses.GridColumnStyles.Add(LibCode)
@@ -725,7 +738,7 @@ Public Class frmAlugenDb
 
     gridHelper = New GridLayoutHelper(grdLicenses, _
         grdLicenses.TableStyles(0), _
-        New Decimal() {0, 0.1, 0.03, 0.09, 0.09, 0.07, 0.05, 0.07, 0.13, 0.1, 0.25}, _
+        New Decimal() {0D, 0.1D, 0.03D, 0.09D, 0.09D, 0.07D, 0.05D, 0.07D, 0.13D, 0.1D, 0.25D}, _
         New Integer() {0, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20})
 
   End Sub
@@ -884,7 +897,7 @@ ByVal registeredLevel As String, ByVal installationCode As String, ByVal license
     End If
     'product name and version
     If Me.cboProductName.SelectedIndex <> 0 Then
-      Dim selProductInfo As ProductInfoItem = Me.cboProductName.SelectedItem
+      Dim selProductInfo As ProductInfoItem = CType(Me.cboProductName.SelectedItem, ProductInfoItem)
       progname = selProductInfo.ProductName
       progver = selProductInfo.ProductVersion
     Else
@@ -893,13 +906,13 @@ ByVal registeredLevel As String, ByVal installationCode As String, ByVal license
     End If
     'license type
     If Me.cboLicType.SelectedIndex <> 0 Then
-      selcboLicType = Me.cboLicType.SelectedItem
+      selcboLicType = CType(Me.cboLicType.SelectedItem, String)
     Else
       selcboLicType = "%"
     End If
     'registered level
     If Me.cboRegisteredLevel.SelectedIndex <> 0 Then
-      selcboRegisteredLevel = Me.cboRegisteredLevel.SelectedItem
+      selcboRegisteredLevel = CType(Me.cboRegisteredLevel.SelectedItem, String)
     Else
       selcboRegisteredLevel = "%"
     End If

@@ -38,7 +38,9 @@
 ' Modified: 08.15.2005
 '===============================================================================
 '
+Option Strict On
 Option Explicit On 
+
 Imports System.Runtime.InteropServices
 Imports ActiveLock3_5NET
 
@@ -184,7 +186,12 @@ Module modALUGEN
 
     Public ReadOnly Property ProductNameVersion() As String
       Get
-        Return _ProductName & IIf(_productVersion.Length > 0, " (" & _productVersion & ")", "")
+        Dim mProductname As String
+        mProductname = _ProductName
+        If _productVersion.Length > 0 Then
+          mProductname = mProductname & " (" & _productVersion & ")"
+        End If
+        Return mProductname
       End Get
     End Property
   End Class

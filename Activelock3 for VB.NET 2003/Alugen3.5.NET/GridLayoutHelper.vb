@@ -1,3 +1,6 @@
+Option Strict On
+Option Explicit On 
+
 Imports System
 Imports System.Windows.Forms
 
@@ -39,7 +42,7 @@ Public Class GridLayoutHelper
     Dim dWidth As Decimal = CType(width, Decimal)
     Dim totalWidth As Integer = width
     Dim colWidth As Integer
-    colWidth = width / nCols
+    colWidth = CType(width / nCols, Integer)
     Dim i As Integer = 0
     While i < lastColIndex
       If Not _percentages Is Nothing Then

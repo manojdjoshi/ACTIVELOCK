@@ -28,7 +28,7 @@
 '*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '*
 '*
-'Option Strict Off
+Option Strict On
 Option Explicit On
 Imports System.IO
 Imports System.Text
@@ -1410,7 +1410,7 @@ Friend Class frmMain
       strLock = strLock.Substring(2)
     End If
 
-    Dim Index, i As Short
+    Dim Index, i As Integer
     Dim strInstCode As String
     strInstCode = ActiveLock3Globals_definst.Base64Decode(txtInstallCode.Text)
 
@@ -1466,7 +1466,11 @@ Friend Class frmMain
       Else
         strNew64Chunk = strdata.Substring(i, 64)
       End If
-      sResult = sResult & IIf(sResult.Length > 0, vbCrLf, "") & strNew64Chunk
+      If sResult.Length > 0 Then
+        sResult = sResult & vbCrLf & strNew64Chunk
+      Else
+        sResult = sResult & strNew64Chunk
+      End If
     Next
 
     Make64ByteChunks = sResult
@@ -1515,7 +1519,7 @@ Friend Class frmMain
 
       Dim foundIt As Boolean
       Dim Y As Object
-      Dim i, j As Short
+      Dim i, j As Integer
       Dim systemDir, s, pathName As String
 
       WhereIsDLL("") 'initialize
@@ -1530,7 +1534,9 @@ Friend Class frmMain
           s = s.Substring(2)
         ElseIf s.IndexOf("\") > 0 Then
           j = s.LastIndexOf("\") 'InStrRev(s, "\")
-          pathName = s.Substring(s, j - 1)
+          '!!!!!!!!!!!!!! TODO ?
+          'pathName = s.Substring(s, j - 1)
+          pathName = s.Substring(0, j - 1)
           s = s.Substring(j + 1)
         Else
           pathName = systemDir
@@ -1574,11 +1580,11 @@ Friend Class frmMain
 
     'Add a call at the beginning of checkForResources
 
-    Static a As Object
+    Static a As String() 'Object
     Dim s, D As String
     Dim EnvString As String
-    Dim Indx As Short ' Declare variables.
-    Dim i As Short
+    Dim Indx As Integer
+    Dim i As Integer
 
     On Error Resume Next
     i = UBound(a)
@@ -1590,7 +1596,9 @@ Friend Class frmMain
 
       If D.Substring(D.Length - 2) = "32" Then 'I'm guessing at the name of the 16 bit windows directory (assuming it exists)
         i = D.Length
-        s = s & D.Substring(D, i - 2) & ";"
+        '!!!!!!!! TODO ?
+        's = s & D.Substring(D, i - 2) & ";"
+        s = s & D.Substring(0, i - 2) & ";"
       End If
 
       s = s & WinDir() & ";"
@@ -1601,7 +1609,7 @@ Friend Class frmMain
           s = s & EnvString.Substring(6)
           Exit Do
         End If
-        Indx = Indx + 1
+        Indx += 1
       Loop Until EnvString = ""
       a = Split(s, ";")
     End If
@@ -1663,7 +1671,7 @@ Friend Class frmMain
 
   Private Function CheckDuplicate(ByRef productName As String, ByRef productVer As String) As Boolean
     CheckDuplicate = False
-    Dim i As Short
+    Dim i As Integer
     For i = 0 To lstvwProducts.Items.Count - 1
       If lstvwProducts.Items(i).Text = productName _
         AndAlso lstvwProducts.Items(i).SubItems(1).Text = productVer Then
@@ -1693,19 +1701,19 @@ Friend Class frmMain
     lstvwProducts.Items.Clear()
     ' Populate Product List on Product Code Generator tab
     ' and Key Gen tab with product info from products.ini
-    Dim arrProdInfos() As Object 'ActiveLock3_4NET.ProductInfo
-    arrProdInfos = GeneratorInstance.RetrieveProducts().Clone()
+    Dim arrProdInfos() As ProductInfo 'ActiveLock3_4NET.ProductInfo
+    arrProdInfos = GeneratorInstance.RetrieveProducts() '.Clone()
 
     If IsArrayEmpty(arrProdInfos) Then Exit Sub
 
-    Dim i As Short
+    Dim i As Integer
     For i = LBound(arrProdInfos) To UBound(arrProdInfos)
-      PopulateUI(arrProdInfos(i))
+      PopulateUI(CType(arrProdInfos(i), ProductInfo))
     Next
     lstvwProducts.Items(0).Selected = True
   End Sub
 
-  Private Function IsArrayEmpty(ByRef arrVar As Object) As Boolean
+  Private Function IsArrayEmpty(ByRef arrVar As ProductInfo()) As Boolean
     IsArrayEmpty = True
     Try
       Dim lb As Integer
@@ -1726,7 +1734,7 @@ Friend Class frmMain
     ' Retrieves lock string and user info from the request string
     '
     Dim a() As String
-    Dim Index, i As Short
+    Dim Index, i As Integer
     Dim aString As String
     Dim usedLockNone As Boolean
     Dim noKey As String
@@ -1923,7 +1931,7 @@ Friend Class frmMain
         .Items.Add(New Mylist("Full Version-USA", 0))
         .Items.Add(New Mylist("Full Version-International", 0))
         .SelectedIndex = 0
-        SaveComboBox(strRegisteredLevelDBName, cboRegisteredLevel, True)
+        SaveComboBox(strRegisteredLevelDBName, cboRegisteredLevel.Items.GetEnumerator, True)
       End With
     Else
       LoadComboBox(strRegisteredLevelDBName, cboRegisteredLevel, True)
@@ -1962,7 +1970,11 @@ Friend Class frmMain
     cboProducts.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboProducts", CStr(0)))
     cboLicType.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboLicType", CStr(1)))
     cboRegisteredLevel.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboRegisteredLevel", CStr(0)))
-    chkItemData.CheckState = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", CStr(0)))
+    If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", CStr(0)) = "Unchecked" Then
+      chkItemData.CheckState = CheckState.Unchecked
+    Else
+      chkItemData.CheckState = CheckState.Checked
+    End If
 
     Me.Text = "ALUGEN3.5NET - ActiveLock3 Universal GENerator - v3.5 for VB.NET"
 
@@ -1974,7 +1986,7 @@ Friend Class frmMain
     mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboProducts", CStr(cboProducts.SelectedIndex))
     mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboLicType", CStr(cboLicType.SelectedIndex))
     mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboRegisteredLevel", CStr(cboRegisteredLevel.SelectedIndex))
-    mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", chkItemData.CheckState)
+    mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", chkItemData.CheckState.ToString)
     End
   End Sub
 
@@ -2076,7 +2088,7 @@ Friend Class frmMain
     cmdValidate.Enabled = True
   End Sub
   Private Sub cmdBrowse_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdBrowse.Click
-    Dim itemProductInfo As ProductInfoItem = cboProducts.SelectedItem
+    Dim itemProductInfo As ProductInfoItem = CType(cboProducts.SelectedItem, ProductInfoItem)
     Dim strName As String = itemProductInfo.ProductName
     Try
       With saveDlg
@@ -2234,7 +2246,7 @@ Friend Class frmMain
     UpdateStatus("Generating license key...")
 
     Try
-      Dim itemProductInfo As ProductInfoItem = cboProducts.SelectedItem
+      Dim itemProductInfo As ProductInfoItem = CType(cboProducts.SelectedItem, ProductInfoItem)
       Dim strName, strVer As String
       strName = itemProductInfo.ProductName
       strVer = itemProductInfo.ProductVersion
@@ -2264,22 +2276,27 @@ Friend Class frmMain
       'Create a product license object without the product key or license key
       'Lic = ActiveLock3.CreateProductLicense(strName, "Code", strVer, alfSingle, varLicType, "Licensee", strExpire, "LicKey", "RegDate", "Hash1")
       'generate license object
-      Dim selRegLevel As Mylist = cboRegisteredLevel.SelectedItem
+      Dim selRegLevel As Mylist = CType(cboRegisteredLevel.SelectedItem, Mylist)
+      Dim selRelLevelType As String
+      If chkItemData.CheckState = CheckState.Unchecked Then
+        selRelLevelType = selRegLevel.Name
+      Else
+        selRelLevelType = selRegLevel.ItemData.ToString
+      End If
       Lic = ActiveLock3Globals_definst.CreateProductLicense(strName, strVer, "", _
                 ProductLicense.LicFlags.alfSingle, varLicType, "", _
-                IIf(chkItemData.CheckState = CheckState.Unchecked, _
-                  selRegLevel.Name, selRegLevel.ItemData), _
+                selRelLevelType, _
                 strExpire, , strRegDate)
 
       Dim strLibKey As String
       ' Pass it to IALUGenerator to generate the key
       Dim selectedRegisteredLevel As String
       Dim mList As Mylist
-      mList = cboRegisteredLevel.Items(cboRegisteredLevel.SelectedIndex)
+      mList = CType(cboRegisteredLevel.Items(cboRegisteredLevel.SelectedIndex), Mylist)
       If chkItemData.CheckState = CheckState.Unchecked Then
         selectedRegisteredLevel = mList.Name
       Else
-        selectedRegisteredLevel = mList.ItemData
+        selectedRegisteredLevel = mList.ItemData.ToString
       End If
       strLibKey = GeneratorInstance.GenKey(Lic, txtInstallCode.Text, selectedRegisteredLevel)
       'split license key into 64byte chunks
@@ -2293,7 +2310,7 @@ Friend Class frmMain
       'add license to database
       Dim lockTypesString As String
       Dim frmAlugenDatabase As New frmAlugenDb
-      If MsgBox("Would you like to save the new license in the License Database?", MsgBoxStyle.YesNo + MsgBoxStyle.Question) = MsgBoxResult.Yes Then
+      If MessageBox.Show("Would you like to save the new license in the License Database?", ACTIVELOCKSTRING, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.Yes Then
         lockTypesString = ""
         If chkLockMACaddress.CheckState = CheckState.Checked Then
           lockTypesString = lockTypesString & "MAC Address"
@@ -2340,7 +2357,7 @@ Friend Class frmMain
 
   Private Sub cmdPaste_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdPaste.Click
     If Clipboard.GetDataObject.GetDataPresent(DataFormats.Text) Then
-      txtInstallCode.Text = Clipboard.GetDataObject.GetData(DataFormats.Text)
+      txtInstallCode.Text = CType(Clipboard.GetDataObject.GetData(DataFormats.Text), String)
     End If
   End Sub
 
@@ -2594,8 +2611,8 @@ Friend Class frmMain
   Private Sub cmdPrintLicenseKey_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdPrintLicenseKey.Click
     Dim daPrintDocument As New daReport.DaPrintDocument
     Dim hashParameters As New Hashtable
-    Dim selProduct As ProductInfoItem = cboProducts.SelectedItem
-    Dim itemRegLevel As Mylist = cboRegisteredLevel.SelectedItem
+    Dim selProduct As ProductInfoItem = CType(cboProducts.SelectedItem, ProductInfoItem)
+    Dim itemRegLevel As Mylist = CType(cboRegisteredLevel.SelectedItem, Mylist)
 
     'set .xml file for printing
     daPrintDocument.setXML("reports\repLicenseKey.xml")
@@ -2629,8 +2646,8 @@ Friend Class frmMain
     Dim emailAddress As String = "user@company.com"
     Dim strSubject As String
     Dim strBodyMessage As String
-    Dim selProduct As ProductInfoItem = cboProducts.SelectedItem
-    Dim itemRegLevel As Mylist = cboRegisteredLevel.SelectedItem
+    Dim selProduct As ProductInfoItem = CType(cboProducts.SelectedItem, ProductInfoItem)
+    Dim itemRegLevel As Mylist = CType(cboRegisteredLevel.SelectedItem, Mylist)
     Dim strNewLine As String = "%0D%0A"
 
     strSubject = String.Format("License key for application {0} ({1}), user [{2}]", selProduct.ProductName, selProduct.ProductVersion, txtUser.Text)

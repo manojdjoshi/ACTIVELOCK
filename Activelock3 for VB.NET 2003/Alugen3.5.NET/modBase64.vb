@@ -37,6 +37,7 @@
 ' Started: 04.21.2005
 ' Modified: 03.25.2006
 '===============================================================================
+Option Strict On
 Option Explicit On 
 
 Module modBase64
@@ -54,11 +55,11 @@ Module modBase64
     ' Remarks: None
     '===============================================================================
     Dim c1, c2, c3 As Integer
-    Dim w1 As Short
-    Dim w2 As Short
-    Dim w3 As Short
-    Dim w4 As Short
-    Dim N As Short
+    Dim w1 As Double
+    Dim w2 As Double
+    Dim w3 As Double
+    Dim w4 As Double
+    Dim N As Integer
     Dim retry As String = String.Empty
     For N = 1 To DecryptedText.Length Step 3
       c1 = Convert.ToInt16(DecryptedText.Substring(N - 1, 1).Chars(0))
@@ -88,7 +89,7 @@ Module modBase64
     Dim w2 As Short
     Dim w3 As Short
     Dim w4 As Short
-    Dim N As Short
+    Dim N As Integer
     Dim retry As String
 
     For N = 1 To a.Length Step 4
@@ -96,14 +97,14 @@ Module modBase64
       w2 = mimedecode(a.Substring(N, 1))
       w3 = mimedecode(a.Substring(N + 1, 1))
       w4 = mimedecode(a.Substring(N + 2, 1))
-      If w2 >= 0 Then retry = retry & Chr((w1 * 4 + Int(w2 / 16)) And 255)
-      If w3 >= 0 Then retry = retry & Chr((w2 * 16 + Int(w3 / 4)) And 255)
+      If w2 >= 0 Then retry = retry & Chr(Convert.ToInt32((w1 * 4 + Int(w2 / 16))) And 255)
+      If w3 >= 0 Then retry = retry & Chr(Convert.ToInt32(w2 * 16 + Int(w3 / 4)) And 255)
       If w4 >= 0 Then retry = retry & Chr((w3 * 64 + w4) And 255)
     Next
     Base64_Decode = retry
   End Function
 
-  Private Function mimeencode(ByRef w As Short) As String
+  Private Function mimeencode(ByRef w As Double) As String
     '===============================================================================
     ' Name: Function mimeencode
     ' Input:
@@ -114,7 +115,7 @@ Module modBase64
     ' Remarks: None
     '===============================================================================
     If w >= 0 Then
-      mimeencode = base64.Substring(w, 1) 'Mid(base64, w + 1, 1)
+      mimeencode = base64.Substring(Convert.ToInt32(w), 1) 'Mid(base64, w + 1, 1)
     Else
       mimeencode = ""
     End If
@@ -134,6 +135,6 @@ Module modBase64
       mimedecode = -1
       Exit Function
     End If
-    mimedecode = base64.IndexOf(a) - 1 'InStr(base64, a) - 1
+    mimedecode = Convert.ToInt16(base64.IndexOf(a) - 1) 'InStr(base64, a) - 1
   End Function
 End Module

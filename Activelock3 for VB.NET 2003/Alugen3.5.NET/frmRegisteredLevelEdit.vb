@@ -38,6 +38,7 @@
 '    Modified   : By Kirtaph on 2006-02-16
 '--------------------------------------------------------------------------------
 '</CSCC>
+Option Strict On
 Option Explicit On 
 Imports System.Windows.Forms
 
@@ -232,21 +233,21 @@ Friend Class frmRegisteredLevelEdit
   Private blnAnnullato As Boolean
   Private blnCanEnabled(NumberOfControl - 1) As Boolean
   Private m_strDescription As String
-  Private m_intItemData As Short
+  Private m_intItemData As Integer
 #End Region
 
 
 
 #Region "Properties"
-  Public Property ItemData() As Short
+  Public Property ItemData() As Integer
     Get
       If Val(txtItemData.Text) > 32767 Then
         MsgBox("ItemData cannot be greater than 32767.", vbExclamation)
         Exit Property
       End If
-      ItemData = Val(txtItemData.Text)
+      ItemData = Convert.ToInt32(txtItemData.Text)
     End Get
-    Set(ByVal Value As Short)
+    Set(ByVal Value As Integer)
       m_intItemData = Value
     End Set
   End Property
@@ -271,7 +272,7 @@ Friend Class frmRegisteredLevelEdit
 
 #Region "Methods"
   Private Function CanEnable() As Boolean
-    Dim inti As Short
+    Dim inti As Integer
     CanEnable = True
     For inti = 0 To UBound(blnCanEnabled)
       CanEnable = CanEnable And blnCanEnabled(inti)
@@ -279,7 +280,7 @@ Friend Class frmRegisteredLevelEdit
   End Function
 
   Private Function InitializeEnable() As Object
-    Dim inti As Short
+    Dim inti As Integer
     For inti = 0 To UBound(blnCanEnabled)
       blnCanEnabled(inti) = False
     Next
@@ -306,7 +307,7 @@ Friend Class frmRegisteredLevelEdit
   End Sub
 
   Private Sub dlgRegisteredLevel_Closing(ByVal eventSender As System.Object, ByVal eventArgs As System.ComponentModel.CancelEventArgs) Handles MyBase.Closing
-    Dim Cancel As Short = eventArgs.Cancel
+    Dim Cancel As Boolean = eventArgs.Cancel
     'blnAnnullato = True
     eventArgs.Cancel = Cancel
   End Sub

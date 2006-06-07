@@ -19,7 +19,7 @@
                 OutputType = "WinExe"
                 OptionCompare = "Binary"
                 OptionExplicit = "On"
-                OptionStrict = "Off"
+                OptionStrict = "On"
                 RootNamespace = "ALUGEN3_5NET"
                 StartupObject = "ALUGEN3_5NET.frmMain"
             >
@@ -89,13 +89,13 @@
                 />
             </References>
             <Imports>
-                <Import Namespace = "Microsoft.VisualBasic" />
                 <Import Namespace = "System" />
                 <Import Namespace = "System.Collections" />
                 <Import Namespace = "System.Data" />
                 <Import Namespace = "System.Drawing" />
                 <Import Namespace = "System.Diagnostics" />
                 <Import Namespace = "System.Windows.Forms" />
+                <Import Namespace = "Microsoft.VisualBasic" />
             </Imports>
         </Build>
         <Files>

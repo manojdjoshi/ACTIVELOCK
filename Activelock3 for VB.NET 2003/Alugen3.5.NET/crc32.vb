@@ -30,6 +30,8 @@
 ' This is v2 of the VB CRC32 algorithm provided by Paul
 ' (wpsjr1@succeed.net) - much quicker than the nasty
 ' original version I posted.  Excellent work!
+Option Strict On
+Option Explicit On 
 
 Public Class CRC32
   Private crc32Table() As Integer
@@ -72,11 +74,11 @@ Public Class CRC32
     For i = 0 To 255
       dwCrc = i
       For j = 8 To 1 Step -1
-        If (dwCrc And 1) Then
-          dwCrc = ((dwCrc And &HFFFFFFFE) \ 2&) And &H7FFFFFFF
+        If (dwCrc And 1) = 0 Then
+          dwCrc = Convert.ToInt32(((dwCrc And &HFFFFFFFE) \ 2&) And &H7FFFFFFF)
           dwCrc = dwCrc Xor dwPolynomial
         Else
-          dwCrc = ((dwCrc And &HFFFFFFFE) \ 2&) And &H7FFFFFFF
+          dwCrc = Convert.ToInt32(((dwCrc And &HFFFFFFFE) \ 2&) And &H7FFFFFFF)
         End If
       Next j
       crc32Table(i) = dwCrc

@@ -53,7 +53,9 @@
 '      You only need to go through this keyset generation step once.
 '      Once you have a valid keyset, you should store it inside your app for later use.
 '
+Option Strict On
 Option Explicit On 
+
 Imports System.IO
 Imports System.Security.Cryptography
 Imports System.text
@@ -183,9 +185,9 @@ Module modActiveLock
     ' Purpose: Trims Null characters from the string.
     ' Remarks: None
     '===============================================================================
-    Dim pos As Short
+    Dim pos As Integer
     pos = startstr.IndexOf(Chr(0))  'InStr(startstr, Chr(0))
-    If pos Then
+    If pos > 0 Then
       TrimNulls = startstr.Substring(0, pos - 1).Trim
     Else
       TrimNulls = startstr.Trim
@@ -208,7 +210,7 @@ Module modActiveLock
 
     ' CRC32 Hash:
     Dim f As FileStream = New FileStream(sPath, FileMode.Open, FileAccess.Read, FileShare.Read, 8192)
-    crc = c.GetCrc32(f)
+    crc = c.GetCrc32(CType(f, Stream))
     f.Close()
 
     ' File size:
@@ -297,7 +299,7 @@ Hell:
     MD5HashFile = LCase(sData)    '<--- ReadFile procedure already computes the MD5.Hash
   End Function
 
-  Public Function LocalTimeZone(ByVal returnType As TimeZoneReturn) As Object
+  Public Function LocalTimeZone(ByVal returnType As TimeZoneReturn) As String 'Object
     '===============================================================================
     ' Name: Function LocalTimeZone
     ' Input:
@@ -331,7 +333,7 @@ Hell:
     If x > 0 Then strName = strName.Substring(0, x - 1)
 
     If returnType = TimeZoneReturn.DST_Active Then
-      LocalTimeZone = bDST
+      LocalTimeZone = bDST.ToString
     End If
 
     If returnType = TimeZoneReturn.TimeZoneName Then
@@ -349,21 +351,21 @@ Hell:
     End If
 
     If returnType = TimeZoneReturn.UTC_BaseOffset Then
-      LocalTimeZone = tzi.bias
+      LocalTimeZone = tzi.bias.ToString
     End If
 
     If returnType = TimeZoneReturn.DST_Offset Then
-      LocalTimeZone = tzi.DaylightBias
+      LocalTimeZone = tzi.DaylightBias.ToString
     End If
 
     If returnType = TimeZoneReturn.UTC_Offset Then
       If tzi.DaylightBias = -60 Then
-        LocalTimeZone = tzi.bias
+        LocalTimeZone = tzi.bias.ToString
       Else
-        LocalTimeZone = -tzi.bias
+        LocalTimeZone = (-tzi.bias).ToString
       End If
       ' Account for Daylight Savings Time
-      If bDST Then LocalTimeZone = LocalTimeZone - 60
+      If bDST Then LocalTimeZone = (Convert.ToDouble(LocalTimeZone) - 60).ToString
     End If
   End Function
 
@@ -447,7 +449,7 @@ Hell:
     ' Return the error message associated with LastDLLError:
     sBuff = New String(Chr(0), 256)
     lCount = FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM Or FORMAT_MESSAGE_IGNORE_INSERTS, 0, lLastDLLError, 0, sBuff, sBuff.Length, 0)
-    If lCount Then
+    If lCount > 0 Then
       WinError = sBuff.Substring(0, lCount)
     End If
   End Function
@@ -462,8 +464,8 @@ Hell:
     ' Remarks: None
     '===============================================================================
     Const FIX_LENGTH As Short = 4096
-    Dim Length As Short
-    Dim Buffer As New String(" ", FIX_LENGTH)
+    Dim Length As Integer
+    Dim Buffer As New String(CType(" ", Char), FIX_LENGTH)
 
     Length = GeneralWinDirApi(Buffer, FIX_LENGTH - 1)
     WinDir = Buffer.Substring(0, Length)
@@ -492,8 +494,8 @@ Hell:
     ' Remarks: None
     '===============================================================================
     Const FIX_LENGTH As Short = 4096
-    Dim Length As Short
-    Dim Buffer As New String(" ", FIX_LENGTH)
+    Dim Length As Integer
+    Dim Buffer As New String(CType(" ", Char), FIX_LENGTH)
 
     Length = GetSystemDirectory(Buffer, FIX_LENGTH - 1)
     WinSysDir = Buffer.Substring(0, Length)

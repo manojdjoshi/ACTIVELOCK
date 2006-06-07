@@ -28,6 +28,7 @@
 '*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '*
 '*
+Option Strict On
 Option Explicit On 
 
 Module modRegisteredLevel
@@ -40,32 +41,40 @@ Module modRegisteredLevel
 		sPath = Trim(sPath)
 		
     If sPath.Length > 0 Then
-      sPath = sPath & IIf(sPath.Substring(sPath.Length - 1) <> "\", "\", "")
+      If sPath.Substring(sPath.Length - 1) <> "\" Then
+        sPath = sPath & "\"
+      End If
     End If
 
     Return sPath
   End Function
 
-  Public Sub SaveComboBox(ByRef FileName As String, ByRef Control As Object, Optional ByRef IsItemData As Boolean = False)
-    Dim FileNum As Byte
+  Public Sub SaveComboBox(ByRef FileName As String, ByRef myEnum As IEnumerator, Optional ByRef IsItemData As Boolean = False)
+    Dim FileNum As Integer
     Dim Teller As Short
     Dim mList As Mylist
+    'ByRef ControlItems As ComboBox
 
     FileNum = FreeFile()
     FileOpen(FileNum, FileName, OpenMode.Output)
     PrintLine(FileNum, IsItemData)
 
-    For Teller = 0 To Control.items.count - 1
-      mList = Control.Items(Teller)
+    Do While myEnum.MoveNext
+      mList = CType(myEnum.Current, Mylist)
       PrintLine(FileNum, mList.Name)
       PrintLine(FileNum, Convert.ToString(mList.ItemData))
-    Next Teller
+    Loop
+    'For Teller = 0 To ListItems.Count - 1 ' Control.Items.Count
+    '  mList = ListItems(Teller) 'Control.Items(Teller)
+    '  PrintLine(FileNum, mList.Name)
+    '  PrintLine(FileNum, Convert.ToString(mList.ItemData))
+    'Next Teller
 
     FileClose(FileNum)
   End Sub
 
-  Public Sub LoadComboBox(ByRef FileName As String, ByRef Control As Object, ByRef IsItemData As Boolean)
-    Dim FileNum As Byte
+  Public Sub LoadComboBox(ByRef FileName As String, ByRef Control As ComboBox, ByRef IsItemData As Boolean)
+    Dim FileNum As Integer
     Dim Teller As Short
     Dim Text As String, Text1 As String, Text2 As String
 
@@ -80,7 +89,30 @@ Module modRegisteredLevel
       If IsItemData = True Then
         Text1 = LineInput(FileNum)
         Text2 = LineInput(FileNum)
-        Control.Items.Add(New Mylist(Text1, Text2))
+        Control.Items.Add(New Mylist(Text1, Convert.ToInt32(Text2)))
+      End If
+    Loop
+
+    FileClose(FileNum)
+  End Sub
+
+  Public Sub LoadListBox(ByRef FileName As String, ByRef Control As ListBox, ByRef IsItemData As Boolean)
+    Dim FileNum As Integer
+    Dim Teller As Short
+    Dim Text As String, Text1 As String, Text2 As String
+
+    FileNum = FreeFile()
+    FileOpen(FileNum, FileName, OpenMode.Input)
+
+    If LOF(FileNum) = 0 Then FileClose(FileNum) : Exit Sub
+    Text = LineInput(FileNum)
+    IsItemData = CBool(Text)
+
+    Do While Not EOF(FileNum)
+      If IsItemData = True Then
+        Text1 = LineInput(FileNum)
+        Text2 = LineInput(FileNum)
+        Control.Items.Add(New Mylist(Text1, Convert.ToInt32(Text2)))
       End If
     Loop
 

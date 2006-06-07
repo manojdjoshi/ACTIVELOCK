@@ -9,6 +9,9 @@
 ' WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY 
 ' or FITNESS FOR A PARTICULAR PURPOSE.
 '
+Option Strict On
+Option Explicit On 
+
 Imports System
 Imports System.ComponentModel
 Imports System.Globalization
@@ -118,7 +121,11 @@ Imports System.Windows.Forms
 
   Private Sub SetToNullValue()
     _isNull = True
-    MyBase.CustomFormat = IIf(_nullValue Is Nothing Or _nullValue = [String].Empty, " ", "'" + _nullValue + "'")
+    If Not (_nullValue Is Nothing Or _nullValue = [String].Empty) Then
+      MyBase.CustomFormat = "'" + _nullValue + "'"
+    Else
+      MyBase.CustomFormat = " "
+    End If
   End Sub
 
   Private Sub SetToDateTimeValue()

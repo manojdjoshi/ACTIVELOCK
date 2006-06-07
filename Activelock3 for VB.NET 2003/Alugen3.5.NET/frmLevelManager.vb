@@ -38,6 +38,7 @@
 '    Modified   : By Kirtaph On 2006-02-16
 '--------------------------------------------------------------------------------
 '</CSCC>
+Option Strict On
 Option Explicit On 
 
 Friend Class frmLevelManager
@@ -232,7 +233,7 @@ Friend Class frmLevelManager
   End Sub
 
   Private Sub cmdClose_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdClose.Click
-    SaveComboBox(strRegisteredLevelDBName, lstRegisteredLevel, True)
+    SaveComboBox(strRegisteredLevelDBName, lstRegisteredLevel.Items.GetEnumerator, True)
     Me.Hide()
   End Sub
 
@@ -248,7 +249,7 @@ Friend Class frmLevelManager
     LoadImages()
 
     lstRegisteredLevel.Items.Clear()
-    LoadComboBox(strRegisteredLevelDBName, lstRegisteredLevel, True)
+    LoadListBox(strRegisteredLevelDBName, lstRegisteredLevel, True)
   End Sub
 
   Private Sub lstRegisteredLevel_DoubleClick(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles lstRegisteredLevel.DoubleClick
@@ -257,7 +258,7 @@ Friend Class frmLevelManager
     If lstRegisteredLevel.Items.Count > 0 Then
       Dim mdlgRegisteredLevel As New frmRegisteredLevelEdit
       With mdlgRegisteredLevel
-        mList = lstRegisteredLevel.Items(lstRegisteredLevel.SelectedIndex)
+        mList = CType(lstRegisteredLevel.Items(lstRegisteredLevel.SelectedIndex), Mylist)
         .ItemData = mList.ItemData
         .Description = mList.Name
         .ShowDialog()

@@ -28,7 +28,7 @@
 '*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '*
 '*
-Option Strict Off
+Option Strict On
 Option Explicit On 
 Imports System.IO
 
