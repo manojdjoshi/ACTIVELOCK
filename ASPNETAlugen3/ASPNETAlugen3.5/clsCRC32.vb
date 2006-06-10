@@ -30,6 +30,9 @@
 ' This is v2 of the VB CRC32 algorithm provided by Paul
 ' (wpsjr1@succeed.net) - much quicker than the nasty
 ' original version I posted.  Excellent work!
+'coments by claudiu
+'and other comments
+
 Option Strict On
 Option Explicit On 
 
