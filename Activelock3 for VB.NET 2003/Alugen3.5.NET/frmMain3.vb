@@ -2094,9 +2094,6 @@ Friend Class frmMain
       With saveDlg
         .InitialDirectory = Dir(txtLicenseFile.Text)
         .Filter = "ALL Files (*.ALL)|*.ALL"
-        '!!!! TODO
-        '.Flags = MSComDlg.FileOpenConstants.cdlOFNExplorer Or MSComDlg.FileOpenConstants.cdlOFNShareAware Or MSComDlg.FileOpenConstants.cdlOFNNoChangeDir
-        '.CancelError = True
         .FileName = strName
         .ShowDialog()
         txtLicenseFile.Text = .FileName

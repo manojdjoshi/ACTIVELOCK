@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <VisualBasic LastOpenVersion = "7.10.3077" >
         <Build>
-            <Settings ReferencePath = "C:\SRC\Activelock3.4\Src_v3\ActiveLock3.4.NET\;C:\Program Files\Activelock3.4_VBNET\Src_v3\ActiveLock3.4.NET\;C:\Program Files\Activelock3.4_VBNET\Src_v3\Alugen3.5.NET\" >
+            <Settings ReferencePath = "C:\SRC\Activelock3.4\Src_v3\ActiveLock3.4.NET\;C:\Program Files\Activelock3.4_VBNET\Src_v3\ActiveLock3.4.NET\;C:\Program Files\Activelock3.4_VBNET\Src_v3\Alugen3.5.NET\;C:\WORK\ActivelockCommunity\Alugen3.5.NET\" >
                 <Config
                     Name = "Debug"
                     EnableASPDebugging = "false"
