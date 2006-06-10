@@ -32,7 +32,13 @@
 ' original version I posted.  Excellent work!
 'coments by claudiu
 'and other comments
+'some comments -ismail
 
+<<<<<<< .mine
+
+=======
+
+>>>>>>> .theirs
 Option Strict On
 Option Explicit On 
 
