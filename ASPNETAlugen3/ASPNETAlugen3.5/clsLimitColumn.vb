@@ -27,13 +27,16 @@
 '*   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 '*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '*
+Option Strict On
+Option Explicit On 
+
 Imports System
 Imports System.Web.UI
 Imports System.Web.UI.WebControls
 
-Public Class LimitColumn
+Friend Class LimitColumn
   Inherits BoundColumn
-  Private _characterLimit As Integer = 0
+  Private _characterLimit As Integer
 
   Public Property CharacterLimit() As Integer
     Get

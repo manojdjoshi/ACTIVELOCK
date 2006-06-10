@@ -30,9 +30,10 @@
 ' This is v2 of the VB CRC32 algorithm provided by Paul
 ' (wpsjr1@succeed.net) - much quicker than the nasty
 ' original version I posted.  Excellent work!
+Option Strict On
+Option Explicit On 
 
 Public Class CRC32
-
   Private crc32Table() As Integer
   Private Const BUFFER_SIZE As Integer = 1024
 
@@ -47,7 +48,6 @@ Public Class CRC32
     Dim count As Integer = stream.Read(buffer, 0, readSize)
     Dim i As Integer
     Dim iLookup As Integer
-    Dim tot As Integer = 0
     Do While (count > 0)
       For i = 0 To count - 1
         iLookup = (crc32Result And &HFF) Xor buffer(i)
@@ -62,7 +62,6 @@ Public Class CRC32
   End Function
 
   Public Sub New()
-
     ' This is the official polynomial used by CRC32 in PKZip.
     ' Often the polynomial is shown reversed (04C11DB7).
     Dim dwPolynomial As Integer = &HEDB88320
@@ -74,11 +73,11 @@ Public Class CRC32
     For i = 0 To 255
       dwCrc = i
       For j = 8 To 1 Step -1
-        If (dwCrc And 1) Then
-          dwCrc = ((dwCrc And &HFFFFFFFE) \ 2&) And &H7FFFFFFF
+        If (dwCrc And 1) = 0 Then
+          dwCrc = Convert.ToInt32(((dwCrc And &HFFFFFFFE) \ 2&) And &H7FFFFFFF)
           dwCrc = dwCrc Xor dwPolynomial
         Else
-          dwCrc = ((dwCrc And &HFFFFFFFE) \ 2&) And &H7FFFFFFF
+          dwCrc = Convert.ToInt32(((dwCrc And &HFFFFFFFE) \ 2&) And &H7FFFFFFF)
         End If
       Next j
       crc32Table(i) = dwCrc

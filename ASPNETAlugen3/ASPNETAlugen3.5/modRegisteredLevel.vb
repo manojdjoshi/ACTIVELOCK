@@ -28,6 +28,7 @@
 '*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '*
 '*
+Option Strict On
 Option Explicit On 
 
 Module modRegisteredLevel
@@ -40,15 +41,17 @@ Module modRegisteredLevel
 		sPath = Trim(sPath)
 		
     If sPath.Length > 0 Then
-      sPath = sPath & IIf(sPath.Substring(sPath.Length - 1) <> "\", "\", "")
+      If sPath.Substring(sPath.Length - 1) <> "\" Then
+        sPath = sPath & "\"
+      End If
     End If
 
     Return sPath
   End Function
 
-  Public Sub SaveComboBox(ByRef FileName As String, ByRef Control As Object, Optional ByRef IsItemData As Boolean = False)
-    Dim FileNum As Byte
-    Dim Teller As Short
+  Public Sub SaveComboBox(ByRef FileName As String, ByRef Control As ListControl, Optional ByRef IsItemData As Boolean = False)
+    Dim FileNum As Integer
+    Dim Teller As Integer
     Dim mList As ListItem
 
     FileNum = FreeFile()
@@ -64,9 +67,8 @@ Module modRegisteredLevel
     FileClose(FileNum)
   End Sub
 
-  Public Sub LoadComboBox(ByRef FileName As String, ByRef Control As Object, ByRef IsItemData As Boolean)
-    Dim FileNum As Byte
-    Dim Teller As Short
+  Public Sub LoadComboBox(ByRef FileName As String, ByRef Control As ListControl, ByRef IsItemData As Boolean)
+    Dim FileNum As Integer
     Dim Text As String, Text1 As String, Text2 As String
 
     FileNum = FreeFile()

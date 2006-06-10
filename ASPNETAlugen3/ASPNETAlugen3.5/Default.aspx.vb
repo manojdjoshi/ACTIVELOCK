@@ -1,4 +1,36 @@
+'*   ActiveLock
+'*   Copyright 1998-2002 Nelson Ferraz
+'*   Copyright 2003-2006 The ActiveLock Software Group (ASG)
+'*   All material is the property of the contributing authors.
+'*
+'*   Redistribution and use in source and binary forms, with or without
+'*   modification, are permitted provided that the following conditions are
+'*   met:
+'*
+'*     [o] Redistributions of source code must retain the above copyright
+'*         notice, this list of conditions and the following disclaimer.
+'*
+'*     [o] Redistributions in binary form must reproduce the above
+'*         copyright notice, this list of conditions and the following
+'*         disclaimer in the documentation and/or other materials provided
+'*         with the distribution.
+'*
+'*   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+'*   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+'*   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+'*   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+'*   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+'*   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+'*   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+'*   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+'*   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+'*   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+'*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+'*
+Option Strict On
 Option Explicit On 
+
+Imports System.Text
 Imports System.IO
 Imports ActiveLock3_5NET
 Imports MagicAjax
@@ -7,12 +39,9 @@ Imports MagicAjax
 Public Class ASPNETAlugen3
   Inherits System.Web.UI.Page
 
-  Public ActiveLock3AlugenGlobals_definst As New AlugenGlobals
-  Public ActiveLock3Globals_definst As New Globals_Renamed
-  Public GeneratorInstance As _IALUGenerator
-  Public ActiveLock As _IActiveLock
-  Public dt As New DataTable
-  Protected WithEvents cmdSaveLicenseFile As System.Web.UI.WebControls.ImageButton
+  Friend GeneratorInstance As _IALUGenerator
+  Friend ActiveLock As _IActiveLock
+  Friend dt As New DataTable
   Private msgPleaseWait As String = "(generating codes - please wait)"
 
 
@@ -57,11 +86,12 @@ Public Class ASPNETAlugen3
   Protected WithEvents cmdGenerateLicenseKey As msWebControlsLibrary.ExImageButton
   Protected WithEvents cmdCopyLicenseKey As System.Web.UI.HtmlControls.HtmlImage
   Protected WithEvents cmdPrintLicenseKey As msWebControlsLibrary.ExImageButton
-  Protected WithEvents cmdEmailLicenseKey As System.Web.UI.WebControls.ImageButton
+  Protected WithEvents cmdEmailLicenseKey As msWebControlsLibrary.ExImageButton
   Protected WithEvents cmdSelectExpireDate As System.Web.UI.WebControls.ImageButton
   Protected WithEvents Calendar1 As System.Web.UI.WebControls.Calendar
   Protected WithEvents plhDate As System.Web.UI.WebControls.PlaceHolder
   Protected WithEvents myCalendar As System.Web.UI.HtmlControls.HtmlGenericControl
+  Protected WithEvents cmdSaveLicenseFile As msWebControlsLibrary.ExImageButton
 
   'NOTE: The following placeholder declaration is required by the Web Form Designer.
   'Do not delete or move it.
@@ -79,10 +109,9 @@ Public Class ASPNETAlugen3
   Private Sub Page_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
     'Put user code to initialize the page here
 
-
     ' Populate Product List on Product Code Generator tab
     ' and Key Gen tab with product info from products.ini
-    Dim i As Short
+    Dim i As Integer
     Dim arrProdInfos() As ProductInfo
     Dim MyGen As New AlugenGlobals
     GeneratorInstance = MyGen.GeneratorInstance()
@@ -93,7 +122,6 @@ Public Class ASPNETAlugen3
 
     'Populate the DataGrid control
 
-    'dt = New DataTable
     Dim dc As New DataColumn("Name", System.Type.GetType("System.String"))
     dt.Columns.Add(dc)
     dc = New DataColumn("Version", System.Type.GetType("System.String"))
@@ -103,16 +131,11 @@ Public Class ASPNETAlugen3
     dc = New DataColumn("GCode", System.Type.GetType("System.String"))
     dt.Columns.Add(dc)
 
-    'If MagicAjaxContext.Current.IsAjaxCallForPage(Me.Page) Then
-    'If MagicAjaxContext.Current.IsAjaxCall Then
-    'If Not IsPostBack Then
-    '  cboProduct.Items.Clear()
-    'End If
     If Not MagicAjax.MagicAjaxContext.Current.IsAjaxCall Then
       cboProduct.Items.Clear()
     End If
 
-    For i = LBound(arrProdInfos) To UBound(arrProdInfos)
+    For i = 0 To arrProdInfos.Length - 1
       PopulateUI(arrProdInfos(i))
     Next
 
@@ -153,27 +176,15 @@ Public Class ASPNETAlugen3
 
     ' Create a DataView from the DataTable.
     Dim dv As DataView = New DataView(dt)
-    dv.Sort = IIf(sortExpression.Value.Length > 0, sortExpression.Value & " " & sortOrder.Value, "")
+    If sortExpression.Value.Length > 0 Then
+      dv.Sort = sortExpression.Value.ToString() & " " & sortOrder.Value.ToString()
+    Else
+      dv.Sort = String.Empty
+    End If
 
     grdProducts.DataSource = dv
     grdProducts.DataBind()
 
-    'For Each col As DataGridColumn In grdProducts.Columns
-    '  col.ItemStyle.Wrap = False
-    '  col.ItemStyle.Width = Unit.Pixel(100)
-    'Next
-
-    ''inject JS call into body load
-    'Dim strInit As String = "document.getElementById('" & "" & "')"
-    'Dim mbody As HtmlGenericControl = CType(Page.FindControl("body"), HtmlGenericControl)
-    'If Not mbody.Attributes("onload") Is Nothing Then
-    '  mbody.Attributes("onload") += ";" & strInit & ";"
-    'Else
-    '  mbody.Attributes.Add("onload", ";" & strInit & ";")
-    'End If
-
-
-    '!!!!!!!!!!!!111
     If Not IsPostBack Then
 
       'initialize RegisteredLevels
@@ -182,26 +193,11 @@ Public Class ASPNETAlugen3
         loadRegisteredLevels()
       End If
 
-
       grdProducts.SelectedIndex = dt.Rows.Count - 1
-      'grdProducts.SelectedItemStyle.BackColor = Color.FromArgb(200, 220, 240) '
       txtProductName.Text = arrProdInfos(i - 1).name
       txtProductVersion.Text = arrProdInfos(i - 1).Version
       txtVCode.Text = arrProdInfos(i - 1).VCode
       txtGCode.Text = arrProdInfos(i - 1).GCode
-
-      ' The following code is for forcing a postback when the contents of a 
-      ' textbox gets changed and it loses focus
-      'Dim js As String
-      'js = "javascript:" & Page.GetPostBackEventReference(Me, "@@@@@buttonPostBack") & ";"
-      'txtName.Attributes.Add("onchange", js)
-      'txtVer.Attributes.Add("onchange", js)
-
-      ' The following Javascript KeyUp code will allow us disable the
-      ' Generate button when there's no Product Name or Version entered
-
-      'txtProductName.Attributes.Add("OnKeyUp", "document.getElementById('" & cmdGenerateCode.ClientID & "').disabled=(this.value=='')")
-      'txtProductVersion.Attributes.Add("OnKeyUp", "document.getElementById('" & cmdGenerateCode.ClientID & "').disabled=(this.value=='')")
 
       cmdGenerateCode.Attributes.Add("OnClick", "document.getElementById('" & txtVCode.ClientID & "').value='" & msgPleaseWait & "'; document.getElementById('" & txtGCode.ClientID & "').value='" & msgPleaseWait & "'")
       cmdCopyVCode.Attributes.Add("OnClick", "CopyToClipboard('" & txtVCode.ClientID & "');")
@@ -241,13 +237,8 @@ Public Class ASPNETAlugen3
     pnlLicenses.Visible = True
   End Sub
 
-
-
-
-
   Public Function AppPath() As String
-    Dim siteNameUrl As String
-    AppPath = System.IO.Path.GetDirectoryName(Server.MapPath("ASPNETAlugen3_2.aspx"))
+    AppPath = System.IO.Path.GetDirectoryName(Server.MapPath("Default.aspx"))
   End Function
 
   Function CreateDataSource(ByVal Name As String, ByVal Ver As String, ByVal Code1 As String, ByVal Code2 As String) As ICollection
@@ -297,11 +288,9 @@ Public Class ASPNETAlugen3
     GeneratorInstance.StoragePath = AppPath() & "\products.ini"
     arrProdInfos = GeneratorInstance.RetrieveProducts()
 
-    For i As Short = LBound(arrProdInfos) To UBound(arrProdInfos)
+    For i As Integer = 0 To arrProdInfos.Length - 1
       If arrProdInfos(i).name = grdProducts.SelectedItem.Cells(1).Text _
       AndAlso arrProdInfos(i).Version = grdProducts.SelectedItem.Cells(2).Text Then
-        'txtVCode.Text = grdProducts.SelectedItem.Cells(3).Text
-        'txtGCode.Text = grdProducts.SelectedItem.Cells(4).Text
         txtVCode.Text = arrProdInfos(i).VCode
         txtGCode.Text = arrProdInfos(i).GCode
         Exit For
@@ -338,10 +327,9 @@ Public Class ASPNETAlugen3
   End Sub
 
 
-
-
-
   Private Sub cmdAddProduct_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdAddProduct.Click
+    'This button add the new product into the list and into the INI file
+
     If txtVCode.Text.Trim.Length = 0 Then
       Say("New product VCode is missing.")
       Exit Sub
@@ -353,10 +341,9 @@ Public Class ASPNETAlugen3
       Say("Selected Product Name and Version already exist in the product list.")
       Exit Sub
     End If
-    'This button add the new product into the list and into the INI file
+
     AddRow(txtProductName.Text, txtProductVersion.Text, txtVCode.Text, txtGCode.Text, True)
-    'txtVCode.Text = ""
-    'txtGCode.Text = ""
+
     cmdRemoveProduct.Enabled = True
 
     SayAjax(String.Format("Product {0} ({1}) added successfuly.", txtProductName.Text, txtProductVersion.Text))
@@ -381,7 +368,7 @@ Public Class ASPNETAlugen3
 
   Private Sub grdProducts_SortCommand(ByVal source As Object, ByVal e As System.Web.UI.WebControls.DataGridSortCommandEventArgs) Handles grdProducts.SortCommand
     ' Retrieve the data source from session state.
-    Dim mydt As DataTable = dt 'CType(Session("Source"), DataTable)
+    Dim mydt As DataTable = dt
 
     ' Create a DataView from the DataTable.
     Dim dv As DataView = New DataView(mydt)
@@ -392,7 +379,12 @@ Public Class ASPNETAlugen3
       sortExpression.Value = e.SortExpression
       sortOrder.Value = ""
     End If
-    sortOrder.Value = IIf(sortOrder.Value = "ASC", "DESC", "ASC")
+    If sortOrder.Value = "ASC" Then
+      sortOrder.Value = "DESC"
+    Else
+      sortOrder.Value = "ASC"
+    End If
+
     dv.Sort = sortExpression.Value & " " & sortOrder.Value
 
     ' Re-bind the data source and specify that it should be sorted
@@ -403,9 +395,6 @@ Public Class ASPNETAlugen3
   End Sub
 
   Private Sub cmdGenerateCode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdGenerateCode.Click
-
-    'txtVCode.Text = ""
-    'txtGCode.Text = ""
 
     If txtProductName.Text = "" Then
       SayAjax("Product Name is empty.")
@@ -466,7 +455,6 @@ Public Class ASPNETAlugen3
       ' the generated keyset is bad.
       ' The work-around for the time being is to keep regenerating the keyset until eventually
       ' you'll get a valid keyset that no longer crashes.
-      Dim strdata As String : strdata = "This is a test string to be encrypted."
       modALUGEN.rsa_createkey(txtVCode.Text, txtVCode.Text.Length, txtGCode.Text, txtGCode.Text.Length, Key)
       ' It worked! We're all set to go.
       modALUGEN.rsa_freekey(Key)
@@ -484,11 +472,11 @@ Public Class ASPNETAlugen3
     CheckDuplicate = False
     Dim dr As DataRow
     'dr = dt.Rows(grdProducts.SelectedIndex)
-    Dim i As Short
+    Dim i As Integer
     For i = 0 To dt.Rows.Count - 1
       dr = dt.Rows(i)
-      If dr(0) = Name Then
-        If dr(1) = Ver Then
+      If CType(dr(0), String) = Name Then
+        If CType(dr(1), String) = Ver Then
           CheckDuplicate = True
           Exit Function
         End If
@@ -530,9 +518,9 @@ Public Class ASPNETAlugen3
       Dim dr As DataRow
       dr = dt.Rows(grdProducts.SelectedIndex)
       If rc = 0 Then
-        SayAjax(dr(0) & " (" & dr(1) & ") validated successfully.")
+        SayAjax(CType(dr(0), String) & " (" & CType(dr(1), String) & ") validated successfully.")
       Else
-        SayAjax(dr(0) & " (" & dr(1) & ") GCode-VCode mismatch!")
+        SayAjax(CType(dr(0), String) & " (" & CType(dr(1), String) & ") GCode-VCode mismatch!")
       End If
       ' It worked! We're all set to go.
       modALUGEN.rsa_freekey(Key)
@@ -545,13 +533,13 @@ Public Class ASPNETAlugen3
   Private Sub cboLicenseType_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboLicenseType.SelectedIndexChanged
     ResetCalendarControls()
     Select Case cboLicenseType.SelectedValue
-      Case 0 'time locked
+      Case "0" 'time locked
         lblExpiry.Text = "Expire on date"
         cmdSelectExpireDate.Visible = True
-      Case 1 'periodic
+      Case "1" 'periodic
         lblExpiry.Text = "Expire after"
         cmdSelectExpireDate.Visible = False
-      Case 2 'permanent
+      Case "2" 'permanent
         lblExpiry.Text = "Not expire"
         cmdSelectExpireDate.Visible = False
     End Select
@@ -577,8 +565,6 @@ Public Class ASPNETAlugen3
       Calendar1.Visible = False
       myCalendar.Visible = False
     End If
-    'AjaxCallHelper.WriteAlert("popup Calendar")
-
   End Sub
 
   Private Sub Calendar1_SelectionChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Calendar1.SelectionChanged
@@ -615,25 +601,6 @@ Public Class ASPNETAlugen3
     ResetCalendarControls()
   End Sub
 
-
-
-  Private Sub InitUI()
-    ' Init Default license class
-    cboLicenseType.SelectedIndex = 0
-    Dim arrProdInfos() As ProductInfo
-    Dim GeneratorInstance As _IALUGenerator
-    Dim MyGen As New AlugenGlobals
-    GeneratorInstance = MyGen.GeneratorInstance()
-    GeneratorInstance.StoragePath = AppPath() & "\products.ini"
-
-    arrProdInfos = GeneratorInstance.RetrieveProducts()
-    If arrProdInfos.Length = 0 Then Exit Sub
-
-    Dim i As Short
-    For i = LBound(arrProdInfos) To UBound(arrProdInfos)
-      PopulateUI(arrProdInfos(i))
-    Next
-  End Sub
 
   Private Sub PopulateUI(ByVal ProdInfo As ProductInfo)
     With ProdInfo
@@ -674,21 +641,22 @@ Public Class ASPNETAlugen3
     If txtInstallCode.Text.Length > 0 Then
       txtUserName.Text = GetUserFromInstallCode(txtInstallCode.Text)
       cmdGenerateLicenseKey.Enabled = True
+      cmdEmailLicenseKey.Enabled = True
+      cmdPrintLicenseKey.Enabled = True
+      cmdSaveLicenseFile.Enabled = True
     Else
       txtUserName.Text = ""
       cmdGenerateLicenseKey.Enabled = False
+      cmdEmailLicenseKey.Enabled = False
+      cmdPrintLicenseKey.Enabled = False
+      cmdSaveLicenseFile.Enabled = False
     End If
   End Sub
 
-  Private Function GetUserFromInstallCode(ByVal strInstCode As String) As String
+  Private Shared Function GetUserFromInstallCode(ByVal strInstCode As String) As String
     ' Retrieves lock string and user info from the request string
     '
     Dim a() As String
-    Dim Index, i As Short
-    Dim aString As String
-    Dim usedLockNone As Boolean
-    Dim noKey As String
-    noKey = Chr(110) & Chr(111) & Chr(107) & Chr(101) & Chr(121)
 
     If strInstCode Is Nothing Or strInstCode = "" Then Exit Function
     strInstCode = ActiveLock3Globals_definst.Base64Decode(strInstCode)
@@ -696,7 +664,6 @@ Public Class ASPNETAlugen3
     If Not strInstCode Is Nothing _
       AndAlso strInstCode.Substring(0, 1) = "+" Then
       strInstCode = strInstCode.Substring(1)
-      usedLockNone = True
     End If
 
     a = Split(strInstCode, vbLf)
@@ -734,10 +701,10 @@ Public Class ASPNETAlugen3
         .Items.Add(New ListItem("Full Version-USA", "22"))
         .Items.Add(New ListItem("Full Version-International", "23"))
         .SelectedIndex = 0
-        SaveComboBox(strRegisteredLevelDBName, cboRegLevel, True)
+        SaveComboBox(strRegisteredLevelDBName, CType(cboRegLevel, ListControl), True)
       End With
     Else
-      LoadComboBox(strRegisteredLevelDBName, cboRegLevel, True)
+      LoadComboBox(strRegisteredLevelDBName, CType(cboRegLevel, ListControl), True)
     End If
   End Sub
 
@@ -748,7 +715,7 @@ Public Class ASPNETAlugen3
       Dim itemProduct As ListItem = cboProduct.SelectedItem
       Dim a As String()
 
-      a = itemProduct.Value.Split("|")
+      a = itemProduct.Value.Split(Convert.ToChar("|"))
       strName = a(0)
       strVer = a(1)
 
@@ -782,10 +749,15 @@ Public Class ASPNETAlugen3
       Dim Lic As ProductLicense
       'generate license object
       Dim selRegLevel As ListItem = cboRegLevel.SelectedItem
+      Dim selRegLevelType As String
+      If chkUseItemData.Checked Then
+        selRegLevelType = selRegLevel.Value
+      Else
+        selRegLevelType = selRegLevel.Text
+      End If
       Lic = ActiveLock3Globals_definst.CreateProductLicense(strName, strVer, "", _
                 ProductLicense.LicFlags.alfSingle, varLicType, "", _
-                IIf(chkUseItemData.Checked, _
-                  selRegLevel.Value, selRegLevel.Text), _
+                selRegLevelType, _
                 strExpire, , strRegDate)
 
       Dim strLibKey As String
@@ -803,9 +775,11 @@ Public Class ASPNETAlugen3
       'split license key into 64byte chunks
       txtLicenseKey.Text = Make64ByteChunks(strLibKey & "aLck" & txtInstallCode.Text)
       'save the license to local server file - for use in save
-      SaveLicenseKey(txtLicenseKey.Text, Session.SessionID.ToString & ".all") '&& "ASPNETAlugen3.all"
+      SaveLicenseKey(txtLicenseKey.Text, Session.SessionID.ToString & ".all")
 
-      SayAjax("License code generated successfuly!")
+      If sender Is cmdGenerateLicenseKey Then
+        SayAjax("License code generated successfuly!")
+      End If
     Catch ex As Exception
       SayAjax("Error: " & ex.Message)
     Finally
@@ -822,12 +796,12 @@ Public Class ASPNETAlugen3
     End If
   End Function
 
-  Private Function Make64ByteChunks(ByRef strdata As String) As String
+  Private Shared Function Make64ByteChunks(ByRef strdata As String) As String
     ' Breaks a long string into chunks of 64-byte lines.
     Dim i As Integer
     Dim Count As Integer
     Dim strNew64Chunk As String
-    Dim sResult As String = ""
+    Dim sResult As New StringBuilder(String.Empty)
 
     Count = strdata.Length
     For i = 0 To Count Step 64
@@ -837,18 +811,26 @@ Public Class ASPNETAlugen3
       Else
         strNew64Chunk = strdata.Substring(i, 64)
       End If
-      sResult = sResult & IIf(sResult.Length > 0, vbCrLf, "") & strNew64Chunk
+      If sResult.Length > 0 Then
+        sResult.Append(vbCrLf)
+        sResult.Append(strNew64Chunk)
+      Else
+        sResult.Append(strNew64Chunk)
+      End If
     Next
 
-    Make64ByteChunks = sResult
+    Make64ByteChunks = sResult.ToString
   End Function
 
-  Private Sub cmdEmailLicenseKey_Click(ByVal sender As System.Object, ByVal e As System.Web.UI.ImageClickEventArgs) Handles cmdEmailLicenseKey.Click
+  Private Sub cmdEmailLicenseKey_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdEmailLicenseKey.Click
     Dim mailToString As String
     Dim emailAddress As String = "user@company.com"
     Dim strSubject As String
     Dim strBodyMessage As String
     Dim strNewLine As String = "%0D%0A"
+
+    'ensure it is correct key
+    cmdGenerateLicenseKey_Click(sender, e)
 
     strSubject = String.Format("License key for application {0}, user [{1}]", cboProduct.SelectedItem.Text, txtUserName.Text)
     strBodyMessage = strNewLine & String.Format("Install code:" & strNewLine & "{0}", txtInstallCode.Text)
@@ -860,18 +842,20 @@ Public Class ASPNETAlugen3
     AjaxCallHelper.Redirect(mailToString)
   End Sub
 
-  Private Sub cmdSaveLicenseFile_Click(ByVal sender As System.Object, ByVal e As System.Web.UI.ImageClickEventArgs) Handles cmdSaveLicenseFile.Click
+  Private Sub cmdSaveLicenseFile_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdSaveLicenseFile.Click
 
-    DownloadFile(AppPath() & "\" & Session.SessionID.ToString & ".all", True)  '"\ASPNETAlugen3.all"
+    'ensure it is correct key and license file generated
+    cmdGenerateLicenseKey_Click(sender, e)
+    'dowload file
+    DownloadFile(AppPath() & "\" & modALUGEN.GENKEYSFOLDER & "\" & Session.SessionID.ToString & ".all", True)
 
   End Sub
 
   Private Sub DownloadFile(ByVal fname As String, ByVal forceDownload As Boolean)
-    Dim path As Path
-    Dim fullpath = path.GetFullPath(fname)
-    Dim name = path.GetFileName(fullpath)
-    Dim ext = path.GetExtension(fullpath)
-    Dim type As String = ""
+    Dim fullpath As String = Path.GetFullPath(fname)
+    'Dim name As String = path.GetFileName(fullpath)
+    Dim ext As String = Path.GetExtension(fullpath)
+    Dim contenttype As String = String.Empty
 
     If Not IsDBNull(ext) Then
       ext = LCase(ext)
@@ -879,29 +863,27 @@ Public Class ASPNETAlugen3
 
     Select Case ext
       Case ".htm", ".html"
-        type = "text/HTML"
+        contenttype = "text/HTML"
       Case ".txt"
-        type = "text/plain"
+        contenttype = "text/plain"
       Case ".doc", ".rtf"
-        type = "Application/msword"
+        contenttype = "Application/msword"
       Case ".csv", ".xls"
-        type = "Application/x-msexcel"
+        contenttype = "Application/x-msexcel"
       Case Else
-        type = "text/plain"
+        'contenttype = "text/plain"
+        contenttype = "application\octet-stream" '"application/zip"
     End Select
 
     HttpContext.Current.Response.Clear()
     HttpContext.Current.Response.ClearHeaders()
     HttpContext.Current.Response.ClearContent()
 
-    Response.ContentType = "application\octet-stream" '"application/zip"
+    Response.ContentType = contenttype
 
-    'If type <> "" Then
-    '  Response.ContentType = type
-    'End If
     If (forceDownload) Then
       Response.AppendHeader("content-disposition", _
-      "attachment; filename=ASPNETAlugen3.all") ' + name
+      "attachment; filename=ASPNETAlugen3" & ext)
     End If
 
     Response.WriteFile(fullpath)
@@ -911,13 +893,119 @@ Public Class ASPNETAlugen3
   Private Sub SaveLicenseKey(ByVal sLibKey As String, ByVal sFileName As String)
     Dim fp As StreamWriter
     Try
-      fp = File.CreateText(Server.MapPath(".\") & sFileName)
+      fp = File.CreateText(Server.MapPath(".\" & modALUGEN.GENKEYSFOLDER & "\") & sFileName)
       fp.WriteLine(sLibKey)
       fp.Close()
     Catch err As Exception
       SayAjax(err.Message)
     Finally
     End Try
+  End Sub
+
+  Private Sub cmdPrintLicenseKey_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles cmdPrintLicenseKey.Click
+    Dim msgToPrint As New StringBuilder(String.Empty)
+    Dim mWidth As Integer = 600
+    Dim mHeight As Integer = 340
+
+    'ensure it is correct key
+    cmdGenerateLicenseKey_Click(sender, e)
+
+    'start html
+    msgToPrint.Append("<html><head>")
+    msgToPrint.Append("<script language='Javascript1.2'>function printPage() { window.print(); }</script>")
+    msgToPrint.Append("</head><body onload='printPage();' style='font-family:Courier;font-size:0.8em;'>")
+    'body content
+    msgToPrint.Append("<table width='100%' border='1' cellpadding='0' cellspacing='0' style='font-family:Courier;font-size:0.8em;'>")
+    'title
+    msgToPrint.Append("<tr>")
+    msgToPrint.Append("<td colspan='2' valign=middle style='background-color:#808080;color:#f0f0f0;font-family:Courier;font-size:1.2em;text-align:center;height:30;'>")
+    msgToPrint.Append("License Key")
+    msgToPrint.Append("</td>")
+    msgToPrint.Append("</tr>")
+    'Software name
+    msgToPrint.Append("<tr>")
+    msgToPrint.Append("<td width=150>")
+    msgToPrint.Append("Software name")
+    msgToPrint.Append("</td>")
+    msgToPrint.Append("<td>")
+    msgToPrint.Append(cboProduct.SelectedItem.Text)
+    msgToPrint.Append("</td>")
+    msgToPrint.Append("</tr>")
+    'Registered level
+    msgToPrint.Append("<tr>")
+    msgToPrint.Append("<td width=150>")
+    msgToPrint.Append("Reg level")
+    msgToPrint.Append("</td>")
+    msgToPrint.Append("<td>")
+    msgToPrint.Append(cboRegLevel.SelectedItem.Text)
+    msgToPrint.Append("</td>")
+    msgToPrint.Append("</tr>")
+    'License type
+    msgToPrint.Append("<tr>")
+    msgToPrint.Append("<td width=150>")
+    msgToPrint.Append("License type")
+    msgToPrint.Append("</td>")
+    msgToPrint.Append("<td>")
+    msgToPrint.Append(cboLicenseType.SelectedItem.Text)
+    msgToPrint.Append("</td>")
+    msgToPrint.Append("</tr>")
+    'Expire date / Afted days
+    msgToPrint.Append("<tr>")
+    msgToPrint.Append("<td width=150>")
+    Select Case cboLicenseType.SelectedValue
+      Case "0" 'time locked
+        msgToPrint.Append("Expire on date")
+      Case "1" 'periodic
+        msgToPrint.Append("Expire after")
+      Case "2" 'permanent
+        msgToPrint.Append("Not expire")
+    End Select
+    msgToPrint.Append("</td>")
+    msgToPrint.Append("<td>")
+    msgToPrint.Append(Server.HtmlEncode(txtDays.Text))
+    msgToPrint.Append("</td>")
+    msgToPrint.Append("</tr>")
+    'UserName
+    msgToPrint.Append("<tr>")
+    msgToPrint.Append("<td width=150>")
+    msgToPrint.Append("User Name")
+    msgToPrint.Append("</td>")
+    msgToPrint.Append("<td>")
+    msgToPrint.Append(Server.HtmlEncode(txtUserName.Text))
+    msgToPrint.Append("</td>")
+    msgToPrint.Append("</tr>")
+    'InstallCode
+    msgToPrint.Append("<tr>")
+    msgToPrint.Append("<td width=150>")
+    msgToPrint.Append("Install code")
+    msgToPrint.Append("</td>")
+    msgToPrint.Append("<td>")
+    msgToPrint.Append(Server.HtmlEncode(txtInstallCode.Text))
+    msgToPrint.Append("</td>")
+    msgToPrint.Append("</tr>")
+    'License key
+    msgToPrint.Append("<tr>")
+    msgToPrint.Append("<td width=150>")
+    msgToPrint.Append("License key")
+    msgToPrint.Append("</td>")
+    msgToPrint.Append("<td>")
+    msgToPrint.Append(txtLicenseKey.Text.Replace(Chr(13), "</br>").Replace(Chr(10), ""))
+    msgToPrint.Append("</td>")
+    msgToPrint.Append("</tr>")
+    'end table
+    msgToPrint.Append("</table>")
+    msgToPrint.Append("</br>")
+    msgToPrint.Append("<p align='right'>")
+    msgToPrint.Append("<a href='javascript:printPage();'>Print me</a>")
+    msgToPrint.Append("&nbsp;")
+    msgToPrint.Append("<a href='javascript:self.close()'>Close me</a>")
+    msgToPrint.Append("</p>")
+    msgToPrint.Append("</br>")
+    'end html
+    msgToPrint.Append("</body></html>")
+
+    'write to page
+    AjaxCallHelper.WriteLine("javascript:PrintLicenseKey(""" & msgToPrint.ToString & """, " & mWidth.ToString & ", " & mHeight.ToString & ");")
   End Sub
 
 End Class

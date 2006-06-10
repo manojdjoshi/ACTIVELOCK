@@ -19,7 +19,7 @@
                 OutputType = "Library"
                 OptionCompare = "Binary"
                 OptionExplicit = "On"
-                OptionStrict = "Off"
+                OptionStrict = "On"
                 RootNamespace = "ASPNETAlugen3"
                 StartupObject = "ASPNETAlugen3.(None)"
             >
@@ -114,53 +114,8 @@
         <Files>
             <Include>
                 <File
-                    RelPath = "ASPNETAlugen3.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "ASPNETAlugen3.aspx.vb"
-                    DependentUpon = "ASPNETAlugen3.aspx"
-                    SubType = "ASPXCodeBehind"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ASPNETAlugen3.aspx.resx"
-                    DependentUpon = "ASPNETAlugen3.aspx.vb"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
                     RelPath = "ASPNETAlugen3.js"
                     BuildAction = "Content"
-                />
-                <File
-                    RelPath = "ASPNETAlugen3_1.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "ASPNETAlugen3_1.aspx.vb"
-                    DependentUpon = "ASPNETAlugen3_1.aspx"
-                    SubType = "ASPXCodeBehind"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ASPNETAlugen3_1.aspx.resx"
-                    DependentUpon = "ASPNETAlugen3_1.aspx.vb"
-                    BuildAction = "EmbeddedResource"
-                />
-                <File
-                    RelPath = "ASPNETAlugen3_2.aspx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "ASPNETAlugen3_2.aspx.vb"
-                    DependentUpon = "ASPNETAlugen3_2.aspx"
-                    SubType = "ASPXCodeBehind"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "ASPNETAlugen3_2.aspx.resx"
-                    DependentUpon = "ASPNETAlugen3_2.aspx.vb"
-                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "AssemblyInfo.vb"
@@ -176,6 +131,21 @@
                     RelPath = "clsLimitColumn.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Default.aspx"
+                    BuildAction = "Content"
+                />
+                <File
+                    RelPath = "Default.aspx.vb"
+                    DependentUpon = "Default.aspx"
+                    SubType = "ASPXCodeBehind"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Default.aspx.resx"
+                    DependentUpon = "Default.aspx.vb"
+                    BuildAction = "EmbeddedResource"
                 />
                 <File
                     RelPath = "Global.asax"
@@ -239,6 +209,7 @@
                     RelPath = "bin\ALCrypto3NET.dll"
                     BuildAction = "Content"
                 />
+                <Folder RelPath = "genkeys\" />
                 <File
                     RelPath = "images\add.gif"
                     BuildAction = "Content"
@@ -269,10 +240,6 @@
                 />
                 <File
                     RelPath = "images\folder.gif"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "images\generate.gif"
                     BuildAction = "Content"
                 />
                 <File
@@ -333,10 +300,6 @@
                 />
                 <File
                     RelPath = "images\upme.gif"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "images\validate.gif"
                     BuildAction = "Content"
                 />
                 <File

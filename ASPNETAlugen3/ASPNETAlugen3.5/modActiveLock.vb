@@ -27,33 +27,15 @@
 '*   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 '*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 '*
+Option Strict On
 Option Explicit On 
+
 Imports System.IO
 Imports System.Text
 Imports System.Security.Cryptography
 
 
 Module modActiveLock
-
-  Public Const STRKEYSTOREINVALID As String = "A license property contains an invalid value."
-  Public Const STRLICENSEEXPIRED As String = "License expired."
-  Public Const STRLICENSEINVALID As String = "License invalid."
-  Public Const STRNOLICENSE As String = "No valid license."
-  Public Const STRLICENSETAMPERED As String = "License may have been tampered."
-  Public Const STRNOTINITIALIZED As String = "ActiveLock has not been initialized."
-  Public Const STRNOTIMPLEMENTED As String = "Not implemented."
-  Public Const STRCLOCKCHANGED As String = STRLICENSEINVALID & " System clock has been tampered."
-  Public Const STRINVALIDTRIALDAYS As String = "Zero Free Trial days allowed."
-  Public Const STRINVALIDTRIALRUNS As String = "Zero Free Trial runs allowed."
-  Public Const STRFILETAMPERED As String = "Alcrypto3.dll has been tampered."
-  Public Const STRKEYSTOREUNINITIALIZED As String = "Key Store Provider hasn't been initialized yet."
-  Public Const STRNOSOFTWARECODE As String = "Software code has not been set."
-  Public Const STRNOSOFTWARENAME As String = "Software Name has not been set."
-  Public Const STRNOSOFTWAREVERSION As String = "Software Version has not been set."
-  Public Const STRUSERNAMETOOLONG As String = "User Name > 2000 characters."
-  Public Const STRRSAERROR As String = "Internal RSA Error."
-  Public Const RETVAL_ON_ERROR As Integer = -999
-
 
   Public Function RSASign(ByVal strPub As String, ByVal strPriv As String, ByVal strdata As String) As String
     ' Performs RSA signing of <code>strData</code> using the specified key.
@@ -95,52 +77,4 @@ Module modActiveLock
     RSAVerify = rc
   End Function
 
-  Public Function ReadFile(ByVal sPath As String, ByRef sData As String) As Integer
-
-    Dim c As New CRC32
-    Dim crc As Integer = 0
-
-    ' CRC32 Hash:
-    Dim f As FileStream = New FileStream(sPath, FileMode.Open, FileAccess.Read, FileShare.Read, 8192)
-    crc = c.GetCrc32(f)
-    f.Close()
-
-    ' File size:
-    'f = New FileStream(sPath, FileMode.Open, FileAccess.Read, FileShare.Read, 8192)
-    'txtSize.Text = String.Format("{0}", f.Length)
-    'f.Close()
-    'txtCrc32.Text = String.Format("{0:X8}", crc)
-    'txtTime.Text = String.Format("{0}", h.ElapsedTime)
-
-    ' Run MD5 Hash
-    f = New FileStream(sPath, FileMode.Open, FileAccess.Read, FileShare.Read, 8192)
-    Dim md5 As MD5CryptoServiceProvider = New MD5CryptoServiceProvider
-    md5.ComputeHash(f)
-    f.Close()
-
-    Dim hash As Byte() = md5.Hash
-    Dim buff As StringBuilder = New StringBuilder
-    Dim hashByte As Byte
-    For Each hashByte In hash
-      buff.Append(String.Format("{0:X1}", hashByte))
-    Next
-    sData = buff.ToString() 'MD5 String
-
-    ' Run SHA-1 Hash
-    'f = New FileStream(sPath, FileMode.Open, FileAccess.Read, FileShare.Read, 8192)
-    'Dim sha1 As SHA1CryptoServiceProvider = New SHA1CryptoServiceProvider
-    'sha1.ComputeHash(f)
-    'f.Close()
-    'hash = SHA1.Hash
-    'buff = New StringBuilder
-    'For Each hashByte In hash
-    '    buff.Append(String.Format("{0:X1}", hashByte))
-    'Next
-    'txtSHA1.Text = buff.ToString()
-
-    ReadFile = sData.Length
-    Exit Function
-Hell:
-    Err.Raise(Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext)
-  End Function
 End Module

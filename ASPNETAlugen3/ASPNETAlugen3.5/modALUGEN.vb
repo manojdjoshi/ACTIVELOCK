@@ -47,7 +47,9 @@
 '  ///////////////////////////////////////////////////////////////////////
 '  /                MODULE CODE BEGINS BELOW THIS LINE                   /
 '  ///////////////////////////////////////////////////////////////////////
+Option Strict On
 Option Explicit On 
+
 Imports System.Runtime.InteropServices
 Imports ActiveLock3_5NET
 
@@ -55,8 +57,8 @@ Module modALUGEN
 
   Public ActiveLock3AlugenGlobals_definst As New AlugenGlobals
   Public ActiveLock3Globals_definst As New Globals_Renamed
-  Public Const LICENSES_FILE As String = "authorizations.txt"
-  Public sortOptions As Object
+
+  Public Const GENKEYSFOLDER As String = "genkeys"
   Public storage() As storageType
 
   ' RSA Key Structure
