@@ -75,18 +75,18 @@ Friend Class IKeyStoreProvider
 	' Remarks: None
 	'===============================================================================
 	Public Function Retrieve(ByRef ProductName As String) As ProductLicense Implements _IKeyStoreProvider.Retrieve
-		
-	End Function
+        Retrieve = Nothing
+    End Function
 
-	'===============================================================================
-	' Name: Sub Store
-	' Input:
-	'   ByRef Lic As ProductLicense - Product license
-	' Output: None
-	' Purpose: Stores a license.
-	' Remarks: None
-	'===============================================================================
-	Public Sub Store(ByRef Lic As ProductLicense) Implements _IKeyStoreProvider.Store
-		
-	End Sub
+    '===============================================================================
+    ' Name: Sub Store
+    ' Input:
+    '   ByRef Lic As ProductLicense - Product license
+    ' Output: None
+    ' Purpose: Stores a license.
+    ' Remarks: None
+    '===============================================================================
+    Public Sub Store(ByRef Lic As ProductLicense) Implements _IKeyStoreProvider.Store
+
+    End Sub
 End Class

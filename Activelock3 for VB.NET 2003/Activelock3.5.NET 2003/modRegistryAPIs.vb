@@ -259,14 +259,15 @@ Module modRegistry
 	'===============================================================================
 	Public Function GetSubKeys(ByRef strKey As String, ByRef SubKey As String, ByRef SubKeyCnt As Integer) As String
 		Dim strValues() As String
-		Dim strTemp As String
+        Dim strTemp As String = String.Empty
 		Dim lngSub As Integer
 		Dim intCnt As Short
 		Dim lngRet As Integer
 		Dim intKeyCnt As Short
 		Dim FT As FILETIME
 		
-		lngRet = RegOpenKeyEx(CInt(strKey), SubKey, 0, KEY_ENUMERATE_SUB_KEYS, lngSub)
+        GetSubKeys = String.Empty
+        lngRet = RegOpenKeyEx(CInt(strKey), SubKey, 0, KEY_ENUMERATE_SUB_KEYS, lngSub)
 		
 		If lngRet <> ERROR_SUCCESS Then
 			SubKeyCnt = 0
@@ -454,12 +455,15 @@ Module modRegistry
 		'     R, "Software\VBW\Registry", "String")
 		'
 		Dim keyhand, r As Integer
-		Dim datatype, lValueType As Integer
+        Dim lValueType As Integer
 		Dim lResult As Integer
 		Dim strBuf As String
 		Dim lDataBufSize As Integer
 		Dim intZeroPos As Short
-		r = RegOpenKey(hKey, strPath, keyhand)
+
+        GetString = String.Empty
+
+        r = RegOpenKey(hKey, strPath, keyhand)
 		lResult = RegQueryValueEx(keyhand, strValue, 0, lValueType, 0, lDataBufSize)
 		
 		If lValueType = REG_SZ Then
@@ -674,7 +678,10 @@ Module modRegistry
 		Dim lDataBufSize As Integer
 		Dim r As Integer
 		Dim keyhand As Integer
-		r = RegOpenKey(hKey, strPath, keyhand)
+
+        Getdword = String.Empty
+
+        r = RegOpenKey(hKey, strPath, keyhand)
 		' Get length/data type
 		lDataBufSize = 4
 		lResult = RegQueryValueEx(keyhand, strValueName, 0, lValueType, lBuf, lDataBufSize)

@@ -1,6 +1,6 @@
 Option Strict Off
 Option Explicit On 
-Imports System.io
+Imports System.IO
 Imports System.Text
 Imports System.Security.Cryptography
 Module modMD5
@@ -180,7 +180,9 @@ Module modMD5
 		Dim intLoop2, intLoop, lngTrace As Integer
 		Dim intInnerLoop, intLoop3 As Integer
 		
-		lngBytesTotal = lngTrack Mod 64
+        MD564Split = String.Empty
+
+        lngBytesTotal = lngTrack Mod 64
 		lngBytesToAdd = 64 - lngBytesTotal
 		lngTrack = (lngTrack + lngLength)
 		
@@ -1128,7 +1130,7 @@ Module modMD5
 	'===============================================================================
 	Sub MD5AB1F1(ByRef w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Short)
 		Dim tempstr As String
-		Dim loopit, tempnum As Short
+        Dim loopit As Short
 		Dim yn, xn, zn As Short
 		
 		x = New String("0", 8 - Len(x)) & x
@@ -1161,8 +1163,8 @@ Module modMD5
 	' Remarks: None
 	'===============================================================================
 	Sub MD5AB1F2(ByRef w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Short)
-		Dim tempstr As String
-		Dim loopit, tempnum As Short
+        Dim tempstr As String = String.Empty
+        Dim loopit As Short
 		Dim yn, xn, zn As Short
 		
 		x = New String("0", 8 - Len(x)) & x
@@ -1196,7 +1198,7 @@ Module modMD5
 	'===============================================================================
 	Sub MD5AB1F3(ByRef w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Short)
 		Dim tempstr As String
-		Dim loopit, tempnum As Short
+        Dim loopit As Short
 		Dim yn, xn, zn As Short
 		
 		x = New String("0", 8 - Len(x)) & x
@@ -1229,8 +1231,8 @@ Module modMD5
 	' Remarks: None
 	'===============================================================================
 	Sub MD5AB1F4(ByRef w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Short)
-		Dim tempstr As String
-		Dim loopit, tempnum As Short
+        Dim tempstr As String = String.Empty
+        Dim loopit As Short
 		Dim yn, xn, zn As Short
 		
 		x = New String("0", 8 - Len(x)) & x
@@ -1405,11 +1407,11 @@ Module modMD5
 	' Remarks: None
 	'===============================================================================
 	Function MD5AB2F(ByVal tempstr As String, ByVal w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Short) As Object
-		Dim valueans, tempvalstr As String
-		Dim loopit As Short
-		Dim tempnum As Integer
-		Dim temps3, temps1, temps2, temps4 As String
-		
+        Dim valueans As String = String.Empty
+        Dim tempvalstr As String
+        Dim tempnum As Integer
+        Dim temps3, temps1, temps2, temps4 As String
+
 		w = New String("0", 8 - Len(w)) & w
 		tempstr = New String("0", 8 - Len(tempstr)) & tempstr
 		in_ = New String("0", 8 - Len(in_)) & in_

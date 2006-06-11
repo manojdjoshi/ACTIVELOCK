@@ -39,16 +39,12 @@ Public Class CCoder
         Dim j As Integer
         Dim k As Integer
 
-        Dim a As Integer
-        Dim r As Integer
-        Dim g As Integer
-        Dim b As Integer
-
         Dim c As Integer
         Dim cr As Integer
         Dim cg As Integer
         Dim cb As Integer
         Dim s As String
+        Dim clr As System.Drawing.Color
 
         bmpResult = New Bitmap(bmpPatern.Width, bmpPatern.Height)
 
@@ -71,12 +67,8 @@ Public Class CCoder
         For ii = i To bmpPatern.Height - 1
             For jj = 0 To bmpPatern.Width - 1
                 If (ii = i AndAlso jj >= j) OrElse ii > i Then
-                    a = bmpPatern.GetPixel(jj, ii).A
-                    r = bmpPatern.GetPixel(jj, ii).R
-                    g = bmpPatern.GetPixel(jj, ii).G
-                    b = bmpPatern.GetPixel(jj, ii).B
-
-                    bmpResult.SetPixel(jj, ii, Color.FromArgb(a, r, g, b))
+                    clr = bmpPatern.GetPixel(jj, ii)
+                    bmpResult.SetPixel(jj, ii, clr)
                 End If
             Next
         Next
@@ -86,24 +78,17 @@ Public Class CCoder
 
     Private Sub SetR(ByRef i As Integer, ByRef j As Integer, ByRef bmpPatern As Bitmap, ByRef bmpNew As Bitmap, ByRef cr As Integer)
         Dim bOk As Boolean = False
-
-        Dim a As Integer
-        Dim r As Integer
-        Dim g As Integer
-        Dim b As Integer
+        Dim clr As System.Drawing.Color
 
         Try
             Do
-                a = bmpPatern.GetPixel(j, i).A
-                r = bmpPatern.GetPixel(j, i).R
-                g = bmpPatern.GetPixel(j, i).G
-                b = bmpPatern.GetPixel(j, i).B
+                clr = bmpPatern.GetPixel(j, i)
 
                 If bmpPatern.GetPixel(j, i).R < gc_intPragCuloare Then
-                    bmpNew.SetPixel(j, i, Color.FromArgb(a, (r + cr) Mod 256, g, b))
+                    bmpNew.SetPixel(j, i, Color.FromArgb(clr.A, (clr.R + cr) Mod 256, clr.G, clr.B))
                     bOk = True
                 Else
-                    bmpNew.SetPixel(j, i, Color.FromArgb(a, r, g, b))
+                    bmpNew.SetPixel(j, i, clr)
                 End If
 
                 j += 1
@@ -119,24 +104,17 @@ Public Class CCoder
 
     Private Sub SetG(ByRef i As Integer, ByRef j As Integer, ByRef bmpPatern As Bitmap, ByRef bmpNew As Bitmap, ByRef cg As Integer)
         Dim bOk As Boolean = False
-
-        Dim a As Integer
-        Dim r As Integer
-        Dim g As Integer
-        Dim b As Integer
+        Dim clr As System.Drawing.Color
 
         Try
             Do
-                a = bmpPatern.GetPixel(j, i).A
-                r = bmpPatern.GetPixel(j, i).R
-                g = bmpPatern.GetPixel(j, i).G
-                b = bmpPatern.GetPixel(j, i).B
+                clr = bmpPatern.GetPixel(j, i)
 
-                If bmpPatern.GetPixel(j, i).G < gc_intPragCuloare Then
-                    bmpNew.SetPixel(j, i, Color.FromArgb(a, r, (g + cg) Mod 256, b))
+                If clr.G < gc_intPragCuloare Then
+                    bmpNew.SetPixel(j, i, Color.FromArgb(clr.A, clr.R, (clr.G + cg) Mod 256, clr.B))
                     bOk = True
                 Else
-                    bmpNew.SetPixel(j, i, Color.FromArgb(a, r, g, b))
+                    bmpNew.SetPixel(j, i, clr)
                 End If
 
                 j += 1
@@ -152,24 +130,17 @@ Public Class CCoder
 
     Private Sub SetB(ByRef i As Integer, ByRef j As Integer, ByRef bmpPatern As Bitmap, ByRef bmpNew As Bitmap, ByRef cb As Integer)
         Dim bOk As Boolean = False
-
-        Dim a As Integer
-        Dim r As Integer
-        Dim g As Integer
-        Dim b As Integer
+        Dim clr As System.Drawing.Color
 
         Try
             Do
-                a = bmpPatern.GetPixel(j, i).A
-                r = bmpPatern.GetPixel(j, i).R
-                g = bmpPatern.GetPixel(j, i).G
-                b = bmpPatern.GetPixel(j, i).B
+                clr = bmpPatern.GetPixel(j, i)
 
-                If bmpPatern.GetPixel(j, i).B < gc_intPragCuloare Then
-                    bmpNew.SetPixel(j, i, Color.FromArgb(a, r, g, (b + cb) Mod 256))
+                If clr.B < gc_intPragCuloare Then
+                    bmpNew.SetPixel(j, i, Color.FromArgb(clr.A, clr.R, clr.G, (clr.B + cb) Mod 256))
                     bOk = True
                 Else
-                    bmpNew.SetPixel(j, i, Color.FromArgb(a, r, g, b))
+                    bmpNew.SetPixel(j, i, clr)
                 End If
 
                 j += 1

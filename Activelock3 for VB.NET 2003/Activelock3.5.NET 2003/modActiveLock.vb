@@ -288,7 +288,7 @@ Hell:
         System.Diagnostics.Debug.WriteLine("Hashing file " & strPath)
         System.Diagnostics.Debug.WriteLine("File Date: " & FileDateTime(strPath))
         ' read and hash the content
-        Dim sData As String
+        Dim sData As String = String.Empty
         Dim nFileLen As Integer
         nFileLen = ReadFile(strPath, sData)
         ' use the .NET's native MD5 functions instead of our own MD5 hashing routine
@@ -329,6 +329,9 @@ Hell:
         Dim strName As String
         Dim bDST As Boolean
         Dim rc As Integer
+
+        LocalTimeZone = Nothing
+
         rc = GetTimeZoneInformation(tzi)
         Select Case rc
             ' if not daylight assume standard
@@ -394,21 +397,21 @@ Hell:
         Dim KEY As RSAKey
         ' create the key from the key blobs
         If rsa_createkey(strPub, Len(strPub), strPriv, Len(strPriv), KEY) = RETVAL_ON_ERROR Then
-            Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
 
         ' sign the data using the created key
         Dim sLen As Integer
         If rsa_sign(KEY, strdata, Len(strdata), vbNullString, sLen) = RETVAL_ON_ERROR Then
-            Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         Dim strSig As String : strSig = New String(Chr(0), sLen)
         If rsa_sign(KEY, strdata, Len(strdata), strSig, sLen) = RETVAL_ON_ERROR Then
-            Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         ' throw away the key
         If rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-            Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         RSASign = strSig
     End Function
@@ -424,20 +427,20 @@ Hell:
     ' Remarks: None
     '===============================================================================
     Public Function RSAVerify(ByVal strPub As String, ByVal strdata As String, ByVal strSig As String) As Integer
-        Dim KEY As RSAKey
+        Dim KEY As RSAKey = Nothing
         Dim rc As Integer
         ' create the key from the public key blob
         If rsa_createkey(strPub, Len(strPub), vbNullString, 0, KEY) = RETVAL_ON_ERROR Then
-            Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         ' validate the key
         rc = rsa_verifysig(KEY, strSig, Len(strSig), strdata, Len(strdata))
         If rc = RETVAL_ON_ERROR Then
-            Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         ' de-allocate memory used by the key
         If rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-            Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         RSAVerify = rc
     End Function
@@ -453,6 +456,8 @@ Hell:
     Public Function WinError(ByVal lLastDLLError As Integer) As String
         Dim sBuff As String
         Dim lCount As Integer
+
+        WinError = String.Empty
 
         ' Return the error message associated with LastDLLError:
         sBuff = New String(Chr(0), 256)

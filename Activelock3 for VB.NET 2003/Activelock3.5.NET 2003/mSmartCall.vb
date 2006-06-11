@@ -177,7 +177,7 @@ Module mSmartCall
     ' DriveNum = 0-3
     ' IDCmd = IDE_ID_FUNCTION or IDE_ATAPI_ID
     '***************************************************************************
-    Private Function IdentifyDrive(ByVal hDrive As Integer, ByVal IDCmd As Byte, ByVal DriveNum As IDE_DRIVE_NUMBER) As String
+    Private Function IdentifyDrive(ByVal hDrive As Integer, ByVal IDCmd As Byte) As String
         Dim SCIP As SENDCMDINPARAMS
         Dim bArrOut(OUTPUT_DATA_SIZE - 1) As Byte
         Dim bSerial(19) As Byte
@@ -220,7 +220,7 @@ Module mSmartCall
         If hDrive = INVALID_HANDLE_VALUE Then Exit Function
 
         If CheckSMARTEnable(hDrive, DriveNum) Then
-            GetDriveInfo = IdentifyDrive(hDrive, IDE_ID_FUNCTION, DriveNum)
+            GetDriveInfo = IdentifyDrive(hDrive, IDE_ID_FUNCTION)
         End If
 
         CloseHandle(hDrive)

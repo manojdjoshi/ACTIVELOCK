@@ -53,46 +53,46 @@ Option Explicit On
 	' ActiveLock Error Codes.
 	' These error codes are used for <code>Err.Number</code> whenever ActiveLock raises an error.
 	'
-	' @param alerrOK                    No error. Operation was successful.
-	' @param alerrNoLicense             No license available.
-	' @param alerrLicenseInvalid        License is invalid.
-	' @param alerrLicenseExpired        License has expired.
-	' @param alerrLicenseTampered       License has been tampered.
-	' @param alerrClockChanged          System clock has been changed.
-	' @param alerrKeyStoreInvalid       Key Store Provider has not been initialized yet.
-	' @param alerrFileTampered          ActiveLock DLL file has been tampered.
-	' @param alerrNotInitialized        ActiveLock has not been initialized yet.
-	' @param alerrNotImplemented        An ActiveLock operation has not been implemented.
-	' @param alerrUserNameTooLong       Maximum User Name length of 2000 characters has been exceeded.
-	' @param alerrInvalidTrialDays      Specified number of Free Trial Days is invalid (possibly <=0).
-	' @param alerrInvalidTrialRuns      Specified number of Free Trial Runs is invalid (possibly <=0).
-	' @param alerrTrialInvalid          Trial is invalid.
-	' @param alerrTrialDaysExpired      Trial Days have expired.
-	' @param alerrTrialRunsExpired      Trial Runs have expired.
-	' @param alerrNoSoftwareName        Software Name has not been specified.
-	' @param alerrNoSoftwareVersion     Software Version has not been specified.
-    ' @param alerrRSAError              Something went wrong in the RSA routines.
+	' @param AlerrOK                    No error. Operation was successful.
+	' @param AlerrNoLicense             No license available.
+	' @param AlerrLicenseInvalid        License is invalid.
+	' @param AlerrLicenseExpired        License has expired.
+	' @param AlerrLicenseTampered       License has been tampered.
+	' @param AlerrClockChanged          System clock has been changed.
+	' @param AlerrKeyStoreInvalid       Key Store Provider has not been initialized yet.
+	' @param AlerrFileTampered          ActiveLock DLL file has been tampered.
+	' @param AlerrNotInitialized        ActiveLock has not been initialized yet.
+	' @param AlerrNotImplemented        An ActiveLock operation has not been implemented.
+	' @param AlerrUserNameTooLong       Maximum User Name length of 2000 characters has been exceeded.
+	' @param AlerrInvalidTrialDays      Specified number of Free Trial Days is invalid (possibly <=0).
+	' @param AlerrInvalidTrialRuns      Specified number of Free Trial Runs is invalid (possibly <=0).
+	' @param AlerrTrialInvalid          Trial is invalid.
+	' @param AlerrTrialDaysExpired      Trial Days have expired.
+	' @param AlerrTrialRunsExpired      Trial Runs have expired.
+	' @param AlerrNoSoftwareName        Software Name has not been specified.
+	' @param AlerrNoSoftwareVersion     Software Version has not been specified.
+    ' @param AlerrRSAError              Something went wrong in the RSA routines.
 
 	Public Enum ActiveLockErrCodeConstants
-		alerrOK = 0 ' successful
-		alerrNoLicense = &H80040001 ' vbObjectError (&H80040000) + 1
-		alerrLicenseInvalid = &H80040002
-		alerrLicenseExpired = &H80040003
-		alerrLicenseTampered = &H80040004
-		alerrClockChanged = &H80040005
-		alerrKeyStoreInvalid = &H80040010
-		alerrFileTampered = &H80040011
-		alerrNotInitialized = &H80040012
-		alerrNotImplemented = &H80040013
-		alerrUserNameTooLong = &H80040014
-		alerrInvalidTrialDays = &H80040020
-		alerrInvalidTrialRuns = &H80040021
-		alerrTrialInvalid = &H80040022
-		alerrTrialDaysExpired = &H80040023
-		alerrTrialRunsExpired = &H80040024
-		alerrNoSoftwareName = &H80040025
-		alerrNoSoftwareVersion = &H80040026
-        alerrRSAError = &H80040027
+		AlerrOK = 0 ' successful
+		AlerrNoLicense = &H80040001 ' vbObjectError (&H80040000) + 1
+		AlerrLicenseInvalid = &H80040002
+		AlerrLicenseExpired = &H80040003
+		AlerrLicenseTampered = &H80040004
+		AlerrClockChanged = &H80040005
+		AlerrKeyStoreInvalid = &H80040010
+		AlerrFileTampered = &H80040011
+		AlerrNotInitialized = &H80040012
+		AlerrNotImplemented = &H80040013
+		AlerrUserNameTooLong = &H80040014
+		AlerrInvalidTrialDays = &H80040020
+		AlerrInvalidTrialRuns = &H80040021
+		AlerrTrialInvalid = &H80040022
+		AlerrTrialDaysExpired = &H80040023
+		AlerrTrialRunsExpired = &H80040024
+		AlerrNoSoftwareName = &H80040025
+		AlerrNoSoftwareVersion = &H80040026
+        AlerrRSAError = &H80040027
     End Enum
     '===============================================================================
     ' Name: Function NewInstance
@@ -129,10 +129,10 @@ Option Explicit On
     ' <p>If <code>LicType</code> is <i>Permanent</i>, then <code>Expiration</code> date parameter will be ignored.
     ' Remarks: None
     '===============================================================================
-    Public Function CreateProductLicense(ByVal name As String, ByVal Ver As String, ByVal Code As String, ByVal Flags As ProductLicense.LicFlags, ByVal LicType As ProductLicense.ALLicType, ByVal Licensee As String, ByVal RegisteredLevel As String, ByVal Expiration As String, Optional ByVal LicKey As String = "", Optional ByVal RegisteredDate As String = "", Optional ByVal Hash1 As String = "", Optional ByVal MaxUsers As Short = 1, Optional ByVal LicCode As String = "") As ProductLicense
+    Public Function CreateProductLicense(ByVal Name As String, ByVal Ver As String, ByVal Code As String, ByVal Flags As ProductLicense.LicFlags, ByVal LicType As ProductLicense.ALLicType, ByVal Licensee As String, ByVal RegisteredLevel As String, ByVal Expiration As String, Optional ByVal LicKey As String = "", Optional ByVal RegisteredDate As String = "", Optional ByVal Hash1 As String = "", Optional ByVal MaxUsers As Short = 1, Optional ByVal LicCode As String = "") As ProductLicense
         Dim NewLic As New ProductLicense
         With NewLic
-            .ProductName = name
+            .ProductName = Name
             .ProductKey = Code
             .ProductVer = Ver
             'If LicType = allicNetwork Then

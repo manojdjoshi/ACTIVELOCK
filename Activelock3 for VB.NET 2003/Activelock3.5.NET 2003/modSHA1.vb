@@ -53,8 +53,8 @@ Module modSHA1
 	' Remarks: None
 	'===============================================================================
 	Function BigAA1Add(ByVal value1 As String, ByVal value2 As String) As String
-		Dim valueans As String
-		Dim loopit, tempnum As Short
+        Dim valueans As String = String.Empty
+        Dim loopit, tempnum As Short
 		
 		tempnum = Len(value1) - Len(value2)
 		If tempnum < 0 Then
@@ -86,8 +86,8 @@ Module modSHA1
 	' Remarks: None
 	'===============================================================================
 	Function BigAA1AND(ByVal value1 As String, ByVal value2 As String) As String
-		Dim valueans As String
-		Dim loopit, tempnum As Short
+        Dim valueans As String = String.Empty
+        Dim loopit, tempnum As Short
 		
 		tempnum = Len(value1) - Len(value2)
 		If tempnum < 0 Then
@@ -124,8 +124,8 @@ Module modSHA1
 	' Remarks: None
 	'===============================================================================
 	Function BigAA1NOT(ByVal value1 As String) As String
-		Dim valueans As String
-		Dim loopit As Short
+        Dim valueans As String = String.Empty
+        Dim loopit As Short
 		
 		value1 = Right(value1, 8)
 		value1 = New String("0", 8 - Len(value1)) & value1
@@ -226,8 +226,8 @@ Module modSHA1
 	' Remarks: None
 	'===============================================================================
 	Function BigAA1XOR(ByVal value1 As String, ByVal value2 As String) As String
-		Dim valueans As String
-		Dim loopit, tempnum As Short
+        Dim valueans As String = String.Empty
+        Dim loopit, tempnum As Short
 		
 		tempnum = Len(value1) - Len(value2)
 		If tempnum < 0 Then
@@ -255,9 +255,10 @@ Module modSHA1
 	' Remarks: None
 	'===============================================================================
 	Function BigAA2Add(ByVal value1 As String, ByVal value2 As String) As String
-		Dim temps2, valueans, temps1, tempstr As String
-		Dim tempnum As Integer
-		
+        Dim valueans As String = String.Empty
+        Dim temps1, temps2, tempstr As String
+        Dim tempnum As Integer
+
 		tempnum = Len(value1) - Len(value2)
 		If tempnum < 0 Then
 			value1 = New String("0", System.Math.Abs(tempnum)) & value1
@@ -292,9 +293,10 @@ Module modSHA1
 	' Remarks: None
 	'===============================================================================
 	Function BigAA2AND(ByVal value1 As String, ByVal value2 As String) As String
-		Dim valueans, tempstr As String
-		Dim loopit, tempnum As Short
-		
+        Dim valueans As String = String.Empty
+        Dim tempstr As String
+        Dim tempnum As Short
+
 		tempnum = Len(value1) - Len(value2)
 		If tempnum < 0 Then
 			value2 = Mid(value2, System.Math.Abs(tempnum) + 1)
@@ -337,8 +339,7 @@ Module modSHA1
 	'===============================================================================
 	Function BigAA2NOT(ByVal value1 As String) As String
 		Dim valueans As String
-		Dim loopit As Short
-		
+
 		value1 = Right(value1, 8)
 		value1 = New String("0", 8 - Len(value1)) & value1
 		valueans = Hex(65535 Xor Val("&H" & Right(value1, 4) & "&"))
@@ -359,9 +360,10 @@ Module modSHA1
 	' Remarks: None
 	'===============================================================================
 	Function BigAA2OR(ByVal value1 As String, ByVal value2 As String) As String
-		Dim valueans, tempstr As String
-		Dim loopit, tempnum As Short
-		
+        Dim valueans As String = String.Empty
+        Dim tempstr As String
+        Dim tempnum As Short
+
 		tempnum = Len(value1) - Len(value2)
 		If tempnum < 0 Then
 			valueans = Left(value2, System.Math.Abs(tempnum))
@@ -406,9 +408,10 @@ Module modSHA1
 	' Remarks: None
 	'===============================================================================
 	Function BigAA2XOR(ByVal value1 As String, ByVal value2 As String) As String
-		Dim valueans, tempstr As String
-		Dim loopit, tempnum As Short
-		
+        Dim valueans As String = String.Empty
+        Dim tempstr As String
+        Dim tempnum As Short
+
 		tempnum = Len(value1) - Len(value2)
 		If tempnum < 0 Then
 			valueans = Left(value2, System.Math.Abs(tempnum))
@@ -444,8 +447,8 @@ Module modSHA1
 		Dim in_(79) As String
 		Dim loopouter, tempnum2, tempnum, loopit, loopinner As Short
 		Dim d, b, a, c, e As String
-		Dim tempstr As String
-		
+        Dim tempstr As String = String.Empty
+
 		' Add padding
 		tempnum = 8 * Len(hashthis)
 		hashthis = hashthis & Chr(128) 'Add binary 10000000
@@ -562,8 +565,8 @@ Module modSHA1
 		Dim in_(79) As String
 		Dim loopouter, tempnum2, tempnum, loopit, loopinner As Short
 		Dim d, b, a, c, e As String
-		Dim tempstr As String
-		
+        Dim tempstr As String = String.Empty
+
 		' Add padding
 		tempnum = 8 * Len(hashthis)
 		hashthis = hashthis & Chr(128) 'Add binary 10000000

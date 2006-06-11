@@ -148,8 +148,8 @@ Friend Class INIFile
 		Dim lReturn As Integer
 		Dim sValuePair As String
 		Dim iCounter As Short
-		Dim asEnumKeys() As String
-		Dim lBuffSize As Integer
+        Dim asEnumKeys() As String = Nothing
+        Dim lBuffSize As Integer
 		Dim iDelim As Short
 		Dim avReturn As Object
 		Dim iTries As Short
@@ -232,8 +232,8 @@ catch_Renamed:
 		Dim lReturn As Integer
 		Dim sValuePair As String
 		Dim iCounter As Short
-		Dim asEnumValues() As String
-		Dim lBuffSize As Integer
+        Dim asEnumValues() As String = Nothing
+        Dim lBuffSize As Integer
 		Dim iDelim As Short
 		Dim iTries As Short
 		
@@ -424,9 +424,9 @@ catch_Renamed:
 		Dim lReturn As Integer
 		Dim sValuePair As String
 		Dim iCounter As Short
-		Dim arrEnumValues() As String
-		Dim arrEnumKeys() As String
-		Dim lBuffSize As Integer
+        Dim arrEnumValues() As String = Nothing
+        Dim arrEnumKeys() As String = Nothing
+        Dim lBuffSize As Integer
 		Dim iDelim As Short
 		Dim iTries As Short
 		
@@ -616,8 +616,8 @@ catch_Renamed:
 	' Remarks: None
 	'===============================================================================
 	Public Sub WriteSection(ByVal rValue As Object)
-		Dim sBuffer As String
-		Dim a As Integer
+        Dim sBuffer As String = String.Empty
+        Dim a As Integer
 		
 		If Not IsArray(rValue) Then Exit Sub
 		

@@ -64,84 +64,84 @@ Option Explicit On
 	' Purpose: [INTERNAL] Specifies Product Name
 	' Remarks: None
 	'===============================================================================
-	Public Property name() As String
-		Get
-			Return mstrName
-		End Get
-		Set(ByVal Value As String)
-			mstrName = Value
-		End Set
-	End Property
+    Public Property Name() As String
+        Get
+            Return mstrName
+        End Get
+        Set(ByVal Value As String)
+            mstrName = Value
+        End Set
+    End Property
     '===============================================================================
-	' Name: Property Get Version
-	' Input: None
-	' Output:
-	'   String - Product version string
-	' Purpose: Gets product version
-	' Remarks: None
-	'===============================================================================
+    ' Name: Property Get Version
+    ' Input: None
+    ' Output:
+    '   String - Product version string
+    ' Purpose: Gets product version
+    ' Remarks: None
     '===============================================================================
-	' Name: Property Let Version
-	' Input:
-	'   ByVal sVer As String - Product version string
-	' Output: None
-	' Purpose: [INTERNAL] Specifies Product Version
-	' Remarks: None
-	'===============================================================================
-	Public Property Version() As String
-		Get
-			Return mstrVer
-		End Get
-		Set(ByVal Value As String)
-			mstrVer = Value
-		End Set
-	End Property
     '===============================================================================
-	' Name: Property Get VCode
-	' Input: None
-	' Output:
-	'   String - Product VCode string
-	' Purpose: Gets the public encryption key used to verify product license keys.
-	' Remarks: None
-	'===============================================================================
+    ' Name: Property Let Version
+    ' Input:
+    '   ByVal sVer As String - Product version string
+    ' Output: None
+    ' Purpose: [INTERNAL] Specifies Product Version
+    ' Remarks: None
     '===============================================================================
-	' Name: Property Let VCode
-	' Input:
-	'   ByRef sCode As String - Product VCode string
-	' Output: None
-	' Purpose: [INTERNAL] Specifies the public encryption key used to generate product license keys.
-	' Remarks: None
-	'===============================================================================
-	Public Property VCode() As String
-		Get
-			Return mstrCode1
-		End Get
-		Set(ByVal Value As String)
-			mstrCode1 = Value
-		End Set
-	End Property
+    Public Property Version() As String
+        Get
+            Return mstrVer
+        End Get
+        Set(ByVal Value As String)
+            mstrVer = Value
+        End Set
+    End Property
     '===============================================================================
-	' Name: Property Get GCode
-	' Input: None
-	' Output:
-	'   String - Code string
-	' Purpose: Returns the private encryption key used to generate product license keys.
-	' Remarks: None
-	'===============================================================================
+    ' Name: Property Get VCode
+    ' Input: None
+    ' Output:
+    '   String - Product VCode string
+    ' Purpose: Gets the public encryption key used to verify product license keys.
+    ' Remarks: None
     '===============================================================================
-	' Name: Property Let GCode
-	' Input:
-	'   ByRef sCode As String - Product GCode
-	' Output: None
-	' Purpose: [INTERNAL] Specifies the private encryption key used to generate product license keys.
-	' Remarks: None
-	'===============================================================================
-	Public Property GCode() As String
-		Get
-			Return mstrCode2
-		End Get
-		Set(ByVal Value As String)
-			mstrCode2 = Value
-		End Set
-	End Property
+    '===============================================================================
+    ' Name: Property Let VCode
+    ' Input:
+    '   ByRef sCode As String - Product VCode string
+    ' Output: None
+    ' Purpose: [INTERNAL] Specifies the public encryption key used to generate product license keys.
+    ' Remarks: None
+    '===============================================================================
+    Public Property VCode() As String
+        Get
+            Return mstrCode1
+        End Get
+        Set(ByVal Value As String)
+            mstrCode1 = Value
+        End Set
+    End Property
+    '===============================================================================
+    ' Name: Property Get GCode
+    ' Input: None
+    ' Output:
+    '   String - Code string
+    ' Purpose: Returns the private encryption key used to generate product license keys.
+    ' Remarks: None
+    '===============================================================================
+    '===============================================================================
+    ' Name: Property Let GCode
+    ' Input:
+    '   ByRef sCode As String - Product GCode
+    ' Output: None
+    ' Purpose: [INTERNAL] Specifies the private encryption key used to generate product license keys.
+    ' Remarks: None
+    '===============================================================================
+    Public Property GCode() As String
+        Get
+            Return mstrCode2
+        End Get
+        Set(ByVal Value As String)
+            mstrCode2 = Value
+        End Set
+    End Property
 End Class

@@ -59,6 +59,8 @@ Module modTrial
     Public TEXTMSG_RUNS, TEXTMSG_DAYS, TEXTMSG As String
     Public VIDEO, OTHERFILE As String
 
+    Public StegInfo As String
+
     Public Const HIDDENFOLDER As String = "SM8YnnHzkjsvBayVJjIexcUpH5+7aO1WosnkqOTm8ZU="
     Public Const EXPIREDDAYS As String = "ExpiredDays"
     Public Const ACTIVELOCKSTRING As String = "Activelock3"
@@ -270,14 +272,16 @@ Module modTrial
     Private Declare Function InternetCloseHandle Lib "wininet.dll" (ByVal hInet As Integer) As Short
 
     Public Function OpenURL(ByVal sUrl As String) As String
-        Const INTERNET_OPEN_TYPE_PRECONFIG As Short = 0
+        ' Const INTERNET_OPEN_TYPE_PRECONFIG As Short = 0
         Const INTERNET_FLAG_RELOAD As Integer = &H80000000
         Dim hSession As Integer
         Dim hFile As Integer
         Dim Result As String
         Dim Buffer As New VB6.FixedLengthString(1024)
-        Dim bResult As Boolean
         Dim lRead As Integer
+
+        OpenURL = String.Empty
+
         'This is where the website is grabbed
         Buffer.Value = ""
         Result = ""
@@ -438,7 +442,7 @@ RunsGoodRegistryError:
     Public Function DateGood(ByVal numDays As Short, ByRef daysLeft As Short, ByRef TrialHideTypes As IActiveLock.ALTrialHideTypes) As Boolean
         Dim use2 As Boolean
         Dim use3, use4 As Boolean
-        Dim daysLeft1, daysLeft2 As Short
+        Dim daysLeft2 As Short
         Dim daysLeft3, daysLeft4 As Short
         PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
 
@@ -447,7 +451,7 @@ RunsGoodRegistryError:
 
         If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialSteganography) Then
             If DateGoodSteganography(numDays, daysLeft2) = False Then
-                Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
+                Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
                 'MsgBox "DateGoodSteganography " & daysLeft2
                 Exit Function
             End If
@@ -455,7 +459,7 @@ RunsGoodRegistryError:
         End If
         If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialHiddenFolder) Then
             If DateGoodHiddenFolder(numDays, daysLeft3) = False Then
-                Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
+                Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
                 'MsgBox "DateGoodHiddenFolder " & daysLeft3
                 Exit Function
             End If
@@ -463,7 +467,7 @@ RunsGoodRegistryError:
         End If
         If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialRegistry) Then
             If DateGoodRegistry(numDays, daysLeft4) = False Then
-                Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
+                Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
                 'MsgBox "DateGoodRegistry " & daysLeft4
                 Exit Function
             End If
@@ -496,7 +500,7 @@ RunsGoodRegistryError:
     Public Function RunsGood(ByVal numRuns As Short, ByRef runsLeft As Short, ByRef TrialHideTypes As IActiveLock.ALTrialHideTypes) As Boolean
         Dim use2 As Boolean
         Dim use3, use4 As Boolean
-        Dim runsLeft1, runsLeft2 As Short
+        Dim runsLeft2 As Short
         Dim runsLeft3, runsLeft4 As Short
         PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
         TEXTMSG_RUNS = DecryptString128Bit("6urN2+xbgqbLLsOoC4hbGpLT3bnvY3YPGW299cOnqfo=", PSWD)
@@ -505,7 +509,7 @@ RunsGoodRegistryError:
 
         If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialSteganography) Then
             If RunsGoodSteganography(numRuns, runsLeft2) = False Then
-                Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
+                Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
                 'MsgBox "RunsGoodSteganography " & runsLeft2
                 Exit Function
             End If
@@ -514,7 +518,7 @@ RunsGoodRegistryError:
 
         If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialHiddenFolder) Then
             If RunsGoodHiddenFolder(numRuns, runsLeft3) = False Then
-                Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
+                Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
                 'MsgBox "RunsGoodHiddenFolder " & runsLeft3
                 Exit Function
             End If
@@ -523,7 +527,7 @@ RunsGoodRegistryError:
 
         If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialRegistry) Then
             If RunsGoodRegistry(numRuns, runsLeft4) = False Then
-                Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
+                Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
                 'MsgBox "RunsGoodRegistry " & runsLeft4
                 Exit Function
             End If
@@ -924,12 +928,17 @@ RunsGoodHiddenFolderError:
             Exit Function
         End If
 
+        If StegInfo = String.Empty Then
+            GetSteganographyInfo()
+        End If
+
+
         TmpCRD = ActiveLockDate(Now)
         Dim a() As String
         Dim aa As String
-        aa = SteganographyPull(strSource)
+        aa = StegInfo
         If aa <> "" Then
-            On Error GoTo continue
+            On Error GoTo [continue]
             a = aa.Split("_")
             If a(1) <> "" Then TmpLRD = CDate(a(1))
             If a(2) <> "" Then TmpFRD = CDate(a(2))
@@ -938,7 +947,7 @@ RunsGoodHiddenFolderError:
                 Exit Function
             End If
         End If
-continue:
+[continue]:
         If TmpLRD = "#12:00:00 AM#" Then TmpLRD = CDate(INITIALDATE)
         If TmpFRD = "#12:00:00 AM#" Then TmpFRD = CDate(INITIALDATE)
         DateGoodSteganography = False
@@ -949,11 +958,12 @@ continue:
             TmpLRD = TmpCRD
             TmpFRD = TmpCRD
             SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & TmpCRD & "_" & TmpFRD & "_" & "0")
+            GetSteganographyInfo()
         End If
         'Read LRD and FRD from the hidden text in the image
         Dim b() As String
         Dim bb As String
-        bb = SteganographyPull(strSource)
+        bb = StegInfo
         b = bb.Split("_")
         If b(1) <> "" Then TmpLRD = CDate(b(1))
         If b(2) <> "" Then TmpFRD = CDate(b(2))
@@ -1020,7 +1030,7 @@ DateGoodSteganographyError:
                 Exit Function
             End If
         End If
-continue:
+[continue]:
         If TmpLRD = "#12:00:00 AM#" Then
             TmpLRD = CDate(INITIALDATE)
             TmpFRD = CDate(INITIALDATE)
@@ -1152,7 +1162,8 @@ FileExistErrors:  'error handling routine, including File Not Found
     '===============================================================================
     Public Function enc2(ByVal strdata As String) As String
         Dim i, N As Integer
-        Dim sResult As String
+        Dim sResult As String = String.Empty
+
         N = Len(strdata)
         Dim l As Integer
         For i = 1 To N
@@ -1181,7 +1192,7 @@ FileExistErrors:  'error handling routine, including File Not Found
         Dim myDir As String
         myDir = "mPY+Que6efQvkZsstJlvvw=="
 
-        On Error GoTo trialError
+        On Error GoTo triAlerror
 
         LICENSE_SOFTWARE_NAME = SoftwareName
         LICENSE_SOFTWARE_VERSION = SoftwareVer
@@ -1237,11 +1248,11 @@ FileExistErrors:  'error handling routine, including File Not Found
 
             If Directory.Exists(dirPath) = True And (attributeReader And System.IO.FileAttributes.Directory And System.IO.FileAttributes.Hidden And System.IO.FileAttributes.ReadOnly And System.IO.FileAttributes.System) > 0 Then
                 MinusAttributes()
-                    'Check to see if our file is there
-                    If fileExist(strSource) Then
-                        SetAttr(strSource, FileAttribute.Normal)
-                        Kill(strSource)
-                    End If
+                'Check to see if our file is there
+                If fileExist(strSource) Then
+                    SetAttr(strSource, FileAttribute.Normal)
+                    Kill(strSource)
+                End If
             ElseIf Directory.Exists(dirPath) = True Then
                 'Ok, the folder is there with no system, hidden attributes
                 'Check to see if our file is there
@@ -1266,29 +1277,29 @@ FileExistErrors:  'error handling routine, including File Not Found
             PlusAttributes()
         End If
 
-            ' *** We are disabling folder date stamp in v3.2 since it's not application specific ***
-            '' Finally folder date stamp
-            'Dim secretFolder As String
-            'secretFolder = WinDir & Chr(92) & Chr(67) & Chr(117) & Chr(114) & Chr(115) & Chr(111) & Chr(114) & Chr(115)
-            'Dim hFolder As Long
-            '' obtain handle to the folder specified
-            'hFolder = GetFolderFileHandle(secretFolder)
-            'DoEvents
-            'If (hFolder <> 0) And (hFolder > -1) Then
-            '    ' change the folder date/time info
-            '    Call ChangeFolderFileDate(hFolder, 9, 1, 2000, 4, 0, 0)
-            '    Call CloseHandle(hFolder)
-            'Else
-            '    Call CloseHandle(hFolder)
-            '    MkDir secretFolder
-            'End If
+        ' *** We are disabling folder date stamp in v3.2 since it's not application specific ***
+        '' Finally folder date stamp
+        'Dim secretFolder As String
+        'secretFolder = WinDir & Chr(92) & Chr(67) & Chr(117) & Chr(114) & Chr(115) & Chr(111) & Chr(114) & Chr(115)
+        'Dim hFolder As Long
+        '' obtain handle to the folder specified
+        'hFolder = GetFolderFileHandle(secretFolder)
+        'DoEvents
+        'If (hFolder <> 0) And (hFolder > -1) Then
+        '    ' change the folder date/time info
+        '    Call ChangeFolderFileDate(hFolder, 9, 1, 2000, 4, 0, 0)
+        '    Call CloseHandle(hFolder)
+        'Else
+        '    Call CloseHandle(hFolder)
+        '    MkDir secretFolder
+        'End If
 
-            ExpireTrial = True
-            Exit Function
+        ExpireTrial = True
+        Exit Function
 
-trialError:
-            'Call CloseHandle(hFolder)
-            ExpireTrial = False
+triAlerror:
+        'Call CloseHandle(hFolder)
+        ExpireTrial = False
     End Function
     '===============================================================================
     ' Name: Function ResetTrial
@@ -1362,7 +1373,7 @@ trialError:
         'End If
 
         ' Hidden folder stuff
-        On Error GoTo trialError
+        On Error GoTo triAlerror
         If TrialHideTypes And IActiveLock.ALTrialHideTypes.trialHiddenFolder Then
             If Directory.Exists(WinDir() & DecryptString128Bit(myDir, PSWD)) = True Then
                 MinusAttributes()
@@ -1385,7 +1396,7 @@ trialError:
         ResetTrial = True
         Exit Function
 
-trialError:
+triAlerror:
         'Call CloseHandle(hFolder)
         ResetTrial = False
     End Function
@@ -1473,7 +1484,8 @@ IsRegistryExpired2Error:
     Public Function IsFolderStampExpired() As Boolean
 
         On Error GoTo IsFolderStampExpiredError
-        Dim secretFolder, fDateTime As String
+        Dim secretFolder As String
+        Dim fDateTime As String = String.Empty
         secretFolder = WinDir() & Chr(92) & Chr(67) & Chr(117) & Chr(114) & Chr(115) & Chr(111) & Chr(114) & Chr(115)
 
         Dim hFolder As Integer
@@ -1582,6 +1594,8 @@ IsFolderStampExpiredError:
         Dim ft_local As FILETIME
         Dim st As SYSTEMTIME
 
+        GetFolderFileDateString = String.Empty
+
         'convert the file time to a local
         'file time
         If FileTimeToLocalFileTime(FT, ft_local) Then
@@ -1631,6 +1645,35 @@ IsEncryptedFileExpiredError:
         IsEncryptedFileExpired = True
     End Function
     '===============================================================================
+    ' Name: Function GetSteganographyInfo
+    ' Input: None
+    ' Output:
+    '   None
+    ' Purpose: Sets the global StegInfo value
+    ' Remarks: None
+    '===============================================================================
+    Public Sub GetSteganographyInfo()
+        Dim strSource As String
+
+        On Error GoTo GetSteganographyInfoError
+
+        StegInfo = String.Empty
+
+        strSource = GetSteganographyFile()
+        If strSource = "" Then
+            Exit Sub
+        End If
+
+        StegInfo = SteganographyPull(strSource)
+
+        Exit Sub
+
+GetSteganographyInfoError:
+        Exit Sub
+
+    End Sub
+
+    '===============================================================================
     ' Name: Function IsSteganographyExpired
     ' Input: None
     ' Output:
@@ -1640,18 +1683,14 @@ IsEncryptedFileExpiredError:
     ' Remarks: None
     '===============================================================================
     Public Function IsSteganographyExpired() As Boolean
-        Dim strSource As String, a As String
 
         On Error GoTo IsSteganographyExpiredError
 
-        strSource = GetSteganographyFile()
-        If strSource = "" Then
-            IsSteganographyExpired = False
-            Exit Function
+        If StegInfo = String.Empty Then
+            GetSteganographyInfo()
         End If
 
-        a = SteganographyPull(strSource)
-        If a.IndexOf(EXPIREDDAYS) > 0 Then
+        If StegInfo.IndexOf(EXPIREDDAYS) > 0 Then
             IsSteganographyExpired = True
         End If
         Exit Function
@@ -1659,6 +1698,7 @@ IsEncryptedFileExpiredError:
 IsSteganographyExpiredError:
         IsSteganographyExpired = True
     End Function
+
     '===============================================================================
     ' Name: Function IsHiddenFolderExpired
     ' Input: None
@@ -1799,7 +1839,8 @@ IsHiddenFolderExpiredError:
         'FileClose(fNum)
 
         If File.Exists(FileName) = False Then SteganographyEmbed = 1 : Exit Function
-        Dim objCoder As CCoder, keyFileName As String
+        Dim objCoder As CCoder = Nothing
+        Dim keyFileName As String
         Try
             objCoder = New CCoder
             keyFileName = WinDir() & "\rock." & Chr(98) & Chr(109) & Chr(112)
@@ -1846,7 +1887,11 @@ IsHiddenFolderExpiredError:
         '    SteganographyPull = SteganographyPull & Chr(Hold)
         'Loop
 
-        Dim objCoder As CCoder, keyFileName As String, a As String
+        Dim objCoder As CCoder = Nothing
+        Dim keyFileName As String
+        Dim a As String = String.Empty
+
+        SteganographyPull = String.Empty
         Try
             objCoder = New CCoder
             keyFileName = WinDir() & "\rock." & Chr(98) & Chr(109) & Chr(112)
@@ -1914,9 +1959,9 @@ IsHiddenFolderExpiredError:
         End If
 
         If alockDays = 0 And trialPeriod = True Then
-            Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrInvalidTrialDays, ACTIVELOCKSTRING, STRINVALIDTRIALDAYS)
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrInvalidTrialDays, ACTIVELOCKSTRING, STRINVALIDTRIALDAYS)
         ElseIf alockRuns = 0 And trialRuns = True Then
-            Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrInvalidTrialRuns, ACTIVELOCKSTRING, STRINVALIDTRIALRUNS)
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrInvalidTrialRuns, ACTIVELOCKSTRING, STRINVALIDTRIALRUNS)
         End If
 
         strMsg = ""
@@ -1930,13 +1975,13 @@ IsHiddenFolderExpiredError:
 
         ' Check to see if any of the hidden signatures say the trial is expired
         If IsRegistryExpired1() = True Then
-            Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
         End If
         If IsRegistryExpired2() = True Then
-            Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
         End If
         If IsEncryptedFileExpired() = True Then
-            Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
         End If
         ' *** We are disabling folder date stamp in v3.2 since it's not application specific ***
         ' Well... nothing was found
@@ -1945,27 +1990,29 @@ IsHiddenFolderExpiredError:
         '    Err.Raise -10100, , TEXTMSG
         'End If
 
+        GetSteganographyInfo()              ' Get the steganography info by decoding the bmp
+
         ' Main trial hiding locations
         If IsRegistryExpired() = True Then
-            Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
         End If
         If IsSteganographyExpired() = True Then
-            Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
         End If
         If IsHiddenFolderExpired() = True Then
-            Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
         End If
         ' Nothing bad so far...
         If trialPeriod Then
             If Not DateGood(alockDays, daysLeft, TrialHideTypes) Then
                 ExpireTrial(SoftwareName, SoftwareVer, TrialType, TrialLength, TrialHideTypes, SoftwarePassword)
                 ' Trial Period has expired
-                Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
+                Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
             Else
                 If fileExist(GetSteganographyFile()) = False And Directory.Exists(WinDir() & DecryptString128Bit(myDir, PSWD)) = False And dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
                     If ClockTampering() Then
                         If SystemClockTampered() Then
-                            Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
+                            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                         End If
                     End If
                 End If
@@ -1980,12 +2027,12 @@ IsHiddenFolderExpiredError:
             If Not RunsGood(alockRuns, runsLeft, TrialHideTypes) Then
                 ExpireTrial(SoftwareName, SoftwareVer, TrialType, TrialLength, TrialHideTypes, SoftwarePassword)
                 ' Trial Runs have expired
-                Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
+                Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
             Else
                 If fileExist(GetSteganographyFile()) = False And Directory.Exists(WinDir() & DecryptString128Bit(myDir, PSWD)) = False And dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
                     If ClockTampering() Then
                         If SystemClockTampered() Then
-                            Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
+                            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                         End If
                     End If
                 End If
@@ -2098,29 +2145,13 @@ exitGracefully:
     '===============================================================================
     Public Function ReadUntil(ByRef sIn As String, ByRef sDelim As String, Optional ByRef bCompare As CompareMethod = CompareMethod.Binary) As String
         Dim nPos As String
+        ReadUntil = String.Empty
+
         nPos = CStr(InStr(1, sIn, sDelim, bCompare))
         If CDbl(nPos) > 0 Then
             ReadUntil = Left(sIn, CDbl(nPos) - 1)
             sIn = Mid(sIn, CDbl(nPos) + Len(sDelim))
         End If
-    End Function
-    '===============================================================================
-    ' Name: Function StrReverse
-    ' Input:
-    '   ByVal sIn As String - Input string
-    ' Output:
-    '   String - Reversed string
-    ' Purpose: Reverses a given string
-    ' Remarks: None
-    '===============================================================================
-    'StrReverse was upgraded to StrReverse_Renamed
-    Public Function StrReverse_Renamed(ByVal sIn As String) As String
-        Dim nC As Short
-        Dim sOut As String
-        For nC = Len(sIn) To 1 Step -1
-            sOut = sOut & Mid(sIn, nC, 1)
-        Next
-        StrReverse_Renamed = sOut
     End Function
     '===============================================================================
     ' Name: Function InStrRev
@@ -2145,6 +2176,24 @@ exitGracefully:
         Else
             InStrRev_Renamed = Len(sIn) - nPos - Len(sFind) + 2
         End If
+    End Function
+    '===============================================================================
+    ' Name: Function StrReverse
+    ' Input:
+    '   ByVal sIn As String - Input string
+    ' Output:
+    '   String - Reversed string
+    ' Purpose: Reverses a given string
+    ' Remarks: None
+    '===============================================================================
+    'StrReverse was upgraded to StrReverse_Renamed
+    Public Function StrReverse_Renamed(ByVal sIn As String) As String
+        Dim nC As Short
+        Dim sOut As String
+        For nC = Len(sIn) To 1 Step -1
+            sOut = sOut & Mid(sIn, nC, 1)
+        Next
+        StrReverse_Renamed = sOut
     End Function
     '===============================================================================
     ' Name: Function Replace
@@ -2206,7 +2255,8 @@ EndFn:
     '===============================================================================
     Public Function Scramb(ByVal strString As String) As String
         Dim i As Short
-        Dim even, odd As String
+        Dim even As String = String.Empty
+        Dim odd As String = String.Empty
         For i = 1 To Len(strString)
             If i Mod 2 = 0 Then
                 even = even & Mid(strString, i, 1)
@@ -2227,6 +2277,8 @@ EndFn:
     '===============================================================================
     Public Function dhTrimNull(ByVal strValue As String) As String
         Dim intPos As Short
+        dhTrimNull = String.Empty
+
         intPos = InStr(strValue, vbNullChar)
         Select Case intPos
             Case 0
@@ -2248,7 +2300,9 @@ EndFn:
     '===============================================================================
     Public Function Unscramb(ByVal strString As String) As String
         Dim evenint, x, oddint As Short
-        Dim odd, even, fin As String
+        Dim odd, even As String
+        Dim fin As String = String.Empty
+
         x = Len(strString)
         x = Int(Len(strString) / 2) 'adding this returns the actual number like 1.5 instead of returning 2
         even = Mid(strString, 1, x)
@@ -2292,7 +2346,7 @@ EndFn:
 
         Dim hFile, retVal As Integer
         Dim sScan As String
-        Dim sBuffer As String
+        ' Dim sBuffer As String
 
         Dim sRegMonClass, sFileMonClass As String
         '\\We break up the class names to avoid
@@ -2355,7 +2409,8 @@ EndFn:
     '===============================================================================
     Public Sub GetSystemTime1()
         'This is the main debugger detection routine.
-        Dim sFc, src, vernumber, str1 As String
+        Dim sFc, src, str1 As String
+        Dim vernumber As String = String.Empty
         Dim vn2, vn0, vn1, vnx As Short
         PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
 
@@ -2571,6 +2626,8 @@ EndFn:
         X2 = 8 ^ 2
         X3 = X1 + PointlessVariable
         X1 = X1 + X2 + X3
+
+        PFunction = Nothing
     End Function
     '===============================================================================
     ' Name: Sub JOC
@@ -2597,8 +2654,9 @@ EndFn:
         Dim JU_C_OR(32) As Object
         Dim ViT(1, 1) As Object
         Dim c, AMIN, tang, App_Les As Object
-        Dim yergisiz, ang, gerinmeoyle, PE_ar, e As Object
-        Dim TXM, TM, TXD, TXZ As Single
+        Dim yergisiz, ang, gerinmeoyle, PE_ar As Object
+        Dim e As Object = Nothing
+        ' Dim TXM, TM, TXD, TXZ As Single
 
         ViT(0, 0) = "yalnizlikzorseydostum"
         AMIN = 1
@@ -2932,10 +2990,7 @@ minusAttributesError:
 
         Dim intLength As Integer
         Dim intRemaining As Integer
-        Dim intCtr As Integer
         Dim strReturnString As String = String.Empty
-        Dim achrCharacterArray() As Char
-        Dim intIndex As Integer
 
         '   *****************************************************************
         '   ******   Convert base64 encrypted value to byte array      ******
@@ -3019,7 +3074,7 @@ minusAttributesError:
         Dim Symbol As String
         Dim iRet1 As Integer
         Dim iRet2 As Integer
-        Dim lpLCDataVar As String
+        Dim lpLCDataVar As String = String.Empty
         Dim Pos As Short
         Dim Locale As Integer
         Locale = GetUserDefaultLCID()

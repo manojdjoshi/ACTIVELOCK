@@ -136,10 +136,11 @@ Friend Class Generator
     Private Function IALUGenerator_RetrieveProducts() As ProductInfo() Implements _IALUGenerator.RetrieveProducts
         ' Retrieve all product information from INI.  Return as an array.
         On Error GoTo RetrieveProductsError
+        IALUGenerator_RetrieveProducts = Nothing
         Dim arrProdInfos() As ProductInfo
         Dim Count As Short
         Dim iniCount As Short
-        Dim arrSections() As String
+        Dim arrSections() As String = Nothing
         Count = 0
         iniCount = MyIniFile.EnumSections(arrSections)
 
@@ -164,20 +165,20 @@ RetrieveProductsError:
     ' Purpose: Retrieves product VCode and GCode from the store file
     ' Remarks: todo Error Handling - Need to return Nothing if store file doesn't contain the product
     '===============================================================================
-    Private Function IALUGenerator_RetrieveProduct(ByVal name As String, ByVal Ver As String) As ProductInfo Implements _IALUGenerator.RetrieveProduct
+    Private Function IALUGenerator_RetrieveProduct(ByVal Name As String, ByVal Ver As String) As ProductInfo Implements _IALUGenerator.RetrieveProduct
         '@todo Error Handling - Need to return Nothing if store file doesn't contain the product
         Dim ProdInfo As New ProductInfo
-        ProdInfo.name = name
+        ProdInfo.Name = Name
         ProdInfo.Version = Ver
         With MyIniFile
-            .Section = name & " " & Ver
+            .Section = Name & " " & Ver
             ProdInfo.Version = CStr(.Values("Version"))
             ProdInfo.VCode = CStr(.Values("VCode")) '@todo Decrypt code1 and code2
             ProdInfo.GCode = CStr(.Values("GCode"))
         End With
         If ProdInfo.VCode = "" Or ProdInfo.GCode = "" Then
             'ACTIVELOCKSTRING could be replaced by System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).ProductName
-            Err.Raise(AlugenGlobals_definst.ALUGENErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, "Product code set is invalid.")
+            Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, "Product code set is invalid.")
         End If
         IALUGenerator_RetrieveProduct = ProdInfo
     End Function
@@ -213,7 +214,8 @@ RetrieveProductsError:
         strReq = Base64_Decode(InstCode)
 
         ' strReq now contains the {LockCode + vbLf + User} string
-        Dim strLock, strUser As String
+        Dim strLock As String = String.Empty
+        Dim strUser As String = String.Empty
         GetLockAndUserFromInstallCode(strReq, strLock, strUser)
 
         Lic.Licensee = strUser
@@ -266,7 +268,7 @@ RetrieveProductsError:
         System.Diagnostics.Debug.WriteLine("====================================================")
 
         ' Serialize it into a formatted string
-        Dim strLibKey As String
+        Dim strLibKey As String = String.Empty
         Lic.Save(strLibKey)
         IALUGenerator_GenKey = strLibKey
     End Function

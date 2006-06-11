@@ -82,7 +82,7 @@ Friend Class FileKeyStoreProvider
 				CreateEmptyFile(Value)
 			Else 'the file exists, but check to see if it has read-only attribute
 				If (GetAttr(Value) And FileAttribute.ReadOnly) Or (GetAttr(Value) And FileAttribute.ReadOnly And FileAttribute.Archive) Then
-					Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
+                    Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
 				End If
 			End If
 			mstrPath = Value
@@ -170,6 +170,6 @@ Friend Class FileKeyStoreProvider
         IKeyStoreProvider_Retrieve = Lic
         Exit Function
 InvalidValue:
-        Err.Raise(Globals_definst.ActiveLockErrCodeConstants.alerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREINVALID)
+        Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREINVALID)
 	End Function
 End Class

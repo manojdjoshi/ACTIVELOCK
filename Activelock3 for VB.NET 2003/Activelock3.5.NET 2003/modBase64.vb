@@ -62,7 +62,8 @@ Module modBase64
         Dim w3 As Short
         Dim w4 As Short
         Dim N As Short
-        Dim retry As String
+        Dim retry As String = String.Empty
+
         For N = 1 To Len(DecryptedText) Step 3
             c1 = Asc(Mid(DecryptedText, N, 1))
             c2 = Asc(Mid(DecryptedText, N + 1, 1) & Chr(0))
@@ -91,7 +92,7 @@ Module modBase64
         Dim w3 As Short
         Dim w4 As Short
         Dim N As Short
-        Dim retry As String
+        Dim retry As String = String.Empty
 
         For N = 1 To Len(a) Step 4
             w1 = mimedecode(Mid(a, N, 1))

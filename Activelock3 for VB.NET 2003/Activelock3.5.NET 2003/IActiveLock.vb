@@ -310,9 +310,9 @@ End Interface
 	'===============================================================================
 	Public ReadOnly Property RegisteredLevel() As String Implements _IActiveLock.RegisteredLevel
 		Get
-			
-		End Get
-	End Property
+            RegisteredLevel = String.Empty
+        End Get
+    End Property
     '===============================================================================
 	' Name: Property Get LockType
 	' Input: None
@@ -404,7 +404,7 @@ End Interface
     '===============================================================================
     Public Property SoftwareName() As String Implements _IActiveLock.SoftwareName
         Get
-
+            SoftwareName = String.Empty
         End Get
         Set(ByVal Value As String)
 
@@ -420,7 +420,7 @@ End Interface
     '===============================================================================
     Public Property SoftwarePassword() As String Implements _IActiveLock.SoftwarePassword
         Get
-
+            SoftwarePassword = String.Empty
         End Get
         Set(ByVal Value As String)
 
@@ -449,7 +449,7 @@ End Interface
     '===============================================================================
     Public Property SoftwareVersion() As String Implements _IActiveLock.SoftwareVersion
         Get
-
+            SoftwareVersion = String.Empty
         End Get
         Set(ByVal Value As String)
 
@@ -497,7 +497,7 @@ End Interface
     '===============================================================================
     Public ReadOnly Property InstallationCode(Optional ByVal User As String = vbNullString, Optional ByVal Lic As ProductLicense = Nothing) As String Implements _IActiveLock.InstallationCode
         Get
-
+            InstallationCode = String.Empty
         End Get
     End Property
     '===============================================================================
@@ -527,7 +527,7 @@ End Interface
     '===============================================================================
     Public ReadOnly Property EventNotifier() As ActiveLockEventNotifier Implements _IActiveLock.EventNotifier
         Get
-
+            EventNotifier = Nothing
         End Get
     End Property
     '===============================================================================
@@ -553,7 +553,7 @@ End Interface
     '===============================================================================
     Public ReadOnly Property RegisteredDate() As String Implements _IActiveLock.RegisteredDate
         Get
-
+            RegisteredDate = String.Empty
         End Get
     End Property
     '===============================================================================
@@ -566,7 +566,7 @@ End Interface
     '===============================================================================
     Public ReadOnly Property RegisteredUser() As String Implements _IActiveLock.RegisteredUser
         Get
-
+            RegisteredUser = String.Empty
         End Get
     End Property
     '===============================================================================
@@ -579,7 +579,7 @@ End Interface
     '===============================================================================
     Public ReadOnly Property ExpirationDate() As String Implements _IActiveLock.ExpirationDate
         Get
-
+            ExpirationDate = String.Empty
         End Get
     End Property
     '===============================================================================
@@ -593,7 +593,7 @@ End Interface
     ' Remarks: None
     '===============================================================================
     Public Function LockCode(Optional ByRef Lic As ProductLicense = Nothing) As String Implements _IActiveLock.LockCode
-
+        LockCode = String.Empty
     End Function
     '===============================================================================
     ' Name: Sub Register
@@ -616,7 +616,7 @@ End Interface
     ' Remarks: Not implemented yet.
     '===============================================================================
     Public Function Transfer(ByVal InstallCode As String) As String Implements _IActiveLock.Transfer
-
+        Transfer = String.Empty
     End Function
     '===============================================================================
     ' Name: Sub Init

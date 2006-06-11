@@ -50,44 +50,44 @@ Option Explicit On
     ' ActiveLock Error Codes.
 	' These error codes are used for <code>Err.Number</code> whenever ActiveLock raises an error.
 	'
-	' @param alugenOK               No error.  Operation was successful.
+	' @param alugenOk               No error.  Operation was successful.
 	' @param alugenProdInvalid      Product Info is invalid
-	Public Enum ALUGENErrCodeConstants
-		alugenOK = 0 ' successful
-		alugenProdInvalid = &H80040100 ' vbObjectError (&H80040000) + &H100
-	End Enum
+    Public Enum alugenErrCodeConstants
+        alugenOk = 0 ' successful
+        alugenProdInvalid = &H80040100 ' vbObjectError (&H80040000) + &H100
+    End Enum
     '===============================================================================
-	' Name: Function GeneratorInstance
-	' Input: None
-	' Output:
-	'   IALUGenerator - New Generator instance
-	' Purpose: Returns a new Generator instance
-	' Remarks: None
-	'===============================================================================
-	Public Function GeneratorInstance() As _IALUGenerator
-		GeneratorInstance = New Generator
-	End Function
-	
-	'===============================================================================
-	' Name: Function CreateProductInfo
-	' Input:
-	'   ByVal name As String - Product name
-	'   ByVal Ver As String - Product version
-	'   ByVal VCode As String - Product VCODE (public key)
-	'   ByVal GCode As String - Product GCODE (private key)
-	' Output:
-	'   ProductInfo - Product information
-	' Purpose: Instantiates a new ProductInfo object
-	' Remarks: None
-	'===============================================================================
-	Public Function CreateProductInfo(ByVal name As String, ByVal Ver As String, ByVal VCode As String, ByVal GCode As String) As ProductInfo
-		Dim ProdInfo As New ProductInfo
-		With ProdInfo
-			.name = name
-			.Version = Ver
-			.VCode = VCode
-			.GCode = GCode
-		End With
-		CreateProductInfo = ProdInfo
-	End Function
+    ' Name: Function GeneratorInstance
+    ' Input: None
+    ' Output:
+    '   IALUGenerator - New Generator instance
+    ' Purpose: Returns a new Generator instance
+    ' Remarks: None
+    '===============================================================================
+    Public Function GeneratorInstance() As _IALUGenerator
+        GeneratorInstance = New Generator
+    End Function
+
+    '===============================================================================
+    ' Name: Function CreateProductInfo
+    ' Input:
+    '   ByVal name As String - Product name
+    '   ByVal Ver As String - Product version
+    '   ByVal VCode As String - Product VCODE (public key)
+    '   ByVal GCode As String - Product GCODE (private key)
+    ' Output:
+    '   ProductInfo - Product information
+    ' Purpose: Instantiates a new ProductInfo object
+    ' Remarks: None
+    '===============================================================================
+    Public Function CreateProductInfo(ByVal Name As String, ByVal Ver As String, ByVal VCode As String, ByVal GCode As String) As ProductInfo
+        Dim ProdInfo As New ProductInfo
+        With ProdInfo
+            .Name = name
+            .Version = Ver
+            .VCode = VCode
+            .GCode = GCode
+        End With
+        CreateProductInfo = ProdInfo
+    End Function
 End Class

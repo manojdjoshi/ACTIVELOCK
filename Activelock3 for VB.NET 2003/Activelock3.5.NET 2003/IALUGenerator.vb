@@ -91,7 +91,7 @@ End Interface
     ' Remarks: None
     '===============================================================================
     Public Function RetrieveProduct(ByVal name As String, ByVal Ver As String) As ProductInfo Implements _IALUGenerator.RetrieveProduct
-
+        RetrieveProduct = Nothing
     End Function
     '===============================================================================
     ' Name: Function RetrieveProducts
@@ -102,7 +102,7 @@ End Interface
     ' Remarks: None
     '===============================================================================
     Public Function RetrieveProducts() As ProductInfo() Implements _IALUGenerator.RetrieveProducts
-
+        RetrieveProducts = Nothing
     End Function
     '===============================================================================
     ' Name: Sub DeleteProduct
@@ -128,6 +128,6 @@ End Interface
     ' Remarks: None
     '===============================================================================
     Public Function GenKey(ByRef Lic As ActiveLock3_5NET.ProductLicense, ByVal InstCode As String, Optional ByVal RegisteredLevel As String = "0") As String Implements _IALUGenerator.GenKey
-
+        GenKey = String.Empty
     End Function
 End Class

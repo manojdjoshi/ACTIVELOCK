@@ -80,14 +80,14 @@ Module modHardware
     ' The following structure defines the structure of a Warranty Threshold
     ' Obsoleted in ATA4!
     '---------------------------------------------------------------------
-    Public Structure ATTRTHRESHOLD
-        Dim bAttrID As Byte ' Identifies which attribute
-        Dim bWarrantyThreshold As Byte ' Triggering value
-        <VBFixedArray(9)> Dim bReserved() As Byte ' ...
-        Public Sub Initialize()
-            ReDim bReserved(9)
-        End Sub
-    End Structure
+    'Public Structure ATTRTHRESHOLD
+    '    Dim bAttrID As Byte ' Identifies which attribute
+    '    Dim bWarrantyThreshold As Byte ' Triggering value
+    '    <VBFixedArray(9)> Dim bReserved() As Byte
+    '    Public Sub Initialize()
+    '        ReDim bReserved(9)
+    '    End Sub
+    'End Structure
 
     '---------------------------------------------------------------------
     ' Valid Attribute IDs
@@ -550,7 +550,7 @@ GetComputerNameError:
 
         GetHDSerial = strSerial
 
-GetHDSerialError:
+GetHDSeriAlerror:
         If GetHDSerial = "" Then
             GetHDSerial = "Not Available"
         End If
@@ -576,7 +576,9 @@ GetHDSerialError:
 
         If IsWindowsNT() = False Then
             GetHDSerialFirmware = Trim(GetDriveInfo(IDE_DRIVE_NUMBER.PRIMARY_MASTER))
-            If GetHDSerialFirmware <> "" Then Exit Function
+            If GetHDSerialFirmware <> "" Then
+                Exit Function
+            End If
         End If
 
         ' ialkan 2-12-06
@@ -587,11 +589,11 @@ GetHDSerialError:
         For jj = 0 To 15 ' Controller index
             GetHDSerialFirmware = Trim(GetHDSerialFirmwareVBNET(jj, True)) ' Check the Master drive
             If GetHDSerialFirmware <> "" Then
-                Exit For
+                Exit Function
             End If
             GetHDSerialFirmware = Trim(GetHDSerialFirmwareVBNET(jj, False)) ' Now check the Slave Drive
             If GetHDSerialFirmware <> "" Then
-                Exit For
+                Exit Function
             End If
         Next
 
@@ -848,6 +850,7 @@ GetHDSerialFirmwareError:
     ' Remarks: None
     '===============================================================================
     Public Function GetMACAddress() As String
+        GetMACAddress = String.Empty
         'On Error Resume Next
         'Dim tmp As String
         'Dim pASTAT As Integer
@@ -966,13 +969,16 @@ GetMACAddressError:
     Public Function GetBIOSserial() As String
         Dim BiosSet As Object
         Dim obj As Object
-        On Error GoTo GetBIOSSerialError
+
+        GetBIOSserial = String.Empty
+
+        On Error GoTo GetBIOSSeriAlerror
         BiosSet = GetObject("WinMgmts:{impersonationLevel=impersonate}").InstancesOf("Win32_BIOS")
         For Each obj In BiosSet
             GetBIOSserial = obj.Version
             If GetBIOSserial <> "" Then Exit Function
         Next obj
-GetBIOSSerialError:
+GetBIOSSeriAlerror:
         If GetBIOSserial = "" Then
             GetBIOSserial = "Not Available"
         End If
@@ -989,7 +995,9 @@ GetBIOSSerialError:
     Public Function GetMotherboardSerial() As String
         Dim MotherboardSet As Object
         Dim obj As Object
-        On Error GoTo GetMotherboardSerialError
+
+        GetMotherboardSerial = String.Empty
+        On Error GoTo GetMotherboardSeriAlerror
 
         MotherboardSet = GetObject("WinMgmts:{impersonationLevel=impersonate}").InstancesOf("CIM_Chassis")
         Dim bytes() As Byte
@@ -1003,7 +1011,7 @@ GetBIOSSerialError:
             End If
         Next obj
 
-GetMotherboardSerialError:
+GetMotherboardSeriAlerror:
         If GetMotherboardSerial = "" Then
             GetMotherboardSerial = "Not Available"
         End If
@@ -1041,9 +1049,9 @@ GetIPaddressError:
         ' This code DOES NOT require WMI
         ' This code DOES NOT require SMART VXD drivers for Win95/98/Me
 
-        Dim myStr As String
+        Dim myStr As String = String.Empty
         Dim str1, reversedStr, str2 As String
-        Dim kk, jj As Short
+        Dim jj As Short
         Dim dummy As Integer = 0
         Dim hdh As IntPtr, newHandle As Boolean
 
@@ -1080,7 +1088,7 @@ GetIPaddressError:
             System.Runtime.InteropServices.Marshal.Copy(bin, 0, bout, 560)
             newHandle = DeviceIoControl2(hdh, 315400, bout, 63, bout, 560, dummy, IntPtr.Zero)
 
-            If (newHandle) Then
+            If newHandle Then
                 System.Runtime.InteropServices.Marshal.Copy(bout, bin, 0, 560)
                 ' HDD Firmware Serial Number is between 64 to 83 - 19 digits as we had from ALCrypto before
                 ' HDD Model Number is between 98 and 137

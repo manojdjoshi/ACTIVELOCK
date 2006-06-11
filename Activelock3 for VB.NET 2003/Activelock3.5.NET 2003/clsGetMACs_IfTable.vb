@@ -105,7 +105,7 @@ Class clsNetworkStats
     Dim ifrow As New MIB_IFROW
     Dim IfTable As New MIB_IFTABLE
     Dim tablesize As Integer
-    Dim iBuf As IntPtr = IntPtr.Zero
+        Dim iBuf As IntPtr = IntPtr.Zero
 
     'get tablesize
     ret = GetIfTable(iBuf, tablesize, True)
@@ -129,25 +129,25 @@ Class clsNetworkStats
     Dim mDest As Byte()
     ReDim mDest(IFROWSize * noInterfaces)
 
-    For i As Byte = 1 To noInterfaces
-      mrows(i - 1) = Marshal.PtrToStructure(New IntPtr(iBuf.ToInt32 + 4 + (i - 1) * IFROWSize), GetType(MIB_IFROW))
-      Dim ifhelp As IFROW_HELPER = PrivToPub(mrows(i - 1))
-      If IgnoreLoopBack = True Then
-        If ifhelp.Description.IndexOf("Loopback") < 0 Then
-          m_Adapters.Add(ifhelp)
-        End If
-      Else
-        m_Adapters.Add(ifhelp)
-      End If
-    Next
-    Marshal.FreeHGlobal(iBuf)
+        For i As Byte = 1 To Convert.ToByte(noInterfaces)
+            mrows(i - 1) = CType(Marshal.PtrToStructure(New IntPtr(iBuf.ToInt32 + 4 + (i - 1) * IFROWSize), GetType(MIB_IFROW)), MIB_IFROW)
+            Dim ifhelp As IFROW_HELPER = PrivToPub(mrows(i - 1))
+            If IgnoreLoopBack = True Then
+                If ifhelp.Description.IndexOf("Loopback") < 0 Then
+                    m_Adapters.Add(ifhelp)
+                End If
+            Else
+                m_Adapters.Add(ifhelp)
+            End If
+        Next
+        Marshal.FreeHGlobal(iBuf)
 
   End Sub
 
     Public Function GetAdapter() As IFROW_HELPER
         Dim i As Short
-        For i = 0 To m_Adapters.Count
-            GetAdapter = m_Adapters(i)
+        For i = 0 To Convert.ToInt16(m_Adapters.Count)
+            Return CType(m_Adapters(i), IFROW_HELPER)
             If GetAdapter.PhysAddr.ToString <> "00-00-00-00-00-00" Then Exit Function
         Next
 
@@ -180,8 +180,6 @@ Class clsNetworkStats
         ifhelp.OutErrors = Convert.ToInt32(pri.dwOutErrors)
         ifhelp.OutQLen = Convert.ToInt32(pri.dwOutQLen)
         ifhelp.Description = System.Text.Encoding.ASCII.GetString(pri.bDescr, 0, Convert.ToInt32(pri.dwDescrLen))
-        'ifhelp.Description = System.Text.Encoding.ASCII.GetString(pri.bDescr, 0, MAXLEN_IFDESCR)
-
         ifhelp.InMegs = ToMegs(ifhelp.InOctets)
         ifhelp.OutMegs = ToMegs(ifhelp.OutOctets)
 
@@ -195,7 +193,7 @@ Class clsNetworkStats
         'If lSize > 1024 Then lSize = (lSize / 1024) * 1000 'Windows styleee filesizing : ) 
         If lSize > 1000 Then
             sDenominator = " KB"
-            lSize = lSize / 1000
+            lSize = Convert.ToInt64(lSize / 1000)
         ElseIf lSize <= 1000 Then
             sDenominator = " B"
             lSize = lSize
