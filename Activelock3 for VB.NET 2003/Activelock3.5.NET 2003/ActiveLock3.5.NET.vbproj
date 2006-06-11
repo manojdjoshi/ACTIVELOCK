@@ -9,7 +9,7 @@
             <Settings
                 ApplicationIcon = ""
                 AssemblyKeyContainerName = ""
-                AssemblyName = "ActiveLock3_5NET"
+                AssemblyName = "ActiveLock3_5Net"
                 AssemblyOriginatorKeyFile = ""
                 AssemblyOriginatorKeyMode = "None"
                 DefaultClientScript = "JScript"
@@ -19,7 +19,7 @@
                 OutputType = "Library"
                 OptionCompare = "Binary"
                 OptionExplicit = "On"
-                OptionStrict = "Off"
+                OptionStrict = "On"
                 RootNamespace = "ActiveLock3_5NET"
                 StartupObject = "ActiveLock3_5NET.(None)"
             >
@@ -236,11 +236,6 @@
                 />
                 <File
                     RelPath = "RegistryKeyStore.vb"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "UpgradeSupport.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
