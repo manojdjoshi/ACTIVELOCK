@@ -98,8 +98,20 @@ End Enum
 ' Purpose: Returns a new Generator instance
 ' Remarks: None
 '===============================================================================
-Public Function GeneratorInstance() As IALUGenerator
-    Set GeneratorInstance = New Generator
+Public Function GeneratorInstance(pProductStorageType As ProductsStoreType) As IALUGenerator
+    Select Case pProductStorageType
+      Case ProductsStoreType.alsINIFile
+        Set GeneratorInstance = New INIGenerator
+      Case ProductsStoreType.alsXMLFile
+        Set GeneratorInstance = New XMLGenerator
+      Case ProductsStoreType.alsMDBFile
+        Set GeneratorInstance = New MDBGenerator
+      'TODO - MSSQLGenerator
+      'Case ProductsStoreType.alsMSSQL
+      '  Set GeneratorInstance = New MSSQLGenerator
+      Case Else
+        Err.Raise ActiveLockErrCodeConstants.alerrNotImplemented, ACTIVELOCKSTRING, STRNOTIMPLEMENTED
+    End Select
 End Function
 
 '===============================================================================

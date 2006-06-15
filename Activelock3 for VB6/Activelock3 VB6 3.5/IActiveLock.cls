@@ -297,6 +297,23 @@ End Enum
 
 '###############################################################
     
+' Products Store Type specifies where to store products infos
+'
+' @param alsINIFile    ' Store in INI file (products.ini)
+' @param alsXMLFile    ' Store in XML file (products.xml)
+' @param alsMDBFile    ' Store in MDB file (license.mdb)
+'                       mdb file should contain a table named products with structure:
+'                       ID(autonumber), name(text,150), version (text,50), vccode(memo), gcode(memo)
+' @param alsMSSQL      ' Store in MSSQL database 'not implemented 'TODO
+Public Enum ProductsStoreType
+    alsINIFile = 0
+    alsXMLFile = 1
+    alsMDBFile = 2
+    'alsMSSQL = 3 'TODO
+End Enum
+
+'###############################################################
+    
 ' Trial Type specifies what kind of Trial Feature is used
 '
 ' @param trialNone      ' No trial used

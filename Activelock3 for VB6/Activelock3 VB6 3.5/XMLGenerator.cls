@@ -6,86 +6,19 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "INIGenerator"
+Attribute VB_Name = "XMLGenerator"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'*   ActiveLock
-'*   Copyright 1998-2002 Nelson Ferraz
-'*   Copyright 2003-2005 The ActiveLock Software Group (ASG)
-'*   All material is the property of the contributing authors.
-'*
-'*   Redistribution and use in source and binary forms, with or without
-'*   modification, are permitted provided that the following conditions are
-'*   met:
-'*
-'*     [o] Redistributions of source code must retain the above copyright
-'*         notice, this list of conditions and the following disclaimer.
-'*
-'*     [o] Redistributions in binary form must reproduce the above
-'*         copyright notice, this list of conditions and the following
-'*         disclaimer in the documentation and/or other materials provided
-'*         with the distribution.
-'*
-'*   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-'*   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-'*   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-'*   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-'*   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-'*   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-'*   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-'*   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-'*   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-'*   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-'*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-'*
-'*
-'===============================================================================
-' Name: Generator
-' Purpose: This is a concrete implementation of the IALUGenerator interface.
-' Functions:
-' Properties:
-' Methods:
-' Started: 08.15.2003
-' Modified: 08.08.2005
-'===============================================================================
-' @author activelock-admins
-' @version 3.0.0
-' @date 20030815
-'
-'* ///////////////////////////////////////////////////////////////////////
-'  /                        MODULE TO DO LIST                            /
-'  ///////////////////////////////////////////////////////////////////////
-'
-'* ///////////////////////////////////////////////////////////////////////
-'  /                        MODULE CHANGE LOG                            /
-'  ///////////////////////////////////////////////////////////////////////
-' @history
-' <pre>
-' 08.15.03 - th2tran        - Created
-' 09.21.03 - th2tran        - Implemented IALUGenerator_RetrieveProduct()
-'                           - Finished implementing IALUGenerator_GenKey()
-'                           - Dumped ActiveLockEventNotifier.  Don't neeed it here.
-' 11.02.03 - th2tran        - Re-implemented IALUGenerator_GenKey() - interface changed
-' 05.13.04 - th2tran        - Fixed bug in GetLockAndUserFromInstallCode()--wasn't returning
-'                                                         the correct LockCode when InstallationCode contained multiple
-'                                                         lockTo setttings (e.g. lockToHD Or lockToMAC)
-' 06.28.04 - th2tran        - Added ByVal qualifier to IALUGENerator_StoragePath parameter for better compatibility /w VC++
-' 07.13.04 - th2tran        - Implemented IALUGenerator_DeleteProduct()
-' 05.13.05 - ialkan         - Modified to remove alutil.dll
-
-' </pre>
-
-'  ///////////////////////////////////////////////////////////////////////
-'  /                MODULE CODE BEGINS BELOW THIS LINE                   /
-'  ///////////////////////////////////////////////////////////////////////
 Option Explicit
 Option Base 0
 Implements IALUGenerator
 
 Private MyActiveLock As ActiveLock3.IActiveLock
-Private MyIniFile As New ActiveLock3.INIFile
+Private MyXMLDoc As MSXML2.DOMDocument40
+Private fileXML As String
+
 '===============================================================================
 ' Name: Property Get ActiveLockInterface
 ' Input: None
@@ -94,16 +27,14 @@ Private MyIniFile As New ActiveLock3.INIFile
 ' Remarks: None
 '===============================================================================
 Private Property Get ActiveLockInterface() As IActiveLock
-    Set ActiveLockInterface = MyActiveLock
+  Set ActiveLockInterface = MyActiveLock
 End Property
 
 
 Private Sub Class_Initialize()
-' 05.13.05 - ialkan Modified to merge DLLs into one
-    ' Initialize AL
-    Set MyActiveLock = New IActiveLock
+  ' Initialize AL
+  Set MyActiveLock = New IActiveLock
 End Sub
-
 
 '===============================================================================
 ' Name: Sub LoadProdInfo
@@ -114,13 +45,12 @@ End Sub
 ' Purpose: Loads Product Info from the specified INI section.
 ' Remarks: None
 '===============================================================================
-Private Sub LoadProdInfo(Section As String, ProdInfo As ProductInfo)
-    With MyIniFile
-        .Section = Section
-        ProdInfo.name = .Values("Name")
-        ProdInfo.Version = .Values("Version")
-        ProdInfo.VCode = .Values("VCode")
-        ProdInfo.GCode = .Values("GCode")
+Private Sub LoadProdInfo(pNode As MSXML2.IXMLDOMNode, ProdInfo As ProductInfo)
+    With pNode
+        ProdInfo.name = pNode.childNodes(0).childNodes(0).Text
+        ProdInfo.Version = pNode.childNodes(1).childNodes(0).Text
+        ProdInfo.VCode = pNode.childNodes(2).childNodes(0).Text
+        ProdInfo.GCode = pNode.childNodes(3).childNodes(0).Text
     End With
 End Sub
 
@@ -133,14 +63,23 @@ End Sub
 ' Remarks: IALUGenerator Interface implementation
 '===============================================================================
 Private Sub IALUGenerator_SaveProduct(ProdInfo As ProductInfo)
-    With MyIniFile
-        ' Section name has to contain ProdName and ProdVer in order to be unique
-        .Section = ProdInfo.name & " " & ProdInfo.Version
-        .Values("Name") = ProdInfo.name
-        .Values("Version") = ProdInfo.Version
-        .Values("VCode") = ProdInfo.VCode '@todo Encrypt code1 and code2, possibly using something as simple as modCrypto.bas
-        .Values("GCode") = ProdInfo.GCode
-    End With
+    Dim rootProducts As MSXML2.IXMLDOMNode
+    Dim newProductNode As MSXML2.IXMLDOMNode
+    Dim schemaCache As New XMLSchemaCache40
+    Dim result As IXMLDOMParseError
+    
+    Set rootProducts = MyXMLDoc.childNodes(1)
+    Set newProductNode = BuildProductNodes(rootProducts, ProdInfo)
+    
+    'schema validation
+    'schemaCache.Add "http://jclement.ca/xml/simple", "c:simple.xsd"
+    'Set MyXMLDoc.schemas = schemaCache
+    'Set result = MyXMLDoc.Validate
+    'If result.errorCode = 0 Then
+    '    Err.Raise ("XML Validation Error:" & result.reason)
+    'End If
+
+    MyXMLDoc.Save (fileXML)
 End Sub
 
 '===============================================================================
@@ -152,21 +91,23 @@ End Sub
 ' Remarks: Returns as an array.
 '===============================================================================
 Private Function IALUGenerator_RetrieveProducts() As ProductInfo()
-    ' Retrieve all product information from INI.  Return as an array.
+    'Retrieve all product information from XML file.  Return as an array.
     On Error GoTo RetrieveProductsError
     Dim arrProdInfos() As ProductInfo
     Dim Count As Integer
-    Dim iniCount As Integer
-    Dim arrSections() As String
+    Dim xmlCount As Integer
     Count = 0
-    iniCount = MyIniFile.EnumSections(arrSections)
+    Dim rootProducts As MSXML2.IXMLDOMNodeList
+    Set rootProducts = MyXMLDoc.childNodes(1).childNodes
     
-    ' If there are no products in the INI file, exit gracefully
-    If iniCount < 1 Then Exit Function
-    For Count = 0 To iniCount - 1
+    xmlCount = rootProducts.Length
+    
+    ' If there are no products in the XML file, exit gracefully
+    If xmlCount < 1 Then Exit Function
+    For Count = 0 To xmlCount - 1
         ReDim Preserve arrProdInfos(Count)
         Set arrProdInfos(Count) = New ProductInfo
-        LoadProdInfo arrSections(Count), arrProdInfos(Count)
+        LoadProdInfo rootProducts(Count), arrProdInfos(Count)
     Next
     IALUGenerator_RetrieveProducts = arrProdInfos
     Exit Function
@@ -188,12 +129,26 @@ Private Function IALUGenerator_RetrieveProduct(ByVal name As String, ByVal Ver A
     Dim ProdInfo As New ProductInfo
     ProdInfo.name = name
     ProdInfo.Version = Ver
-    With MyIniFile
-        .Section = name & " " & Ver
-        ProdInfo.Version = .Values("Version")
-        ProdInfo.VCode = .Values("VCode") '@todo Decrypt code1 and code2
-        ProdInfo.GCode = .Values("GCode")
-    End With
+    
+    Dim xmlCount As Integer
+    Dim Count As Integer
+    Count = 0
+    
+    Dim rootProducts As MSXML2.IXMLDOMNodeList
+    Set rootProducts = MyXMLDoc.childNodes(1).childNodes
+    
+    xmlCount = rootProducts.Length
+
+    For Count = 0 To xmlCount - 1
+      With rootProducts(Count)
+          If .childNodes(0).childNodes(0).nodeValue = name And _
+                .childNodes(1).childNodes(0).nodeValue = Ver Then
+              ProdInfo.VCode = .childNodes(2).childNodes(0).Text
+              ProdInfo.GCode = .childNodes(3).childNodes(0).Text
+              Exit For
+          End If
+      End With
+    Next
     If ProdInfo.VCode = "" Or ProdInfo.GCode = "" Then
         Err.Raise ALUGENErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, "Product code set is invalid."
     End If
@@ -210,8 +165,25 @@ End Function
 ' Remarks: Removes a section from the INI file
 '===============================================================================
 Private Sub IALUGenerator_DeleteProduct(ByVal name As String, ByVal Ver As String)
-    ' Remove the section from INI file
-    Call MyIniFile.DeleteSection(name & " " & Ver)
+    ' Remove the section from XML file
+    Dim xmlCount As Integer
+    Dim Count As Integer
+    Count = 0
+    
+    Dim rootProducts As MSXML2.IXMLDOMNodeList
+    Set rootProducts = MyXMLDoc.childNodes(1).childNodes
+
+    xmlCount = rootProducts.Length
+
+    For Count = 0 To xmlCount - 1
+      If rootProducts(Count).childNodes(0).childNodes(0).nodeValue = name And _
+            rootProducts(Count).childNodes(1).childNodes(0).nodeValue = Ver Then
+          MyXMLDoc.childNodes(1).removeChild rootProducts(Count)
+          Exit For
+      End If
+    Next
+    
+    MyXMLDoc.Save (fileXML)
 End Sub
 
 '===============================================================================
@@ -224,14 +196,74 @@ End Sub
 '===============================================================================
 Private Property Let IALUGenerator_StoragePath(ByVal RHS As String)
     If Not FileExists(RHS) Then
-        ' Create an empty products.ini file if it doesn't exists
-        Dim hFile As Long
-        hFile = FreeFile
-        Open RHS For Output As #hFile
-        Close #hFile
+      'setup xml doc
+      Call SetupXmlDoc
+      'save the new created xml doc
+      MyXMLDoc.Save (RHS)
+    Else
+      Set MyXMLDoc = New MSXML2.DOMDocument40
+      'load existing xml doc
+      MyXMLDoc.Load (RHS)
     End If
-    MyIniFile.File = RHS
+    fileXML = RHS
 End Property
+
+Private Sub SetupXmlDoc()
+    Dim Version As MSXML2.IXMLDOMProcessingInstruction  '<?xml version="1.0"?>
+     
+    'Create a new document object
+    Set MyXMLDoc = New MSXML2.DOMDocument40
+    MyXMLDoc.preserveWhiteSpace = False
+    MyXMLDoc.async = False
+    'tell the parser to automatically load externally defined DTD's or XSD's
+    MyXMLDoc.resolveExternals = True
+  
+    Set Version = MyXMLDoc.createProcessingInstruction("xml", "version=" & Chr(34) & "1.0" & Chr(34))
+    'create the root element
+    'and append it and the XML version to the document
+    MyXMLDoc.appendChild Version
+    
+    MyXMLDoc.appendChild MyXMLDoc.createElement("Products")
+  
+End Sub
+
+Private Function BuildProductNodes(RootNode As IXMLDOMNode, ProdInfo As ProductInfo) As IXMLDOMNode
+    'Build the document structure needed to add a new product
+    
+    Dim NameNode As MSXML2.IXMLDOMNode     'software name
+    Dim VersionNode As MSXML2.IXMLDOMNode    'software version
+    Dim VCodeNode As MSXML2.IXMLDOMNode     'software vcode
+    Dim GCodeNode As MSXML2.IXMLDOMNode     'software gcode
+  
+    Dim productsNode As MSXML2.IXMLDOMNode
+  
+    'MyXMLDoc.namespaces
+    Set productsNode = MyXMLDoc.createElement("Products")
+    RootNode.appendChild productsNode
+    
+    'Create all the new data nodes
+    Set NameNode = MyXMLDoc.createElement("name")
+    Set VersionNode = MyXMLDoc.createElement("version")
+    Set VCodeNode = MyXMLDoc.createElement("vcode")
+    Set GCodeNode = MyXMLDoc.createElement("gcode")
+  
+    'fill info
+    NameNode.appendChild MyXMLDoc.createTextNode(ProdInfo.name)
+    VersionNode.appendChild MyXMLDoc.createTextNode(ProdInfo.Version)
+    VCodeNode.appendChild MyXMLDoc.createTextNode(ProdInfo.VCode)
+    GCodeNode.appendChild MyXMLDoc.createTextNode(ProdInfo.GCode)
+  
+    'Add the new nodes to the root "Products" node
+    'Note that the append order is important
+    productsNode.appendChild NameNode
+    productsNode.appendChild VersionNode
+    productsNode.appendChild VCodeNode
+    productsNode.appendChild GCodeNode
+  
+    'Return the new root "Products" node
+    Set BuildProductNodes = RootNode
+End Function
+
 
 '===============================================================================
 ' Name: Function IALUGenerator_GenKey

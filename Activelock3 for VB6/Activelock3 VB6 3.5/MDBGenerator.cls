@@ -6,86 +6,23 @@ BEGIN
   DataSourceBehavior  = 0  'vbNone
   MTSTransactionMode  = 0  'NotAnMTSObject
 END
-Attribute VB_Name = "INIGenerator"
+Attribute VB_Name = "MDBGenerator"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'*   ActiveLock
-'*   Copyright 1998-2002 Nelson Ferraz
-'*   Copyright 2003-2005 The ActiveLock Software Group (ASG)
-'*   All material is the property of the contributing authors.
-'*
-'*   Redistribution and use in source and binary forms, with or without
-'*   modification, are permitted provided that the following conditions are
-'*   met:
-'*
-'*     [o] Redistributions of source code must retain the above copyright
-'*         notice, this list of conditions and the following disclaimer.
-'*
-'*     [o] Redistributions in binary form must reproduce the above
-'*         copyright notice, this list of conditions and the following
-'*         disclaimer in the documentation and/or other materials provided
-'*         with the distribution.
-'*
-'*   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-'*   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-'*   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-'*   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-'*   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-'*   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-'*   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-'*   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-'*   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-'*   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-'*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-'*
-'*
-'===============================================================================
-' Name: Generator
-' Purpose: This is a concrete implementation of the IALUGenerator interface.
-' Functions:
-' Properties:
-' Methods:
-' Started: 08.15.2003
-' Modified: 08.08.2005
-'===============================================================================
-' @author activelock-admins
-' @version 3.0.0
-' @date 20030815
-'
-'* ///////////////////////////////////////////////////////////////////////
-'  /                        MODULE TO DO LIST                            /
-'  ///////////////////////////////////////////////////////////////////////
-'
-'* ///////////////////////////////////////////////////////////////////////
-'  /                        MODULE CHANGE LOG                            /
-'  ///////////////////////////////////////////////////////////////////////
-' @history
-' <pre>
-' 08.15.03 - th2tran        - Created
-' 09.21.03 - th2tran        - Implemented IALUGenerator_RetrieveProduct()
-'                           - Finished implementing IALUGenerator_GenKey()
-'                           - Dumped ActiveLockEventNotifier.  Don't neeed it here.
-' 11.02.03 - th2tran        - Re-implemented IALUGenerator_GenKey() - interface changed
-' 05.13.04 - th2tran        - Fixed bug in GetLockAndUserFromInstallCode()--wasn't returning
-'                                                         the correct LockCode when InstallationCode contained multiple
-'                                                         lockTo setttings (e.g. lockToHD Or lockToMAC)
-' 06.28.04 - th2tran        - Added ByVal qualifier to IALUGENerator_StoragePath parameter for better compatibility /w VC++
-' 07.13.04 - th2tran        - Implemented IALUGenerator_DeleteProduct()
-' 05.13.05 - ialkan         - Modified to remove alutil.dll
-
-' </pre>
-
-'  ///////////////////////////////////////////////////////////////////////
-'  /                MODULE CODE BEGINS BELOW THIS LINE                   /
-'  ///////////////////////////////////////////////////////////////////////
 Option Explicit
 Option Base 0
 Implements IALUGenerator
 
 Private MyActiveLock As ActiveLock3.IActiveLock
-Private MyIniFile As New ActiveLock3.INIFile
+
+Dim oConnect As ADODB.Connection
+Dim oRST As ADODB.Recordset
+Dim myCmd As ADODB.Command
+
+Private fileMDB As String
+
 '===============================================================================
 ' Name: Property Get ActiveLockInterface
 ' Input: None
@@ -94,16 +31,16 @@ Private MyIniFile As New ActiveLock3.INIFile
 ' Remarks: None
 '===============================================================================
 Private Property Get ActiveLockInterface() As IActiveLock
-    Set ActiveLockInterface = MyActiveLock
+  Set ActiveLockInterface = MyActiveLock
 End Property
 
 
 Private Sub Class_Initialize()
-' 05.13.05 - ialkan Modified to merge DLLs into one
-    ' Initialize AL
-    Set MyActiveLock = New IActiveLock
+  ' Initialize AL
+  Set MyActiveLock = New IActiveLock
+  Set oConnect = New ADODB.Connection
+  Set oRST = New ADODB.Recordset
 End Sub
-
 
 '===============================================================================
 ' Name: Sub LoadProdInfo
@@ -114,14 +51,11 @@ End Sub
 ' Purpose: Loads Product Info from the specified INI section.
 ' Remarks: None
 '===============================================================================
-Private Sub LoadProdInfo(Section As String, ProdInfo As ProductInfo)
-    With MyIniFile
-        .Section = Section
-        ProdInfo.name = .Values("Name")
-        ProdInfo.Version = .Values("Version")
-        ProdInfo.VCode = .Values("VCode")
-        ProdInfo.GCode = .Values("GCode")
-    End With
+Private Sub LoadProdInfo(pRecordset As Recordset, ProdInfo As ProductInfo)
+  ProdInfo.name = pRecordset("name")
+  ProdInfo.Version = pRecordset("version")
+  ProdInfo.VCode = pRecordset("vcode")
+  ProdInfo.GCode = pRecordset("gcode")
 End Sub
 
 '===============================================================================
@@ -133,14 +67,23 @@ End Sub
 ' Remarks: IALUGenerator Interface implementation
 '===============================================================================
 Private Sub IALUGenerator_SaveProduct(ProdInfo As ProductInfo)
-    With MyIniFile
-        ' Section name has to contain ProdName and ProdVer in order to be unique
-        .Section = ProdInfo.name & " " & ProdInfo.Version
-        .Values("Name") = ProdInfo.name
-        .Values("Version") = ProdInfo.Version
-        .Values("VCode") = ProdInfo.VCode '@todo Encrypt code1 and code2, possibly using something as simple as modCrypto.bas
-        .Values("GCode") = ProdInfo.GCode
-    End With
+  'save product in database
+  
+  Dim strSQL As String
+  'open connection to MDB file
+  oConnect.Open "Provider=Microsoft.Jet.OLEDB.4.0;" & _
+    "Data Source= " & fileMDB & ";"
+  
+  strSQL = "INSERT INTO products (name, version, vcode, gcode) VALUES ('" & ProdInfo.name & "', '" & ProdInfo.Version & "', '" & ProdInfo.VCode & "', '" & ProdInfo.GCode & "')"
+
+  Set myCmd = New ADODB.Command
+  myCmd.ActiveConnection = oConnect
+  myCmd.CommandTimeout = 0
+  myCmd.CommandText = strSQL
+  myCmd.CommandType = adCmdText
+  myCmd.Execute
+  oConnect.Close
+
 End Sub
 
 '===============================================================================
@@ -152,26 +95,41 @@ End Sub
 ' Remarks: Returns as an array.
 '===============================================================================
 Private Function IALUGenerator_RetrieveProducts() As ProductInfo()
-    ' Retrieve all product information from INI.  Return as an array.
+    'Retrieve all product information from XML file.  Return as an array.
     On Error GoTo RetrieveProductsError
     Dim arrProdInfos() As ProductInfo
-    Dim Count As Integer
-    Dim iniCount As Integer
-    Dim arrSections() As String
-    Count = 0
-    iniCount = MyIniFile.EnumSections(arrSections)
     
-    ' If there are no products in the INI file, exit gracefully
-    If iniCount < 1 Then Exit Function
-    For Count = 0 To iniCount - 1
-        ReDim Preserve arrProdInfos(Count)
-        Set arrProdInfos(Count) = New ProductInfo
-        LoadProdInfo arrSections(Count), arrProdInfos(Count)
-    Next
+    'open connection to MDB file
+    oConnect.Open "Provider=Microsoft.Jet.OLEDB.4.0;" & _
+      "Data Source= " & fileMDB & ";"
+
+    'open recordset
+    oRST.Open "select * from products", oConnect
+    
+    Dim Count As Integer
+    Count = 0
+    Do Until oRST.EOF
+      ReDim Preserve arrProdInfos(Count)
+      Set arrProdInfos(Count) = New ProductInfo
+      'load product info
+      LoadProdInfo oRST, arrProdInfos(Count)
+        
+      Count = Count + 1
+      oRST.MoveNext
+    Loop
+    'close recordset
+    oRST.Close
+    'Close connection
+    oConnect.Close
+    
     IALUGenerator_RetrieveProducts = arrProdInfos
     Exit Function
     
 RetrieveProductsError:
+    'close recordset
+    oRST.Close
+    'Close connection
+    oConnect.Close
 End Function
 
 '===============================================================================
@@ -188,12 +146,22 @@ Private Function IALUGenerator_RetrieveProduct(ByVal name As String, ByVal Ver A
     Dim ProdInfo As New ProductInfo
     ProdInfo.name = name
     ProdInfo.Version = Ver
-    With MyIniFile
-        .Section = name & " " & Ver
-        ProdInfo.Version = .Values("Version")
-        ProdInfo.VCode = .Values("VCode") '@todo Decrypt code1 and code2
-        ProdInfo.GCode = .Values("GCode")
-    End With
+    
+    'open connection to MDB file
+    oConnect.Open "Provider=Microsoft.Jet.OLEDB.4.0;" & _
+      "Data Source= " & fileMDB & ";"
+
+    'open recordset
+    oRST.Open "select * from products where name='" & name & "' AND version='" & Ver & "'", oConnect
+    
+    If oRST.RecordCount > 0 Then
+      ProdInfo.VCode = oRST("vcode")
+      ProdInfo.GCode = oRST("gcode")
+    End If
+    
+    oRST.Close
+    oConnect.Close
+    
     If ProdInfo.VCode = "" Or ProdInfo.GCode = "" Then
         Err.Raise ALUGENErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, "Product code set is invalid."
     End If
@@ -210,8 +178,23 @@ End Function
 ' Remarks: Removes a section from the INI file
 '===============================================================================
 Private Sub IALUGenerator_DeleteProduct(ByVal name As String, ByVal Ver As String)
-    ' Remove the section from INI file
-    Call MyIniFile.DeleteSection(name & " " & Ver)
+    ' Remove the section from XML file
+    
+    Dim strSQL As String
+    'open connection to MDB file
+    oConnect.Open "Provider=Microsoft.Jet.OLEDB.4.0;" & _
+      "Data Source= " & fileMDB & ";"
+    
+    strSQL = "DELETE FROM products WHERE name='" & name & "' AND version='" & Ver & "'"
+
+    Set myCmd = New ADODB.Command
+    myCmd.ActiveConnection = oConnect
+    myCmd.CommandTimeout = 0
+    myCmd.CommandText = strSQL
+    myCmd.CommandType = adCmdText
+    myCmd.Execute
+    oConnect.Close
+
 End Sub
 
 '===============================================================================
@@ -223,14 +206,10 @@ End Sub
 ' Remarks: None
 '===============================================================================
 Private Property Let IALUGenerator_StoragePath(ByVal RHS As String)
-    If Not FileExists(RHS) Then
-        ' Create an empty products.ini file if it doesn't exists
-        Dim hFile As Long
-        hFile = FreeFile
-        Open RHS For Output As #hFile
-        Close #hFile
-    End If
-    MyIniFile.File = RHS
+  If Not FileExists(RHS) Then
+  Else
+    fileMDB = RHS
+  End If
 End Property
 
 '===============================================================================
