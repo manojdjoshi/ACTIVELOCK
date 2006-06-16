@@ -83,7 +83,7 @@ Attribute VB_Exposed = False
 Option Explicit
 Option Base 0
 Implements IALUGenerator
-
+ 
 Private MyActiveLock As ActiveLock3.IActiveLock
 Private MyIniFile As New ActiveLock3.INIFile
 '===============================================================================
