@@ -49,42 +49,49 @@ Begin VB.Form frmMain
       _ExtentY        =   13891
       _Version        =   393216
       Tabs            =   2
-      Tab             =   1
       TabHeight       =   520
       TabCaption(0)   =   "Pro&duct Code Generator"
       TabPicture(0)   =   "frmMain3.frx":0CCA
-      Tab(0).ControlEnabled=   0   'False
+      Tab(0).ControlEnabled=   -1  'True
       Tab(0).Control(0)=   "Label1"
+      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).Control(1)=   "Label17"
+      Tab(0).Control(1).Enabled=   0   'False
       Tab(0).Control(2)=   "gridProds"
+      Tab(0).Control(2).Enabled=   0   'False
       Tab(0).Control(3)=   "fraProdNew"
+      Tab(0).Control(3).Enabled=   0   'False
       Tab(0).Control(4)=   "cmdRemove"
+      Tab(0).Control(4).Enabled=   0   'False
       Tab(0).Control(5)=   "Frame1"
+      Tab(0).Control(5).Enabled=   0   'False
       Tab(0).Control(6)=   "Picture1"
+      Tab(0).Control(6).Enabled=   0   'False
       Tab(0).Control(7)=   "cmdValidate"
+      Tab(0).Control(7).Enabled=   0   'False
       Tab(0).ControlCount=   8
       TabCaption(1)   =   "&License Key Generator"
       TabPicture(1)   =   "frmMain3.frx":0CE6
-      Tab(1).ControlEnabled=   -1  'True
-      Tab(1).Control(0)=   "Label8"
+      Tab(1).ControlEnabled=   0   'False
+      Tab(1).Control(0)=   "cmdViewArchive"
       Tab(1).Control(0).Enabled=   0   'False
-      Tab(1).Control(1)=   "Label15"
+      Tab(1).Control(1)=   "cmbRegisteredLevel"
       Tab(1).Control(1).Enabled=   0   'False
-      Tab(1).Control(2)=   "cmdViewLevel"
+      Tab(1).Control(2)=   "cmbProds"
       Tab(1).Control(2).Enabled=   0   'False
       Tab(1).Control(3)=   "frmKeyGen"
       Tab(1).Control(3).Enabled=   0   'False
-      Tab(1).Control(4)=   "cmbProds"
+      Tab(1).Control(4)=   "cmdViewLevel"
       Tab(1).Control(4).Enabled=   0   'False
-      Tab(1).Control(5)=   "cmbRegisteredLevel"
+      Tab(1).Control(5)=   "Label15"
       Tab(1).Control(5).Enabled=   0   'False
-      Tab(1).Control(6)=   "cmdViewArchive"
+      Tab(1).Control(6)=   "Label8"
       Tab(1).Control(6).Enabled=   0   'False
       Tab(1).ControlCount=   7
       Begin VB.CommandButton cmdValidate 
          Caption         =   "&Validate"
          Height          =   315
-         Left            =   -66480
+         Left            =   8520
          TabIndex        =   49
          Top             =   4080
          Width           =   1005
@@ -96,7 +103,7 @@ Begin VB.Form frmMain
          BorderStyle     =   0  'None
          ForeColor       =   &H80000008&
          Height          =   825
-         Left            =   -66270
+         Left            =   8730
          Picture         =   "frmMain3.frx":0D02
          ScaleHeight     =   825
          ScaleWidth      =   825
@@ -107,7 +114,7 @@ Begin VB.Form frmMain
       Begin VB.CommandButton cmdViewArchive 
          Caption         =   "&View License Database"
          Height          =   315
-         Left            =   1440
+         Left            =   -73560
          TabIndex        =   46
          ToolTipText     =   "View License Archive"
          Top             =   7425
@@ -115,7 +122,7 @@ Begin VB.Form frmMain
       End
       Begin VB.ComboBox cmbRegisteredLevel 
          Height          =   315
-         Left            =   6660
+         Left            =   -68340
          Style           =   2  'Dropdown List
          TabIndex        =   42
          Top             =   480
@@ -125,7 +132,7 @@ Begin VB.Form frmMain
          Caption         =   "Product Codes for the Selected Product"
          ForeColor       =   &H00FF0000&
          Height          =   1095
-         Left            =   -74880
+         Left            =   120
          TabIndex        =   36
          Top             =   2760
          Width           =   8295
@@ -187,14 +194,14 @@ Begin VB.Form frmMain
          Caption         =   "&Remove"
          Enabled         =   0   'False
          Height          =   315
-         Left            =   -66480
+         Left            =   8520
          TabIndex        =   11
          Top             =   4500
          Width           =   1000
       End
       Begin VB.ComboBox cmbProds 
          Height          =   315
-         Left            =   1440
+         Left            =   -73560
          Style           =   2  'Dropdown List
          TabIndex        =   15
          Top             =   480
@@ -203,7 +210,7 @@ Begin VB.Form frmMain
       Begin VB.Frame frmKeyGen 
          BorderStyle     =   0  'None
          Height          =   6495
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   13
          Top             =   840
          Width           =   9495
@@ -508,10 +515,18 @@ Begin VB.Form frmMain
       End
       Begin VB.Frame fraProdNew 
          Height          =   2295
-         Left            =   -74880
+         Left            =   120
          TabIndex        =   12
          Top             =   360
          Width           =   9495
+         Begin VB.CommandButton cmdProductsStorage 
+            Caption         =   "Products st&orage ..."
+            Height          =   345
+            Left            =   7770
+            TabIndex        =   63
+            Top             =   360
+            Width           =   1575
+         End
          Begin VB.CommandButton cmdCopyGCode 
             Height          =   345
             Left            =   7920
@@ -644,7 +659,7 @@ Begin VB.Form frmMain
       End
       Begin MSFlexGridLib.MSFlexGrid gridProds 
          Height          =   3255
-         Left            =   -74880
+         Left            =   120
          TabIndex        =   10
          Top             =   4080
          Width           =   8265
@@ -668,7 +683,7 @@ Begin VB.Form frmMain
       End
       Begin VB.Image cmdViewLevel 
          Height          =   240
-         Left            =   9360
+         Left            =   -65640
          MouseIcon       =   "frmMain3.frx":7468
          MousePointer    =   99  'Custom
          Picture         =   "frmMain3.frx":7772
@@ -680,7 +695,7 @@ Begin VB.Form frmMain
          Caption         =   "Activelock V3"
          ForeColor       =   &H00FF0000&
          Height          =   165
-         Left            =   -66390
+         Left            =   8610
          TabIndex        =   48
          Top             =   6660
          Width           =   1065
@@ -688,7 +703,7 @@ Begin VB.Form frmMain
       Begin VB.Label Label15 
          Caption         =   "Registered Level:"
          Height          =   255
-         Left            =   5400
+         Left            =   -69600
          TabIndex        =   43
          Top             =   510
          Width           =   1275
@@ -696,7 +711,7 @@ Begin VB.Form frmMain
       Begin VB.Label Label1 
          Caption         =   "&Product List:"
          Height          =   255
-         Left            =   -74880
+         Left            =   120
          TabIndex        =   32
          Top             =   3840
          Width           =   1215
@@ -704,7 +719,7 @@ Begin VB.Form frmMain
       Begin VB.Label Label8 
          Caption         =   "&Product:"
          Height          =   255
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   14
          Top             =   510
          Width           =   975
@@ -813,6 +828,9 @@ Option Explicit
 Private GeneratorInstance As ActiveLock3.IALUGenerator
 Private fDisableNotifications As Boolean
 Private ActiveLock As ActiveLock3.IActiveLock
+Public mKeyStoreType As LicStoreType
+Public mProductsStoreType As ProductsStoreType
+Public mProductsStoragePath As String
 
 ' Hardware keys from the Installation Code
 Dim MACaddress As String, ComputerName As String
@@ -1372,6 +1390,21 @@ Private Sub cmdPaste_Click()
 txtReqCodeIn.Text = Clipboard.GetText
 End Sub
 
+Private Sub cmdProductsStorage_Click()
+  On Error GoTo cmdProductsStorage_Click_Error
+      
+  Dim mPSform As frmProductsStorage
+  Set mPSform = New frmProductsStorage
+  mPSform.Show 1, Me
+
+  On Error GoTo 0
+  Exit Sub
+
+cmdProductsStorage_Click_Error:
+
+  MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure cmdProductsStorage_Click of Form frmMain"
+End Sub
+
 Private Sub cmdRemove_Click()
     If SSTab1.Tab <> 0 Then Exit Sub ' our tab not active - do nothing
     Dim strName As String
@@ -1488,7 +1521,24 @@ Private Sub cmdViewLevel_Click()
     Unload frmLevelManager
 End Sub
 
-Private Sub Form_Load()
+Private Sub Form_Initialize()
+  'on first start.. initialize variables
+  'with default values
+  mKeyStoreType = alsFile 'alsRegistry or alsFile
+  mProductsStoreType = alsINIFile 'alsINIFile - for ini file, alsXMLFile for xml file, alsMDBFile for MDB file
+  Select Case mProductsStoreType
+    Case alsINIFile
+      mProductsStoragePath = App.path & "\products.ini"
+    Case alsXMLFile
+      mProductsStoragePath = App.path & "\products.xml" 'for XML store
+    Case alsMDBFile
+      mProductsStoragePath = App.path & "\license.mdb" 'for MDB store
+    'Case alsMSSQL '-not implemented yet
+      'mProductsStoragePath =
+  End Select
+End Sub
+
+Public Sub Form_Load()
     
     '<Added by: kirtaph at: 2/16/2006-13.05.40 on machine: KIRTAPHPC>
     strRegisteredLevelDBName = AddBackSlash(App.path) & "RegisteredLevelDB.dat"
@@ -1536,22 +1586,15 @@ Private Sub Form_Load()
     End If
     '</Modified by: kirtaph at 2/16/2006-13.06.25 on machine: KIRTAPHPC>
     
-    ' Initialize AL
-    Set ActiveLock = ActiveLock3.NewInstance()
-    ActiveLock.KeyStoreType = alsFile
-    
-    ActiveLock.Init
-    
-    ' Initialize Generator
-    Set GeneratorInstance = ActiveLock3.GeneratorInstance(alsINIFile) 'alsINIFile - for ini file, alsXMLFile for xml file, alsMDBFile for MDB file
-    GeneratorInstance.StoragePath = App.path & "\products.ini"
-    'GeneratorInstance.StoragePath = App.path & "\products.xml"
-    'GeneratorInstance.StoragePath = App.path & "\license.mdb"
+    'initialize ActiveLock instances
+    InitActiveLock
     
     ' Initialize GUI
     txtLibKey = ""
     InitUI
-    cmbProds.ListIndex = 0
+    If cmbProds.ListCount > 0 Then
+      cmbProds.ListIndex = 0
+    End If
     
     'Assume originally the app is not using LockNone as the LockType
     txtUser.Enabled = False
@@ -1571,6 +1614,26 @@ Private Sub Form_Load()
     Move (Screen.Width - Me.Width) / 2, (Screen.Height - Me.Height) / 2
 
 End Sub
+
+Private Sub InitActiveLock()
+  On Error GoTo InitForm_Error
+  ' Initialize AL
+  Set ActiveLock = ActiveLock3.NewInstance()
+  ActiveLock.KeyStoreType = mKeyStoreType
+  ActiveLock.Init
+  
+  ' Initialize Generator
+  Set GeneratorInstance = ActiveLock3.GeneratorInstance(mProductsStoreType) 'alsINIFile - for ini file, alsXMLFile for xml file, alsMDBFile for MDB file
+  GeneratorInstance.StoragePath = mProductsStoragePath
+   
+  On Error GoTo 0
+  Exit Sub
+
+InitForm_Error:
+
+  MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure InitForm of Form frmMain"
+End Sub
+
 Function CheckForResources(ParamArray MyArray()) As Boolean
 'MyArray is a list of things to check
 'These can be DLLs or OCXs
@@ -2076,6 +2139,8 @@ Private Sub InitUI()
         .ColAlignment(2) = flexAlignLeftCenter
         .ColAlignment(3) = flexAlignLeftCenter
     End With
+    cmbProds.Clear
+    
     ' Populate Product List on Product Code Generator tab
     ' and Key Gen tab with product info from products.ini
     Dim arrProdInfos() As ProductInfo

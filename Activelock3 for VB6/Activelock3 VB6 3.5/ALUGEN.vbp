@@ -15,6 +15,7 @@ Module=modBase64; modBase64.bas
 Form=dlgRegisteredLevel.frm
 Form=frmLevelManager.frm
 Module=modRegisteredLevel; modRegisteredLevel.bas
+Form=frmProductsStorage.frm
 IconForm="frmMain"
 Startup="frmMain"
 HelpFile=""
