@@ -74,19 +74,12 @@ Begin VB.Form frmMain
       TabPicture(1)   =   "frmMain3.frx":0CE6
       Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "cmdViewArchive"
-      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).Control(1)=   "cmbRegisteredLevel"
-      Tab(1).Control(1).Enabled=   0   'False
       Tab(1).Control(2)=   "cmbProds"
-      Tab(1).Control(2).Enabled=   0   'False
       Tab(1).Control(3)=   "frmKeyGen"
-      Tab(1).Control(3).Enabled=   0   'False
       Tab(1).Control(4)=   "cmdViewLevel"
-      Tab(1).Control(4).Enabled=   0   'False
       Tab(1).Control(5)=   "Label15"
-      Tab(1).Control(5).Enabled=   0   'False
       Tab(1).Control(6)=   "Label8"
-      Tab(1).Control(6).Enabled=   0   'False
       Tab(1).ControlCount=   7
       Begin VB.CommandButton cmdValidate 
          Caption         =   "&Validate"
@@ -825,12 +818,13 @@ Attribute VB_Exposed = False
 '  /                MODULE CODE BEGINS BELOW THIS LINE                   /
 '  ///////////////////////////////////////////////////////////////////////
 Option Explicit
-Private GeneratorInstance As ActiveLock3.IALUGenerator
+Private GeneratorInstance As IALUGenerator
 Private fDisableNotifications As Boolean
 Private ActiveLock As ActiveLock3.IActiveLock
 Public mKeyStoreType As LicStoreType
 Public mProductsStoreType As ProductsStoreType
 Public mProductsStoragePath As String
+Private blnIsFirstLaunch As Boolean
 
 ' Hardware keys from the Installation Code
 Dim MACaddress As String, ComputerName As String
@@ -1092,6 +1086,7 @@ Private Function ActiveLockDateFormat(dt As Date) As String
     'ActiveLockDateFormat = Year(dt) & "/" & Month(dt) & "/" & Day(dt)
     ActiveLockDateFormat = Format(UTC(dt), "YYYY/MM/DD")
 End Function
+
 Private Sub cmbProds_Click()
     UpdateKeyGenButtonStatus
 End Sub
@@ -1523,6 +1518,7 @@ End Sub
 
 Private Sub Form_Initialize()
   'on first start.. initialize variables
+  blnIsFirstLaunch = True
   'with default values
   mKeyStoreType = alsFile 'alsRegistry or alsFile
   mProductsStoreType = alsINIFile 'alsINIFile - for ini file, alsXMLFile for xml file, alsMDBFile for MDB file
@@ -1586,6 +1582,9 @@ Public Sub Form_Load()
     End If
     '</Modified by: kirtaph at 2/16/2006-13.06.25 on machine: KIRTAPHPC>
     
+    'load form settings
+    LoadFormSetting
+    
     'initialize ActiveLock instances
     InitActiveLock
     
@@ -1601,19 +1600,42 @@ Public Sub Form_Load()
     txtUser.Locked = True
     txtUser.BackColor = vbButtonFace
 
-    'Read the program INI file to retrieve control settings
-    PROJECT_INI_FILENAME = WinDir() & "\Alugen3.ini"
-    On Error Resume Next
-    SSTab1.Tab = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", 0))
-    cmbProds.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbProds", 0))
-    cmbLicType.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbLicType", 1))
-    cmbRegisteredLevel.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbRegisteredLevel", 0))
-    chkItemData.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", False))
-
     Me.Caption = "ALUGEN - ActiveLock3 Universal GENerator - v" & App.Major & "." & App.Minor & "." & App.Revision
     Move (Screen.Width - Me.Width) / 2, (Screen.Height - Me.Height) / 2
 
 End Sub
+
+Private Sub LoadFormSetting()
+  'Read the program INI file to retrieve control settings
+  On Error GoTo LoadFormSetting_Error
+  
+  If Not blnIsFirstLaunch Then Exit Sub
+  
+  PROJECT_INI_FILENAME = WinDir() & "\Alugen3.ini"
+  On Error Resume Next
+  SSTab1.Tab = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", 0))
+  cmbProds.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbProds", 0))
+  cmbLicType.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbLicType", 1))
+  cmbRegisteredLevel.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbRegisteredLevel", 0))
+  chkItemData.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", False))
+  mKeyStoreType = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "KeyStoreType", 1))
+  mProductsStoreType = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoreType", 0))
+  mProductsStoragePath = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoragePath", App.path & "\products.ini")
+  If Not fileExist(mProductsStoragePath) Then
+    mProductsStoreType = alsINIFile
+    mProductsStoragePath = App.path & "\products.ini"
+  End If
+
+  blnIsFirstLaunch = False
+  
+  On Error GoTo 0
+  Exit Sub
+
+LoadFormSetting_Error:
+
+  MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure LoadFormSetting of Form frmMain"
+End Sub
+
 
 Private Sub InitActiveLock()
   On Error GoTo InitForm_Error
@@ -1806,14 +1828,30 @@ LooseSpace$ = invoer$
 End Function
 
 Private Sub Form_Unload(Cancel As Integer)
-Dim mnReturnValue As Long
-mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", CStr(SSTab1.Tab))
-mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbProds", CStr(cmbProds.ListIndex))
-mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbLicType", CStr(cmbLicType.ListIndex))
-mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbRegisteredLevel", CStr(cmbRegisteredLevel.ListIndex))
-mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", CStr(chkItemData.Value))
-End
+  SaveFormSettings
 End Sub
+
+Private Sub SaveFormSettings()
+  'save form settings
+  On Error GoTo SaveFormSettings_Error
+  Dim mnReturnValue As Long
+  mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", CStr(SSTab1.Tab))
+  mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbProds", CStr(cmbProds.ListIndex))
+  mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbLicType", CStr(cmbLicType.ListIndex))
+  mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbRegisteredLevel", CStr(cmbRegisteredLevel.ListIndex))
+  mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", CStr(chkItemData.Value))
+  mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "KeyStoreType", CStr(mKeyStoreType))
+  mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoreType", CStr(mProductsStoreType))
+  mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoragePath", CStr(mProductsStoragePath))
+
+ On Error GoTo 0
+ Exit Sub
+
+SaveFormSettings_Error:
+
+  MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure SaveFormSettings of Form frmMain"
+End Sub
+
 Public Function SetProfileString32(sININame As String, sSection As String, sKeyword As String, vsEntry As String) As Long
 '
 '   This routine will write a string to an INI file. The user must pass the
