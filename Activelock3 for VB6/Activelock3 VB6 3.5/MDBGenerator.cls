@@ -48,7 +48,7 @@ End Sub
 '   ByRef Section As String - Section Name that contains ProdName and ProdVer in order to be unique
 '   ByRef ProdInfo As ProductInfo - Object containing product information to be saved.
 ' Output: None
-' Purpose: Loads Product Info from the specified INI section.
+' Purpose: Loads Product Info from the specified MDB database.
 ' Remarks: None
 '===============================================================================
 Private Sub LoadProdInfo(pRecordset As Recordset, ProdInfo As ProductInfo)
@@ -91,11 +91,11 @@ End Sub
 ' Input: None
 ' Output:
 '   ProductInfo - Product info object
-' Purpose: Retrieves all product information from INI.
+' Purpose: Retrieves all product information from MDB.
 ' Remarks: Returns as an array.
 '===============================================================================
 Private Function IALUGenerator_RetrieveProducts() As ProductInfo()
-    'Retrieve all product information from XML file.  Return as an array.
+    'Retrieve all product information from MDB file.  Return as an array.
     On Error GoTo RetrieveProductsError
     Dim arrProdInfos() As ProductInfo
     
@@ -174,11 +174,10 @@ End Function
 '   ByVal name As String - Product name
 '   ByVal Ver As String - Product version
 ' Output: None
-' Purpose: Removes the license keys section from a INI file, i.e. deletes product details in the license database
-' Remarks: Removes a section from the INI file
+' Purpose: Removes the license keys section from a MDB database, i.e. deletes product details in the license database
 '===============================================================================
 Private Sub IALUGenerator_DeleteProduct(ByVal name As String, ByVal Ver As String)
-    ' Remove the section from XML file
+    ' Remove the section from MDB file
     
     Dim strSQL As String
     'open connection to MDB file

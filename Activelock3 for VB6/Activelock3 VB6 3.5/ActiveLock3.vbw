@@ -1,6 +1,6 @@
 ActiveLock = 25, 200, 989, 617, C
 IActiveLock = 93, 51, 1057, 696, 
-AlugenGlobals = 154, 203, 1118, 688, 
+AlugenGlobals = 154, 203, 1118, 688, C
 IKeyStoreProvider = 44, 58, 1008, 543, C
 RegistryKeyStoreProvider = 44, 44, 757, 469, C
 ProductLicense = 66, 87, 1030, 572, C
@@ -21,5 +21,5 @@ clsCryptAPI = 22, 29, 986, 514, C
 modTrial = 49, 11, 997, 667, C
 clsRijndael = 0, 0, 964, 485, C
 XMLGenerator = 0, 0, 713, 425, C
-MDBGenerator = 0, 0, 0, 0, C
-INIGenerator = 0, 0, 0, 0, C
+MDBGenerator = 176, 176, 882, 626, 
+INIGenerator = 198, 198, 904, 648, 

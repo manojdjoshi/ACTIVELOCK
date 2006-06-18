@@ -1,15 +1,19 @@
 VERSION 5.00
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Begin VB.Form frmProductsStorage 
+   BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Products Storage"
    ClientHeight    =   2220
-   ClientLeft      =   60
-   ClientTop       =   345
+   ClientLeft      =   45
+   ClientTop       =   330
    ClientWidth     =   6825
    Icon            =   "frmProductsStorage.frx":0000
    LinkTopic       =   "Form1"
+   MaxButton       =   0   'False
+   MinButton       =   0   'False
    ScaleHeight     =   2220
    ScaleWidth      =   6825
+   ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
    Begin MSComDlg.CommonDialog CommonDialog1 
       Left            =   60
@@ -26,7 +30,7 @@ Begin VB.Form frmProductsStorage
       Top             =   1860
       Width           =   1335
    End
-   Begin VB.CommandButton cmkOK 
+   Begin VB.CommandButton cmdOK 
       Caption         =   "OK"
       Height          =   315
       Left            =   4050
@@ -148,7 +152,7 @@ Private Sub cmdCancel_Click()
   Unload Me
 End Sub
 
-Private Sub cmkOK_Click()
+Private Sub cmdOK_Click()
   SaveSettings
   frmMain.Form_Load
   Unload Me

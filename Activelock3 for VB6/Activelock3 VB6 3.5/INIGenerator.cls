@@ -224,7 +224,7 @@ End Sub
 '===============================================================================
 Private Property Let IALUGenerator_StoragePath(ByVal RHS As String)
     If Not FileExists(RHS) Then
-        ' Create an empty products.ini file if it doesn't exists
+        ' Create an empty licenses.ini file if it doesn't exists
         Dim hFile As Long
         hFile = FreeFile
         Open RHS For Output As #hFile

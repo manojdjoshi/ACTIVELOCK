@@ -299,9 +299,9 @@ End Enum
     
 ' Products Store Type specifies where to store products infos
 '
-' @param alsINIFile    ' Store in INI file (products.ini)
-' @param alsXMLFile    ' Store in XML file (products.xml)
-' @param alsMDBFile    ' Store in MDB file (license.mdb)
+' @param alsINIFile    ' Store in INI file (licenses.ini)
+' @param alsXMLFile    ' Store in XML file (licenses.xml)
+' @param alsMDBFile    ' Store in MDB file (licenses.mdb)
 '                       mdb file should contain a table named products with structure:
 '                       ID(autonumber), name(text,150), version (text,50), vccode(memo), gcode(memo)
 ' @param alsMSSQL      ' Store in MSSQL database 'not implemented 'TODO

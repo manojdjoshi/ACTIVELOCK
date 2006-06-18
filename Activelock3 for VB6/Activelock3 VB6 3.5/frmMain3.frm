@@ -1524,11 +1524,11 @@ Private Sub Form_Initialize()
   mProductsStoreType = alsINIFile 'alsINIFile - for ini file, alsXMLFile for xml file, alsMDBFile for MDB file
   Select Case mProductsStoreType
     Case alsINIFile
-      mProductsStoragePath = App.path & "\products.ini"
+      mProductsStoragePath = App.path & "\licenses.ini"
     Case alsXMLFile
-      mProductsStoragePath = App.path & "\products.xml" 'for XML store
+      mProductsStoragePath = App.path & "\licenses.xml" 'for XML store
     Case alsMDBFile
-      mProductsStoragePath = App.path & "\license.mdb" 'for MDB store
+      mProductsStoragePath = App.path & "\licenses.mdb" 'for MDB store
     'Case alsMSSQL '-not implemented yet
       'mProductsStoragePath =
   End Select
@@ -1620,10 +1620,10 @@ Private Sub LoadFormSetting()
   chkItemData.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", False))
   mKeyStoreType = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "KeyStoreType", 1))
   mProductsStoreType = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoreType", 0))
-  mProductsStoragePath = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoragePath", App.path & "\products.ini")
-  If Not fileExist(mProductsStoragePath) Then
+  mProductsStoragePath = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoragePath", App.path & "\licenses.ini")
+  If Not fileExist(mProductsStoragePath) And mProductsStoreType = alsMDBFile Then
     mProductsStoreType = alsINIFile
-    mProductsStoragePath = App.path & "\products.ini"
+    mProductsStoragePath = App.path & "\licenses.ini"
   End If
 
   blnIsFirstLaunch = False
@@ -2180,12 +2180,12 @@ Private Sub InitUI()
     cmbProds.Clear
     
     ' Populate Product List on Product Code Generator tab
-    ' and Key Gen tab with product info from products.ini
+    ' and Key Gen tab with product info from licenses.ini
     Dim arrProdInfos() As ProductInfo
     arrProdInfos = GeneratorInstance.RetrieveProducts()
     If IsArrayEmpty(arrProdInfos) Then Exit Sub
 
-    Dim i%
+    Dim i As Integer
     For i = LBound(arrProdInfos) To UBound(arrProdInfos)
         PopulateUI arrProdInfos(i)
     Next

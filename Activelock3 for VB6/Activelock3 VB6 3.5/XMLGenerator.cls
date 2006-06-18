@@ -47,10 +47,10 @@ End Sub
 '===============================================================================
 Private Sub LoadProdInfo(pNode As MSXML2.IXMLDOMNode, ProdInfo As ProductInfo)
     With pNode
-        ProdInfo.name = pNode.childNodes(0).childNodes(0).Text
-        ProdInfo.Version = pNode.childNodes(1).childNodes(0).Text
-        ProdInfo.VCode = pNode.childNodes(2).childNodes(0).Text
-        ProdInfo.GCode = pNode.childNodes(3).childNodes(0).Text
+        ProdInfo.name = pNode.selectSingleNode("name").Text
+        ProdInfo.Version = pNode.selectSingleNode("version").Text
+        ProdInfo.VCode = pNode.selectSingleNode("vcode").Text
+        ProdInfo.GCode = pNode.selectSingleNode("gcode").Text
     End With
 End Sub
 
@@ -66,9 +66,9 @@ Private Sub IALUGenerator_SaveProduct(ProdInfo As ProductInfo)
     Dim rootProducts As MSXML2.IXMLDOMNode
     Dim newProductNode As MSXML2.IXMLDOMNode
     Dim schemaCache As New XMLSchemaCache40
-    Dim result As IXMLDOMParseError
+    Dim Result As IXMLDOMParseError
     
-    Set rootProducts = MyXMLDoc.childNodes(1)
+    Set rootProducts = MyXMLDoc.selectSingleNode("Alugen3")
     Set newProductNode = BuildProductNodes(rootProducts, ProdInfo)
     
     'schema validation
@@ -98,7 +98,7 @@ Private Function IALUGenerator_RetrieveProducts() As ProductInfo()
     Dim xmlCount As Integer
     Count = 0
     Dim rootProducts As MSXML2.IXMLDOMNodeList
-    Set rootProducts = MyXMLDoc.childNodes(1).childNodes
+    Set rootProducts = MyXMLDoc.getElementsByTagName("Products")
     
     xmlCount = rootProducts.Length
     
@@ -135,16 +135,16 @@ Private Function IALUGenerator_RetrieveProduct(ByVal name As String, ByVal Ver A
     Count = 0
     
     Dim rootProducts As MSXML2.IXMLDOMNodeList
-    Set rootProducts = MyXMLDoc.childNodes(1).childNodes
+    Set rootProducts = MyXMLDoc.getElementsByTagName("Products")
     
     xmlCount = rootProducts.Length
 
     For Count = 0 To xmlCount - 1
       With rootProducts(Count)
-          If .childNodes(0).childNodes(0).nodeValue = name And _
-                .childNodes(1).childNodes(0).nodeValue = Ver Then
-              ProdInfo.VCode = .childNodes(2).childNodes(0).Text
-              ProdInfo.GCode = .childNodes(3).childNodes(0).Text
+          If .selectSingleNode("name").Text = name And _
+                .selectSingleNode("version").Text = Ver Then
+              ProdInfo.VCode = .selectSingleNode("vcode").Text
+              ProdInfo.GCode = .selectSingleNode("gcode").Text
               Exit For
           End If
       End With
@@ -171,14 +171,14 @@ Private Sub IALUGenerator_DeleteProduct(ByVal name As String, ByVal Ver As Strin
     Count = 0
     
     Dim rootProducts As MSXML2.IXMLDOMNodeList
-    Set rootProducts = MyXMLDoc.childNodes(1).childNodes
+    Set rootProducts = MyXMLDoc.getElementsByTagName("Products")
 
     xmlCount = rootProducts.Length
 
     For Count = 0 To xmlCount - 1
-      If rootProducts(Count).childNodes(0).childNodes(0).nodeValue = name And _
-            rootProducts(Count).childNodes(1).childNodes(0).nodeValue = Ver Then
-          MyXMLDoc.childNodes(1).removeChild rootProducts(Count)
+      If rootProducts(Count).selectSingleNode("name").Text = name And _
+            rootProducts(Count).selectSingleNode("version").Text = Ver Then
+          rootProducts(Count).parentNode.removeChild rootProducts(Count)
           Exit For
       End If
     Next
@@ -223,7 +223,7 @@ Private Sub SetupXmlDoc()
     'and append it and the XML version to the document
     MyXMLDoc.appendChild Version
     
-    MyXMLDoc.appendChild MyXMLDoc.createElement("Products")
+    MyXMLDoc.appendChild MyXMLDoc.createElement("Alugen3")
   
 End Sub
 
