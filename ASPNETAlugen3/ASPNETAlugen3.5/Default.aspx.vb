@@ -110,12 +110,12 @@ Public Class ASPNETAlugen3
     'Put user code to initialize the page here
 
     ' Populate Product List on Product Code Generator tab
-    ' and Key Gen tab with product info from products.ini
+    ' and Key Gen tab with product info from licenses.ini
     Dim i As Integer
     Dim arrProdInfos() As ProductInfo
     Dim MyGen As New AlugenGlobals
-    GeneratorInstance = MyGen.GeneratorInstance()
-    GeneratorInstance.StoragePath = AppPath() & "\products.ini"
+    GeneratorInstance = MyGen.GeneratorInstance(IActiveLock.ProductsStoreType.alsINIFile)
+    GeneratorInstance.StoragePath = AppPath() & "\licenses.ini"
 
     arrProdInfos = GeneratorInstance.RetrieveProducts()
     If arrProdInfos.Length = 0 Then Exit Sub
@@ -284,8 +284,8 @@ Public Class ASPNETAlugen3
 
     Dim arrProdInfos() As ProductInfo
     Dim MyGen As New AlugenGlobals
-    GeneratorInstance = MyGen.GeneratorInstance()
-    GeneratorInstance.StoragePath = AppPath() & "\products.ini"
+    GeneratorInstance = MyGen.GeneratorInstance(IActiveLock.ProductsStoreType.alsINIFile)
+    GeneratorInstance.StoragePath = AppPath() & "\licenses.ini"
     arrProdInfos = GeneratorInstance.RetrieveProducts()
 
     For i As Integer = 0 To arrProdInfos.Length - 1
@@ -726,8 +726,8 @@ Public Class ASPNETAlugen3
       End With
 
       Dim Generator As New AlugenGlobals
-      GeneratorInstance = Generator.GeneratorInstance()
-      GeneratorInstance.StoragePath = AppPath() & "\products.ini"
+      GeneratorInstance = Generator.GeneratorInstance(IActiveLock.ProductsStoreType.alsINIFile)
+      GeneratorInstance.StoragePath = AppPath() & "\licenses.ini"
 
       Dim varLicType As ProductLicense.ALLicType
 

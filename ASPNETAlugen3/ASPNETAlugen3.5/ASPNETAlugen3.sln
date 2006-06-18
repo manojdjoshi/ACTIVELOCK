@@ -11,7 +11,8 @@ Global
 	GlobalSection(ProjectConfiguration) = postSolution
 		{73EEFC3A-6595-4472-B826-016554551A44}.Debug.ActiveCfg = Debug|.NET
 		{73EEFC3A-6595-4472-B826-016554551A44}.Debug.Build.0 = Debug|.NET
-		{73EEFC3A-6595-4472-B826-016554551A44}.Release.ActiveCfg = Debug|.NET
+		{73EEFC3A-6595-4472-B826-016554551A44}.Release.ActiveCfg = Release|.NET
+		{73EEFC3A-6595-4472-B826-016554551A44}.Release.Build.0 = Release|.NET
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

@@ -34,11 +34,6 @@
 'and other comments
 'some comments -ismail
 
-<<<<<<< .mine
-
-=======
-
->>>>>>> .theirs
 Option Strict On
 Option Explicit On 
 
