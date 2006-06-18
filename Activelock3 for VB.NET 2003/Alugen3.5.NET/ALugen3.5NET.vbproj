@@ -21,7 +21,7 @@
                 OptionExplicit = "On"
                 OptionStrict = "On"
                 RootNamespace = "ALUGEN3_5NET"
-                StartupObject = "ALUGEN3_5NET.frmMain"
+                StartupObject = ""
             >
                 <Config
                     Name = "Debug"
@@ -78,14 +78,14 @@
                     AssemblyName = "System.Xml"
                 />
                 <Reference
-                    Name = "ActiveLock3_5NET"
-                    AssemblyName = "ActiveLock3_5NET"
-                    HintPath = "ActiveLock3_5NET.dll"
-                />
-                <Reference
                     Name = "daReport"
                     AssemblyName = "daReport"
                     HintPath = "daReport.dll"
+                />
+                <Reference
+                    Name = "ActiveLock3_5NET"
+                    AssemblyName = "ActiveLock3_5NET"
+                    HintPath = "ActiveLock3_5NET.dll"
                 />
             </References>
             <Imports>
@@ -159,6 +159,16 @@
                     BuildAction = "EmbeddedResource"
                 />
                 <File
+                    RelPath = "frmProductsStorage.vb"
+                    SubType = "Form"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "frmProductsStorage.resx"
+                    DependentUpon = "frmProductsStorage.vb"
+                    BuildAction = "EmbeddedResource"
+                />
+                <File
                     RelPath = "frmRegisteredLevelEdit.vb"
                     SubType = "Form"
                     BuildAction = "Compile"
@@ -206,6 +216,11 @@
                 <File
                     RelPath = "NullableDateTimePicker.vb"
                     SubType = "Component"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "Startup.vb"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
             </Include>

@@ -47,6 +47,11 @@ Friend Class frmMain
   Public ActiveLock As _IActiveLock
   Public fDisableNotifications As Boolean
 
+  Public mKeyStoreType As IActiveLock.LicStoreType
+  Public mProductsStoreType As IActiveLock.ProductsStoreType
+  Public mProductsStoragePath As String
+  Private blnIsFirstLaunch As Boolean
+
   ' Hardware keys from the Installation Code
   Private MACaddress, ComputerName As String
   Private VolumeSerial, FirmwareSerial As String
@@ -68,10 +73,30 @@ Friend Class frmMain
     'This call is required by the Windows Form Designer.
     InitializeComponent()
 
+    'on first start.. initialize variables
+    blnIsFirstLaunch = True
+    'with default values
+    mKeyStoreType = IActiveLock.LicStoreType.alsFile 'alsRegistry or alsFile
+    mProductsStoreType = IActiveLock.ProductsStoreType.alsINIFile 'alsINIFile - for ini file, alsXMLFile for xml file, alsMDBFile for MDB file
+    Select Case mProductsStoreType
+      Case IActiveLock.ProductsStoreType.alsINIFile
+        mProductsStoragePath = modALUGEN.AppPath & "\licenses.ini"
+      Case IActiveLock.ProductsStoreType.alsXMLFile
+        mProductsStoragePath = modALUGEN.AppPath & "\licenses.xml" 'for XML store
+      Case IActiveLock.ProductsStoreType.alsMDBFile
+        mProductsStoragePath = modALUGEN.AppPath & "\licenses.mdb" 'for MDB store
+        'Case alsMSSQL '-not implemented yet
+        'mProductsStoragePath =
+    End Select
+
+    'load resources
+    LoadResources()
+
     ' Create an instance of a ListView column sorter and assign it 
     ' to the ListView control.
     lvwColumnSorter = New ListViewColumnSorter
     Me.lstvwProducts.ListViewItemSorter = lvwColumnSorter
+
   End Sub
   'Form overrides dispose to clean up the component list.
   Protected Overloads Overrides Sub Dispose(ByVal Disposing As Boolean)
@@ -156,6 +181,7 @@ Friend Class frmMain
   Friend WithEvents cboRegisteredLevel As System.Windows.Forms.ComboBox
   Friend WithEvents cboLicType As System.Windows.Forms.ComboBox
   Friend WithEvents cmdEmailLicenseKey As System.Windows.Forms.Button
+  Friend WithEvents cmdProductsStorage As System.Windows.Forms.Button
   <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
     Me.components = New System.ComponentModel.Container
     Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(frmMain))
@@ -192,6 +218,7 @@ Friend Class frmMain
     Me.cmdViewLevel = New System.Windows.Forms.Button
     Me.cmdPrintLicenseKey = New System.Windows.Forms.Button
     Me.cmdEmailLicenseKey = New System.Windows.Forms.Button
+    Me.cmdProductsStorage = New System.Windows.Forms.Button
     Me.SSTab1 = New System.Windows.Forms.TabControl
     Me._SSTab1_TabPage0 = New System.Windows.Forms.TabPage
     Me.grpProductsList = New System.Windows.Forms.GroupBox
@@ -478,10 +505,10 @@ Friend Class frmMain
     Me.cmdAdd.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
     Me.cmdAdd.ForeColor = System.Drawing.SystemColors.ControlText
     Me.cmdAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-    Me.cmdAdd.Location = New System.Drawing.Point(7, 210)
+    Me.cmdAdd.Location = New System.Drawing.Point(7, 209)
     Me.cmdAdd.Name = "cmdAdd"
     Me.cmdAdd.RightToLeft = System.Windows.Forms.RightToLeft.No
-    Me.cmdAdd.Size = New System.Drawing.Size(128, 21)
+    Me.cmdAdd.Size = New System.Drawing.Size(128, 23)
     Me.cmdAdd.TabIndex = 7
     Me.cmdAdd.Text = "&Add to product list"
     Me.cmdAdd.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -514,10 +541,10 @@ Friend Class frmMain
     Me.cmdRemove.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
     Me.cmdRemove.ForeColor = System.Drawing.SystemColors.ControlText
     Me.cmdRemove.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-    Me.cmdRemove.Location = New System.Drawing.Point(139, 210)
+    Me.cmdRemove.Location = New System.Drawing.Point(139, 209)
     Me.cmdRemove.Name = "cmdRemove"
     Me.cmdRemove.RightToLeft = System.Windows.Forms.RightToLeft.No
-    Me.cmdRemove.Size = New System.Drawing.Size(154, 21)
+    Me.cmdRemove.Size = New System.Drawing.Size(154, 23)
     Me.cmdRemove.TabIndex = 8
     Me.cmdRemove.Text = "&Remove from product list"
     Me.cmdRemove.TextAlign = System.Drawing.ContentAlignment.MiddleRight
@@ -746,6 +773,23 @@ Friend Class frmMain
     Me.cmdEmailLicenseKey.TextAlign = System.Drawing.ContentAlignment.MiddleRight
     Me.ToolTip1.SetToolTip(Me.cmdEmailLicenseKey, "Email License Key")
     '
+    'cmdProductsStorage
+    '
+    Me.cmdProductsStorage.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+    Me.cmdProductsStorage.BackColor = System.Drawing.SystemColors.Control
+    Me.cmdProductsStorage.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+    Me.cmdProductsStorage.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+    Me.cmdProductsStorage.ForeColor = System.Drawing.SystemColors.ControlText
+    Me.cmdProductsStorage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+    Me.cmdProductsStorage.Location = New System.Drawing.Point(420, 209)
+    Me.cmdProductsStorage.Name = "cmdProductsStorage"
+    Me.cmdProductsStorage.RightToLeft = System.Windows.Forms.RightToLeft.No
+    Me.cmdProductsStorage.Size = New System.Drawing.Size(140, 23)
+    Me.cmdProductsStorage.TabIndex = 65
+    Me.cmdProductsStorage.Text = "Products st&orage ..."
+    Me.cmdProductsStorage.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+    Me.ToolTip1.SetToolTip(Me.cmdProductsStorage, "Select product storage")
+    '
     'SSTab1
     '
     Me.SSTab1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -789,6 +833,7 @@ Friend Class frmMain
     Me.fraProdNew.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                 Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
     Me.fraProdNew.BackColor = System.Drawing.SystemColors.Control
+    Me.fraProdNew.Controls.Add(Me.cmdProductsStorage)
     Me.fraProdNew.Controls.Add(Me.picALBanner2)
     Me.fraProdNew.Controls.Add(Me.grpCodes)
     Me.fraProdNew.Controls.Add(Me.cmdCodeGen)
@@ -1331,6 +1376,8 @@ Friend Class frmMain
     cmdBrowse.Image = CType(resxList("folder.gif"), Image)
     cmdPrintLicenseKey.Image = CType(resxList("print.gif"), Image)
     cmdEmailLicenseKey.Image = CType(resxList("email.gif"), Image)
+    cmdProductsStorage.Image = CType(resxList("database.gif"), Image)
+
     'lbl's
     lblVCode.Image = CType(resxList("keys.gif"), Image)
     lblGCode.Image = CType(resxList("keys.gif"), Image)
@@ -1699,10 +1746,12 @@ Friend Class frmMain
     cboProducts.ValueMember = "ProductNameVersion"
 
     lstvwProducts.Items.Clear()
+    cboProducts.Items.Clear()
+
     ' Populate Product List on Product Code Generator tab
-    ' and Key Gen tab with product info from products.ini
-    Dim arrProdInfos() As ProductInfo 'ActiveLock3_4NET.ProductInfo
-    arrProdInfos = GeneratorInstance.RetrieveProducts() '.Clone()
+    ' and Key Gen tab with product info from licenses.ini
+    Dim arrProdInfos() As ProductInfo
+    arrProdInfos = GeneratorInstance.RetrieveProducts()
 
     If IsArrayEmpty(arrProdInfos) Then Exit Sub
 
@@ -1720,7 +1769,7 @@ Friend Class frmMain
       lb = UBound(arrVar, 1) ' this will raise an error if the array is empty
       IsArrayEmpty = False ' If we managed to get to here, then it's not empty
     Catch ex As Exception
-      MessageBox.Show(ex.Message, ACTIVELOCKSTRING, MessageBoxButtons.OK, MessageBoxIcon.Error)
+      'MessageBox.Show(ex.Message, ACTIVELOCKSTRING, MessageBoxButtons.OK, MessageBoxIcon.Error)
     End Try
   End Function
 
@@ -1889,9 +1938,8 @@ Friend Class frmMain
 
 #Region "Events"
 
-  Private Sub frmMain_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
-    'load resources
-    LoadResources()
+  Friend Sub frmMain_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
+
     'load images for buttons, labels, pictureboxes
     LoadImages()
 
@@ -1899,7 +1947,8 @@ Friend Class frmMain
     strRegisteredLevelDBName = AddBackSlash(Application.StartupPath) & "RegisteredLevelDB.dat"
 
     ' Check the existence of necessary files to run this application
-    Call CheckForResources("Alcrypto3.dll", "comdlg32.ocx", "msflxgrd.ocx", "comctl32.ocx", "tabctl32.ocx")
+    'Call CheckForResources("Alcrypto3.dll", "comdlg32.ocx", "msflxgrd.ocx", "comctl32.ocx", "tabctl32.ocx")
+    Call CheckForResources("Alcrypto3.dll")
 
     'load RegisteredLevels
     If Not File.Exists(strRegisteredLevelDBName) Then
@@ -1938,31 +1987,36 @@ Friend Class frmMain
       'cboRegisteredLevel.SelectedIndex = 0
     End If
 
+    'load form settings
+    LoadFormSetting()
+
     ' Initialize AL
-    ActiveLock = ActiveLock3Globals_definst.NewInstance()
-    ActiveLock.KeyStoreType = IActiveLock.LicStoreType.alsFile
-
-    Dim MyAL As New Globals_Renamed
-    Dim MyGen As New AlugenGlobals
-
-    'Use the following for ASP.NET applications
-    'ActiveLock.Init(Application.StartupPath & "\bin")
-    'Use the following for the VB.NET applications
-    ActiveLock.Init(Application.StartupPath)
-
-    GeneratorInstance = MyGen.GeneratorInstance()
-    GeneratorInstance.StoragePath = AppPath() & "\products.ini"
+    InitActiveLock()
 
     ' Initialize GUI
     InitUI()
 
-    If File.Exists(AppPath() & "\products.ini") Then cboProducts.SelectedIndex = 0
+    If cboProducts.Items.Count > 0 Then
+      cboProducts.SelectedIndex = 0
+    End If
 
     'Assume that the application LockType is not LOckNone only
     txtUser.Enabled = False
     txtUser.ReadOnly = True
     txtUser.BackColor = System.Drawing.ColorTranslator.FromOle(&H8000000F)
 
+    Me.Text = "ALUGEN3.5NET - ActiveLock3 Universal GENerator - v3.5 for VB.NET"
+
+  End Sub
+
+  Private Sub LoadFormSetting()
+    'Read the program INI file to retrieve control settings
+    On Error GoTo LoadFormSetting_Error
+
+    If Not blnIsFirstLaunch Then Exit Sub
+
+    PROJECT_INI_FILENAME = WinDir() & "\Alugen3.ini"
+    On Error Resume Next
     'Read the program INI file to retrieve control settings
     PROJECT_INI_FILENAME = WinDir() & "\Alugen3_4NET.ini"
 
@@ -1975,19 +2029,74 @@ Friend Class frmMain
     Else
       chkItemData.CheckState = CheckState.Checked
     End If
+    mKeyStoreType = CType(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "KeyStoreType", CStr(1)), IActiveLock.LicStoreType)
+    mProductsStoreType = CType(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoreType", CStr(0)), IActiveLock.ProductsStoreType)
+    mProductsStoragePath = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoragePath", modALUGEN.AppPath & "\licenses.ini")
+    If Not File.Exists(mProductsStoragePath) And mProductsStoreType = IActiveLock.ProductsStoreType.alsMDBFile Then
+      mProductsStoreType = IActiveLock.ProductsStoreType.alsINIFile
+      mProductsStoragePath = modALUGEN.AppPath & "\licenses.ini"
+    End If
 
-    Me.Text = "ALUGEN3.5NET - ActiveLock3 Universal GENerator - v3.5 for VB.NET"
+    blnIsFirstLaunch = False
+
+    On Error GoTo 0
+    Exit Sub
+
+LoadFormSetting_Error:
+
+    MessageBox.Show("Error " & Err.Number & " (" & Err.Description & ") in procedure LoadFormSetting of Form frmMain", modALUGEN.ACTIVELOCKSTRING)
 
   End Sub
 
+  Private Sub InitActiveLock()
+    On Error GoTo InitForm_Error
+    ActiveLock = ActiveLock3Globals_definst.NewInstance()
+    ActiveLock.KeyStoreType = mKeyStoreType
+
+    Dim MyAL As New Globals_Renamed
+    Dim MyGen As New AlugenGlobals
+
+    'Use the following for ASP.NET applications
+    'ActiveLock.Init(Application.StartupPath & "\bin")
+    'Use the following for the VB.NET applications
+    ActiveLock.Init(Application.StartupPath)
+
+    ' Initialize Generator
+    GeneratorInstance = MyGen.GeneratorInstance(mProductsStoreType)
+    GeneratorInstance.StoragePath = mProductsStoragePath
+
+    On Error GoTo 0
+    Exit Sub
+
+InitForm_Error:
+
+    MessageBox.Show("Error " & Err.Number & " (" & Err.Description & ") in procedure InitForm of Form frmMain", modALUGEN.ACTIVELOCKSTRING)
+  End Sub
+
   Private Sub frmMain_Closed(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Closed
-    Dim mnReturnValue As Integer
+    'save form settings
+    SaveFormSettings()
+  End Sub
+
+  Private Sub SaveFormSettings()
+    'save form settings
+    On Error GoTo SaveFormSettings_Error
+    Dim mnReturnValue As Long
     mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", CStr(SSTab1.SelectedIndex))
     mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboProducts", CStr(cboProducts.SelectedIndex))
     mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboLicType", CStr(cboLicType.SelectedIndex))
     mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboRegisteredLevel", CStr(cboRegisteredLevel.SelectedIndex))
     mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", chkItemData.CheckState.ToString)
-    End
+    mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "KeyStoreType", CStr(mKeyStoreType))
+    mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoreType", CStr(mProductsStoreType))
+    mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoragePath", CStr(mProductsStoragePath))
+
+    On Error GoTo 0
+    Exit Sub
+
+SaveFormSettings_Error:
+
+    MessageBox.Show("Error " & Err.Number & " (" & Err.Description & ") in procedure SaveFormSettings of Form frmMain", modALUGEN.ACTIVELOCKSTRING)
   End Sub
 
   Private Sub chkLockBIOS_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockBIOS.CheckStateChanged
@@ -2129,20 +2238,20 @@ Friend Class frmMain
       'for now. Modified alcrypto3NET.dll to create a second generate function
       'rsa_generate2 that does not deal with progress monitoring
       If modALUGEN.rsa_generate2(KEY, 1024) = RETVAL_ON_ERROR Then
-        Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+        Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
       End If
 
       ' extract private and public key blobs
       Dim strBlob As String
       Dim blobLen As Integer
       If rsa_public_key_blob(KEY, vbNullString, blobLen) = RETVAL_ON_ERROR Then
-        Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+        Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
       End If
 
       If blobLen > 0 Then
         strBlob = New String(Chr(0), blobLen)
         If rsa_public_key_blob(KEY, strBlob, blobLen) = RETVAL_ON_ERROR Then
-          Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+          Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
 
         System.Diagnostics.Debug.WriteLine("Public blob: " & strBlob)
@@ -2160,13 +2269,13 @@ Friend Class frmMain
       'txtGCode.Text = xmlPrivateKey
 
       If modALUGEN.rsa_private_key_blob(KEY, vbNullString, blobLen) = RETVAL_ON_ERROR Then
-        Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+        Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
       End If
 
       If blobLen > 0 Then
         strBlob = New String(Chr(0), blobLen)
         If modALUGEN.rsa_private_key_blob(KEY, strBlob, blobLen) = RETVAL_ON_ERROR Then
-          Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+          Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
 
         System.Diagnostics.Debug.WriteLine("Private blob: " & strBlob)
@@ -2174,7 +2283,7 @@ Friend Class frmMain
       End If
       ' done with the key - throw it away
       If modALUGEN.rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-        Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+        Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
       End If
 
       ' Test generated key for correctness by recreating it from the blobs
@@ -2186,12 +2295,12 @@ Friend Class frmMain
       ' you'll get a valid keyset that no longer crashes.
       Dim strdata As String : strdata = "This is a test string to be encrypted."
       If modALUGEN.rsa_createkey(txtVCode.Text, txtVCode.Text.Length, txtGCode.Text, txtGCode.Text.Length, KEY) = RETVAL_ON_ERROR Then
-        Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+        Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
       End If
 
       ' It worked! We're all set to go.
       If modALUGEN.rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-        Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+        Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
       End If
 
     Catch ex As Exception
@@ -2431,7 +2540,7 @@ Friend Class frmMain
     End If
     ' It worked! We're all set to go.
     If modALUGEN.rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-      Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+      Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
     End If
 
     Cursor.Current = Cursors.Default
@@ -2660,4 +2769,8 @@ Friend Class frmMain
 #End Region
 
 
+  Private Sub cmdProductsStorage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdProductsStorage.Click
+    Dim myProductsStorageForm As New frmProductsStorage
+    myProductsStorageForm.ShowDialog(Me)
+  End Sub
 End Class
