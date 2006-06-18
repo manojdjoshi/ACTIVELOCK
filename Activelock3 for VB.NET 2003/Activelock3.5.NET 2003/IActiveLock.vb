@@ -274,392 +274,410 @@ End Interface
 	Public Enum LicStoreType
 		alsRegistry = 0
 		alsFile = 1
-	End Enum
-    '###############################################################
-	
-	' Trial Type specifies what kind of Trial Feature is used
-	'
-	' @param trialNone      ' No trial used
-	' @param trialDays      ' Trial by Days
-	' @param trialRuns      ' Trial by Runs
-	Public Enum ALTrialTypes
-		trialNone = 0
-		trialDays = 1
-		trialRuns = 2
-	End Enum
-    '###############################################################
-	
-	' Trial Hide Mode Type specifies what kind of Trial Hiding Mode is used
-	' Values can be combined (OR&#39;ed) together.
-	'
-	' @param trialSteganography     ' Trial information is hidden in BMP files
-	' @param trialHiddenFolder      ' Trial information is hidden in a folder which uses a default namespace
-	' @param trialRegistry          ' Trial information is encrypted and hidden in several registry locations
-	Public Enum ALTrialHideTypes
-		trialSteganography = 1
-		trialHiddenFolder = 2
-		trialRegistry = 4
-	End Enum
-    '===============================================================================
-	' Name: Property Get RegisteredLevel
-	' Input: None
-	' Output:
-	'   String - Registered level
-	' Purpose: Returns the registered level.
-	' Remarks: None
-	'===============================================================================
-	Public ReadOnly Property RegisteredLevel() As String Implements _IActiveLock.RegisteredLevel
-		Get
-            RegisteredLevel = String.Empty
-        End Get
-    End Property
-    '===============================================================================
-	' Name: Property Get LockType
-	' Input: None
-	' Output:
-	'   ALLockTypes - lock type object corresponding to the lock type(s) being used
-	' Purpose: Returns the Lock Type being used in this instance.
-	' Remarks: None
-	'===============================================================================
-	Public Property LockType() As ALLockTypes Implements _IActiveLock.LockType
-		Get
-			
-		End Get
-		Set(ByVal Value As ALLockTypes)
-			
-		End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Get UsedLockType
-    ' Input: None
-    ' Output:
-    '   ALLockTypes - lock type object corresponding to the current lock type(s) being used
-    ' Purpose: Returns the Current Lock Type being used in this instance.
-    ' Remarks: None
-    '===============================================================================
-    Public Property UsedLockType() As ALLockTypes Implements _IActiveLock.UsedLockType
-        Get
+  End Enum
 
-        End Get
-        Set(ByVal Value As ALLockTypes)
+  '###############################################################
 
-        End Set
-    End Property
+  ' Products Store Type specifies where to store products infos
+  '
+  ' @param alsINIFile    ' Store in INI file (licenses.ini)
+  ' @param alsXMLFile    ' Store in XML file (licenses.xml)
+  ' @param alsMDBFile    ' Store in MDB file (licenses.mdb)
+  '                       mdb file should contain a table named products with structure:
+  '                       ID(autonumber), name(text,150), version (text,50), vccode(memo), gcode(memo)
+  ' @param alsMSSQL      ' Store in MSSQL database 'not implemented 'TODO
+  Public Enum ProductsStoreType
+    alsINIFile = 0
+    alsXMLFile = 1
+    alsMDBFile = 2
+    'alsMSSQL = 3 'TODO
+  End Enum
 
-    '===============================================================================
-    ' Name: Property Get TrialHideType
-    ' Input: None
-    ' Output:
-    '   ALTrialHideTypes - trial hide type object corresponding to the trial hide type(s) being used
-    ' Purpose: Returns the Trial Hide Type being used in this instance.
-    ' Remarks: None
-    '===============================================================================
-    Public Property TrialHideType() As ALTrialHideTypes Implements _IActiveLock.TrialHideType
-        Get
+  '###############################################################
 
-        End Get
-        Set(ByVal Value As ALTrialHideTypes)
+  ' Trial Type specifies what kind of Trial Feature is used
+  '
+  ' @param trialNone      ' No trial used
+  ' @param trialDays      ' Trial by Days
+  ' @param trialRuns      ' Trial by Runs
+  Public Enum ALTrialTypes
+    trialNone = 0
+    trialDays = 1
+    trialRuns = 2
+  End Enum
+  '###############################################################
 
-        End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Get TrialType
-    ' Input: None
-    ' Output:
-    '   ALTrialTypes - Trial Type (TrialNone, TrialByDays, TrialByRuns)
-    ' Purpose: Returns the Trial Type being used in this instance.
-    ' Remarks: None
-    '===============================================================================
-    Public Property TrialType() As ALTrialTypes Implements _IActiveLock.TrialType
-        Get
+  ' Trial Hide Mode Type specifies what kind of Trial Hiding Mode is used
+  ' Values can be combined (OR&#39;ed) together.
+  '
+  ' @param trialSteganography     ' Trial information is hidden in BMP files
+  ' @param trialHiddenFolder      ' Trial information is hidden in a folder which uses a default namespace
+  ' @param trialRegistry          ' Trial information is encrypted and hidden in several registry locations
+  Public Enum ALTrialHideTypes
+    trialSteganography = 1
+    trialHiddenFolder = 2
+    trialRegistry = 4
+  End Enum
+  '===============================================================================
+  ' Name: Property Get RegisteredLevel
+  ' Input: None
+  ' Output:
+  '   String - Registered level
+  ' Purpose: Returns the registered level.
+  ' Remarks: None
+  '===============================================================================
+  Public ReadOnly Property RegisteredLevel() As String Implements _IActiveLock.RegisteredLevel
+    Get
+      RegisteredLevel = String.Empty
+    End Get
+  End Property
+  '===============================================================================
+  ' Name: Property Get LockType
+  ' Input: None
+  ' Output:
+  '   ALLockTypes - lock type object corresponding to the lock type(s) being used
+  ' Purpose: Returns the Lock Type being used in this instance.
+  ' Remarks: None
+  '===============================================================================
+  Public Property LockType() As ALLockTypes Implements _IActiveLock.LockType
+    Get
 
-        End Get
-        Set(ByVal Value As ALTrialTypes)
+    End Get
+    Set(ByVal Value As ALLockTypes)
 
-        End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Get TrialLength
-    ' Input: None
-    ' Output:
-    '   Integer - Trial Length (Number of Days or Runs)
-    ' Purpose: Returns the Trial Length being used in this instance.
-    ' Remarks: None
-    '===============================================================================
-    Public Property TrialLength() As Integer Implements _IActiveLock.TrialLength
-        Get
+    End Set
+  End Property
+  '===============================================================================
+  ' Name: Property Get UsedLockType
+  ' Input: None
+  ' Output:
+  '   ALLockTypes - lock type object corresponding to the current lock type(s) being used
+  ' Purpose: Returns the Current Lock Type being used in this instance.
+  ' Remarks: None
+  '===============================================================================
+  Public Property UsedLockType() As ALLockTypes Implements _IActiveLock.UsedLockType
+    Get
 
-        End Get
-        Set(ByVal Value As Integer)
+    End Get
+    Set(ByVal Value As ALLockTypes)
 
-        End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Get SoftwareName
-    ' Input: None
-    ' Output:
-    '   String - Software Name
-    ' Purpose: Returns the Software Name being used in this instance.
-    ' Remarks: None
-    '===============================================================================
-    Public Property SoftwareName() As String Implements _IActiveLock.SoftwareName
-        Get
-            SoftwareName = String.Empty
-        End Get
-        Set(ByVal Value As String)
+    End Set
+  End Property
 
-        End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Get SoftwarePassword
-    ' Input: None
-    ' Output:
-    '   String - Software Password
-    ' Purpose: Returns the Software Password being used in this instance.
-    ' Remarks: None
-    '===============================================================================
-    Public Property SoftwarePassword() As String Implements _IActiveLock.SoftwarePassword
-        Get
-            SoftwarePassword = String.Empty
-        End Get
-        Set(ByVal Value As String)
+  '===============================================================================
+  ' Name: Property Get TrialHideType
+  ' Input: None
+  ' Output:
+  '   ALTrialHideTypes - trial hide type object corresponding to the trial hide type(s) being used
+  ' Purpose: Returns the Trial Hide Type being used in this instance.
+  ' Remarks: None
+  '===============================================================================
+  Public Property TrialHideType() As ALTrialHideTypes Implements _IActiveLock.TrialHideType
+    Get
 
-        End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Let SoftwareCode
-    ' Input:
-    '   ByVal sCode As String - Software Code
-    ' Output: None
-    ' Purpose: Specifies the software code (product code)
-    ' Remarks: None
-    '===============================================================================
-    Public WriteOnly Property SoftwareCode() As String Implements _IActiveLock.SoftwareCode
-        Set(ByVal Value As String)
+    End Get
+    Set(ByVal Value As ALTrialHideTypes)
 
-        End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Get SoftwareVersion
-    ' Input: None
-    ' Output:
-    '   String - Software Version
-    ' Purpose: Returns the Software Version being used in this instance.
-    ' Remarks: None
-    '===============================================================================
-    Public Property SoftwareVersion() As String Implements _IActiveLock.SoftwareVersion
-        Get
-            SoftwareVersion = String.Empty
-        End Get
-        Set(ByVal Value As String)
+    End Set
+  End Property
+  '===============================================================================
+  ' Name: Property Get TrialType
+  ' Input: None
+  ' Output:
+  '   ALTrialTypes - Trial Type (TrialNone, TrialByDays, TrialByRuns)
+  ' Purpose: Returns the Trial Type being used in this instance.
+  ' Remarks: None
+  '===============================================================================
+  Public Property TrialType() As ALTrialTypes Implements _IActiveLock.TrialType
+    Get
 
-        End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Let KeyStoreType
-    ' Input:
-    '   ByVal KeyStore As LicStoreType - Key store type
-    ' Output: None
-    ' Purpose: Specifies the key store type.
-    ' Remarks: None
-    '===============================================================================
-    Public WriteOnly Property KeyStoreType() As LicStoreType Implements _IActiveLock.KeyStoreType
-        Set(ByVal Value As LicStoreType)
+    End Get
+    Set(ByVal Value As ALTrialTypes)
 
-        End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Let KeyStorePath
-    ' Input:
-    '   ByVal sPath As String - File path and name
-    ' Output: None
-    ' Purpose: Specifies the key store path.
-    ' Remarks: None
-    '===============================================================================
-    ' @param sPath  The path to be used for the specified KeyStoreType.
-    '               e.g. If <a href="IActiveLock.LicStoreType.html">alsFile</a> is used for <a href="IActiveLock.Let.KeyStoreType.html">KeyStoreType</a>,
-    '               then <code>Path</code> specifies the path to the license file.
-    '               If <a href="IActiveLock.LicStoreType.html">alsRegistry</a> is used,
-    '               the Path specifies the Registry hive where license information is stored.
-    Public WriteOnly Property KeyStorePath() As String Implements _IActiveLock.KeyStorePath
-        Set(ByVal Value As String)
+    End Set
+  End Property
+  '===============================================================================
+  ' Name: Property Get TrialLength
+  ' Input: None
+  ' Output:
+  '   Integer - Trial Length (Number of Days or Runs)
+  ' Purpose: Returns the Trial Length being used in this instance.
+  ' Remarks: None
+  '===============================================================================
+  Public Property TrialLength() As Integer Implements _IActiveLock.TrialLength
+    Get
 
-        End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Get InstallationCode
-    ' Input:
-    '   ByVal User As String - Optionally tailors the installation code specific to this user.
-    ' Output:
-    '   String - Installation Code
-    ' Purpose: Returns the installation-specific code needed to obtain the liberation key.
-    ' Remarks: None
-    '===============================================================================
-    Public ReadOnly Property InstallationCode(Optional ByVal User As String = vbNullString, Optional ByVal Lic As ProductLicense = Nothing) As String Implements _IActiveLock.InstallationCode
-        Get
-            InstallationCode = String.Empty
-        End Get
-    End Property
-    '===============================================================================
-    ' Name: Property Let AutoRegisterKeyPath
-    ' Input:
-    '   ByVal sPath As String - Full path to where the liberation file may reside.
-    ' Output: None
-    ' Purpose: Specifies the file path that contains the liberation key.
-    ' <p>If this file exists, ActiveLock will attempt to register the key automatically during its initialization.
-    ' <p>Upon successful registration, the liberation file WILL be deleted.
-    ' Remarks: Note: This property is only effective if it is set prior to calling <code>Init</code>.
-    '===============================================================================
-    Public WriteOnly Property AutoRegisterKeyPath() As String Implements _IActiveLock.AutoRegisterKeyPath
-        Set(ByVal Value As String)
+    End Get
+    Set(ByVal Value As Integer)
 
-        End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Get EventNotifier
-    ' Input: None
-    ' Output:
-    '   ActiveLockEventNotifier - An object that can be used as a COM event source. i.e. can be used in <code>WithEvents</code> statements in VB.
-    ' Purpose: Retrieves the event notifier.
-    ' <p>Client applications uses this Notifier to handle event notifications sent by ActiveLock,
-    ' including license property validation and encryption events.
-    ' Remarks: See ActiveLockEventNotifier for more information.
-    '===============================================================================
-    Public ReadOnly Property EventNotifier() As ActiveLockEventNotifier Implements _IActiveLock.EventNotifier
-        Get
-            EventNotifier = Nothing
-        End Get
-    End Property
-    '===============================================================================
-    ' Name: Property Get UsedDays
-    ' Input: None
-    ' Output:
-    '   Long - Used days for the license
-    ' Purpose: Returns the number of days this product has been used since its registration.
-    ' Remarks: None
-    '===============================================================================
-    Public ReadOnly Property UsedDays() As Integer Implements _IActiveLock.UsedDays
-        Get
+    End Set
+  End Property
+  '===============================================================================
+  ' Name: Property Get SoftwareName
+  ' Input: None
+  ' Output:
+  '   String - Software Name
+  ' Purpose: Returns the Software Name being used in this instance.
+  ' Remarks: None
+  '===============================================================================
+  Public Property SoftwareName() As String Implements _IActiveLock.SoftwareName
+    Get
+      SoftwareName = String.Empty
+    End Get
+    Set(ByVal Value As String)
 
-        End Get
-    End Property
-    '===============================================================================
-    ' Name: Property Get RegisteredDate
-    ' Input: None
-    ' Output:
-    '   String - Date on which the product is registered.
-    ' Purpose: Retrieves the registration date.
-    ' Remarks: None
-    '===============================================================================
-    Public ReadOnly Property RegisteredDate() As String Implements _IActiveLock.RegisteredDate
-        Get
-            RegisteredDate = String.Empty
-        End Get
-    End Property
-    '===============================================================================
-    ' Name: Property Get RegisteredUser
-    ' Input: None
-    ' Output:
-    '   String - Registered user name
-    ' Purpose: Returns the registered user.
-    ' Remarks: None
-    '===============================================================================
-    Public ReadOnly Property RegisteredUser() As String Implements _IActiveLock.RegisteredUser
-        Get
-            RegisteredUser = String.Empty
-        End Get
-    End Property
-    '===============================================================================
-    ' Name: Property Get ExpirationDate
-    ' Input: None
-    ' Output:
-    '   String - Date on which the license will expire.
-    ' Purpose: Retrieves the expiration date.
-    ' Remarks: None
-    '===============================================================================
-    Public ReadOnly Property ExpirationDate() As String Implements _IActiveLock.ExpirationDate
-        Get
-            ExpirationDate = String.Empty
-        End Get
-    End Property
-    '===============================================================================
-    ' Name: Function LockCode
-    ' Input:
-    '   ByRef Lic As ProductLicense - Product License for which to compute the lock code.
-    ' Output:
-    '   String - Lock code
-    ' Purpose: Interface Method. Computes a lock code corresponding to the specified Lock Types, License Class, etc.
-    ' Optionally, if a product license is specified, then a lock string specific to that license is returned.
-    ' Remarks: None
-    '===============================================================================
-    Public Function LockCode(Optional ByRef Lic As ProductLicense = Nothing) As String Implements _IActiveLock.LockCode
-        LockCode = String.Empty
-    End Function
-    '===============================================================================
-    ' Name: Sub Register
-    ' Input:
-    '   ByVal LibKey As String - Liberation key
-    ' Output: None
-    ' Purpose: Registers the product using the specified liberation key.
-    ' Remarks: None
-    '===============================================================================
-    Public Sub Register(ByVal LibKey As String) Implements _IActiveLock.Register
+    End Set
+  End Property
+  '===============================================================================
+  ' Name: Property Get SoftwarePassword
+  ' Input: None
+  ' Output:
+  '   String - Software Password
+  ' Purpose: Returns the Software Password being used in this instance.
+  ' Remarks: None
+  '===============================================================================
+  Public Property SoftwarePassword() As String Implements _IActiveLock.SoftwarePassword
+    Get
+      SoftwarePassword = String.Empty
+    End Get
+    Set(ByVal Value As String)
 
-    End Sub
-    '===============================================================================
-    ' Name: Function Transfer
-    ' Input:
-    '   ByVal InstallCode As String - Installation Code generated from the other computer.
-    ' Output:
-    '   String - The liberation key tailored for the request code generated from the other machine.
-    ' Purpose: Transfers the current license to another computer.
-    ' Remarks: Not implemented yet.
-    '===============================================================================
-    Public Function Transfer(ByVal InstallCode As String) As String Implements _IActiveLock.Transfer
-        Transfer = String.Empty
-    End Function
-    '===============================================================================
-    ' Name: Sub Init
-    ' Input:
-    '    autoLicString As String - license key if autoregister is successful
-    ' Output: None
-    ' Purpose: Initializes ActiveLock before use. Some of the routines, including <a href="IActiveLock.Acquire.html">Acquire()</a>
-    ' and <a href="IActiveLock.Register.html">Register()</a> requires <code>Init()</code> to be called first.
-    ' Remarks: None
-    '===============================================================================
-    Public Sub Init(Optional ByVal strPath As String = "", Optional ByRef autoLicString As String = "") Implements _IActiveLock.Init
+    End Set
+  End Property
+  '===============================================================================
+  ' Name: Property Let SoftwareCode
+  ' Input:
+  '   ByVal sCode As String - Software Code
+  ' Output: None
+  ' Purpose: Specifies the software code (product code)
+  ' Remarks: None
+  '===============================================================================
+  Public WriteOnly Property SoftwareCode() As String Implements _IActiveLock.SoftwareCode
+    Set(ByVal Value As String)
 
-    End Sub
-    '===============================================================================
-    ' Name: Sub Acquire
-    ' Input:
-    '   ByRef strMsg As String - String returned by Activelock
-    ' Output: None
-    ' Purpose: Acquires a valid license token.
-    ' <p>If no valid license can be found, an appropriate error will be raised, specifying the cause.
-    ' Remarks: None
-    '===============================================================================
-    Public Sub Acquire(Optional ByRef strMsg As String = "") Implements _IActiveLock.Acquire
+    End Set
+  End Property
+  '===============================================================================
+  ' Name: Property Get SoftwareVersion
+  ' Input: None
+  ' Output:
+  '   String - Software Version
+  ' Purpose: Returns the Software Version being used in this instance.
+  ' Remarks: None
+  '===============================================================================
+  Public Property SoftwareVersion() As String Implements _IActiveLock.SoftwareVersion
+    Get
+      SoftwareVersion = String.Empty
+    End Get
+    Set(ByVal Value As String)
 
-    End Sub
-    '===============================================================================
-    ' Name: Sub ResetTrial
-    ' Input: None
-    ' Output: None
-    ' Purpose: Resets the Trial Mode
-    ' Remarks: None
-    '===============================================================================
-    Public Sub ResetTrial() Implements _IActiveLock.ResetTrial
+    End Set
+  End Property
+  '===============================================================================
+  ' Name: Property Let KeyStoreType
+  ' Input:
+  '   ByVal KeyStore As LicStoreType - Key store type
+  ' Output: None
+  ' Purpose: Specifies the key store type.
+  ' Remarks: None
+  '===============================================================================
+  Public WriteOnly Property KeyStoreType() As LicStoreType Implements _IActiveLock.KeyStoreType
+    Set(ByVal Value As LicStoreType)
 
-    End Sub
-    '===============================================================================
-    ' Name: Sub KillTrial
-    ' Input: None
-    ' Output: None
-    ' Purpose: Kills the Trial Mode
-    ' Remarks: None
-    '===============================================================================
-    Public Sub KillTrial() Implements _IActiveLock.KillTrial
+    End Set
+  End Property
+  '===============================================================================
+  ' Name: Property Let KeyStorePath
+  ' Input:
+  '   ByVal sPath As String - File path and name
+  ' Output: None
+  ' Purpose: Specifies the key store path.
+  ' Remarks: None
+  '===============================================================================
+  ' @param sPath  The path to be used for the specified KeyStoreType.
+  '               e.g. If <a href="IActiveLock.LicStoreType.html">alsFile</a> is used for <a href="IActiveLock.Let.KeyStoreType.html">KeyStoreType</a>,
+  '               then <code>Path</code> specifies the path to the license file.
+  '               If <a href="IActiveLock.LicStoreType.html">alsRegistry</a> is used,
+  '               the Path specifies the Registry hive where license information is stored.
+  Public WriteOnly Property KeyStorePath() As String Implements _IActiveLock.KeyStorePath
+    Set(ByVal Value As String)
 
-    End Sub
+    End Set
+  End Property
+  '===============================================================================
+  ' Name: Property Get InstallationCode
+  ' Input:
+  '   ByVal User As String - Optionally tailors the installation code specific to this user.
+  ' Output:
+  '   String - Installation Code
+  ' Purpose: Returns the installation-specific code needed to obtain the liberation key.
+  ' Remarks: None
+  '===============================================================================
+  Public ReadOnly Property InstallationCode(Optional ByVal User As String = vbNullString, Optional ByVal Lic As ProductLicense = Nothing) As String Implements _IActiveLock.InstallationCode
+    Get
+      InstallationCode = String.Empty
+    End Get
+  End Property
+  '===============================================================================
+  ' Name: Property Let AutoRegisterKeyPath
+  ' Input:
+  '   ByVal sPath As String - Full path to where the liberation file may reside.
+  ' Output: None
+  ' Purpose: Specifies the file path that contains the liberation key.
+  ' <p>If this file exists, ActiveLock will attempt to register the key automatically during its initialization.
+  ' <p>Upon successful registration, the liberation file WILL be deleted.
+  ' Remarks: Note: This property is only effective if it is set prior to calling <code>Init</code>.
+  '===============================================================================
+  Public WriteOnly Property AutoRegisterKeyPath() As String Implements _IActiveLock.AutoRegisterKeyPath
+    Set(ByVal Value As String)
+
+    End Set
+  End Property
+  '===============================================================================
+  ' Name: Property Get EventNotifier
+  ' Input: None
+  ' Output:
+  '   ActiveLockEventNotifier - An object that can be used as a COM event source. i.e. can be used in <code>WithEvents</code> statements in VB.
+  ' Purpose: Retrieves the event notifier.
+  ' <p>Client applications uses this Notifier to handle event notifications sent by ActiveLock,
+  ' including license property validation and encryption events.
+  ' Remarks: See ActiveLockEventNotifier for more information.
+  '===============================================================================
+  Public ReadOnly Property EventNotifier() As ActiveLockEventNotifier Implements _IActiveLock.EventNotifier
+    Get
+      EventNotifier = Nothing
+    End Get
+  End Property
+  '===============================================================================
+  ' Name: Property Get UsedDays
+  ' Input: None
+  ' Output:
+  '   Long - Used days for the license
+  ' Purpose: Returns the number of days this product has been used since its registration.
+  ' Remarks: None
+  '===============================================================================
+  Public ReadOnly Property UsedDays() As Integer Implements _IActiveLock.UsedDays
+    Get
+
+    End Get
+  End Property
+  '===============================================================================
+  ' Name: Property Get RegisteredDate
+  ' Input: None
+  ' Output:
+  '   String - Date on which the product is registered.
+  ' Purpose: Retrieves the registration date.
+  ' Remarks: None
+  '===============================================================================
+  Public ReadOnly Property RegisteredDate() As String Implements _IActiveLock.RegisteredDate
+    Get
+      RegisteredDate = String.Empty
+    End Get
+  End Property
+  '===============================================================================
+  ' Name: Property Get RegisteredUser
+  ' Input: None
+  ' Output:
+  '   String - Registered user name
+  ' Purpose: Returns the registered user.
+  ' Remarks: None
+  '===============================================================================
+  Public ReadOnly Property RegisteredUser() As String Implements _IActiveLock.RegisteredUser
+    Get
+      RegisteredUser = String.Empty
+    End Get
+  End Property
+  '===============================================================================
+  ' Name: Property Get ExpirationDate
+  ' Input: None
+  ' Output:
+  '   String - Date on which the license will expire.
+  ' Purpose: Retrieves the expiration date.
+  ' Remarks: None
+  '===============================================================================
+  Public ReadOnly Property ExpirationDate() As String Implements _IActiveLock.ExpirationDate
+    Get
+      ExpirationDate = String.Empty
+    End Get
+  End Property
+  '===============================================================================
+  ' Name: Function LockCode
+  ' Input:
+  '   ByRef Lic As ProductLicense - Product License for which to compute the lock code.
+  ' Output:
+  '   String - Lock code
+  ' Purpose: Interface Method. Computes a lock code corresponding to the specified Lock Types, License Class, etc.
+  ' Optionally, if a product license is specified, then a lock string specific to that license is returned.
+  ' Remarks: None
+  '===============================================================================
+  Public Function LockCode(Optional ByRef Lic As ProductLicense = Nothing) As String Implements _IActiveLock.LockCode
+    LockCode = String.Empty
+  End Function
+  '===============================================================================
+  ' Name: Sub Register
+  ' Input:
+  '   ByVal LibKey As String - Liberation key
+  ' Output: None
+  ' Purpose: Registers the product using the specified liberation key.
+  ' Remarks: None
+  '===============================================================================
+  Public Sub Register(ByVal LibKey As String) Implements _IActiveLock.Register
+
+  End Sub
+  '===============================================================================
+  ' Name: Function Transfer
+  ' Input:
+  '   ByVal InstallCode As String - Installation Code generated from the other computer.
+  ' Output:
+  '   String - The liberation key tailored for the request code generated from the other machine.
+  ' Purpose: Transfers the current license to another computer.
+  ' Remarks: Not implemented yet.
+  '===============================================================================
+  Public Function Transfer(ByVal InstallCode As String) As String Implements _IActiveLock.Transfer
+    Transfer = String.Empty
+  End Function
+  '===============================================================================
+  ' Name: Sub Init
+  ' Input:
+  '    autoLicString As String - license key if autoregister is successful
+  ' Output: None
+  ' Purpose: Initializes ActiveLock before use. Some of the routines, including <a href="IActiveLock.Acquire.html">Acquire()</a>
+  ' and <a href="IActiveLock.Register.html">Register()</a> requires <code>Init()</code> to be called first.
+  ' Remarks: None
+  '===============================================================================
+  Public Sub Init(Optional ByVal strPath As String = "", Optional ByRef autoLicString As String = "") Implements _IActiveLock.Init
+
+  End Sub
+  '===============================================================================
+  ' Name: Sub Acquire
+  ' Input:
+  '   ByRef strMsg As String - String returned by Activelock
+  ' Output: None
+  ' Purpose: Acquires a valid license token.
+  ' <p>If no valid license can be found, an appropriate error will be raised, specifying the cause.
+  ' Remarks: None
+  '===============================================================================
+  Public Sub Acquire(Optional ByRef strMsg As String = "") Implements _IActiveLock.Acquire
+
+  End Sub
+  '===============================================================================
+  ' Name: Sub ResetTrial
+  ' Input: None
+  ' Output: None
+  ' Purpose: Resets the Trial Mode
+  ' Remarks: None
+  '===============================================================================
+  Public Sub ResetTrial() Implements _IActiveLock.ResetTrial
+
+  End Sub
+  '===============================================================================
+  ' Name: Sub KillTrial
+  ' Input: None
+  ' Output: None
+  ' Purpose: Kills the Trial Mode
+  ' Remarks: None
+  '===============================================================================
+  Public Sub KillTrial() Implements _IActiveLock.KillTrial
+
+  End Sub
 End Class

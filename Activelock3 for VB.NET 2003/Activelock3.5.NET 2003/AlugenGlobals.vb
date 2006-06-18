@@ -1,4 +1,4 @@
-Option Strict Off
+Option Strict On
 Option Explicit On
 'Class instancing was changed to public
 <System.Runtime.InteropServices.ProgId("AlugenGlobals_NET.AlugenGlobals")> Public Class AlugenGlobals
@@ -64,30 +64,43 @@ Option Explicit On
     ' Purpose: Returns a new Generator instance
     ' Remarks: None
     '===============================================================================
-    Public Function GeneratorInstance() As _IALUGenerator
-        GeneratorInstance = New Generator
-    End Function
+  Public Function GeneratorInstance(ByVal pProductStorageType As IActiveLock.ProductsStoreType) As _IALUGenerator
 
-    '===============================================================================
-    ' Name: Function CreateProductInfo
-    ' Input:
-    '   ByVal name As String - Product name
-    '   ByVal Ver As String - Product version
-    '   ByVal VCode As String - Product VCODE (public key)
-    '   ByVal GCode As String - Product GCODE (private key)
-    ' Output:
-    '   ProductInfo - Product information
-    ' Purpose: Instantiates a new ProductInfo object
-    ' Remarks: None
-    '===============================================================================
-    Public Function CreateProductInfo(ByVal Name As String, ByVal Ver As String, ByVal VCode As String, ByVal GCode As String) As ProductInfo
-        Dim ProdInfo As New ProductInfo
-        With ProdInfo
-            .Name = name
-            .Version = Ver
-            .VCode = VCode
-            .GCode = GCode
-        End With
-        CreateProductInfo = ProdInfo
-    End Function
+    Select Case pProductStorageType
+      Case IActiveLock.ProductsStoreType.alsINIFile
+        GeneratorInstance = New INIGenerator
+      Case IActiveLock.ProductsStoreType.alsXMLFile
+        GeneratorInstance = New XMLGenerator
+      Case IActiveLock.ProductsStoreType.alsMDBFile
+        GeneratorInstance = New MDBGenerator
+        'TODO - MSSQLGenerator
+        'Case ProductsStoreType.alsMSSQL
+        '  Set GeneratorInstance = New MSSQLGenerator
+      Case Else
+        Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNotImplemented, ACTIVELOCKSTRING, STRNOTIMPLEMENTED)
+    End Select
+  End Function
+
+  '===============================================================================
+  ' Name: Function CreateProductInfo
+  ' Input:
+  '   ByVal name As String - Product name
+  '   ByVal Ver As String - Product version
+  '   ByVal VCode As String - Product VCODE (public key)
+  '   ByVal GCode As String - Product GCODE (private key)
+  ' Output:
+  '   ProductInfo - Product information
+  ' Purpose: Instantiates a new ProductInfo object
+  ' Remarks: None
+  '===============================================================================
+  Public Function CreateProductInfo(ByVal Name As String, ByVal Ver As String, ByVal VCode As String, ByVal GCode As String) As ProductInfo
+    Dim ProdInfo As New ProductInfo
+    With ProdInfo
+      .Name = Name
+      .Version = Ver
+      .VCode = VCode
+      .GCode = GCode
+    End With
+    CreateProductInfo = ProdInfo
+  End Function
 End Class

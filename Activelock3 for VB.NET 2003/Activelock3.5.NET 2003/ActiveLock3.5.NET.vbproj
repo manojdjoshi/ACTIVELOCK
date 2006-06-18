@@ -146,11 +146,6 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "Generator.vb"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Globals3.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -172,6 +167,16 @@
                 />
                 <File
                     RelPath = "INIFile3.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "INIGenerator.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "MDBGenerator.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -236,6 +241,11 @@
                 />
                 <File
                     RelPath = "RegistryKeyStore.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "XMLGenerator.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
