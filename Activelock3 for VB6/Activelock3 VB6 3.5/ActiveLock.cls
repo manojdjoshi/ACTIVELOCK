@@ -127,6 +127,7 @@ Private mSoftwarePassword As String
 Private mSoftwareCode As String
 Private mRegisteredLevel As String
 Private mLockTypes As ALLockTypes
+Private mLicenseKeyTypes As ALLicenseKeyTypes
 Private mUsedLockTypes As ALLockTypes
 Private mTrialType As Long
 Private mTrialLength As Long
@@ -177,6 +178,18 @@ End Function
 '===============================================================================
 Private Property Let IActiveLock_LockType(ByVal RHS As ALLockTypes)
     mLockTypes = RHS
+End Property
+
+'===============================================================================
+' Name: Property Let IActiveLock_LicenseKeyType
+' Input:
+'   ByVal RHS As ALLicenseKeyTypes - ALLicenseKeyTypes type
+' Output: None
+' Purpose: Specifies the ALLicenseKeyTypes type
+' Remarks: None
+'===============================================================================
+Private Property Let IActiveLock_LicenseKeyType(ByVal RHS As ALLicenseKeyTypes)
+    mLicenseKeyTypes = RHS
 End Property
 
 '===============================================================================
@@ -855,52 +868,61 @@ End Property
 ' Remarks: None
 '===============================================================================
 Private Property Get IActiveLock_InstallationCode(Optional ByVal User As String = "", Optional Lic As ProductLicense = Nothing) As String
-    ' Generate Request code to Lock
     
-    Dim strReq As String, strLock  As String
+    'Before we generate the installation code, let's check if this app is using a short key
+    If mLicenseKeyTypes = alsShortKeyMD5 Then
+        IActiveLock_InstallationCode = GenerateShortSerial(mSoftwareName & mSoftwareVer & mSoftwarePassword, modHardware.GetHDSerialFirmware())
     
-    'Restrict user name to 2000 characters; need more? why?
-    If Len(User) > 2000 Then
-        Err.Raise ActiveLockErrCodeConstants.alerrUserNameTooLong, ACTIVELOCKSTRING, STRUSERNAMETOOLONG
-    End If
-    
-    ' New in v3.1
-    ' Version 3.1 and above of Activelock will append the "+" sign
-    ' in front of the installation code whenever lockNone is used or
-    ' lockType is not specified in the protected app.
-    ' When "+" is not found at the beginning of the installation code,
-    ' Alugen will not allow users pick the hardware lock method since this
-    ' corresponds to an installation code which
-    ' utilizes a hardware lock option specified inside the protected app.
-    If mLockTypes = lockNone Then
-        strLock = "+" & IActiveLock_LockCode()
-    Else
-        strLock = IActiveLock_LockCode()
-    End If
-    
-    ' combine with user name
-    strReq = strLock & vbLf & User
-    
-    ' base-64 encode the request
-    Dim strReq2 As String
-    strReq2 = modBase64.Base64_Encode(strReq)
-    IActiveLock_InstallationCode = strReq2
+    ElseIf mLicenseKeyTypes = alsALCryptoRSA Then
 
-    ' New in v3.1
-    ' If there's a license and the LicenseCode exists, then use it
-    ' LicenseCode is actually the Installation Code modified by Alugen
-    ' LicenseCode is appended to the end of the lic file so that we can know
-    ' Alugen specified the hardware keys, and LockType
-    ' was not specified inside the protected app
-    If Not Lic Is Nothing Then
-        If Lic.LicenseCode <> "" Then
-            IActiveLock_InstallationCode = Lic.LicenseCode
-            If Left(IActiveLock_InstallationCode, 1) = "+" Then IActiveLock_InstallationCode = Mid(IActiveLock_InstallationCode, 2)
-        ' We won't do the following in order to maintain backwards compatibility with existing licenses
-        'ElseIf Lic.LicenseCode = "" And mLockTypes = lockNone Then
-        '    Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
+        ' Generate Request code to Lock
+        Dim strReq As String, strLock  As String
+        
+        'Restrict user name to 2000 characters; need more? why?
+        If Len(User) > 2000 Then
+            Err.Raise ActiveLockErrCodeConstants.alerrUserNameTooLong, ACTIVELOCKSTRING, STRUSERNAMETOOLONG
         End If
+        
+        ' New in v3.1
+        ' Version 3.1 and above of Activelock will append the "+" sign
+        ' in front of the installation code whenever lockNone is used or
+        ' lockType is not specified in the protected app.
+        ' When "+" is not found at the beginning of the installation code,
+        ' Alugen will not allow users pick the hardware lock method since this
+        ' corresponds to an installation code which
+        ' utilizes a hardware lock option specified inside the protected app.
+        If mLockTypes = lockNone Then
+            strLock = "+" & IActiveLock_LockCode()
+        Else
+            strLock = IActiveLock_LockCode()
+        End If
+        
+        ' combine with user name
+        strReq = strLock & vbLf & User
+        
+        ' base-64 encode the request
+        Dim strReq2 As String
+        strReq2 = modBase64.Base64_Encode(strReq)
+        IActiveLock_InstallationCode = strReq2
+    
+        ' New in v3.1
+        ' If there's a license and the LicenseCode exists, then use it
+        ' LicenseCode is actually the Installation Code modified by Alugen
+        ' LicenseCode is appended to the end of the lic file so that we can know
+        ' Alugen specified the hardware keys, and LockType
+        ' was not specified inside the protected app
+        If Not Lic Is Nothing Then
+            If Lic.LicenseCode <> "" Then
+                IActiveLock_InstallationCode = Lic.LicenseCode
+                If Left(IActiveLock_InstallationCode, 1) = "+" Then IActiveLock_InstallationCode = Mid(IActiveLock_InstallationCode, 2)
+            ' We won't do the following in order to maintain backwards compatibility with existing licenses
+            'ElseIf Lic.LicenseCode = "" And mLockTypes = lockNone Then
+            '    Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
+            End If
+        End If
+    
     End If
+    
 End Property
 
 '===============================================================================

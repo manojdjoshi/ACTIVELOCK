@@ -13,7 +13,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = True
 '*   ActiveLock
 '*   Copyright 1998-2002 Nelson Ferraz
-'*   Copyright 2005 The ActiveLock Software Group (ASG)
+'*   Copyright 2003-2006 The ActiveLock Software Group (ASG)
 '*   All material is the property of the contributing authors.
 '*
 '*   Redistribution and use in source and binary forms, with or without
@@ -207,48 +207,11 @@ Attribute VB_Exposed = True
 ' Properties:
 ' Methods:
 ' Started: 21.04.2005
-' Modified: 08.05.2005
+' Modified: 06.19.2006
 '===============================================================================
 
-' @author activelock-admins
-' @version 3.0.0
-' @date 20050808
-'
-'* ///////////////////////////////////////////////////////////////////////
-'  /                        MODULE TO DO LIST                            /
-'  ///////////////////////////////////////////////////////////////////////
-'
-'  ///////////////////////////////////////////////////////////////////////
-'  /                        MODULE CHANGE LOG                            /
-'  ///////////////////////////////////////////////////////////////////////
-' @history
-' <pre>
-'   07.07.03 - mcrute   - Updated the header comments for this file.
-'   07.20.03 - th2tran  - Added EventNotifier used for firing COM events.
-'   08.03.03 - th2tran  - VBDox&#39;ed this interface.
-'   09.21.03 - th2tran  - Changed Register(Lic As ProductLicense) subroutine to Register(ByVal LibKey As String)
-'   10.11.03 - th2tran  - Major updates to VBDOX comments...
-'                       - Removed VBDox regarding key generation, now taken care by ALUGEN.
-'                       - Added VB doc Attributes for showing in VB Object Browser
-'   11.02.03 - th2tran  - LicFlags Enum and its corresponding property don&#39;t belong here. Moved its definition to ProductLicense.
-'                       - Added InstallationCode and RegisteredUser properties
-'                       - Updated VBDox with new/simpler registration instructions.
-'   04.10.04 - th2tran  - Added ByVal modifier to parameter declarations for better compatibility with other COM languages (like VC++)
-'   04.17.04 - th2tran  - Removed the ParamArray thingy in Init() since it doesn't seem very forward-compatible.
-'                         It's inconceivable to account for all possible future requirements, and if we try, we'll end up
-'                         complicating ourselves in terms of compatibility.
-'                         Better to do it via property accessors (such as the AutoRegisterKeyPath property), and
-'                         leave Init() with no parameters.
-'   04.21.04 - th2tran  - Added AutoRegisterKeyPath property
-'   07.11.04 - th2tran  - Fixed bad alsRegistry href in vbdox
-' </pre>
-
-'  ///////////////////////////////////////////////////////////////////////
-'  /                MODULE CODE BEGINS BELOW THIS LINE                   /
-'  ///////////////////////////////////////////////////////////////////////
-
 Option Explicit
-
+'###############################################################
 
 ' License Lock Types.  Values can be combined (OR&#39;ed) together.
 '
@@ -282,10 +245,20 @@ Public Enum ALLockTypes
 End Enum
 '    lockCustom = 128
 '    lockSID = 512
-'
+
 '###############################################################
     
+' License Key Type specifies the length/type
+'
+' @param alsALCryptoRSA    ' 1024-bit Long keys by RSA via ALCrypto DLL
+' @param alsShortKeyMD5    ' Short license keys by MD5
+Public Enum ALLicenseKeyTypes
+    alsALCryptoRSA = 0
+    alsShortKeyMD5 = 1
+End Enum
 
+'###############################################################
+    
 ' License Store Type specifies where to store license keys
 '
 ' @param alsRegistry    ' Store in Windows Registry
@@ -339,6 +312,7 @@ Public Enum ALTrialHideTypes
     trialRegistry = 4
 End Enum
 
+
 '===============================================================================
 ' Name: Property Get RegisteredLevel
 ' Input: None
@@ -362,6 +336,18 @@ Public Property Let LockType(ByVal LockTypes As ALLockTypes)
 Attribute LockType.VB_Description = "Lock type for this instance of ActiveLock."
 
 End Property
+'===============================================================================
+' Name: Property Let LicenseKeyType
+' Input:
+'    ByVal LicenseKeyTypes As ALLicenseKeyType - License Key Types object
+' Output: None
+' Purpose: Interface Property. Specifies the license key type for this instance of ActiveLock.
+' Remarks: None
+'===============================================================================
+Public Property Let LicenseKeyType(ByVal LicenseKeyTypes As ALLicenseKeyTypes)
+
+End Property
+
 '===============================================================================
 ' Name: Property Let TrialHideType
 ' Input:
@@ -409,6 +395,7 @@ End Property
 Public Property Get LockType() As ALLockTypes
 
 End Property
+
 '===============================================================================
 ' Name: Property Get UsedLockType
 ' Input: None

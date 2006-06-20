@@ -196,6 +196,28 @@ Public Declare Function GeneralWinDirApi Lib "kernel32" _
 Public Declare Function GetSystemDirectory Lib "kernel32.dll" Alias "GetSystemDirectoryA" _
     (ByVal lpBuffer As String, ByVal nSize As Long) As Long
 
+'*******************************************************************************
+' Sub GenerateShortSerial
+'
+' Input:
+' appNameVersionPassword
+' HDDfirmwareSerial
+'
+' DESCRIPTION:
+' Generates a Short Key (Serial Number)
+'*******************************************************************************
+Public Function GenerateShortSerial(ByVal appNameVersionPassword As String, ByVal HDDfirmwareSerial As String) As String
+    Dim oReg As clsShortSerial
+    Dim sKey As String
+    
+    Set oReg = New clsShortSerial
+    sKey = oReg.GenerateKey(appNameVersionPassword, HDDfirmwareSerial)
+    GenerateShortSerial = sKey
+    ' If longer serial is used, possible to break up into sections
+    'Left(sKey, 4) & "-" & Mid(sKey, 5, 4) & "-" & Mid(sKey, 9, 4) & "-" & Mid(sKey, 13, 4)
+    
+    Set oReg = Nothing
+End Function
 
 '===============================================================================
 ' Name: Function TrimNulls
@@ -404,7 +426,7 @@ End Function
 ' Remarks: None
 '===============================================================================
 Public Function LocalTimeZone(ByVal returnType As TimeZoneReturn) As Variant
-    Dim X As Long
+    Dim x As Long
     Dim tzi As TIME_ZONE_INFORMATION
     Dim strName As String
     Dim bDST As Boolean
@@ -420,8 +442,8 @@ Public Function LocalTimeZone(ByVal returnType As TimeZoneReturn) As Variant
     End Select
     
     ' name terminates with null
-    X = InStr(strName, vbNullChar)
-    If X > 0 Then strName = Left$(strName, X - 1)
+    x = InStr(strName, vbNullChar)
+    If x > 0 Then strName = Left$(strName, x - 1)
             
     If returnType = DST_Active Then
         LocalTimeZone = bDST
@@ -433,10 +455,10 @@ Public Function LocalTimeZone(ByVal returnType As TimeZoneReturn) As Variant
     
     If returnType = TimeZoneCode Then
         LocalTimeZone = Left(strName, 1)
-        X = InStr(1, strName, " ")
-        Do While X > 0
-            LocalTimeZone = LocalTimeZone & Mid(strName, X + 1, 1)
-            X = InStr(X + 1, strName, " ")
+        x = InStr(1, strName, " ")
+        Do While x > 0
+            LocalTimeZone = LocalTimeZone & Mid(strName, x + 1, 1)
+            x = InStr(x + 1, strName, " ")
         Loop
         LocalTimeZone = Trim(LocalTimeZone)
     End If
