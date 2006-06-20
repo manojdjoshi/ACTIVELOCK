@@ -1,6 +1,6 @@
 VERSION 5.00
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "COMCTL32.OCX"
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Begin VB.Form frmMain 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "ALTestApp - ActiveLock3 Test Application"
@@ -58,11 +58,11 @@ Begin VB.Form frmMain
       TabCaption(1)   =   "Sample App"
       TabPicture(1)   =   "frmMain.frx":0CE6
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "fraViewport"
-      Tab(1).Control(1)=   "Frame1"
+      Tab(1).Control(0)=   "lblLockStatus"
+      Tab(1).Control(1)=   "lblLockStatus2"
       Tab(1).Control(2)=   "lblTrialInfo"
-      Tab(1).Control(3)=   "lblLockStatus2"
-      Tab(1).Control(4)=   "lblLockStatus"
+      Tab(1).Control(3)=   "Frame1"
+      Tab(1).Control(4)=   "fraViewport"
       Tab(1).ControlCount=   5
       Begin VB.Frame fraViewport 
          BorderStyle     =   0  'None
@@ -153,7 +153,7 @@ Begin VB.Form frmMain
       Begin VB.Frame fraReg 
          Caption         =   "Register"
          ForeColor       =   &H00FF0000&
-         Height          =   4155
+         Height          =   4380
          Left            =   120
          TabIndex        =   17
          Top             =   3240
@@ -164,7 +164,7 @@ Begin VB.Form frmMain
             Picture         =   "frmMain.frx":0D3F
             Style           =   1  'Graphical
             TabIndex        =   47
-            Top             =   1680
+            Top             =   2070
             Width           =   345
          End
          Begin VB.CommandButton cmdCopy 
@@ -183,7 +183,7 @@ Begin VB.Form frmMain
             Left            =   8220
             TabIndex        =   43
             ToolTipText     =   "Kill the License"
-            Top             =   2520
+            Top             =   2880
             Width           =   1095
          End
          Begin VB.TextBox txtUser 
@@ -214,7 +214,7 @@ Begin VB.Form frmMain
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Height          =   765
+            Height          =   1080
             Left            =   1440
             MultiLine       =   -1  'True
             TabIndex        =   8
@@ -228,7 +228,7 @@ Begin VB.Form frmMain
             Left            =   8220
             TabIndex        =   11
             ToolTipText     =   "Register the License"
-            Top             =   2100
+            Top             =   2475
             Width           =   1095
          End
          Begin VB.TextBox txtLibKeyIn 
@@ -247,7 +247,7 @@ Begin VB.Form frmMain
             MultiLine       =   -1  'True
             ScrollBars      =   3  'Both
             TabIndex        =   10
-            Top             =   1380
+            Top             =   1710
             Width           =   6675
          End
          Begin VB.Label Label13 
@@ -269,9 +269,9 @@ Begin VB.Form frmMain
          Begin VB.Label Label4 
             Caption         =   "Liberation Key:"
             Height          =   255
-            Left            =   120
+            Left            =   135
             TabIndex        =   18
-            Top             =   1380
+            Top             =   1710
             Width           =   1335
          End
       End
@@ -747,7 +747,11 @@ Private Sub Form_Load()
         
         ' New in v3.3
         ' This should be set to protect yourself against ResetTrial abuse
+        ' The password is also used by the Short License Key type below
         .SoftwarePassword = Chr(99) & Chr(111) & Chr(111) & Chr(108)
+        
+        ' New in v3.5
+        .LicenseKeyType = alsShortKeyMD5
         
         ' New in v3.1 - Trial Feature
         .TrialType = trialDays
@@ -1057,19 +1061,23 @@ End Function
 ' Key Request and Registration Functionalities
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Private Sub cmdReqGen_Click()
+    Dim instCode As String
     ' Generate Request code to Lock
     If MyActiveLock Is Nothing Then
         noTrialThisTime = True
         Form_Load
     End If
-'    If FileExist(strKeyStorePath) And FileLen(strKeyStorePath) <> 0 Then
-'        MsgBox "There's an active license file already." & vbCrLf & _
-'            "The LockTypes are acquired from the types used in the license file." & vbCrLf & vbCrLf & _
-'            "If you don't want this, you must kill the existing license first.", vbInformation
-'    End If
+    
     If txtRegStatus.Text <> "Registered" Then txtRegStatus.Text = ""
     If Not IsNumeric(txtUsedDays.Text) Then txtUsedDays.Text = ""
-    txtReqCodeGen.Text = MyActiveLock.InstallationCode(txtUser)
+    instCode = MyActiveLock.InstallationCode(txtUser)
+    If Len(instCode) = 8 Then
+        instCode = "You must send all of the following for authorization:" & vbCrLf & _
+            "Serial Number: " & instCode & vbCrLf & _
+            "Application Name: " & txtName.Text & vbCrLf & _
+            "Application Version: " & txtVersion.Text
+    End If
+    txtReqCodeGen.Text = instCode
 End Sub
 
 Private Sub cmdRegister_Click()
