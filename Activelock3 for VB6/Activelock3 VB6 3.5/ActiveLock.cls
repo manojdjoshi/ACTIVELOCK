@@ -167,7 +167,6 @@ Private Function Make64ByteChunks(strdata As String) As String
     Make64ByteChunks = sResult
 End Function
 
-
 '===============================================================================
 ' Name: Property Let IActiveLock_LockType
 ' Input:
@@ -732,6 +731,71 @@ Private Sub IActiveLock_KillTrial()
         trialStatus = ExpireTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, mSoftwarePassword)
     End If
 End Sub
+Private Function IActiveLock_GenerateShortKey(ByVal SoftwareCode As String, ByVal SerialNumber As String, ByVal LicenseeAndRegisteredLevel As String, ByVal Expiration As String, ByVal LicType As ActiveLock3.ALLicType, Optional ByVal MaxUsers As Integer = 1) As String
+
+    On Error GoTo ErrHandler
+    
+    Dim m_Key As clsShortLicenseKey
+    Set m_Key = New clsShortLicenseKey
+    
+    m_Key.AddSwapBits 0, 0, 1, 0
+    m_Key.AddSwapBits 0, 2, 1, 1
+    m_Key.AddSwapBits 0, 4, 2, 0
+    m_Key.AddSwapBits 0, 5, 2, 1
+    m_Key.AddSwapBits 2, 0, 3, 0
+    m_Key.AddSwapBits 2, 6, 3, 1
+    m_Key.AddSwapBits 2, 7, 1, 3
+
+    Dim oReg As clsShortSerial
+    Set oReg = New clsShortSerial
+    Dim sKey As String
+    Dim m_ProdCode As Long
+    
+    
+    sKey = oReg.GenerateKey("", SoftwareCode)
+    m_ProdCode = CLng(Left(sKey, 4))
+    MsgBox SoftwareCode
+    MsgBox m_ProdCode
+    MsgBox LicenseeAndRegisteredLevel
+    MsgBox Expiration
+    MsgBox MaxUsers
+    MsgBox LicType
+    ' create a new key
+    IActiveLock_GenerateShortKey = m_Key.CreateKey(SerialNumber, _
+        LicenseeAndRegisteredLevel, m_ProdCode, Expiration, _
+        MakeWord(CStr(MaxUsers), CStr(LicType)))
+
+    Exit Function
+ErrHandler:
+    Set oReg = Nothing
+    Set m_Key = Nothing
+    
+End Function
+
+'*******************************************************************************
+' Sub GenerateShortSerial
+'
+' Input:
+' appNameVersionPassword
+' HDDfirmwareSerial
+'
+' DESCRIPTION:
+' Generates a Short Key (Serial Number)
+'*******************************************************************************
+Private Function IActivelock_GenerateShortSerial(ByVal HDDfirmwareSerial As String) As String
+    Dim oReg As clsShortSerial
+    Dim sKey As String
+    
+    Set oReg = New clsShortSerial
+    sKey = oReg.GenerateKey(mSoftwareName & mSoftwareVer & mSoftwarePassword, HDDfirmwareSerial)
+    IActivelock_GenerateShortSerial = sKey
+    ' If longer serial is used, possible to break up into sections
+    'Left(sKey, 4) & "-" & Mid(sKey, 5, 4) & "-" & Mid(sKey, 9, 4) & "-" & Mid(sKey, 13, 4)
+    
+    Set oReg = Nothing
+End Function
+
+
 '===============================================================================
 ' Name: Sub IActiveLock_ResetTrial
 ' Input: None
@@ -871,7 +935,7 @@ Private Property Get IActiveLock_InstallationCode(Optional ByVal User As String 
     
     'Before we generate the installation code, let's check if this app is using a short key
     If mLicenseKeyTypes = alsShortKeyMD5 Then
-        IActiveLock_InstallationCode = GenerateShortSerial(mSoftwareName & mSoftwareVer & mSoftwarePassword, modHardware.GetHDSerialFirmware())
+        IActiveLock_InstallationCode = IActivelock_GenerateShortSerial(modHardware.GetHDSerialFirmware())
     
     ElseIf mLicenseKeyTypes = alsALCryptoRSA Then
 

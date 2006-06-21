@@ -196,27 +196,25 @@ Public Declare Function GeneralWinDirApi Lib "kernel32" _
 Public Declare Function GetSystemDirectory Lib "kernel32.dll" Alias "GetSystemDirectoryA" _
     (ByVal lpBuffer As String, ByVal nSize As Long) As Long
 
-'*******************************************************************************
-' Sub GenerateShortSerial
-'
-' Input:
-' appNameVersionPassword
-' HDDfirmwareSerial
-'
-' DESCRIPTION:
-' Generates a Short Key (Serial Number)
-'*******************************************************************************
-Public Function GenerateShortSerial(ByVal appNameVersionPassword As String, ByVal HDDfirmwareSerial As String) As String
-    Dim oReg As clsShortSerial
-    Dim sKey As String
+
+Public Function MakeWord(ByVal LoByte As Byte, ByVal HiByte As Byte) As Integer
+'===============================================================================
+'   MakeWord - Packs 2 8-bit integers into a 16-bit integer.
+'===============================================================================
+
+    If (HiByte And &H80) <> 0 Then
+        MakeWord = ((HiByte * 256&) + LoByte) Or &HFFFF0000
+    Else
+        MakeWord = (HiByte * 256) + LoByte
+    End If
     
-    Set oReg = New clsShortSerial
-    sKey = oReg.GenerateKey(appNameVersionPassword, HDDfirmwareSerial)
-    GenerateShortSerial = sKey
-    ' If longer serial is used, possible to break up into sections
-    'Left(sKey, 4) & "-" & Mid(sKey, 5, 4) & "-" & Mid(sKey, 9, 4) & "-" & Mid(sKey, 13, 4)
-    
-    Set oReg = Nothing
+End Function
+
+Public Function HiByte(ByVal w As Integer) As Byte
+    HiByte = (w And &HFF00&) \ 256
+End Function
+Public Function LoByte(ByVal w As Integer) As Byte
+    LoByte = w And &HFF
 End Function
 
 '===============================================================================

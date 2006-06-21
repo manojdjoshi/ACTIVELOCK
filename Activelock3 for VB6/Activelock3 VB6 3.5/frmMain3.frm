@@ -1,8 +1,8 @@
 VERSION 5.00
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Begin VB.Form frmMain 
    Appearance      =   0  'Flat
    BorderStyle     =   1  'Fixed Single
@@ -13,6 +13,7 @@ Begin VB.Form frmMain
    ClientWidth     =   9735
    Icon            =   "frmMain3.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    ScaleHeight     =   8190
    ScaleWidth      =   9735
    StartUpPosition =   3  'Windows Default
@@ -34,7 +35,6 @@ Begin VB.Form frmMain
             Object.Width           =   17119
             Text            =   "Ready"
             TextSave        =   "Ready"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -70,16 +70,23 @@ Begin VB.Form frmMain
       Tab(0).Control(7)=   "cmdValidate"
       Tab(0).Control(7).Enabled=   0   'False
       Tab(0).ControlCount=   8
-      TabCaption(1)   =   "&License Key Generator"
+      TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "cmdViewArchive"
-      Tab(1).Control(1)=   "cmbRegisteredLevel"
-      Tab(1).Control(2)=   "cmbProds"
+      Tab(1).Control(0)=   "Label8"
+      Tab(1).Control(0).Enabled=   0   'False
+      Tab(1).Control(1)=   "Label15"
+      Tab(1).Control(1).Enabled=   0   'False
+      Tab(1).Control(2)=   "cmdViewLevel"
+      Tab(1).Control(2).Enabled=   0   'False
       Tab(1).Control(3)=   "frmKeyGen"
-      Tab(1).Control(4)=   "cmdViewLevel"
-      Tab(1).Control(5)=   "Label15"
-      Tab(1).Control(6)=   "Label8"
+      Tab(1).Control(3).Enabled=   0   'False
+      Tab(1).Control(4)=   "cmbProds"
+      Tab(1).Control(4).Enabled=   0   'False
+      Tab(1).Control(5)=   "cmbRegisteredLevel"
+      Tab(1).Control(5).Enabled=   0   'False
+      Tab(1).Control(6)=   "cmdViewArchive"
+      Tab(1).Control(6).Enabled=   0   'False
       Tab(1).ControlCount=   7
       Begin VB.CommandButton cmdValidate 
          Caption         =   "&Validate"
@@ -372,7 +379,7 @@ Begin VB.Form frmMain
             Left            =   1320
             Locked          =   -1  'True
             TabIndex        =   19
-            Text            =   "30"
+            Text            =   "365"
             Top             =   375
             Width           =   1755
          End
@@ -473,11 +480,11 @@ Begin VB.Form frmMain
             Width           =   1335
          End
          Begin VB.Label Label7 
-            Caption         =   "Installation C&ode:"
-            Height          =   255
+            Caption         =   "Installation C&ode or Serial Number:"
+            Height          =   435
             Left            =   0
             TabIndex        =   20
-            Top             =   750
+            Top             =   720
             Width           =   1335
          End
          Begin VB.Label Label12 
@@ -1247,15 +1254,18 @@ End Sub
 
 ' Generate liberation key
 Private Sub cmdKeyGen_Click()
+    Dim usedVCode As String
     If SSTab1.Tab <> 1 Then Exit Sub ' our tab not active - do nothing
     
-    If chkLockMACaddress.Value = vbUnchecked And chkLockComputer.Value = vbUnchecked And _
-        chkLockHD.Value = vbUnchecked And chkLockHDfirmware.Value = vbUnchecked And _
-        chkLockWindows.Value = vbUnchecked And chkLockBIOS.Value = vbUnchecked And _
-        chkLockMotherboard.Value = vbUnchecked And chkLockIP.Value = vbUnchecked Then
-        MsgBox "Warning: You did not select any hardware keys to lock the license.", vbExclamation
+    If Len(txtReqCodeIn.Text) <> 8 Then  'Short Key License
+        If chkLockMACaddress.Value = vbUnchecked And chkLockComputer.Value = vbUnchecked And _
+            chkLockHD.Value = vbUnchecked And chkLockHDfirmware.Value = vbUnchecked And _
+            chkLockWindows.Value = vbUnchecked And chkLockBIOS.Value = vbUnchecked And _
+            chkLockMotherboard.Value = vbUnchecked And chkLockIP.Value = vbUnchecked Then
+            MsgBox "Warning: You did not select any hardware keys to lock the license.", vbExclamation
+        End If
     End If
-
+   
     ' get product and version
     Screen.MousePointer = vbHourglass
     UpdateStatus "Generating license key..."
@@ -1269,9 +1279,9 @@ Private Sub cmdKeyGen_Click()
         .SoftwareName = strName
         .SoftwareVersion = strVer
     End With
-
+    
     Dim varLicType As ActiveLock3.ALLicType
-
+    
     If cmbLicType = "Periodic" Then
         varLicType = allicPeriodic
     ElseIf cmbLicType = "Permanent" Then
@@ -1281,27 +1291,34 @@ Private Sub cmdKeyGen_Click()
     Else
         varLicType = allicNone
     End If
-
+    
     Dim strExpire$
     strExpire = GetExpirationDate()
     Dim Lic As ActiveLock3.ProductLicense
-'    Set Lic = ActiveLock3.CreateProductLicense(strName, "Code", strVer, alfSingle, varLicType, "Licensee", strExpire, "LicKey", "RegDate", "Hash1")
+    'Set Lic = ActiveLock3.CreateProductLicense(strName, "Code", strVer, alfSingle, varLicType, "Licensee", strExpire, "LicKey", "RegDate", "Hash1")
     ' Create a product license object without the product key or license key
     
     Dim strRegDate As String
     'strRegDate = ActiveLockDateFormat(Now())
     strRegDate = Format(UTC(Now()), "YYYY/MM/DD")
-     '<Modified by: kirtaph at 2/16/2006-13.03.47 on machine: KIRTAPHPC>
     Set Lic = ActiveLock3.CreateProductLicense(strName, strVer, "", alfSingle, varLicType, "", IIf(chkItemData.Value = vbUnchecked, cmbRegisteredLevel.List(cmbRegisteredLevel.ListIndex), cmbRegisteredLevel.ItemData(cmbRegisteredLevel.ListIndex)), strExpire, , strRegDate)
-     '</Modified by: kirtaph at 2/16/2006-13.03.47 on machine: KIRTAPHPC>
     
     Dim strLibKey As String
-    ' Pass it to IALUGenerator to generate the key
-     '<Modified by: kirtaph at 2/16/2006-13.04.30 on machine: KIRTAPHPC>
-    strLibKey = GeneratorInstance.GenKey(Lic, txtReqCodeIn, IIf(chkItemData.Value = vbUnchecked, cmbRegisteredLevel.List(cmbRegisteredLevel.ListIndex), cmbRegisteredLevel.ItemData(cmbRegisteredLevel.ListIndex)))
-     '</Modified by: kirtaph at 2/16/2006-13.04.30 on machine: KIRTAPHPC>
-    txtLibKey.Text = Make64ByteChunks(strLibKey & "aLck" & txtReqCodeIn.Text)
-    txtLibFile.Text = App.path & "\" & strName & ".all"
+    If Len(txtReqCodeIn.Text) = 8 Then  'Short Key License
+        For i = 1 To gridProds.Rows
+            If strName = gridProds.TextMatrix(i, 0) And strVer = gridProds.TextMatrix(i, 1) Then
+                usedVCode = gridProds.TextMatrix(i, 2)
+                Exit For
+            End If
+        Next
+        strLibKey = ActiveLock.GenerateShortKey(usedVCode, txtReqCodeIn.Text, txtUser.Text & IIf(chkItemData.Value = vbUnchecked, cmbRegisteredLevel.List(cmbRegisteredLevel.ListIndex), cmbRegisteredLevel.ItemData(cmbRegisteredLevel.ListIndex)), strExpire, varLicType, 50)
+        txtLibKey.Text = strLibKey
+    Else 'ALCrypto License Key
+        ' Pass it to IALUGenerator to generate the key
+        strLibKey = GeneratorInstance.GenKey(Lic, txtReqCodeIn, IIf(chkItemData.Value = vbUnchecked, cmbRegisteredLevel.List(cmbRegisteredLevel.ListIndex), cmbRegisteredLevel.ItemData(cmbRegisteredLevel.ListIndex)))
+        txtLibKey.Text = Make64ByteChunks(strLibKey & "aLck" & txtReqCodeIn.Text)
+        txtLibFile.Text = App.path & "\" & strName & ".all"
+    End If
     
     Screen.MousePointer = vbNormal
     UpdateStatus "Ready"
@@ -1348,7 +1365,8 @@ Private Sub cmdKeyGen_Click()
         Unload frmAlugenDatabase
         Set frmAlugenDatabase = Nothing
     End If
-
+    
+   
     Exit Sub
 ErrHandler:
     UpdateStatus "Error: " + Err.Description
@@ -1801,12 +1819,12 @@ FileExistErrors:    'error handling routine, including File Not Found
     Exit Function 'end of error handler
 End Function
 
-Function inString(ByVal X As String, ParamArray MyArray()) As Boolean
+Function inString(ByVal x As String, ParamArray MyArray()) As Boolean
 'Do ANY of a group of sub-strings appear in within the first string?
 'Case doesn't count and we don't care WHERE or WHICH
 Dim Y As Variant    'member of array that holds all arguments except the first
     For Each Y In MyArray
-    If InStr(1, X, Y, 1) > 0 Then 'the "ones" make the comparison case-insensitive
+    If InStr(1, x, Y, 1) > 0 Then 'the "ones" make the comparison case-insensitive
         inString = True
         Exit Function
     End If
@@ -2015,59 +2033,97 @@ Private Sub txtName_Change()
 End Sub
 
 Private Sub txtReqCodeIn_Change()
-'<Modified by: kirtaph at 2/16/2006-13.08.40 on machine: KIRTAPHPC>
-If Len(txtReqCodeIn) > 0 Then
-
-    If systemEvent Then Exit Sub
-    
+If Len(txtReqCodeIn.Text) = 8 Then 'Short key authorization is much simpler
     UpdateKeyGenButtonStatus
     If fDisableNotifications Then Exit Sub
-    
-    fDisableNotifications = True
-    txtUser = GetUserFromInstallCode(txtReqCodeIn)
-    fDisableNotifications = False
-    
-    systemEvent = True
-    If chkLockMACaddress.Enabled = True Then chkLockMACaddress.Value = vbChecked
-    If chkLockComputer.Enabled = True Then chkLockComputer.Value = vbChecked
-    If chkLockHD.Enabled = True Then chkLockHD.Value = vbChecked
-    If chkLockHDfirmware.Enabled = True Then chkLockHDfirmware.Value = vbChecked
-    If chkLockWindows.Enabled = True Then chkLockWindows.Value = vbChecked
-    If chkLockBIOS.Enabled = True Then chkLockBIOS.Value = vbChecked
-    If chkLockMotherboard.Enabled = True Then chkLockMotherboard.Value = vbChecked
-    If chkLockIP.Enabled = True Then chkLockIP.Value = vbChecked
-    systemEvent = False
 
-Else
-    fDisableNotifications = True
-    chkLockComputer.Enabled = True
-    chkLockComputer.Caption = "Lock to Computer Name"
-    chkLockHD.Enabled = True
-    chkLockHD.Caption = "Lock to HDD Volume Serial"
-    chkLockHDfirmware.Enabled = True
-    chkLockHDfirmware.Caption = "Lock to HDD Firmware Serial"
-    chkLockMACaddress.Enabled = True
-    chkLockMACaddress.Caption = "Lock to MAC Address"
-    chkLockWindows.Enabled = True
-    chkLockWindows.Caption = "Lock to Windows Serial"
-    chkLockBIOS.Enabled = True
-    chkLockBIOS.Caption = "Lock to BIOS Serial"
-    chkLockMotherboard.Enabled = True
-    chkLockMotherboard.Caption = "Lock to Motherboard Serial"
-    chkLockIP.Enabled = True
-    chkLockIP.Caption = "Lock to IP Address"
+    chkLockMACaddress.Visible = False
+    chkLockComputer.Visible = False
+    chkLockHD.Visible = False
+    chkLockHDfirmware.Visible = False
+    chkLockWindows.Visible = False
+    chkLockBIOS.Visible = False
+    chkLockMotherboard.Visible = False
+    chkLockIP.Visible = False
+    Label18.Visible = False
     txtUser.Text = ""
-    fDisableNotifications = False
-End If
+    txtUser.Enabled = True
+    txtUser.Locked = False
+    txtUser.BackColor = vbWhite
+    
+    Label5.Visible = False
+    txtLibFile.Visible = False
+    cmdBrowse.Visible = False
+    cmdSave.Visible = False
+    Exit Sub
 
-'</Modified by: kirtaph at 2/16/2006-13.08.40 on machine: KIRTAPHPC>
+Else 'ALCrypto
+    
+    chkLockMACaddress.Visible = True
+    chkLockComputer.Visible = True
+    chkLockHD.Visible = True
+    chkLockHDfirmware.Visible = True
+    chkLockWindows.Visible = True
+    chkLockBIOS.Visible = True
+    chkLockMotherboard.Visible = True
+    chkLockIP.Visible = True
+    Label18.Visible = True
+    txtUser.Enabled = False
+    txtUser.Locked = True
+    txtUser.BackColor = vbButtonFace
+    Label5.Visible = False
+    txtLibFile.Visible = False
+    cmdBrowse.Visible = False
+    cmdSave.Visible = False
+
+    If Len(txtReqCodeIn.Text) > 0 Then
+        If systemEvent Then Exit Sub
+        UpdateKeyGenButtonStatus
+        If fDisableNotifications Then Exit Sub
+        
+        fDisableNotifications = True
+        txtUser = GetUserFromInstallCode(txtReqCodeIn.Text)
+        fDisableNotifications = False
+        
+        systemEvent = True
+        If chkLockMACaddress.Enabled = True Then chkLockMACaddress.Value = vbChecked
+        If chkLockComputer.Enabled = True Then chkLockComputer.Value = vbChecked
+        If chkLockHD.Enabled = True Then chkLockHD.Value = vbChecked
+        If chkLockHDfirmware.Enabled = True Then chkLockHDfirmware.Value = vbChecked
+        If chkLockWindows.Enabled = True Then chkLockWindows.Value = vbChecked
+        If chkLockBIOS.Enabled = True Then chkLockBIOS.Value = vbChecked
+        If chkLockMotherboard.Enabled = True Then chkLockMotherboard.Value = vbChecked
+        If chkLockIP.Enabled = True Then chkLockIP.Value = vbChecked
+        systemEvent = False
+    Else
+        fDisableNotifications = True
+        chkLockComputer.Enabled = True
+        chkLockComputer.Caption = "Lock to Computer Name"
+        chkLockHD.Enabled = True
+        chkLockHD.Caption = "Lock to HDD Volume Serial"
+        chkLockHDfirmware.Enabled = True
+        chkLockHDfirmware.Caption = "Lock to HDD Firmware Serial"
+        chkLockMACaddress.Enabled = True
+        chkLockMACaddress.Caption = "Lock to MAC Address"
+        chkLockWindows.Enabled = True
+        chkLockWindows.Caption = "Lock to Windows Serial"
+        chkLockBIOS.Enabled = True
+        chkLockBIOS.Caption = "Lock to BIOS Serial"
+        chkLockMotherboard.Enabled = True
+        chkLockMotherboard.Caption = "Lock to Motherboard Serial"
+        chkLockIP.Enabled = True
+        chkLockIP.Caption = "Lock to IP Address"
+        txtUser.Text = ""
+        fDisableNotifications = False
+    End If
+End If
 
 End Sub
 
 Private Sub txtUser_Change()
     If fDisableNotifications Then Exit Sub
     fDisableNotifications = True
-    txtReqCodeIn = ActiveLock.installationCode(txtUser)
+    If Len(txtReqCodeIn.Text) <> 8 Then txtReqCodeIn.Text = ActiveLock.installationCode(txtUser)
     fDisableNotifications = False
 End Sub
 
