@@ -10,6 +10,7 @@ Begin VB.Form frmMain
    ClientWidth     =   9720
    Icon            =   "frmMain.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    ScaleHeight     =   7995
    ScaleWidth      =   9720
@@ -29,7 +30,6 @@ Begin VB.Form frmMain
       BeginProperty Panels {0713E89E-850A-101B-AFC0-4210102A8DA7} 
          NumPanels       =   1
          BeginProperty Panel1 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -1070,12 +1070,12 @@ Private Sub cmdReqGen_Click()
     
     If txtRegStatus.Text <> "Registered" Then txtRegStatus.Text = ""
     If Not IsNumeric(txtUsedDays.Text) Then txtUsedDays.Text = ""
-    instCode = MyActiveLock.InstallationCode(txtUser)
+    instCode = MyActiveLock.InstallationCode(txtUser.Text)
     If Len(instCode) = 8 Then
         instCode = "You must send all of the following for authorization:" & vbCrLf & _
             "Serial Number: " & instCode & vbCrLf & _
-            "Application Name: " & txtName.Text & vbCrLf & _
-            "Application Version: " & txtVersion.Text
+            "Application Name: " & txtName.Text & " - Version " & txtVersion.Text & vbCrLf & _
+            "User Name: " & txtUser.Text
     End If
     txtReqCodeGen.Text = instCode
 End Sub
