@@ -30,6 +30,7 @@ Begin VB.Form frmMain
       BeginProperty Panels {0713E89E-850A-101B-AFC0-4210102A8DA7} 
          NumPanels       =   1
          BeginProperty Panel1 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -1081,10 +1082,15 @@ Private Sub cmdReqGen_Click()
 End Sub
 
 Private Sub cmdRegister_Click()
-    Dim ok As Boolean
+    Dim ok As Boolean, LibKey As String
     On Error GoTo errHandler
     ' Register this key
-    MyActiveLock.Register txtLibKeyIn
+    LibKey = txtLibKeyIn.Text
+    If Mid(LibKey, 5, 1) = "-" And Mid(LibKey, 10, 1) = "-" And Mid(LibKey, 15, 1) = "-" And Mid(LibKey, 20, 1) = "-" Then
+        MyActiveLock.Register txtLibKeyIn.Text, txtUser.Text 'YOU MUST SPECIFY THE USER NAME WITH SHORT KEYS !!!
+    Else    ' ALCRYPTO RSA
+        MyActiveLock.Register txtLibKeyIn.Text
+    End If
     MsgBox modMain.Dec("386.457.46D.483.4F1.4FC.4E6.42B.4FC.483.4C5.4BA.160.4F1.507.441.441.457.4F1.4F1.462.507.4A4.16B"), vbInformation ' "Registration successful!"
     Unload Me
     Form_Load
