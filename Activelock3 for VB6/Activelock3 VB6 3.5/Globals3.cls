@@ -103,6 +103,7 @@ Option Explicit
 ' @param alerrNotInitialized        ActiveLock has not been initialized yet.
 ' @param alerrNotImplemented        An ActiveLock operation has not been implemented.
 ' @param alerrUserNameTooLong       Maximum User Name length of 2000 characters has been exceeded.
+' @param alerrUserNameInvalid       Used User name does not match with the license key.
 ' @param alerrInvalidTrialDays      Specified number of Free Trial Days is invalid (possibly <=0).
 ' @param alerrInvalidTrialRuns      Specified number of Free Trial Runs is invalid (possibly <=0).
 ' @param alerrTrialInvalid          Trial is invalid.
@@ -124,6 +125,7 @@ Public Enum ActiveLockErrCodeConstants
     alerrNotInitialized = &H80040012
     alerrNotImplemented = &H80040013
     alerrUserNameTooLong = &H80040014
+    alerrUserNameInvalid = &H80040015
     alerrInvalidTrialDays = &H80040020
     alerrInvalidTrialRuns = &H80040021
     alerrTrialInvalid = &H80040022

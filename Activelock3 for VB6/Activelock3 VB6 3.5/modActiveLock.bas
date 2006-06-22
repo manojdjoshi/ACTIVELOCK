@@ -99,6 +99,7 @@ Public Const STRNOSOFTWARECODE As String = "Software code has not been set."
 Public Const STRNOSOFTWARENAME As String = "Software Name has not been set."
 Public Const STRNOSOFTWAREVERSION As String = "Software Version has not been set."
 Public Const STRUSERNAMETOOLONG As String = "User Name > 2000 characters."
+Public Const STRUSERNAMEINVALID As String = "User Name invalid."
 Public Const STRRSAERROR As String = "Internal RSA Error."
 Public Const RETVAL_ON_ERROR As Long = -999
 

@@ -571,7 +571,7 @@ End Property
 ' Purpose: Returns the installation-specific code needed to obtain the liberation key.
 ' Remarks: None
 '===============================================================================
-Public Property Get InstallationCode(Optional ByVal User As String = "", Optional Lic As ProductLicense = Nothing) As String
+Public Property Get InstallationCode(Optional ByVal user As String = "", Optional Lic As ProductLicense = Nothing) As String
 
 End Property
 
@@ -614,7 +614,7 @@ End Function
 ' Purpose: Registers the product using the specified liberation key.
 ' Remarks: None
 '===============================================================================
-Public Sub Register(ByVal LibKey As String)
+Public Sub Register(ByVal LibKey As String, Optional user As String = "")
 Attribute Register.VB_Description = "Registers the product using the specified liberation key."
 
 End Sub

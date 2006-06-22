@@ -74,19 +74,12 @@ Begin VB.Form frmMain
       TabPicture(1)   =   "frmMain3.frx":0CE6
       Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "Label8"
-      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).Control(1)=   "Label15"
-      Tab(1).Control(1).Enabled=   0   'False
       Tab(1).Control(2)=   "cmdViewLevel"
-      Tab(1).Control(2).Enabled=   0   'False
       Tab(1).Control(3)=   "frmKeyGen"
-      Tab(1).Control(3).Enabled=   0   'False
       Tab(1).Control(4)=   "cmbProds"
-      Tab(1).Control(4).Enabled=   0   'False
       Tab(1).Control(5)=   "cmbRegisteredLevel"
-      Tab(1).Control(5).Enabled=   0   'False
       Tab(1).Control(6)=   "cmdViewArchive"
-      Tab(1).Control(6).Enabled=   0   'False
       Tab(1).ControlCount=   7
       Begin VB.CommandButton cmdValidate 
          Caption         =   "&Validate"
@@ -1303,7 +1296,7 @@ Private Sub cmdKeyGen_Click()
     strRegDate = Format(UTC(Now()), "YYYY/MM/DD")
     Set Lic = ActiveLock3.CreateProductLicense(strName, strVer, "", alfSingle, varLicType, "", IIf(chkItemData.Value = vbUnchecked, cmbRegisteredLevel.List(cmbRegisteredLevel.ListIndex), cmbRegisteredLevel.ItemData(cmbRegisteredLevel.ListIndex)), strExpire, , strRegDate)
     
-    Dim strLibKey As String
+    Dim strLibKey As String, i As Integer
     If Len(txtReqCodeIn.Text) = 8 Then  'Short Key License
         For i = 1 To gridProds.Rows
             If strName = gridProds.TextMatrix(i, 0) And strVer = gridProds.TextMatrix(i, 1) Then

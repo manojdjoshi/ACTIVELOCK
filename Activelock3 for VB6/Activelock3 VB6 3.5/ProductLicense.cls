@@ -506,6 +506,7 @@ End Function
 Public Sub Load(ByVal strLic As String)
 Attribute Load.VB_Description = "Loads the license from a formatted string created by Save() method."
     Dim a() As String
+    
     ' First take out all crlf characters
     strLic = Replace(strLic, vbCrLf, "")
     
@@ -538,6 +539,7 @@ Attribute Load.VB_Description = "Loads the license from a formatted string creat
     Expiration = arrParts(7)
     MaxCount = CLng(arrParts(8))
     LicenseKey = arrParts(9)
+    
 End Sub
 
 

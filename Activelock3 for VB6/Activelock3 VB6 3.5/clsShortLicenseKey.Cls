@@ -123,18 +123,18 @@ Private Declare Function MapFileAndCheckSumA Lib "IMAGEHLP.DLL" (ByVal FileName 
 ' Note: add a project conditional compile argument "IncludeCreate"
 ' if the CreateKey is to be compiled into the application.
 '#If IncludeCreate = 1 Then
-Friend Function CreateKey(ByVal PrivateKey As String, _
-                          ByVal Licensee As String, _
+Friend Function CreateKey(ByVal SerialNumber As String, _
+                          ByVal LicenseeAndRegisteredLevel As String, _
                           ByVal ProductCode As Long, _
                           ByVal ExpireDate As Date, _
                           ByVal UserData As Integer) As String
 '===============================================================================
 '   CreateKey - Creates a new serial number.
 '
-'   PrivateKey      This key should be kept private and would probably be
+'   SerialNumber      This key should be kept private and would probably be
 '                   unique to a specific product. It can be any string you
 '                   define and is needed for key validation.
-'   Licensee        Name of party to whom this license is issued.
+'   LicenseeAndRegisteredLevel        Name of party to whom this license is issued.
 '   ProductCode     A unique number assigned to this product. This is intended
 '                   to identify a serial number at a glance. If, however, you
 '                   expect to issue multiple serial numbers to the same
@@ -160,11 +160,11 @@ Friend Function CreateKey(ByVal PrivateKey As String, _
 
     ' Compute CRC against pertinent info.
     KeySegs(iCRC) = HexWORD(CRC(UCase$( _
-        Licensee & _
+        LicenseeAndRegisteredLevel & _
         KeySegs(iProdCode) & _
         KeySegs(iExpire) & _
         KeySegs(iUserData) & _
-        PrivateKey)))
+        SerialNumber)))
 
     ' Perform bit swaps
     For i = 0 To m_nSwaps - 1
@@ -174,7 +174,7 @@ Friend Function CreateKey(ByVal PrivateKey As String, _
     ' Calculate the CRC used to perform
     ' simple user input validation.
     KeySegs(iCRC2) = HexWORD(CRC(UCase$( _
-        Licensee & _
+        LicenseeAndRegisteredLevel & _
         KeySegs(iProdCode) & _
         KeySegs(iExpire) & _
         KeySegs(iUserData) & _
@@ -197,7 +197,7 @@ Friend Function TestKey(ByVal LicenseKey As String, ByVal Licensee As String) As
 '   "correctly". Does NOT validate that the key is VALID. This function allows
 '   the caller to "test" the key input by the user, without having to execute
 '   the key validation code, making it more work for a cracker to generate a
-'   for your application.
+'   key for your application.
 '===============================================================================
 
     Dim KeySegs         As Variant
@@ -227,31 +227,36 @@ End Function
 '#End If
 
 '#If IncludeValidate = 1 Then
-Friend Function ValidateKey(ByVal LicenseKey As String, _
-                            ByVal PrivateKey As String, _
+Friend Function ValidateShortKey(ByVal LicenseKey As String, _
+                            ByVal SerialNumber As String, _
                             ByVal Licensee As String, _
                             ByVal ProductCode As Long, _
                             Optional ExpireDate As Date, _
                             Optional UserData As Integer) As Boolean
+
+MsgBox LicenseKey
+MsgBox SerialNumber
+MsgBox Licensee
+MsgBox ProductCode
+MsgBox ExpireDate
 '===============================================================================
-'   ValidateKey - Evaluates the supplied license key and tests that it is
+'   ValidateShortKey - Evaluates the supplied license key and tests that it is
 '   valid. We do this by recomputing the checksum and comparing it to the one
 '   embedded in the serial number.
 '
-'   LicenseKey      The serial number to validate.
-'                   serial number.
-'   PrivateKey      A magic string that is application specific. This should
-'                   be the same as was used to create the serial number.
+'   LicenseKey      The license number to validate. Liberation Key.
+'   SerialNumber    A magic string that is application specific. This should
+'                   be the same as was originally created by the application.
 '   Licensee        Name of party to whom this license is issued. This should
 '                   be the same as was used to create the serial number.
-'   ProductCode     A unique number assigned to this product. This should
-'                   be the same as was used to create the serial number.
+'   ProductCode     A unique 4 digit number assigned to this product. This should
+'                   be the same as was used to create the license key.
 '   ExpireDate      Use this field for time-based serial numbers. This should
-'                   be the same as was used to create the serial number.
+'                   be the same as was used to create the license key.
 '   UserData        This field is caller defined. This should be the same as
-'                   was used to create the serial number.
+'                   was used to create the license key.
 '
-'   RETURNS         True if the serial number checks out, False otherwise.
+'   RETURNS         True if the license key checks out, False otherwise.
 '
 '===============================================================================
 
@@ -327,7 +332,7 @@ Friend Function ValidateKey(ByVal LicenseKey As String, _
     nCrc2 = CRC(UCase$(KeySegs(iProdCode)), nCrc1)
     nCrc3 = CRC(UCase$(KeySegs(iExpire)), nCrc2)
     nCrc3 = CRC(UCase$(KeySegs(iUserData)), nCrc3)
-    nCrc4 = CRC(UCase$(PrivateKey), nCrc3)
+    nCrc4 = CRC(UCase$(SerialNumber), nCrc3)
 
     ' Return success and fill outputs IF the license KeySegs is valid
     If nCrc4 = SegmentValue(KeySegs(iCRC)) Then
@@ -338,7 +343,7 @@ Friend Function ValidateKey(ByVal LicenseKey As String, _
    
         ' IMPORTANT: This is an easy patch point
         ' if you use real-time key validation.
-        ValidateKey = True
+        ValidateShortKey = True
     
     End If
 

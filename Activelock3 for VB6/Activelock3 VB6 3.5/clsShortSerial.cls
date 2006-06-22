@@ -152,8 +152,8 @@ End Function
 ' Takes the key, recalculates the MD5 part and tests for equality.
 '*******************************************************************************
 Public Function IsKeyOK(sKey As String, _
-                        sRegisteredName As String, _
-                        sAppChars As String) As Boolean
+                        sAppNameVersionPassword As String, _
+                        sHDDfirmwareSerial As String) As Boolean
                         
     Dim lChar       As Long
     Dim lCount      As Long
@@ -163,8 +163,8 @@ Public Function IsKeyOK(sKey As String, _
     
     ' Recalculate the MD5 digest
     'Set oMD5 = New CMD5
-    'sMD5 = oMD5.MD5(UCase(sRegisteredName) & sAppChars)
-    sMD5 = Hash(UCase(sRegisteredName) & sAppChars)
+    'sMD5 = oMD5.MD5(UCase(sAppNameVersionPassword) & sHDDfirmwareSerial)
+    sMD5 = Hash(UCase(sAppNameVersionPassword) & sHDDfirmwareSerial)
     'Set oMD5 = Nothing
     
     ' We now take each byte-pair from the MD5, convert it back to a byte
