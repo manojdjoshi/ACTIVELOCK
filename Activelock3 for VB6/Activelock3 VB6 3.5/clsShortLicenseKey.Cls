@@ -121,32 +121,30 @@ Private Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (ByVal lpDes
 Private Declare Function MapFileAndCheckSumA Lib "IMAGEHLP.DLL" (ByVal FileName As String, HeaderSum As Long, CheckSum As Long) As Long
 
 ' Note: add a project conditional compile argument "IncludeCreate"
-' if the CreateKey is to be compiled into the application.
+' if the CreateShortKey is to be compiled into the application.
 '#If IncludeCreate = 1 Then
-Friend Function CreateKey(ByVal SerialNumber As String, _
-                          ByVal LicenseeAndRegisteredLevel As String, _
+Friend Function CreateShortKey(ByVal SerialNumber As String, _
+                          ByVal Licensee As String, _
                           ByVal ProductCode As Long, _
                           ByVal ExpireDate As Date, _
-                          ByVal UserData As Integer) As String
+                          ByVal UserData As Integer, _
+                          ByVal RegisteredLevel As Long) As String
 '===============================================================================
-'   CreateKey - Creates a new serial number.
+'   CreateShortKey - Creates a new serial number.
 '
-'   SerialNumber      This key should be kept private and would probably be
-'                   unique to a specific product. It can be any string you
-'                   define and is needed for key validation.
-'   LicenseeAndRegisteredLevel        Name of party to whom this license is issued.
-'   ProductCode     A unique number assigned to this product. This is intended
-'                   to identify a serial number at a glance. If, however, you
-'                   expect to issue multiple serial numbers to the same
-'                   Licensee then this field could be used to further qualify.
+'   SerialNumber    The serial number is generated from the app name, version,
+'                   and password, along with the HDD firmware serial number,
+'                   which makes it unique for the machine running the app.
+'   Licensee        Name of party to whom this license is issued.
+'   ProductCode     A unique number assigned to this product. This is created
+'                   from the app private key and is a 4 digit integer.
 '   ExpireDate      Use this field for time-based serial numbers. This allows
 '                   serial number to be issued that expire in two weeks or at
 '                   the end of the year.
-'   UserData        This field is caller defined. One might use it to identify
-'                   the # of licensed CPU's, or perhaps the # of servers
-'                   licensed, etc, or both (using a LoByte/HiByte packed field).
-'
-'   RETURNS         A serial number in the form of "233C-3912-00FF-BE49"
+'   UserData        This field is caller defined. Currently we are using
+'                   the MaxUser and LicType (using a LoByte/HiByte packed field).
+'   RegisteredLevel This is the Registered Level from Alugen. Long only.
+'   RETURNS         A License Key in the form of "233C-3912-00FF-BE49"
 '===============================================================================
 
     Dim KeySegs(4)  As String
@@ -155,12 +153,12 @@ Friend Function CreateKey(ByVal SerialNumber As String, _
     ' convert each segment value to a hex string
     KeySegs(iProdCode) = HexWORD(ProductCode)
     KeySegs(iExpire) = HexWORD(DateDiff("d", _
-        DateValue(#1/1/1970#), DateValue(CDate(Format(ExpireDate, "mm/dd/yyyy")))))
+        DateValue(#1/1/1970#), DateValue(CDate(Format(ExpireDate, "YYYY/MM/DD")))))
     KeySegs(iUserData) = HexWORD(UserData)
 
     ' Compute CRC against pertinent info.
     KeySegs(iCRC) = HexWORD(CRC(UCase$( _
-        LicenseeAndRegisteredLevel & _
+        Licensee & _
         KeySegs(iProdCode) & _
         KeySegs(iExpire) & _
         KeySegs(iUserData) & _
@@ -174,19 +172,20 @@ Friend Function CreateKey(ByVal SerialNumber As String, _
     ' Calculate the CRC used to perform
     ' simple user input validation.
     KeySegs(iCRC2) = HexWORD(CRC(UCase$( _
-        LicenseeAndRegisteredLevel & _
+        Licensee & _
         KeySegs(iProdCode) & _
         KeySegs(iExpire) & _
         KeySegs(iUserData) & _
         KeySegs(iCRC))))
     
     ' Return the key to the caller
-    CreateKey = UCase$(KeySegs(iProdCode) & "-" & _
+    CreateShortKey = UCase$(KeySegs(iProdCode) & "-" & _
         KeySegs(iExpire) & "-" & _
         KeySegs(iUserData) & "-" & _
         KeySegs(iCRC) & "-" & _
-        KeySegs(iCRC2))
-
+        KeySegs(iCRC2)) & "-" & _
+        UCase$(HexWORD(RegisteredLevel))
+        
 End Function
 '#End If
 
@@ -232,13 +231,9 @@ Friend Function ValidateShortKey(ByVal LicenseKey As String, _
                             ByVal Licensee As String, _
                             ByVal ProductCode As Long, _
                             Optional ExpireDate As Date, _
-                            Optional UserData As Integer) As Boolean
+                            Optional UserData As Integer, _
+                            Optional RegisteredLevel As Long) As Boolean
 
-MsgBox LicenseKey
-MsgBox SerialNumber
-MsgBox Licensee
-MsgBox ProductCode
-MsgBox ExpireDate
 '===============================================================================
 '   ValidateShortKey - Evaluates the supplied license key and tests that it is
 '   valid. We do this by recomputing the checksum and comparing it to the one
@@ -286,9 +281,10 @@ MsgBox ExpireDate
     ' ----------------------------------------------------------
     ' This section of code could raise red flags
     ' ----------------------------------------------------------
-    
+    RegisteredLevel = SegmentValue(Mid(LicenseKey, 26, 4)) - 200
+    LicenseKey = Mid(LicenseKey, 1, 24)
     If Not SplitKey(LicenseKey, KeySegs) Then GoTo ExitLabel
-
+    
     ' ----------------------------------------------------------
 
     ' TODO: UCase string before it get's here

@@ -685,7 +685,7 @@ Public Function GenerateShortSerial(ByVal HDDfirmwareSerial As String) As String
 
 End Function
 
-Public Function GenerateShortKey(ByVal SoftwareCode As String, ByVal SerialNumber As String, ByVal LicenseeAndRegisteredLevel As String, ByVal Expiration As String, ByVal LicType As ActiveLock3.ALLicType, Optional ByVal MaxUsers As Integer = 1) As String
+Public Function GenerateShortKey(ByVal SoftwareCode As String, ByVal SerialNumber As String, ByVal LicenseeAndRegisteredLevel As String, ByVal Expiration As String, ByVal LicType As ActiveLock3.ALLicType, ByVal RegisteredLevel As Long, Optional ByVal MaxUsers As Integer = 1) As String
 
 End Function
 

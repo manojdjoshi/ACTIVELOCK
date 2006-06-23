@@ -501,6 +501,7 @@ Private Sub ValidateShortKey(Lic As ProductLicense, ByVal user As String)
     Dim SerialNumber As String
     Dim ExpireDate As Date
     Dim UserData As Integer
+    Dim RegisteredLevel As Long
     
     ' make sure software code is set
     If mSoftwareCode = "" Then
@@ -517,7 +518,7 @@ Private Sub ValidateShortKey(Lic As ProductLicense, ByVal user As String)
 
     ' verify the key is valid
     If m_Key.ValidateShortKey(Lic.LicenseKey, SerialNumber, _
-        user, m_ProdCode, ExpireDate, UserData) = True Then
+        user, m_ProdCode, ExpireDate, UserData, RegisteredLevel) = True Then
             ' After the key is disassembled it fills the output
             ' variables with expire date and license counter.
             Lic.LicenseType = CLng(CStr(modActiveLock.HiByte(UserData)))
@@ -525,17 +526,25 @@ Private Sub ValidateShortKey(Lic As ProductLicense, ByVal user As String)
             Lic.ProductVer = mSoftwareVer
             Lic.LicenseClass = LicFlags.alfSingle 'Multi User License will be available with network version
             Lic.Licensee = user
-            Lic.RegisteredLevel = 1 'Not implemented yet
-            If Lic.RegisteredDate = "" Then
-                Lic.RegisteredDate = Format(modActiveLock.UTC(Now), "mm/dd/yyyy")
+            If Lic.RegisteredLevel = 0 Then
+                Lic.RegisteredLevel = CStr(RegisteredLevel)
+            ElseIf Lic.RegisteredLevel <> CStr(RegisteredLevel) Then
+                Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
             End If
-            Lic.Expiration = Format(modActiveLock.UTC(ExpireDate), "mm/dd/yyyy")
+            If Lic.RegisteredDate = "" Then
+                Lic.RegisteredDate = Format(modActiveLock.UTC(Now), "YYYY/MM/DD")
+            End If
+            ' ignore expiration date if license type is "permanent"
+            If Lic.LicenseType <> allicPermanent Then
+                Lic.Expiration = Format(modActiveLock.UTC(ExpireDate), "YYYY/MM/DD")
+            End If
             Lic.MaxCount = CLng(CStr(modActiveLock.LoByte(UserData)))
             ' Finally check if the serial number is Ok
             If Not oReg.IsKeyOK(SerialNumber, mSoftwareName & mSoftwareVer & mSoftwarePassword, modHardware.GetHDSerialFirmware()) Then
                 ' Something wrong with the serial number used
                 Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
             End If
+            Lic.LicenseCode = "Short Key"
             '"Key is valid."
     Else
          'MsgBox "Invalid license key."
@@ -575,7 +584,12 @@ Private Sub ValidateLic(Lic As ProductLicense)
     End If
 
     ' validate license key first
-    ValidateKey Lic
+    If Mid(Lic.LicenseKey, 5, 1) = "-" And Mid(Lic.LicenseKey, 10, 1) = "-" And Mid(Lic.LicenseKey, 15, 1) = "-" And Mid(Lic.LicenseKey, 20, 1) = "-" Then
+        ValidateShortKey Lic, Lic.Licensee
+    Else 'ALCrypto RSA key
+        ValidateKey Lic
+    End If
+    
     Dim strEncrypted As String, strHash As String
     ' Validate last run date
     strEncrypted = Lic.LastUsed
@@ -754,7 +768,7 @@ Private Sub IActiveLock_Register(ByVal LibKey As String, Optional user As String
     
     ' Check to see if this is a Short License Key
     If Mid(LibKey, 5, 1) = "-" And Mid(LibKey, 10, 1) = "-" And Mid(LibKey, 15, 1) = "-" And Mid(LibKey, 20, 1) = "-" Then
-        Lic.LicenseKey = LibKey
+        Lic.LicenseKey = UCase(LibKey)
         ValidateShortKey Lic, user
     Else 'ALCrypto RSA key
         Lic.Load LibKey
@@ -810,7 +824,7 @@ Private Sub IActiveLock_KillTrial()
         trialStatus = ExpireTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, mSoftwarePassword)
     End If
 End Sub
-Private Function IActiveLock_GenerateShortKey(ByVal SoftwareCode As String, ByVal SerialNumber As String, ByVal LicenseeAndRegisteredLevel As String, ByVal Expiration As String, ByVal LicType As ActiveLock3.ALLicType, Optional ByVal MaxUsers As Integer = 1) As String
+Private Function IActiveLock_GenerateShortKey(ByVal SoftwareCode As String, ByVal SerialNumber As String, ByVal LicenseeAndRegisteredLevel As String, ByVal Expiration As String, ByVal LicType As ActiveLock3.ALLicType, ByVal RegisteredLevel As Long, Optional ByVal MaxUsers As Integer = 1) As String
 
     On Error GoTo ErrHandler
     
@@ -834,9 +848,9 @@ Private Function IActiveLock_GenerateShortKey(ByVal SoftwareCode As String, ByVa
     m_ProdCode = CLng(Left(sKey, 4))
     
     ' create a new key
-    IActiveLock_GenerateShortKey = m_Key.CreateKey(SerialNumber, _
+    IActiveLock_GenerateShortKey = m_Key.CreateShortKey(SerialNumber, _
         LicenseeAndRegisteredLevel, m_ProdCode, Expiration, _
-        MakeWord(CStr(MaxUsers), CStr(LicType)))
+        MakeWord(CStr(MaxUsers), CStr(LicType)), RegisteredLevel)
 
     Exit Function
 ErrHandler:

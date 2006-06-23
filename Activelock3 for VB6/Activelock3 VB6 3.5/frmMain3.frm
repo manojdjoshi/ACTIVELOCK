@@ -35,6 +35,7 @@ Begin VB.Form frmMain
             Object.Width           =   17119
             Text            =   "Ready"
             TextSave        =   "Ready"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -49,42 +50,42 @@ Begin VB.Form frmMain
       _ExtentY        =   13891
       _Version        =   393216
       Tabs            =   2
+      Tab             =   1
       TabHeight       =   520
       TabCaption(0)   =   "Pro&duct Code Generator"
       TabPicture(0)   =   "frmMain3.frx":0CCA
-      Tab(0).ControlEnabled=   -1  'True
+      Tab(0).ControlEnabled=   0   'False
       Tab(0).Control(0)=   "Label1"
-      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).Control(1)=   "Label17"
-      Tab(0).Control(1).Enabled=   0   'False
       Tab(0).Control(2)=   "gridProds"
-      Tab(0).Control(2).Enabled=   0   'False
       Tab(0).Control(3)=   "fraProdNew"
-      Tab(0).Control(3).Enabled=   0   'False
       Tab(0).Control(4)=   "cmdRemove"
-      Tab(0).Control(4).Enabled=   0   'False
       Tab(0).Control(5)=   "Frame1"
-      Tab(0).Control(5).Enabled=   0   'False
       Tab(0).Control(6)=   "Picture1"
-      Tab(0).Control(6).Enabled=   0   'False
       Tab(0).Control(7)=   "cmdValidate"
-      Tab(0).Control(7).Enabled=   0   'False
       Tab(0).ControlCount=   8
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
-      Tab(1).ControlEnabled=   0   'False
+      Tab(1).ControlEnabled=   -1  'True
       Tab(1).Control(0)=   "Label8"
+      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).Control(1)=   "Label15"
+      Tab(1).Control(1).Enabled=   0   'False
       Tab(1).Control(2)=   "cmdViewLevel"
+      Tab(1).Control(2).Enabled=   0   'False
       Tab(1).Control(3)=   "frmKeyGen"
+      Tab(1).Control(3).Enabled=   0   'False
       Tab(1).Control(4)=   "cmbProds"
+      Tab(1).Control(4).Enabled=   0   'False
       Tab(1).Control(5)=   "cmbRegisteredLevel"
+      Tab(1).Control(5).Enabled=   0   'False
       Tab(1).Control(6)=   "cmdViewArchive"
+      Tab(1).Control(6).Enabled=   0   'False
       Tab(1).ControlCount=   7
       Begin VB.CommandButton cmdValidate 
          Caption         =   "&Validate"
          Height          =   315
-         Left            =   8520
+         Left            =   -66480
          TabIndex        =   49
          Top             =   4080
          Width           =   1005
@@ -96,7 +97,7 @@ Begin VB.Form frmMain
          BorderStyle     =   0  'None
          ForeColor       =   &H80000008&
          Height          =   825
-         Left            =   8730
+         Left            =   -66270
          Picture         =   "frmMain3.frx":0D02
          ScaleHeight     =   825
          ScaleWidth      =   825
@@ -107,7 +108,7 @@ Begin VB.Form frmMain
       Begin VB.CommandButton cmdViewArchive 
          Caption         =   "&View License Database"
          Height          =   315
-         Left            =   -73560
+         Left            =   1440
          TabIndex        =   46
          ToolTipText     =   "View License Archive"
          Top             =   7425
@@ -115,7 +116,7 @@ Begin VB.Form frmMain
       End
       Begin VB.ComboBox cmbRegisteredLevel 
          Height          =   315
-         Left            =   -68340
+         Left            =   6660
          Style           =   2  'Dropdown List
          TabIndex        =   42
          Top             =   480
@@ -125,7 +126,7 @@ Begin VB.Form frmMain
          Caption         =   "Product Codes for the Selected Product"
          ForeColor       =   &H00FF0000&
          Height          =   1095
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   36
          Top             =   2760
          Width           =   8295
@@ -187,14 +188,14 @@ Begin VB.Form frmMain
          Caption         =   "&Remove"
          Enabled         =   0   'False
          Height          =   315
-         Left            =   8520
+         Left            =   -66480
          TabIndex        =   11
          Top             =   4500
          Width           =   1000
       End
       Begin VB.ComboBox cmbProds 
          Height          =   315
-         Left            =   -73560
+         Left            =   1440
          Style           =   2  'Dropdown List
          TabIndex        =   15
          Top             =   480
@@ -203,7 +204,7 @@ Begin VB.Form frmMain
       Begin VB.Frame frmKeyGen 
          BorderStyle     =   0  'None
          Height          =   6495
-         Left            =   -74880
+         Left            =   120
          TabIndex        =   13
          Top             =   840
          Width           =   9495
@@ -508,7 +509,7 @@ Begin VB.Form frmMain
       End
       Begin VB.Frame fraProdNew 
          Height          =   2295
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   12
          Top             =   360
          Width           =   9495
@@ -652,7 +653,7 @@ Begin VB.Form frmMain
       End
       Begin MSFlexGridLib.MSFlexGrid gridProds 
          Height          =   3255
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   10
          Top             =   4080
          Width           =   8265
@@ -676,7 +677,7 @@ Begin VB.Form frmMain
       End
       Begin VB.Image cmdViewLevel 
          Height          =   240
-         Left            =   -65640
+         Left            =   9360
          MouseIcon       =   "frmMain3.frx":7468
          MousePointer    =   99  'Custom
          Picture         =   "frmMain3.frx":7772
@@ -688,7 +689,7 @@ Begin VB.Form frmMain
          Caption         =   "Activelock V3"
          ForeColor       =   &H00FF0000&
          Height          =   165
-         Left            =   8610
+         Left            =   -66390
          TabIndex        =   48
          Top             =   6660
          Width           =   1065
@@ -696,7 +697,7 @@ Begin VB.Form frmMain
       Begin VB.Label Label15 
          Caption         =   "Registered Level:"
          Height          =   255
-         Left            =   -69600
+         Left            =   5400
          TabIndex        =   43
          Top             =   510
          Width           =   1275
@@ -704,7 +705,7 @@ Begin VB.Form frmMain
       Begin VB.Label Label1 
          Caption         =   "&Product List:"
          Height          =   255
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   32
          Top             =   3840
          Width           =   1215
@@ -712,7 +713,7 @@ Begin VB.Form frmMain
       Begin VB.Label Label8 
          Caption         =   "&Product:"
          Height          =   255
-         Left            =   -74880
+         Left            =   120
          TabIndex        =   14
          Top             =   510
          Width           =   975
@@ -1304,7 +1305,7 @@ Private Sub cmdKeyGen_Click()
                 Exit For
             End If
         Next
-        strLibKey = ActiveLock.GenerateShortKey(usedVCode, txtReqCodeIn.Text, txtUser.Text & IIf(chkItemData.Value = vbUnchecked, cmbRegisteredLevel.List(cmbRegisteredLevel.ListIndex), cmbRegisteredLevel.ItemData(cmbRegisteredLevel.ListIndex)), strExpire, varLicType, 50)
+        strLibKey = ActiveLock.GenerateShortKey(usedVCode, txtReqCodeIn.Text, txtUser.Text, strExpire, varLicType, cmbRegisteredLevel.ListIndex + 200, 50)
         txtLibKey.Text = strLibKey
     Else 'ALCrypto License Key
         ' Pass it to IALUGenerator to generate the key
