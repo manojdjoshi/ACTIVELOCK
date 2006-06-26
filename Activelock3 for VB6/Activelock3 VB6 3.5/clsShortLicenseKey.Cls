@@ -184,7 +184,7 @@ Friend Function CreateShortKey(ByVal SerialNumber As String, _
         KeySegs(iUserData) & "-" & _
         KeySegs(iCRC) & "-" & _
         KeySegs(iCRC2)) & "-" & _
-        UCase$(HexWORD(RegisteredLevel))
+        StrReverse((HexWORD(RegisteredLevel)))
         
 End Function
 '#End If
@@ -277,16 +277,14 @@ Friend Function ValidateShortKey(ByVal LicenseKey As String, _
     On Error GoTo ExitLabel
     
     ' TODO: don't even call this function if SoftIce was detected!
-    
     ' ----------------------------------------------------------
     ' This section of code could raise red flags
     ' ----------------------------------------------------------
-    RegisteredLevel = SegmentValue(Mid(LicenseKey, 26, 4)) - 200
+    RegisteredLevel = SegmentValue(StrReverse(Mid(LicenseKey, 26, 4))) - 200
     LicenseKey = Mid(LicenseKey, 1, 24)
     If Not SplitKey(LicenseKey, KeySegs) Then GoTo ExitLabel
     
     ' ----------------------------------------------------------
-
     ' TODO: UCase string before it get's here
     
     ' Get CRC used for input validation
