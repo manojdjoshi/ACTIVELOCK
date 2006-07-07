@@ -1,0 +1,514 @@
+// Created by Microsoft (R) C/C++ Compiler Version 13.10.3077 (d5993f59).
+//
+// c:\daves\sauce\activelock mfc c++ 3.4\alugen c++\release\activelock3.4.tli
+//
+// Wrapper implementations for Win32 type library C:\\windows\\system32\\ActiveLock3.4.dll
+// compiler-generated file created 05/30/06 at 12:11:36 - DO NOT EDIT!
+
+#pragma once
+
+//
+// interface _ProductInfo wrapper method implementations
+//
+
+inline _bstr_t _ProductInfo::Getname ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_name(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t _ProductInfo::GetVersion ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Version(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t _ProductInfo::GetVCode ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_VCode(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t _ProductInfo::GetGCode ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_GCode(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+//
+// dispinterface __ActiveLockEventNotifier wrapper method implementations
+//
+
+inline HRESULT __ActiveLockEventNotifier::ValidateValue ( BSTR * Value ) {
+    return _com_dispatch_method(this, 0x1, DISPATCH_METHOD, VT_EMPTY, NULL, 
+        L"\x4008", Value);
+}
+
+//
+// interface _ProductLicense wrapper method implementations
+//
+
+inline void _ProductLicense::PutRegisteredLevel ( _bstr_t _arg1 ) {
+    HRESULT _hr = put_RegisteredLevel(_arg1);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t _ProductLicense::GetRegisteredLevel ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_RegisteredLevel(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void _ProductLicense::PutLicenseType ( enum ALLicType * _arg1 ) {
+    HRESULT _hr = put_LicenseType(_arg1);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline enum ALLicType _ProductLicense::GetLicenseType ( ) {
+    enum ALLicType _result;
+    HRESULT _hr = get_LicenseType(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline _bstr_t _ProductLicense::GetProductName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_ProductName(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t _ProductLicense::GetProductVer ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_ProductVer(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void _ProductLicense::PutProductKey ( _bstr_t _arg1 ) {
+    HRESULT _hr = put_ProductKey(_arg1);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t _ProductLicense::GetProductKey ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_ProductKey(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t _ProductLicense::GetLicenseClass ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_LicenseClass(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void _ProductLicense::PutLicensee ( _bstr_t _arg1 ) {
+    HRESULT _hr = put_Licensee(_arg1);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t _ProductLicense::GetLicensee ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Licensee(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void _ProductLicense::PutLicenseKey ( _bstr_t _arg1 ) {
+    HRESULT _hr = put_LicenseKey(_arg1);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline void _ProductLicense::PutLicenseCode ( _bstr_t _arg1 ) {
+    HRESULT _hr = put_LicenseCode(_arg1);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t _ProductLicense::GetLicenseKey ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_LicenseKey(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t _ProductLicense::GetLicenseCode ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_LicenseCode(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t _ProductLicense::GetExpiration ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Expiration(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t _ProductLicense::GetRegisteredDate ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_RegisteredDate(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline long _ProductLicense::GetMaxCount ( ) {
+    long _result = 0;
+    HRESULT _hr = get_MaxCount(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline _bstr_t _ProductLicense::GetLastUsed ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_LastUsed(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t _ProductLicense::GetHash1 ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_Hash1(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t _ProductLicense::ToString ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_ToString(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline HRESULT _ProductLicense::Load ( _bstr_t strLic ) {
+    HRESULT _hr = raw_Load(strLic);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT _ProductLicense::Save ( BSTR * strOut ) {
+    HRESULT _hr = raw_Save(strOut);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+//
+// interface _IActiveLock wrapper method implementations
+//
+
+inline _bstr_t _IActiveLock::GetRegisteredLevel ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_RegisteredLevel(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void _IActiveLock::PutLockType ( enum ALLockTypes _arg1 ) {
+    HRESULT _hr = put_LockType(_arg1);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline void _IActiveLock::PutTrialHideType ( enum ALTrialHideTypes _arg1 ) {
+    HRESULT _hr = put_TrialHideType(_arg1);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline void _IActiveLock::PutTrialType ( enum ALTrialTypes _arg1 ) {
+    HRESULT _hr = put_TrialType(_arg1);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline void _IActiveLock::PutTrialLength ( long _arg1 ) {
+    HRESULT _hr = put_TrialLength(_arg1);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline enum ALLockTypes _IActiveLock::GetLockType ( ) {
+    enum ALLockTypes _result;
+    HRESULT _hr = get_LockType(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline enum ALLockTypes _IActiveLock::GetUsedLockType ( ) {
+    enum ALLockTypes _result;
+    HRESULT _hr = get_UsedLockType(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline enum ALTrialHideTypes _IActiveLock::GetTrialHideType ( ) {
+    enum ALTrialHideTypes _result;
+    HRESULT _hr = get_TrialHideType(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline enum ALTrialTypes _IActiveLock::GetTrialType ( ) {
+    enum ALTrialTypes _result;
+    HRESULT _hr = get_TrialType(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline long _IActiveLock::GetTrialLength ( ) {
+    long _result = 0;
+    HRESULT _hr = get_TrialLength(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline void _IActiveLock::PutSoftwareName ( _bstr_t _arg1 ) {
+    HRESULT _hr = put_SoftwareName(_arg1);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline void _IActiveLock::PutSoftwarePassword ( _bstr_t _arg1 ) {
+    HRESULT _hr = put_SoftwarePassword(_arg1);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t _IActiveLock::GetSoftwareName ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_SoftwareName(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t _IActiveLock::GetSoftwarePassword ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_SoftwarePassword(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void _IActiveLock::PutSoftwareCode ( _bstr_t _arg1 ) {
+    HRESULT _hr = put_SoftwareCode(_arg1);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline void _IActiveLock::PutSoftwareVersion ( _bstr_t _arg1 ) {
+    HRESULT _hr = put_SoftwareVersion(_arg1);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t _IActiveLock::GetSoftwareVersion ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_SoftwareVersion(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void _IActiveLock::PutKeyStoreType ( enum LicStoreType _arg1 ) {
+    HRESULT _hr = put_KeyStoreType(_arg1);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline void _IActiveLock::PutKeyStorePath ( _bstr_t _arg1 ) {
+    HRESULT _hr = put_KeyStorePath(_arg1);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t _IActiveLock::GetInstallationCode ( _bstr_t User, struct _ProductLicense * * Lic ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_InstallationCode(User, Lic, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline void _IActiveLock::PutAutoRegisterKeyPath ( _bstr_t _arg1 ) {
+    HRESULT _hr = put_AutoRegisterKeyPath(_arg1);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline _bstr_t _IActiveLock::LockCode ( struct _ProductLicense * * Lic ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_LockCode(Lic, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline HRESULT _IActiveLock::Register ( _bstr_t LibKey ) {
+    HRESULT _hr = raw_Register(LibKey);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline _bstr_t _IActiveLock::Transfer ( _bstr_t InstallCode ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_Transfer(InstallCode, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline HRESULT _IActiveLock::Init ( BSTR * autoLicString ) {
+    HRESULT _hr = raw_Init(autoLicString);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT _IActiveLock::Acquire ( BSTR * strMsg ) {
+    HRESULT _hr = raw_Acquire(strMsg);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT _IActiveLock::ResetTrial ( ) {
+    HRESULT _hr = raw_ResetTrial();
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT _IActiveLock::KillTrial ( ) {
+    HRESULT _hr = raw_KillTrial();
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline _ActiveLockEventNotifierPtr _IActiveLock::GetEventNotifier ( ) {
+    struct _ActiveLockEventNotifier * _result = 0;
+    HRESULT _hr = get_EventNotifier(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _ActiveLockEventNotifierPtr(_result, false);
+}
+
+inline long _IActiveLock::GetUsedDays ( ) {
+    long _result = 0;
+    HRESULT _hr = get_UsedDays(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline _bstr_t _IActiveLock::GetRegisteredDate ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_RegisteredDate(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t _IActiveLock::GetRegisteredUser ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_RegisteredUser(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t _IActiveLock::GetExpirationDate ( ) {
+    BSTR _result = 0;
+    HRESULT _hr = get_ExpirationDate(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+//
+// interface _Globals wrapper method implementations
+//
+
+inline _IActiveLockPtr _Globals::NewInstance ( ) {
+    struct _IActiveLock * _result = 0;
+    HRESULT _hr = raw_NewInstance(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _IActiveLockPtr(_result, false);
+}
+
+inline _ProductLicensePtr _Globals::CreateProductLicense ( _bstr_t name, _bstr_t Ver, _bstr_t Code, enum LicFlags Flags, enum ALLicType LicType, _bstr_t Licensee, _bstr_t RegisteredLevel, _bstr_t Expiration, _bstr_t LicKey, _bstr_t RegisteredDate, _bstr_t Hash1, short MaxUsers, _bstr_t LicCode ) {
+    struct _ProductLicense * _result = 0;
+    HRESULT _hr = raw_CreateProductLicense(name, Ver, Code, Flags, LicType, Licensee, RegisteredLevel, Expiration, LicKey, RegisteredDate, Hash1, MaxUsers, LicCode, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _ProductLicensePtr(_result, false);
+}
+
+inline _bstr_t _Globals::TrimNulls ( _bstr_t str ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_TrimNulls(str, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t _Globals::MD5Hash ( _bstr_t str ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_MD5Hash(str, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t _Globals::Base64Encode ( _bstr_t str ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_Base64Encode(str, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+inline _bstr_t _Globals::Base64Decode ( _bstr_t strEncoded ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_Base64Decode(strEncoded, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+//
+// interface _IALUGenerator wrapper method implementations
+//
+
+inline void _IALUGenerator::PutStoragePath ( _bstr_t _arg1 ) {
+    HRESULT _hr = put_StoragePath(_arg1);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+}
+
+inline HRESULT _IALUGenerator::SaveProduct ( struct _ProductInfo * * ProdInfo ) {
+    HRESULT _hr = raw_SaveProduct(ProdInfo);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline _ProductInfoPtr _IALUGenerator::RetrieveProduct ( _bstr_t name, _bstr_t Ver ) {
+    struct _ProductInfo * _result = 0;
+    HRESULT _hr = raw_RetrieveProduct(name, Ver, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _ProductInfoPtr(_result, false);
+}
+
+inline SAFEARRAY * _IALUGenerator::RetrieveProducts ( ) {
+    SAFEARRAY * _result = 0;
+    HRESULT _hr = raw_RetrieveProducts(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
+
+inline HRESULT _IALUGenerator::DeleteProduct ( _bstr_t name, _bstr_t Ver ) {
+    HRESULT _hr = raw_DeleteProduct(name, Ver);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline _bstr_t _IALUGenerator::GenKey ( struct _ProductLicense * * Lic, _bstr_t InstCode, _bstr_t RegisteredLevel ) {
+    BSTR _result = 0;
+    HRESULT _hr = raw_GenKey(Lic, InstCode, RegisteredLevel, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _bstr_t(_result, false);
+}
+
+//
+// interface _AlugenGlobals wrapper method implementations
+//
+
+inline _IALUGeneratorPtr _AlugenGlobals::GeneratorInstance ( ) {
+    struct _IALUGenerator * _result = 0;
+    HRESULT _hr = raw_GeneratorInstance(&_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _IALUGeneratorPtr(_result, false);
+}
+
+inline _ProductInfoPtr _AlugenGlobals::CreateProductInfo ( _bstr_t name, _bstr_t Ver, _bstr_t VCode, _bstr_t GCode ) {
+    struct _ProductInfo * _result = 0;
+    HRESULT _hr = raw_CreateProductInfo(name, Ver, VCode, GCode, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _ProductInfoPtr(_result, false);
+}

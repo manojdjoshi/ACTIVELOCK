@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "StringHiderBasic", "StringHiderBasic.vbproj", "{0417EE74-E5AC-4E33-BAC3-2D1AB8AD633D}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{0417EE74-E5AC-4E33-BAC3-2D1AB8AD633D}.Debug.ActiveCfg = Debug|.NET
+		{0417EE74-E5AC-4E33-BAC3-2D1AB8AD633D}.Debug.Build.0 = Debug|.NET
+		{0417EE74-E5AC-4E33-BAC3-2D1AB8AD633D}.Release.ActiveCfg = Release|.NET
+		{0417EE74-E5AC-4E33-BAC3-2D1AB8AD633D}.Release.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

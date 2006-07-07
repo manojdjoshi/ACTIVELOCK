@@ -1,0 +1,24 @@
+
+I am forever making a mess of LockCode, but I will perceiver.
+Last time I said that my code 'orderd' enumerations which was a stupid idea,
+as a solution I suggested using a long to store the 'orderd' enumerations in
+this solved the initial problem but if you have a lot of lock codes
+orderd together they need to be separated
+Therefore they should not be ordered together but stored in an array/collection
+My latest attempt does this ( 2 failures, next time correct, --Maybe--)
+
+Also 
+1. The array is built directly into mUsedLockTypes, not into a temporary version and copied later.
+2. If LockNone has been selected then LockNone is the first entry in the array,
+but is now followed by the individual LockCodes that have been used.
+3. Private Property Let IActiveLock_UsedLockType has been removed
+4. Private Property Get IActiveLock_UsedLockType() As ALLockTypes()
+   Now returns an array
+
+I am forwarding the code to Ismail in a private email
+I am not a VB programmer and the new code contains the use of arrays which requires checking
+and general inspection.
+I have done some simple testing.
+
+Anyone interested can download the 2 changed files from
+http://www.4all2u.com/uploads/changes.zip
