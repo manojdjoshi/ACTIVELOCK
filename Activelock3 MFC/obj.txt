@@ -1,0 +1,6 @@
+The obj folders purpose is to contain temporary compiler / linker files.
+This makes it easy to remove .obj, .pch .... files prior to release
+
+Currently MFCSample is the only program using this facility.
+When work is done on any program they will be converted to this format
+

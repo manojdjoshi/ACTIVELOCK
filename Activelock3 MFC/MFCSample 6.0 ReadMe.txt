@@ -1,0 +1,10 @@
+MFCSample VC 6.0
+
+This was developed backwards, that is it existed for VS 2003 and not for VC 6.0 and I did
+not want to spend too much time on it.
+
+Sorted out some problems I had earlier with include files, this now uses the same source files as 
+the VS2003 version
+
+Otherwise this is effectively the same as the VS 2003 and uses the same set of activelock
+source code in common/active/
