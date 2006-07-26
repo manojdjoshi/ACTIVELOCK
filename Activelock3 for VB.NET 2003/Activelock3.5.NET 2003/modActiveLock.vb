@@ -79,6 +79,7 @@ Module modActiveLock
 	Public Const STRNOSOFTWARENAME As String = "Software Name has not been set."
 	Public Const STRNOSOFTWAREVERSION As String = "Software Version has not been set."
 	Public Const STRUSERNAMETOOLONG As String = "User Name > 2000 characters."
+    Public Const STRUSERNAMEINVALID As String = "User Name invalid."
     Public Const STRRSAERROR As String = "Internal RSA Error."
     Public Const RETVAL_ON_ERROR As Integer = -999
 
@@ -510,4 +511,36 @@ Hell:
         Length = GetSystemDirectory(Buffer.Value, FIX_LENGTH - 1)
         WinSysDir = Left(Buffer.Value, Length)
     End Function
+    Public Function MakeWord(ByVal LoByte As Byte, ByVal HiByte As Byte) As Short
+        '===============================================================================
+        '   MakeWord - Packs 2 8-bit integers into a 16-bit integer.
+        '===============================================================================
+
+        If (HiByte And &H80S) <> 0 Then
+            MakeWord = ((HiByte * 256) + LoByte) Or &HFFFF0000
+        Else
+            MakeWord = (HiByte * 256) + LoByte
+        End If
+
+    End Function
+    Public Function HiByte(ByVal w As Short) As Byte
+        HiByte = (w And &HFF00) \ 256
+    End Function
+    Public Function LoByte(ByVal w As Short) As Byte
+        LoByte = w And &HFFS
+    End Function
+    '===============================================================================
+    ' Name: Function UTC
+    ' Input:
+    '   ByRef dt As Date - Date-Time input to be converted into UTC Date-Time
+    ' Output:
+    '   Date - UTC Date-Time
+    ' Purpose: Converts a local date-time into UTC/GMT date-time
+    ' Remarks: None
+    '===============================================================================
+    Public Function UTC(ByRef dt As Date) As Date
+        '  Returns current UTC date-time.
+        UTC = DateAdd(Microsoft.VisualBasic.DateInterval.Minute, LocalTimeZone(TimeZoneReturn.UTC_Offset), dt)
+    End Function
+
 End Module

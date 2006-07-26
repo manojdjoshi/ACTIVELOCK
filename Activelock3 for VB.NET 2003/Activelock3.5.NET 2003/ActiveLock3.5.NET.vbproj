@@ -131,6 +131,16 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "clsShortLicenseKey.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "clsShortSerial.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "clsTrialCryptAPI.vb"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -60,6 +60,7 @@ Friend Class ActiveLock
     Private mSoftwareCode As String
     Private mRegisteredLevel As String
     Private mLockTypes As IActiveLock.ALLockTypes
+    Private mLicenseKeyTypes As IActiveLock.ALLicenseKeyTypes
     Private mUsedLockTypes As IActiveLock.ALLockTypes
     Private mTrialType As Integer
     Private mTrialLength As Integer
@@ -75,6 +76,19 @@ Friend Class ActiveLock
 
     ' Transients
     Private mfInit As Boolean ' flag to indicate that ActiveLock has been initialized
+    '===============================================================================
+    ' Name: Property Let IActiveLock_LicenseKeyType
+    ' Input:
+    '   ByVal RHS As ALLicenseKeyTypes - ALLicenseKeyTypes type
+    ' Output: None
+    ' Purpose: Specifies the ALLicenseKeyTypes type
+    ' Remarks: None
+    '===============================================================================
+    Private WriteOnly Property IActiveLock_LicenseKeyType() As IActiveLock.ALLicenseKeyTypes Implements _IActiveLock.LicenseKeyType
+        Set(ByVal Value As IActiveLock.ALLicenseKeyTypes)
+            mLicenseKeyTypes = Value
+        End Set
+    End Property
     '===============================================================================
     ' Name: Property Get IActiveLock_RegisteredLevel
     ' Input: None
@@ -385,49 +399,56 @@ Friend Class ActiveLock
     '===============================================================================
     Private ReadOnly Property IActiveLock_InstallationCode(Optional ByVal User As String = vbNullString, Optional ByVal Lic As ProductLicense = Nothing) As String Implements _IActiveLock.InstallationCode
         Get
-            ' Generate Request code to Lock
+            'Before we generate the installation code, let's check if this app is using a short key
             Dim strReq, strLock As String
-
-            'Restrict user name to 2000 characters; need more? why?
-            If Len(User) > 2000 Then
-                Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrUserNameTooLong, ACTIVELOCKSTRING, STRUSERNAMETOOLONG)
-            End If
-
-            ' New in v3.1
-            ' Version 3.1 and above of Activelock will append the "+" sign
-            ' in front of the installation code whenever lockNone is used or
-            ' lockType is not specified in the protected app.
-            ' When "+" is not found at the beginning of the installation code,
-            ' Alugen will not allow users pick the hardware lock method since this
-            ' corresponds to an installation code which
-            ' utilizes a hardware lock option specified inside the protected app.
-            If mLockTypes = IActiveLock.ALLockTypes.lockNone Then
-                strLock = "+" & IActiveLock_LockCode()
-            Else
-                strLock = IActiveLock_LockCode()
-            End If
-
-            ' combine with user name
-            strReq = strLock & vbLf & User
-
-            ' base-64 encode the request
             Dim strReq2 As String
-            strReq2 = modBase64.Base64_Encode(strReq)
-            Return strReq2
+            If mLicenseKeyTypes = IActiveLock.ALLicenseKeyTypes.alsShortKeyMD5 Then
+                Return IActivelock_GenerateShortSerial(modHardware.GetHDSerialFirmware())
 
-            ' New in v3.1
-            ' If there's a license and the LicenseCode exists, then use it
-            ' LicenseCode is actually the Installation Code modified by Alugen
-            ' LicenseCode is appended to the end of the lic file so that we can know
-            ' Alugen specified the hardware keys, and LockType
-            ' was not specified inside the protected app
-            If Not Lic Is Nothing Then
-                If Lic.LicenseCode <> "" Then
-                    Return Lic.LicenseCode
-                    If Left(IActiveLock_InstallationCode, 1) = "+" Then Return Mid(IActiveLock_InstallationCode, 2)
-                    ' We won't do the following in order to maintain backwards compatibility with existing licenses
-                    ' ElseIf Lic.LicenseCode = "" And mLockTypes = lockNone Then
-                    ' Err.Raise ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
+            ElseIf mLicenseKeyTypes = IActiveLock.ALLicenseKeyTypes.alsALCryptoRSA Then
+
+                ' Generate Request code to Lock
+
+                'Restrict user name to 2000 characters; need more? why?
+                If Len(User) > 2000 Then
+                    Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrUserNameTooLong, ACTIVELOCKSTRING, STRUSERNAMETOOLONG)
+                End If
+
+                ' New in v3.1
+                ' Version 3.1 and above of Activelock will append the "+" sign
+                ' in front of the installation code whenever lockNone is used or
+                ' lockType is not specified in the protected app.
+                ' When "+" is not found at the beginning of the installation code,
+                ' Alugen will not allow users pick the hardware lock method since this
+                ' corresponds to an installation code which
+                ' utilizes a hardware lock option specified inside the protected app.
+                If mLockTypes = IActiveLock.ALLockTypes.lockNone Then
+                    strLock = "+" & IActiveLock_LockCode()
+                Else
+                    strLock = IActiveLock_LockCode()
+                End If
+
+                ' combine with user name
+                strReq = strLock & vbLf & User
+
+                ' base-64 encode the request
+                strReq2 = modBase64.Base64_Encode(strReq)
+                Return strReq2
+
+                ' New in v3.1
+                ' If there's a license and the LicenseCode exists, then use it
+                ' LicenseCode is actually the Installation Code modified by Alugen
+                ' LicenseCode is appended to the end of the lic file so that we can know
+                ' Alugen specified the hardware keys, and LockType
+                ' was not specified inside the protected app
+                If Not Lic Is Nothing Then
+                    If Lic.LicenseCode <> "" Then
+                        Return Lic.LicenseCode
+                        If Left(IActiveLock_InstallationCode, 1) = "+" Then Return Mid(IActiveLock_InstallationCode, 2)
+                        ' We won't do the following in order to maintain backwards compatibility with existing licenses
+                        ' ElseIf Lic.LicenseCode = "" And mLockTypes = lockNone Then
+                        ' Err.Raise ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
+                    End If
                 End If
             End If
         End Get
@@ -696,6 +717,96 @@ continueRegistration:
         End If
     End Sub
     '===============================================================================
+    ' Name: Sub ValidateShortKey
+    ' Input:
+    '   Lic As ProductLicense - Product license
+    ' Output: None
+    ' Purpose: Validates the License Key using the Short Key MD5 verification.
+    ' Remarks: None
+    '===============================================================================
+    Private Sub ValidateShortKey(ByRef Lic As ProductLicense, ByVal user As String)
+
+        Dim oReg As clsShortSerial
+        Dim m_Key As clsShortLicenseKey
+        Dim sKey As String
+        Dim m_ProdCode As Integer
+        Dim SerialNumber As String
+        Dim ExpireDate As Date
+        Dim UserData As Short
+        Dim RegisteredLevel As Integer
+
+        ' make sure software code is set
+        If mSoftwareCode = "" Then
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNotInitialized, ACTIVELOCKSTRING, STRNOSOFTWARECODE)
+        End If
+
+        'This is a short key
+        m_Key = New clsShortLicenseKey
+
+        m_Key.AddSwapBits(0, 0, 1, 0)
+        m_Key.AddSwapBits(0, 2, 1, 1)
+        m_Key.AddSwapBits(0, 4, 2, 0)
+        m_Key.AddSwapBits(0, 5, 2, 1)
+        m_Key.AddSwapBits(2, 0, 3, 0)
+        m_Key.AddSwapBits(2, 6, 3, 1)
+        m_Key.AddSwapBits(2, 7, 1, 3)
+
+        oReg = New clsShortSerial
+        sKey = oReg.GenerateKey("", Left(mSoftwareCode, Len(mSoftwareCode) - 2)) 'Do not include the last 2 possible == paddings
+        m_ProdCode = CInt(Left(sKey, 4))
+
+        SerialNumber = oReg.GenerateKey(mSoftwareName & mSoftwareVer & mSoftwarePassword, modHardware.GetHDSerialFirmware())
+
+        ' verify the key is valid
+        If m_Key.ValidateShortKey(Lic.LicenseKey, SerialNumber, user, m_ProdCode, ExpireDate, UserData, RegisteredLevel) = True Then
+            ' After the key is disassembled it fills the output
+            ' variables with expire date and license counter.
+            Lic.LicenseType = CInt(CStr(modActiveLock.HiByte(UserData)))
+            Lic.ProductName = mSoftwareName
+            Lic.ProductVer = mSoftwareVer
+            Lic.LicenseClass = ProductLicense.LicFlags.alfSingle 'Multi User License will be available with network version
+            Lic.Licensee = user
+            If Lic.RegisteredLevel = 0 Then
+                Lic.RegisteredLevel = CStr(RegisteredLevel)
+            ElseIf Lic.RegisteredLevel <> CStr(RegisteredLevel) Then
+                Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
+            End If
+            If Lic.RegisteredDate = "" Then
+                Lic.RegisteredDate = Microsoft.VisualBasic.Compatibility.VB6.Format(Now.UtcNow, "YYYY/MM/DD")
+            End If
+            ' ignore expiration date if license type is "permanent"
+            If Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
+                Lic.Expiration = Microsoft.VisualBasic.Compatibility.VB6.Format(ExpireDate, "YYYY/MM/DD")
+            End If
+            Lic.MaxCount = CInt(CStr(modActiveLock.LoByte(UserData)))
+            ' Finally check if the serial number is Ok
+            If Not oReg.IsKeyOK(SerialNumber, mSoftwareName & mSoftwareVer & mSoftwarePassword, modHardware.GetHDSerialFirmware()) Then
+                ' Something wrong with the serial number used
+                Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
+            End If
+            Lic.LicenseCode = "Short Key"
+            '"Key is valid."
+        Else
+            'MsgBox "Invalid license key."
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
+        End If
+
+        ' Check if license has not expired
+        ' but don't do it if there's no expiration date
+        If Lic.Expiration = "" Then Exit Sub
+        Dim dtExp As Date
+        dtExp = CDate(Lic.Expiration)
+        If Microsoft.VisualBasic.Compatibility.VB6.Format(Now.UtcNow, "YYYY/MM/DD") > Microsoft.VisualBasic.Compatibility.VB6.Format(dtexp, "YYYY/MM/DD") And Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
+            ' ialkan - 9-23-2005 added the following to update and store the license
+            ' with the new LastUsed property; otherwise setting the clock back next time
+            ' might bypass the protection mechanism
+            ' Update last used date
+            UpdateLastUsed(Lic)
+            mKeyStore.Store(Lic)
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrLicenseExpired, ACTIVELOCKSTRING, STRLICENSEEXPIRED)
+        End If
+    End Sub
+    '===============================================================================
     ' Name: Sub ValidateLic
     ' Input:
     '  Lic As ProductLicense - Product License
@@ -710,7 +821,11 @@ continueRegistration:
         End If
 
         ' validate license key first
-        ValidateKey(Lic)
+        If Mid(Lic.LicenseKey, 5, 1) = "-" And Mid(Lic.LicenseKey, 10, 1) = "-" And Mid(Lic.LicenseKey, 15, 1) = "-" And Mid(Lic.LicenseKey, 20, 1) = "-" Then
+            ValidateShortKey(Lic, Lic.Licensee)
+        Else 'ALCrypto RSA key
+            ValidateKey(Lic)
+        End If
 
         Dim strEncrypted, strHash As String
         ' Validate last run date
@@ -760,17 +875,23 @@ continueRegistration:
     ' Purpose: Registers Activelock license with a given liberation key
     ' Remarks: None
     '===============================================================================
-    Private Sub IActiveLock_Register(ByVal LibKey As String) Implements _IActiveLock.Register
+    Private Sub IActiveLock_Register(ByVal LibKey As String, Optional ByRef user As String = "") Implements _IActiveLock.Register
 
         Dim Lic As ActiveLock3_5NET.ProductLicense = New ActiveLock3_5NET.ProductLicense
-
-        Lic.Load(LibKey)
-
-        ' Validate that the license key.
-        '   - registered user
-        '   - expiry date
         Dim varResult As Object
-        ValidateKey(Lic)
+        Dim trialStatus As Boolean
+
+        ' Check to see if this is a Short License Key
+        If Mid(LibKey, 5, 1) = "-" And Mid(LibKey, 10, 1) = "-" And Mid(LibKey, 15, 1) = "-" And Mid(LibKey, 20, 1) = "-" Then
+            Lic.LicenseKey = UCase(LibKey)
+            ValidateShortKey(Lic, user)
+        Else 'ALCrypto RSA key
+            Lic.Load(LibKey)
+            ' Validate that the license key.
+            '   - registered user
+            '   - expiry date
+            ValidateKey(Lic)
+        End If
 
         ' License was validated successfuly. Check clock tampering for non-permanent licenses.
         If Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
@@ -793,7 +914,6 @@ continueRegistration:
         ' Expire all trial licenses
         On Error Resume Next
         ' Expire the Trial
-        Dim trialStatus As Boolean
         If mTrialType <> IActiveLock.ALTrialTypes.trialNone Then
             trialStatus = ExpireTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, mSoftwarePassword)
         End If
@@ -818,6 +938,38 @@ continueRegistration:
             trialStatus = ExpireTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, mSoftwarePassword)
         End If
     End Sub
+    Private Function IActiveLock_GenerateShortKey(ByVal SoftwareCode As String, ByVal SerialNumber As String, ByVal LicenseeAndRegisteredLevel As String, ByVal Expiration As String, ByVal LicType As ProductLicense.ALLicType, ByVal RegisteredLevel As Integer, Optional ByVal MaxUsers As Short = 1) As String Implements _IActiveLock.GenerateShortKey
+
+        On Error GoTo ErrHandler
+
+        Dim m_Key As clsShortLicenseKey
+        m_Key = New clsShortLicenseKey
+
+        m_Key.AddSwapBits(0, 0, 1, 0)
+        m_Key.AddSwapBits(0, 2, 1, 1)
+        m_Key.AddSwapBits(0, 4, 2, 0)
+        m_Key.AddSwapBits(0, 5, 2, 1)
+        m_Key.AddSwapBits(2, 0, 3, 0)
+        m_Key.AddSwapBits(2, 6, 3, 1)
+        m_Key.AddSwapBits(2, 7, 1, 3)
+
+        Dim oReg As clsShortSerial
+        oReg = New clsShortSerial
+        Dim sKey As String
+        Dim m_ProdCode As Integer
+
+        sKey = oReg.GenerateKey("", Left(SoftwareCode, Len(SoftwareCode) - 2)) 'Do not include the last 2 possible == paddings
+        m_ProdCode = CInt(Left(sKey, 4))
+
+        ' create a new key
+        IActiveLock_GenerateShortKey = m_Key.CreateShortKey(SerialNumber, LicenseeAndRegisteredLevel, m_ProdCode, CDate(Expiration), MakeWord(CStr(MaxUsers), CStr(LicType)), RegisteredLevel)
+
+        Exit Function
+ErrHandler:
+        oReg = Nothing
+        m_Key = Nothing
+
+    End Function
     '===============================================================================
     ' Name: Sub IActiveLock_ResetTrial
     ' Input: None
@@ -1063,5 +1215,28 @@ continueRegistration:
     Private Function IActiveLock_Transfer(ByVal OtherSoftwareCode As String) As String Implements _IActiveLock.Transfer
         ' TODO: Implement me!
         Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNotImplemented, ACTIVELOCKSTRING, STRNOTIMPLEMENTED)
+    End Function
+
+    '*******************************************************************************
+    ' Sub GenerateShortSerial
+    '
+    ' Input:
+    ' appNameVersionPassword
+    ' HDDfirmwareSerial
+    '
+    ' DESCRIPTION:
+    ' Generates a Short Key (Serial Number)
+    Private Function IActivelock_GenerateShortSerial(ByVal HDDfirmwareSerial As String) As String Implements _IActiveLock.GenerateShortSerial
+        Dim oReg As clsShortSerial
+        Dim sKey As String
+
+        oReg = New clsShortSerial
+        sKey = oReg.GenerateKey(mSoftwareName & mSoftwareVer & mSoftwarePassword, HDDfirmwareSerial)
+        IActivelock_GenerateShortSerial = sKey
+        ' If longer serial is used, possible to break up into sections
+        'Left(sKey, 4) & "-" & Mid(sKey, 5, 4) & "-" & Mid(sKey, 9, 4) & "-" & Mid(sKey, 13, 4)
+
+        'UPGRADE_NOTE: Object oReg may not be destroyed until it is garbage collected. Click for more: 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="vbup1029"'
+        oReg = Nothing
     End Function
 End Class
