@@ -100,6 +100,7 @@ Public Function GenerateKey(sAppNameVersionPassword As String, _
                             sHDDfirmwareSerial As String) As String
     Dim lChar   As Long
     Dim lCount  As Long
+    Dim oMD5    As clsMD5
     Dim sMD5    As String
     Dim sKey    As String
     
@@ -116,13 +117,10 @@ Public Function GenerateKey(sAppNameVersionPassword As String, _
     ' Try to make the application characters long to help prevent cracking.
     
     ' The following could be used if the MD5 routines were in a class instead of a module
-    'Set oMD5 = New CMD5
-    'sMD5 = oMD5.MD5(UCase(sAppNameVersionPassword) & sHDDfirmwareSerial)
-    'Set oMD5 = New clsMD5
-    'sMD5 = oMD5.CalculateMD5(UCase(sAppNameVersionPassword) & sHDDfirmwareSerial)
-    
-    sMD5 = Hash(UCase(sAppNameVersionPassword) & sHDDfirmwareSerial)
-    'Set oMD5 = Nothing
+    Set oMD5 = New clsMD5
+    sMD5 = oMD5.CalculateMD5(UCase(sAppNameVersionPassword) & sHDDfirmwareSerial)
+    'sMD5 = Hash(UCase(sAppNameVersionPassword) & sHDDfirmwareSerial)
+    Set oMD5 = Nothing
     
     ' We now take each byte-pair from the MD5, convert it back to a byte
     ' value from the hex code, do a mod 10, and then select the appropriate
@@ -157,15 +155,15 @@ Public Function IsKeyOK(sKey As String, _
                         
     Dim lChar       As Long
     Dim lCount      As Long
-    'Dim oMD5        As CMD5
+    Dim oMD5        As clsMD5
     Dim sMD5        As String
     Dim sTestKey    As String
     
     ' Recalculate the MD5 digest
-    'Set oMD5 = New CMD5
-    'sMD5 = oMD5.MD5(UCase(sAppNameVersionPassword) & sHDDfirmwareSerial)
-    sMD5 = Hash(UCase(sAppNameVersionPassword) & sHDDfirmwareSerial)
-    'Set oMD5 = Nothing
+    Set oMD5 = New clsMD5
+    sMD5 = oMD5.CalculateMD5(UCase(sAppNameVersionPassword) & sHDDfirmwareSerial)
+    'sMD5 = Hash(UCase(sAppNameVersionPassword) & sHDDfirmwareSerial)
+    Set oMD5 = Nothing
     
     ' We now take each byte-pair from the MD5, convert it back to a byte
     ' value from the hex code, do a MOD 32, and then select the appropriate

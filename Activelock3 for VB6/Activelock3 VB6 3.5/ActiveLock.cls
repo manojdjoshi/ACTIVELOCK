@@ -13,7 +13,7 @@ Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 '*   ActiveLock
 '*   Copyright 1998-2002 Nelson Ferraz
-'*   Copyright 2003-2005 The ActiveLock Software Group (ASG)
+'*   Copyright 2003-2006 The ActiveLock Software Group (ASG)
 '*   All material is the property of the contributing authors.
 '*
 '*   Redistribution and use in source and binary forms, with or without
@@ -510,8 +510,17 @@ Private Sub ValidateShortKey(Lic As ProductLicense, ByVal user As String)
 
     'This is a short key
     Set m_Key = New clsShortLicenseKey
+    
+    m_Key.AddSwapBits 0, 0, 1, 0
+    m_Key.AddSwapBits 0, 2, 1, 1
+    m_Key.AddSwapBits 0, 4, 2, 0
+    m_Key.AddSwapBits 0, 5, 2, 1
+    m_Key.AddSwapBits 2, 0, 3, 0
+    m_Key.AddSwapBits 2, 6, 3, 1
+    m_Key.AddSwapBits 2, 7, 1, 3
+    
     Set oReg = New clsShortSerial
-    sKey = oReg.GenerateKey("", mSoftwareCode)
+    sKey = oReg.GenerateKey("", Left(mSoftwareCode, Len(mSoftwareCode) - 2)) 'Do not include the last 2 possible == paddings
     m_ProdCode = CLng(Left(sKey, 4))
     
     SerialNumber = oReg.GenerateKey(mSoftwareName & mSoftwareVer & mSoftwarePassword, modHardware.GetHDSerialFirmware())
@@ -519,6 +528,7 @@ Private Sub ValidateShortKey(Lic As ProductLicense, ByVal user As String)
     ' verify the key is valid
     If m_Key.ValidateShortKey(Lic.LicenseKey, SerialNumber, _
         user, m_ProdCode, ExpireDate, UserData, RegisteredLevel) = True Then
+            
             ' After the key is disassembled it fills the output
             ' variables with expire date and license counter.
             Lic.LicenseType = CLng(CStr(modActiveLock.HiByte(UserData)))
@@ -526,15 +536,15 @@ Private Sub ValidateShortKey(Lic As ProductLicense, ByVal user As String)
             Lic.ProductVer = mSoftwareVer
             Lic.LicenseClass = LicFlags.alfSingle 'Multi User License will be available with network version
             Lic.Licensee = user
-            If Lic.RegisteredLevel = 0 Then
+            If Lic.RegisteredLevel = "" Then
                 Lic.RegisteredLevel = CStr(RegisteredLevel)
             ElseIf Lic.RegisteredLevel <> CStr(RegisteredLevel) Then
                 Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
             End If
-            If Lic.RegisteredDate = "" Then
+           If Lic.RegisteredDate = "" Then
                 Lic.RegisteredDate = Format(modActiveLock.UTC(Now), "YYYY/MM/DD")
             End If
-            ' ignore expiration date if license type is "permanent"
+         ' ignore expiration date if license type is "permanent"
             If Lic.LicenseType <> allicPermanent Then
                 Lic.Expiration = Format(modActiveLock.UTC(ExpireDate), "YYYY/MM/DD")
             End If
@@ -566,8 +576,6 @@ Private Sub ValidateShortKey(Lic As ProductLicense, ByVal user As String)
         Err.Raise ActiveLockErrCodeConstants.alerrLicenseExpired, ACTIVELOCKSTRING, STRLICENSEEXPIRED
     End If
 End Sub
-
-
 
 '===============================================================================
 ' Name: Sub ValidateLic
@@ -795,7 +803,7 @@ Private Sub IActiveLock_Register(ByVal LibKey As String, Optional user As String
     ' Update last used date
     UpdateLastUsed Lic
     mKeyStore.Store Lic
-    
+   
     ' Expire all trial licenses
     On Error Resume Next
     ' Expire the Trial
@@ -844,7 +852,7 @@ Private Function IActiveLock_GenerateShortKey(ByVal SoftwareCode As String, ByVa
     Dim sKey As String
     Dim m_ProdCode As Long
     
-    sKey = oReg.GenerateKey("", SoftwareCode)
+    sKey = oReg.GenerateKey("", Left(SoftwareCode, Len(SoftwareCode) - 2)) 'Do not include the last 2 possible == paddings
     m_ProdCode = CLng(Left(sKey, 4))
     
     ' create a new key

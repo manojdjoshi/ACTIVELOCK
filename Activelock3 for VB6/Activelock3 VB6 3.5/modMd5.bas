@@ -1,7 +1,7 @@
 Attribute VB_Name = "modMD5"
 '*   ActiveLock
 '*   Copyright 1998-2002 Nelson Ferraz
-'*   Copyright 2003-2005 The ActiveLock Software Group (ASG)
+'*   Copyright 2003-2006 The ActiveLock Software Group (ASG)
 '*   All material is the property of the contributing authors.
 '*
 '*   Redistribution and use in source and binary forms, with or without

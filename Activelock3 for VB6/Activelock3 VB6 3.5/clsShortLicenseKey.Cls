@@ -183,8 +183,8 @@ Friend Function CreateShortKey(ByVal SerialNumber As String, _
         KeySegs(iExpire) & "-" & _
         KeySegs(iUserData) & "-" & _
         KeySegs(iCRC) & "-" & _
-        KeySegs(iCRC2)) & "-" & _
-        StrReverse((HexWORD(RegisteredLevel)))
+        KeySegs(iCRC2) & "-" & _
+        StrReverse((HexWORD(RegisteredLevel))))
         
 End Function
 '#End If

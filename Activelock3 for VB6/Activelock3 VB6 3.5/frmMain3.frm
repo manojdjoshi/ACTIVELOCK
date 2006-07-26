@@ -55,14 +55,14 @@ Begin VB.Form frmMain
       TabCaption(0)   =   "Pro&duct Code Generator"
       TabPicture(0)   =   "frmMain3.frx":0CCA
       Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "Label1"
-      Tab(0).Control(1)=   "Label17"
-      Tab(0).Control(2)=   "gridProds"
-      Tab(0).Control(3)=   "fraProdNew"
-      Tab(0).Control(4)=   "cmdRemove"
-      Tab(0).Control(5)=   "Frame1"
-      Tab(0).Control(6)=   "Picture1"
-      Tab(0).Control(7)=   "cmdValidate"
+      Tab(0).Control(0)=   "cmdValidate"
+      Tab(0).Control(1)=   "Picture1"
+      Tab(0).Control(2)=   "Frame1"
+      Tab(0).Control(3)=   "cmdRemove"
+      Tab(0).Control(4)=   "fraProdNew"
+      Tab(0).Control(5)=   "gridProds"
+      Tab(0).Control(6)=   "Label17"
+      Tab(0).Control(7)=   "Label1"
       Tab(0).ControlCount=   8
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
@@ -1288,13 +1288,12 @@ Private Sub cmdKeyGen_Click()
     
     Dim strExpire$
     strExpire = GetExpirationDate()
-    Dim Lic As ActiveLock3.ProductLicense
-    'Set Lic = ActiveLock3.CreateProductLicense(strName, "Code", strVer, alfSingle, varLicType, "Licensee", strExpire, "LicKey", "RegDate", "Hash1")
-    ' Create a product license object without the product key or license key
-    
     Dim strRegDate As String
-    'strRegDate = ActiveLockDateFormat(Now())
     strRegDate = Format(UTC(Now()), "YYYY/MM/DD")
+
+    Dim Lic As ActiveLock3.ProductLicense
+    
+    ' Create a product license object without the product key or license key
     Set Lic = ActiveLock3.CreateProductLicense(strName, strVer, "", alfSingle, varLicType, "", IIf(chkItemData.Value = vbUnchecked, cmbRegisteredLevel.List(cmbRegisteredLevel.ListIndex), cmbRegisteredLevel.ItemData(cmbRegisteredLevel.ListIndex)), strExpire, , strRegDate)
     
     Dim strLibKey As String, i As Integer
