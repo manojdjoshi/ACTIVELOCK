@@ -1,6 +1,6 @@
 Type=Exe
 Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\WINDOWS\system32\STDOLE2.TLB#OLE Automation
-Reference=*\G{AF4F98F5-0488-455D-BFE0-0D8E4BFD45A3}#1.0#0#..\..\windows\system32\activelock3.5.dll#ActiveLock Object Library 3.5
+Reference=*\G{2FC5022A-2CB8-4182-B342-6DFD1D3B7262}#1.0#0#..\..\windows\system32\activelock3.5.dll#ActiveLock Object Library 3.5
 Object={BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0; TABCTL32.OCX
 Object={6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0; comctl32.ocx
 Form=frmMain.frm
