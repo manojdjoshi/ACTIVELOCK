@@ -85,7 +85,7 @@
                 <Reference
                     Name = "ActiveLock3_5NET"
                     AssemblyName = "ActiveLock3_5NET"
-                    HintPath = "ActiveLock3_5NET.dll"
+                    HintPath = "..\ActiveLock3.5.Net\ActiveLock3_5NET.dll"
                 />
             </References>
             <Imports>
