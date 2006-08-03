@@ -4,7 +4,7 @@ Public Interface _IActiveLock
 	ReadOnly Property RegisteredLevel As String
     Property LockType() As IActiveLock.ALLockTypes
     WriteOnly Property LicenseKeyType() As IActiveLock.ALLicenseKeyTypes
-    Property UsedLockType() As IActiveLock.ALLockTypes
+    Property UsedLockType() As IActiveLock.ALLockTypes()
     Property TrialHideType() As IActiveLock.ALTrialHideTypes
     Property TrialType() As IActiveLock.ALTrialTypes
     Property TrialLength() As Integer
@@ -381,11 +381,11 @@ End Interface
     ' Purpose: Returns the Current Lock Type being used in this instance.
     ' Remarks: None
     '===============================================================================
-    Public Property UsedLockType() As ALLockTypes Implements _IActiveLock.UsedLockType
+    Public Property UsedLockType() As ALLockTypes() Implements _IActiveLock.UsedLockType
         Get
 
         End Get
-        Set(ByVal Value As ALLockTypes)
+        Set(ByVal Value As ALLockTypes())
 
         End Set
     End Property
