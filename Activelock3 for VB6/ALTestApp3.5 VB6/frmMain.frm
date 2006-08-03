@@ -30,6 +30,7 @@ Begin VB.Form frmMain
       BeginProperty Panels {0713E89E-850A-101B-AFC0-4210102A8DA7} 
          NumPanels       =   1
          BeginProperty Panel1 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -751,7 +752,8 @@ Private Sub Form_Load()
         .SoftwarePassword = Chr(99) & Chr(111) & Chr(111) & Chr(108)
         
         ' New in v3.5
-        .LicenseKeyType = alsShortKeyMD5
+        '.LicenseKeyType = alsShortKeyMD5
+        .LicenseKeyType = alsALCryptoRSA
         
         ' New in v3.1 - Trial Feature
         .TrialType = trialDays
@@ -768,7 +770,7 @@ Private Sub Form_Load()
         .TrialHideType = trialHiddenFolder Or trialRegistry Or trialSteganography
         
         .SoftwareCode = Dec(PUB_KEY)
-        '.LockType = lockWindows 'Or lockComp 'Or lockComp Or lockWindows 'Change this to lockNone if just want to lock to user name
+        .LockType = lockNone  'lockWindows 'Or lockComp 'Or lockComp Or lockWindows
         strAutoRegisterKeyPath = App.Path & "\" & LICENSE_ROOT & ".all"
         .AutoRegisterKeyPath = strAutoRegisterKeyPath
         If FileExist(strAutoRegisterKeyPath) Then boolAutoRegisterKeyPath = True
@@ -804,6 +806,7 @@ Private Sub Form_Load()
     ' Check registration status
     Dim strMsg As String
     MyActiveLock.Acquire strMsg
+    
     If strMsg <> "" Then 'There's a trial
         A = Split(strMsg, vbCrLf)
         txtRegStatus.Text = A(0)
@@ -824,6 +827,12 @@ Private Sub Form_Load()
         cmdKillTrial.Visible = False
         cmdResetTrial.Visible = False
     End If
+    
+    ' Uncomment the following to retrieve the usedlocktypes
+'    Dim aa() As ActiveLock3.ALLockTypes
+'    ReDim aa(UBound(MyActiveLock.UsedLockType))
+'    aa = MyActiveLock.UsedLockType
+'    MsgBox aa(0) 'For example, if only lockHDfirmware was used, this will return 256
     
     txtRegStatus.Text = "Registered"
     txtUsedDays.Text = MyActiveLock.UsedDays

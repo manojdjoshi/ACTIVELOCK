@@ -1,13 +1,13 @@
 [TestApp]
 ProductVersion=1.0
 LicenseType=1
-LicenseClass=0
+LicenseClass=Single
 Licensee=Evaluation User
-RegisteredLevel=10
-MaxCount=50
-LicenseKey=19E1-3446-0132-749F-B585-2D00
-RegisteredDate=2006/07/23
-LastUsed=2006/07/23
-Hash1=c05f5fcdc8292fc14891e409bb0c47d1
-Expiration=2006/08/22
-LicenseCode=Short Key
+RegisteredLevel=Educational E
+MaxCount=1
+LicenseKey=AAAAB3NzaC1yc2EAAACAQaySMzZfUdeGE5FwmNGwjyvHAY4av4NNh6p+X0PZZcfh3AQqQcijdjgny+FNtQNkM+YGYmRozbi7CkNVqn11YwbFRvAdT4IHGJs4966djswIzsK78Tk215cSbGHyirLZbjHQWhq/jTmNTJJbDURo++BO0h22KzZaf48ecM0WkF4
+RegisteredDate=2006/08/02
+LastUsed=2006/08/03
+Hash1=52835380971b953f69ba2530b1feaf4d
+Expiration=2006/09/01
+LicenseCode=K25va2V5Cm5va2V5Cm5va2V5CjNKVDI2QUEwCm5va2V5Cm5va2V5Cm5va2V5Cm5va2V5CkV2YWx1YXRpb24gVXNlcg
