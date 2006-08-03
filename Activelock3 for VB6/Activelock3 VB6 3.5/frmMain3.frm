@@ -35,7 +35,6 @@ Begin VB.Form frmMain
             Object.Width           =   17119
             Text            =   "Ready"
             TextSave        =   "Ready"
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -1617,34 +1616,44 @@ Public Sub Form_Load()
 End Sub
 
 Private Sub LoadFormSetting()
-  'Read the program INI file to retrieve control settings
-  On Error GoTo LoadFormSetting_Error
-  
-  If Not blnIsFirstLaunch Then Exit Sub
-  
-  PROJECT_INI_FILENAME = WinDir() & "\Alugen3.ini"
-  On Error Resume Next
-  SSTab1.Tab = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", 0))
-  cmbProds.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbProds", 0))
-  cmbLicType.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbLicType", 1))
-  cmbRegisteredLevel.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbRegisteredLevel", 0))
-  chkItemData.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", False))
-  mKeyStoreType = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "KeyStoreType", 1))
-  mProductsStoreType = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoreType", 0))
-  mProductsStoragePath = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoragePath", App.path & "\licenses.ini")
-  If Not fileExist(mProductsStoragePath) And mProductsStoreType = alsMDBFile Then
+'Read the program INI file to retrieve control settings
+On Error GoTo LoadFormSetting_Error
+
+If Not blnIsFirstLaunch Then Exit Sub
+
+PROJECT_INI_FILENAME = WinDir() & "\Alugen3.ini"
+On Error Resume Next
+SSTab1.Tab = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", 0))
+cmbProds.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbProds", 0))
+cmbLicType.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbLicType", 1))
+cmbRegisteredLevel.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbRegisteredLevel", 0))
+chkItemData.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", False))
+mKeyStoreType = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "KeyStoreType", 1))
+mProductsStoreType = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoreType", 0))
+mProductsStoragePath = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoragePath", App.path & "\licenses.ini")
+
+chkLockBIOS.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockBIOS", False))
+chkLockComputer.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockComputer", False))
+chkLockHD.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockHD", False))
+chkLockHDfirmware.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockHDfirmware", True))
+chkLockIP.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockIP", False))
+chkLockMACaddress.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMACaddress", False))
+chkLockMotherboard.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMotherboard", False))
+chkLockWindows.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockWindows", False))
+
+If Not fileExist(mProductsStoragePath) And mProductsStoreType = alsMDBFile Then
     mProductsStoreType = alsINIFile
     mProductsStoragePath = App.path & "\licenses.ini"
-  End If
+End If
 
-  blnIsFirstLaunch = False
-  
-  On Error GoTo 0
-  Exit Sub
+blnIsFirstLaunch = False
+
+On Error GoTo 0
+Exit Sub
 
 LoadFormSetting_Error:
 
-  MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure LoadFormSetting of Form frmMain"
+MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure LoadFormSetting of Form frmMain"
 End Sub
 
 
@@ -1843,24 +1852,34 @@ Private Sub Form_Unload(Cancel As Integer)
 End Sub
 
 Private Sub SaveFormSettings()
-  'save form settings
-  On Error GoTo SaveFormSettings_Error
-  Dim mnReturnValue As Long
-  mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", CStr(SSTab1.Tab))
-  mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbProds", CStr(cmbProds.ListIndex))
-  mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbLicType", CStr(cmbLicType.ListIndex))
-  mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbRegisteredLevel", CStr(cmbRegisteredLevel.ListIndex))
-  mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", CStr(chkItemData.Value))
-  mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "KeyStoreType", CStr(mKeyStoreType))
-  mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoreType", CStr(mProductsStoreType))
-  mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoragePath", CStr(mProductsStoragePath))
+'save form settings
+On Error GoTo SaveFormSettings_Error
+Dim mnReturnValue As Long
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", CStr(SSTab1.Tab))
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbProds", CStr(cmbProds.ListIndex))
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbLicType", CStr(cmbLicType.ListIndex))
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbRegisteredLevel", CStr(cmbRegisteredLevel.ListIndex))
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", CStr(chkItemData.Value))
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "KeyStoreType", CStr(mKeyStoreType))
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoreType", CStr(mProductsStoreType))
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoragePath", CStr(mProductsStoragePath))
 
- On Error GoTo 0
- Exit Sub
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockBIOS", CStr(chkLockBIOS.Value))
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockComputer", CStr(chkLockComputer.Value))
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockHD", CStr(chkLockHD.Value))
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockHDfirmware", CStr(chkLockHDfirmware.Value))
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockIP", CStr(chkLockIP.Value))
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMACaddress", CStr(chkLockMACaddress.Value))
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMotherboard", CStr(chkLockMotherboard.Value))
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockWindows", CStr(chkLockWindows.Value))
+
+On Error GoTo 0
+Exit Sub
 
 SaveFormSettings_Error:
 
-  MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure SaveFormSettings of Form frmMain"
+MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure SaveFormSettings of Form frmMain"
+
 End Sub
 
 Public Function SetProfileString32(sININame As String, sSection As String, sKeyword As String, vsEntry As String) As Long
@@ -2078,16 +2097,16 @@ Else 'ALCrypto
         txtUser = GetUserFromInstallCode(txtReqCodeIn.Text)
         fDisableNotifications = False
         
-        systemEvent = True
-        If chkLockMACaddress.Enabled = True Then chkLockMACaddress.Value = vbChecked
-        If chkLockComputer.Enabled = True Then chkLockComputer.Value = vbChecked
-        If chkLockHD.Enabled = True Then chkLockHD.Value = vbChecked
-        If chkLockHDfirmware.Enabled = True Then chkLockHDfirmware.Value = vbChecked
-        If chkLockWindows.Enabled = True Then chkLockWindows.Value = vbChecked
-        If chkLockBIOS.Enabled = True Then chkLockBIOS.Value = vbChecked
-        If chkLockMotherboard.Enabled = True Then chkLockMotherboard.Value = vbChecked
-        If chkLockIP.Enabled = True Then chkLockIP.Value = vbChecked
-        systemEvent = False
+'        systemEvent = True
+'        If chkLockMACaddress.Enabled = True Then chkLockMACaddress.Value = vbChecked
+'        If chkLockComputer.Enabled = True Then chkLockComputer.Value = vbChecked
+'        If chkLockHD.Enabled = True Then chkLockHD.Value = vbChecked
+'        If chkLockHDfirmware.Enabled = True Then chkLockHDfirmware.Value = vbChecked
+'        If chkLockWindows.Enabled = True Then chkLockWindows.Value = vbChecked
+'        If chkLockBIOS.Enabled = True Then chkLockBIOS.Value = vbChecked
+'        If chkLockMotherboard.Enabled = True Then chkLockMotherboard.Value = vbChecked
+'        If chkLockIP.Enabled = True Then chkLockIP.Value = vbChecked
+'        systemEvent = False
     Else
         fDisableNotifications = True
         chkLockComputer.Enabled = True
@@ -2285,23 +2304,23 @@ Loop
 GetUserFromInstallCode = Mid$(strInstCode, Index + 1)
 
 systemEvent = True
-chkLockMACaddress.Value = vbUnchecked
 chkLockMACaddress.Enabled = True
-chkLockComputer.Value = vbUnchecked
 chkLockComputer.Enabled = True
-chkLockHD.Value = vbUnchecked
 chkLockHD.Enabled = True
-chkLockHDfirmware.Value = vbUnchecked
 chkLockHDfirmware.Enabled = True
-chkLockWindows.Value = vbUnchecked
 chkLockWindows.Enabled = True
-' Added in v3.3
-chkLockBIOS.Value = vbUnchecked
 chkLockBIOS.Enabled = True
-chkLockMotherboard.Value = vbUnchecked
 chkLockMotherboard.Enabled = True
-chkLockIP.Value = vbUnchecked
 chkLockIP.Enabled = True
+
+'chkLockMACaddress.Value = vbUnchecked
+'chkLockComputer.Value = vbUnchecked
+'chkLockHD.Value = vbUnchecked
+'chkLockHDfirmware.Value = vbUnchecked
+'chkLockWindows.Value = vbUnchecked
+'chkLockBIOS.Value = vbUnchecked
+'chkLockMotherboard.Value = vbUnchecked
+'chkLockIP.Value = vbUnchecked
 
 a = Split(strInstCode, vbLf)
 If usedLockNone = True Then

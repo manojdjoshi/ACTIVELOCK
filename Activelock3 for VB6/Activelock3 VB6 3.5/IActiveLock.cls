@@ -404,7 +404,7 @@ End Property
 ' Purpose: Returns the Used Lock Type in this instance.
 ' Remarks: None
 '===============================================================================
-Public Property Get UsedLockType() As ALLockTypes
+Public Property Get UsedLockType() As ALLockTypes()
 
 End Property
 

@@ -128,7 +128,7 @@ Private mSoftwareCode As String
 Private mRegisteredLevel As String
 Private mLockTypes As ALLockTypes
 Private mLicenseKeyTypes As ALLicenseKeyTypes
-Private mUsedLockTypes As ALLockTypes
+Private mUsedLockTypes() As ALLockTypes
 Private mTrialType As Long
 Private mTrialLength As Long
 Private mTrialHideTypes As ALTrialHideTypes
@@ -382,6 +382,21 @@ continueRegistration:
     ' Validate license
     ValidateLic Lic
     
+End Sub
+'===============================================================================
+' Name: Sub IActiveLock_AddLockCode
+' Input:
+'   ByVal LockType As ALLockTypes _ to be added to array
+'   ByRef Byref LockTypes() As ALLockTypes - array of used LockTypes being built up
+'   ByRef SizeLT as Integer - size of array of used LockTypes being built up
+' Output:
+' Purpose: Helper function to build up array of used LockType s
+' Remarks:
+'===============================================================================
+Private Sub IActiveLock_AddLockCode(ByVal LockType As ALLockTypes, ByRef SizeLT As Integer)
+  ReDim Preserve mUsedLockTypes(SizeLT)
+  mUsedLockTypes(SizeLT) = LockType
+  SizeLT = SizeLT + 1
 End Sub
 
 '===============================================================================
@@ -701,17 +716,6 @@ Private Property Let IActiveLock_KeyStoreType(ByVal RHS As LicStoreType)
 End Property
 
 '===============================================================================
-' Name: Property Let IActiveLock_UsedLockType
-' Input:
-'   ByVal RHS As ALLockTypes - ALLockTypes type
-' Output: None
-' Purpose: Specifies the ALLockTypes type
-' Remarks: None
-'===============================================================================
-Private Property Let IActiveLock_UsedLockType(ByVal RHS As ALLockTypes)
-    mUsedLockTypes = RHS
-End Property
-'===============================================================================
 ' Name: Property Let IActiveLock_TrialHideType
 ' Input:
 '   ByVal RHS As ALTrialHideTypes - ALTrialHideTypes type
@@ -743,10 +747,9 @@ End Property
 ' Purpose: Gets the ALLockTypes type
 ' Remarks: None
 '===============================================================================
-Private Property Get IActiveLock_UsedLockType() As ALLockTypes
+Private Property Get IActiveLock_UsedLockType() As ALLockTypes()
     IActiveLock_UsedLockType = mUsedLockTypes
 End Property
-
 
 '===============================================================================
 ' Name: Property Get IActiveLock_TrialHideType
@@ -1097,9 +1100,6 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
     Dim strLock As String
     Dim noKey As String
     Dim userFromInstallCode As String, usedcode As String
-    ' Per David Weatherall ' New in v3.3
-    Dim tmpLockType As ALLockTypes ' use temp in case of failure.
-    Dim bLockNone As Boolean ' we have lockNone
     Dim a() As String, aString As String
     Dim j As Integer
     
@@ -1179,17 +1179,19 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
         ' Modified Installation Code is appended to the end of the Liberation Key
         ' The modified Installation Code is also stored in the license file
         ' otherwise we'd never know which hardware leys were used to lock the license
-        'IActiveLock_LockCode = Lic.ToString() & vbLf & strLock
         
-        tmpLockType = lockNone ' lockNone = 0 so starting value
+        ReDim mUsedLockTypes(0)  ' remove all previous
+        Dim SizeLockType As Integer  ' use to build up LockCode.
+        SizeLockType = 0
     
         If Lic.LicenseCode <> "" Then
             If Left(Lic.LicenseCode, 1) = "+" Then
                 usedcode = modBase64.Base64_Decode(Mid(Lic.LicenseCode, 2))
-                bLockNone = True ' per David Weatherall
+                'bLockNone = True ' per David Weatherall
+                IActiveLock_AddLockCode lockNone, SizeLockType   'dw1 build up lockTypes - start with lockNone
             Else
                 usedcode = modBase64.Base64_Decode(Lic.LicenseCode)
-                bLockNone = False ' per David Weatherall
+                'bLockNone = False ' per David Weatherall
             End If
             
             a = Split(usedcode, vbLf)
@@ -1198,56 +1200,56 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                 If Left(aString, 1) = "+" Then aString = Mid(aString, 2)
                 If j = LBound(a) Then
                     If aString <> noKey Then
-                        If Not bLockNone Then tmpLockType = tmpLockType Or lockMAC ' build up lockType per David Weatherall
+                        IActiveLock_AddLockCode lockMAC, SizeLockType
                         If aString <> modHardware.GetMACAddress() Then
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 1 Then
                     If aString <> noKey Then
-                        If Not bLockNone Then tmpLockType = tmpLockType Or lockComp ' build up lockType per David Weatherall
+                        IActiveLock_AddLockCode lockComp, SizeLockType 'dw1 build up lockTypes
                         If aString <> modHardware.GetComputerName() Then
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 2 Then
                     If aString <> noKey Then
-                        If Not bLockNone Then tmpLockType = tmpLockType Or lockHD ' build up lockType per David Weatherall
+                        IActiveLock_AddLockCode lockHD, SizeLockType  'dw1 build up lockTypes
                         If aString <> modHardware.GetHDSerial() Then
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 3 Then
                     If aString <> noKey Then
-                        If Not bLockNone Then tmpLockType = tmpLockType Or lockHDFirmware ' build up lockType per David Weatherall
+                        IActiveLock_AddLockCode lockHDFirmware, SizeLockType  'dw1 build up lockTypes
                         If aString <> modHardware.GetHDSerialFirmware() Then
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 4 Then
                     If aString <> noKey Then
-                        If Not bLockNone Then tmpLockType = tmpLockType Or lockWindows ' build up lockType per David Weatherall
+                        IActiveLock_AddLockCode lockWindows, SizeLockType  'dw1 build up lockTypes
                         If aString <> modHardware.GetWindowsSerial() Then
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 5 Then
                     If aString <> noKey Then
-                        If Not bLockNone Then tmpLockType = tmpLockType Or lockBIOS ' build up lockType per David Weatherall
+                        IActiveLock_AddLockCode lockBIOS, SizeLockType  'dw1 build up lockTypes
                         If aString <> modHardware.GetBIOSserial() Then
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 6 Then
                     If aString <> noKey Then
-                        If Not bLockNone Then tmpLockType = tmpLockType Or lockMotherboard ' build up lockType per David Weatherall
+                        IActiveLock_AddLockCode lockMotherboard, SizeLockType  'dw1 build up lockTypes
                         If aString <> modHardware.GetMotherboardSerial() Then
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 7 Then
                     If aString <> noKey Then
-                        If Not bLockNone Then tmpLockType = tmpLockType Or lockIP ' build up lockType per David Weatherall
+                        IActiveLock_AddLockCode lockIP, SizeLockType  'dw1 build up lockTypes
                         If aString <> modHardware.GetIPaddress() Then
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
@@ -1270,7 +1272,7 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                 Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
             End If
             ' above is last possible failure point
-            mUsedLockTypes = tmpLockType ' per David Weatherall
+            'mUsedLockTypes = tmpLockType ' per David Weatherall
                         
             usedcode = Mid(usedcode, 1, Len(usedcode) - Len(userFromInstallCode) - 1)
             
