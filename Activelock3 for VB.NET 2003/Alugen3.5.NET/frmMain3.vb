@@ -1817,22 +1817,23 @@ Friend Class frmMain
 
         systemEvent = True
         'clean checkboxes
-        chkLockMACaddress.CheckState = CheckState.Unchecked
         chkLockMACaddress.Enabled = True
-        chkLockComputer.CheckState = CheckState.Unchecked
         chkLockComputer.Enabled = True
-        chkLockHD.CheckState = CheckState.Unchecked
         chkLockHD.Enabled = True
-        chkLockHDfirmware.CheckState = CheckState.Unchecked
         chkLockHDfirmware.Enabled = True
-        chkLockWindows.CheckState = CheckState.Unchecked
         chkLockWindows.Enabled = True
-        chkLockBIOS.CheckState = CheckState.Unchecked
         chkLockBIOS.Enabled = True
-        chkLockMotherboard.CheckState = CheckState.Unchecked
         chkLockMotherboard.Enabled = True
-        chkLockIP.CheckState = CheckState.Unchecked
         chkLockIP.Enabled = True
+
+        'chkLockMACaddress.CheckState = CheckState.Unchecked
+        'chkLockComputer.CheckState = CheckState.Unchecked
+        'chkLockHD.CheckState = CheckState.Unchecked
+        'chkLockHDfirmware.CheckState = CheckState.Unchecked
+        'chkLockWindows.CheckState = CheckState.Unchecked
+        'chkLockBIOS.CheckState = CheckState.Unchecked
+        'chkLockMotherboard.CheckState = CheckState.Unchecked
+        'chkLockIP.CheckState = CheckState.Unchecked
 
         a = Split(strInstCode, vbLf)
         If usedLockNone = True Then
@@ -2046,22 +2047,63 @@ Friend Class frmMain
     Else
       chkItemData.CheckState = CheckState.Checked
     End If
-    mKeyStoreType = CType(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "KeyStoreType", CStr(1)), IActiveLock.LicStoreType)
-    mProductsStoreType = CType(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoreType", CStr(0)), IActiveLock.ProductsStoreType)
-    mProductsStoragePath = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoragePath", modALUGEN.AppPath & "\licenses.ini")
-    If Not File.Exists(mProductsStoragePath) And mProductsStoreType = IActiveLock.ProductsStoreType.alsMDBFile Then
-      mProductsStoreType = IActiveLock.ProductsStoreType.alsINIFile
-      mProductsStoragePath = modALUGEN.AppPath & "\licenses.ini"
-    End If
+        If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockBIOS", CStr(0)) = "Unchecked" Then
+            chkLockBIOS.CheckState = CheckState.Unchecked
+        Else
+            chkLockBIOS.CheckState = CheckState.Checked
+        End If
+        If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockComputer", CStr(0)) = "Unchecked" Then
+            chkLockComputer.CheckState = CheckState.Unchecked
+        Else
+            chkLockComputer.CheckState = CheckState.Checked
+        End If
+        If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockHD", CStr(0)) = "Unchecked" Then
+            chkLockHD.CheckState = CheckState.Unchecked
+        Else
+            chkLockHD.CheckState = CheckState.Checked
+        End If
+        If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockHDfirmware", CStr(0)) = "Unchecked" Then
+            chkLockHDfirmware.CheckState = CheckState.Unchecked
+        Else
+            chkLockHDfirmware.CheckState = CheckState.Checked
+        End If
+        If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockIP", CStr(0)) = "Unchecked" Then
+            chkLockIP.CheckState = CheckState.Unchecked
+        Else
+            chkLockIP.CheckState = CheckState.Checked
+        End If
+        If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMACaddress", CStr(0)) = "Unchecked" Then
+            chkLockMACaddress.CheckState = CheckState.Unchecked
+        Else
+            chkLockMACaddress.CheckState = CheckState.Checked
+        End If
+        If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMotherboard", CStr(0)) = "Unchecked" Then
+            chkLockMotherboard.CheckState = CheckState.Unchecked
+        Else
+            chkLockMotherboard.CheckState = CheckState.Checked
+        End If
+        If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockWindows", CStr(0)) = "Unchecked" Then
+            chkLockWindows.CheckState = CheckState.Unchecked
+        Else
+            chkLockWindows.CheckState = CheckState.Checked
+        End If
 
-    blnIsFirstLaunch = False
+        mKeyStoreType = CType(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "KeyStoreType", CStr(1)), IActiveLock.LicStoreType)
+        mProductsStoreType = CType(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoreType", CStr(0)), IActiveLock.ProductsStoreType)
+        mProductsStoragePath = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoragePath", modALUGEN.AppPath & "\licenses.ini")
+        If Not File.Exists(mProductsStoragePath) And mProductsStoreType = IActiveLock.ProductsStoreType.alsMDBFile Then
+            mProductsStoreType = IActiveLock.ProductsStoreType.alsINIFile
+            mProductsStoragePath = modALUGEN.AppPath & "\licenses.ini"
+        End If
 
-    On Error GoTo 0
-    Exit Sub
+        blnIsFirstLaunch = False
+
+        On Error GoTo 0
+        Exit Sub
 
 LoadFormSetting_Error:
 
-    MessageBox.Show("Error " & Err.Number & " (" & Err.Description & ") in procedure LoadFormSetting of Form frmMain", modALUGEN.ACTIVELOCKSTRING)
+        MessageBox.Show("Error " & Err.Number & " (" & Err.Description & ") in procedure LoadFormSetting of Form frmMain", modALUGEN.ACTIVELOCKSTRING)
 
   End Sub
 
@@ -2107,6 +2149,15 @@ InitForm_Error:
     mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "KeyStoreType", CStr(mKeyStoreType))
     mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoreType", CStr(mProductsStoreType))
     mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoragePath", CStr(mProductsStoragePath))
+
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockBIOS", chkLockBIOS.CheckState.ToString)
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockComputer", chkLockComputer.CheckState.ToString)
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockHD", chkLockHD.CheckState.ToString)
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockHDfirmware", chkLockHDfirmware.CheckState.ToString)
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockIP", chkLockIP.CheckState.ToString)
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMACaddress", chkLockMACaddress.CheckState.ToString)
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMotherboard", chkLockMotherboard.CheckState.ToString)
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockWindows", chkLockWindows.CheckState.ToString)
 
     On Error GoTo 0
     Exit Sub
@@ -2716,16 +2767,16 @@ SaveFormSettings_Error:
                 txtUser.Text = GetUserFromInstallCode(txtInstallCode.Text)
                 fDisableNotifications = False
 
-                systemEvent = True
-                If chkLockMACaddress.Enabled = True Then chkLockMACaddress.CheckState = CheckState.Checked
-                If chkLockComputer.Enabled = True Then chkLockComputer.CheckState = CheckState.Checked
-                If chkLockHD.Enabled = True Then chkLockHD.CheckState = CheckState.Checked
-                If chkLockHDfirmware.Enabled = True Then chkLockHDfirmware.CheckState = CheckState.Checked
-                If chkLockWindows.Enabled = True Then chkLockWindows.CheckState = CheckState.Checked
-                If chkLockBIOS.Enabled = True Then chkLockBIOS.CheckState = CheckState.Checked
-                If chkLockMotherboard.Enabled = True Then chkLockMotherboard.CheckState = CheckState.Checked
-                If chkLockIP.Enabled = True Then chkLockIP.CheckState = CheckState.Checked
-                systemEvent = False
+                'systemEvent = True
+                'If chkLockMACaddress.Enabled = True Then chkLockMACaddress.CheckState = CheckState.Checked
+                'If chkLockComputer.Enabled = True Then chkLockComputer.CheckState = CheckState.Checked
+                'If chkLockHD.Enabled = True Then chkLockHD.CheckState = CheckState.Checked
+                'If chkLockHDfirmware.Enabled = True Then chkLockHDfirmware.CheckState = CheckState.Checked
+                'If chkLockWindows.Enabled = True Then chkLockWindows.CheckState = CheckState.Checked
+                'If chkLockBIOS.Enabled = True Then chkLockBIOS.CheckState = CheckState.Checked
+                'If chkLockMotherboard.Enabled = True Then chkLockMotherboard.CheckState = CheckState.Checked
+                'If chkLockIP.Enabled = True Then chkLockIP.CheckState = CheckState.Checked
+                'systemEvent = False
             Else
                 fDisableNotifications = True
                 chkLockComputer.Enabled = True
