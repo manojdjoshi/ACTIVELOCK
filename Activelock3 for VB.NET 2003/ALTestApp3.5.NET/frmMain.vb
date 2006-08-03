@@ -1140,7 +1140,8 @@ Friend Class frmMain
             .SoftwarePassword = Chr(99) & Chr(111) & Chr(111) & Chr(108)
 
             ' New in v3.5
-            .LicenseKeyType = ActiveLock3_5NET.IActiveLock.ALLicenseKeyTypes.alsShortKeyMD5
+            '.LicenseKeyType = ActiveLock3_5NET.IActiveLock.ALLicenseKeyTypes.alsShortKeyMD5
+            .LicenseKeyType = ActiveLock3_5NET.IActiveLock.ALLicenseKeyTypes.alsALCryptoRSA
 
             ' New in v3.1 - Trial Feature
             .TrialType = ActiveLock3_5NET.IActiveLock.ALTrialTypes.trialDays
@@ -1226,6 +1227,10 @@ Friend Class frmMain
             cmdKillTrial.Visible = False
             cmdResetTrial.Visible = False
         End If
+
+        ' You can retrieve the LockTypes set inside Alugen
+        ' by accessing the UsedLockType property
+        'MsgBox(MyActiveLock.UsedLockType(0))
 
         txtRegStatus.Text = "Registered"
         txtUsedDays.Text = MyActiveLock.UsedDays.ToString
