@@ -89,7 +89,11 @@ Friend Class frmMain
 	'NOTE: The following procedure is required by the Windows Form Designer
 	'It can be modified using the Windows Form Designer.
 	'Do not modify it using the code editor.
-	<System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
+    Public WithEvents Label10 As System.Windows.Forms.Label
+    Public WithEvents txtNetworkedLicense As System.Windows.Forms.TextBox
+    Public WithEvents txtMaxCount As System.Windows.Forms.TextBox
+    Public WithEvents lblConcurrentUsers As System.Windows.Forms.Label
+    <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(frmMain))
         Me.ToolTip1 = New System.Windows.Forms.ToolTip(Me.components)
@@ -101,6 +105,10 @@ Friend Class frmMain
         Me.SSTab1 = New System.Windows.Forms.TabControl
         Me._SSTab1_TabPage0 = New System.Windows.Forms.TabPage
         Me.fraRegStatus = New System.Windows.Forms.GroupBox
+        Me.lblConcurrentUsers = New System.Windows.Forms.Label
+        Me.txtMaxCount = New System.Windows.Forms.TextBox
+        Me.txtNetworkedLicense = New System.Windows.Forms.TextBox
+        Me.Label10 = New System.Windows.Forms.Label
         Me.txtLicenseType = New System.Windows.Forms.TextBox
         Me.Picture2 = New System.Windows.Forms.PictureBox
         Me.txtRegisteredLevel = New System.Windows.Forms.TextBox
@@ -249,6 +257,10 @@ Friend Class frmMain
         'fraRegStatus
         '
         Me.fraRegStatus.BackColor = System.Drawing.SystemColors.Control
+        Me.fraRegStatus.Controls.Add(Me.lblConcurrentUsers)
+        Me.fraRegStatus.Controls.Add(Me.txtMaxCount)
+        Me.fraRegStatus.Controls.Add(Me.txtNetworkedLicense)
+        Me.fraRegStatus.Controls.Add(Me.Label10)
         Me.fraRegStatus.Controls.Add(Me.txtLicenseType)
         Me.fraRegStatus.Controls.Add(Me.cmdResetTrial)
         Me.fraRegStatus.Controls.Add(Me.cmdKillTrial)
@@ -274,10 +286,70 @@ Friend Class frmMain
         Me.fraRegStatus.Location = New System.Drawing.Point(8, 28)
         Me.fraRegStatus.Name = "fraRegStatus"
         Me.fraRegStatus.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.fraRegStatus.Size = New System.Drawing.Size(633, 177)
+        Me.fraRegStatus.Size = New System.Drawing.Size(633, 182)
         Me.fraRegStatus.TabIndex = 13
         Me.fraRegStatus.TabStop = False
         Me.fraRegStatus.Text = "Status"
+        '
+        'lblConcurrentUsers
+        '
+        Me.lblConcurrentUsers.BackColor = System.Drawing.SystemColors.Control
+        Me.lblConcurrentUsers.Cursor = System.Windows.Forms.Cursors.Default
+        Me.lblConcurrentUsers.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblConcurrentUsers.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.lblConcurrentUsers.Location = New System.Drawing.Point(230, 158)
+        Me.lblConcurrentUsers.Name = "lblConcurrentUsers"
+        Me.lblConcurrentUsers.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblConcurrentUsers.Size = New System.Drawing.Size(126, 17)
+        Me.lblConcurrentUsers.TabIndex = 49
+        Me.lblConcurrentUsers.Text = "No. of Concurrent Users:"
+        '
+        'txtMaxCount
+        '
+        Me.txtMaxCount.AcceptsReturn = True
+        Me.txtMaxCount.AutoSize = False
+        Me.txtMaxCount.BackColor = System.Drawing.SystemColors.InactiveCaptionText
+        Me.txtMaxCount.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtMaxCount.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtMaxCount.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtMaxCount.Location = New System.Drawing.Point(358, 156)
+        Me.txtMaxCount.MaxLength = 0
+        Me.txtMaxCount.Name = "txtMaxCount"
+        Me.txtMaxCount.ReadOnly = True
+        Me.txtMaxCount.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtMaxCount.Size = New System.Drawing.Size(36, 19)
+        Me.txtMaxCount.TabIndex = 48
+        Me.txtMaxCount.Text = ""
+        '
+        'txtNetworkedLicense
+        '
+        Me.txtNetworkedLicense.AcceptsReturn = True
+        Me.txtNetworkedLicense.AutoSize = False
+        Me.txtNetworkedLicense.BackColor = System.Drawing.SystemColors.InactiveCaptionText
+        Me.txtNetworkedLicense.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtNetworkedLicense.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtNetworkedLicense.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtNetworkedLicense.Location = New System.Drawing.Point(104, 156)
+        Me.txtNetworkedLicense.MaxLength = 0
+        Me.txtNetworkedLicense.Name = "txtNetworkedLicense"
+        Me.txtNetworkedLicense.ReadOnly = True
+        Me.txtNetworkedLicense.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtNetworkedLicense.Size = New System.Drawing.Size(120, 19)
+        Me.txtNetworkedLicense.TabIndex = 47
+        Me.txtNetworkedLicense.Text = ""
+        '
+        'Label10
+        '
+        Me.Label10.BackColor = System.Drawing.SystemColors.Control
+        Me.Label10.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label10.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label10.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label10.Location = New System.Drawing.Point(8, 158)
+        Me.Label10.Name = "Label10"
+        Me.Label10.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label10.Size = New System.Drawing.Size(89, 17)
+        Me.Label10.TabIndex = 46
+        Me.Label10.Text = "License Class:"
         '
         'txtLicenseType
         '
@@ -545,9 +617,9 @@ Friend Class frmMain
         Me.Label6.Location = New System.Drawing.Point(8, 58)
         Me.Label6.Name = "Label6"
         Me.Label6.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label6.Size = New System.Drawing.Size(65, 17)
+        Me.Label6.Size = New System.Drawing.Size(92, 17)
         Me.Label6.TabIndex = 14
-        Me.Label6.Text = "Registered:"
+        Me.Label6.Text = "License Status:"
         '
         'fraReg
         '
@@ -1062,6 +1134,8 @@ Friend Class frmMain
                 txtUsedDays.Text = ""
                 txtExpiration.Text = ""
                 txtRegisteredLevel.Text = ""
+                txtNetworkedLicense.Text = ""
+                txtMaxCount.Text = ""
             Else
                 MsgBox("There's no license to kill.", MsgBoxStyle.Information)
             End If
@@ -1081,6 +1155,9 @@ Friend Class frmMain
         txtExpiration.Text = ""
         txtRegisteredLevel.Text = ""
         txtLicenseType.Text = "None"
+        txtNetworkedLicense.Text = ""
+        txtMaxCount.Text = ""
+
     End Sub
     Private Sub cmdPaste_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdPaste.Click
         If Clipboard.GetDataObject.GetDataPresent(DataFormats.Text) Then
@@ -1102,6 +1179,9 @@ Friend Class frmMain
         txtExpiration.Text = ""
         txtRegisteredLevel.Text = ""
         txtLicenseType.Text = "None"
+        txtNetworkedLicense.Text = ""
+        txtMaxCount.Text = ""
+
     End Sub
     '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     ' ActiveLock Initialization
@@ -1238,6 +1318,17 @@ Friend Class frmMain
         If txtExpiration.Text = "" Then txtExpiration.Text = "Permanent" 'App has a permanent license
         txtUser.Text = MyActiveLock.RegisteredUser
         txtRegisteredLevel.Text = MyActiveLock.RegisteredLevel
+
+        ' Networked Licenses
+        If MyActiveLock.LicenseClass = "MultiUser" Then
+            txtNetworkedLicense.Text = "Networked"
+        Else
+            txtNetworkedLicense.Text = "Single User"
+            txtMaxCount.Visible = False
+            lblConcurrentUsers.Visible = False
+        End If
+        txtMaxCount.Text = MyActiveLock.MaxCount
+
         'Read the license file into a string to determine the license type
         Dim strBuff As String
         Dim fNum As Short

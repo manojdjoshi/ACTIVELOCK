@@ -70,7 +70,7 @@ Module modMain
             VerifyActiveLockNETdll = String.Format("{0:X8}", crc)
             f.Close()
             System.Diagnostics.Debug.WriteLine("Hash: " & crc)
-            If VerifyActiveLockNETdll <> Dec("2D6.226.268.2EC.2CB.2EC.268.2EC") Then
+            If VerifyActiveLockNETdll <> Dec("226.231.210.302.247.2E1.23C.268") Then
                 ' Encrypted version of "activelock3NET.dll has been corrupted. If you were running a real application, it should terminate at this point."
                 MsgBox(Dec("42B.441.4FC.483.512.457.4A4.4C5.441.499.231.35A.2F7.39C.1FA.44C.4A4.4A4.160.478.42B.4F1.160.436.457.457.4BA.160.441.4C5.4E6.4E6.507.4D0.4FC.457.44C.1FA"))
                 End
