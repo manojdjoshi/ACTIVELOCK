@@ -13,7 +13,6 @@ Begin VB.Form frmMain
    ClientWidth     =   9735
    Icon            =   "frmMain3.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    ScaleHeight     =   8190
    ScaleWidth      =   9735
    StartUpPosition =   3  'Windows Default
@@ -54,14 +53,14 @@ Begin VB.Form frmMain
       TabCaption(0)   =   "Pro&duct Code Generator"
       TabPicture(0)   =   "frmMain3.frx":0CCA
       Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "cmdValidate"
-      Tab(0).Control(1)=   "Picture1"
-      Tab(0).Control(2)=   "Frame1"
-      Tab(0).Control(3)=   "cmdRemove"
-      Tab(0).Control(4)=   "fraProdNew"
-      Tab(0).Control(5)=   "gridProds"
-      Tab(0).Control(6)=   "Label17"
-      Tab(0).Control(7)=   "Label1"
+      Tab(0).Control(0)=   "Label1"
+      Tab(0).Control(1)=   "Label17"
+      Tab(0).Control(2)=   "gridProds"
+      Tab(0).Control(3)=   "fraProdNew"
+      Tab(0).Control(4)=   "cmdRemove"
+      Tab(0).Control(5)=   "Frame1"
+      Tab(0).Control(6)=   "Picture1"
+      Tab(0).Control(7)=   "cmdValidate"
       Tab(0).ControlCount=   8
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
@@ -207,6 +206,24 @@ Begin VB.Form frmMain
          TabIndex        =   13
          Top             =   840
          Width           =   9495
+         Begin VB.TextBox txtMaxCount 
+            Height          =   315
+            Left            =   7065
+            MaxLength       =   2
+            TabIndex        =   65
+            Text            =   "5"
+            Top             =   323
+            Visible         =   0   'False
+            Width           =   315
+         End
+         Begin VB.CheckBox chkNetworkedLicense 
+            Caption         =   "Networked Licence"
+            Height          =   330
+            Left            =   5265
+            TabIndex        =   64
+            Top             =   315
+            Width           =   1770
+         End
          Begin VB.CheckBox chkLockIP 
             Caption         =   "Lock to IP Address"
             Height          =   195
@@ -287,12 +304,12 @@ Begin VB.Form frmMain
             Width           =   825
          End
          Begin VB.CheckBox chkItemData 
-            Caption         =   "Use Item Data for Code"
+            Caption         =   "Use ItemData instead of ListIndex"
             Height          =   330
-            Left            =   6540
+            Left            =   6525
             TabIndex        =   51
-            Top             =   0
-            Width           =   2760
+            Top             =   -45
+            Width           =   2805
          End
          Begin VB.CommandButton cmdCopy 
             Height          =   345
@@ -421,6 +438,15 @@ Begin VB.Form frmMain
             _ExtentX        =   847
             _ExtentY        =   847
             _Version        =   393216
+         End
+         Begin VB.Label lblConcurrentUsers 
+            Caption         =   "Concurrent Users"
+            Height          =   255
+            Left            =   7425
+            TabIndex        =   66
+            Top             =   405
+            Visible         =   0   'False
+            Width           =   1335
          End
          Begin VB.Label Label18 
             Caption         =   "Note: IP address may be Dynamic!"
@@ -1057,6 +1083,17 @@ txtReqCodeIn.Text = ReconstructedInstallationCode
 systemEvent = False
 End Sub
 
+Private Sub chkNetworkedLicense_Click()
+If chkNetworkedLicense.Value = vbChecked Then
+    lblConcurrentUsers.Visible = True
+    txtMaxCount.Visible = True
+Else
+    lblConcurrentUsers.Visible = False
+    txtMaxCount.Visible = False
+End If
+    
+End Sub
+
 Private Sub cmbLicType_Click()
     ' enable the days edit box
     If cmbLicType = "Periodic" Or cmbLicType = "Time Locked" Then
@@ -1248,6 +1285,8 @@ End Sub
 ' Generate liberation key
 Private Sub cmdKeyGen_Click()
     Dim usedVCode As String
+    Dim licFlag As ActiveLock3.LicFlags, maximumUsers As Integer
+    
     If SSTab1.Tab <> 1 Then Exit Sub ' our tab not active - do nothing
     
     If Len(txtReqCodeIn.Text) <> 8 Then  'Short Key License
@@ -1290,10 +1329,17 @@ Private Sub cmdKeyGen_Click()
     Dim strRegDate As String
     strRegDate = Format(UTC(Now()), "YYYY/MM/DD")
 
-    Dim Lic As ActiveLock3.ProductLicense
+    'Take care of the networked licenses
+    If chkNetworkedLicense.Value = vbChecked Then
+        licFlag = alfMulti
+    Else
+        licFlag = alfSingle
+    End If
+    maximumUsers = CInt(txtMaxCount.Text)
     
+    Dim Lic As ActiveLock3.ProductLicense
     ' Create a product license object without the product key or license key
-    Set Lic = ActiveLock3.CreateProductLicense(strName, strVer, "", alfSingle, varLicType, "", IIf(chkItemData.Value = vbUnchecked, cmbRegisteredLevel.List(cmbRegisteredLevel.ListIndex), cmbRegisteredLevel.ItemData(cmbRegisteredLevel.ListIndex)), strExpire, , strRegDate)
+    Set Lic = ActiveLock3.CreateProductLicense(strName, strVer, "", licFlag, varLicType, "", IIf(chkItemData.Value = vbUnchecked, cmbRegisteredLevel.List(cmbRegisteredLevel.ListIndex), cmbRegisteredLevel.ItemData(cmbRegisteredLevel.ListIndex)), strExpire, , strRegDate, , maximumUsers)
     
     Dim strLibKey As String, i As Integer
     If Len(txtReqCodeIn.Text) = 8 Then  'Short Key License
@@ -1628,6 +1674,8 @@ cmbProds.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options"
 cmbLicType.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbLicType", 1))
 cmbRegisteredLevel.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbRegisteredLevel", 0))
 chkItemData.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", False))
+chkNetworkedLicense.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkNetworkedLicense", False))
+
 mKeyStoreType = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "KeyStoreType", 1))
 mProductsStoreType = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoreType", 0))
 mProductsStoragePath = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoragePath", App.path & "\licenses.ini")
@@ -1640,6 +1688,7 @@ chkLockIP.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "
 chkLockMACaddress.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMACaddress", False))
 chkLockMotherboard.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMotherboard", False))
 chkLockWindows.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockWindows", False))
+txtMaxCount.Text = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtMaxCount", CStr(5))
 
 If Not fileExist(mProductsStoragePath) And mProductsStoreType = alsMDBFile Then
     mProductsStoreType = alsINIFile
@@ -1860,6 +1909,8 @@ mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmb
 mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbLicType", CStr(cmbLicType.ListIndex))
 mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbRegisteredLevel", CStr(cmbRegisteredLevel.ListIndex))
 mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", CStr(chkItemData.Value))
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkNetworkedLicense", CStr(chkNetworkedLicense.Value))
+
 mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "KeyStoreType", CStr(mKeyStoreType))
 mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoreType", CStr(mProductsStoreType))
 mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoragePath", CStr(mProductsStoragePath))
@@ -1872,6 +1923,7 @@ mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chk
 mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMACaddress", CStr(chkLockMACaddress.Value))
 mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMotherboard", CStr(chkLockMotherboard.Value))
 mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockWindows", CStr(chkLockWindows.Value))
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtMaxCount", txtMaxCount.Text)
 
 On Error GoTo 0
 Exit Sub

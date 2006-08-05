@@ -325,6 +325,30 @@ Public Property Get RegisteredLevel() As String
 
 End Property
 '===============================================================================
+' Name: Property Get MaxCount
+' Input: None
+' Output:
+'   Long - MaxCount
+' Purpose: Returns the Number of concurrent users for the license
+' Remarks: None
+'===============================================================================
+Public Property Get MaxCount() As Long
+
+End Property
+
+'===============================================================================
+' Name: Property Get LicenseClass
+' Input: None
+' Output:
+'   String - LicenseClass
+' Purpose: Returns the LicenseClass for the license
+' Remarks: None
+'===============================================================================
+Public Property Get LicenseClass() As String
+
+End Property
+
+'===============================================================================
 ' Name: Property Let LockType
 ' Input:
 '    ByVal LockTypes As ALLockTypes - Lock Types object

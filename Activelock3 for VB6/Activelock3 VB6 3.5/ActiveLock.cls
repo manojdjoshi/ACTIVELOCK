@@ -984,6 +984,43 @@ End Property
 Private Property Get IActiveLock_SoftwareName() As String
     IActiveLock_SoftwareName = mSoftwareName
 End Property
+'===============================================================================
+' Name: Property Get IActiveLock_MaxCount
+' Input: None
+' Output:
+'   Long - Number of concurrent users for the networked license
+' Purpose: Gets the Number of concurrent users for the networked license
+' Remarks: None
+'===============================================================================
+Private Property Get IActiveLock_MaxCount() As Long
+    Dim Lic As ProductLicense
+    Set Lic = mKeyStore.Retrieve(mSoftwareName)
+    If Lic Is Nothing Then
+        Err.Raise ActiveLockErrCodeConstants.alerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE
+    End If
+    ' Validate the License.
+    ValidateLic Lic
+    IActiveLock_MaxCount = Lic.MaxCount
+End Property
+
+'===============================================================================
+' Name: Property Get IActiveLock_LicenseClass
+' Input: None
+' Output:
+'   String - LicenseClass
+' Purpose: Gets the LicenseClass for the license
+' Remarks: None
+'===============================================================================
+Private Property Get IActiveLock_LicenseClass() As String
+    Dim Lic As ProductLicense
+    Set Lic = mKeyStore.Retrieve(mSoftwareName)
+    If Lic Is Nothing Then
+        Err.Raise ActiveLockErrCodeConstants.alerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE
+    End If
+    ' Validate the License.
+    ValidateLic Lic
+    IActiveLock_LicenseClass = Lic.LicenseClass
+End Property
 
 '===============================================================================
 ' Name: Property Get IActiveLock_SoftwarePassword

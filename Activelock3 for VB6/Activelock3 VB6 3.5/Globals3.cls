@@ -192,11 +192,7 @@ Public Function CreateProductLicense(ByVal name As String, _
         .ProductName = name
         .ProductKey = Code
         .ProductVer = Ver
-        'If LicType = allicNetwork Then
-        '    .LicenseClass = alfMulti
-        'Else
-            .LicenseClass = GetClassString(Flags)
-        'End If
+        .LicenseClass = GetClassString(Flags)
         .LicenseType = LicType
         .Licensee = Licensee
         .RegisteredLevel = RegisteredLevel
