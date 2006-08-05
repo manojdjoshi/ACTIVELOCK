@@ -110,6 +110,46 @@ Friend Class ActiveLock
         End Get
     End Property
     '===============================================================================
+    ' Name: Property Get IActiveLock_LicenseClass
+    ' Input: None
+    ' Output:
+    '   String - LicenseClass
+    ' Purpose: Gets the LicenseClass
+    ' Remarks: None
+    '===============================================================================
+    Private ReadOnly Property IActiveLock_LicenseClass() As String Implements _IActiveLock.LicenseClass
+        Get
+            Dim Lic As ProductLicense
+            Lic = mKeyStore.Retrieve(mSoftwareName)
+            If Lic Is Nothing Then
+                Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE)
+            End If
+            ' Validate the License.
+            ValidateLic(Lic)
+            Return Lic.LicenseClass
+        End Get
+    End Property
+    '===============================================================================
+    ' Name: Property Get IActiveLock_MaxCount
+    ' Input: None
+    ' Output:
+    '   Integer - Number of concurrent users for the networked license
+    ' Purpose: Gets the Number of concurrent users for the networked license
+    ' Remarks: None
+    '===============================================================================
+    Private ReadOnly Property IActiveLock_MaxCount() As Integer Implements _IActiveLock.MaxCount
+        Get
+            Dim Lic As ProductLicense
+            Lic = mKeyStore.Retrieve(mSoftwareName)
+            If Lic Is Nothing Then
+                Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE)
+            End If
+            ' Validate the License.
+            ValidateLic(Lic)
+            Return Lic.MaxCount
+        End Get
+    End Property
+    '===============================================================================
     ' Name: Property Let IActiveLock_AutoRegisterKeyPath
     ' Input:
     '   ByVal RHS As String - Liberation key file auto path name

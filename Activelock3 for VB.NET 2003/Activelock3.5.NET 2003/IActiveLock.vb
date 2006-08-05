@@ -1,7 +1,9 @@
 Option Strict Off
 Option Explicit On
 Public Interface _IActiveLock
-	ReadOnly Property RegisteredLevel As String
+    ReadOnly Property MaxCount() As Integer
+    ReadOnly Property RegisteredLevel() As String
+    ReadOnly Property LicenseClass() As String
     Property LockType() As IActiveLock.ALLockTypes
     WriteOnly Property LicenseKeyType() As IActiveLock.ALLicenseKeyTypes
     Property UsedLockType() As IActiveLock.ALLockTypes()
@@ -342,6 +344,32 @@ End Interface
     Public ReadOnly Property RegisteredLevel() As String Implements _IActiveLock.RegisteredLevel
         Get
             RegisteredLevel = String.Empty
+        End Get
+    End Property
+    '===============================================================================
+    ' Name: Property Get MaxCount
+    ' Input: None
+    ' Output:
+    '   Integer - Number of concurrent users for the networked license
+    ' Purpose: Returns the Number of concurrent users for the networked license
+    ' Remarks: None
+    '===============================================================================
+    Public ReadOnly Property MaxCount() As Integer Implements _IActiveLock.MaxCount
+        Get
+            MaxCount = 0
+        End Get
+    End Property
+    '===============================================================================
+    ' Name: Property Get LicenseClass
+    ' Input: None
+    ' Output:
+    '   String - LicenseClass
+    ' Purpose: Returns the LicenseClass
+    ' Remarks: None
+    '===============================================================================
+    Public ReadOnly Property LicenseClass() As String Implements _IActiveLock.LicenseClass
+        Get
+            LicenseClass = "Single"
         End Get
     End Property
     '===============================================================================
