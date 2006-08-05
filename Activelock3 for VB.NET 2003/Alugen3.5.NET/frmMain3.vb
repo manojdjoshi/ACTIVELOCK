@@ -183,6 +183,9 @@ Friend Class frmMain
   Friend WithEvents cmdEmailLicenseKey As System.Windows.Forms.Button
   Friend WithEvents cmdProductsStorage As System.Windows.Forms.Button
     Friend WithEvents Label18 As System.Windows.Forms.Label
+    Friend WithEvents chkNetworkedLicense As System.Windows.Forms.CheckBox
+    Friend WithEvents txtMaxCount As System.Windows.Forms.TextBox
+    Friend WithEvents lblConcurrentUsers As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(frmMain))
@@ -220,6 +223,7 @@ Friend Class frmMain
         Me.cmdPrintLicenseKey = New System.Windows.Forms.Button
         Me.cmdEmailLicenseKey = New System.Windows.Forms.Button
         Me.cmdProductsStorage = New System.Windows.Forms.Button
+        Me.txtMaxCount = New System.Windows.Forms.TextBox
         Me.SSTab1 = New System.Windows.Forms.TabControl
         Me._SSTab1_TabPage0 = New System.Windows.Forms.TabPage
         Me.grpProductsList = New System.Windows.Forms.GroupBox
@@ -232,6 +236,9 @@ Friend Class frmMain
         Me.Label3 = New System.Windows.Forms.Label
         Me._SSTab1_TabPage1 = New System.Windows.Forms.TabPage
         Me.frmKeyGen = New System.Windows.Forms.Panel
+        Me.lblConcurrentUsers = New System.Windows.Forms.Label
+        Me.chkNetworkedLicense = New System.Windows.Forms.CheckBox
+        Me.Label18 = New System.Windows.Forms.Label
         Me.dtpExpireDate = New System.Windows.Forms.DateTimePicker
         Me.chkLockIP = New System.Windows.Forms.CheckBox
         Me.chkLockMotherboard = New System.Windows.Forms.CheckBox
@@ -256,7 +263,6 @@ Friend Class frmMain
         Me.mainStatusBarPanel = New System.Windows.Forms.StatusBarPanel
         Me.saveDlg = New System.Windows.Forms.SaveFileDialog
         Me.lnkActivelockSoftwareGroup = New System.Windows.Forms.LinkLabel
-        Me.Label18 = New System.Windows.Forms.Label
         Me.SSTab1.SuspendLayout()
         Me._SSTab1_TabPage0.SuspendLayout()
         Me.grpProductsList.SuspendLayout()
@@ -792,6 +798,26 @@ Friend Class frmMain
         Me.cmdProductsStorage.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.ToolTip1.SetToolTip(Me.cmdProductsStorage, "Select product storage")
         '
+        'txtMaxCount
+        '
+        Me.txtMaxCount.AcceptsReturn = True
+        Me.txtMaxCount.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.txtMaxCount.AutoSize = False
+        Me.txtMaxCount.BackColor = System.Drawing.SystemColors.Window
+        Me.txtMaxCount.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtMaxCount.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.txtMaxCount.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtMaxCount.Location = New System.Drawing.Point(440, 54)
+        Me.txtMaxCount.MaxLength = 2
+        Me.txtMaxCount.Name = "txtMaxCount"
+        Me.txtMaxCount.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtMaxCount.Size = New System.Drawing.Size(22, 21)
+        Me.txtMaxCount.TabIndex = 68
+        Me.txtMaxCount.Text = "5"
+        Me.ToolTip1.SetToolTip(Me.txtMaxCount, "Enter or select license file")
+        Me.txtMaxCount.Visible = False
+        '
         'SSTab1
         '
         Me.SSTab1.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
@@ -964,6 +990,9 @@ Friend Class frmMain
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.frmKeyGen.BackColor = System.Drawing.SystemColors.Control
+        Me.frmKeyGen.Controls.Add(Me.lblConcurrentUsers)
+        Me.frmKeyGen.Controls.Add(Me.txtMaxCount)
+        Me.frmKeyGen.Controls.Add(Me.chkNetworkedLicense)
         Me.frmKeyGen.Controls.Add(Me.Label18)
         Me.frmKeyGen.Controls.Add(Me.cmdEmailLicenseKey)
         Me.frmKeyGen.Controls.Add(Me.cmdPrintLicenseKey)
@@ -1010,6 +1039,46 @@ Friend Class frmMain
         Me.frmKeyGen.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.frmKeyGen.Size = New System.Drawing.Size(567, 498)
         Me.frmKeyGen.TabIndex = 0
+        '
+        'lblConcurrentUsers
+        '
+        Me.lblConcurrentUsers.BackColor = System.Drawing.SystemColors.Control
+        Me.lblConcurrentUsers.Cursor = System.Windows.Forms.Cursors.Default
+        Me.lblConcurrentUsers.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblConcurrentUsers.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.lblConcurrentUsers.Location = New System.Drawing.Point(464, 58)
+        Me.lblConcurrentUsers.Name = "lblConcurrentUsers"
+        Me.lblConcurrentUsers.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblConcurrentUsers.Size = New System.Drawing.Size(92, 17)
+        Me.lblConcurrentUsers.TabIndex = 69
+        Me.lblConcurrentUsers.Text = "Concurrent Users"
+        Me.lblConcurrentUsers.Visible = False
+        '
+        'chkNetworkedLicense
+        '
+        Me.chkNetworkedLicense.BackColor = System.Drawing.SystemColors.Control
+        Me.chkNetworkedLicense.Cursor = System.Windows.Forms.Cursors.Default
+        Me.chkNetworkedLicense.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkNetworkedLicense.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.chkNetworkedLicense.Location = New System.Drawing.Point(326, 52)
+        Me.chkNetworkedLicense.Name = "chkNetworkedLicense"
+        Me.chkNetworkedLicense.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.chkNetworkedLicense.Size = New System.Drawing.Size(116, 22)
+        Me.chkNetworkedLicense.TabIndex = 67
+        Me.chkNetworkedLicense.Text = "Networked License"
+        '
+        'Label18
+        '
+        Me.Label18.BackColor = System.Drawing.SystemColors.Control
+        Me.Label18.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label18.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label18.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label18.Location = New System.Drawing.Point(0, 246)
+        Me.Label18.Name = "Label18"
+        Me.Label18.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label18.Size = New System.Drawing.Size(86, 26)
+        Me.Label18.TabIndex = 66
+        Me.Label18.Text = "Note: IP address may be dynamic!"
         '
         'dtpExpireDate
         '
@@ -1261,7 +1330,7 @@ Friend Class frmMain
         Me.lblDays.Location = New System.Drawing.Point(208, 56)
         Me.lblDays.Name = "lblDays"
         Me.lblDays.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblDays.Size = New System.Drawing.Size(182, 17)
+        Me.lblDays.Size = New System.Drawing.Size(114, 17)
         Me.lblDays.TabIndex = 11
         Me.lblDays.Text = "days"
         '
@@ -1320,19 +1389,6 @@ Friend Class frmMain
         Me.lnkActivelockSoftwareGroup.Text = "www.activelocksoftware.com"
         Me.lnkActivelockSoftwareGroup.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.lnkActivelockSoftwareGroup.VisitedLinkColor = System.Drawing.Color.Blue
-        '
-        'Label18
-        '
-        Me.Label18.BackColor = System.Drawing.SystemColors.Control
-        Me.Label18.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label18.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label18.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label18.Location = New System.Drawing.Point(0, 246)
-        Me.Label18.Name = "Label18"
-        Me.Label18.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label18.Size = New System.Drawing.Size(86, 26)
-        Me.Label18.TabIndex = 66
-        Me.Label18.Text = "Note: IP address may be dynamic!"
         '
         'frmMain
         '
@@ -2087,6 +2143,12 @@ Friend Class frmMain
         Else
             chkLockWindows.CheckState = CheckState.Checked
         End If
+        If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkNetworkedLicense", CStr(0)) = "Unchecked" Then
+            chkNetworkedLicense.CheckState = CheckState.Unchecked
+        Else
+            chkNetworkedLicense.CheckState = CheckState.Checked
+        End If
+        txtMaxCount.Text = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtMaxCount", CStr(5))
 
         mKeyStoreType = CType(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "KeyStoreType", CStr(1)), IActiveLock.LicStoreType)
         mProductsStoreType = CType(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoreType", CStr(0)), IActiveLock.ProductsStoreType)
@@ -2146,7 +2208,9 @@ InitForm_Error:
     mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboLicType", CStr(cboLicType.SelectedIndex))
     mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboRegisteredLevel", CStr(cboRegisteredLevel.SelectedIndex))
     mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", chkItemData.CheckState.ToString)
-    mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "KeyStoreType", CStr(mKeyStoreType))
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkNetworkedLicense", chkNetworkedLicense.CheckState.ToString)
+
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "KeyStoreType", CStr(mKeyStoreType))
     mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoreType", CStr(mProductsStoreType))
     mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoragePath", CStr(mProductsStoragePath))
 
@@ -2158,6 +2222,7 @@ InitForm_Error:
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMACaddress", chkLockMACaddress.CheckState.ToString)
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMotherboard", chkLockMotherboard.CheckState.ToString)
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockWindows", chkLockWindows.CheckState.ToString)
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtMaxCount", txtMaxCount.Text)
 
     On Error GoTo 0
     Exit Sub
@@ -2403,6 +2468,8 @@ SaveFormSettings_Error:
   ' Generate license key
   Private Sub cmdKeyGen_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdKeyGen.Click
         Dim usedVCode As String
+        Dim licFlag As ActiveLock3_5NET.ProductLicense.LicFlags, maximumUsers As Short
+
         If SSTab1.SelectedIndex <> 1 Then Exit Sub ' our tab not active - do nothing
 
         If Len(txtInstallCode.Text) <> 8 Then  'Short Key License
@@ -2459,10 +2526,19 @@ SaveFormSettings_Error:
             Else
                 selRelLevelType = selRegLevel.ItemData.ToString
             End If
+
+            'Take care of the networked licenses
+            If chkNetworkedLicense.CheckState = CheckState.Checked Then
+                licFlag = ProductLicense.LicFlags.alfMulti
+            Else
+                licFlag = ProductLicense.LicFlags.alfSingle
+            End If
+            maximumUsers = CShort(txtMaxCount.Text)
+
             Lic = ActiveLock3Globals_definst.CreateProductLicense(strName, strVer, "", _
-                      ProductLicense.LicFlags.alfSingle, varLicType, "", _
+                      licFlag, varLicType, "", _
                       selRelLevelType, _
-                      strExpire, , strRegDate)
+                      strExpire, , strRegDate, , maximumUsers)
 
             Dim strLibKey As String, i As Integer
             If Len(txtInstallCode.Text) = 8 Then  'Short Key License
@@ -2472,7 +2548,7 @@ SaveFormSettings_Error:
                         Exit For
                     End If
                 Next
-                strLibKey = ActiveLock.GenerateShortKey(usedVCode, txtInstallCode.Text, txtUser.Text, strExpire, varLicType, cboRegisteredLevel.SelectedIndex + 200, 50)
+                strLibKey = ActiveLock.GenerateShortKey(usedVCode, txtInstallCode.Text, txtUser.Text, strExpire, varLicType, cboRegisteredLevel.SelectedIndex + 200, maximumUsers)
                 txtLicenseKey.Text = strLibKey
             Else 'ALCrypto License Key
                 ' Pass it to IALUGenerator to generate the key
@@ -2896,4 +2972,16 @@ SaveFormSettings_Error:
     Dim myProductsStorageForm As New frmProductsStorage
     myProductsStorageForm.ShowDialog(Me)
   End Sub
+
+    Private Sub chkNetworkedLicense_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkNetworkedLicense.CheckedChanged
+        If chkNetworkedLicense.CheckState = CheckState.Checked Then
+            lblConcurrentUsers.Visible = True
+            txtMaxCount.Visible = True
+        Else
+            lblConcurrentUsers.Visible = False
+            txtMaxCount.Visible = False
+        End If
+
+    End Sub
+
 End Class
