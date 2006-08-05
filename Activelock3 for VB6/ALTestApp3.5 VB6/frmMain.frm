@@ -10,7 +10,6 @@ Begin VB.Form frmMain
    ClientWidth     =   9720
    Icon            =   "frmMain.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    MaxButton       =   0   'False
    ScaleHeight     =   7995
    ScaleWidth      =   9720
@@ -59,11 +58,11 @@ Begin VB.Form frmMain
       TabCaption(1)   =   "Sample App"
       TabPicture(1)   =   "frmMain.frx":0CE6
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "lblLockStatus"
-      Tab(1).Control(1)=   "lblLockStatus2"
+      Tab(1).Control(0)=   "fraViewport"
+      Tab(1).Control(1)=   "Frame1"
       Tab(1).Control(2)=   "lblTrialInfo"
-      Tab(1).Control(3)=   "Frame1"
-      Tab(1).Control(4)=   "fraViewport"
+      Tab(1).Control(3)=   "lblLockStatus2"
+      Tab(1).Control(4)=   "lblLockStatus"
       Tab(1).ControlCount=   5
       Begin VB.Frame fraViewport 
          BorderStyle     =   0  'None
@@ -279,11 +278,29 @@ Begin VB.Form frmMain
       Begin VB.Frame fraRegStatus 
          Caption         =   "Status"
          ForeColor       =   &H00FF0000&
-         Height          =   2655
+         Height          =   2745
          Left            =   120
          TabIndex        =   13
          Top             =   420
          Width           =   9495
+         Begin VB.TextBox txtMaxCount 
+            BackColor       =   &H80000013&
+            Height          =   285
+            Left            =   5355
+            Locked          =   -1  'True
+            TabIndex        =   51
+            Top             =   2340
+            Width           =   540
+         End
+         Begin VB.TextBox txtNetworkedLicense 
+            BackColor       =   &H80000013&
+            Height          =   285
+            Left            =   1560
+            Locked          =   -1  'True
+            TabIndex        =   48
+            Top             =   2340
+            Width           =   1890
+         End
          Begin VB.TextBox txtLicenseType 
             BackColor       =   &H80000013&
             Height          =   285
@@ -391,6 +408,22 @@ Begin VB.Form frmMain
             Top             =   840
             Width           =   4335
          End
+         Begin VB.Label lblConcurrentUsers 
+            Caption         =   "No. of Concurrent Users:"
+            Height          =   255
+            Left            =   3555
+            TabIndex        =   50
+            Top             =   2385
+            Width           =   1785
+         End
+         Begin VB.Label Label10 
+            Caption         =   "License Class:"
+            Height          =   255
+            Left            =   135
+            TabIndex        =   49
+            Top             =   2340
+            Width           =   1335
+         End
          Begin VB.Label Label9 
             Alignment       =   1  'Right Justify
             Caption         =   "License Type:"
@@ -459,12 +492,12 @@ Begin VB.Form frmMain
             Width           =   975
          End
          Begin VB.Label Label6 
-            Caption         =   "Registered:"
+            Caption         =   "License Status:"
             Height          =   255
             Left            =   120
             TabIndex        =   14
             Top             =   870
-            Width           =   975
+            Width           =   1380
          End
       End
       Begin VB.Label lblTrialInfo 
@@ -670,6 +703,8 @@ Private Sub cmdKillLicense_Click()
                 txtUsedDays.Text = ""
                 txtExpiration.Text = ""
                 txtRegisteredLevel.Text = ""
+                txtNetworkedLicense.Text = ""
+                txtMaxCount.Text = ""
         Else
             MsgBox "There's no license to kill.", vbInformation
         End If
@@ -691,6 +726,9 @@ txtUsedDays.Text = ""
 txtExpiration.Text = ""
 txtRegisteredLevel.Text = ""
 txtLicenseType.Text = "None"
+txtNetworkedLicense.Text = ""
+txtMaxCount.Text = ""
+
 End Sub
 
 Private Sub cmdPaste_Click()
@@ -713,6 +751,9 @@ txtUsedDays.Text = ""
 txtExpiration.Text = ""
 txtRegisteredLevel.Text = ""
 txtLicenseType.Text = "None"
+txtNetworkedLicense.Text = ""
+txtMaxCount.Text = ""
+
 End Sub
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -737,6 +778,7 @@ Private Sub Form_Load()
     ' Obtain AL instance and initialize its properties
     Set MyActiveLock = ActiveLock3.NewInstance()
     With MyActiveLock
+        
         
         .SoftwareName = LICENSE_ROOT
         txtName.Text = .SoftwareName
@@ -840,6 +882,17 @@ Private Sub Form_Load()
     If txtExpiration.Text = "" Then txtExpiration.Text = "Permanent" 'App has a permanent license
     txtUser.Text = MyActiveLock.RegisteredUser
     txtRegisteredLevel.Text = MyActiveLock.RegisteredLevel
+    
+    ' Networked Licenses
+    If MyActiveLock.LicenseClass = "MultiUser" Then
+        txtNetworkedLicense.Text = "Networked"
+    Else
+        txtNetworkedLicense.Text = "Single User"
+        txtMaxCount.Visible = False
+        lblConcurrentUsers.Visible = False
+    End If
+    txtMaxCount.Text = MyActiveLock.MaxCount
+
     'Read the license file into a string to determine the license type
     Dim strBuff As String
     Dim fNum As Integer
@@ -891,16 +944,16 @@ Function CheckForResources(ParamArray MyArray()) As Boolean
 
 On Error GoTo checkForResourcesError
 Dim foundIt As Boolean
-Dim y As Variant
+Dim Y As Variant
 Dim i As Integer, j As Integer
 Dim s As String, systemDir As String, pathName As String
 
 WhereIsDLL ("") 'initialize
 
 systemDir = WindowsSystemDirectory 'Get the Windows system directory
-For Each y In MyArray
+For Each Y In MyArray
     foundIt = False
-    s = CStr(y)
+    s = CStr(Y)
     
     If Left$(s, 1) = "#" Then
         pathName = App.Path
@@ -927,7 +980,7 @@ For Each y In MyArray
         App.Title & " cannot run without this library file!" & vbCrLf & vbCrLf & "Exiting!", vbCritical, "Missing Resource"
         End
     End If
-Next y
+Next Y
 
 CheckForResources = True
 Exit Function
@@ -1031,16 +1084,16 @@ FileExistErrors:    'error handling routine, including File Not Found
     FileExist = False
     Exit Function 'end of error handler
 End Function
-Function Instring(ByVal x As String, ParamArray MyArray()) As Boolean
+Function Instring(ByVal X As String, ParamArray MyArray()) As Boolean
 'Do ANY of a group of sub-strings appear in within the first string?
 'Case doesn't count and we don't care WHERE or WHICH
-Dim y As Variant    'member of array that holds all arguments except the first
-    For Each y In MyArray
-    If InStr(1, x, y, 1) > 0 Then 'the "ones" make the comparison case-insensitive
+Dim Y As Variant    'member of array that holds all arguments except the first
+    For Each Y In MyArray
+    If InStr(1, X, Y, 1) > 0 Then 'the "ones" make the comparison case-insensitive
         Instring = True
         Exit Function
     End If
-    Next y
+    Next Y
 End Function
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
