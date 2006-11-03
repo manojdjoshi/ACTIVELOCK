@@ -47,12 +47,15 @@ namespace Licensing
       this.Ok = new System.Windows.Forms.Button();
       this.Cancel = new System.Windows.Forms.Button();
       this.label7 = new System.Windows.Forms.Label();
+      this.label8 = new System.Windows.Forms.Label();
+      this.label9 = new System.Windows.Forms.Label();
       this.groupBox1.SuspendLayout();
       this.licenseInformation.SuspendLayout();
       this.SuspendLayout();
       // 
       // groupBox1
       // 
+      this.groupBox1.Controls.Add(this.label9);
       this.groupBox1.Controls.Add(this.label2);
       this.groupBox1.Controls.Add(this.label1);
       this.groupBox1.Controls.Add(this.userName);
@@ -232,6 +235,26 @@ namespace Licensing
       this.label7.TabIndex = 5;
       this.label7.Text = "CSharp Example";
       // 
+      // label8
+      // 
+      this.label8.AutoSize = true;
+      this.label8.Location = new System.Drawing.Point(91, 44);
+      this.label8.Name = "label8";
+      this.label8.Size = new System.Drawing.Size(659, 13);
+      this.label8.TabIndex = 5;
+      this.label8.Text = "In AluGen this Program is TestApp - 1.0  NOT CSharpExample. Enter UserName, \'Gene" +
+          "rate\' , Copy and Paste Installation Code Into Alugen";
+      // 
+      // label9
+      // 
+      this.label9.AutoSize = true;
+      this.label9.Location = new System.Drawing.Point(226, 91);
+      this.label9.Name = "label9";
+      this.label9.Size = new System.Drawing.Size(418, 13);
+      this.label9.TabIndex = 6;
+      this.label9.Text = "Use Alugen To Produce a Liberation Key in C:\\TestApp.all, Then Restart This Progr" +
+          "am.";
+      // 
       // AboutWithLicensing
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -239,6 +262,7 @@ namespace Licensing
       this.ClientSize = new System.Drawing.Size(772, 435);
       this.ControlBox = false;
       this.Controls.Add(this.label7);
+      this.Controls.Add(this.label8);
       this.Controls.Add(this.Cancel);
       this.Controls.Add(this.Ok);
       this.Controls.Add(this.licenseInformation);
@@ -280,6 +304,8 @@ namespace Licensing
     private System.Windows.Forms.Button Ok;
     private System.Windows.Forms.Button Cancel;
     private System.Windows.Forms.Label label7;
+    private System.Windows.Forms.Label label8;
+    private System.Windows.Forms.Label label9;
 
   }
 }

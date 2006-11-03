@@ -90,11 +90,16 @@ namespace CSharpExample
     {
       InitializeComponent();
       ActiveLockAccess();
+      if (!RegStatus)
+      {
+        this.importantBtn.Enabled = false;
+        this.listView1.Enabled = false;
+      }
     }
 
     private void exitToolStripMenuItem_Click(object sender, EventArgs e)
     {
-
+      this.Close();
     }
 
     private void licensingToolStripMenuItem1_Click(object sender, EventArgs e)
@@ -125,16 +130,71 @@ namespace CSharpExample
         activeLock.SoftwareName = "TestApp";
         activeLock.SoftwareVersion = "1.0";
         activeLock.LockType = IActiveLock.ALLockTypes.lockHDFirmware;
+
+
+
+
+
+
+        // instead of the following line 
+
         activeLock.SoftwareCode = "AAAAB3NzaC1yc2EAAAABJQAAAIB8/B2KWoai2WSGTRPcgmMoczeXpd8nv0Y4r1sJ1wV3vH21q4rTpEYuBiD4HFOpkbNBSRdpBHJGWec7jUi8ISV0pM6i2KznjhCms5CEtYHRybbiYvRXleGzFsAAP817PLN3JYo3WkErT2ofR5RCkfhmx060BT8waPoqnn3AB7sZ0Q==";
+
+
+        // run once then comment out after you have obfuscated value
+        // do something like - or something much much better
+        // the following license key string should be obfuscated
+        bool obfuscating = true;
+        string splay = "AAAAB3NzaC1yc2EAAAABJQAAAIB8/B2KWoai2WSGTRPcgmMoczeXpd8nv0Y4r1sJ1wV3vH21q4rTpEYuBiD4HFOpkbNBSRdpBHJGWec7jUi8ISV0pM6i2KznjhCms5CEtYHRybbiYvRXleGzFsAAP817PLN3JYo3WkErT2ofR5RCkfhmx060BT8waPoqnn3AB7sZ0Q=="; ;
+        string save = splay;
+        if (obfuscating)
+        {
+          int size = splay.Length;
+          if ((size >> 1) * 2 != size)
+          {
+            // not even think of another technique
+          }
+          else
+          {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < splay.Length / 2; i++)
+            {
+              sb.Append(splay[2 * i + 1]);
+              sb.Append(splay[2 * i]);
+            }
+            splay = sb.ToString();      // use debugger and take value and transfer to the line below
+          }
+        }
+        // having run once and got the value above and placed it below
+        // make all the above comment. Sort out any compiler problems
+        // you are all programmers
+        string sobfuscated = splay;     // edit value from debugger into here
+
+
+
+        StringBuilder sb1 = new StringBuilder();
+        for (int i = 0; i < sobfuscated.Length / 2; i++)
+        {
+          sb1.Append(sobfuscated[2 * i + 1]);
+          sb1.Append(sobfuscated[2 * i]);
+        }
+        sobfuscated = sb1.ToString();
+        // once you comment out above code 
+        activeLock.SoftwareCode = sobfuscated;
+
+
         activeLock.KeyStoreType = IActiveLock.LicStoreType.alsFile;
         activeLock.KeyStorePath = "c:\\S3.lic";
         activeLock.AutoRegisterKeyPath = "c:\\TestApp.all";
 
         activeLock.Init("", ref result);
 
-        activeLock.TrialType = IActiveLock.ALTrialTypes.trialDays;
-        activeLock.TrialHideType = IActiveLock.ALTrialHideTypes.trialSteganography;
-        activeLock.TrialLength = 31;
+        if (false)  // remove if you want trial licenses
+        {
+          activeLock.TrialType = IActiveLock.ALTrialTypes.trialDays;
+          activeLock.TrialHideType = IActiveLock.ALTrialHideTypes.trialSteganography;
+          activeLock.TrialLength = 31;
+        }
         //activeLock.ResetTrial();
         //activeLock.ResetTrial();
 

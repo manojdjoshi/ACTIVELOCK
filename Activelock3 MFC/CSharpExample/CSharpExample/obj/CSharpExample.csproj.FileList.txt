@@ -5,7 +5,6 @@ obj\Debug\CSharpExample.Properties.Resources.resources
 obj\Debug\CSharpExample.csproj.GenerateResource.Cache
 bin\Debug\CSharpExample.exe
 bin\Debug\CSharpExample.pdb
-bin\Debug\Activelock3_4NET.dll
 bin\Debug\Activelock3_4NET.pdb
 obj\Debug\CSharpExample.exe
 obj\Debug\CSharpExample.pdb
