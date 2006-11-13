@@ -143,7 +143,6 @@ Private Const AL_REGISTRY_HIVE$ = "Software\ActiveLock Software Group\ActiveLock
 
 ' Transients
 Private mfInit As Boolean   ' flag to indicate that ActiveLock has been initialized
-
 '===============================================================================
 ' Name: Function AppendLockString
 ' Input:
@@ -340,9 +339,15 @@ End Sub
 '===============================================================================
 Private Sub IActiveLock_Acquire(Optional strMsg As String)
     Dim trialActivated As Boolean
+    
     'Check the Key Store Provider
     If mKeyStore Is Nothing Then
         Err.Raise ActiveLockErrCodeConstants.alerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREUNINITIALIZED
+    End If
+    
+    'Check the Key Store Path (LIC file path)
+    If mKeyStorePath = "" Then
+        Err.Raise ActiveLockErrCodeConstants.alerrKeyStorePathInvalid, ACTIVELOCKSTRING, STRKEYSTOREPATHISEMPTY
     End If
 
     Dim Lic As ProductLicense
@@ -454,7 +459,7 @@ Private Sub ValidateKey(Lic As ProductLicense)
         Err.Raise ActiveLockErrCodeConstants.alerrNotInitialized, ACTIVELOCKSTRING, STRNOSOFTWARECODE
     End If
 
-    Dim KEY As RSAKey
+    Dim Key As RSAKey
     Dim strPubKey As String
     Dim strSig As String
     Dim strLic As String
@@ -467,20 +472,35 @@ Private Sub ValidateKey(Lic As ProductLicense)
     ' decode the license key
     strSig = Base64_Decode(strLicKey)
     
-    ' Print out some info for debugging purposes
-    Debug.Print "Code1: " & strPubKey
-    Debug.Print "Lic: " & strLic
-    Debug.Print "Lic hash: " & modMD5.Hash(strLic)
-    Debug.Print "LicKey: " & strLicKey
-    Debug.Print "Sig: " & strSig
-    Debug.Print "Verify: " & RSAVerify(strPubKey, strLic, strSig)
-    Debug.Print "===================================================="
-    
-    ' validate the key
-    Dim rc&
-    rc = RSAVerify(strPubKey, strLic, strSig)
-    If rc <> 0 Then
-        Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
+    If Left(strPubKey, 3) <> "RSA" Then 'ALCrypto
+        ' Print out some info for debugging purposes
+        Debug.Print "Code1: " & strPubKey
+        Debug.Print "Lic: " & strLic
+        Debug.Print "Lic hash: " & modMD5.Hash(strLic)
+        Debug.Print "LicKey: " & strLicKey
+        Debug.Print "Sig: " & strSig
+        Debug.Print "Verify: " & RSAVerify(strPubKey, strLic, strSig)
+        Debug.Print "===================================================="
+        
+        ' validate the key
+        Dim rc As Long
+        rc = RSAVerify(strPubKey, strLic, strSig)
+        If rc <> 0 Then
+            Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
+        End If
+    Else    'CryptoAPI
+        
+        Dim strPublicBlob As String
+        Dim MyGlobals As Globals
+        Dim ok As String
+        Set MyGlobals = New Globals
+        ' Validate the key with CryptoAPI
+        If Left(strPubKey, 6) = "RSA512" Then
+            strPublicBlob = Right(strPubKey, Len(strPubKey) - 6)
+        Else
+            strPublicBlob = Right(strPubKey, Len(strPubKey) - 7)
+        End If
+        ok = MyGlobals.CryptoAPIAction(5, mSoftwareName & mSoftwareVer, "", strSig, strPublicBlob, "", 0)
     End If
 
     ' Check if license has not expired

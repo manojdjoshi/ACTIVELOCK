@@ -140,10 +140,6 @@ Public Declare Function GlobalAlloc Lib "kernel32" _
 Public Declare Function GlobalFree Lib "kernel32" _
    (ByVal hMem As Long) As Long
 
-Public Declare Function ComputerName Lib "kernel32" Alias _
-        "GetComputerNameA" (ByVal lpBuffer As String, nSize As Long) As Long
-Public Const MAX_COMPUTERNAME_LENGTH = 15
-
 Private Declare Function FindFirstFile Lib "kernel32" _
  Alias "FindFirstFileA" (ByVal lpFileName As String, _
  lpFindFileData As WIN32_FIND_DATA) As Long
@@ -1146,20 +1142,6 @@ End Function
 
 
 
-'===============================================================================
-' Name: Function GetComputerName1
-' Input: None
-' Output: Returns the name of the computer on the network
-' Purpose: The name of the computer on the network
-' Remarks: Stolen from ActiveLock 1.89. Author Unknown
-'===============================================================================
-Public Function GetComputerName1() As String
-    Dim name As String, maxSize As Long, tmp As Long
-    maxSize = MAX_COMPUTERNAME_LENGTH + 1
-    name = String(maxSize, 0)
-    tmp = ComputerName(name, maxSize)
-    GetComputerName1 = Trim(name)
-End Function
 '===============================================================================
 ' Name: Function fileExist
 ' Input:

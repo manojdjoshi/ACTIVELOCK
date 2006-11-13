@@ -95,6 +95,7 @@ Public Const STRINVALIDTRIALDAYS As String = "Zero Free Trial days allowed."
 Public Const STRINVALIDTRIALRUNS As String = "Zero Free Trial runs allowed."
 Public Const STRFILETAMPERED As String = "Alcrypto3.dll has been tampered."
 Public Const STRKEYSTOREUNINITIALIZED As String = "Key Store Provider hasn't been initialized yet."
+Public Const STRKEYSTOREPATHISEMPTY As String = "Key Store Path (LIC file path) not specified."
 Public Const STRNOSOFTWARECODE As String = "Software code has not been set."
 Public Const STRNOSOFTWARENAME As String = "Software Name has not been set."
 Public Const STRNOSOFTWAREVERSION As String = "Software Version has not been set."
@@ -197,7 +198,6 @@ Public Declare Function GeneralWinDirApi Lib "kernel32" _
 Public Declare Function GetSystemDirectory Lib "kernel32.dll" Alias "GetSystemDirectoryA" _
     (ByVal lpBuffer As String, ByVal nSize As Long) As Long
 
-
 Public Function MakeWord(ByVal LoByte As Byte, ByVal HiByte As Byte) As Integer
 '===============================================================================
 '   MakeWord - Packs 2 8-bit integers into a 16-bit integer.
@@ -228,10 +228,10 @@ End Function
 ' Remarks: None
 '===============================================================================
 Public Function TrimNulls(startstr As String) As String
-    Dim pos As Integer
-    pos = InStr(startstr, Chr$(0))
-    If pos Then
-        TrimNulls = Trim(Left$(startstr, pos - 1))
+    Dim Pos As Integer
+    Pos = InStr(startstr, Chr$(0))
+    If Pos Then
+        TrimNulls = Trim(Left$(startstr, Pos - 1))
     Else
         TrimNulls = Trim(startstr)
     End If
@@ -509,23 +509,23 @@ End Function
 ' Remarks: 05.13.05    - alkan  - Removed the modActiveLock references
 '===============================================================================
 Public Function RSASign(ByVal strPub As String, ByVal strPriv As String, ByVal strdata As String) As String
-    Dim KEY As RSAKey
+    Dim Key As RSAKey
     ' create the key from the key blobs
-    If rsa_createkey(strPub, Len(strPub), strPriv, Len(strPriv), KEY) = RETVAL_ON_ERROR Then
+    If rsa_createkey(strPub, Len(strPub), strPriv, Len(strPriv), Key) = RETVAL_ON_ERROR Then
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
 
     ' sign the data using the created key
     Dim sLen&
-    If rsa_sign(KEY, strdata, Len(strdata), vbNullString, sLen) = RETVAL_ON_ERROR Then
+    If rsa_sign(Key, strdata, Len(strdata), vbNullString, sLen) = RETVAL_ON_ERROR Then
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
     Dim strSig As String: strSig = String(sLen, 0)
-    If rsa_sign(KEY, strdata, Len(strdata), strSig, sLen) = RETVAL_ON_ERROR Then
+    If rsa_sign(Key, strdata, Len(strdata), strSig, sLen) = RETVAL_ON_ERROR Then
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
     ' throw away the key
-    If rsa_freekey(KEY) = RETVAL_ON_ERROR Then
+    If rsa_freekey(Key) = RETVAL_ON_ERROR Then
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
     RSASign = strSig
@@ -543,19 +543,19 @@ End Function
 ' Remarks: None
 '===============================================================================
 Public Function RSAVerify(ByVal strPub As String, ByVal strdata As String, ByVal strSig As String) As Long
-    Dim KEY As RSAKey
+    Dim Key As RSAKey
     Dim rc As Long
     ' create the key from the public key blob
-    If rsa_createkey(strPub, Len(strPub), vbNullString, 0, KEY) = RETVAL_ON_ERROR Then
+    If rsa_createkey(strPub, Len(strPub), vbNullString, 0, Key) = RETVAL_ON_ERROR Then
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
     ' validate the key
-    rc = rsa_verifysig(KEY, strSig, Len(strSig), strdata, Len(strdata))
+    rc = rsa_verifysig(Key, strSig, Len(strSig), strdata, Len(strdata))
     If rc = RETVAL_ON_ERROR Then
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
     ' de-allocate memory used by the key
-    If rsa_freekey(KEY) = RETVAL_ON_ERROR Then
+    If rsa_freekey(Key) = RETVAL_ON_ERROR Then
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
     RSAVerify = rc

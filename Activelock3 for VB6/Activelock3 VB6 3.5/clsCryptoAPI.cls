@@ -8,7 +8,7 @@ BEGIN
 END
 Attribute VB_Name = "clsCryptoAPI"
 Attribute VB_GlobalNameSpace = False
-Attribute VB_Creatable = True
+Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 Option Explicit
@@ -369,6 +369,8 @@ Private Declare Function WideCharToMultiByte Lib "kernel32" (ByVal CodePage As L
                                                     ByVal lpDefaultChar As Long, _
                                                     ByVal lpUsedDefaultChar As Long) As Long
 
+
+
 Public Property Get DblByteStrings() As Boolean
 
     DblByteStrings = bolUnicode
@@ -718,7 +720,7 @@ Dim abKeyBlob() As Byte
     ' Added by Ismail
     Dim b64 As clsCryptoAPIBase64
     Set b64 = New clsCryptoAPIBase64
-    abPublicBlob = b64.Decode("BgIAAAAkAABSU0ExAAIAAAEAAQD/lSmzzJy6+17PgPDciaBpRgrEmnLPG+EcyTyLi76/Uq4oqU3stGS1bi9LT6rVGQoIqa7xkZuMdZJBHeoqwubb")
+    abPublicBlob = b64.Decode(publicPublicKeyBlob)   '"BgIAAAAkAABSU0ExAAIAAAEAAQD/lSmzzJy6+17PgPDciaBpRgrEmnLPG+EcyTyLi76/Uq4oqU3stGS1bi9LT6rVGQoIqa7xkZuMdZJBHeoqwubb")
     lngPubBlobLength = Len(ByteArrayToString(abPublicBlob))
     ' Added by Ismail
     
@@ -754,7 +756,7 @@ Dim lLen As Long
     ' added by Ismail
     Dim b64 As clsCryptoAPIBase64
     Set b64 = New clsCryptoAPIBase64
-    abPrivateBlob = b64.Decode("BwIAAAAkAAD4eEFtuTobjhCgyJKf5Rg2ZZpUhcxs9xpKhxXKfphl1rHDtZ6W9YEkeZ3gC6x4xeKQkmV7McfF6u0rJoZXdqYX5OQI40jFYc/3alD1dGWVAjnnh+NYUv7/d0xIv4XBWC7eTG12IQb7w9EASTmV1waGQBjp/OTT3uWg6F0ukkQrSwJNZUFOjpAhUDVq6pb8BHTF1YZ2NRPoywRIF/Oi2Hw5hsi956OLc9eqx30gsEAhqu0EUZ4h702Ey7oP7rcEEmIcmOLxt11wk8fXsULZZ9aBdm5tHut0Kh9oihT38CN+NCs9eFk8ROyy04ois3TQlhMITprgU5gfrVJH4OROR3+Nm7wkaU9Tg8L4JjCBwaYPzdSKax8tyjZh60BuySsVzg46L+k4X8/qR8y/cB8=")
+    abPrivateBlob = b64.Decode(publicPrivateKeyBlob)    '"BwIAAAAkAAD4eEFtuTobjhCgyJKf5Rg2ZZpUhcxs9xpKhxXKfphl1rHDtZ6W9YEkeZ3gC6x4xeKQkmV7McfF6u0rJoZXdqYX5OQI40jFYc/3alD1dGWVAjnnh+NYUv7/d0xIv4XBWC7eTG12IQb7w9EASTmV1waGQBjp/OTT3uWg6F0ukkQrSwJNZUFOjpAhUDVq6pb8BHTF1YZ2NRPoywRIF/Oi2Hw5hsi956OLc9eqx30gsEAhqu0EUZ4h702Ey7oP7rcEEmIcmOLxt11wk8fXsULZZ9aBdm5tHut0Kh9oihT38CN+NCs9eFk8ROyy04ois3TQlhMITprgU5gfrVJH4OROR3+Nm7wkaU9Tg8L4JjCBwaYPzdSKax8tyjZh60BuySsVzg46L+k4X8/qR8y/cB8=")
     lngPvtBlobLength = Len(ByteArrayToString(abPrivateBlob))
     ' added by Ismail
     
@@ -1923,7 +1925,6 @@ Else
     lngSigLength = UBound(abSigned) + 1
     ReDim abSig(UBound(abSigned))
     abSig = abSigned ' load the Signature array
-    'MsgBox hHash & "  " & abSig(0) & "  " & lngSigLength & "  " & hKeyPair
     lngReturnValue = CryptVerifySignature(hHash, abSig(0), lngSigLength, hKeyPair, 0, 0)
     If lngReturnValue = 0 Then 'some error occurred
         SignValidate = Err.LastDllError

@@ -95,7 +95,7 @@ Private Type TDecodeTable
 End Type
 
 Private Type TLongByte
-  B(0 To 3) As Byte
+  b(0 To 3) As Byte
 End Type
 
 Private mEncodeTable As TEncodeTable
@@ -162,9 +162,9 @@ ReDim Out(0& To OutTop)
 
 For i = 0& To SrcTop Step 3&
   With AccuB
-    .B(0) = Src(i + 2&)
-    .B(1) = Src(i + 1&)
-    .B(2) = Src(i)
+    .b(0) = Src(i + 2&)
+    .b(1) = Src(i + 1&)
+    .b(2) = Src(i)
   End With
   CopyMem4 AccuB, AccuL
   With mEncodeTable
@@ -266,10 +266,10 @@ For i = 0& To SrcTop Step 4&
   End With
   CopyMem4 AccuL, AccuB
   With AccuB
-    If .B(3) = 0 Then
-      Out(j + 2&) = .B(0)
-      Out(j + 1&) = .B(1)
-           Out(j) = .B(2)
+    If .b(3) = 0 Then
+      Out(j + 2&) = .b(0)
+      Out(j + 1&) = .b(1)
+           Out(j) = .b(2)
     Else
       ErrRaise cMETHODNAME, "Invalid character found"
     End If
@@ -364,7 +364,6 @@ End Function
 '******************************************************************************
 '* Private helpers
 '******************************************************************************
-
 Private Sub ErrRaise(ByVal MethodName As String, Optional ByVal Description As String)
 Err.Raise 5, mcClassName & "." & MethodName, Description
 End Sub

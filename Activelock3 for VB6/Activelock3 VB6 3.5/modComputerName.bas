@@ -40,10 +40,8 @@ Attribute VB_Name = "modHardware"
 ' Modified: 08.15.2005
 '===============================================================================
 
-Private Declare Function ComputerName Lib "kernel32" Alias _
+Public Declare Function ComputerName Lib "kernel32" Alias _
         "GetComputerNameA" (ByVal lpBuffer As String, nSize As Long) As Long
-
-Private Const MAX_COMPUTERNAME_LENGTH = 15
 
 Public Declare Function apiGetVolumeInformation Lib "kernel32" Alias "GetVolumeInformationA" _
     (ByVal lpRootPathName As String, ByVal lpVolumeNameBuffer As String, ByVal nVolumeNameSize As Long, _
@@ -294,17 +292,6 @@ Private Type BufferType
      myBuffer(559) As Byte
 End Type
 
-Private Type OSVERSIONINFO
-    dwOSVersionInfoSize As Long
-    dwMajorVersion As Long
-    dwMinorVersion As Long
-    dwBuildNumber As Long
-    dwPlatformId As Long
-    szCSDVersion As String * 128
-End Type
-
-Private Declare Function GetVersionEx Lib "kernel32" Alias "GetVersionExA" (LpVersionInformation As OSVERSIONINFO) As Long
-
 ' The following UDT and the DLL function is for getting
 ' the serial number from a C++ DLL in case the VB6 APIs fail
 ' Currently, VB code cannot handle the serial numbers
@@ -512,13 +499,14 @@ Private Declare Function GetIfTable Lib "iphlpapi.dll" _
 ' Remarks: Stolen from ActiveLock 1.89. Author Unknown
 '===============================================================================
 Public Function GetComputerName() As String
-Dim name As String, maxSize As Long, tmp As Long
-On Error GoTo GetComputerNameError
-
-maxSize = MAX_COMPUTERNAME_LENGTH + 1
-name = String(maxSize, 0)
-tmp = ComputerName(name, maxSize)
-GetComputerName = TrimNulls(name)
+Dim strString As String
+'Create a buffer
+strString = String(255, Chr$(0))
+'Get the computer name
+ComputerName strString, 255
+'Remove the unnecessary Chr$(0)
+strString = Left$(strString, InStr(1, strString, Chr$(0)) - 1)
+GetComputerName = strString
 
 GetComputerNameError:
 If GetComputerName = "" Then
@@ -644,12 +632,14 @@ End If
 ' function from ALCrypto3.dll
 For jj = 0 To 15 ' Controller index
     GetHDSerialFirmware = Trim(GetHDSerialFirmwareVB6(jj, True))    ' Check the Master drive
-    If GetHDSerialFirmware <> "" Then Exit For
+    If GetHDSerialFirmware <> "" Then Exit Function
     GetHDSerialFirmware = Trim(GetHDSerialFirmwareVB6(jj, False))   ' Now check the Slave Drive
-    If GetHDSerialFirmware <> "" Then Exit For
+    If GetHDSerialFirmware <> "" Then Exit Function
 Next
    
-' Still nothing... Use ALCrypto DLL
+' Still nothing... Use WMI per Jaegermeister
+
+' Still nothing...... :( Use ALCrypto DLL
 Dim mU As MyUDT2
 Call getHardDriveFirmware(mU)
 GetHDSerialFirmware = Trim(StripControlChars(mU.myStr, False))
@@ -855,20 +845,6 @@ Private Function IsBitSet(iBitString As Byte, ByVal lBitNo As Integer) As Boolea
     Else
         IsBitSet = iBitString And (2 ^ lBitNo)
     End If
-End Function
-'===============================================================================
-' Name: Function IsWindowsNT
-' Input: None
-' Output:
-'   Boolean - True if WinNT4 or later
-' Purpose: Returns True if running Windows NT4 or later
-' Remarks: None
-'===============================================================================
-Private Function IsWindowsNT() As Boolean
-   Dim verinfo As OSVERSIONINFO
-   verinfo.dwOSVersionInfoSize = Len(verinfo)
-   If (GetVersionEx(verinfo)) = 0 Then Exit Function
-   If verinfo.dwPlatformId = 2 And verinfo.dwMajorVersion >= 4 Then IsWindowsNT = True
 End Function
 
 '===============================================================================

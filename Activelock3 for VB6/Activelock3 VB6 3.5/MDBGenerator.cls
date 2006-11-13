@@ -223,66 +223,95 @@ End Property
 ' Remarks: None
 '===============================================================================
 Private Function IALUGenerator_GenKey(Lic As ActiveLock3.ProductLicense, ByVal InstCode As String, Optional ByVal RegisteredLevel As String = "0") As String
-    ' Take request code and decrypt it.
-    Dim strReq As String
-    ' 05.13.05 - ialkan Modified to merge DLLs into one
-    strReq = Base64_Decode(InstCode)
-    ' strReq now contains the {LockCode + vbLf + User} string
-    Dim strLock$, strUser$
-    GetLockAndUserFromInstallCode strReq, strLock, strUser
-    Lic.Licensee = strUser
-    ' registration date
-    Dim strRegDate As String
-    ' registered level
-    Lic.RegisteredLevel = RegisteredLevel
-    strRegDate = Lic.RegisteredDate
+Dim strReq As String
+Dim strLock As String, strUser As String
+Dim strRegDate As String
+Dim ProdInfo As ProductInfo
+Dim strLic As String
+Dim strSig As String
+Dim strLicKey As String
+Dim strLibKey As String
 
-    Dim strEncrypted As String
-    ' @todo Rethink this bit about encrypting the dates.
-    ' We need to keep in mind that the app does not have access to the private key, so and any decryption that requires private key
-    ' would not be possible.
-    ' Perhaps instead of encrypting, we could do MD5 hash of (regdate+lockcode)?
-    'ActiveLockEventSink_ValidateValue strRegDate, strEncrypted
-    ' hash it
-    'strEncrypted = ActiveLock3.MD5Hash(strEncrypted)
-    strEncrypted = strRegDate
+' Take request code and decrypt it.
 
-    ' get software codes
-    Dim ProdInfo As ProductInfo
-    Set ProdInfo = IALUGenerator_RetrieveProduct(Lic.ProductName, Lic.ProductVer)
-    Lic.ProductKey = ProdInfo.VCode
+' 05.13.05 - ialkan Modified to merge DLLs into one
+strReq = Base64_Decode(InstCode)
+' strReq now contains the {LockCode + vbLf + User} string
+GetLockAndUserFromInstallCode strReq, strLock, strUser
+Lic.Licensee = strUser
+' registered level
+Lic.RegisteredLevel = RegisteredLevel
+' registration date
+strRegDate = Lic.RegisteredDate
 
-    '@todo Check for "ProdInfo Is Nothing" and handle appropriately
+' @todo Rethink this bit about encrypting the dates.
+' We need to keep in mind that the app does not have access to the private key, so and any decryption that requires private key
+' would not be possible.
+' Perhaps instead of encrypting, we could do MD5 hash of (regdate+lockcode)?
+'ActiveLockEventSink_ValidateValue strRegDate, strEncrypted
+' hash it
+'strEncrypted = ActiveLock3.MD5Hash(strEncrypted)
+'strEncrypted = strRegDate
 
-    Dim strLic As String
-    strLic = Lic.ToString() & vbLf & strLock
+' get software codes
+Set ProdInfo = IALUGenerator_RetrieveProduct(Lic.ProductName, Lic.ProductVer)
+Lic.ProductKey = ProdInfo.VCode
+
+'@todo Check for "ProdInfo Is Nothing" and handle appropriately
+
+strLic = Lic.ToString() & vbLf & strLock
 Debug.Print "strLic: " & vbCrLf & strLic
 
+If Left(ProdInfo.VCode, 3) <> "RSA" Then
     ' sign it
-    Dim strSig As String: strSig = String(1024, 0)
+    strSig = String(1024, 0)
     ' 05.13.05 - ialkan Modified to merge DLLs into one. Moved RSASign into a module
     strSig = RSASign(ProdInfo.VCode, ProdInfo.GCode, strLic)
-
+    
     ' Create liberation key.  This will be a base-64 encoded string of the whole license.
-    Dim strLicKey As String
     ' 05.13.05 - ialkan Modified to merge DLLs into one
     strLicKey = Base64_Encode(strSig)
     ' update Lic with license key
     Lic.LicenseKey = strLicKey
-' Print some info for debugging purposes
-Debug.Print "VCode: " & ProdInfo.VCode
-Debug.Print "Lic: " & strLic
-Debug.Print "Lic hash: " & modMD5.Hash(strLic)
-Debug.Print "LicKey: " & strLicKey
-Debug.Print "Sig: " & strSig
-Debug.Print "Verify: " & RSAVerify(ProdInfo.VCode, strLic, Base64_Decode(strLicKey))
-Debug.Print "===================================================="
+    
+    ' Print some info for debugging purposes
+    Debug.Print "VCode: " & ProdInfo.VCode
+    Debug.Print "Lic: " & strLic
+    Debug.Print "Lic hash: " & modMD5.Hash(strLic)
+    Debug.Print "LicKey: " & strLicKey
+    Debug.Print "Sig: " & strSig
+    Debug.Print "Verify: " & RSAVerify(ProdInfo.VCode, strLic, Base64_Decode(strLicKey))
+    Debug.Print "===================================================="
+Else
+    
+    Dim MyGlobals As Globals
+    Dim ok As String, strPrivateBlob As String
+    Set MyGlobals = New Globals
+    'ok = MyGlobals.ContainerChange(Lic.ProductName & Lic.ProductVer)
+    strPrivateBlob = ProdInfo.GCode
+    ' Destroy Container
+    ok = MyGlobals.CryptoAPIAction(2, Lic.ProductName & Lic.ProductVer, "", "", "", "", 0)
+    
+    ' Sign a string
+    If Left(ProdInfo.GCode, 6) = "RSA512" Then
+        strPrivateBlob = Right(ProdInfo.GCode, Len(ProdInfo.GCode) - 6)
+    Else
+        strPrivateBlob = Right(ProdInfo.GCode, Len(ProdInfo.GCode) - 7)
+    End If
+    ok = MyGlobals.CryptoAPIAction(4, Lic.ProductName & Lic.ProductVer, strLic, strSig, "", strPrivateBlob, 0)
+    ' Create liberation key.  This will be a base-64 encoded string of the whole license.
+    ' 05.13.05 - ialkan Modified to merge DLLs into one
+    strLicKey = Base64_Encode(strSig)
+    ' update Lic with license key
+    Lic.LicenseKey = strLicKey
 
-    ' Serialize it into a formatted string
-    Dim strLibKey As String
-    Lic.Save strLibKey
-    IALUGenerator_GenKey = strLibKey
+End If
+
+' Serialize it into a formatted string
+Lic.Save strLibKey
+IALUGenerator_GenKey = strLibKey
 End Function
+
 '===============================================================================
 ' Name: Sub GetLockAndUserFromInstallCode
 ' Input:

@@ -136,3 +136,4 @@ Public Function CreateProductInfo(ByVal name As String, ByVal Ver As String, ByV
     End With
     Set CreateProductInfo = ProdInfo
 End Function
+
