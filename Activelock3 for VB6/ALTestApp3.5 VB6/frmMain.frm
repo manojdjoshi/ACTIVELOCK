@@ -785,7 +785,8 @@ Private Sub Form_Load()
         
         ' Note: Do not use (App.Major & "." & App.Minor & "." & App.Revision)
         ' since the license will fail with version incremented exe builds
-        .SoftwareVersion = "1.0"   ' WARNING *** WARNING *** DO NOT USE App.Major & "." & App.Minor & "." & App.Revision
+        '.SoftwareVersion = "1.0"   ' WARNING *** WARNING *** DO NOT USE App.Major & "." & App.Minor & "." & App.Revision
+        .SoftwareVersion = "2.0"
         txtVersion.Text = .SoftwareVersion
         
         ' New in v3.3
@@ -811,7 +812,8 @@ Private Sub Form_Load()
         ' or don't use this property to use ALL techniques
         .TrialHideType = trialHiddenFolder Or trialRegistry Or trialSteganography
         
-        .SoftwareCode = Dec(PUB_KEY)
+        '.SoftwareCode = Dec(PUB_KEY)
+        .SoftwareCode = "RSA2048BgIAAAAkAABSU0ExAAgAAAEAAQDPXvRi8OsaXj7Zlf0kHDL9ZZiTFUK02rx0kluIooFQV3hF44+hmnb3O+vLq1DJd5NK9I/tQ9uMTfGGLhjKCXVWYT8SkU3+em0Er2hmZX4EW63kVxFQMFAAYjhN7IFxIMqZJ/2DG+awKlrszorZ8U+fwHKPMomiZDxAzFWmD78H4HC/hxPaG8Tso2AkoScjlYHN8zLh/jeQ6IKaFpIBqLwfLVQF9tCUnsZ8Po6Erk44xqNsH3n0yapqsjdl1jUONT8BOjHtD++7U3lEcyW+n2G4ZCMKCTzDeq7Qddqnz6ubnTUGJvPpXg3DTvfklbpNlcOftfxnr5M+k9MhFzTj2Yvu"
         .LockType = lockNone  'lockWindows 'Or lockComp 'Or lockComp Or lockWindows
         strAutoRegisterKeyPath = App.Path & "\" & LICENSE_ROOT & ".all"
         .AutoRegisterKeyPath = strAutoRegisterKeyPath
@@ -944,16 +946,16 @@ Function CheckForResources(ParamArray MyArray()) As Boolean
 
 On Error GoTo checkForResourcesError
 Dim foundIt As Boolean
-Dim Y As Variant
+Dim y As Variant
 Dim i As Integer, j As Integer
 Dim s As String, systemDir As String, pathName As String
 
 WhereIsDLL ("") 'initialize
 
 systemDir = WindowsSystemDirectory 'Get the Windows system directory
-For Each Y In MyArray
+For Each y In MyArray
     foundIt = False
-    s = CStr(Y)
+    s = CStr(y)
     
     If Left$(s, 1) = "#" Then
         pathName = App.Path
@@ -980,7 +982,7 @@ For Each Y In MyArray
         App.Title & " cannot run without this library file!" & vbCrLf & vbCrLf & "Exiting!", vbCritical, "Missing Resource"
         End
     End If
-Next Y
+Next y
 
 CheckForResources = True
 Exit Function
@@ -1084,16 +1086,16 @@ FileExistErrors:    'error handling routine, including File Not Found
     FileExist = False
     Exit Function 'end of error handler
 End Function
-Function Instring(ByVal X As String, ParamArray MyArray()) As Boolean
+Function Instring(ByVal x As String, ParamArray MyArray()) As Boolean
 'Do ANY of a group of sub-strings appear in within the first string?
 'Case doesn't count and we don't care WHERE or WHICH
-Dim Y As Variant    'member of array that holds all arguments except the first
-    For Each Y In MyArray
-    If InStr(1, X, Y, 1) > 0 Then 'the "ones" make the comparison case-insensitive
+Dim y As Variant    'member of array that holds all arguments except the first
+    For Each y In MyArray
+    If InStr(1, x, y, 1) > 0 Then 'the "ones" make the comparison case-insensitive
         Instring = True
         Exit Function
     End If
-    Next Y
+    Next y
 End Function
 
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
