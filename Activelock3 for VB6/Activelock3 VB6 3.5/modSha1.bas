@@ -353,7 +353,6 @@ End Function
 '===============================================================================
 Function BigAA2NOT(ByVal value1 As String) As String
     Dim valueans As String
-    Dim loopit As Integer
 
     value1 = Right$(value1, 8)
     value1 = String$(8 - Len(value1), "0") + value1
@@ -363,7 +362,6 @@ Function BigAA2NOT(ByVal value1 As String) As String
     valueans = String$(8 - Len(valueans), "0") + valueans
     
     BigAA2NOT = valueans
-
 End Function
 
 '===============================================================================
@@ -463,7 +461,7 @@ Function SHA1AA1Hash(ByVal hashthis As String) As String
     ReDim buf(0 To 4) As String
     ReDim in_(0 To 79) As String
     Dim tempnum As Integer, tempnum2 As Integer, loopit As Integer, loopouter As Integer, loopinner As Integer
-    Dim a As String, b As String, c As String, d As String, e As String
+    Dim a As String, b As String, C As String, d As String, e As String
     Dim tempstr As String
 
     ' Add padding
@@ -492,7 +490,7 @@ Function SHA1AA1Hash(ByVal hashthis As String) As String
     For loopouter = 0 To Len(hashthis) / 64 - 1
         a = buf(0)
         b = buf(1)
-        c = buf(2)
+        C = buf(2)
         d = buf(3)
         e = buf(4)
 
@@ -510,48 +508,48 @@ Function SHA1AA1Hash(ByVal hashthis As String) As String
         Next loopit
 
         For loopit = 0 To 19
-            tempstr = BigAA1OR(BigAA1AND(b, c), BigAA1AND(BigAA1NOT(b), d))
+            tempstr = BigAA1OR(BigAA1AND(b, C), BigAA1AND(BigAA1NOT(b), d))
             tempstr = BigAA1Mod32Add(BigAA1RotLeft(a, 5), BigAA1Mod32Add(tempstr, BigAA1Mod32Add(e, BigAA1Mod32Add(in_(loopit), "5A827999"))))
             e = d
-            d = c
-            c = BigAA1RotLeft(b, 30)
+            d = C
+            C = BigAA1RotLeft(b, 30)
             b = a
             a = tempstr
         Next loopit
 
         For loopit = 20 To 39
-            tempstr = BigAA1XOR(BigAA1XOR(b, c), d)
+            tempstr = BigAA1XOR(BigAA1XOR(b, C), d)
             tempstr = BigAA1Mod32Add(BigAA1RotLeft(a, 5), BigAA1Mod32Add(tempstr, BigAA1Mod32Add(e, BigAA1Mod32Add(in_(loopit), "6ED9EBA1"))))
             e = d
-            d = c
-            c = BigAA1RotLeft(b, 30)
+            d = C
+            C = BigAA1RotLeft(b, 30)
             b = a
             a = tempstr
         Next loopit
 
         For loopit = 40 To 59
-            tempstr = BigAA1OR(BigAA1OR(BigAA1AND(b, c), BigAA1AND(b, d)), BigAA1AND(c, d))
+            tempstr = BigAA1OR(BigAA1OR(BigAA1AND(b, C), BigAA1AND(b, d)), BigAA1AND(C, d))
             tempstr = BigAA1Mod32Add(BigAA1RotLeft(a, 5), BigAA1Mod32Add(tempstr, BigAA1Mod32Add(e, BigAA1Mod32Add(in_(loopit), "8F1BBCDC"))))
             e = d
-            d = c
-            c = BigAA1RotLeft(b, 30)
+            d = C
+            C = BigAA1RotLeft(b, 30)
             b = a
             a = tempstr
         Next loopit
 
         For loopit = 60 To 79
-            tempstr = BigAA1XOR(BigAA1XOR(b, c), d)
+            tempstr = BigAA1XOR(BigAA1XOR(b, C), d)
             tempstr = BigAA1Mod32Add(BigAA1RotLeft(a, 5), BigAA1Mod32Add(tempstr, BigAA1Mod32Add(e, BigAA1Mod32Add(in_(loopit), "CA62C1D6"))))
             e = d
-            d = c
-            c = BigAA1RotLeft(b, 30)
+            d = C
+            C = BigAA1RotLeft(b, 30)
             b = a
             a = tempstr
         Next loopit
         
         buf(0) = BigAA1Mod32Add(buf(0), a)
         buf(1) = BigAA1Mod32Add(buf(1), b)
-        buf(2) = BigAA1Mod32Add(buf(2), c)
+        buf(2) = BigAA1Mod32Add(buf(2), C)
         buf(3) = BigAA1Mod32Add(buf(3), d)
         buf(4) = BigAA1Mod32Add(buf(4), e)
     
@@ -582,7 +580,7 @@ Function SHA1AA2Hash(ByVal hashthis As String) As String
     ReDim buf(0 To 4) As String
     ReDim in_(0 To 79) As String
     Dim tempnum As Integer, tempnum2 As Integer, loopit As Integer, loopouter As Integer, loopinner As Integer
-    Dim a As String, b As String, c As String, d As String, e As String
+    Dim a As String, b As String, C As String, d As String, e As String
     Dim tempstr As String
 
     ' Add padding
@@ -611,7 +609,7 @@ Function SHA1AA2Hash(ByVal hashthis As String) As String
     For loopouter = 0 To Len(hashthis) / 64 - 1
         a = buf(0)
         b = buf(1)
-        c = buf(2)
+        C = buf(2)
         d = buf(3)
         e = buf(4)
 
@@ -629,48 +627,48 @@ Function SHA1AA2Hash(ByVal hashthis As String) As String
         Next loopit
 
         For loopit = 0 To 19
-            tempstr = BigAA2OR(BigAA2AND(b, c), BigAA2AND(BigAA2NOT(b), d))
+            tempstr = BigAA2OR(BigAA2AND(b, C), BigAA2AND(BigAA2NOT(b), d))
             tempstr = BigAA2Mod32Add(BigAA2RotLeft(a, 5), BigAA2Mod32Add(tempstr, BigAA2Mod32Add(e, BigAA2Mod32Add(in_(loopit), "5A827999"))))
             e = d
-            d = c
-            c = BigAA2RotLeft(b, 30)
+            d = C
+            C = BigAA2RotLeft(b, 30)
             b = a
             a = tempstr
         Next loopit
 
         For loopit = 20 To 39
-            tempstr = BigAA2XOR(BigAA2XOR(b, c), d)
+            tempstr = BigAA2XOR(BigAA2XOR(b, C), d)
             tempstr = BigAA2Mod32Add(BigAA2RotLeft(a, 5), BigAA2Mod32Add(tempstr, BigAA2Mod32Add(e, BigAA2Mod32Add(in_(loopit), "6ED9EBA1"))))
             e = d
-            d = c
-            c = BigAA2RotLeft(b, 30)
+            d = C
+            C = BigAA2RotLeft(b, 30)
             b = a
             a = tempstr
         Next loopit
 
         For loopit = 40 To 59
-            tempstr = BigAA2OR(BigAA2OR(BigAA2AND(b, c), BigAA2AND(b, d)), BigAA2AND(c, d))
+            tempstr = BigAA2OR(BigAA2OR(BigAA2AND(b, C), BigAA2AND(b, d)), BigAA2AND(C, d))
             tempstr = BigAA2Mod32Add(BigAA2RotLeft(a, 5), BigAA2Mod32Add(tempstr, BigAA2Mod32Add(e, BigAA2Mod32Add(in_(loopit), "8F1BBCDC"))))
             e = d
-            d = c
-            c = BigAA2RotLeft(b, 30)
+            d = C
+            C = BigAA2RotLeft(b, 30)
             b = a
             a = tempstr
         Next loopit
 
         For loopit = 60 To 79
-            tempstr = BigAA2XOR(BigAA2XOR(b, c), d)
+            tempstr = BigAA2XOR(BigAA2XOR(b, C), d)
             tempstr = BigAA2Mod32Add(BigAA2RotLeft(a, 5), BigAA2Mod32Add(tempstr, BigAA2Mod32Add(e, BigAA2Mod32Add(in_(loopit), "CA62C1D6"))))
             e = d
-            d = c
-            c = BigAA2RotLeft(b, 30)
+            d = C
+            C = BigAA2RotLeft(b, 30)
             b = a
             a = tempstr
         Next loopit
         
         buf(0) = BigAA2Mod32Add(buf(0), a)
         buf(1) = BigAA2Mod32Add(buf(1), b)
-        buf(2) = BigAA2Mod32Add(buf(2), c)
+        buf(2) = BigAA2Mod32Add(buf(2), C)
         buf(3) = BigAA2Mod32Add(buf(3), d)
         buf(4) = BigAA2Mod32Add(buf(4), e)
     

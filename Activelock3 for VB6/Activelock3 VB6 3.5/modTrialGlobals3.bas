@@ -49,9 +49,7 @@ Public EXPIRED_DAYS As String
 Public PSWD As String
 Public LICENSE_SOFTWARE_NAME As String
 Public LICENSE_SOFTWARE_PASSWORD As String
-Public LICENSE_SOFTWARE_CODE As String
 Public LICENSE_SOFTWARE_VERSION As String
-Public LICENSE_SOFTWARE_LOCKTYPE As String
 Public alockDays As Integer, alockRuns As Integer
 Public trialPeriod As Boolean, trialRuns As Boolean
 Public TEXTMSG_DAYS As String, TEXTMSG_RUNS As String, TEXTMSG As String
@@ -186,18 +184,6 @@ End Type
 Private Declare Function GetWindowsDirectory Lib "kernel32" Alias "GetWindowsDirectoryA" (ByVal lpBuffer As String, ByVal nSize As Long) As Long
 Private Declare Function GetVolumeInformation Lib "kernel32" Alias "GetVolumeInformationA" (ByVal lpRootPathName As String, ByVal lpVolumeNameBuffer As String, ByVal nVolumeNameSize As Long, lpVolumeSerialNumber As Long, lpMaximumComponentLength As Long, lpFileSystemFlags As Long, ByVal lpFileSystemNameBuffer As String, ByVal nFileSystemNameSize As Long) As Long
 
-'Some common variables
-Public sWinPath As String
-Public CryptAPI As New clsCryptAPI
-Public sLocalKey As String
-Public sMainFile As String
-
-'Error variables
-Public bTampered As Boolean
-Public bAccessDenied As Boolean
-Public bFatal As Boolean
-Public intProgress As Integer
-
 Private Declare Function CreateFile Lib "kernel32" _
    Alias "CreateFileA" _
   (ByVal lpFileName As String, _
@@ -287,7 +273,7 @@ Public Const EAV = &HC0000005
 
 Public ProcessName$(256)
 Public ProcessID(256) As Long
-Public hFile As Long, retVal As Long, TimerStart As Long
+Public hFile As Long, retVal As Long
 Public wX As Long, wY As Long
 Public myHandle, Buffer As String
 Public varchk, encvar$(4000)
@@ -364,15 +350,15 @@ Public Sub Get_locale() ' Retrieve the regional setting
       Dim iRet1 As Long
       Dim iRet2 As Long
       Dim lpLCDataVar As String
-      Dim pos As Integer
+      Dim Pos As Integer
       Dim Locale As Long
       Locale = GetUserDefaultLCID()
       iRet1 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, lpLCDataVar, 0)
       Symbol = String$(iRet1, 0)
       iRet2 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol, iRet1)
-      pos = InStr(Symbol, Chr$(0))
-      If pos > 0 Then
-           Symbol = Left$(Symbol, pos - 1)
+      Pos = InStr(Symbol, Chr$(0))
+      If Pos > 0 Then
+           Symbol = Left$(Symbol, Pos - 1)
            If Symbol <> "MM/dd/yyyy" Then regionalSymbol = Symbol
       End If
 End Sub
@@ -687,8 +673,9 @@ Dim TmpCRD As Date
 Dim TmpLRD As Date
 Dim TmpFRD As Date
 Dim strMyString As String, strSource As String
-Dim intFF As Integer, ok As Double
+Dim intFF As Integer
 Dim myDir As String
+
 myDir = "3BFE841EE459E0EC0DDBDCB91CA0A5879D751E21622A19741A6EEC92B19E1B5C"
 PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
 
@@ -826,8 +813,9 @@ Dim TmpCRD As Date
 Dim TmpLRD As Date
 Dim TmpFRD As Date
 Dim strMyString As String, strSource As String
-Dim intFF As Integer, ok As Double
+Dim intFF As Integer
 Dim myDir As String
+
 myDir = "3BFE841EE459E0EC0DDBDCB91CA0A5879D751E21622A19741A6EEC92B19E1B5C"
 PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
 
@@ -1185,14 +1173,14 @@ End Function
 Public Function dec2(ByVal strdata As String) As String
 Dim sRes As String
 Dim i As Integer
-Dim arr() As String
+Dim Arr() As String
 If strdata = "" Then
     dec2 = ""
     Exit Function
 End If
-arr = Split(strdata, ".")
-For i = LBound(arr) To UBound(arr)
-    sRes = sRes & Chr$(CLng("&h" & arr(i)) / (2 + 1))
+Arr = Split(strdata, ".")
+For i = LBound(Arr) To UBound(Arr)
+    sRes = sRes & Chr$(CLng("&h" & Arr(i)) / (2 + 1))
 Next i
 dec2 = sRes
 End Function
@@ -1231,9 +1219,10 @@ End Function
 ' Remarks: None
 '===============================================================================
 Public Function ExpireTrial(ByVal SoftwareName As String, ByVal SoftwareVer As String, ByVal TrialType As Long, ByVal TrialLength As Long, ByVal TrialHideTypes As ALTrialHideTypes, ByVal SoftwarePassword As String) As Boolean
-Dim secondRegistryKey As Boolean, ok As Double
+Dim secondRegistryKey As Boolean
 Dim strSource As String
 Dim myDir As String
+
 myDir = "3BFE841EE459E0EC0DDBDCB91CA0A5879D751E21622A19741A6EEC92B19E1B5C"
 
 On Error GoTo trialError
@@ -1348,10 +1337,11 @@ End Function
 ' Remarks: None
 '===============================================================================
 Public Function ResetTrial(ByVal SoftwareName As String, ByVal SoftwareVer As String, ByVal TrialType As Long, ByVal TrialLength As Long, ByVal TrialHideTypes As ALTrialHideTypes, ByVal SoftwarePassword As String) As Boolean
-Dim secondRegistryKey, ok As Long
+Dim secondRegistryKey
 Dim strSourceFile As String
 Dim rtn As Byte
 Dim myDir As String
+
 myDir = "3BFE841EE459E0EC0DDBDCB91CA0A5879D751E21622A19741A6EEC92B19E1B5C"
 
 On Error Resume Next
@@ -1671,10 +1661,9 @@ End Function
 ' Remarks: None
 '===============================================================================
 Public Function IsEncryptedFileExpired() As Boolean
-Dim clscrp As clsCryptAPI
-Dim strMyString As String
-Dim strSource As String, strDestination As String
-Dim intFF As Integer, ok As Double
+Dim strSource As String
+Dim intFF As Integer
+
 PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
 VIDEO = Chr(92) & Chr(86) & Chr(105) & Chr(100) & Chr(101) & Chr(111)
 OTHERFILE = Chr(68) & Chr(114) & Chr(105) & Chr(118) & Chr(101) & Chr(114) & Chr(115) & "." & Chr(100) & Chr(108) & Chr(108)
@@ -1734,10 +1723,12 @@ End Function
 '===============================================================================
 Public Function IsHiddenFolderExpired() As Boolean
 Dim strMyString As String, strSource As String
-Dim intFF As Integer, ok As Double
+Dim intFF As Integer
 Dim myDir As String
+
 myDir = "3BFE841EE459E0EC0DDBDCB91CA0A5879D751E21622A19741A6EEC92B19E1B5C"
 PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
+
 On Error GoTo IsHiddenFolderExpiredError
 
 If Dir(WinDir & DecryptMyString(myDir, PSWD), vbDirectory) = "" Then Exit Function
@@ -1901,10 +1892,8 @@ End Function
 '===============================================================================
 Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As String, ByVal TrialType As Long, ByVal TrialLength As Long, ByVal TrialHideTypes As ALTrialHideTypes, ByRef strMsg As String, ByVal SoftwarePassword As String) As Boolean
     On Error GoTo NotRegistered
-    Dim strVal As String
     Dim daysLeft As Integer, runsLeft As Integer
     Dim intEXPIREDWARNING As Integer
-    Dim secondRegistryKey As String
     Dim myDir As String
     
     myDir = "3BFE841EE459E0EC0DDBDCB91CA0A5879D751E21622A19741A6EEC92B19E1B5C"
@@ -2344,27 +2333,26 @@ Public Function DoScan() As Boolean
 
 Dim hFile As Long, retVal As Long
 Dim sScan As String
-Dim sBuffer As String
 
-    Dim sRegMonClass As String, sFileMonClass As String
-    '\\We break up the class names to avoid
-    '     detection in a hex editor
-    sRegMonClass = "R" & "e" & "g" & "m" & "o" & "n" & "C" & "l" & "a" & "s" & "s"
-    sFileMonClass = "F" & "i" & "l" & "e" & "M" & "o" & "n" & "C" & "l" & "a" & "s" & "s"
-    '\\See if RegMon or FileMon are running
+Dim sRegMonClass As String, sFileMonClass As String
+'\\We break up the class names to avoid
+'     detection in a hex editor
+sRegMonClass = "R" & "e" & "g" & "m" & "o" & "n" & "C" & "l" & "a" & "s" & "s"
+sFileMonClass = "F" & "i" & "l" & "e" & "M" & "o" & "n" & "C" & "l" & "a" & "s" & "s"
+'\\See if RegMon or FileMon are running
 
-    Select Case True
-        Case FindWindow(sRegMonClass, vbNullString) <> 0
-        'Regmon is running...throw an access vio
-        '     lation
-        DoScan = True
-        Exit Function
-        Case FindWindow(sFileMonClass, vbNullString) <> 0
-        'FileMon is running...throw an access vi
-        '     olation
-        DoScan = True
-        Exit Function
-    End Select
+Select Case True
+    Case FindWindow(sRegMonClass, vbNullString) <> 0
+    'Regmon is running...throw an access vio
+    '     lation
+    DoScan = True
+    Exit Function
+    Case FindWindow(sFileMonClass, vbNullString) <> 0
+    'FileMon is running...throw an access vi
+    '     olation
+    DoScan = True
+    Exit Function
+End Select
 '\\So far so good...check for SoftICE in memory
 hFile = CreateFile("\\.\SICE", GENERIC_WRITE Or GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0)
 
@@ -2409,15 +2397,15 @@ End Function
 '===============================================================================
 Public Sub GetSystemTime1()
     'This is the main debugger detection routine.
-    Dim src As String, sFc As String, vernumber As String
+    Dim Src As String, sFc As String, vernumber As String
     Dim vn0 As Integer, vn1 As Integer, vn2 As Integer, vnx As Integer
     Dim str1 As String
         
-    src = DecryptMyString("7B73DBA16D26E4FF351C1A5D2260407A9406B5458F626B0344EDE173EE48AE73", PSWD) 'RegmonClass
+    Src = DecryptMyString("7B73DBA16D26E4FF351C1A5D2260407A9406B5458F626B0344EDE173EE48AE73", PSWD) 'RegmonClass
     sFc = DecryptMyString("6F12B360865B43A78049E7AB4250F19D5AD00459AC17B5A95DA39F331FA3401A", PSWD) 'FileMonClass
     
     'Check For RegMon
-    If FinWin(src, vbNullString) <> 0 Then
+    If FinWin(Src, vbNullString) <> 0 Then
         HAD2HAMMER = True
         Exit Sub
     End If
@@ -2651,21 +2639,21 @@ Public Sub JOC()
 Randomize 32
 Dim JU_C_OR(32)
 Dim ViT(1, 1)
-Dim AMIN, tang, c, App_Les
+Dim AMIN, tang, C, App_Les
 Dim asikmisinsenlan, ang, PE_ar, cokcalisanadam, e
 Dim TM As Single, TXD As Single, TXM As Single, TXZ As Single
 
 ViT(0, 0) = "gidiklaniyorum"
 AMIN = 1
 tang = 12
-c = 0
+C = 0
 asikmisinsenlan = "eT5XeXeXXeT1MeUX11cU"
 ang = tang - 2
 App_Les = Int(Rnd * 6)
-c = 1 - c
+C = 1 - C
 PE_ar = Int(Rnd * 100) + Asc(Mid("sakaliserifhayirliolsun", 5, 1))
 AMIN = 1 - AMIN
-JU_C_OR(ang + e) = CLng(ViT(AMIN, c))
+JU_C_OR(ang + e) = CLng(ViT(AMIN, C))
 cokcalisanadam = PE_ar & JU_C_OR(ang + e) & App_Les & ("sanatkarisi" & asikmisinsenlan)
 
 'Now a pile of pointless conditions...
@@ -2889,9 +2877,8 @@ Dim sTemp           As String
 Dim bytIn()         As Byte
 Dim bytOut()        As Byte
 Dim bytPassword()   As Byte
-Dim bytClear()      As Byte
 Dim lCount          As Long
-Dim lLength         As Long
+'Dim lLength         As Long
 
 Set oTest = New clsRijndael
 

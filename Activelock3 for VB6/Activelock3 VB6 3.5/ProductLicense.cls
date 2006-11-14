@@ -85,7 +85,6 @@ Attribute VB_Exposed = True
 '  ///////////////////////////////////////////////////////////////////////
 Option Explicit
 
-Private mstrType As String
 Private mstrLicensee As String
 Private mstrRegisteredLevel As String
 Private mstrLicenseClass As String
@@ -100,8 +99,6 @@ Private mstrRegisteredDate As String
 Private mstrLastUsed As String
 Private mstrHash1 As String ' hash of mstrRegisteredDate
 Private mnMaxCount As Long ' max number of concurrent users
-
-
 
 ' License Flags.  Values can be combined (OR&#39;ed) together.
 '
@@ -234,9 +231,9 @@ End Property
 ' Remarks: !!!WARNING!!! Use this method with caution.  You run the risk of invalidating your existing license
 ' if you call this method without knowing what you are doing.
 '===============================================================================
-Public Property Let ProductKey(ByVal KEY As String)
+Public Property Let ProductKey(ByVal Key As String)
 Attribute ProductKey.VB_Description = "Product Key."
-    mstrProductKey = KEY
+    mstrProductKey = Key
 End Property
 '===============================================================================
 ' Name: Property Get ProductKey
@@ -313,9 +310,9 @@ End Property
 ' Remarks: !!! WARNING !!! Make sure you know what you're doing when you call this method; otherwise, you run
 ' the risk of invalidating your existing license.
 '===============================================================================
-Public Property Let LicenseKey(ByVal KEY As String)
+Public Property Let LicenseKey(ByVal Key As String)
 Attribute LicenseKey.VB_Description = "License key."
-    mstrLicenseKey = KEY
+    mstrLicenseKey = Key
 End Property
 
 '===============================================================================

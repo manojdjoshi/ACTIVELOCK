@@ -108,7 +108,6 @@ Attribute VB_Exposed = False
 '                            user name is blank, which causes ALUGEN to (correctly) take the LockCode part of InstallationCode
 '                            (the part after the last vbLf delimiter) for the user name, resulting in an invalid liberation key
 '                            being generated.
-' 05.13.05 - ialkan        - Added mRegisteredLevel which implements the Registered to Level X feature
 ' </pre>
 
 '  ///////////////////////////////////////////////////////////////////////
@@ -125,7 +124,6 @@ Private mSoftwareName As String
 Private mSoftwareVer As String
 Private mSoftwarePassword As String
 Private mSoftwareCode As String
-Private mRegisteredLevel As String
 Private mLockTypes As ALLockTypes
 Private mLicenseKeyTypes As ALLicenseKeyTypes
 Private mUsedLockTypes() As ALLockTypes
@@ -135,7 +133,6 @@ Private mTrialHideTypes As ALTrialHideTypes
 Private mKeyStore As IKeyStoreProvider
 Private mKeyStorePath As String
 Private MyNotifier As New ActiveLockEventNotifier
-Private MyGlobals As New Globals
 Private mLibKeyPath As String
 
 ' Registry hive used to store Activelock settings.
@@ -338,7 +335,6 @@ End Sub
 ' Remarks: None
 '===============================================================================
 Private Sub IActiveLock_Acquire(Optional strMsg As String)
-    Dim trialActivated As Boolean
     
     'Check the Key Store Provider
     If mKeyStore Is Nothing Then
@@ -459,7 +455,6 @@ Private Sub ValidateKey(Lic As ProductLicense)
         Err.Raise ActiveLockErrCodeConstants.alerrNotInitialized, ACTIVELOCKSTRING, STRNOSOFTWARECODE
     End If
 
-    Dim Key As RSAKey
     Dim strPubKey As String
     Dim strSig As String
     Dim strLic As String
@@ -669,7 +664,6 @@ End Sub
 '===============================================================================
 Private Sub UpdateLastUsed(Lic As ProductLicense)
     ' Update license store with LastRunDate
-    Dim strEncrypted As String
     Dim strLastUsed As String
     strLastUsed = Format(modActiveLock.UTC(Now()), "YYYY/MM/DD")
     Lic.LastUsed = strLastUsed
@@ -794,7 +788,6 @@ End Property
 Private Sub IActiveLock_Register(ByVal LibKey As String, Optional user As String = "")
     
     Dim Lic As New ActiveLock3.ProductLicense
-    Dim varResult As Variant
     Dim trialStatus As Boolean
     
     ' Check to see if this is a Short License Key

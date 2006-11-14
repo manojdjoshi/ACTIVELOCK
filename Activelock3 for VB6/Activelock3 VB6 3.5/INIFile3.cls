@@ -198,7 +198,6 @@ Public Function EnumSectionKeys(ByRef ArrayResult As Variant) As Integer
     Dim asEnumKeys() As String
     Dim lBuffSize As Long
     Dim iDelim As Integer
-    Dim avReturn As Variant
     Dim iTries As Integer
 
     On Error GoTo catch
@@ -371,7 +370,6 @@ Public Function EnumSections(ByRef ArrayResult As Variant) As Integer
     Dim iCounter As Integer
     Dim asEnumSections() As String
     Dim lBuffSize As Long
-    Dim iDelim As Integer
     Dim iTries As Integer
 
     'Debug.Assert 0

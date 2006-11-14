@@ -491,16 +491,16 @@ End Sub
 '*******************************************************************************
 Public Sub gkey(ByVal nb As Long, _
                 ByVal nk As Long, _
-                KEY() As Byte)
+                Key() As Byte)
                 
     Dim i               As Long
     Dim j               As Long
     Dim k               As Long
     Dim m               As Long
     Dim N               As Long
-    Dim C1              As Long
-    Dim C2              As Long
-    Dim C3              As Long
+    Dim c1              As Long
+    Dim c2              As Long
+    Dim c3              As Long
     Dim CipherKey(7)    As Long
     
     m_Nb = nb
@@ -512,31 +512,31 @@ Public Sub gkey(ByVal nb As Long, _
         m_Nr = 6 + m_Nk
     End If
     
-    C1 = 1
+    c1 = 1
     If m_Nb < 8 Then
-        C2 = 2
-        C3 = 3
+        c2 = 2
+        c3 = 3
     Else
-        C2 = 3
-        C3 = 4
+        c2 = 3
+        c3 = 4
     End If
     
     For j = 0 To nb - 1
         m = j * 3
         
-        m_fi(m) = (j + C1) Mod nb
-        m_fi(m + 1) = (j + C2) Mod nb
-        m_fi(m + 2) = (j + C3) Mod nb
-        m_ri(m) = (nb + j - C1) Mod nb
-        m_ri(m + 1) = (nb + j - C2) Mod nb
-        m_ri(m + 2) = (nb + j - C3) Mod nb
+        m_fi(m) = (j + c1) Mod nb
+        m_fi(m + 1) = (j + c2) Mod nb
+        m_fi(m + 2) = (j + c3) Mod nb
+        m_ri(m) = (nb + j - c1) Mod nb
+        m_ri(m + 1) = (nb + j - c2) Mod nb
+        m_ri(m + 2) = (nb + j - c3) Mod nb
     Next
     
     N = m_Nb * (m_Nr + 1)
     
     For i = 0 To m_Nk - 1
         j = i * 4
-        CipherKey(i) = PackFrom(KEY, j)
+        CipherKey(i) = PackFrom(Key, j)
     Next
     
     For i = 0 To m_Nk - 1
@@ -755,8 +755,6 @@ Public Function EncryptData(bytMessage() As Byte, _
     Dim lCount          As Long
     Dim lLength         As Long
     Dim lEncodedLength  As Long
-    Dim bytLen(3)       As Byte
-    Dim lPosition       As Long
     
     If Not IsInitialized(bytMessage) Then
         Exit Function
@@ -824,8 +822,6 @@ Public Function DecryptData(bytIn() As Byte, _
     Dim lCount          As Long
     Dim lLength         As Long
     Dim lEncodedLength  As Long
-    Dim bytLen(3)       As Byte
-    Dim lPosition       As Long
     
     If Not IsInitialized(bytIn) Then
         Exit Function

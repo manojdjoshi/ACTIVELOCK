@@ -175,8 +175,6 @@ Private Const SERVICE_PROVIDER As String = "Microsoft Base Cryptographic Provide
 Private Const KEY_CONTAINER As String = "ActiveLock"
 Private Const PROV_RSA_FULL As Long = 1
 
-Private fInit As Boolean ' flag to indicate that module initialization has been done
-
 Private Declare Sub CopyMem Lib "kernel32" Alias "RtlMoveMemory" (Destination As Any, Source As Any, ByVal Length As Long)
 Private Declare Function GetModuleFileName Lib "kernel32" Alias "GetModuleFileNameA" (ByVal hModule As Long, ByVal lpFileName As String, ByVal nSize As Long) As Long
 Private Declare Function MapFileAndCheckSum Lib "imagehlp" Alias "MapFileAndCheckSumA" (ByVal FileName As String, HeaderSum As Long, CheckSum As Long) As Long
@@ -328,7 +326,6 @@ Private Function GetTypeLibPathFromObject(obj As IUnknown) As String
     Set tliApp = CreateObject("TLI.TLIApplication")
     Dim ti As Object ' actually TLI.TypeInfo
     Set ti = tliApp.ClassInfoFromObject(obj)
-    Dim strDllPath As String
     GetTypeLibPathFromObject = ti.Parent.ContainingFile
 End Function
 
