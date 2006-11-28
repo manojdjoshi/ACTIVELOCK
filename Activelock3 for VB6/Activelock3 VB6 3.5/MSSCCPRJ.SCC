@@ -15,3 +15,6 @@ SCC_Aux_Path=<This is an empty string for the mssccprj.scc file>
 [TrialPeriodTool.vbp]
 SCC_Project_Name=this project is not under source code control
 SCC_Aux_Path=<This is an empty string for the mssccprj.scc file>
+[test.vbp]
+SCC_Project_Name=this project is not under source code control
+SCC_Aux_Path=<This is an empty string for the mssccprj.scc file>
