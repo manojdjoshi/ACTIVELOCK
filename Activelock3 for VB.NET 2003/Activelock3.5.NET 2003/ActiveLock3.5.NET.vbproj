@@ -111,6 +111,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "ADSFile.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "AlugenGlobals.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
@@ -232,6 +237,11 @@
                 />
                 <File
                     RelPath = "mSmartCall.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "OSVersion.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

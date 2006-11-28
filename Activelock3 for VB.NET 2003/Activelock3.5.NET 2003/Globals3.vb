@@ -1,5 +1,8 @@
 Option Strict Off
-Option Explicit On
+Option Explicit On 
+Imports System.Security.Cryptography
+Imports System.Text
+
 'Class instancing was changed to public
 <System.Runtime.InteropServices.ProgId("Globals_Renamed_NET.Globals_Renamed")> Public Class Globals_Renamed
 	'*   ActiveLock
@@ -58,9 +61,11 @@ Option Explicit On
 	' @param AlerrLicenseInvalid        License is invalid.
 	' @param AlerrLicenseExpired        License has expired.
 	' @param AlerrLicenseTampered       License has been tampered.
-	' @param AlerrClockChanged          System clock has been changed.
-	' @param AlerrKeyStoreInvalid       Key Store Provider has not been initialized yet.
-	' @param AlerrFileTampered          ActiveLock DLL file has been tampered.
+    ' @param AlerrClockChanged          System clock has been changed.
+    ' @param AlerrWrongIPaddress        Wrong IP Address.
+    ' @param AlerrKeyStoreInvalid       Key Store Provider has not been initialized yet.
+    ' @param alerrKeyStorePathInvalid   Key Store Path (LIC file path) hasn't been specified.
+    ' @param AlerrFileTampered          ActiveLock DLL file has been tampered.
 	' @param AlerrNotInitialized        ActiveLock has not been initialized yet.
 	' @param AlerrNotImplemented        An ActiveLock operation has not been implemented.
 	' @param AlerrUserNameTooLong       Maximum User Name length of 2000 characters has been exceeded.
@@ -73,14 +78,17 @@ Option Explicit On
 	' @param AlerrNoSoftwareVersion     Software Version has not been specified.
     ' @param AlerrRSAError              Something went wrong in the RSA routines.
 
+    ' @param alerrCryptoAPIError        Crypto API error in CryptoAPI class.
+
 	Public Enum ActiveLockErrCodeConstants
 		AlerrOK = 0 ' successful
 		AlerrNoLicense = &H80040001 ' vbObjectError (&H80040000) + 1
 		AlerrLicenseInvalid = &H80040002
 		AlerrLicenseExpired = &H80040003
 		AlerrLicenseTampered = &H80040004
-		AlerrClockChanged = &H80040005
-		AlerrKeyStoreInvalid = &H80040010
+        AlerrClockChanged = &H80040005
+        AlerrWrongIPaddress = &H80040006
+        AlerrKeyStoreInvalid = &H80040010
 		AlerrFileTampered = &H80040011
 		AlerrNotInitialized = &H80040012
 		AlerrNotImplemented = &H80040013
@@ -93,7 +101,12 @@ Option Explicit On
 		AlerrNoSoftwareName = &H80040025
 		AlerrNoSoftwareVersion = &H80040026
         AlerrRSAError = &H80040027
+        AlerrKeyStorePathInvalid = &H80040028
+        AlerrCryptoAPIError = &H80040029
+        AlerrNoSoftwarePassword = &H80040030
     End Enum
+    Private strCypherText As String
+    Private bCypherOn As Boolean
     '===============================================================================
     ' Name: Function NewInstance
     ' Input: None

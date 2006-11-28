@@ -133,4 +133,11 @@ Module modALUGEN
             ReDim phases(MAXPHASE - 1)
         End Sub
     End Structure
+    Public Function strLeft(ByVal vString As String, ByVal vLength As Integer) As String
+        strLeft = vString.Substring(0, vLength)
+    End Function
+    Public Function strRight(ByVal vString As String, ByVal vLength As Integer) As String
+        strRight = vString.Substring(vString.Length - vLength)
+    End Function
+
 End Module

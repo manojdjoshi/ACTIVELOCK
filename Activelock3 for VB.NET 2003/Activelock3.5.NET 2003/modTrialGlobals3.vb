@@ -98,9 +98,6 @@ Module modTrial
     Public Declare Function GlobalAlloc Lib "kernel32" (ByVal wFlags As Integer, ByVal dwBytes As Integer) As Integer
     Public Declare Function GlobalFree Lib "kernel32" (ByVal hMem As Integer) As Integer
 
-    Public Declare Function ComputerName Lib "kernel32" Alias "GetComputerNameA" (ByVal lpBuffer As String, ByRef nSize As Integer) As Integer
-    Public Const MAX_COMPUTERNAME_LENGTH As Short = 15
-
     Private Declare Function FindFirstFile Lib "kernel32" Alias "FindFirstFileA" (ByVal lpFileName As String, ByRef lpFindFileData As WIN32_FIND_DATA) As Integer
     Private Declare Function FindNextFile Lib "kernel32" Alias "FindNextFileA" (ByVal hFindFile As Integer, ByRef lpFindFileData As WIN32_FIND_DATA) As Integer
     Private Declare Function FindClose Lib "kernel32" (ByVal hFindFile As Integer) As Integer
@@ -1086,21 +1083,6 @@ RunsGoodSteganographyError:
         runsLeft = 0
         RunsGoodSteganography = False
         Exit Function
-    End Function
-    '===============================================================================
-    ' Name: Function GetComputerName1
-    ' Input: None
-    ' Output: Returns the name of the computer on the network
-    ' Purpose: The name of the computer on the network
-    ' Remarks: Stolen from ActiveLock 1.89. Author Unknown
-    '===============================================================================
-    Public Function GetComputerName1() As String
-        Dim name As String
-        Dim maxSize, tmp As Integer
-        maxSize = MAX_COMPUTERNAME_LENGTH + 1
-        name = New String(Chr(0), maxSize)
-        tmp = ComputerName(name, maxSize)
-        GetComputerName1 = name.Trim
     End Function
     '===============================================================================
     ' Name: Function fileExist

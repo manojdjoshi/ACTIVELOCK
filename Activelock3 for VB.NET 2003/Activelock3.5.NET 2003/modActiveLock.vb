@@ -75,13 +75,16 @@ Module modActiveLock
 	Public Const STRINVALIDTRIALRUNS As String = "Zero Free Trial runs allowed."
 	Public Const STRFILETAMPERED As String = "Alcrypto3.dll has been tampered."
 	Public Const STRKEYSTOREUNINITIALIZED As String = "Key Store Provider hasn't been initialized yet."
-	Public Const STRNOSOFTWARECODE As String = "Software code has not been set."
+    Public Const STRKEYSTOREPATHISEMPTY As String = "Key Store Path (LIC file path) not specified."
+    Public Const STRNOSOFTWARECODE As String = "Software code has not been set."
 	Public Const STRNOSOFTWARENAME As String = "Software Name has not been set."
 	Public Const STRNOSOFTWAREVERSION As String = "Software Version has not been set."
-	Public Const STRUSERNAMETOOLONG As String = "User Name > 2000 characters."
+    Public Const STRNOSOFTWAREPASSWORD As String = "Software Password has not been set."
+    Public Const STRUSERNAMETOOLONG As String = "User Name > 2000 characters."
     Public Const STRUSERNAMEINVALID As String = "User Name invalid."
     Public Const STRRSAERROR As String = "Internal RSA Error."
     Public Const RETVAL_ON_ERROR As Integer = -999
+    Public Const STRWRONGIPADDRESS As String = "Wrong IP Address."
 
 	' RSA encrypts the data.
 	' @param CryptType CryptType = 0 for public&#59; 1 for private
@@ -476,12 +479,20 @@ Hell:
     ' Remarks: None
     '===============================================================================
     Public Function WinDir() As String
-        Const FIX_LENGTH As Short = 4096
-        Dim Length As Short
-        Dim Buffer As New VB6.FixedLengthString(FIX_LENGTH)
-
-        Length = GeneralWinDirApi(Buffer.Value, FIX_LENGTH - 1)
-        WinDir = Left(Buffer.Value, Length)
+        Dim WinSysPath As String = System.Environment.GetFolderPath(Environment.SpecialFolder.System)
+        WinDir = WinSysPath.Substring(0, WinSysPath.LastIndexOf("\"))
+    End Function
+    '===============================================================================
+    ' Name: Function WinSysDir
+    ' Input: None
+    ' Output:
+    '   String - Windows system directory path
+    ' Purpose: Gets the Windows system directory
+    ' Remarks: None
+    '===============================================================================
+    Public Function WinSysDir() As String
+        WinSysDir = System.Environment.GetFolderPath(Environment.SpecialFolder.System)
+        ' or could use WinSysDir = System.Environment.SystemDirectory
     End Function
     '===============================================================================
     ' Name: Function FolderExists
@@ -494,22 +505,6 @@ Hell:
     '===============================================================================
     Public Function FolderExists(ByVal sFolder As String) As Boolean
         FolderExists = Directory.Exists(sFolder)
-    End Function
-    '===============================================================================
-    ' Name: Function WinSysDir
-    ' Input: None
-    ' Output:
-    '   String - Windows system directory path
-    ' Purpose: Gets the Windows system directory
-    ' Remarks: None
-    '===============================================================================
-    Public Function WinSysDir() As String
-        Const FIX_LENGTH As Short = 4096
-        Dim Length As Short
-        Dim Buffer As New VB6.FixedLengthString(FIX_LENGTH)
-
-        Length = GetSystemDirectory(Buffer.Value, FIX_LENGTH - 1)
-        WinSysDir = Left(Buffer.Value, Length)
     End Function
     Public Function MakeWord(ByVal LoByte As Byte, ByVal HiByte As Byte) As Short
         '===============================================================================

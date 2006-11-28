@@ -3,6 +3,10 @@ Option Explicit On
 Imports System.IO
 Imports Microsoft.visualbasic.compatibility
 Imports ActiveLock3_5NET
+Imports System.Security.Cryptography
+Imports System.text
+Imports System.Management
+Imports System.TimeSpan
 
 Friend Class ActiveLock
     Implements _IActiveLock
@@ -76,6 +80,8 @@ Friend Class ActiveLock
 
     ' Transients
     Private mfInit As Boolean ' flag to indicate that ActiveLock has been initialized
+    Private Declare Function GetVolumeInformation Lib "kernel32" Alias "GetVolumeInformationA" (ByVal lpRootPathName As String, ByVal lpVolumeNameBuffer As String, ByVal nVolumeNameSize As Integer, ByRef lpVolumeSerialNumber As Integer, ByRef lpMaximumComponentLength As Integer, ByRef lpFileSystemFlags As Integer, ByVal lpFileSystemNameBuffer As String, ByVal nFileSystemNameSize As Integer) As Integer
+
     '===============================================================================
     ' Name: Property Let IActiveLock_LicenseKeyType
     ' Input:
@@ -669,9 +675,23 @@ finally_Renamed:
     '===============================================================================
     Private Sub IActiveLock_Acquire(Optional ByRef strMsg As String = "") Implements _IActiveLock.Acquire
         Dim trialActivated As Boolean
+        Dim mINIFile As INIFile
+        Dim adsText As String = String.Empty
+        Dim strStream As String = String.Empty
+        strStream = mSoftwareName & mSoftwareVer & mSoftwarePassword
+
         'Check the Key Store Provider
         If mKeyStore Is Nothing Then
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREUNINITIALIZED)
+            'Check the Key Store Path (LIC file path)
+        ElseIf mKeyStorePath = "" Then
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrKeyStorePathInvalid, ACTIVELOCKSTRING, STRKEYSTOREPATHISEMPTY)
+        ElseIf mSoftwareName = "" Then
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNoSoftwareName, ACTIVELOCKSTRING, STRNOSOFTWARENAME)
+        ElseIf mSoftwareVer = "" Then
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNoSoftwareVersion, ACTIVELOCKSTRING, STRNOSOFTWAREVERSION)
+        ElseIf mSoftwarePassword = "" Then
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNoSoftwarePassword, ACTIVELOCKSTRING, STRNOSOFTWAREPASSWORD)
         End If
 
         Dim Lic As ProductLicense
@@ -705,12 +725,53 @@ finally_Renamed:
 noRegistration:
             Set_locale((regionalSymbol))
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE)
+
+        Else  'Lic exists therefore we'll check the LIC file ADS
+            'On Error GoTo adsProblem
+            If CheckStreamCapability() Then
+                ' No license found
+                Dim fi As New FileInfo(mKeyStorePath)
+                If fi.Length = 0 Then GoTo continueRegistration
+                adsText = ADSFile.Read(mKeyStorePath, strStream)
+                Dim dt1 As DateTime = Convert.ToDateTime(adsText)
+                Dim dt2 As DateTime = Now
+                Dim span As TimeSpan = dt2.Subtract(dt1)
+                If adsText = "" Then
+                    Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrLicenseTampered, ACTIVELOCKSTRING, STRLICENSETAMPERED)
+                ElseIf span.TotalHours < -1 Then
+                    Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
+                End If
+                Dim ok As Integer
+                ok = ADSFile.Write(Now, mKeyStorePath, strStream)
+                GoTo continueRegistration
+
+adsProblem:
+                Set_locale((regionalSymbol))
+            End If
         End If
 
 continueRegistration:
         ' Validate license
         ValidateLic(Lic)
     End Sub
+    Public Function CheckStreamCapability() As Boolean
+        Dim mc As New ManagementClass("Win32_LogicalDisk")
+        Dim moc As ManagementObjectCollection = mc.GetInstances()
+        Dim strFileSystem As String = String.Empty
+        Dim mo As ManagementObject
+        For Each mo In moc
+            If strFileSystem = String.Empty Then ' only return the file system
+                If mo("Name").ToString = "C:" Then
+                    strFileSystem = mo("FileSystem").ToString
+                    Exit For
+                End If
+            End If
+            mo.Dispose()
+        Next mo
+        If strFileSystem = "NTFS" Then
+            CheckStreamCapability = True
+        End If
+    End Function
     '===============================================================================
     ' Name: Sub ValidateKey
     ' Input:
@@ -721,39 +782,80 @@ continueRegistration:
     ' Remarks: None
     '===============================================================================
     Private Sub ValidateKey(ByRef Lic As ProductLicense)
+        Dim Key As RSAKey
+        Dim strPubKey As String
+        Dim strSig As String
+        Dim strLic As String
+        Dim strLicKey As String
+
+        strPubKey = mSoftwareCode
+
         ' make sure software code is set
         If mSoftwareCode = "" Then
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNotInitialized, ACTIVELOCKSTRING, STRNOSOFTWARECODE)
         End If
 
-        Dim Key As RSAKey
-        Dim strPubKey As String
-        strPubKey = mSoftwareCode
-
-        Dim strSig As String
-        Dim strLic As String
-        Dim strLicKey As String
-
         strLic = IActiveLock_LockCode(Lic)
         strLicKey = Lic.LicenseKey
 
-        ' decode the license key
-        strSig = Base64_Decode(strLicKey)
+        If Left(strPubKey, 3) <> "RSA" Then 'ALCrypto
+            ' decode the license key
+            strSig = Base64_Decode(strLicKey)
 
-        ' Print out some info for debugging purposes
-        'System.Diagnostics.Debug.WriteLine("Code1: " & strPubKey)
-        'System.Diagnostics.Debug.WriteLine("Lic: " & strLic)
-        'System.Diagnostics.Debug.WriteLine("Lic hash: " & modMD5.Hash(strLic))
-        'System.Diagnostics.Debug.WriteLine("LicKey: " & strLicKey)
-        'System.Diagnostics.Debug.WriteLine("Sig: " & strSig)
-        'System.Diagnostics.Debug.WriteLine("Verify: " & RSAVerify(strPubKey, strLic, strSig))
-        'System.Diagnostics.Debug.WriteLine("====================================================")
+            ' Print out some info for debugging purposes
+            'System.Diagnostics.Debug.WriteLine("Code1: " & strPubKey)
+            'System.Diagnostics.Debug.WriteLine("Lic: " & strLic)
+            'System.Diagnostics.Debug.WriteLine("Lic hash: " & modMD5.Hash(strLic))
+            'System.Diagnostics.Debug.WriteLine("LicKey: " & strLicKey)
+            'System.Diagnostics.Debug.WriteLine("Sig: " & strSig)
+            'System.Diagnostics.Debug.WriteLine("Verify: " & RSAVerify(strPubKey, strLic, strSig))
+            'System.Diagnostics.Debug.WriteLine("====================================================")
 
-        ' validate the key
-        Dim rc As Integer
-        rc = RSAVerify(strPubKey, strLic, strSig)
-        If rc <> 0 Then
-            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
+            ' validate the key
+            Dim rc As Integer
+            rc = RSAVerify(strPubKey, strLic, strSig)
+            If rc <> 0 Then
+                Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
+            End If
+        Else    ' .NET RSA
+
+            Try
+
+                ' Verify Signature
+                Dim rsaCSP As New System.Security.Cryptography.RSACryptoServiceProvider
+                Dim rsaPubParams As RSAParameters 'stores public key
+                Dim strPublicBlob As String
+                Dim userData As Byte() = Encoding.UTF8.GetBytes(strLic)
+                If strLeft(strPubKey, 6) = "RSA512" Then
+                    strPublicBlob = strRight(strPubKey, Len(strPubKey) - 6)
+                Else
+                    strPublicBlob = strRight(strPubKey, Len(strPubKey) - 7)
+                End If
+                rsaCSP.FromXmlString(strPublicBlob)
+                rsaPubParams = rsaCSP.ExportParameters(False)
+                ' import public key params into instance of RSACryptoServiceProvider
+                rsaCSP.ImportParameters(rsaPubParams)
+                Dim newsignature() As Byte
+                newsignature = Convert.FromBase64String(strLicKey)
+                Dim asd As AsymmetricSignatureDeformatter = New RSAPKCS1SignatureDeformatter(rsaCSP)
+                Dim algorithm As HashAlgorithm = New SHA1Managed
+                asd.SetHashAlgorithm(algorithm.ToString)
+                Dim newhashedData() As Byte ' a byte array to store hash value
+                Dim newhashedDataString As String
+                newhashedData = algorithm.ComputeHash(userData)
+                newhashedDataString = BitConverter.ToString(newhashedData).Replace("-", String.Empty)
+                Dim verified As Boolean
+                verified = asd.VerifySignature(algorithm, newsignature)
+                If verified Then
+                    'MsgBox("Signature Valid", MsgBoxStyle.Information)
+                Else
+                    Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
+                    'MsgBox("Invalid Signature", MsgBoxStyle.Exclamation)
+                End If
+            Catch ex As Exception
+                Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, ex.Message)
+            End Try
+
         End If
 
         ' Check if license has not expired
@@ -966,6 +1068,15 @@ continueRegistration:
         UpdateLastUsed(Lic)
         mKeyStore.Store(Lic)
 
+        ' This works under NTFS and is needed to prevent clock tampering
+        If CheckStreamCapability() Then
+            ' Write the current date and time into the ads
+            Dim ok As Integer
+            Dim strStream As String = String.Empty
+            strStream = mSoftwareName & mSoftwareVer & mSoftwarePassword
+            ok = ADSFile.Write(Now, mKeyStorePath, strStream)
+        End If
+
         ' Expire all trial licenses
         On Error Resume Next
         ' Expire the Trial
@@ -989,6 +1100,8 @@ continueRegistration:
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNoSoftwareName, ACTIVELOCKSTRING, STRNOSOFTWARENAME)
         ElseIf mSoftwareVer = "" Then
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNoSoftwareVersion, ACTIVELOCKSTRING, STRNOSOFTWAREVERSION)
+        ElseIf mSoftwarePassword = "" Then
+            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNoSoftwarePassword, ACTIVELOCKSTRING, STRNOSOFTWAREPASSWORD)
         Else
             trialStatus = ExpireTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, mSoftwarePassword)
         End If
@@ -1216,7 +1329,7 @@ ErrHandler:
                         If aString <> noKey Then
                             IActiveLock_AddLockCode(IActiveLock.ALLockTypes.lockIP, SizeLockType)
                             If aString <> modHardware.GetIPaddress() Then
-                                Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
+                                Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrWrongIPaddress, ACTIVELOCKSTRING, STRWRONGIPADDRESS)
                             End If
                         End If
                     End If

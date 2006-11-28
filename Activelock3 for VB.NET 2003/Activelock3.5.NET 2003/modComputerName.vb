@@ -145,10 +145,6 @@ Module modHardware
     Public Const READ_THRESHOLD_BUFFER_SIZE As Short = 512
     Private Const OUTPUT_DATA_SIZE As Integer = IDENTIFY_BUFFER_SIZE + 16
 
-    Private Declare Function ComputerName Lib "kernel32" Alias "GetComputerNameA" (ByVal lpBuffer As String, ByRef nSize As Integer) As Integer
-
-    Private Const MAX_COMPUTERNAME_LENGTH As Short = 15
-
     Public Declare Function apiGetVolumeInformation Lib "kernel32" Alias "GetVolumeInformationA" (ByVal lpRootPathName As String, ByVal lpVolumeNameBuffer As String, ByVal nVolumeNameSize As Integer, ByRef lpVolumeSerialNumber As Integer, ByRef lpMaximumComponentLength As Integer, ByRef lpFileSystemFlags As Integer, ByVal lpFileSystemNameBuffer As String, ByVal nFileSystemNameSize As Integer) As Integer
 
     'GETVERSIONOUTPARAMS contains the data returned
@@ -441,25 +437,16 @@ Module modHardware
     Public Declare Function GetProcessHeap Lib "kernel32" () As Integer
     Public Declare Function HeapAlloc Lib "kernel32" (ByVal hHeap As Integer, ByVal dwFlags As Integer, ByVal dwBytes As Integer) As Integer
     Public Declare Function HeapFree Lib "kernel32" (ByVal hHeap As Integer, ByVal dwFlags As Integer, ByVal lpMem As Integer) As Integer
-
     '===============================================================================
     ' Name: Function GetComputerName
     ' Input: None
     ' Output:
     '   String - Computer name
     ' Purpose: Gets the computer name on the network
-    ' Remarks: Stolen from ActiveLock 1.89. Author Unknown
     '===============================================================================
     Public Function GetComputerName() As String
-        Dim name As String
-        Dim maxSize, tmp As Integer
         On Error GoTo GetComputerNameError
-
-        maxSize = MAX_COMPUTERNAME_LENGTH + 1
-        name = New String(Chr(0), maxSize)
-        tmp = ComputerName(name, maxSize)
-        GetComputerName = modActiveLock.TrimNulls(name)
-
+        GetComputerName = System.Environment.ExpandEnvironmentVariables("%ComputerName%")
 GetComputerNameError:
         If GetComputerName = "" Then
             GetComputerName = "Not Available"
@@ -707,10 +694,12 @@ GetHDSerialFirmwareError:
     End Function
 
     Private Function IsWindowsNT() As Boolean
-        Dim verinfo As OSVERSIONINFO
-        verinfo.dwOSVersionInfoSize = Len(verinfo)
-        If (GetVersionEx(verinfo)) = 0 Then Exit Function
-        If verinfo.dwPlatformId = 2 Then IsWindowsNT = True
+        'Dim verinfo As OSVERSIONINFO
+        'verinfo.dwOSVersionInfoSize = Len(verinfo)
+        'If (GetVersionEx(verinfo)) = 0 Then Exit Function
+        'If verinfo.dwPlatformId = 2 Then IsWindowsNT = True
+        Dim MyHost As New CWindows.OperatingSystemVersion
+        IsWindowsNT = MyHost.IsWinNT4Plus
     End Function
 
     Private Function IsBitSet(ByRef iBitString As Byte, ByVal lBitNo As Short) As Boolean
