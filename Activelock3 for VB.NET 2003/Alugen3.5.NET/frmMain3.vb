@@ -30,162 +30,175 @@
 '*
 Option Strict On
 Option Explicit On
+Imports System
 Imports System.IO
 Imports System.Text
 Imports System.Windows.Forms
 Imports ActiveLock3_5NET
+Imports System.Security.Cryptography
+Imports System.text.regularexpressions
 
 Friend Class frmMain
-  Inherits System.Windows.Forms.Form
+    Inherits System.Windows.Forms.Form
+    ' Precompiled base64 regular expression
+    Public Shared ReadOnly ExpBase64 As Regex = New Regex("^[a-zA-Z0-9+/=]{4,}$", RegexOptions.Compiled)
 
 #Region "Private variables "
-  'listview sorter class
-  Private lvwColumnSorter As ListViewColumnSorter
+    'listview sorter class
+    Private lvwColumnSorter As ListViewColumnSorter
 
-  'ActiveLock objects
-  Public GeneratorInstance As _IALUGenerator
-  Public ActiveLock As _IActiveLock
-  Public fDisableNotifications As Boolean
+    'ActiveLock objects
+    Public GeneratorInstance As _IALUGenerator
+    Public ActiveLock As _IActiveLock
+    Public fDisableNotifications As Boolean
 
-  Public mKeyStoreType As IActiveLock.LicStoreType
-  Public mProductsStoreType As IActiveLock.ProductsStoreType
-  Public mProductsStoragePath As String
-  Private blnIsFirstLaunch As Boolean
+    Public mKeyStoreType As IActiveLock.LicStoreType
+    Public mProductsStoreType As IActiveLock.ProductsStoreType
+    Public mProductsStoragePath As String
+    Private blnIsFirstLaunch As Boolean
 
-  ' Hardware keys from the Installation Code
-  Private MACaddress, ComputerName As String
-  Private VolumeSerial, FirmwareSerial As String
-  Private WindowsSerial, BIOSserial As String
-  Private MotherboardSerial, IPaddress As String
-  Private systemEvent As Boolean
+    ' Hardware keys from the Installation Code
+    Private MACaddress, ComputerName As String
+    Private VolumeSerial, FirmwareSerial As String
+    Private WindowsSerial, BIOSserial As String
+    Private MotherboardSerial, IPaddress As String
+    Private systemEvent As Boolean
 
-  Private PROJECT_INI_FILENAME As String
+    Private PROJECT_INI_FILENAME As String
 
-  Public Shared resxList As New Collections.Specialized.ListDictionary
+    Public Shared resxList As New Collections.Specialized.ListDictionary
 
-  Private printPreviewDialog1 As New PrintPreviewDialog
+    Private printPreviewDialog1 As New PrintPreviewDialog
 
 #End Region
 
 #Region "Windows Form Designer generated code "
-  Public Sub New()
-    MyBase.New()
-    'This call is required by the Windows Form Designer.
-    InitializeComponent()
+    Public Sub New()
+        MyBase.New()
+        'This call is required by the Windows Form Designer.
+        InitializeComponent()
 
-    'on first start.. initialize variables
-    blnIsFirstLaunch = True
-    'with default values
-    mKeyStoreType = IActiveLock.LicStoreType.alsFile 'alsRegistry or alsFile
-    mProductsStoreType = IActiveLock.ProductsStoreType.alsINIFile 'alsINIFile - for ini file, alsXMLFile for xml file, alsMDBFile for MDB file
-    Select Case mProductsStoreType
-      Case IActiveLock.ProductsStoreType.alsINIFile
-        mProductsStoragePath = modALUGEN.AppPath & "\licenses.ini"
-      Case IActiveLock.ProductsStoreType.alsXMLFile
-        mProductsStoragePath = modALUGEN.AppPath & "\licenses.xml" 'for XML store
-      Case IActiveLock.ProductsStoreType.alsMDBFile
-        mProductsStoragePath = modALUGEN.AppPath & "\licenses.mdb" 'for MDB store
-        'Case alsMSSQL '-not implemented yet
-        'mProductsStoragePath =
-    End Select
+        'on first start.. initialize variables
+        blnIsFirstLaunch = True
+        'with default values
+        mKeyStoreType = IActiveLock.LicStoreType.alsFile 'alsRegistry or alsFile
+        mProductsStoreType = IActiveLock.ProductsStoreType.alsINIFile 'alsINIFile - for ini file, alsXMLFile for xml file, alsMDBFile for MDB file
+        Select Case mProductsStoreType
+            Case IActiveLock.ProductsStoreType.alsINIFile
+                mProductsStoragePath = modALUGEN.AppPath & "\licenses.ini"
+            Case IActiveLock.ProductsStoreType.alsXMLFile
+                mProductsStoragePath = modALUGEN.AppPath & "\licenses.xml" 'for XML store
+            Case IActiveLock.ProductsStoreType.alsMDBFile
+                mProductsStoragePath = modALUGEN.AppPath & "\licenses.mdb" 'for MDB store
+                'Case alsMSSQL '-not implemented yet
+                'mProductsStoragePath =
+        End Select
 
-    'load resources
-    LoadResources()
+        'load resources
+        LoadResources()
 
-    ' Create an instance of a ListView column sorter and assign it 
-    ' to the ListView control.
-    lvwColumnSorter = New ListViewColumnSorter
-    Me.lstvwProducts.ListViewItemSorter = lvwColumnSorter
+        ' Create an instance of a ListView column sorter and assign it 
+        ' to the ListView control.
+        lvwColumnSorter = New ListViewColumnSorter
+        Me.lstvwProducts.ListViewItemSorter = lvwColumnSorter
 
-  End Sub
-  'Form overrides dispose to clean up the component list.
-  Protected Overloads Overrides Sub Dispose(ByVal Disposing As Boolean)
-    If Disposing Then
-      If Not components Is Nothing Then
-        components.Dispose()
-      End If
-    End If
-    MyBase.Dispose(Disposing)
-  End Sub
-  'Required by the Windows Form Designer
-  Private components As System.ComponentModel.IContainer
-  Friend ToolTip1 As System.Windows.Forms.ToolTip
-  Friend WithEvents cmdCopyGCode As System.Windows.Forms.Button
-  Friend WithEvents cmdCopyVCode As System.Windows.Forms.Button
-  Friend WithEvents cmdCodeGen As System.Windows.Forms.Button
-  Friend WithEvents txtName As System.Windows.Forms.TextBox
-  Friend WithEvents txtVer As System.Windows.Forms.TextBox
-  Friend WithEvents cmdAdd As System.Windows.Forms.Button
-  Friend WithEvents Label2 As System.Windows.Forms.Label
-  Friend WithEvents Label3 As System.Windows.Forms.Label
-  Friend WithEvents fraProdNew As System.Windows.Forms.GroupBox
-  Friend WithEvents cmdRemove As System.Windows.Forms.Button
-  Friend WithEvents cmdValidate As System.Windows.Forms.Button
-  Friend WithEvents _SSTab1_TabPage0 As System.Windows.Forms.TabPage
-  Friend WithEvents Label8 As System.Windows.Forms.Label
-  Friend WithEvents Label15 As System.Windows.Forms.Label
-  Friend WithEvents chkLockIP As System.Windows.Forms.CheckBox
-  Friend WithEvents chkLockMotherboard As System.Windows.Forms.CheckBox
-  Friend WithEvents chkLockBIOS As System.Windows.Forms.CheckBox
-  Friend WithEvents chkLockWindows As System.Windows.Forms.CheckBox
-  Friend WithEvents chkLockHDfirmware As System.Windows.Forms.CheckBox
-  Friend WithEvents chkLockHD As System.Windows.Forms.CheckBox
-  Friend WithEvents chkLockComputer As System.Windows.Forms.CheckBox
-  Friend WithEvents chkLockMACaddress As System.Windows.Forms.CheckBox
-  Friend WithEvents chkItemData As System.Windows.Forms.CheckBox
-  Friend WithEvents cmdCopy As System.Windows.Forms.Button
-  Friend WithEvents cmdPaste As System.Windows.Forms.Button
-  Friend WithEvents txtUser As System.Windows.Forms.TextBox
-  Friend WithEvents cmdBrowse As System.Windows.Forms.Button
-  Friend WithEvents cmdSave As System.Windows.Forms.Button
-  Friend WithEvents txtDays As System.Windows.Forms.TextBox
-  Friend WithEvents cmdKeyGen As System.Windows.Forms.Button
-  Friend WithEvents Label11 As System.Windows.Forms.Label
-  Friend WithEvents Label5 As System.Windows.Forms.Label
-  Friend WithEvents lblExpiry As System.Windows.Forms.Label
-  Friend WithEvents Label6 As System.Windows.Forms.Label
-  Friend WithEvents Label7 As System.Windows.Forms.Label
-  Friend WithEvents lblDays As System.Windows.Forms.Label
-  Friend WithEvents frmKeyGen As System.Windows.Forms.Panel
-  Friend WithEvents cmdViewArchive As System.Windows.Forms.Button
-  Friend WithEvents _SSTab1_TabPage1 As System.Windows.Forms.TabPage
-  Friend WithEvents SSTab1 As System.Windows.Forms.TabControl
-  Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
-  Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
-  Friend WithEvents ColumnHeader3 As System.Windows.Forms.ColumnHeader
-  Friend WithEvents ColumnHeader4 As System.Windows.Forms.ColumnHeader
-  Friend WithEvents lstvwProducts As System.Windows.Forms.ListView
-  Friend WithEvents sbStatus As System.Windows.Forms.StatusBar
-  Friend WithEvents mainStatusBarPanel As System.Windows.Forms.StatusBarPanel
-  Friend WithEvents saveDlg As System.Windows.Forms.SaveFileDialog
-  Friend WithEvents cmdViewLevel As System.Windows.Forms.Button
-  Friend WithEvents grpCodes As System.Windows.Forms.GroupBox
-  Friend WithEvents grpProductsList As System.Windows.Forms.GroupBox
-  Friend WithEvents picALBanner As System.Windows.Forms.PictureBox
-  Friend WithEvents picALBanner2 As System.Windows.Forms.PictureBox
-  'NOTE: The following procedure is required by the Windows Form Designer
-  'It can be modified using the Windows Form Designer.
-  'Do not modify it using the code editor.
-  Friend WithEvents lblGCode As System.Windows.Forms.Label
-  Friend WithEvents lblVCode As System.Windows.Forms.Label
-  Friend WithEvents lblLicenseKey As System.Windows.Forms.Label
-  Friend WithEvents dtpExpireDate As DateTimePicker
-  Friend WithEvents txtVCode As System.Windows.Forms.TextBox
-  Friend WithEvents txtGCode As System.Windows.Forms.TextBox
-  Friend WithEvents txtInstallCode As System.Windows.Forms.TextBox
-  Friend WithEvents txtLicenseKey As System.Windows.Forms.TextBox
-  Friend WithEvents txtLicenseFile As System.Windows.Forms.TextBox
-  Friend WithEvents cboProducts As System.Windows.Forms.ComboBox
-  Friend WithEvents lnkActivelockSoftwareGroup As System.Windows.Forms.LinkLabel
-  Friend WithEvents cmdPrintLicenseKey As System.Windows.Forms.Button
-  Friend WithEvents cboRegisteredLevel As System.Windows.Forms.ComboBox
-  Friend WithEvents cboLicType As System.Windows.Forms.ComboBox
-  Friend WithEvents cmdEmailLicenseKey As System.Windows.Forms.Button
-  Friend WithEvents cmdProductsStorage As System.Windows.Forms.Button
+    End Sub
+    'Form overrides dispose to clean up the component list.
+    Protected Overloads Overrides Sub Dispose(ByVal Disposing As Boolean)
+        If Disposing Then
+            If Not components Is Nothing Then
+                components.Dispose()
+            End If
+        End If
+        MyBase.Dispose(Disposing)
+    End Sub
+    'Required by the Windows Form Designer
+    Private components As System.ComponentModel.IContainer
+    Friend ToolTip1 As System.Windows.Forms.ToolTip
+    Friend WithEvents cmdCopyGCode As System.Windows.Forms.Button
+    Friend WithEvents cmdCopyVCode As System.Windows.Forms.Button
+    Friend WithEvents cmdCodeGen As System.Windows.Forms.Button
+    Friend WithEvents txtName As System.Windows.Forms.TextBox
+    Friend WithEvents txtVer As System.Windows.Forms.TextBox
+    Friend WithEvents cmdAdd As System.Windows.Forms.Button
+    Friend WithEvents Label2 As System.Windows.Forms.Label
+    Friend WithEvents Label3 As System.Windows.Forms.Label
+    Friend WithEvents fraProdNew As System.Windows.Forms.GroupBox
+    Friend WithEvents cmdRemove As System.Windows.Forms.Button
+    Friend WithEvents cmdValidate As System.Windows.Forms.Button
+    Friend WithEvents _SSTab1_TabPage0 As System.Windows.Forms.TabPage
+    Friend WithEvents Label8 As System.Windows.Forms.Label
+    Friend WithEvents Label15 As System.Windows.Forms.Label
+    Friend WithEvents chkLockIP As System.Windows.Forms.CheckBox
+    Friend WithEvents chkLockMotherboard As System.Windows.Forms.CheckBox
+    Friend WithEvents chkLockBIOS As System.Windows.Forms.CheckBox
+    Friend WithEvents chkLockWindows As System.Windows.Forms.CheckBox
+    Friend WithEvents chkLockHDfirmware As System.Windows.Forms.CheckBox
+    Friend WithEvents chkLockHD As System.Windows.Forms.CheckBox
+    Friend WithEvents chkLockComputer As System.Windows.Forms.CheckBox
+    Friend WithEvents chkLockMACaddress As System.Windows.Forms.CheckBox
+    Friend WithEvents chkItemData As System.Windows.Forms.CheckBox
+    Friend WithEvents cmdCopy As System.Windows.Forms.Button
+    Friend WithEvents cmdPaste As System.Windows.Forms.Button
+    Friend WithEvents txtUser As System.Windows.Forms.TextBox
+    Friend WithEvents cmdBrowse As System.Windows.Forms.Button
+    Friend WithEvents cmdSave As System.Windows.Forms.Button
+    Friend WithEvents txtDays As System.Windows.Forms.TextBox
+    Friend WithEvents cmdKeyGen As System.Windows.Forms.Button
+    Friend WithEvents Label11 As System.Windows.Forms.Label
+    Friend WithEvents Label5 As System.Windows.Forms.Label
+    Friend WithEvents lblExpiry As System.Windows.Forms.Label
+    Friend WithEvents Label6 As System.Windows.Forms.Label
+    Friend WithEvents Label7 As System.Windows.Forms.Label
+    Friend WithEvents lblDays As System.Windows.Forms.Label
+    Friend WithEvents frmKeyGen As System.Windows.Forms.Panel
+    Friend WithEvents cmdViewArchive As System.Windows.Forms.Button
+    Friend WithEvents _SSTab1_TabPage1 As System.Windows.Forms.TabPage
+    Friend WithEvents SSTab1 As System.Windows.Forms.TabControl
+    Friend WithEvents ColumnHeader1 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader2 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader3 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents ColumnHeader4 As System.Windows.Forms.ColumnHeader
+    Friend WithEvents lstvwProducts As System.Windows.Forms.ListView
+    Friend WithEvents sbStatus As System.Windows.Forms.StatusBar
+    Friend WithEvents mainStatusBarPanel As System.Windows.Forms.StatusBarPanel
+    Friend WithEvents saveDlg As System.Windows.Forms.SaveFileDialog
+    Friend WithEvents cmdViewLevel As System.Windows.Forms.Button
+    Friend WithEvents grpCodes As System.Windows.Forms.GroupBox
+    Friend WithEvents grpProductsList As System.Windows.Forms.GroupBox
+    Friend WithEvents picALBanner As System.Windows.Forms.PictureBox
+    Friend WithEvents picALBanner2 As System.Windows.Forms.PictureBox
+    'NOTE: The following procedure is required by the Windows Form Designer
+    'It can be modified using the Windows Form Designer.
+    'Do not modify it using the code editor.
+    Friend WithEvents lblGCode As System.Windows.Forms.Label
+    Friend WithEvents lblVCode As System.Windows.Forms.Label
+    Friend WithEvents lblLicenseKey As System.Windows.Forms.Label
+    Friend WithEvents dtpExpireDate As DateTimePicker
+    Friend WithEvents txtVCode As System.Windows.Forms.TextBox
+    Friend WithEvents txtGCode As System.Windows.Forms.TextBox
+    Friend WithEvents txtInstallCode As System.Windows.Forms.TextBox
+    Friend WithEvents txtLicenseKey As System.Windows.Forms.TextBox
+    Friend WithEvents txtLicenseFile As System.Windows.Forms.TextBox
+    Friend WithEvents cboProducts As System.Windows.Forms.ComboBox
+    Friend WithEvents lnkActivelockSoftwareGroup As System.Windows.Forms.LinkLabel
+    Friend WithEvents cmdPrintLicenseKey As System.Windows.Forms.Button
+    Friend WithEvents cboRegisteredLevel As System.Windows.Forms.ComboBox
+    Friend WithEvents cboLicType As System.Windows.Forms.ComboBox
+    Friend WithEvents cmdEmailLicenseKey As System.Windows.Forms.Button
+    Friend WithEvents cmdProductsStorage As System.Windows.Forms.Button
     Friend WithEvents Label18 As System.Windows.Forms.Label
     Friend WithEvents chkNetworkedLicense As System.Windows.Forms.CheckBox
     Friend WithEvents txtMaxCount As System.Windows.Forms.TextBox
     Friend WithEvents lblConcurrentUsers As System.Windows.Forms.Label
+    Friend WithEvents optStrength0 As System.Windows.Forms.RadioButton
+    Friend WithEvents optStrength1 As System.Windows.Forms.RadioButton
+    Friend WithEvents Label1 As System.Windows.Forms.Label
+    Friend WithEvents optStrength2 As System.Windows.Forms.RadioButton
+    Friend WithEvents optStrength4 As System.Windows.Forms.RadioButton
+    Friend WithEvents optStrength5 As System.Windows.Forms.RadioButton
+    Friend WithEvents optStrength3 As System.Windows.Forms.RadioButton
+    Friend WithEvents cmdValidate2 As System.Windows.Forms.Button
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(frmMain))
@@ -224,10 +237,18 @@ Friend Class frmMain
         Me.cmdEmailLicenseKey = New System.Windows.Forms.Button
         Me.cmdProductsStorage = New System.Windows.Forms.Button
         Me.txtMaxCount = New System.Windows.Forms.TextBox
+        Me.cmdValidate2 = New System.Windows.Forms.Button
         Me.SSTab1 = New System.Windows.Forms.TabControl
         Me._SSTab1_TabPage0 = New System.Windows.Forms.TabPage
         Me.grpProductsList = New System.Windows.Forms.GroupBox
         Me.fraProdNew = New System.Windows.Forms.GroupBox
+        Me.optStrength3 = New System.Windows.Forms.RadioButton
+        Me.optStrength5 = New System.Windows.Forms.RadioButton
+        Me.optStrength4 = New System.Windows.Forms.RadioButton
+        Me.optStrength2 = New System.Windows.Forms.RadioButton
+        Me.Label1 = New System.Windows.Forms.Label
+        Me.optStrength1 = New System.Windows.Forms.RadioButton
+        Me.optStrength0 = New System.Windows.Forms.RadioButton
         Me.grpCodes = New System.Windows.Forms.GroupBox
         Me.txtGCode = New System.Windows.Forms.TextBox
         Me.lblGCode = New System.Windows.Forms.Label
@@ -302,7 +323,7 @@ Friend Class frmMain
         Me.cmdBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.cmdBrowse.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdBrowse.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdBrowse.Location = New System.Drawing.Point(477, 474)
+        Me.cmdBrowse.Location = New System.Drawing.Point(477, 495)
         Me.cmdBrowse.Name = "cmdBrowse"
         Me.cmdBrowse.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdBrowse.Size = New System.Drawing.Size(21, 22)
@@ -319,7 +340,7 @@ Friend Class frmMain
         Me.cmdSave.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdSave.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdSave.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdSave.Location = New System.Drawing.Point(499, 474)
+        Me.cmdSave.Location = New System.Drawing.Point(499, 495)
         Me.cmdSave.Name = "cmdSave"
         Me.cmdSave.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdSave.Size = New System.Drawing.Size(65, 22)
@@ -356,7 +377,7 @@ Friend Class frmMain
         Me.cmdViewArchive.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdViewArchive.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdViewArchive.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdViewArchive.Location = New System.Drawing.Point(3, 426)
+        Me.cmdViewArchive.Location = New System.Drawing.Point(3, 447)
         Me.cmdViewArchive.Name = "cmdViewArchive"
         Me.cmdViewArchive.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdViewArchive.Size = New System.Drawing.Size(79, 44)
@@ -376,7 +397,7 @@ Friend Class frmMain
         Me.lstvwProducts.Location = New System.Drawing.Point(3, 16)
         Me.lstvwProducts.MultiSelect = False
         Me.lstvwProducts.Name = "lstvwProducts"
-        Me.lstvwProducts.Size = New System.Drawing.Size(558, 239)
+        Me.lstvwProducts.Size = New System.Drawing.Size(558, 241)
         Me.lstvwProducts.Sorting = System.Windows.Forms.SortOrder.Ascending
         Me.lstvwProducts.TabIndex = 10
         Me.ToolTip1.SetToolTip(Me.lstvwProducts, "Products list")
@@ -456,7 +477,7 @@ Friend Class frmMain
         Me.cmdCodeGen.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdCodeGen.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdCodeGen.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdCodeGen.Location = New System.Drawing.Point(192, 48)
+        Me.cmdCodeGen.Location = New System.Drawing.Point(192, 42)
         Me.cmdCodeGen.Name = "cmdCodeGen"
         Me.cmdCodeGen.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdCodeGen.Size = New System.Drawing.Size(78, 23)
@@ -475,7 +496,7 @@ Friend Class frmMain
         Me.txtName.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtName.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtName.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtName.Location = New System.Drawing.Point(88, 24)
+        Me.txtName.Location = New System.Drawing.Point(88, 20)
         Me.txtName.MaxLength = 0
         Me.txtName.Name = "txtName"
         Me.txtName.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -494,7 +515,7 @@ Friend Class frmMain
         Me.txtVer.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtVer.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtVer.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtVer.Location = New System.Drawing.Point(88, 48)
+        Me.txtVer.Location = New System.Drawing.Point(88, 44)
         Me.txtVer.MaxLength = 0
         Me.txtVer.Name = "txtVer"
         Me.txtVer.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -513,7 +534,7 @@ Friend Class frmMain
         Me.cmdAdd.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdAdd.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdAdd.Location = New System.Drawing.Point(7, 209)
+        Me.cmdAdd.Location = New System.Drawing.Point(7, 223)
         Me.cmdAdd.Name = "cmdAdd"
         Me.cmdAdd.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdAdd.Size = New System.Drawing.Size(128, 23)
@@ -531,7 +552,7 @@ Friend Class frmMain
         Me.cmdValidate.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdValidate.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdValidate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdValidate.Location = New System.Drawing.Point(272, 48)
+        Me.cmdValidate.Location = New System.Drawing.Point(272, 42)
         Me.cmdValidate.Name = "cmdValidate"
         Me.cmdValidate.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdValidate.Size = New System.Drawing.Size(78, 23)
@@ -549,7 +570,7 @@ Friend Class frmMain
         Me.cmdRemove.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdRemove.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdRemove.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdRemove.Location = New System.Drawing.Point(139, 209)
+        Me.cmdRemove.Location = New System.Drawing.Point(139, 223)
         Me.cmdRemove.Name = "cmdRemove"
         Me.cmdRemove.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdRemove.Size = New System.Drawing.Size(154, 23)
@@ -635,7 +656,7 @@ Friend Class frmMain
         Me.txtLicenseFile.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtLicenseFile.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtLicenseFile.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtLicenseFile.Location = New System.Drawing.Point(86, 475)
+        Me.txtLicenseFile.Location = New System.Drawing.Point(86, 496)
         Me.txtLicenseFile.MaxLength = 0
         Me.txtLicenseFile.Name = "txtLicenseFile"
         Me.txtLicenseFile.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -696,7 +717,7 @@ Friend Class frmMain
         Me.txtLicenseKey.ReadOnly = True
         Me.txtLicenseKey.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.txtLicenseKey.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtLicenseKey.Size = New System.Drawing.Size(476, 200)
+        Me.txtLicenseKey.Size = New System.Drawing.Size(476, 221)
         Me.txtLicenseKey.TabIndex = 27
         Me.txtLicenseKey.Text = "1234567890123456789012345678901234567890123456789012345678901234" & Microsoft.VisualBasic.ChrW(13) & Microsoft.VisualBasic.ChrW(10)
         Me.ToolTip1.SetToolTip(Me.txtLicenseKey, "License Key")
@@ -713,7 +734,7 @@ Friend Class frmMain
         Me.cboRegisteredLevel.Location = New System.Drawing.Point(418, 4)
         Me.cboRegisteredLevel.Name = "cboRegisteredLevel"
         Me.cboRegisteredLevel.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cboRegisteredLevel.Size = New System.Drawing.Size(124, 22)
+        Me.cboRegisteredLevel.Size = New System.Drawing.Size(124, 20)
         Me.cboRegisteredLevel.TabIndex = 3
         Me.ToolTip1.SetToolTip(Me.cboRegisteredLevel, "Select desired registration level")
         '
@@ -789,7 +810,7 @@ Friend Class frmMain
         Me.cmdProductsStorage.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdProductsStorage.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdProductsStorage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdProductsStorage.Location = New System.Drawing.Point(420, 209)
+        Me.cmdProductsStorage.Location = New System.Drawing.Point(420, 222)
         Me.cmdProductsStorage.Name = "cmdProductsStorage"
         Me.cmdProductsStorage.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdProductsStorage.Size = New System.Drawing.Size(140, 23)
@@ -808,7 +829,7 @@ Friend Class frmMain
         Me.txtMaxCount.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtMaxCount.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtMaxCount.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtMaxCount.Location = New System.Drawing.Point(440, 54)
+        Me.txtMaxCount.Location = New System.Drawing.Point(442, 53)
         Me.txtMaxCount.MaxLength = 2
         Me.txtMaxCount.Name = "txtMaxCount"
         Me.txtMaxCount.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -817,6 +838,25 @@ Friend Class frmMain
         Me.txtMaxCount.Text = "5"
         Me.ToolTip1.SetToolTip(Me.txtMaxCount, "Enter or select license file")
         Me.txtMaxCount.Visible = False
+        '
+        'cmdValidate2
+        '
+        Me.cmdValidate2.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmdValidate2.BackColor = System.Drawing.SystemColors.Control
+        Me.cmdValidate2.Cursor = System.Windows.Forms.Cursors.Default
+        Me.cmdValidate2.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.cmdValidate2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdValidate2.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.cmdValidate2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.cmdValidate2.Location = New System.Drawing.Point(352, 42)
+        Me.cmdValidate2.Name = "cmdValidate2"
+        Me.cmdValidate2.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.cmdValidate2.Size = New System.Drawing.Size(78, 23)
+        Me.cmdValidate2.TabIndex = 73
+        Me.cmdValidate2.Text = "&Validate2"
+        Me.cmdValidate2.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.ToolTip1.SetToolTip(Me.cmdValidate2, "Validate product codes")
+        Me.cmdValidate2.Visible = False
         '
         'SSTab1
         '
@@ -830,7 +870,7 @@ Friend Class frmMain
         Me.SSTab1.Location = New System.Drawing.Point(0, 0)
         Me.SSTab1.Name = "SSTab1"
         Me.SSTab1.SelectedIndex = 1
-        Me.SSTab1.Size = New System.Drawing.Size(580, 526)
+        Me.SSTab1.Size = New System.Drawing.Size(580, 547)
         Me.SSTab1.TabIndex = 0
         '
         '_SSTab1_TabPage0
@@ -839,7 +879,7 @@ Friend Class frmMain
         Me._SSTab1_TabPage0.Controls.Add(Me.fraProdNew)
         Me._SSTab1_TabPage0.Location = New System.Drawing.Point(4, 22)
         Me._SSTab1_TabPage0.Name = "_SSTab1_TabPage0"
-        Me._SSTab1_TabPage0.Size = New System.Drawing.Size(572, 500)
+        Me._SSTab1_TabPage0.Size = New System.Drawing.Size(572, 521)
         Me._SSTab1_TabPage0.TabIndex = 0
         Me._SSTab1_TabPage0.Text = "Product Code Generator"
         '
@@ -849,9 +889,9 @@ Friend Class frmMain
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.grpProductsList.Controls.Add(Me.lstvwProducts)
-        Me.grpProductsList.Location = New System.Drawing.Point(4, 240)
+        Me.grpProductsList.Location = New System.Drawing.Point(4, 258)
         Me.grpProductsList.Name = "grpProductsList"
-        Me.grpProductsList.Size = New System.Drawing.Size(564, 258)
+        Me.grpProductsList.Size = New System.Drawing.Size(564, 260)
         Me.grpProductsList.TabIndex = 1
         Me.grpProductsList.TabStop = False
         Me.grpProductsList.Text = " Products list "
@@ -861,6 +901,14 @@ Friend Class frmMain
         Me.fraProdNew.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.fraProdNew.BackColor = System.Drawing.SystemColors.Control
+        Me.fraProdNew.Controls.Add(Me.cmdValidate2)
+        Me.fraProdNew.Controls.Add(Me.optStrength3)
+        Me.fraProdNew.Controls.Add(Me.optStrength5)
+        Me.fraProdNew.Controls.Add(Me.optStrength4)
+        Me.fraProdNew.Controls.Add(Me.optStrength2)
+        Me.fraProdNew.Controls.Add(Me.Label1)
+        Me.fraProdNew.Controls.Add(Me.optStrength1)
+        Me.fraProdNew.Controls.Add(Me.optStrength0)
         Me.fraProdNew.Controls.Add(Me.cmdProductsStorage)
         Me.fraProdNew.Controls.Add(Me.picALBanner2)
         Me.fraProdNew.Controls.Add(Me.grpCodes)
@@ -874,13 +922,76 @@ Friend Class frmMain
         Me.fraProdNew.Controls.Add(Me.cmdRemove)
         Me.fraProdNew.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.fraProdNew.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.fraProdNew.Location = New System.Drawing.Point(2, 0)
+        Me.fraProdNew.Location = New System.Drawing.Point(0, 4)
         Me.fraProdNew.Name = "fraProdNew"
         Me.fraProdNew.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.fraProdNew.Size = New System.Drawing.Size(567, 236)
+        Me.fraProdNew.Size = New System.Drawing.Size(567, 250)
         Me.fraProdNew.TabIndex = 0
         Me.fraProdNew.TabStop = False
         Me.fraProdNew.Text = " Product details "
+        '
+        'optStrength3
+        '
+        Me.optStrength3.Location = New System.Drawing.Point(334, 71)
+        Me.optStrength3.Name = "optStrength3"
+        Me.optStrength3.Size = New System.Drawing.Size(62, 20)
+        Me.optStrength3.TabIndex = 72
+        Me.optStrength3.Text = "1536-bit"
+        '
+        'optStrength5
+        '
+        Me.optStrength5.Location = New System.Drawing.Point(460, 71)
+        Me.optStrength5.Name = "optStrength5"
+        Me.optStrength5.Size = New System.Drawing.Size(62, 20)
+        Me.optStrength5.TabIndex = 71
+        Me.optStrength5.Text = "512-bit"
+        '
+        'optStrength4
+        '
+        Me.optStrength4.Location = New System.Drawing.Point(396, 71)
+        Me.optStrength4.Name = "optStrength4"
+        Me.optStrength4.Size = New System.Drawing.Size(62, 20)
+        Me.optStrength4.TabIndex = 70
+        Me.optStrength4.Text = "1024-bit"
+        '
+        'optStrength2
+        '
+        Me.optStrength2.Location = New System.Drawing.Point(270, 71)
+        Me.optStrength2.Name = "optStrength2"
+        Me.optStrength2.Size = New System.Drawing.Size(62, 20)
+        Me.optStrength2.TabIndex = 69
+        Me.optStrength2.Text = "2048-bit"
+        '
+        'Label1
+        '
+        Me.Label1.BackColor = System.Drawing.SystemColors.Control
+        Me.Label1.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label1.Location = New System.Drawing.Point(32, 74)
+        Me.Label1.Name = "Label1"
+        Me.Label1.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label1.Size = New System.Drawing.Size(54, 18)
+        Me.Label1.TabIndex = 68
+        Me.Label1.Text = "Strength:"
+        '
+        'optStrength1
+        '
+        Me.optStrength1.Location = New System.Drawing.Point(208, 71)
+        Me.optStrength1.Name = "optStrength1"
+        Me.optStrength1.Size = New System.Drawing.Size(62, 20)
+        Me.optStrength1.TabIndex = 67
+        Me.optStrength1.Text = "4096-bit"
+        '
+        'optStrength0
+        '
+        Me.optStrength0.Checked = True
+        Me.optStrength0.Location = New System.Drawing.Point(90, 71)
+        Me.optStrength0.Name = "optStrength0"
+        Me.optStrength0.Size = New System.Drawing.Size(116, 20)
+        Me.optStrength0.TabIndex = 66
+        Me.optStrength0.TabStop = True
+        Me.optStrength0.Text = "ALCrypto-1024-bit"
         '
         'grpCodes
         '
@@ -892,7 +1003,7 @@ Friend Class frmMain
         Me.grpCodes.Controls.Add(Me.lblVCode)
         Me.grpCodes.Controls.Add(Me.cmdCopyVCode)
         Me.grpCodes.Controls.Add(Me.cmdCopyGCode)
-        Me.grpCodes.Location = New System.Drawing.Point(4, 75)
+        Me.grpCodes.Location = New System.Drawing.Point(4, 92)
         Me.grpCodes.Name = "grpCodes"
         Me.grpCodes.Size = New System.Drawing.Size(556, 129)
         Me.grpCodes.TabIndex = 6
@@ -955,10 +1066,10 @@ Friend Class frmMain
         Me.Label2.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label2.Location = New System.Drawing.Point(8, 24)
+        Me.Label2.Location = New System.Drawing.Point(32, 22)
         Me.Label2.Name = "Label2"
         Me.Label2.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label2.Size = New System.Drawing.Size(65, 18)
+        Me.Label2.Size = New System.Drawing.Size(40, 18)
         Me.Label2.TabIndex = 0
         Me.Label2.Text = "&Name:"
         '
@@ -968,10 +1079,10 @@ Friend Class frmMain
         Me.Label3.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label3.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label3.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label3.Location = New System.Drawing.Point(8, 48)
+        Me.Label3.Location = New System.Drawing.Point(32, 46)
         Me.Label3.Name = "Label3"
         Me.Label3.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label3.Size = New System.Drawing.Size(73, 18)
+        Me.Label3.Size = New System.Drawing.Size(52, 18)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "V&ersion:"
         '
@@ -980,7 +1091,7 @@ Friend Class frmMain
         Me._SSTab1_TabPage1.Controls.Add(Me.frmKeyGen)
         Me._SSTab1_TabPage1.Location = New System.Drawing.Point(4, 22)
         Me._SSTab1_TabPage1.Name = "_SSTab1_TabPage1"
-        Me._SSTab1_TabPage1.Size = New System.Drawing.Size(572, 500)
+        Me._SSTab1_TabPage1.Size = New System.Drawing.Size(572, 521)
         Me._SSTab1_TabPage1.TabIndex = 1
         Me._SSTab1_TabPage1.Text = "License Key Generator"
         '
@@ -1037,7 +1148,7 @@ Friend Class frmMain
         Me.frmKeyGen.Location = New System.Drawing.Point(2, 0)
         Me.frmKeyGen.Name = "frmKeyGen"
         Me.frmKeyGen.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.frmKeyGen.Size = New System.Drawing.Size(567, 498)
+        Me.frmKeyGen.Size = New System.Drawing.Size(567, 519)
         Me.frmKeyGen.TabIndex = 0
         '
         'lblConcurrentUsers
@@ -1046,7 +1157,7 @@ Friend Class frmMain
         Me.lblConcurrentUsers.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblConcurrentUsers.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblConcurrentUsers.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblConcurrentUsers.Location = New System.Drawing.Point(464, 58)
+        Me.lblConcurrentUsers.Location = New System.Drawing.Point(464, 55)
         Me.lblConcurrentUsers.Name = "lblConcurrentUsers"
         Me.lblConcurrentUsers.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblConcurrentUsers.Size = New System.Drawing.Size(92, 17)
@@ -1262,7 +1373,7 @@ Friend Class frmMain
         Me.Label5.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label5.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label5.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label5.Location = New System.Drawing.Point(2, 477)
+        Me.Label5.Location = New System.Drawing.Point(2, 498)
         Me.Label5.Name = "Label5"
         Me.Label5.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Label5.Size = New System.Drawing.Size(78, 17)
@@ -1363,7 +1474,7 @@ Friend Class frmMain
         'sbStatus
         '
         Me.sbStatus.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.sbStatus.Location = New System.Drawing.Point(0, 527)
+        Me.sbStatus.Location = New System.Drawing.Point(0, 548)
         Me.sbStatus.Name = "sbStatus"
         Me.sbStatus.Panels.AddRange(New System.Windows.Forms.StatusBarPanel() {Me.mainStatusBarPanel})
         Me.sbStatus.ShowPanels = True
@@ -1394,7 +1505,7 @@ Friend Class frmMain
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(580, 549)
+        Me.ClientSize = New System.Drawing.Size(580, 570)
         Me.Controls.Add(Me.lnkActivelockSoftwareGroup)
         Me.Controls.Add(Me.sbStatus)
         Me.Controls.Add(Me.SSTab1)
@@ -1423,443 +1534,443 @@ Friend Class frmMain
 
 #Region "Methods"
 
-  Private Sub LoadResources()
-    Dim resxReader As Resources.ResXResourceReader = New Resources.ResXResourceReader("Alugen3NET.resx")
-    Dim resxDE As IDictionaryEnumerator = resxReader.GetEnumerator
-    For Each dd As DictionaryEntry In resxReader
-      resxList.Add(dd.Key, dd.Value)
-    Next
-  End Sub
+    Private Sub LoadResources()
+        Dim resxReader As Resources.ResXResourceReader = New Resources.ResXResourceReader("Alugen3NET.resx")
+        Dim resxDE As IDictionaryEnumerator = resxReader.GetEnumerator
+        For Each dd As DictionaryEntry In resxReader
+            resxList.Add(dd.Key, dd.Value)
+        Next
+    End Sub
 
-  Private Sub LoadImages()
-    'load buttons images
-    cmdAdd.Image = CType(resxList("add.gif"), Image)
-    cmdRemove.Image = CType(resxList("delete.gif"), Image)
-    cmdCodeGen.Image = CType(resxList("generate.gif"), Image)
-    cmdKeyGen.Image = CType(resxList("generate.gif"), Image)
-    cmdValidate.Image = CType(resxList("validate.gif"), Image)
-    cmdCopyVCode.Image = CType(resxList("copy.gif"), Image)
-    cmdCopyGCode.Image = CType(resxList("copy.gif"), Image)
-    cmdCopy.Image = CType(resxList("copy.gif"), Image)
-    cmdViewLevel.Image = CType(resxList("preview.gif"), Image)
-    cmdPaste.Image = CType(resxList("paste.gif"), Image)
-    cmdSave.Image = CType(resxList("save.gif"), Image)
-    cmdViewArchive.Image = CType(resxList("viewdatabase.gif"), Image)
-    cmdBrowse.Image = CType(resxList("folder.gif"), Image)
-    cmdPrintLicenseKey.Image = CType(resxList("print.gif"), Image)
-    cmdEmailLicenseKey.Image = CType(resxList("email.gif"), Image)
-    cmdProductsStorage.Image = CType(resxList("database.gif"), Image)
+    Private Sub LoadImages()
+        'load buttons images
+        cmdAdd.Image = CType(resxList("add.gif"), Image)
+        cmdRemove.Image = CType(resxList("delete.gif"), Image)
+        cmdCodeGen.Image = CType(resxList("generate.gif"), Image)
+        cmdKeyGen.Image = CType(resxList("generate.gif"), Image)
+        cmdValidate.Image = CType(resxList("validate.gif"), Image)
+        cmdCopyVCode.Image = CType(resxList("copy.gif"), Image)
+        cmdCopyGCode.Image = CType(resxList("copy.gif"), Image)
+        cmdCopy.Image = CType(resxList("copy.gif"), Image)
+        cmdViewLevel.Image = CType(resxList("preview.gif"), Image)
+        cmdPaste.Image = CType(resxList("paste.gif"), Image)
+        cmdSave.Image = CType(resxList("save.gif"), Image)
+        cmdViewArchive.Image = CType(resxList("viewdatabase.gif"), Image)
+        cmdBrowse.Image = CType(resxList("folder.gif"), Image)
+        cmdPrintLicenseKey.Image = CType(resxList("print.gif"), Image)
+        cmdEmailLicenseKey.Image = CType(resxList("email.gif"), Image)
+        cmdProductsStorage.Image = CType(resxList("database.gif"), Image)
 
-    'lbl's
-    lblVCode.Image = CType(resxList("keys.gif"), Image)
-    lblGCode.Image = CType(resxList("keys.gif"), Image)
-    lblLicenseKey.Image = CType(resxList("KeyLock.gif"), Image)
-    'AL banners
-    picALBanner.Image = CType(resxList("I_Trust_AL_small.gif"), Image)
-    picALBanner2.Image = CType(resxList("I_Trust_AL_small.gif"), Image)
-  End Sub
+        'lbl's
+        lblVCode.Image = CType(resxList("keys.gif"), Image)
+        lblGCode.Image = CType(resxList("keys.gif"), Image)
+        lblLicenseKey.Image = CType(resxList("KeyLock.gif"), Image)
+        'AL banners
+        picALBanner.Image = CType(resxList("I_Trust_AL_small.gif"), Image)
+        picALBanner2.Image = CType(resxList("I_Trust_AL_small.gif"), Image)
+    End Sub
 
-  Private Sub AppendLockString(ByRef strLock As String, ByVal newSubString As String)
-    '===============================================================================
-    ' Name: Sub AppendLockString
-    ' Input:
-    '   ByRef strLock As String - The lock string to be appended to, returns as an output
-    '   ByVal newSubString As String - The string to be appended to the lock string if strLock is empty string
-    ' Output:
-    '   Appended lock string and installation code
-    ' Purpose: Appends the lock string to the given installation code
-    ' Remarks: None
-    '===============================================================================
+    Private Sub AppendLockString(ByRef strLock As String, ByVal newSubString As String)
+        '===============================================================================
+        ' Name: Sub AppendLockString
+        ' Input:
+        '   ByRef strLock As String - The lock string to be appended to, returns as an output
+        '   ByVal newSubString As String - The string to be appended to the lock string if strLock is empty string
+        ' Output:
+        '   Appended lock string and installation code
+        ' Purpose: Appends the lock string to the given installation code
+        ' Remarks: None
+        '===============================================================================
 
-    If strLock = "" Then
-      strLock = newSubString
-    Else
-      strLock = strLock & vbLf & newSubString
-    End If
-  End Sub
-
-  Private Function ReconstructedInstallationCode() As String
-    Dim strLock, strReq As String
-    Dim noKey As String
-    noKey = Chr(110) & Chr(111) & Chr(107) & Chr(101) & Chr(121)
-
-    If Me.chkLockMACaddress.CheckState = CheckState.Checked Then
-      AppendLockString(strLock, MACaddress)
-    Else
-      AppendLockString(strLock, noKey)
-    End If
-    If Me.chkLockComputer.CheckState = CheckState.Checked Then
-      AppendLockString(strLock, ComputerName)
-    Else
-      AppendLockString(strLock, noKey)
-    End If
-    If Me.chkLockHD.CheckState = CheckState.Checked Then
-      AppendLockString(strLock, VolumeSerial)
-    Else
-      AppendLockString(strLock, noKey)
-    End If
-    If Me.chkLockHDfirmware.CheckState = CheckState.Checked Then
-      AppendLockString(strLock, FirmwareSerial)
-    Else
-      AppendLockString(strLock, noKey)
-    End If
-    If Me.chkLockWindows.CheckState = CheckState.Checked Then
-      AppendLockString(strLock, WindowsSerial)
-    Else
-      AppendLockString(strLock, noKey)
-    End If
-    If Me.chkLockBIOS.CheckState = CheckState.Checked Then
-      AppendLockString(strLock, BIOSserial)
-    Else
-      AppendLockString(strLock, noKey)
-    End If
-    If Me.chkLockMotherboard.CheckState = CheckState.Checked Then
-      AppendLockString(strLock, MotherboardSerial)
-    Else
-      AppendLockString(strLock, noKey)
-    End If
-    If Me.chkLockIP.CheckState = CheckState.Checked Then
-      AppendLockString(strLock, IPaddress)
-    Else
-      AppendLockString(strLock, noKey)
-    End If
-
-    If Not strLock Is Nothing _
-      AndAlso strLock.Substring(0, 1) = vbLf Then
-      strLock = strLock.Substring(2)
-    End If
-
-    Dim Index, i As Integer
-    Dim strInstCode As String
-    strInstCode = ActiveLock3Globals_definst.Base64Decode(txtInstallCode.Text)
-
-    If strInstCode Is Nothing Then Exit Function
-
-    If Not strInstCode Is Nothing _
-      AndAlso strInstCode.Substring(0, 1) = "+" Then
-      strInstCode = strInstCode.Substring(2)
-    End If
-    Index = 0
-    i = 1
-    ' Get to the last vbLf, which denotes the ending of the lock code and beginning of user name.
-    Do While i > 0
-      i = strInstCode.IndexOf(vbLf, Index) 'InStr(Index + 1, strInstCode, vbLf)
-      If i > 0 Then Index = i
-    Loop
-    ' user name starts from Index+1 to the end
-    Dim user As String
-    user = strInstCode.Substring(Index + 1)
-
-    ' combine with user name
-    strReq = strLock & vbLf & user
-
-    ' base-64 encode the request
-    Dim strReq2 As String
-    strReq2 = modBase64.Base64_Encode("+" & strReq)
-    ReconstructedInstallationCode = strReq2
-
-  End Function
-
-  Private Sub UpdateKeyGenButtonStatus()
-    If txtInstallCode.Text = "" Then
-      cmdKeyGen.Enabled = False
-    Else
-      If cboProducts.SelectedIndex >= 0 Then
-        cmdKeyGen.Enabled = True
-      End If
-    End If
-  End Sub
-
-  Private Function Make64ByteChunks(ByRef strdata As String) As String
-    ' Breaks a long string into chunks of 64-byte lines.
-    Dim i As Integer
-    Dim Count As Integer
-    Dim strNew64Chunk As String
-    Dim sResult As String = ""
-
-    Count = strdata.Length
-    For i = 0 To Count Step 64
-      If i + 64 > Count Then
-        strNew64Chunk = strdata.Substring(i)
-
-      Else
-        strNew64Chunk = strdata.Substring(i, 64)
-      End If
-      If sResult.Length > 0 Then
-        sResult = sResult & vbCrLf & strNew64Chunk
-      Else
-        sResult = sResult & strNew64Chunk
-      End If
-    Next
-
-    Make64ByteChunks = sResult
-  End Function
-
-  Private Function GetExpirationDate() As String
-    If cboLicType.Text = "Time Locked" Then
-      'GetExpirationDate = txtDays.Text
-      GetExpirationDate = CType(dtpExpireDate.Value, DateTime).ToString("yyyy/MM/dd")
-    Else
-      GetExpirationDate = Now.UtcNow.AddDays(CShort(txtDays.Text)).ToString("yyyy/MM/dd")
-    End If
-  End Function
-
-  Private Sub SaveLicenseKey(ByVal sLibKey As String, ByVal sFileName As String)
-    Dim hFile As Integer
-    hFile = FreeFile()
-    FileOpen(hFile, sFileName, OpenMode.Output)
-    PrintLine(hFile, sLibKey)
-    FileClose(hFile)
-  End Sub
-
-
-  Private Sub UpdateStatus(ByRef Msg As String)
-    'write status on fist status bar panel
-    sbStatus.Panels(0).Text = Msg
-  End Sub
-
-
-  Function CheckForResources(ByVal ParamArray MyArray() As Object) As Boolean
-    'MyArray is a list of things to check
-    'These can be DLLs or OCXs
-
-    'Files, by default, are searched for in the Windows System Directory
-    'Exceptions;
-    '   Begins with a # means it should be in the same directory with the executable
-    '   Contains the full path (anything with a "\")
-
-    'Typical names would be "#aaa.dll", "mydll.dll", "myocx.ocx", "comdlg32.ocx", "mscomctl.ocx", "msflxgrd.ocx"
-
-    'If the file has no extension, we;
-    '     assume it's a DLL, and if it still can't be found
-    '     assume it's an OCX
-
-    Try
-
-      Dim foundIt As Boolean
-      Dim Y As Object
-      Dim i, j As Integer
-      Dim systemDir, s, pathName As String
-
-      WhereIsDLL("") 'initialize
-
-      systemDir = WinSysDir() 'Get the Windows system directory
-      For Each Y In MyArray
-        foundIt = False
-        s = CStr(Y)
-
-        If s.Substring(0, 1) = "#" Then
-          pathName = Application.StartupPath
-          s = s.Substring(2)
-        ElseIf s.IndexOf("\") > 0 Then
-          j = s.LastIndexOf("\") 'InStrRev(s, "\")
-          '!!!!!!!!!!!!!! TODO ?
-          'pathName = s.Substring(s, j - 1)
-          pathName = s.Substring(0, j - 1)
-          s = s.Substring(j + 1)
+        If strLock = "" Then
+            strLock = newSubString
         Else
-          pathName = systemDir
+            strLock = strLock & vbLf & newSubString
+        End If
+    End Sub
+
+    Private Function ReconstructedInstallationCode() As String
+        Dim strLock, strReq As String
+        Dim noKey As String
+        noKey = Chr(110) & Chr(111) & Chr(107) & Chr(101) & Chr(121)
+
+        If Me.chkLockMACaddress.CheckState = CheckState.Checked Then
+            AppendLockString(strLock, MACaddress)
+        Else
+            AppendLockString(strLock, noKey)
+        End If
+        If Me.chkLockComputer.CheckState = CheckState.Checked Then
+            AppendLockString(strLock, ComputerName)
+        Else
+            AppendLockString(strLock, noKey)
+        End If
+        If Me.chkLockHD.CheckState = CheckState.Checked Then
+            AppendLockString(strLock, VolumeSerial)
+        Else
+            AppendLockString(strLock, noKey)
+        End If
+        If Me.chkLockHDfirmware.CheckState = CheckState.Checked Then
+            AppendLockString(strLock, FirmwareSerial)
+        Else
+            AppendLockString(strLock, noKey)
+        End If
+        If Me.chkLockWindows.CheckState = CheckState.Checked Then
+            AppendLockString(strLock, WindowsSerial)
+        Else
+            AppendLockString(strLock, noKey)
+        End If
+        If Me.chkLockBIOS.CheckState = CheckState.Checked Then
+            AppendLockString(strLock, BIOSserial)
+        Else
+            AppendLockString(strLock, noKey)
+        End If
+        If Me.chkLockMotherboard.CheckState = CheckState.Checked Then
+            AppendLockString(strLock, MotherboardSerial)
+        Else
+            AppendLockString(strLock, noKey)
+        End If
+        If Me.chkLockIP.CheckState = CheckState.Checked Then
+            AppendLockString(strLock, IPaddress)
+        Else
+            AppendLockString(strLock, noKey)
         End If
 
-        If s.IndexOf(".") > 0 Then
-          If File.Exists(pathName & "\" & s) Then foundIt = True
-        ElseIf File.Exists(pathName & "\" & s & ".DLL") Then
-          foundIt = True
-        ElseIf File.Exists(pathName & "\" & s & ".OCX") Then
-          foundIt = True
-          s = s & ".OCX" 'this will make the softlocx check easier
+        If Not strLock Is Nothing _
+          AndAlso strLock.Substring(0, 1) = vbLf Then
+            strLock = strLock.Substring(2)
         End If
 
-        If Not foundIt Then
-          MsgBox(s & " could not be found in " & pathName & vbCrLf & System.Reflection.Assembly.GetExecutingAssembly.GetName.Name & " cannot run without this library file!" & vbCrLf & vbCrLf & "Exiting!", MsgBoxStyle.Critical, "Missing Resource")
-          End
+        Dim Index, i As Integer
+        Dim strInstCode As String
+        strInstCode = ActiveLock3Globals_definst.Base64Decode(txtInstallCode.Text)
+
+        If strInstCode Is Nothing Then Exit Function
+
+        If Not strInstCode Is Nothing _
+          AndAlso strInstCode.Substring(0, 1) = "+" Then
+            strInstCode = strInstCode.Substring(2)
         End If
-      Next Y
+        Index = 0
+        i = 1
+        ' Get to the last vbLf, which denotes the ending of the lock code and beginning of user name.
+        Do While i > 0
+            i = strInstCode.IndexOf(vbLf, Index) 'InStr(Index + 1, strInstCode, vbLf)
+            If i > 0 Then Index = i
+        Loop
+        ' user name starts from Index+1 to the end
+        Dim user As String
+        user = strInstCode.Substring(Index + 1)
 
-      CheckForResources = True
-    Catch ex As Exception
-      MessageBox.Show(ex.Message, ACTIVELOCKSTRING, MessageBoxButtons.OK, MessageBoxIcon.Error)
-    End Try
+        ' combine with user name
+        strReq = strLock & vbLf & user
 
+        ' base-64 encode the request
+        Dim strReq2 As String
+        strReq2 = modBase64.Base64_Encode("+" & strReq)
+        ReconstructedInstallationCode = strReq2
 
-  End Function
+    End Function
 
-  Function WhereIsDLL(ByVal T As String) As String
-    'Places where programs look for DLLs
-    '   1 directory containing the EXE
-    '   2 current directory
-    '   3 32 bit system directory   possibly \Windows\system32
-    '   4 16 bit system directory   possibly \Windows\system
-    '   5 windows directory         possibly \Windows
-    '   6 path
-
-    'The current directory may be changed in the course of the program
-    'but current directory -- when the program starts -- is what matters
-    'so a call should be made to this function early on to "lock" the paths.
-
-    'Add a call at the beginning of checkForResources
-
-    Static a As String() 'Object
-    Dim s, D As String
-    Dim EnvString As String
-    Dim Indx As Integer
-    Dim i As Integer
-
-    On Error Resume Next
-    i = UBound(a)
-    If i = 0 Then
-      s = Environment.GetEnvironmentVariable("PATH") & ";" & CurDir() & ";"
-
-      D = WinSysDir()
-      s = s & D & ";"
-
-      If D.Substring(D.Length - 2) = "32" Then 'I'm guessing at the name of the 16 bit windows directory (assuming it exists)
-        i = D.Length
-        '!!!!!!!! TODO ?
-        's = s & D.Substring(D, i - 2) & ";"
-        s = s & D.Substring(0, i - 2) & ";"
-      End If
-
-      s = s & WinDir() & ";"
-      Indx = 1 ' Initialize index to 1.
-      Do
-        EnvString = Environ(Indx) ' Get environment variable.
-        If StrComp(EnvString.Substring(0, 5), "PATH=", CompareMethod.Text) = 0 Then ' Check PATH entry.
-          s = s & EnvString.Substring(6)
-          Exit Do
+    Private Sub UpdateKeyGenButtonStatus()
+        If txtInstallCode.Text = "" Then
+            cmdKeyGen.Enabled = False
+        Else
+            If cboProducts.SelectedIndex >= 0 Then
+                cmdKeyGen.Enabled = True
+            End If
         End If
-        Indx += 1
-      Loop Until EnvString = ""
-      a = Split(s, ";")
-    End If
+    End Sub
 
-    T = Trim(T)
-    If T = "" Then Exit Function
-    If Not T.Substring(T.Length - 4).IndexOf(".") > 0 Then T = T & ".DLL" 'default extension
-    For i = 0 To UBound(a)
-      If File.Exists(a(i) & "\" & T) Then
-        WhereIsDLL = a(i)
-        Exit Function
-      End If
-    Next i
+    Private Function Make64ByteChunks(ByRef strdata As String) As String
+        ' Breaks a long string into chunks of 64-byte lines.
+        Dim i As Integer
+        Dim Count As Integer
+        Dim strNew64Chunk As String
+        Dim sResult As String = ""
 
-  End Function
+        Count = strdata.Length
+        For i = 0 To Count Step 64
+            If i + 64 > Count Then
+                strNew64Chunk = strdata.Substring(i)
 
-  Private Sub AddRow(ByRef productName As String, ByRef productVer As String, ByRef productVCode As String, ByRef productGCode As String, Optional ByRef fUpdateStore As Boolean = True)
-    ' Add a Product Row to the GUI.
-    ' If fUpdateStore is True, then product info is also saved to the store.
-    ' Call Activelock3.IALUGenerator to add product
-    If fUpdateStore Then
-      Dim ProdInfo As ProductInfo
-      ProdInfo = ActiveLock3AlugenGlobals_definst.CreateProductInfo(productName, productVer, productVCode, productGCode)
-      Call GeneratorInstance.SaveProduct(ProdInfo)
-    End If
-    ' Update the view
-    Dim itemProductInfo As New ProductInfoItem(productName, productVer)
-    cboProducts.Items.Add(itemProductInfo)
-    Dim mainListItem As New ListViewItem(productName)
-    mainListItem.SubItems.Add(productVer)
-    mainListItem.SubItems.Add(productVCode)
-    mainListItem.SubItems.Add(productGCode)
-    lstvwProducts.BeginUpdate()
-    lstvwProducts.Items.Add(mainListItem)
-    lstvwProducts.EndUpdate()
-    mainListItem.Selected = True
-    cmdRemove.Enabled = True
-  End Sub
+            Else
+                strNew64Chunk = strdata.Substring(i, 64)
+            End If
+            If sResult.Length > 0 Then
+                sResult = sResult & vbCrLf & strNew64Chunk
+            Else
+                sResult = sResult & strNew64Chunk
+            End If
+        Next
 
-  Private Sub UpdateCodeGenButtonStatus()
-    If txtName.Text = "" Or txtVer.Text = "" Then
-      cmdCodeGen.Enabled = False
-    ElseIf CheckDuplicate(txtName.Text, txtVer.Text) Then
-      cmdCodeGen.Enabled = False
-    Else
-      cmdCodeGen.Enabled = True
-    End If
-  End Sub
+        Make64ByteChunks = sResult
+    End Function
 
-  Private Sub UpdateAddButtonStatus()
-    If txtName.Text = "" Or txtVer.Text = "" Or txtVCode.Text = "" Then
-      cmdAdd.Enabled = False
-    ElseIf CheckDuplicate(txtName.Text, txtVer.Text) Then
-      cmdAdd.Enabled = False
-    Else
-      cmdAdd.Enabled = True
-    End If
-  End Sub
+    Private Function GetExpirationDate() As String
+        If cboLicType.Text = "Time Locked" Then
+            'GetExpirationDate = txtDays.Text
+            GetExpirationDate = CType(dtpExpireDate.Value, DateTime).ToString("yyyy/MM/dd")
+        Else
+            GetExpirationDate = Now.UtcNow.AddDays(CShort(txtDays.Text)).ToString("yyyy/MM/dd")
+        End If
+    End Function
 
-  Private Function CheckDuplicate(ByRef productName As String, ByRef productVer As String) As Boolean
-    CheckDuplicate = False
-    Dim i As Integer
-    For i = 0 To lstvwProducts.Items.Count - 1
-      If lstvwProducts.Items(i).Text = productName _
-        AndAlso lstvwProducts.Items(i).SubItems(1).Text = productVer Then
+    Private Sub SaveLicenseKey(ByVal sLibKey As String, ByVal sFileName As String)
+        Dim hFile As Integer
+        hFile = FreeFile()
+        FileOpen(hFile, sFileName, OpenMode.Output)
+        PrintLine(hFile, sLibKey)
+        FileClose(hFile)
+    End Sub
+
+
+    Private Sub UpdateStatus(ByRef Msg As String)
+        'write status on fist status bar panel
+        sbStatus.Panels(0).Text = Msg
+    End Sub
+
+
+    Function CheckForResources(ByVal ParamArray MyArray() As Object) As Boolean
+        'MyArray is a list of things to check
+        'These can be DLLs or OCXs
+
+        'Files, by default, are searched for in the Windows System Directory
+        'Exceptions;
+        '   Begins with a # means it should be in the same directory with the executable
+        '   Contains the full path (anything with a "\")
+
+        'Typical names would be "#aaa.dll", "mydll.dll", "myocx.ocx", "comdlg32.ocx", "mscomctl.ocx", "msflxgrd.ocx"
+
+        'If the file has no extension, we;
+        '     assume it's a DLL, and if it still can't be found
+        '     assume it's an OCX
+
+        Try
+
+            Dim foundIt As Boolean
+            Dim Y As Object
+            Dim i, j As Integer
+            Dim systemDir, s, pathName As String
+
+            WhereIsDLL("") 'initialize
+
+            systemDir = WinSysDir() 'Get the Windows system directory
+            For Each Y In MyArray
+                foundIt = False
+                s = CStr(Y)
+
+                If s.Substring(0, 1) = "#" Then
+                    pathName = Application.StartupPath
+                    s = s.Substring(2)
+                ElseIf s.IndexOf("\") > 0 Then
+                    j = s.LastIndexOf("\") 'InStrRev(s, "\")
+                    '!!!!!!!!!!!!!! TODO ?
+                    'pathName = s.Substring(s, j - 1)
+                    pathName = s.Substring(0, j - 1)
+                    s = s.Substring(j + 1)
+                Else
+                    pathName = systemDir
+                End If
+
+                If s.IndexOf(".") > 0 Then
+                    If File.Exists(pathName & "\" & s) Then foundIt = True
+                ElseIf File.Exists(pathName & "\" & s & ".DLL") Then
+                    foundIt = True
+                ElseIf File.Exists(pathName & "\" & s & ".OCX") Then
+                    foundIt = True
+                    s = s & ".OCX" 'this will make the softlocx check easier
+                End If
+
+                If Not foundIt Then
+                    MsgBox(s & " could not be found in " & pathName & vbCrLf & System.Reflection.Assembly.GetExecutingAssembly.GetName.Name & " cannot run without this library file!" & vbCrLf & vbCrLf & "Exiting!", MsgBoxStyle.Critical, "Missing Resource")
+                    End
+                End If
+            Next Y
+
+            CheckForResources = True
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, ACTIVELOCKSTRING, MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+
+
+    End Function
+
+    Function WhereIsDLL(ByVal T As String) As String
+        'Places where programs look for DLLs
+        '   1 directory containing the EXE
+        '   2 current directory
+        '   3 32 bit system directory   possibly \Windows\system32
+        '   4 16 bit system directory   possibly \Windows\system
+        '   5 windows directory         possibly \Windows
+        '   6 path
+
+        'The current directory may be changed in the course of the program
+        'but current directory -- when the program starts -- is what matters
+        'so a call should be made to this function early on to "lock" the paths.
+
+        'Add a call at the beginning of checkForResources
+
+        Static a As String() 'Object
+        Dim s, D As String
+        Dim EnvString As String
+        Dim Indx As Integer
+        Dim i As Integer
+
+        On Error Resume Next
+        i = UBound(a)
+        If i = 0 Then
+            s = Environment.GetEnvironmentVariable("PATH") & ";" & CurDir() & ";"
+
+            D = WinSysDir()
+            s = s & D & ";"
+
+            If D.Substring(D.Length - 2) = "32" Then 'I'm guessing at the name of the 16 bit windows directory (assuming it exists)
+                i = D.Length
+                '!!!!!!!! TODO ?
+                's = s & D.Substring(D, i - 2) & ";"
+                s = s & D.Substring(0, i - 2) & ";"
+            End If
+
+            s = s & WinDir() & ";"
+            Indx = 1 ' Initialize index to 1.
+            Do
+                EnvString = Environ(Indx) ' Get environment variable.
+                If StrComp(EnvString.Substring(0, 5), "PATH=", CompareMethod.Text) = 0 Then ' Check PATH entry.
+                    s = s & EnvString.Substring(6)
+                    Exit Do
+                End If
+                Indx += 1
+            Loop Until EnvString = ""
+            a = Split(s, ";")
+        End If
+
+        T = Trim(T)
+        If T = "" Then Exit Function
+        If Not T.Substring(T.Length - 4).IndexOf(".") > 0 Then T = T & ".DLL" 'default extension
+        For i = 0 To UBound(a)
+            If File.Exists(a(i) & "\" & T) Then
+                WhereIsDLL = a(i)
+                Exit Function
+            End If
+        Next i
+
+    End Function
+
+    Private Sub AddRow(ByRef productName As String, ByRef productVer As String, ByRef productVCode As String, ByRef productGCode As String, Optional ByRef fUpdateStore As Boolean = True)
+        ' Add a Product Row to the GUI.
+        ' If fUpdateStore is True, then product info is also saved to the store.
+        ' Call Activelock3.IALUGenerator to add product
+        If fUpdateStore Then
+            Dim ProdInfo As ProductInfo
+            ProdInfo = ActiveLock3AlugenGlobals_definst.CreateProductInfo(productName, productVer, productVCode, productGCode)
+            Call GeneratorInstance.SaveProduct(ProdInfo)
+        End If
+        ' Update the view
+        Dim itemProductInfo As New ProductInfoItem(productName, productVer)
+        cboProducts.Items.Add(itemProductInfo)
+        Dim mainListItem As New ListViewItem(productName)
+        mainListItem.SubItems.Add(productVer)
+        mainListItem.SubItems.Add(productVCode)
+        mainListItem.SubItems.Add(productGCode)
+        lstvwProducts.BeginUpdate()
+        lstvwProducts.Items.Add(mainListItem)
+        lstvwProducts.EndUpdate()
+        mainListItem.Selected = True
+        cmdRemove.Enabled = True
+    End Sub
+
+    Private Sub UpdateCodeGenButtonStatus()
+        If txtName.Text = "" Or txtVer.Text = "" Then
+            cmdCodeGen.Enabled = False
+        ElseIf CheckDuplicate(txtName.Text, txtVer.Text) Then
+            cmdCodeGen.Enabled = False
+        Else
+            cmdCodeGen.Enabled = True
+        End If
+    End Sub
+
+    Private Sub UpdateAddButtonStatus()
+        If txtName.Text = "" Or txtVer.Text = "" Or txtVCode.Text = "" Then
+            cmdAdd.Enabled = False
+        ElseIf CheckDuplicate(txtName.Text, txtVer.Text) Then
+            cmdAdd.Enabled = False
+        Else
+            cmdAdd.Enabled = True
+        End If
+    End Sub
+
+    Private Function CheckDuplicate(ByRef productName As String, ByRef productVer As String) As Boolean
+        CheckDuplicate = False
+        Dim i As Integer
+        For i = 0 To lstvwProducts.Items.Count - 1
+            If lstvwProducts.Items(i).Text = productName _
+              AndAlso lstvwProducts.Items(i).SubItems(1).Text = productVer Then
+                If Not fDisableNotifications Then
+                    txtVCode.Text = lstvwProducts.Items(i).SubItems(2).Text
+                    txtGCode.Text = lstvwProducts.Items(i).SubItems(3).Text
+                End If
+                CheckDuplicate = True
+                Exit Function
+            End If
+        Next
         If Not fDisableNotifications Then
-          txtVCode.Text = lstvwProducts.Items(i).SubItems(2).Text
-          txtGCode.Text = lstvwProducts.Items(i).SubItems(3).Text
+            txtVCode.Text = ""
+            txtGCode.Text = ""
         End If
-        CheckDuplicate = True
-        Exit Function
-      End If
-    Next
-    If Not fDisableNotifications Then
-      txtVCode.Text = ""
-      txtGCode.Text = ""
-    End If
-  End Function
+    End Function
 
-  Private Sub InitUI()
-    ' Initialize the GUI
+    Private Sub InitUI()
+        ' Initialize the GUI
 
-    txtLicenseKey.Text = ""
-    cboLicType.Text = "Periodic"
+        txtLicenseKey.Text = ""
+        cboLicType.Text = "Periodic"
 
-    cboProducts.DisplayMember = "ProductNameVersion"
-    cboProducts.ValueMember = "ProductNameVersion"
+        cboProducts.DisplayMember = "ProductNameVersion"
+        cboProducts.ValueMember = "ProductNameVersion"
 
-    lstvwProducts.Items.Clear()
-    cboProducts.Items.Clear()
+        lstvwProducts.Items.Clear()
+        cboProducts.Items.Clear()
 
-    ' Populate Product List on Product Code Generator tab
-    ' and Key Gen tab with product info from licenses.ini
-    Dim arrProdInfos() As ProductInfo
-    arrProdInfos = GeneratorInstance.RetrieveProducts()
+        ' Populate Product List on Product Code Generator tab
+        ' and Key Gen tab with product info from licenses.ini
+        Dim arrProdInfos() As ProductInfo
+        arrProdInfos = GeneratorInstance.RetrieveProducts()
 
-    If IsArrayEmpty(arrProdInfos) Then Exit Sub
+        If IsArrayEmpty(arrProdInfos) Then Exit Sub
 
-    Dim i As Integer
-    For i = LBound(arrProdInfos) To UBound(arrProdInfos)
-      PopulateUI(CType(arrProdInfos(i), ProductInfo))
-    Next
-    lstvwProducts.Items(0).Selected = True
-  End Sub
+        Dim i As Integer
+        For i = LBound(arrProdInfos) To UBound(arrProdInfos)
+            PopulateUI(CType(arrProdInfos(i), ProductInfo))
+        Next
+        lstvwProducts.Items(0).Selected = True
+    End Sub
 
-  Private Function IsArrayEmpty(ByRef arrVar As ProductInfo()) As Boolean
-    IsArrayEmpty = True
-    Try
-      Dim lb As Integer
-      lb = UBound(arrVar, 1) ' this will raise an error if the array is empty
-      IsArrayEmpty = False ' If we managed to get to here, then it's not empty
-    Catch ex As Exception
-      'MessageBox.Show(ex.Message, ACTIVELOCKSTRING, MessageBoxButtons.OK, MessageBoxIcon.Error)
-    End Try
-  End Function
+    Private Function IsArrayEmpty(ByRef arrVar As ProductInfo()) As Boolean
+        IsArrayEmpty = True
+        Try
+            Dim lb As Integer
+            lb = UBound(arrVar, 1) ' this will raise an error if the array is empty
+            IsArrayEmpty = False ' If we managed to get to here, then it's not empty
+        Catch ex As Exception
+            'MessageBox.Show(ex.Message, ACTIVELOCKSTRING, MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Function
 
-  Private Sub PopulateUI(ByRef ProdInfo As ProductInfo)
-    With ProdInfo
-      AddRow(.name, .Version, .VCode, .GCode, False)
-    End With
-  End Sub
+    Private Sub PopulateUI(ByRef ProdInfo As ProductInfo)
+        With ProdInfo
+            AddRow(.Name, .Version, .VCode, .GCode, False)
+        End With
+    End Sub
 
-  Private Function GetUserFromInstallCode(ByVal strInstCode As String) As String
-    ' Retrieves lock string and user info from the request string
-    '
-    Dim a() As String
-    Dim Index, i As Integer
-    Dim aString As String
-    Dim usedLockNone As Boolean
-    Dim noKey As String
-    noKey = Chr(110) & Chr(111) & Chr(107) & Chr(101) & Chr(121)
+    Private Function GetUserFromInstallCode(ByVal strInstCode As String) As String
+        ' Retrieves lock string and user info from the request string
+        '
+        Dim a() As String
+        Dim Index, i As Integer
+        Dim aString As String
+        Dim usedLockNone As Boolean
+        Dim noKey As String
+        noKey = Chr(110) & Chr(111) & Chr(107) & Chr(101) & Chr(121)
 
         If strInstCode = "" Then Exit Function
         strInstCode = ActiveLock3Globals_definst.Base64Decode(strInstCode)
@@ -1998,13 +2109,13 @@ Friend Class frmMain
         GetUserFromInstallCode = a(a.Length - 1)
         systemEvent = False
 
-  End Function
+    End Function
 
-  Private Sub SelectOnEnterTextBox(ByRef sender As Object)
-    'select all text in a textbox
-    CType(sender, TextBox).SelectionStart = 0
-    CType(sender, TextBox).SelectionLength = CType(sender, TextBox).Text.Length
-  End Sub
+    Private Sub SelectOnEnterTextBox(ByRef sender As Object)
+        'select all text in a textbox
+        CType(sender, TextBox).SelectionStart = 0
+        CType(sender, TextBox).SelectionLength = CType(sender, TextBox).Text.Length
+    End Sub
 
 #End Region
 
@@ -2012,97 +2123,92 @@ Friend Class frmMain
 
 #Region "Events"
 
-  Friend Sub frmMain_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
+    Friend Sub frmMain_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
 
-    'load images for buttons, labels, pictureboxes
-    LoadImages()
+        'load images for buttons, labels, pictureboxes
+        LoadImages()
 
-    'initialize RegisteredLevels
-    strRegisteredLevelDBName = AddBackSlash(Application.StartupPath) & "RegisteredLevelDB.dat"
+        'initialize RegisteredLevels
+        strRegisteredLevelDBName = AddBackSlash(Application.StartupPath) & "RegisteredLevelDB.dat"
 
-    ' Check the existence of necessary files to run this application
-    'Call CheckForResources("Alcrypto3.dll", "comdlg32.ocx", "msflxgrd.ocx", "comctl32.ocx", "tabctl32.ocx")
-    Call CheckForResources("Alcrypto3.dll")
+        ' Check the existence of necessary files to run this application
+        'Call CheckForResources("Alcrypto3.dll", "comdlg32.ocx", "msflxgrd.ocx", "comctl32.ocx", "tabctl32.ocx")
+        Call CheckForResources("Alcrypto3.dll")
 
-    'load RegisteredLevels
-    If Not File.Exists(strRegisteredLevelDBName) Then
+        'load RegisteredLevels
+        If Not File.Exists(strRegisteredLevelDBName) Then
 
-      With cboRegisteredLevel
-        .Items.Clear()
-        .Items.Add(New Mylist("Limited A", 0))
-        .Items.Add(New Mylist("Limited B", 0))
-        .Items.Add(New Mylist("Limited C", 0))
-        .Items.Add(New Mylist("Limited D", 0))
-        .Items.Add(New Mylist("Limited E", 0))
-        .Items.Add(New Mylist("No Print/Save", 0))
-        .Items.Add(New Mylist("Educational A", 0))
-        .Items.Add(New Mylist("Educational B", 0))
-        .Items.Add(New Mylist("Educational C", 0))
-        .Items.Add(New Mylist("Educational D", 0))
-        .Items.Add(New Mylist("Educational E", 0))
-        .Items.Add(New Mylist("Level 1", 0))
-        .Items.Add(New Mylist("Level 2", 0))
-        .Items.Add(New Mylist("Level 3", 0))
-        .Items.Add(New Mylist("Level 4", 0))
-        .Items.Add(New Mylist("Light Version", 0))
-        .Items.Add(New Mylist("Pro Version", 0))
-        .Items.Add(New Mylist("Enterprise Version", 0))
-        .Items.Add(New Mylist("Demo Only", 0))
-        .Items.Add(New Mylist("Full Version-Europe", 0))
-        .Items.Add(New Mylist("Full Version-Africa", 0))
-        .Items.Add(New Mylist("Full Version-Asia", 0))
-        .Items.Add(New Mylist("Full Version-USA", 0))
-        .Items.Add(New Mylist("Full Version-International", 0))
-        .SelectedIndex = 0
-        SaveComboBox(strRegisteredLevelDBName, cboRegisteredLevel.Items.GetEnumerator, True)
-      End With
-    Else
-      LoadComboBox(strRegisteredLevelDBName, cboRegisteredLevel, True)
-      'cboRegisteredLevel.SelectedIndex = 0
-    End If
+            With cboRegisteredLevel
+                .Items.Clear()
+                .Items.Add(New Mylist("Limited A", 0))
+                .Items.Add(New Mylist("Limited B", 0))
+                .Items.Add(New Mylist("Limited C", 0))
+                .Items.Add(New Mylist("Limited D", 0))
+                .Items.Add(New Mylist("Limited E", 0))
+                .Items.Add(New Mylist("No Print/Save", 0))
+                .Items.Add(New Mylist("Educational A", 0))
+                .Items.Add(New Mylist("Educational B", 0))
+                .Items.Add(New Mylist("Educational C", 0))
+                .Items.Add(New Mylist("Educational D", 0))
+                .Items.Add(New Mylist("Educational E", 0))
+                .Items.Add(New Mylist("Level 1", 0))
+                .Items.Add(New Mylist("Level 2", 0))
+                .Items.Add(New Mylist("Level 3", 0))
+                .Items.Add(New Mylist("Level 4", 0))
+                .Items.Add(New Mylist("Light Version", 0))
+                .Items.Add(New Mylist("Pro Version", 0))
+                .Items.Add(New Mylist("Enterprise Version", 0))
+                .Items.Add(New Mylist("Demo Only", 0))
+                .Items.Add(New Mylist("Full Version-Europe", 0))
+                .Items.Add(New Mylist("Full Version-Africa", 0))
+                .Items.Add(New Mylist("Full Version-Asia", 0))
+                .Items.Add(New Mylist("Full Version-USA", 0))
+                .Items.Add(New Mylist("Full Version-International", 0))
+                .SelectedIndex = 0
+                SaveComboBox(strRegisteredLevelDBName, cboRegisteredLevel.Items.GetEnumerator, True)
+            End With
+        Else
+            LoadComboBox(strRegisteredLevelDBName, cboRegisteredLevel, True)
+            'cboRegisteredLevel.SelectedIndex = 0
+        End If
 
-    'load form settings
-    LoadFormSetting()
+        ' Initialize AL
+        InitActiveLock()
 
-    ' Initialize AL
-    InitActiveLock()
+        ' Initialize GUI
+        InitUI()
 
-    ' Initialize GUI
-    InitUI()
+        'load form settings
+        LoadFormSetting()
 
-    If cboProducts.Items.Count > 0 Then
-      cboProducts.SelectedIndex = 0
-    End If
+        'Assume that the application LockType is not LOckNone only
+        txtUser.Enabled = False
+        txtUser.ReadOnly = True
+        txtUser.BackColor = System.Drawing.ColorTranslator.FromOle(&H8000000F)
 
-    'Assume that the application LockType is not LOckNone only
-    txtUser.Enabled = False
-    txtUser.ReadOnly = True
-    txtUser.BackColor = System.Drawing.ColorTranslator.FromOle(&H8000000F)
+        Me.Text = "ActiveLock3 Universal GENerator (Alugen) for VB.NET 2003 - v" & Application.ProductVersion
 
-    Me.Text = "ALUGEN3.5NET - ActiveLock3 Universal GENerator - v3.5 for VB.NET"
+    End Sub
 
-  End Sub
+    Private Sub LoadFormSetting()
+        'Read the program INI file to retrieve control settings
+        On Error GoTo LoadFormSetting_Error
 
-  Private Sub LoadFormSetting()
-    'Read the program INI file to retrieve control settings
-    On Error GoTo LoadFormSetting_Error
+        If Not blnIsFirstLaunch Then Exit Sub
 
-    If Not blnIsFirstLaunch Then Exit Sub
+        On Error Resume Next
+        'Read the program INI file to retrieve control settings
+        PROJECT_INI_FILENAME = WinDir() & "\" & Application.ProductName & Application.ProductVersion & ".ini"
 
-    PROJECT_INI_FILENAME = WinDir() & "\Alugen3.ini"
-    On Error Resume Next
-    'Read the program INI file to retrieve control settings
-    PROJECT_INI_FILENAME = WinDir() & "\Alugen3_4NET.ini"
-
-    SSTab1.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", CStr(0)))
-    cboProducts.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboProducts", CStr(0)))
-    cboLicType.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboLicType", CStr(1)))
-    cboRegisteredLevel.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboRegisteredLevel", CStr(0)))
-    If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", CStr(0)) = "Unchecked" Then
-      chkItemData.CheckState = CheckState.Unchecked
-    Else
-      chkItemData.CheckState = CheckState.Checked
-    End If
+        SSTab1.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", CStr(0)))
+        cboProducts.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboProducts", CStr(0)))
+        cboLicType.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboLicType", CStr(1)))
+        cboRegisteredLevel.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboRegisteredLevel", CStr(0)))
+        If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", CStr(0)) = "Unchecked" Then
+            chkItemData.CheckState = CheckState.Unchecked
+        Else
+            chkItemData.CheckState = CheckState.Checked
+        End If
         If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockBIOS", CStr(0)) = "Unchecked" Then
             chkLockBIOS.CheckState = CheckState.Unchecked
         Else
@@ -2150,6 +2256,13 @@ Friend Class frmMain
         End If
         txtMaxCount.Text = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtMaxCount", CStr(5))
 
+        optStrength0.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength0", "1"))
+        optStrength1.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength1", "0"))
+        optStrength2.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength2", "0"))
+        optStrength3.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength3", "0"))
+        optStrength4.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength4", "0"))
+        optStrength5.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength5", "0"))
+
         mKeyStoreType = CType(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "KeyStoreType", CStr(1)), IActiveLock.LicStoreType)
         mProductsStoreType = CType(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoreType", CStr(0)), IActiveLock.ProductsStoreType)
         mProductsStoragePath = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoragePath", modALUGEN.AppPath & "\licenses.ini")
@@ -2167,52 +2280,52 @@ LoadFormSetting_Error:
 
         MessageBox.Show("Error " & Err.Number & " (" & Err.Description & ") in procedure LoadFormSetting of Form frmMain", modALUGEN.ACTIVELOCKSTRING)
 
-  End Sub
+    End Sub
 
-  Private Sub InitActiveLock()
-    On Error GoTo InitForm_Error
-    ActiveLock = ActiveLock3Globals_definst.NewInstance()
-    ActiveLock.KeyStoreType = mKeyStoreType
+    Private Sub InitActiveLock()
+        On Error GoTo InitForm_Error
+        ActiveLock = ActiveLock3Globals_definst.NewInstance()
+        ActiveLock.KeyStoreType = mKeyStoreType
 
-    Dim MyAL As New Globals_Renamed
-    Dim MyGen As New AlugenGlobals
+        Dim MyAL As New Globals_Renamed
+        Dim MyGen As New AlugenGlobals
 
-    'Use the following for ASP.NET applications
-    'ActiveLock.Init(Application.StartupPath & "\bin")
-    'Use the following for the VB.NET applications
-    ActiveLock.Init(Application.StartupPath)
+        'Use the following for ASP.NET applications
+        'ActiveLock.Init(Application.StartupPath & "\bin")
+        'Use the following for the VB.NET applications
+        ActiveLock.Init(Application.StartupPath)
 
-    ' Initialize Generator
-    GeneratorInstance = MyGen.GeneratorInstance(mProductsStoreType)
-    GeneratorInstance.StoragePath = mProductsStoragePath
+        ' Initialize Generator
+        GeneratorInstance = MyGen.GeneratorInstance(mProductsStoreType)
+        GeneratorInstance.StoragePath = mProductsStoragePath
 
-    On Error GoTo 0
-    Exit Sub
+        On Error GoTo 0
+        Exit Sub
 
 InitForm_Error:
 
-    MessageBox.Show("Error " & Err.Number & " (" & Err.Description & ") in procedure InitForm of Form frmMain", modALUGEN.ACTIVELOCKSTRING)
-  End Sub
+        MessageBox.Show("Error " & Err.Number & " (" & Err.Description & ") in procedure InitForm of Form frmMain", modALUGEN.ACTIVELOCKSTRING)
+    End Sub
 
-  Private Sub frmMain_Closed(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Closed
-    'save form settings
-    SaveFormSettings()
-  End Sub
+    Private Sub frmMain_Closed(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Closed
+        'save form settings
+        SaveFormSettings()
+    End Sub
 
-  Private Sub SaveFormSettings()
-    'save form settings
-    On Error GoTo SaveFormSettings_Error
-    Dim mnReturnValue As Long
-    mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", CStr(SSTab1.SelectedIndex))
-    mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboProducts", CStr(cboProducts.SelectedIndex))
-    mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboLicType", CStr(cboLicType.SelectedIndex))
-    mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboRegisteredLevel", CStr(cboRegisteredLevel.SelectedIndex))
-    mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", chkItemData.CheckState.ToString)
+    Private Sub SaveFormSettings()
+        'save form settings
+        On Error GoTo SaveFormSettings_Error
+        Dim mnReturnValue As Long
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", CStr(SSTab1.SelectedIndex))
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboProducts", CStr(cboProducts.SelectedIndex))
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboLicType", CStr(cboLicType.SelectedIndex))
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboRegisteredLevel", CStr(cboRegisteredLevel.SelectedIndex))
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", chkItemData.CheckState.ToString)
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkNetworkedLicense", chkNetworkedLicense.CheckState.ToString)
 
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "KeyStoreType", CStr(mKeyStoreType))
-    mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoreType", CStr(mProductsStoreType))
-    mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoragePath", CStr(mProductsStoragePath))
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoreType", CStr(mProductsStoreType))
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoragePath", CStr(mProductsStoragePath))
 
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockBIOS", chkLockBIOS.CheckState.ToString)
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockComputer", chkLockComputer.CheckState.ToString)
@@ -2224,249 +2337,297 @@ InitForm_Error:
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockWindows", chkLockWindows.CheckState.ToString)
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtMaxCount", txtMaxCount.Text)
 
-    On Error GoTo 0
-    Exit Sub
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optstrength0", CStr(optStrength0.Checked))
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optstrength1", CStr(optStrength1.Checked))
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optstrength2", CStr(optStrength2.Checked))
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optstrength3", CStr(optStrength3.Checked))
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optstrength4", CStr(optStrength4.Checked))
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optstrength5", CStr(optStrength5.Checked))
+
+        On Error GoTo 0
+        Exit Sub
 
 SaveFormSettings_Error:
 
-    MessageBox.Show("Error " & Err.Number & " (" & Err.Description & ") in procedure SaveFormSettings of Form frmMain", modALUGEN.ACTIVELOCKSTRING)
-  End Sub
+        MessageBox.Show("Error " & Err.Number & " (" & Err.Description & ") in procedure SaveFormSettings of Form frmMain", modALUGEN.ACTIVELOCKSTRING)
+    End Sub
 
-  Private Sub chkLockBIOS_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockBIOS.CheckStateChanged
-    If systemEvent Then Exit Sub
-    systemEvent = True
-    txtInstallCode.Text = ReconstructedInstallationCode()
-    systemEvent = False
-  End Sub
+    Private Sub chkLockBIOS_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockBIOS.CheckStateChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
 
-  Private Sub chkLockComputer_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockComputer.CheckStateChanged
-    If systemEvent Then Exit Sub
-    systemEvent = True
-    txtInstallCode.Text = ReconstructedInstallationCode()
-    systemEvent = False
-  End Sub
+    Private Sub chkLockComputer_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockComputer.CheckStateChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
 
-  Private Sub chkLockHD_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockHD.CheckStateChanged
-    If systemEvent Then Exit Sub
-    systemEvent = True
-    txtInstallCode.Text = ReconstructedInstallationCode()
-    systemEvent = False
-  End Sub
+    Private Sub chkLockHD_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockHD.CheckStateChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
 
-  Private Sub chkLockHDfirmware_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockHDfirmware.CheckStateChanged
-    If systemEvent Then Exit Sub
-    systemEvent = True
-    txtInstallCode.Text = ReconstructedInstallationCode()
-    systemEvent = False
-  End Sub
+    Private Sub chkLockHDfirmware_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockHDfirmware.CheckStateChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
 
-  Private Sub chkLockIP_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockIP.CheckStateChanged
-    If systemEvent Then Exit Sub
-    systemEvent = True
-    txtInstallCode.Text = ReconstructedInstallationCode()
-    systemEvent = False
-  End Sub
+    Private Sub chkLockIP_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockIP.CheckStateChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
 
-  Private Sub chkLockMACaddress_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockMACaddress.CheckStateChanged
-    If systemEvent Then Exit Sub
-    systemEvent = True
-    txtInstallCode.Text = ReconstructedInstallationCode()
-    systemEvent = False
-  End Sub
+    Private Sub chkLockMACaddress_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockMACaddress.CheckStateChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
 
-  Private Sub chkLockMotherboard_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockMotherboard.CheckStateChanged
-    If systemEvent Then Exit Sub
-    systemEvent = True
-    txtInstallCode.Text = ReconstructedInstallationCode()
-    systemEvent = False
-  End Sub
+    Private Sub chkLockMotherboard_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockMotherboard.CheckStateChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
 
-  Private Sub chkLockWindows_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockWindows.CheckStateChanged
-    If systemEvent Then Exit Sub
-    systemEvent = True
-    txtInstallCode.Text = ReconstructedInstallationCode()
-    systemEvent = False
-  End Sub
+    Private Sub chkLockWindows_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockWindows.CheckStateChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
 
-  Private Sub cboLicType_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cboLicType.SelectedIndexChanged
-    ' enable the days edit box
-    If cboLicType.Text = "Periodic" Or cboLicType.Text = "Time Locked" Then
-      txtDays.ReadOnly = False
-      txtDays.BackColor = System.Drawing.ColorTranslator.FromOle(&H80000005)
-      txtDays.ForeColor = System.Drawing.Color.Black
-    Else
-      txtDays.ReadOnly = True
-      txtDays.BackColor = System.Drawing.ColorTranslator.FromOle(&H8000000F)
-      txtDays.ForeColor = System.Drawing.ColorTranslator.FromOle(&H8000000F)
-    End If
-    If cboLicType.Text = "Time Locked" Then
-      lblExpiry.Text = "&Expires on Date:"
-      txtDays.Text = Now.UtcNow.AddDays(30).ToString("yyyy/MM/dd")
-      lblDays.Text = "YYYY/MM/DD"
-      txtDays.Visible = False
-      dtpExpireDate.Visible = True
-      dtpExpireDate.Value = Now.UtcNow.AddDays(30)
-    Else
-      lblExpiry.Text = "&Expires after:"
-      txtDays.Text = "30"
-      lblDays.Text = "Day(s)"
-      txtDays.Visible = True
-      dtpExpireDate.Visible = False
-    End If
-  End Sub
-
-  Private Sub cboProducts_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cboProducts.SelectedIndexChanged
-    'product selected from products combo - update the controls
-    UpdateKeyGenButtonStatus()
-  End Sub
-
-  Private Sub cmdAdd_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdAdd.Click
-    If SSTab1.SelectedIndex <> 0 Then Exit Sub ' our tab not active - do nothing
-    cmdAdd.Enabled = False ' disallow repeated clicking of Add button
-    AddRow(txtName.Text, txtVer.Text, txtVCode.Text, txtGCode.Text)
-
-    UpdateStatus(String.Format("Product '{0}({1})' was added succesfuly.", txtName.Text, txtVer.Text))
-    txtName.Focus()
-    cmdValidate.Enabled = True
-  End Sub
-  Private Sub cmdBrowse_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdBrowse.Click
-    Dim itemProductInfo As ProductInfoItem = CType(cboProducts.SelectedItem, ProductInfoItem)
-    Dim strName As String = itemProductInfo.ProductName
-    Try
-      With saveDlg
-        .InitialDirectory = Dir(txtLicenseFile.Text)
-        .Filter = "ALL Files (*.ALL)|*.ALL"
-        .FileName = strName
-        .ShowDialog()
-        txtLicenseFile.Text = .FileName
-      End With
-    Catch ex As Exception
-      MessageBox.Show(ex.Message, ACTIVELOCKSTRING, MessageBoxButtons.OK, MessageBoxIcon.Error)
-    End Try
-  End Sub
-
-  Private Sub cmdCodeGen_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCodeGen.Click
-    If SSTab1.SelectedIndex <> 0 Then Exit Sub ' our tab not active - do nothing
-
-    Cursor.Current = Cursors.WaitCursor
-    UpdateStatus("Generating product codes! Please wait ...")
-    fDisableNotifications = True
-    txtVCode.Text = ""
-    txtGCode.Text = ""
-    fDisableNotifications = False
-    Enabled = False
-
-    Application.DoEvents()
-
-    Try
-
-      Dim KEY As RSAKey
-
-      ReDim KEY.data(32)
-      'Dim progress As ProgressType
-      ' generate the key
-      'VarPtr function is not supported in VB.NET
-      'VB6 equivalent function is used instead - ialkan
-      'Adding a delegate for AddressOf CryptoProgressUpdate did not work
-      'for now. Modified alcrypto3NET.dll to create a second generate function
-      'rsa_generate2 that does not deal with progress monitoring
-      If modALUGEN.rsa_generate2(KEY, 1024) = RETVAL_ON_ERROR Then
-        Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-      End If
-
-      ' extract private and public key blobs
-      Dim strBlob As String
-      Dim blobLen As Integer
-      If rsa_public_key_blob(KEY, vbNullString, blobLen) = RETVAL_ON_ERROR Then
-        Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-      End If
-
-      If blobLen > 0 Then
-        strBlob = New String(Chr(0), blobLen)
-        If rsa_public_key_blob(KEY, strBlob, blobLen) = RETVAL_ON_ERROR Then
-          Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+    Private Sub cboLicType_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cboLicType.SelectedIndexChanged
+        ' enable the days edit box
+        If cboLicType.Text = "Periodic" Or cboLicType.Text = "Time Locked" Then
+            txtDays.ReadOnly = False
+            txtDays.BackColor = System.Drawing.ColorTranslator.FromOle(&H80000005)
+            txtDays.ForeColor = System.Drawing.Color.Black
+        Else
+            txtDays.ReadOnly = True
+            txtDays.BackColor = System.Drawing.ColorTranslator.FromOle(&H8000000F)
+            txtDays.ForeColor = System.Drawing.ColorTranslator.FromOle(&H8000000F)
         End If
-
-        System.Diagnostics.Debug.WriteLine("Public blob: " & strBlob)
-        txtVCode.Text = strBlob
-      End If
-
-      'FUTURE RSA IMPLEMENTATION
-      'Dim rsa As New RSACryptoServiceProvider
-      'Dim xmlPublicKey As String
-      'Dim xmlPrivateKey As String
-      'xmlPublicKey = rsa.ToXmlString(False)
-      'xmlPrivateKey = rsa.ToXmlString(True)
-      'rsa.FromXmlString(xmlPublicKey)
-      'txtVCode.Text = xmlPublicKey
-      'txtGCode.Text = xmlPrivateKey
-
-      If modALUGEN.rsa_private_key_blob(KEY, vbNullString, blobLen) = RETVAL_ON_ERROR Then
-        Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-      End If
-
-      If blobLen > 0 Then
-        strBlob = New String(Chr(0), blobLen)
-        If modALUGEN.rsa_private_key_blob(KEY, strBlob, blobLen) = RETVAL_ON_ERROR Then
-          Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+        If cboLicType.Text = "Time Locked" Then
+            lblExpiry.Text = "&Expires on Date:"
+            txtDays.Text = Now.UtcNow.AddDays(30).ToString("yyyy/MM/dd")
+            lblDays.Text = "YYYY/MM/DD"
+            txtDays.Visible = False
+            dtpExpireDate.Visible = True
+            dtpExpireDate.Value = Now.UtcNow.AddDays(30)
+        Else
+            lblExpiry.Text = "&Expires after:"
+            txtDays.Text = "30"
+            lblDays.Text = "Day(s)"
+            txtDays.Visible = True
+            dtpExpireDate.Visible = False
         End If
+    End Sub
 
-        System.Diagnostics.Debug.WriteLine("Private blob: " & strBlob)
-        txtGCode.Text = strBlob
-      End If
-      ' done with the key - throw it away
-      If modALUGEN.rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-        Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-      End If
+    Private Sub cboProducts_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cboProducts.SelectedIndexChanged
+        'product selected from products combo - update the controls
+        UpdateKeyGenButtonStatus()
+    End Sub
 
-      ' Test generated key for correctness by recreating it from the blobs
-      ' Note:
-      ' ====
-      ' Due to an outstanding bug in ALCrypto.dll, sometimes this step will crash the app because
-      ' the generated keyset is bad.
-      ' The work-around for the time being is to keep regenerating the keyset until eventually
-      ' you'll get a valid keyset that no longer crashes.
-      Dim strdata As String : strdata = "This is a test string to be encrypted."
-      If modALUGEN.rsa_createkey(txtVCode.Text, txtVCode.Text.Length, txtGCode.Text, txtGCode.Text.Length, KEY) = RETVAL_ON_ERROR Then
-        Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-      End If
+    Private Sub cmdAdd_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdAdd.Click
+        If SSTab1.SelectedIndex <> 0 Then Exit Sub ' our tab not active - do nothing
+        cmdAdd.Enabled = False ' disallow repeated clicking of Add button
+        AddRow(txtName.Text, txtVer.Text, txtVCode.Text, txtGCode.Text)
 
-      ' It worked! We're all set to go.
-      If modALUGEN.rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-        Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-      End If
+        UpdateStatus(String.Format("Product '{0}({1})' was added successfully.", txtName.Text, txtVer.Text))
+        txtName.Focus()
+        cmdValidate.Enabled = True
+    End Sub
+    Private Sub cmdBrowse_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdBrowse.Click
+        Dim itemProductInfo As ProductInfoItem = CType(cboProducts.SelectedItem, ProductInfoItem)
+        Dim strName As String = itemProductInfo.ProductName
+        Try
+            With saveDlg
+                .InitialDirectory = Dir(txtLicenseFile.Text)
+                .Filter = "ALL Files (*.ALL)|*.ALL"
+                .FileName = strName
+                .ShowDialog()
+                txtLicenseFile.Text = .FileName
+            End With
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, ACTIVELOCKSTRING, MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
 
-    Catch ex As Exception
-      MessageBox.Show(ex.Message, ACTIVELOCKSTRING, MessageBoxButtons.OK, MessageBoxIcon.Error)
-    Finally
-      'update controls
-      fDisableNotifications = True
-      UpdateAddButtonStatus()
-      UpdateStatus("Product codes generation success.")
-      Cursor.Current = Cursors.Default
-      Enabled = True
-    End Try
-  End Sub
+    Private Sub cmdCodeGen_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCodeGen.Click
+        If SSTab1.SelectedIndex <> 0 Then Exit Sub ' our tab not active - do nothing
 
-  Private Sub cmdCopy_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCopy.Click
-    Dim aDataObject As New DataObject
-    aDataObject.SetData(DataFormats.Text, txtLicenseKey.Text)
-    Clipboard.SetDataObject(aDataObject)
-  End Sub
-  Private Sub cmdCopyGCode_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCopyGCode.Click
-    Dim aDataObject As New DataObject
-    aDataObject.SetData(DataFormats.Text, txtGCode.Text)
-    Clipboard.SetDataObject(aDataObject)
-  End Sub
+        Cursor.Current = Cursors.WaitCursor
+        UpdateStatus("Generating product codes! Please wait ...")
+        fDisableNotifications = True
+        txtVCode.Text = ""
+        txtGCode.Text = ""
+        fDisableNotifications = False
+        Enabled = False
 
-  Private Sub cmdCopyVCode_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCopyVCode.Click
-    Dim aDataObject As New DataObject
-    aDataObject.SetData(DataFormats.Text, txtVCode.Text)
-    Clipboard.SetDataObject(aDataObject)
-  End Sub
+        Application.DoEvents()
 
-  ' Generate license key
-  Private Sub cmdKeyGen_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdKeyGen.Click
+        Try
+            ' ALCrypto DLL with 1024-bit strength
+            If optStrength0.Checked = True Then
+                Dim KEY As RSAKey
+                ReDim KEY.data(32)
+                'Dim progress As ProgressType
+                ' generate the key
+                'VarPtr function is not supported in VB.NET
+                'VB6 equivalent function is used instead - ialkan
+                'Adding a delegate for AddressOf CryptoProgressUpdate did not work
+                'for now. Modified alcrypto3NET.dll to create a second generate function
+                'rsa_generate2 that does not deal with progress monitoring
+                If modALUGEN.rsa_generate2(KEY, 1024) = RETVAL_ON_ERROR Then
+                    Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                End If
+
+                ' extract private and public key blobs
+                Dim strBlob As String
+                Dim blobLen As Integer
+                If rsa_public_key_blob(KEY, vbNullString, blobLen) = RETVAL_ON_ERROR Then
+                    Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                End If
+
+                If blobLen > 0 Then
+                    strBlob = New String(Chr(0), blobLen)
+                    If rsa_public_key_blob(KEY, strBlob, blobLen) = RETVAL_ON_ERROR Then
+                        Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                    End If
+
+                    System.Diagnostics.Debug.WriteLine("Public blob: " & strBlob)
+                    txtVCode.Text = strBlob
+                End If
+
+                If modALUGEN.rsa_private_key_blob(KEY, vbNullString, blobLen) = RETVAL_ON_ERROR Then
+                    Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                End If
+
+                If blobLen > 0 Then
+                    strBlob = New String(Chr(0), blobLen)
+                    If modALUGEN.rsa_private_key_blob(KEY, strBlob, blobLen) = RETVAL_ON_ERROR Then
+                        Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                    End If
+
+                    System.Diagnostics.Debug.WriteLine("Private blob: " & strBlob)
+                    txtGCode.Text = strBlob
+                End If
+                ' done with the key - throw it away
+                If modALUGEN.rsa_freekey(KEY) = RETVAL_ON_ERROR Then
+                    Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                End If
+
+                ' Test generated key for correctness by recreating it from the blobs
+                ' Note:
+                ' ====
+                ' Due to an outstanding bug in ALCrypto.dll, sometimes this step will crash the app because
+                ' the generated keyset is bad.
+                ' The work-around for the time being is to keep regenerating the keyset until eventually
+                ' you'll get a valid keyset that no longer crashes.
+                Dim strdata As String : strdata = "This is a test string to be encrypted."
+                If modALUGEN.rsa_createkey(txtVCode.Text, txtVCode.Text.Length, txtGCode.Text, txtGCode.Text.Length, KEY) = RETVAL_ON_ERROR Then
+                    Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                End If
+
+                ' It worked! We're all set to go.
+                If modALUGEN.rsa_freekey(KEY) = RETVAL_ON_ERROR Then
+                    Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                End If
+
+            Else  ' CryptoAPI - RSA with given strength
+
+                Dim strPublicBlob As String, strPrivateBlob As String
+                Dim ok As String, imodulus As Integer
+
+                If optStrength1.Checked = True Then
+                    imodulus = 4096
+                ElseIf optStrength2.Checked = True Then
+                    imodulus = 2048
+                ElseIf optStrength3.Checked = True Then
+                    imodulus = 1536
+                ElseIf optStrength4.Checked = True Then
+                    imodulus = 1024
+                ElseIf optStrength5.Checked = True Then
+                    imodulus = 512
+                End If
+
+                'create new instance of RSACryptoServiceProvider
+                'Dim cspParam As CspParameters = New CspParameters
+                'cspParam.Flags = CspProviderFlags.UseMachineKeyStore
+                'cspParam.KeyContainerName = txtName.Text & txtVer.Text
+                'cspParam.KeyNumber = 2 'signature key pair
+                ''Set the CSP Provider Type PROV_RSA_FULL
+                'cspParam.ProviderType = 1
+                ''Set the CSP Provider Name
+                'cspParam.ProviderName = "Microsoft Base Cryptographic Provider v1.0"
+
+                'create new instance of RSACryptoServiceProvider
+                Dim rsaCSP As New System.Security.Cryptography.RSACryptoServiceProvider(imodulus)   ', cspParam)
+
+                'Generate public and private key data and allowing their exporting.
+                'True to include private parameters; otherwise, false
+
+                Dim rsaPubParams As RSAParameters       'stores public key
+                Dim rsaPrivateParams As RSAParameters   'stores private key
+                rsaPrivateParams = rsaCSP.ExportParameters(True)
+                rsaPubParams = rsaCSP.ExportParameters(False)
+
+                strPrivateBlob = rsaCSP.ToXmlString(True)
+                strPublicBlob = rsaCSP.ToXmlString(False)
+
+                'ok = ActiveLock3Globals_definst.ContainerChange(txtName.Text & txtVer.Text)
+                'ok = ActiveLock3Globals_definst.CryptoAPIAction(1, txtName.Text & txtVer.Text, "", "", strPublicBlob, strPrivateBlob, modulus)
+                txtVCode.Text = "RSA" & imodulus & strPublicBlob
+                txtGCode.Text = "RSA" & imodulus & strPrivateBlob
+
+                rsaPubParams = Nothing
+                rsaPrivateParams = Nothing
+                rsaCSP = Nothing
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, ACTIVELOCKSTRING, MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Finally
+            'update controls
+            fDisableNotifications = True
+            UpdateAddButtonStatus()
+            UpdateStatus("Product codes generated successfully.")
+            Cursor.Current = Cursors.Default
+            Enabled = True
+        End Try
+    End Sub
+
+    Private Sub cmdCopy_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCopy.Click
+        Dim aDataObject As New DataObject
+        aDataObject.SetData(DataFormats.Text, txtLicenseKey.Text)
+        Clipboard.SetDataObject(aDataObject)
+    End Sub
+    Private Sub cmdCopyGCode_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCopyGCode.Click
+        Dim aDataObject As New DataObject
+        aDataObject.SetData(DataFormats.Text, txtGCode.Text)
+        Clipboard.SetDataObject(aDataObject)
+    End Sub
+
+    Private Sub cmdCopyVCode_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCopyVCode.Click
+        Dim aDataObject As New DataObject
+        aDataObject.SetData(DataFormats.Text, txtVCode.Text)
+        Clipboard.SetDataObject(aDataObject)
+    End Sub
+
+    ' Generate license key
+    Private Sub cmdKeyGen_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdKeyGen.Click
         Dim usedVCode As String
         Dim licFlag As ActiveLock3_5NET.ProductLicense.LicFlags, maximumUsers As Short
 
@@ -2616,181 +2777,308 @@ SaveFormSettings_Error:
         Finally
             Cursor.Current = Cursors.Default
         End Try
-  End Sub
+    End Sub
 
-  Private Sub cmdPaste_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdPaste.Click
-    If Clipboard.GetDataObject.GetDataPresent(DataFormats.Text) Then
-      txtInstallCode.Text = CType(Clipboard.GetDataObject.GetData(DataFormats.Text), String)
-    End If
-  End Sub
+    Private Sub cmdPaste_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdPaste.Click
+        If Clipboard.GetDataObject.GetDataPresent(DataFormats.Text) Then
+            txtInstallCode.Text = CType(Clipboard.GetDataObject.GetData(DataFormats.Text), String)
+            UpdateKeyGenButtonStatus()
+        End If
+    End Sub
 
-  Private Sub cmdRemove_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdRemove.Click
-    If SSTab1.SelectedIndex <> 0 Then Exit Sub ' our tab not active - do nothing
-    Dim SelStart, SelEnd As Short
-    Dim fEnableAdd As Boolean
-    fEnableAdd = False
+    Private Sub cmdRemove_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdRemove.Click
+        If SSTab1.SelectedIndex <> 0 Then Exit Sub ' our tab not active - do nothing
+        Dim SelStart, SelEnd As Short
+        Dim fEnableAdd As Boolean
+        fEnableAdd = False
 
-    Dim strName As String = lstvwProducts.SelectedItems(0).Text
-    Dim strVer As String = lstvwProducts.SelectedItems(0).SubItems(1).Text
-    Dim selItem As String = strName & " - " & strVer
-    'delete from INI File
-    GeneratorInstance.DeleteProduct(strName, strVer)
-    'remove from products list
-    lstvwProducts.SelectedItems(0).Remove()
+        Dim strName As String = lstvwProducts.SelectedItems(0).Text
+        Dim strVer As String = lstvwProducts.SelectedItems(0).SubItems(1).Text
+        Dim selItem As String = strName & " - " & strVer
+        'delete from INI File
+        GeneratorInstance.DeleteProduct(strName, strVer)
+        'remove from products list
+        lstvwProducts.SelectedItems(0).Remove()
 
-    ' Enable Add button if we're removing the variable currently being edited.
-    If fEnableAdd Then
-      cmdAdd.Enabled = True
-    End If
-    If lstvwProducts.Items.Count = 0 Then
-      ' no (selectable) rows left (just the header)
-      cmdRemove.Enabled = False
-    End If
+        ' Enable Add button if we're removing the variable currently being edited.
+        If fEnableAdd Then
+            cmdAdd.Enabled = True
+        End If
+        If lstvwProducts.Items.Count = 0 Then
+            ' no (selectable) rows left (just the header)
+            cmdRemove.Enabled = False
+        End If
 
-    For Each itemProduct As ProductInfoItem In cboProducts.Items
-      If itemProduct.ProductName = strName _
-      AndAlso itemProduct.ProductVersion = strVer Then
-        cboProducts.Items.Remove(itemProduct)
-        Exit For
-      End If
-    Next
+        For Each itemProduct As ProductInfoItem In cboProducts.Items
+            If itemProduct.ProductName = strName _
+            AndAlso itemProduct.ProductVersion = strVer Then
+                cboProducts.Items.Remove(itemProduct)
+                Exit For
+            End If
+        Next
 
-    txtVCode.Text = ""
-    txtGCode.Text = ""
-    cmdValidate.Enabled = True
+        txtVCode.Text = ""
+        txtGCode.Text = ""
+        cmdValidate.Enabled = True
 
-  End Sub
+    End Sub
 
-  Private Sub cmdSave_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdSave.Click
-    UpdateStatus("Saving license key to file...")
-    ' save the license key
-    SaveLicenseKey(txtLicenseKey.Text, txtLicenseFile.Text)
-    UpdateStatus("License key saved.")
-  End Sub
+    Private Sub cmdSave_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdSave.Click
+        UpdateStatus("Saving license key to file...")
+        ' save the license key
+        SaveLicenseKey(txtLicenseKey.Text, txtLicenseFile.Text)
+        UpdateStatus("License key saved.")
+    End Sub
 
-  Private Sub cmdValidate_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdValidate.Click
-    Cursor.Current = Cursors.WaitCursor
-    If txtVCode.Text = "" And txtGCode.Text = "" Then
-      UpdateStatus("GCode and VCode fields are blank.  Nothing to validate.")
-      Exit Sub ' nothing to validate
-    End If
-    ' Validate to keyset to make sure it's valid.
-    UpdateStatus("Validating keyset...")
-    Dim KEY As RSAKey
-    Dim strdata As String : strdata = "This is a test string to be signed."
-    Dim strSig As String, rc As Integer
-    rc = modALUGEN.rsa_createkey(txtVCode.Text, txtVCode.Text.Length, txtGCode.Text, txtGCode.Text.Length, KEY)
-    If rc = RETVAL_ON_ERROR Then
-      MessageBox.Show("Code not valid! " & vbCrLf & STRRSAERROR, ACTIVELOCKSTRING, MessageBoxButtons.OK, MessageBoxIcon.Error)
-      'Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-      UpdateStatus(txtName.Text & " (" & txtVer.Text & ") " & STRRSAERROR)
-      Exit Sub
-    End If
+    Private Sub cmdValidate_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdValidate.Click
+        Dim KEY As RSAKey
+        Dim strdata As String
+        Dim strSig As String, rc As Integer
 
-    ' sign it
-    strSig = RSASign(txtVCode.Text, txtGCode.Text, strdata)
-    rc = RSAVerify(txtVCode.Text, strdata, strSig)
-    If rc = 0 Then
-      UpdateStatus(txtName.Text & " (" & txtVer.Text & ") validated successfully.")
-    Else
-      UpdateStatus(txtName.Text & " (" & txtVer.Text & ") GCode-VCode mismatch!")
-    End If
-    ' It worked! We're all set to go.
-    If modALUGEN.rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-      Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-    End If
+        Cursor.Current = Cursors.WaitCursor
+        If txtVCode.Text = "" And txtGCode.Text = "" Then
+            UpdateStatus("GCode and VCode fields are blank.  Nothing to validate.")
+            Exit Sub ' nothing to validate
+        End If
 
-    Cursor.Current = Cursors.Default
-  End Sub
+        strdata = "I love Activelock"
 
-  Private Sub cmdViewArchive_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdViewArchive.Click
-    Dim lic As New frmAlugenDb
-    lic.Show()
-  End Sub
+        ' ALCrypto DLL with 1024-bit strength
+        If strLeft(txtVCode.Text, 3) <> "RSA" Then
+            ' Validate to keyset to make sure it's valid.
+            UpdateStatus("Validating keyset...")
+            rc = modALUGEN.rsa_createkey(txtVCode.Text, txtVCode.Text.Length, txtGCode.Text, txtGCode.Text.Length, KEY)
+            If rc = RETVAL_ON_ERROR Then
+                MessageBox.Show("Code not valid! " & vbCrLf & STRRSAERROR, ACTIVELOCKSTRING, MessageBoxButtons.OK, MessageBoxIcon.Error)
+                'Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                UpdateStatus(txtName.Text & " (" & txtVer.Text & ") " & STRRSAERROR)
+                Exit Sub
+            End If
 
-  Private Sub cmdViewLevel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdViewLevel.Click
-    Dim mfrmLevelManager As New frmLevelManager
-    With mfrmLevelManager
-      .ShowDialog()
-      cboRegisteredLevel.Items.Clear()
-      LoadComboBox(strRegisteredLevelDBName, cboRegisteredLevel, True)
-      cboRegisteredLevel.SelectedIndex = 0
-    End With
-    mfrmLevelManager.Close()
-    mfrmLevelManager = Nothing
-  End Sub
+            ' sign it
+            strSig = RSASign(txtVCode.Text, txtGCode.Text, strdata)
+            rc = RSAVerify(txtVCode.Text, strdata, strSig)
+            If rc = 0 Then
+                UpdateStatus(txtName.Text & " (" & txtVer.Text & ") validated successfully.")
+            Else
+                UpdateStatus(txtName.Text & " (" & txtVer.Text & ") GCode-VCode mismatch!")
+            End If
+            ' It worked! We're all set to go.
+            If modALUGEN.rsa_freekey(KEY) = RETVAL_ON_ERROR Then
+                Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+            End If
+        Else  '.NET RSA
 
-  Private Sub lstvwProducts_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lstvwProducts.SelectedIndexChanged
-    If lstvwProducts.SelectedItems.Count > 0 Then
-      Dim selListItem As ListViewItem = lstvwProducts.SelectedItems(0)
-      txtName.Text = selListItem.Text
-      txtVer.Text = selListItem.SubItems(1).Text
+            Try
+                ' ------------------ begin Message from Ismail ------------------
+                ' This code block is used to Encrypt/Sign and then Validate/Decrypt
+                ' a small size text.
+                ' This code uses "I love Activelock" to validate the given Public/Private key pair
+                ' If you try to do the same with a much longer string, these routines will fail
+                ' with a "Bad Length" error
+                ' Increasing the cpher strength (say from 1024 to 2048-bits) will allow you to
+                ' run this code with much longer data strings
+                ' Activelock DLL uses a different algorithm to sign/validate
+                ' This section is functional, but more than that it's provided here
+                ' as the entire solution for a typical RSA signing/validation algorithm
+                ' ------------------ end Message from Ismail ------------------
 
-      txtVCode.Text = selListItem.SubItems(2).Text
-      txtGCode.Text = selListItem.SubItems(3).Text
-      'txtVCode.Text = ""
-      'txtGCode.Text = ""
+                Dim rsaCSP As New System.Security.Cryptography.RSACryptoServiceProvider
+                Dim rsaPubParams As RSAParameters 'stores public key
+                Dim strPublicBlob, strPrivateBlob As String
 
-      cmdRemove.Enabled = True
-      cmdValidate.Enabled = True
-    End If
-  End Sub
+                strPublicBlob = txtVCode.Text
+                strPrivateBlob = txtGCode.Text
 
-  Private Sub lstvwProducts_ColumnClick(ByVal sender As Object, ByVal e As ColumnClickEventArgs) Handles lstvwProducts.ColumnClick
-    'Determine if the clicked column is already the column that is 
-    ' being sorted.
-    If (e.Column = lvwColumnSorter.SortColumn) Then
-      ' Reverse the current sort direction for this column.
-      If (lvwColumnSorter.Order = SortOrder.Ascending) Then
-        lvwColumnSorter.Order = SortOrder.Descending
-      Else
-        lvwColumnSorter.Order = SortOrder.Ascending
-      End If
-    Else
-      ' Set the column number that is to be sorted; default to ascending.
-      lvwColumnSorter.SortColumn = e.Column
-      lvwColumnSorter.Order = SortOrder.Ascending
-    End If
+                ' ENCRYPT PLAIN TEXT USING THE PUBLIC KEY
+                ' Convert the data string to a byte array.
+                Dim toEncrypt As Byte()     ' Holds message in bytes
+                Dim enc As New UTF8Encoding ' new instance of Unicode8 instance
+                Dim encrypted As Byte() ' holds encrypted data
+                Dim encryptedPlainText As String
 
-    ' Perform the sort with these new sort options.
-    Me.lstvwProducts.Sort()
-  End Sub
+                If strLeft(txtVCode.Text, 6) = "RSA512" Then
+                    strPublicBlob = strRight(txtVCode.Text, Len(txtVCode.Text) - 6)
+                Else
+                    strPublicBlob = strRight(txtVCode.Text, Len(txtVCode.Text) - 7)
+                End If
+                rsaCSP.FromXmlString(strPublicBlob)
+                rsaPubParams = rsaCSP.ExportParameters(False)
+                ' import public key params into instance of RSACryptoServiceProvider
+                rsaCSP.ImportParameters(rsaPubParams)
+                toEncrypt = enc.GetBytes(strdata)
+                encrypted = rsaCSP.Encrypt(toEncrypt, False)
+                encryptedPlainText = Convert.ToBase64String(encrypted) ' convert to base64/Radix output
 
-  Private Sub picALBanner_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles picALBanner.Click
-    'navigate to www.activelocksoftware.com
-    System.Diagnostics.Process.Start(ACTIVELOCKSOFTWAREWEB)
-  End Sub
+                ' HASH AND SIGN THE SIGNATURE
+                ' GENERATE SIGNATURE BLOCK USING SENDER'S PRIVATE KEY
+                Dim signatureBlock As String
+                ' Hash the encrypted data and generate a signature block on the hash
+                ' using the sender's private key. (Signature Block)
+                ' create new instance of SHA1 hash algorithm to compute hash
+                Dim hash As New SHA1Managed
+                Dim hashedData() As Byte ' a byte array to store hash value
+                If strLeft(txtGCode.Text, 6) = "RSA512" Then
+                    strPrivateBlob = strRight(txtGCode.Text, Len(txtGCode.Text) - 6)
+                Else
+                    strPrivateBlob = strRight(txtGCode.Text, Len(txtGCode.Text) - 7)
+                End If
+                ' import private key params into instance of RSACryptoServiceProvider
+                rsaCSP.FromXmlString(strPrivateBlob)
+                Dim rsaPrivateParams As RSAParameters 'stores private key
+                rsaPrivateParams = rsaCSP.ExportParameters(True)
+                rsaCSP.ImportParameters(rsaPrivateParams)
+                ' compute hash with algorithm specified as here we have SHA1
+                hashedData = hash.ComputeHash(encrypted)
+                ' Sign Data using private key and  OID is simple name of the algorithm for which to get the object identifier (OID)
+                Dim signature As Byte() ' holds signatures
+                signature = rsaCSP.SignHash(hashedData, CryptoConfig.MapNameToOID("SHA1"))
+                ' convert to base64/Radix output
+                signatureBlock = Convert.ToBase64String(signature)
 
-  Private Sub picALBanner2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles picALBanner2.Click
-    'navigate to www.activelocksoftware.com
-    picALBanner_Click(sender, e)
-  End Sub
+                ' VERIFY SIGNATURE BLOCK USING THE SENDER'S PUBLIC KEY
+                ' VALIDATE THE STRING WITH THE PUBLIC/PRIVATE KEY PAIR
+                ' Verify the signature is authentic using the sender's public key(decrypt Signature block)
+                Dim myencrypted() As Byte
+                Dim mysignature() As Byte
+                myencrypted = Convert.FromBase64String(encryptedPlainText)
+                mysignature = Convert.FromBase64String(signatureBlock)
+                ' create new instance of SHA1 hash algorithm to compute hash
+                Dim sha1hash As New SHA1Managed
+                Dim sha1hashedData() As Byte ' a byte array to store hash value
+                ' import  public key params into instance of RSACryptoServiceProvider
+                rsaCSP.ImportParameters(rsaPubParams)
+                ' compute hash with algorithm specified as here we have SHA1
+                sha1hashedData = sha1hash.ComputeHash(myencrypted)
+                ' Sign Data using public key and  OID is simple name of the algorithm for which to get the object identifier (OID)
+                Dim verified As Boolean
+                verified = rsaCSP.VerifyHash(sha1hashedData, CryptoConfig.MapNameToOID("SHA1"), mysignature)
+                If verified Then
+                    UpdateStatus(txtName.Text & " (" & txtVer.Text & ") validated successfully.")
+                    'MsgBox("Signature Valid", MsgBoxStyle.Information)
+                Else
+                    UpdateStatus(txtName.Text & " (" & txtVer.Text & ") GCode-VCode mismatch!")
+                    'MsgBox("Invalid Signature", MsgBoxStyle.Exclamation)
+                End If
 
-  Private Sub txtLicenseKey_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtLicenseKey.TextChanged
-    cmdSave.Enabled = CBool(txtLicenseKey.Text.Length > 0)
-  End Sub
+                ' THE FOLLOWING CODE BLOCK IS USED TO RETRIEVE THE ORIGINAL
+                ' STRING strData BUT IS NOT NEEDED FOR THE VALIDATION PROCESS
+                ' IT'S BEEN SHOWN HERE FOR DEMONSTRATION PURPOSES
+                Dim newencrypted() As Byte
+                newencrypted = Convert.FromBase64String(encryptedPlainText)
+                Dim fromEncrypt() As Byte ' a byte array to store decrypted bytes
+                Dim roundTrip As String ' holds orig nal message
+                ' import  private key params into instance of RSACryptoServiceProvider
+                rsaCSP.ImportParameters(rsaPrivateParams)
+                'store decrypted data into byte array
+                fromEncrypt = rsaCSP.Decrypt(newencrypted, False)
+                'convert bytes to string
+                roundTrip = enc.GetString(fromEncrypt)
+                If roundTrip <> strdata Then
+                    UpdateStatus(txtName.Text & " (" & txtVer.Text & ") GCode-VCode mismatch!")
+                End If
+            Catch ex As Exception
+                UpdateStatus(ex.Message)
+            End Try
 
-  Private Sub txtName_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtName.TextChanged
-    fDisableNotifications = False
-    UpdateCodeGenButtonStatus()
-    UpdateAddButtonStatus()
-  End Sub
+        End If
 
-  Private Sub txtVer_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtVer.TextChanged
-    ' New product - will be processed by Add command
-    fDisableNotifications = False
-    UpdateCodeGenButtonStatus()
-    UpdateAddButtonStatus()
-  End Sub
+        Cursor.Current = Cursors.Default
+        Exit Sub
 
-  Private Sub txtUser_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtUser.TextChanged
-    If fDisableNotifications Then Exit Sub
-    fDisableNotifications = True
+exitValidate:
+        UpdateStatus(txtName.Text & " (" & txtVer.Text & ") GCode-VCode mismatch!")
+        Cursor.Current = Cursors.Default
+    End Sub
+
+    Private Sub cmdViewArchive_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdViewArchive.Click
+        Dim lic As New frmAlugenDb
+        lic.Show()
+    End Sub
+
+    Private Sub cmdViewLevel_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdViewLevel.Click
+        Dim mfrmLevelManager As New frmLevelManager
+        With mfrmLevelManager
+            .ShowDialog()
+            cboRegisteredLevel.Items.Clear()
+            LoadComboBox(strRegisteredLevelDBName, cboRegisteredLevel, True)
+            cboRegisteredLevel.SelectedIndex = 0
+        End With
+        mfrmLevelManager.Close()
+        mfrmLevelManager = Nothing
+    End Sub
+
+    Private Sub lstvwProducts_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles lstvwProducts.SelectedIndexChanged
+        If lstvwProducts.SelectedItems.Count > 0 Then
+            Dim selListItem As ListViewItem = lstvwProducts.SelectedItems(0)
+            txtName.Text = selListItem.Text
+            txtVer.Text = selListItem.SubItems(1).Text
+
+            txtVCode.Text = selListItem.SubItems(2).Text
+            txtGCode.Text = selListItem.SubItems(3).Text
+            'txtVCode.Text = ""
+            'txtGCode.Text = ""
+
+            cmdRemove.Enabled = True
+            cmdValidate.Enabled = True
+        End If
+    End Sub
+
+    Private Sub lstvwProducts_ColumnClick(ByVal sender As Object, ByVal e As ColumnClickEventArgs) Handles lstvwProducts.ColumnClick
+        'Determine if the clicked column is already the column that is 
+        ' being sorted.
+        If (e.Column = lvwColumnSorter.SortColumn) Then
+            ' Reverse the current sort direction for this column.
+            If (lvwColumnSorter.Order = SortOrder.Ascending) Then
+                lvwColumnSorter.Order = SortOrder.Descending
+            Else
+                lvwColumnSorter.Order = SortOrder.Ascending
+            End If
+        Else
+            ' Set the column number that is to be sorted; default to ascending.
+            lvwColumnSorter.SortColumn = e.Column
+            lvwColumnSorter.Order = SortOrder.Ascending
+        End If
+
+        ' Perform the sort with these new sort options.
+        Me.lstvwProducts.Sort()
+    End Sub
+
+    Private Sub picALBanner_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles picALBanner.Click
+        'navigate to www.activelocksoftware.com
+        System.Diagnostics.Process.Start(ACTIVELOCKSOFTWAREWEB)
+    End Sub
+
+    Private Sub picALBanner2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles picALBanner2.Click
+        'navigate to www.activelocksoftware.com
+        picALBanner_Click(sender, e)
+    End Sub
+
+    Private Sub txtLicenseKey_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtLicenseKey.TextChanged
+        cmdSave.Enabled = CBool(txtLicenseKey.Text.Length > 0)
+    End Sub
+
+    Private Sub txtName_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtName.TextChanged
+        fDisableNotifications = False
+        UpdateCodeGenButtonStatus()
+        UpdateAddButtonStatus()
+    End Sub
+
+    Private Sub txtVer_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtVer.TextChanged
+        ' New product - will be processed by Add command
+        fDisableNotifications = False
+        UpdateCodeGenButtonStatus()
+        UpdateAddButtonStatus()
+    End Sub
+
+    Private Sub txtUser_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtUser.TextChanged
+        If fDisableNotifications Then Exit Sub
+        fDisableNotifications = True
         If Len(txtInstallCode.Text) <> 8 Then txtInstallCode.Text = ActiveLock.InstallationCode(txtUser.Text)
         fDisableNotifications = False
-  End Sub
+    End Sub
 
-  Private Sub txtInstallCode_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtInstallCode.TextChanged
+    Private Sub txtInstallCode_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtInstallCode.TextChanged
         If Len(txtInstallCode.Text) = 8 Then 'Short key authorization is much simpler
             UpdateKeyGenButtonStatus()
             If fDisableNotifications Then Exit Sub
@@ -2968,10 +3256,10 @@ SaveFormSettings_Error:
 #End Region
 
 
-  Private Sub cmdProductsStorage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdProductsStorage.Click
-    Dim myProductsStorageForm As New frmProductsStorage
-    myProductsStorageForm.ShowDialog(Me)
-  End Sub
+    Private Sub cmdProductsStorage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdProductsStorage.Click
+        Dim myProductsStorageForm As New frmProductsStorage
+        myProductsStorageForm.ShowDialog(Me)
+    End Sub
 
     Private Sub chkNetworkedLicense_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkNetworkedLicense.CheckedChanged
         If chkNetworkedLicense.CheckState = CheckState.Checked Then
@@ -2984,4 +3272,93 @@ SaveFormSettings_Error:
 
     End Sub
 
+    Private Sub cmdValidate2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdValidate2.Click
+
+        ' ------------------ begin Message from Ismail ------------------
+        ' This code block is used to Sign and then Validate any size text
+        ' If you try to do the same with the typical RSA and with long strings, 
+        ' routines will fail with a "Bad Length" error
+        ' I am providing this sample here to show a second type of sign/verify scheme
+        ' Although RSA is usually intended for signing/verifying short keys,
+        ' the routine below with sign/verify any length string
+        ' This 2nd type of validation button is hidden and is intended for 
+        ' developers to test and learn.
+        ' Note that no facility exists to retrieve the original data.
+        ' Similar code can be found under SourceForge in project NCrypto
+        ' ------------------ end Message from Ismail ------------------
+
+        If strLeft(txtVCode.Text, 3) = "RSA" Then
+
+            Try
+                Dim strData As String
+                strData = "TestApp" & vbCrLf & "3" & vbCrLf & "Single" & vbCrLf & "1" & vbCrLf & "Evaluation User" & vbCrLf & "0" & vbCrLf & "2006/11/22" & vbCrLf & "2006/12/22" & vbCrLf & "5" & vbLf & "+00 10 18 09 71 85" & vbCrLf & "MYSWEETBABY" & vbCrLf & "5CA9-4B2A" & vbCrLf & "3JT26AA0" & vbCrLf & "55274-OEM-0011903-00102" & vbCrLf & "DELL   - 7" & vbCrLf & "BFWB741" & vbCrLf & "192.168.0.1"
+                Dim rsaCSP As New System.Security.Cryptography.RSACryptoServiceProvider
+                Dim rsaPubParams As RSAParameters 'stores public key
+                Dim strPublicBlob, strPrivateBlob As String
+
+                strPublicBlob = txtVCode.Text
+                strPrivateBlob = txtGCode.Text
+
+                If strLeft(txtGCode.Text, 6) = "RSA512" Then
+                    strPrivateBlob = strRight(txtGCode.Text, Len(txtGCode.Text) - 6)
+                Else
+                    strPrivateBlob = strRight(txtGCode.Text, Len(txtGCode.Text) - 7)
+                End If
+                ' import private key params into instance of RSACryptoServiceProvider
+                rsaCSP.FromXmlString(strPrivateBlob)
+                Dim rsaPrivateParams As RSAParameters 'stores private key
+                rsaPrivateParams = rsaCSP.ExportParameters(True)
+                rsaCSP.ImportParameters(rsaPrivateParams)
+
+                Dim userData As Byte() = Encoding.UTF8.GetBytes(strData)
+                Dim asf As AsymmetricSignatureFormatter = New RSAPKCS1SignatureFormatter(rsaCSP)
+                Dim algorithm As HashAlgorithm = New SHA1Managed
+                asf.SetHashAlgorithm(algorithm.ToString)
+                Dim myhashedData() As Byte ' a byte array to store hash value
+                Dim myhashedDataString As String
+                myhashedData = algorithm.ComputeHash(userData)
+                myhashedDataString = BitConverter.ToString(myhashedData).Replace("-", String.Empty)
+                Dim mysignature As Byte() ' holds signatures
+                mysignature = asf.CreateSignature(algorithm)
+                Dim mySignatureBlock As String
+                mySignatureBlock = Convert.ToBase64String(mysignature)
+
+                ' Verify Signature
+                If strLeft(txtVCode.Text, 6) = "RSA512" Then
+                    strPublicBlob = strRight(txtVCode.Text, Len(txtVCode.Text) - 6)
+                Else
+                    strPublicBlob = strRight(txtVCode.Text, Len(txtVCode.Text) - 7)
+                End If
+                rsaCSP.FromXmlString(strPublicBlob)
+                rsaPubParams = rsaCSP.ExportParameters(False)
+                ' import public key params into instance of RSACryptoServiceProvider
+                rsaCSP.ImportParameters(rsaPubParams)
+
+                ' Also could use the following to check if the string is a base64 string
+                If ExpBase64.IsMatch(mySignatureBlock) Then
+                End If
+
+                Dim newsignature() As Byte
+                newsignature = Convert.FromBase64String(mySignatureBlock)
+                Dim asd As AsymmetricSignatureDeformatter = New RSAPKCS1SignatureDeformatter(rsaCSP)
+                asd.SetHashAlgorithm(algorithm.ToString)
+                Dim newhashedData() As Byte ' a byte array to store hash value
+                Dim newhashedDataString As String
+                newhashedData = algorithm.ComputeHash(userData)
+                newhashedDataString = BitConverter.ToString(newhashedData).Replace("-", String.Empty)
+                Dim verified As Boolean
+                verified = asd.VerifySignature(algorithm, newsignature)
+                If verified Then
+                    UpdateStatus(txtName.Text & " (" & txtVer.Text & ") validated successfully.")
+                    'MsgBox("Signature Valid", MsgBoxStyle.Information)
+                Else
+                    UpdateStatus(txtName.Text & " (" & txtVer.Text & ") GCode-VCode mismatch!")
+                    'MsgBox("Invalid Signature", MsgBoxStyle.Exclamation)
+                End If
+            Catch ex As Exception
+                UpdateStatus(ex.Message)
+            End Try
+        End If
+
+    End Sub
 End Class
