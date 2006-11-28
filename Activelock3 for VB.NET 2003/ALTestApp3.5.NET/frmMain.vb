@@ -1620,4 +1620,7 @@ errHandler:
         Return System.Windows.Forms.Application.StartupPath
     End Function
 
+    Private Sub fraRegStatus_Enter(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles fraRegStatus.Enter
+
+    End Sub
 End Class
