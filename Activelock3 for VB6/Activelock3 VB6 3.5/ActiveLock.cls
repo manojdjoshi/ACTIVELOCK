@@ -346,6 +346,14 @@ Private Sub IActiveLock_Acquire(Optional strMsg As String)
         Err.Raise ActiveLockErrCodeConstants.alerrKeyStorePathInvalid, ACTIVELOCKSTRING, STRKEYSTOREPATHISEMPTY
     End If
 
+    If mSoftwareName = "" Then
+        Err.Raise ActiveLockErrCodeConstants.alerrNoSoftwareName, ACTIVELOCKSTRING, STRNOSOFTWARENAME
+    ElseIf mSoftwareVer = "" Then
+        Err.Raise ActiveLockErrCodeConstants.alerrNoSoftwareVersion, ACTIVELOCKSTRING, STRNOSOFTWAREVERSION
+    ElseIf mSoftwarePassword = "" Then
+        Err.Raise ActiveLockErrCodeConstants.alerrNoSoftwarePassword, ACTIVELOCKSTRING, STRNOSOFTWAREPASSWORD
+    End If
+    
     Dim Lic As ProductLicense
     Set Lic = mKeyStore.Retrieve(mSoftwareName)
     If Lic Is Nothing Then
@@ -844,6 +852,8 @@ Private Sub IActiveLock_KillTrial()
         Err.Raise ActiveLockErrCodeConstants.alerrNoSoftwareName, ACTIVELOCKSTRING, STRNOSOFTWARENAME
     ElseIf mSoftwareVer = "" Then
         Err.Raise ActiveLockErrCodeConstants.alerrNoSoftwareVersion, ACTIVELOCKSTRING, STRNOSOFTWAREVERSION
+    ElseIf mSoftwarePassword = "" Then
+        Err.Raise ActiveLockErrCodeConstants.alerrNoSoftwarePassword, ACTIVELOCKSTRING, STRNOSOFTWAREPASSWORD
     Else
         trialStatus = ExpireTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, mSoftwarePassword)
     End If
@@ -1301,7 +1311,7 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                     If aString <> noKey Then
                         IActiveLock_AddLockCode lockIP, SizeLockType  'dw1 build up lockTypes
                         If aString <> modHardware.GetIPaddress() Then
-                            Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
+                            Err.Raise ActiveLockErrCodeConstants.alerrWrongIPaddress, ACTIVELOCKSTRING, STRWRONGIPADDRESS
                         End If
                     End If
                 End If

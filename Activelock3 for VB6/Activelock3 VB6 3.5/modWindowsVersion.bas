@@ -74,7 +74,7 @@ Public Function GetWinVer() As String
 'ie "95", "98", "NT4", "WinXP"
 Dim osv As OSVERSIONINFO
 Dim r As Long
-Dim pos As Integer
+Dim Pos As Integer
 Dim sVer As String
 Dim sBuild As String
 
@@ -125,42 +125,6 @@ End If
 
 
 End Function
-
-Private Sub Command1_Click()
-   
-'   Text1(0).Text = IsWin95()
-'   Text1(1).Text = IsWin95OSR2()
-'   Text1(2).Text = IsWin98()
-'   Text1(3).Text = IsWinME()
-'
-'   Text1(4).Text = IsWinNT4()
-'   Text1(5).Text = IsWinNT4Plus()
-'   Text1(6).Text = IsWinNT4Server()
-'   Text1(7).Text = IsWinNT4Workstation()
-'
-'   Text1(8).Text = IsWin2000()
-'   Text1(9).Text = IsWin2000Plus()
-'   Text1(10).Text = IsWin2000Server()
-'   Text1(11).Text = IsWin2000AdvancedServer
-'   Text1(12).Text = IsWin2000Workstation()
-'
-'   Text1(13).Text = IsWinXP()
-'   Text1(14).Text = IsWinXPPlus()
-'   Text1(15).Text = IsWinXPHomeEdition()
-'   Text1(16).Text = IsWinXPProEdition()
-'   Text1(17).Text = IsWinXPSP2()
-'
-'   Text1(18).Text = IsWin2003Server()
-'
-'   Text1(19).Text = IsBackOfficeServer()
-'   Text1(20).Text = IsBladeServer()
-'   Text1(21).Text = IsDomainController()
-'   Text1(22).Text = IsEnterpriseServer()
-'   Text1(23).Text = IsSmallBusinessServer()
-'   Text1(24).Text = IsSmallBusinessRestrictedServer()
-'   Text1(25).Text = IsTerminalServer()
-
-End Sub
 
 Public Function IsBackOfficeServer() As Boolean
 
@@ -509,6 +473,18 @@ Public Function IsWinXP() As Boolean
       IsWinXP = (osv.PlatformID = VER_PLATFORM_WIN32_NT) And _
                 (osv.dwVerMajor = 5 And osv.dwVerMinor = 1) And _
                 (osv.dwBuildNumber >= 2600)
+   End If
+
+End Function
+Public Function IsWinVista() As Boolean
+
+  'returns True if running Windows Vista (NT6.0)
+   Dim osv As OSVERSIONINFO
+
+   osv.OSVSize = Len(osv)
+   If GetVersionEx(osv) = 1 Then
+      IsWinVista = (osv.PlatformID = VER_PLATFORM_WIN32_NT) And _
+                (osv.dwVerMajor = 6 And osv.dwVerMinor = 0)
    End If
 
 End Function

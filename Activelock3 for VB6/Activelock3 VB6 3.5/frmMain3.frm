@@ -34,6 +34,7 @@ Begin VB.Form frmMain
             Object.Width           =   17119
             Text            =   "Ready"
             TextSave        =   "Ready"
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -54,14 +55,20 @@ Begin VB.Form frmMain
       TabPicture(0)   =   "frmMain3.frx":0CCA
       Tab(0).ControlEnabled=   0   'False
       Tab(0).Control(0)=   "cmdValidate"
+      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).Control(1)=   "Picture1"
-      Tab(0).Control(2)=   "Frame1"
-      Tab(0).Control(3)=   "cmdRemove"
-      Tab(0).Control(4)=   "fraProdNew"
-      Tab(0).Control(5)=   "gridProds"
-      Tab(0).Control(6)=   "Label17"
-      Tab(0).Control(7)=   "Label1"
-      Tab(0).ControlCount=   8
+      Tab(0).Control(1).Enabled=   0   'False
+      Tab(0).Control(2)=   "cmdRemove"
+      Tab(0).Control(2).Enabled=   0   'False
+      Tab(0).Control(3)=   "fraProdNew"
+      Tab(0).Control(3).Enabled=   0   'False
+      Tab(0).Control(4)=   "gridProds"
+      Tab(0).Control(4).Enabled=   0   'False
+      Tab(0).Control(5)=   "Label17"
+      Tab(0).Control(5).Enabled=   0   'False
+      Tab(0).Control(6)=   "Label1"
+      Tab(0).Control(6).Enabled=   0   'False
+      Tab(0).ControlCount=   7
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
       Tab(1).ControlEnabled=   -1  'True
@@ -74,7 +81,7 @@ Begin VB.Form frmMain
          Caption         =   "&Validate"
          Height          =   315
          Left            =   -66480
-         TabIndex        =   45
+         TabIndex        =   40
          Top             =   4755
          Width           =   1005
       End
@@ -89,7 +96,7 @@ Begin VB.Form frmMain
          Picture         =   "frmMain3.frx":0D02
          ScaleHeight     =   825
          ScaleWidth      =   825
-         TabIndex        =   43
+         TabIndex        =   38
          Top             =   6495
          Width           =   825
       End
@@ -97,72 +104,10 @@ Begin VB.Form frmMain
          Caption         =   "&View License Database"
          Height          =   315
          Left            =   1470
-         TabIndex        =   42
+         TabIndex        =   37
          ToolTipText     =   "View License Archive"
          Top             =   7785
          Width           =   2115
-      End
-      Begin VB.Frame Frame1 
-         Caption         =   "Product Codes for the Selected Product"
-         ForeColor       =   &H00FF0000&
-         Height          =   1095
-         Left            =   -74880
-         TabIndex        =   34
-         Top             =   3285
-         Width           =   8295
-         Begin VB.TextBox txtCode2_2 
-            BackColor       =   &H8000000F&
-            BeginProperty Font 
-               Name            =   "Small Fonts"
-               Size            =   6.75
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   315
-            Left            =   720
-            Locked          =   -1  'True
-            TabIndex        =   38
-            Top             =   690
-            Width           =   7425
-         End
-         Begin VB.TextBox txtCode1_2 
-            BackColor       =   &H8000000F&
-            BeginProperty Font 
-               Name            =   "Small Fonts"
-               Size            =   6.75
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   315
-            Left            =   720
-            Locked          =   -1  'True
-            TabIndex        =   35
-            ToolTipText     =   "Use this code to set ActiveLock's SoftwareCode property within your application."
-            Top             =   330
-            Width           =   7425
-         End
-         Begin VB.Label Label14 
-            Caption         =   "GCode"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   37
-            Top             =   720
-            Width           =   615
-         End
-         Begin VB.Label Label13 
-            Caption         =   "VCode"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   36
-            Top             =   360
-            Width           =   615
-         End
       End
       Begin VB.CommandButton cmdRemove 
          Caption         =   "&Remove"
@@ -184,7 +129,7 @@ Begin VB.Form frmMain
             Height          =   315
             Left            =   1305
             Style           =   2  'Dropdown List
-            TabIndex        =   66
+            TabIndex        =   61
             Top             =   90
             Width           =   3615
          End
@@ -192,7 +137,7 @@ Begin VB.Form frmMain
             Height          =   315
             Left            =   6480
             Style           =   2  'Dropdown List
-            TabIndex        =   65
+            TabIndex        =   60
             Top             =   90
             Width           =   2625
          End
@@ -200,7 +145,7 @@ Begin VB.Form frmMain
             Height          =   315
             Left            =   3105
             MaxLength       =   2
-            TabIndex        =   61
+            TabIndex        =   56
             Text            =   "5"
             Top             =   1185
             Visible         =   0   'False
@@ -210,7 +155,7 @@ Begin VB.Form frmMain
             Caption         =   "Networked Licence"
             Height          =   330
             Left            =   1305
-            TabIndex        =   60
+            TabIndex        =   55
             Top             =   1170
             Width           =   1770
          End
@@ -218,7 +163,7 @@ Begin VB.Form frmMain
             Caption         =   "Lock to IP Address"
             Height          =   195
             Left            =   1305
-            TabIndex        =   57
+            TabIndex        =   52
             Top             =   4185
             Width           =   7095
          End
@@ -226,7 +171,7 @@ Begin VB.Form frmMain
             Caption         =   "Lock to Motherboard Serial"
             Height          =   195
             Left            =   1305
-            TabIndex        =   56
+            TabIndex        =   51
             Top             =   3915
             Width           =   7095
          End
@@ -234,7 +179,7 @@ Begin VB.Form frmMain
             Caption         =   "Lock to BIOS Version"
             Height          =   195
             Left            =   1305
-            TabIndex        =   55
+            TabIndex        =   50
             Top             =   3645
             Width           =   7095
          End
@@ -242,7 +187,7 @@ Begin VB.Form frmMain
             Caption         =   "Lock to Windows Serial"
             Height          =   195
             Left            =   1305
-            TabIndex        =   54
+            TabIndex        =   49
             Top             =   3375
             Width           =   7095
          End
@@ -250,7 +195,7 @@ Begin VB.Form frmMain
             Caption         =   "Lock to HDD Firmware Serial"
             Height          =   195
             Left            =   1305
-            TabIndex        =   53
+            TabIndex        =   48
             Top             =   3105
             Width           =   7095
          End
@@ -258,7 +203,7 @@ Begin VB.Form frmMain
             Caption         =   "Lock to HDD Volume Serial"
             Height          =   195
             Left            =   1305
-            TabIndex        =   52
+            TabIndex        =   47
             Top             =   2835
             Width           =   7095
          End
@@ -266,7 +211,7 @@ Begin VB.Form frmMain
             Caption         =   "Lock to Computer Name"
             Height          =   195
             Left            =   1305
-            TabIndex        =   51
+            TabIndex        =   46
             Top             =   2565
             Width           =   7095
          End
@@ -274,7 +219,7 @@ Begin VB.Form frmMain
             Caption         =   "Lock to MAC Address"
             Height          =   195
             Left            =   1305
-            TabIndex        =   50
+            TabIndex        =   45
             Top             =   2295
             Width           =   7095
          End
@@ -289,7 +234,7 @@ Begin VB.Form frmMain
             Picture         =   "frmMain3.frx":3C8A
             ScaleHeight     =   825
             ScaleWidth      =   825
-            TabIndex        =   48
+            TabIndex        =   43
             Top             =   5385
             Width           =   825
          End
@@ -297,7 +242,7 @@ Begin VB.Form frmMain
             Caption         =   "Use ItemData instead of ListIndex"
             Height          =   330
             Left            =   6480
-            TabIndex        =   47
+            TabIndex        =   42
             Top             =   405
             Width           =   2805
          End
@@ -307,7 +252,7 @@ Begin VB.Form frmMain
             MaskColor       =   &H8000000F&
             Picture         =   "frmMain3.frx":6C12
             Style           =   1  'Graphical
-            TabIndex        =   41
+            TabIndex        =   36
             Top             =   4905
             Width           =   345
          End
@@ -316,7 +261,7 @@ Begin VB.Form frmMain
             Left            =   8520
             Picture         =   "frmMain3.frx":6D5C
             Style           =   1  'Graphical
-            TabIndex        =   40
+            TabIndex        =   35
             Top             =   1530
             Width           =   345
          End
@@ -433,7 +378,7 @@ Begin VB.Form frmMain
             Caption         =   "&Product:"
             Height          =   255
             Left            =   0
-            TabIndex        =   64
+            TabIndex        =   59
             Top             =   150
             Width           =   975
          End
@@ -441,7 +386,7 @@ Begin VB.Form frmMain
             Caption         =   "Registered Level:"
             Height          =   255
             Left            =   5175
-            TabIndex        =   63
+            TabIndex        =   58
             Top             =   135
             Width           =   1275
          End
@@ -458,7 +403,7 @@ Begin VB.Form frmMain
             Caption         =   "Concurrent Users"
             Height          =   255
             Left            =   3465
-            TabIndex        =   62
+            TabIndex        =   57
             Top             =   1260
             Visible         =   0   'False
             Width           =   1335
@@ -467,7 +412,7 @@ Begin VB.Form frmMain
             Caption         =   "Note: IP address may be Dynamic!"
             Height          =   390
             Left            =   0
-            TabIndex        =   58
+            TabIndex        =   53
             Top             =   4140
             Width           =   1335
          End
@@ -477,7 +422,7 @@ Begin VB.Form frmMain
             ForeColor       =   &H00FF0000&
             Height          =   165
             Left            =   0
-            TabIndex        =   49
+            TabIndex        =   44
             Top             =   6225
             Width           =   1065
          End
@@ -558,7 +503,7 @@ Begin VB.Form frmMain
             Height          =   240
             Index           =   0
             Left            =   1305
-            TabIndex        =   73
+            TabIndex        =   68
             Top             =   1215
             Width           =   1590
          End
@@ -567,7 +512,7 @@ Begin VB.Form frmMain
             Height          =   240
             Index           =   1
             Left            =   3105
-            TabIndex        =   71
+            TabIndex        =   66
             Top             =   1215
             Value           =   -1  'True
             Width           =   875
@@ -577,7 +522,7 @@ Begin VB.Form frmMain
             Height          =   240
             Index           =   2
             Left            =   4005
-            TabIndex        =   70
+            TabIndex        =   65
             Top             =   1215
             Width           =   875
          End
@@ -586,7 +531,7 @@ Begin VB.Form frmMain
             Height          =   240
             Index           =   3
             Left            =   4995
-            TabIndex        =   69
+            TabIndex        =   64
             Top             =   1215
             Width           =   875
          End
@@ -595,7 +540,7 @@ Begin VB.Form frmMain
             Height          =   240
             Index           =   4
             Left            =   5985
-            TabIndex        =   68
+            TabIndex        =   63
             Top             =   1215
             Width           =   875
          End
@@ -604,7 +549,7 @@ Begin VB.Form frmMain
             Height          =   240
             Index           =   5
             Left            =   6930
-            TabIndex        =   67
+            TabIndex        =   62
             Top             =   1215
             Width           =   875
          End
@@ -612,7 +557,7 @@ Begin VB.Form frmMain
             Caption         =   "Products st&orage ..."
             Height          =   345
             Left            =   7770
-            TabIndex        =   59
+            TabIndex        =   54
             Top             =   360
             Width           =   1575
          End
@@ -621,7 +566,7 @@ Begin VB.Form frmMain
             Left            =   7920
             Picture         =   "frmMain3.frx":79A8
             Style           =   1  'Graphical
-            TabIndex        =   46
+            TabIndex        =   41
             Top             =   2400
             Width           =   345
          End
@@ -630,7 +575,7 @@ Begin VB.Form frmMain
             Left            =   4680
             Picture         =   "frmMain3.frx":7AF2
             Style           =   1  'Graphical
-            TabIndex        =   39
+            TabIndex        =   34
             Top             =   2400
             Width           =   345
          End
@@ -709,7 +654,7 @@ Begin VB.Form frmMain
             Caption         =   "&Strength"
             Height          =   375
             Left            =   135
-            TabIndex        =   72
+            TabIndex        =   67
             Top             =   1215
             Width           =   1095
          End
@@ -755,13 +700,13 @@ Begin VB.Form frmMain
          End
       End
       Begin MSFlexGridLib.MSFlexGrid gridProds 
-         Height          =   3255
+         Height          =   4425
          Left            =   -74880
          TabIndex        =   10
-         Top             =   4755
+         Top             =   3585
          Width           =   8265
          _ExtentX        =   14579
-         _ExtentY        =   5741
+         _ExtentY        =   7805
          _Version        =   393216
          Cols            =   4
          FixedCols       =   0
@@ -784,7 +729,7 @@ Begin VB.Form frmMain
          ForeColor       =   &H00FF0000&
          Height          =   165
          Left            =   -66390
-         TabIndex        =   44
+         TabIndex        =   39
          Top             =   7335
          Width           =   1065
       End
@@ -793,7 +738,7 @@ Begin VB.Form frmMain
          Height          =   255
          Left            =   -74865
          TabIndex        =   30
-         Top             =   4500
+         Top             =   3330
          Width           =   1215
       End
    End
@@ -1314,12 +1259,12 @@ Clipboard.SetText txtLibKey.Text
 End Sub
 Private Sub cmdCopyGCode_Click()
 Clipboard.Clear
-Clipboard.SetText txtCode2_2.Text
+Clipboard.SetText txtCode2.Text
 End Sub
 
 Private Sub cmdCopyVCode_Click()
 Clipboard.Clear
-Clipboard.SetText txtCode1_2.Text
+Clipboard.SetText txtCode1.Text
 End Sub
 
 Private Sub cmdDecryptInstCode_Click()
@@ -1601,21 +1546,21 @@ strdata = "This is a test string to be signed."
 
 Screen.MousePointer = vbHourglass
 
-If txtCode1_2.Text = "" And txtCode2_2.Text = "" Then
+If txtCode1.Text = "" And txtCode2.Text = "" Then
     UpdateStatus "GCode and VCode fields are blank.  Nothing to validate."
     Exit Sub ' nothing to validate
 End If
 
 ' ALCrypto DLL with 1024-bit strength
-If Left(txtCode1_2.Text, 3) <> "RSA" Then
+If Left(txtCode1.Text, 3) <> "RSA" Then
     ' Validate to keyset to make sure it's valid.
     UpdateStatus "Validating keyset..."
-    If modALUGEN.rsa_createkey(txtCode1_2.Text, Len(txtCode1_2), txtCode2_2.Text, Len(txtCode2_2), Key) = RETVAL_ON_ERROR Then
+    If modALUGEN.rsa_createkey(txtCode1.Text, Len(txtCode1), txtCode2.Text, Len(txtCode2), Key) = RETVAL_ON_ERROR Then
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
     ' sign it
-    strSig = RSASign(txtCode1_2.Text, txtCode2_2.Text, strdata)
-    rc = RSAVerify(txtCode1_2.Text, strdata, strSig)
+    strSig = RSASign(txtCode1.Text, txtCode2.Text, strdata)
+    rc = RSAVerify(txtCode1.Text, strdata, strSig)
     If rc = 0 Then
         UpdateStatus gridProds.TextMatrix(gridProds.Row, 0) & " (" + gridProds.TextMatrix(gridProds.Row, 1) + ") validated successfully."
     Else
@@ -1628,25 +1573,24 @@ If Left(txtCode1_2.Text, 3) <> "RSA" Then
 Else
     On Error GoTo exitValidate
 
-    'ok = Globals.ContainerChange(txtName.Text & txtVer.Text)
-    strPublicBlob = txtCode1_2.Text
-    strPrivateBlob = txtCode2_2.Text
+    strPublicBlob = txtCode1.Text
+    strPrivateBlob = txtCode2.Text
     ' Destroy Container
     ok = Globals.CryptoAPIAction(2, txtName.Text & txtVer.Text, "", "", "", "", 0)
     
     ' Sign a string
-    If Left(txtCode2_2.Text, 6) = "RSA512" Then
-        strPrivateBlob = Right(txtCode2_2.Text, Len(txtCode2_2.Text) - 6)
+    If Left(txtCode2.Text, 6) = "RSA512" Then
+        strPrivateBlob = Right(txtCode2.Text, Len(txtCode2.Text) - 6)
     Else
-        strPrivateBlob = Right(txtCode2_2.Text, Len(txtCode2_2.Text) - 7)
+        strPrivateBlob = Right(txtCode2.Text, Len(txtCode2.Text) - 7)
     End If
     ok = Globals.CryptoAPIAction(4, txtName.Text & txtVer.Text, strdata, strSig, "", strPrivateBlob, 0)
     
     ' Validate the same string with the key pair
-    If Left(txtCode1_2.Text, 6) = "RSA512" Then
-        strPublicBlob = Right(txtCode1_2.Text, Len(txtCode1_2.Text) - 6)
+    If Left(txtCode1.Text, 6) = "RSA512" Then
+        strPublicBlob = Right(txtCode1.Text, Len(txtCode1.Text) - 6)
     Else
-        strPublicBlob = Right(txtCode1_2.Text, Len(txtCode1_2.Text) - 7)
+        strPublicBlob = Right(txtCode1.Text, Len(txtCode1.Text) - 7)
     End If
     ok = Globals.CryptoAPIAction(5, txtName.Text & txtVer.Text, "", strSig, strPublicBlob, "", 0)
     UpdateStatus gridProds.TextMatrix(gridProds.Row, 0) & " (" + gridProds.TextMatrix(gridProds.Row, 1) + ") validated successfully."
@@ -1753,18 +1697,15 @@ Public Sub Form_Load()
     End If
     '</Modified by: kirtaph at 2/16/2006-13.06.25 on machine: KIRTAPHPC>
     
-    'load form settings
-    LoadFormSetting
-    
     'initialize ActiveLock instances
     InitActiveLock
     
     ' Initialize GUI
     txtLibKey = ""
     InitUI
-    If cmbProds.ListCount > 0 Then
-      cmbProds.ListIndex = 0
-    End If
+    
+    'load form settings
+    LoadFormSetting
     
     'Assume originally the app is not using LockNone as the LockType
     txtUser.Enabled = False
@@ -2101,8 +2042,6 @@ Private Sub gridProds_Click()
     gridProds_EnterCell
     
     'begin -- added code by Ismail
-    txtCode1.Text = ""
-    txtCode2.Text = ""
     cmdValidate.Enabled = True
     'end -- added code by Ismail
     
@@ -2123,8 +2062,8 @@ Private Sub gridProds_EnterCell()
     txtVer = gridProds.TextMatrix(gridProds.Row, 1)
     
     'begin -- Modified code by Ismail
-    txtCode1_2 = gridProds.TextMatrix(gridProds.Row, 2)
-    txtCode2_2 = gridProds.TextMatrix(gridProds.Row, 3)
+    txtCode1 = gridProds.TextMatrix(gridProds.Row, 2)
+    txtCode2 = gridProds.TextMatrix(gridProds.Row, 3)
     'end -- Modified code by Ismail
 
     cmdRemove.Enabled = True
@@ -2188,22 +2127,10 @@ Private Sub gridProds_RowColChange()
 'Debug.Print "RowColChange!!"
 End Sub
 
-Private Sub txtCode1_2_GotFocus()
-txtCode1_2.SelStart = 0
-txtCode1_2.SelLength = Len(txtCode1_2.Text)
-End Sub
-
-
 Private Sub txtCode1_GotFocus()
 txtCode1.SelStart = 0
 txtCode1.SelLength = Len(txtCode1.Text)
 End Sub
-
-Private Sub txtCode2_2_GotFocus()
-txtCode2_2.SelStart = 0
-txtCode2_2.SelLength = Len(txtCode2_2.Text)
-End Sub
-
 
 Private Sub txtCode2_GotFocus()
 txtCode2.SelStart = 0

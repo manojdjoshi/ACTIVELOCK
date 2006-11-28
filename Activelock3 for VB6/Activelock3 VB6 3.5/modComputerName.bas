@@ -490,6 +490,59 @@ Public Declare Function GetIfEntry Lib "iphlpapi.dll" (ByRef pIfRow As Any) As L
 Private Declare Function GetIfTable Lib "iphlpapi.dll" _
         (ByRef pIfTable As Any, ByRef pdwSize As Long, ByVal bOrder As Long) As Long
 
+' Getting External IP Address
+Dim VbString, IP As String
+Dim StrEnd, a As Integer
+  
+Public Declare Function InternetOpen Lib "wininet.dll" Alias "InternetOpenA" (ByVal sAgent As String, ByVal lAccessType As Long, ByVal sProxyName As String, ByVal sProxyBypass As String, ByVal lFlags As Long) As Long
+Public Declare Function InternetOpenUrl Lib "wininet.dll" Alias "InternetOpenUrlA" (ByVal hOpen As Long, ByVal sUrl As String, ByVal sHeaders As String, ByVal lLength As Long, ByVal lFlags As Long, ByVal lContext As Long) As Long
+Public Declare Function InternetReadFile Lib "wininet.dll" (ByVal hFile As Long, ByVal sBuffer As String, ByVal lNumBytesToRead As Long, lNumberOfBytesRead As Long) As Integer
+Public Declare Function InternetCloseHandle Lib "wininet.dll" (ByVal hInet As Long) As Integer
+  
+Public Const INTERNET_OPEN_TYPE_PRECONFIG = 0
+Public Const INTERNET_OPEN_TYPE_DIRECT = 1
+Public Const INTERNET_OPEN_TYPE_PROXY = 3
+  
+Public Const scUserAgent = "VB OpenUrl"
+Public Const INTERNET_FLAG_RELOAD = &H80000000
+
+Function GetExternalIP(URL As String) As String
+  
+Dim hOpen As Long
+Dim hOpenUrl As Long
+Dim bDoLoop As Boolean
+Dim bRet As Boolean
+Dim sReadBuffer As String * 2048
+Dim lNumberOfBytesRead As Long
+Dim sBuffer As String
+
+hOpen = InternetOpen(scUserAgent, INTERNET_OPEN_TYPE_PRECONFIG, vbNullString, vbNullString, 0)
+hOpenUrl = InternetOpenUrl(hOpen, URL, vbNullString, 0, INTERNET_FLAG_RELOAD, 0)
+
+bDoLoop = True
+While bDoLoop
+    sReadBuffer = vbNullString
+    bRet = InternetReadFile(hOpenUrl, sReadBuffer, Len(sReadBuffer), lNumberOfBytesRead)
+    sBuffer = sBuffer & Left$(sReadBuffer, lNumberOfBytesRead)
+    If Not CBool(lNumberOfBytesRead) Then bDoLoop = False
+Wend
+ 
+VbString = sBuffer
+ 
+VbString = Mid(VbString, InStr(VbString, "IP Address:") + 12, 20)
+StrEnd = InStr(VbString, "<br>") - 2
+
+For a = 1 To StrEnd
+    IP = IP + Mid(VbString, a, 1)
+Next
+ 
+GetExternalIP = IP
+ 
+If hOpenUrl <> 0 Then InternetCloseHandle (hOpenUrl)
+If hOpen <> 0 Then InternetCloseHandle (hOpen)
+  
+End Function
+
 '===============================================================================
 ' Name: Function GetComputerName
 ' Input: None
@@ -525,7 +578,7 @@ End Function
 ' Currently works on local drives, mapped drives, and shared drives.
 ' Remarks: TODO: Decide what to to about shared folders and RAID arrays
 '===============================================================================
-Private Function HDSerial(path As String) As String
+Public Function HDSerial(path As String) As String
     
     Dim lngReturn As Long, lngDummy1 As Long, lngDummy2 As Long, lngSerial As Long
     Dim strDummy1 As String, strDummy2 As String, strSerial As String
@@ -1317,6 +1370,9 @@ For i = 1 To HOST.hLen
 Next
 GetIPaddress = Mid$(sIPAddr, 1, Len(sIPAddr) - 1)
 SocketsCleanup
+
+' for external IP address, use the following
+'GetIPaddress = GetExternalIP("http://checkip.dyndns.org/")
 
 GetIPaddressError:
 If GetIPaddress = "" Then

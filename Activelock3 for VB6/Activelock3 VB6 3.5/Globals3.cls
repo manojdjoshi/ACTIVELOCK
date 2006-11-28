@@ -98,6 +98,7 @@ Option Explicit
 ' @param alerrLicenseExpired        License has expired.
 ' @param alerrLicenseTampered       License has been tampered.
 ' @param alerrClockChanged          System clock has been changed.
+' @param alerrWrongIPaddress        Wrong IP Address.
 ' @param alerrKeyStoreInvalid       Key Store Provider has not been initialized yet.
 ' @param alerrKeyStorePathInvalid   Key Store Path (LIC file path) hasn't been specified.
 ' @param alerrFileTampered          ActiveLock DLL file has been tampered.
@@ -123,12 +124,15 @@ Public Enum ActiveLockErrCodeConstants
     alerrLicenseExpired = &H80040003
     alerrLicenseTampered = &H80040004
     alerrClockChanged = &H80040005
+    alerrWrongIPaddress = &H80040006
+    
     alerrKeyStoreInvalid = &H80040010
     alerrFileTampered = &H80040011
     alerrNotInitialized = &H80040012
     alerrNotImplemented = &H80040013
     alerrUserNameTooLong = &H80040014
     alerrUserNameInvalid = &H80040015
+    
     alerrInvalidTrialDays = &H80040020
     alerrInvalidTrialRuns = &H80040021
     alerrTrialInvalid = &H80040022
@@ -138,8 +142,9 @@ Public Enum ActiveLockErrCodeConstants
     alerrNoSoftwareVersion = &H80040026
     alerrRSAError = &H80040027
     alerrKeyStorePathInvalid = &H80040028
-
     alerrCryptoAPIError = &H80040029
+    alerrNoSoftwarePassword = &H80040030
+    
 End Enum
 
 ' USED BY CRYPTOAPI
@@ -293,8 +298,6 @@ Case 4    'sign the key
         Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, "Crypto API Error: There's no string to sign"
         Exit Function
     End If
-    Dim b64 As clsCryptoAPIBase64
-    Set b64 = New clsCryptoAPIBase64
     Set cryptSession = New clsCryptoAPI
     If cryptSession.VerifyContainer(containerName, False) = True Then
         cryptSession.DestroyContainer containerName

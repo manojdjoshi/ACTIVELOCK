@@ -99,10 +99,12 @@ Public Const STRKEYSTOREPATHISEMPTY As String = "Key Store Path (LIC file path) 
 Public Const STRNOSOFTWARECODE As String = "Software code has not been set."
 Public Const STRNOSOFTWARENAME As String = "Software Name has not been set."
 Public Const STRNOSOFTWAREVERSION As String = "Software Version has not been set."
+Public Const STRNOSOFTWAREPASSWORD As String = "Software Password has not been set."
 Public Const STRUSERNAMETOOLONG As String = "User Name > 2000 characters."
 Public Const STRUSERNAMEINVALID As String = "User Name invalid."
 Public Const STRRSAERROR As String = "Internal RSA Error."
 Public Const RETVAL_ON_ERROR As Long = -999
+Public Const STRWRONGIPADDRESS As String = "Wrong IP Address."
 
 ' RSA encrypts the data.
 ' @param CryptType CryptType = 0 for public&#59; 1 for private
@@ -422,7 +424,7 @@ End Function
 ' Remarks: None
 '===============================================================================
 Public Function LocalTimeZone(ByVal returnType As TimeZoneReturn) As Variant
-    Dim x As Long
+    Dim X As Long
     Dim tzi As TIME_ZONE_INFORMATION
     Dim strName As String
     Dim bDST As Boolean
@@ -438,8 +440,8 @@ Public Function LocalTimeZone(ByVal returnType As TimeZoneReturn) As Variant
     End Select
     
     ' name terminates with null
-    x = InStr(strName, vbNullChar)
-    If x > 0 Then strName = Left$(strName, x - 1)
+    X = InStr(strName, vbNullChar)
+    If X > 0 Then strName = Left$(strName, X - 1)
             
     If returnType = DST_Active Then
         LocalTimeZone = bDST
@@ -451,10 +453,10 @@ Public Function LocalTimeZone(ByVal returnType As TimeZoneReturn) As Variant
     
     If returnType = TimeZoneCode Then
         LocalTimeZone = Left(strName, 1)
-        x = InStr(1, strName, " ")
-        Do While x > 0
-            LocalTimeZone = LocalTimeZone & Mid(strName, x + 1, 1)
-            x = InStr(x + 1, strName, " ")
+        X = InStr(1, strName, " ")
+        Do While X > 0
+            LocalTimeZone = LocalTimeZone & Mid(strName, X + 1, 1)
+            X = InStr(X + 1, strName, " ")
         Loop
         LocalTimeZone = Trim(LocalTimeZone)
     End If
