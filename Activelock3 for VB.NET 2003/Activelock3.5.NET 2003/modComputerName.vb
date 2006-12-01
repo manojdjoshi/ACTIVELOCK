@@ -948,28 +948,28 @@ GetMACAddressError:
     End Function
 
     '===============================================================================
-    ' Name: Function GetBIOSserial
+    ' Name: Function GetBiosVersion
     ' Input: None
     ' Output:
     '   String - BIOS serial number
     ' Purpose: Gets the BIOS Serial Number
     ' Remarks: Uses the WMI
     '===============================================================================
-    Public Function GetBIOSserial() As String
+    Public Function GetBiosVersion() As String
         Dim BiosSet As Object
         Dim obj As Object
 
-        GetBIOSserial = String.Empty
+        GetBiosVersion = String.Empty
 
-        On Error GoTo GetBIOSSeriAlerror
+        On Error GoTo GetBiosVersionerror
         BiosSet = GetObject("WinMgmts:{impersonationLevel=impersonate}").InstancesOf("Win32_BIOS")
         For Each obj In BiosSet
-            GetBIOSserial = obj.Version
-            If GetBIOSserial <> "" Then Exit Function
+            GetBiosVersion = obj.Version
+            If GetBiosVersion <> "" Then Exit Function
         Next obj
-GetBIOSSeriAlerror:
-        If GetBIOSserial = "" Then
-            GetBIOSserial = "Not Available"
+GetBiosVersionerror:
+        If GetBiosVersion = "" Then
+            GetBiosVersion = "Not Available"
         End If
     End Function
 

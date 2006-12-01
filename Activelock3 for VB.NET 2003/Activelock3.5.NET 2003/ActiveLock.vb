@@ -74,13 +74,18 @@ Friend Class ActiveLock
     Private MyNotifier As New ActiveLockEventNotifier
     Private MyGlobals As New Globals_Renamed
     Private mLibKeyPath As String
+    Private mCheckTimeServerForClockTampering As IActiveLock.ALTimeServerTypes
 
     ' Registry hive used to store Activelock settings.
     Private Const AL_REGISTRY_HIVE As String = "Software\ActiveLock\ActiveLock3"
 
     ' Transients
     Private mfInit As Boolean ' flag to indicate that ActiveLock has been initialized
-    Private Declare Function GetVolumeInformation Lib "kernel32" Alias "GetVolumeInformationA" (ByVal lpRootPathName As String, ByVal lpVolumeNameBuffer As String, ByVal nVolumeNameSize As Integer, ByRef lpVolumeSerialNumber As Integer, ByRef lpMaximumComponentLength As Integer, ByRef lpFileSystemFlags As Integer, ByVal lpFileSystemNameBuffer As String, ByVal nFileSystemNameSize As Integer) As Integer
+    Public Declare Auto Function GetVolumeInformation Lib "kernel32" (ByVal lpRootPathName As String, _
+        ByVal lpVolumeNameBuffer As StringBuilder, ByVal nVolumeNameSize As Integer, _
+        ByRef lpVolumeSerialNumber As Integer, ByRef lpMaximumComponentLength As Integer, _
+        ByRef lpFileSystemFlags As Integer, ByVal lpFileSystemNameBuffer As StringBuilder, _
+        ByRef nFileSystemNameSize As Integer) As Boolean
 
     '===============================================================================
     ' Name: Property Let IActiveLock_LicenseKeyType
@@ -418,6 +423,19 @@ Friend Class ActiveLock
         End Set
     End Property
     '===============================================================================
+    ' Name: Property Let IActiveLock_CheckTimeServerForClockTampering
+    ' Input:
+    '   ByVal iServer As Integer - Flag being passed to check the time server
+    ' Output: None
+    ' Purpose: Specifies whether a Time Server should be used to check Clock Tampering
+    ' Remarks: None
+    '===============================================================================
+    Private WriteOnly Property IActiveLock_CheckTimeServerForClockTampering() As IActiveLock.ALTimeServerTypes Implements _IActiveLock.CheckTimeServerForClockTampering
+        Set(ByVal Value As IActiveLock.ALTimeServerTypes)
+            mCheckTimeServerForClockTampering = Value
+        End Set
+    End Property
+    '===============================================================================
     ' Name: Property Get IActiveLock_TrialType
     ' Input: None
     ' Output:
@@ -466,7 +484,7 @@ Friend Class ActiveLock
             If mLicenseKeyTypes = IActiveLock.ALLicenseKeyTypes.alsShortKeyMD5 Then
                 Return IActivelock_GenerateShortSerial(modHardware.GetHDSerialFirmware())
 
-            ElseIf mLicenseKeyTypes = IActiveLock.ALLicenseKeyTypes.alsALCryptoRSA Then
+            ElseIf mLicenseKeyTypes = IActiveLock.ALLicenseKeyTypes.alsRSA Then
 
                 ' Generate Request code to Lock
 
@@ -675,7 +693,6 @@ finally_Renamed:
     '===============================================================================
     Private Sub IActiveLock_Acquire(Optional ByRef strMsg As String = "") Implements _IActiveLock.Acquire
         Dim trialActivated As Boolean
-        Dim mINIFile As INIFile
         Dim adsText As String = String.Empty
         Dim strStream As String = String.Empty
         strStream = mSoftwareName & mSoftwareVer & mSoftwarePassword
@@ -714,7 +731,7 @@ finally_Renamed:
             ' Using this trick to temporarily set the date format to mm/dd/yyyy
             Get_locale() ' Get the current date format and save it to regionalSymbol variable
             Set_locale((""))
-            trialStatus = ActivateTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, strMsg, mSoftwarePassword)
+            trialStatus = ActivateTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, strMsg, mSoftwarePassword, mCheckTimeServerForClockTampering)
             ' Set the locale date format to what we had before; can't leave changed
             Set_locale((regionalSymbol))
             If trialStatus = True Then
@@ -727,26 +744,29 @@ noRegistration:
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE)
 
         Else  'Lic exists therefore we'll check the LIC file ADS
-            'On Error GoTo adsProblem
+            'If ClockTampering() Then
+            '    Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
+            'End If
+            If mCheckTimeServerForClockTampering = IActiveLock.ALTimeServerTypes.alsCheckTimeServer Then
+                If SystemClockTampered() Then
+                    Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
+                End If
+            End If
             If CheckStreamCapability() Then
-                ' No license found
                 Dim fi As New FileInfo(mKeyStorePath)
                 If fi.Length = 0 Then GoTo continueRegistration
                 adsText = ADSFile.Read(mKeyStorePath, strStream)
                 Dim dt1 As DateTime = Convert.ToDateTime(adsText)
-                Dim dt2 As DateTime = Now
+                Dim dt2 As DateTime = Now.UtcNow
                 Dim span As TimeSpan = dt2.Subtract(dt1)
                 If adsText = "" Then
                     Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrLicenseTampered, ACTIVELOCKSTRING, STRLICENSETAMPERED)
-                ElseIf span.TotalHours < -1 Then
+                ElseIf span.TotalHours < 0 Then
                     Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                 End If
                 Dim ok As Integer
-                ok = ADSFile.Write(Now, mKeyStorePath, strStream)
+                ok = ADSFile.Write(Now.UtcNow, mKeyStorePath, strStream)
                 GoTo continueRegistration
-
-adsProblem:
-                Set_locale((regionalSymbol))
             End If
         End If
 
@@ -755,22 +775,31 @@ continueRegistration:
         ValidateLic(Lic)
     End Sub
     Public Function CheckStreamCapability() As Boolean
-        Dim mc As New ManagementClass("Win32_LogicalDisk")
-        Dim moc As ManagementObjectCollection = mc.GetInstances()
-        Dim strFileSystem As String = String.Empty
-        Dim mo As ManagementObject
-        For Each mo In moc
-            If strFileSystem = String.Empty Then ' only return the file system
-                If mo("Name").ToString = "C:" Then
-                    strFileSystem = mo("FileSystem").ToString
-                    Exit For
-                End If
-            End If
-            mo.Dispose()
-        Next mo
-        If strFileSystem = "NTFS" Then
+        ' The following WMI call also works but it seems to be a bit slower than the GetVolumeInformation
+        ' especially when it checks the A: drive
+
+        'Dim mc As New ManagementClass("Win32_LogicalDisk")
+        'Dim moc As ManagementObjectCollection = mc.GetInstances()
+        'Dim strFileSystem As String = String.Empty
+        'Dim mo As ManagementObject
+        'For Each mo In moc
+        '    If strFileSystem = String.Empty Then ' only return the file system
+        '        If mo("Name").ToString = "C:" Then
+        '            strFileSystem = mo("FileSystem").ToString
+        '            Exit For
+        '        End If
+        '    End If
+        '    mo.Dispose()
+        'Next mo
+
+        Const StringBufferLength As Integer = 255
+        Dim lsRootPathName As String = IO.Directory.GetDirectoryRoot(Application.StartupPath)
+        Dim lsFileSystemNameBuffer As New StringBuilder(StringBufferLength)
+        GetVolumeInformation(lsRootPathName, Nothing, Nothing, Nothing, Nothing, Nothing, lsFileSystemNameBuffer, Nothing)
+        If lsFileSystemNameBuffer.ToString = "NTFS" Then
             CheckStreamCapability = True
         End If
+
     End Function
     '===============================================================================
     ' Name: Sub ValidateKey
@@ -1052,11 +1081,14 @@ continueRegistration:
 
         ' License was validated successfuly. Check clock tampering for non-permanent licenses.
         If Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
-            If ClockTampering() Then
+            If mCheckTimeServerForClockTampering = IActiveLock.ALTimeServerTypes.alsCheckTimeServer Then
                 If SystemClockTampered() Then
                     Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                 End If
             End If
+            'If ClockTampering() Then
+            '    Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
+            'End If
         End If
 
         ' License was validated successfuly.  Store it.
@@ -1074,7 +1106,7 @@ continueRegistration:
             Dim ok As Integer
             Dim strStream As String = String.Empty
             strStream = mSoftwareName & mSoftwareVer & mSoftwarePassword
-            ok = ADSFile.Write(Now, mKeyStorePath, strStream)
+            ok = ADSFile.Write(Now.UtcNow, mKeyStorePath, strStream)
         End If
 
         ' Expire all trial licenses
@@ -1193,7 +1225,7 @@ ErrHandler:
                 AppendLockString(strLock, modHardware.GetHDSerial())
                 AppendLockString(strLock, modHardware.GetHDSerialFirmware())
                 AppendLockString(strLock, modHardware.GetWindowsSerial())
-                AppendLockString(strLock, modHardware.GetBIOSserial())
+                AppendLockString(strLock, modHardware.GetBiosVersion())
                 AppendLockString(strLock, modHardware.GetMotherboardSerial())
                 AppendLockString(strLock, modHardware.GetIPaddress())
             Else
@@ -1223,7 +1255,7 @@ ErrHandler:
                     AppendLockString(strLock, noKey)
                 End If
                 If mLockTypes And IActiveLock.ALLockTypes.lockBIOS Then
-                    AppendLockString(strLock, modHardware.GetBIOSserial())
+                    AppendLockString(strLock, modHardware.GetBiosVersion())
                 Else
                     AppendLockString(strLock, noKey)
                 End If
@@ -1314,7 +1346,7 @@ ErrHandler:
                     ElseIf j = LBound(a) + 5 Then
                         If aString <> noKey Then
                             IActiveLock_AddLockCode(IActiveLock.ALLockTypes.lockBIOS, SizeLockType)
-                            If aString <> modHardware.GetBIOSserial() Then
+                            If aString <> modHardware.GetBiosVersion() Then
                                 Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
                             End If
                         End If

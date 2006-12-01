@@ -12,6 +12,7 @@ Public Interface _IActiveLock
     Property TrialLength() As Integer
     Property SoftwareName() As String
     Property SoftwarePassword() As String
+    WriteOnly Property CheckTimeServerForClockTampering() As IActiveLock.ALTimeServerTypes
     WriteOnly Property SoftwareCode() As String
     Property SoftwareVersion() As String
     WriteOnly Property KeyStoreType() As IActiveLock.LicStoreType
@@ -275,10 +276,10 @@ End Interface
 
     ' License Key Type specifies the length/type
     '
-    ' @param alsALCryptoRSA    ' 1024-bit Long keys by RSA via ALCrypto DLL
+    ' @param alsRSA    ' 1024-bit Long keys by RSA via ALCrypto DLL
     ' @param alsShortKeyMD5    ' Short license keys by MD5
     Public Enum ALLicenseKeyTypes
-        alsALCryptoRSA = 0
+        alsRSA = 0
         alsShortKeyMD5 = 1
     End Enum
     '###############################################################
@@ -333,6 +334,17 @@ End Interface
         trialHiddenFolder = 2
         trialRegistry = 4
     End Enum
+    '###############################################################
+
+    ' Enum for accessing the Time Servers
+    '
+    ' @param alsDontCheckTimeServer  ' Skips checking a Time Server
+    ' @param alsCheckTimeServer      ' Checks a Time Server
+    Public Enum ALTimeServerTypes
+        alsDontCheckTimeServer = 0
+        alsCheckTimeServer = 1
+    End Enum
+
     '===============================================================================
     ' Name: Property Get RegisteredLevel
     ' Input: None
@@ -498,6 +510,21 @@ End Interface
 
         End Set
     End Property
+    '===============================================================================
+    ' Name: Property Let CheckTimeServerForClockTampering
+    ' Input:
+    '   Integer - Flag to use a Time Server or not
+    ' Output:
+    '   None
+    ' Purpose: Specifies whether a Time Server should be used to check Clock Tampering
+    ' Remarks: None
+    '===============================================================================
+    Public WriteOnly Property CheckTimeServerForClockTampering() As ALTimeServerTypes Implements _IActiveLock.CheckTimeServerForClockTampering
+        Set(ByVal Value As ALTimeServerTypes)
+
+        End Set
+    End Property
+
     '===============================================================================
     ' Name: Property Let SoftwareCode
     ' Input:

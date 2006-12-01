@@ -1905,7 +1905,7 @@ IsHiddenFolderExpiredError:
     ' Purpose: This function checks the authenticity and validity of the trial period/runs
     ' Remarks: This is the main call to activate the trial feature
     '===============================================================================
-    Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As String, ByVal TrialType As Integer, ByVal TrialLength As Integer, ByVal TrialHideTypes As IActiveLock.ALTrialHideTypes, ByRef strMsg As String, ByVal SoftwarePassword As String) As Boolean
+    Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As String, ByVal TrialType As Integer, ByVal TrialLength As Integer, ByVal TrialHideTypes As IActiveLock.ALTrialHideTypes, ByRef strMsg As String, ByVal SoftwarePassword As String, ByVal mCheckTimeServerForClockTampering As IActiveLock.ALTimeServerTypes) As Boolean
         On Error GoTo NotRegistered
         Dim strVal As String
         Dim daysLeft, runsLeft As Short
@@ -1992,10 +1992,11 @@ IsHiddenFolderExpiredError:
                 Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
             Else
                 If fileExist(GetSteganographyFile()) = False And Directory.Exists(WinDir() & DecryptString128Bit(myDir, PSWD)) = False And dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
+                    If SystemClockTampered() Then
+                        Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
+                    End If
                     If ClockTampering() Then
-                        If SystemClockTampered() Then
-                            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
-                        End If
+                        Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                     End If
                 End If
                 ' So far so good; trial mode seems to be fine
@@ -2012,10 +2013,11 @@ IsHiddenFolderExpiredError:
                 Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
             Else
                 If fileExist(GetSteganographyFile()) = False And Directory.Exists(WinDir() & DecryptString128Bit(myDir, PSWD)) = False And dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
+                    If SystemClockTampered() Then
+                        Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
+                    End If
                     If ClockTampering() Then
-                        If SystemClockTampered() Then
-                            Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
-                        End If
+                        Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                     End If
                 End If
                 ' So far so good; trial mode seems to be fine
@@ -2063,14 +2065,18 @@ exitGracefully:
         Dim i, Count As Short
         On Error Resume Next
 
-        For i = 0 To 2
+        For i = 0 To 4
             Select Case i
                 Case 0
                     t = "c:"
                 Case 1
-                    t = WinSysDir()
-                Case Else
                     t = WinDir()
+                Case 2
+                    t = WinDir() & "\Temp"
+                Case 3
+                    t = WinDir() & "\Applog"
+                Case 4
+                    t = WinDir() & "\Recent"
             End Select
 
             Count = 0
@@ -2855,7 +2861,7 @@ minusAttributesError:
         Dim month2() As String
         month1 = "January;February;March;April;May;June;July;August;September;October;November;December".Split(";")
         month2 = "01;02;03;04;05;06;07;08;09;10;11;12".Split(";")
-        ss = OpenURL(DecryptString128Bit("xcZfCWJLnPOl2V5kTJpBOi4ysgfzBj1H3nUzyhxODIQTLfqFDbHBbHmfcP4yzX7e", "myserver")) 'http://www.time.gov/timezone.cgi?UTC
+        ss = OpenURL(DecryptString128Bit("xcZfCWJLnPOl2V5kTJpBOi4ysgfzBj1H3nUzyhxODIQTLfqFDbHBbHmfcP4yzX7e", "myloveactivelock")) 'http://www.time.gov/timezone.cgi?UTC
         If ss = "" Then Exit Function
         blabla = "</b></font><font size=" & """" & "5" & """" & " color=" & """" & "white" & """" & ">"
         i = InStr(ss, blabla)
@@ -2873,7 +2879,7 @@ minusAttributesError:
             End If
         Next
         ss = VB6.Format(CDate(ss), "short date")
-        aa = VB6.Format(Now, "short date")
+        aa = VB6.Format(Now.UtcNow, "short date")
         diff = System.Math.Abs(DateDiff(Microsoft.VisualBasic.DateInterval.Day, CDate(ss), CDate(aa)))
         If diff > 1 Then SystemClockTampered = True
     End Function
@@ -2972,7 +2978,10 @@ minusAttributesError:
 
         Dim intLength As Integer
         Dim intRemaining As Integer
+        Dim intCtr As Integer
         Dim strReturnString As String = String.Empty
+        Dim achrCharacterArray() As Char
+        Dim intIndex As Integer
 
         '   *****************************************************************
         '   ******   Convert base64 encrypted value to byte array      ******
@@ -3009,6 +3018,7 @@ minusAttributesError:
         '   ***********************************************************************
 
         Try
+
             objCryptoStream = New CryptoStream(objMemoryStream, _
                objRijndaelManaged.CreateDecryptor(bytDecryptionKey, bytIV), _
                CryptoStreamMode.Read)
@@ -3018,6 +3028,7 @@ minusAttributesError:
             objCryptoStream.FlushFinalBlock()
             objMemoryStream.Close()
             objCryptoStream.Close()
+
         Catch
 
         End Try
@@ -3029,6 +3040,7 @@ minusAttributesError:
         Return StripNullCharacters(Encoding.ASCII.GetString(bytTemp))
 
     End Function
+
     Public Function StripNullCharacters(ByVal vstrStringWithNulls As String) As String
 
         Dim intPosition As Integer
