@@ -134,6 +134,7 @@ Private mKeyStore As IKeyStoreProvider
 Private mKeyStorePath As String
 Private MyNotifier As New ActiveLockEventNotifier
 Private mLibKeyPath As String
+Private mCheckTimeServerForClockTampering As ALTimeServerTypes
 
 ' Registry hive used to store Activelock settings.
 Private Const AL_REGISTRY_HIVE$ = "Software\ActiveLock Software Group\ActiveLock3"
@@ -162,6 +163,18 @@ Private Function Make64ByteChunks(strdata As String) As String
     Wend
     Make64ByteChunks = sResult
 End Function
+
+'===============================================================================
+' Name: Property Let CheckTimeServerForClockTampering
+' Input:
+'   ByVal RHS As Integer - Flag being passed to check the time server
+' Output: None
+' Purpose: Specifies whether a Time Server should be used to check Clock Tampering
+' Remarks: None
+'===============================================================================
+Private Property Let IActiveLock_CheckTimeServerForClockTampering(ByVal RHS As ALTimeServerTypes)
+    mCheckTimeServerForClockTampering = RHS
+End Property
 
 '===============================================================================
 ' Name: Property Let IActiveLock_LockType
@@ -335,18 +348,17 @@ End Sub
 ' Remarks: None
 '===============================================================================
 Private Sub IActiveLock_Acquire(Optional strMsg As String)
+    Dim adsText As String
+    Dim strStream As String
+    strStream = mSoftwareName & mSoftwareVer & mSoftwarePassword
     
     'Check the Key Store Provider
     If mKeyStore Is Nothing Then
         Err.Raise ActiveLockErrCodeConstants.alerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREUNINITIALIZED
-    End If
-    
     'Check the Key Store Path (LIC file path)
-    If mKeyStorePath = "" Then
+    ElseIf mKeyStorePath = "" Then
         Err.Raise ActiveLockErrCodeConstants.alerrKeyStorePathInvalid, ACTIVELOCKSTRING, STRKEYSTOREPATHISEMPTY
-    End If
-
-    If mSoftwareName = "" Then
+    ElseIf mSoftwareName = "" Then
         Err.Raise ActiveLockErrCodeConstants.alerrNoSoftwareName, ACTIVELOCKSTRING, STRNOSOFTWARENAME
     ElseIf mSoftwareVer = "" Then
         Err.Raise ActiveLockErrCodeConstants.alerrNoSoftwareVersion, ACTIVELOCKSTRING, STRNOSOFTWAREVERSION
@@ -373,7 +385,7 @@ Private Sub IActiveLock_Acquire(Optional strMsg As String)
         ' Using this trick to temporarily set the date format to mm/dd/yyyy
         Get_locale ' Get the current date format and save it to regionalSymbol variable
         Set_locale ""
-        trialStatus = ActivateTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, strMsg, mSoftwarePassword)
+        trialStatus = ActivateTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, strMsg, mSoftwarePassword, mCheckTimeServerForClockTampering)
         ' Set the locale date format to what we had before; can't leave changed
         Set_locale ((regionalSymbol))
         If trialStatus = True Then
@@ -384,6 +396,51 @@ Private Sub IActiveLock_Acquire(Optional strMsg As String)
 noRegistration:
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE
+    
+    Else  'Lic exists therefore we'll check the LIC file ADS
+        
+        ' Check clock tampering for non-permanent licenses.
+        If Lic.LicenseType <> allicPermanent Then
+            If mCheckTimeServerForClockTampering = alsCheckTimeServer Then
+                If SystemClockTampered Then
+                    Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                End If
+            End If
+            'If ClockTampering Then
+            '    Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+            'End If
+        End If
+        
+        If CheckStreamCapability() Then
+
+            If FileLen(mKeyStorePath) = 0 Then GoTo continueRegistration
+            adsText = ViewStream(mKeyStorePath & ":" & strStream) ' View the stream
+            If adsText = "" Then
+                Err.Raise ActiveLockErrCodeConstants.alerrLicenseTampered, ACTIVELOCKSTRING, STRLICENSETAMPERED
+            End If
+            Dim dt1 As Date
+            dt1 = CDate(adsText)
+            Dim dt2 As Date
+            dt2 = UTC(Now)
+            If dt2 < dt1 Then
+                Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+            End If
+            ' Write the stream to the file
+            Dim fileno As Integer
+            Dim run As String
+            fileno = FreeFile
+            run = App.path & "\run.bat"
+            Open run For Append As fileno
+            Print #fileno, "@ECHO OFF"
+            Print #fileno, "echo " & UTC(Now) & " > " & """" & mKeyStorePath & """" & ":" & """" & strStream & """"
+            Close fileno
+            Dim rc As Double
+            rc = Shell(run, vbMinimizedFocus)
+            DoEvents
+            Kill run
+            
+            GoTo continueRegistration
+        End If
     
     End If
 
@@ -655,7 +712,7 @@ Private Sub ValidateLic(Lic As ProductLicense)
     If strNow < Format(Lic.LastUsed, "YYYY/MM/DD") And Lic.LicenseType <> allicPermanent Then
         'MsgBox "UTC Now: " & strNow
         'MsgBox "LastUsed: " & CDate(Lic.LastUsed)
-        Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+        Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
     End If
     UpdateLastUsed Lic
     mKeyStore.Store Lic
@@ -812,10 +869,13 @@ Private Sub IActiveLock_Register(ByVal LibKey As String, Optional user As String
     
     ' License was validated successfuly. Check clock tampering for non-permanent licenses.
     If Lic.LicenseType <> allicPermanent Then
-        If ClockTampering Then
+        If mCheckTimeServerForClockTampering = alsCheckTimeServer Then
             If SystemClockTampered Then
-                Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
             End If
+        End If
+        If ClockTampering Then
+            Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
         End If
     End If
     
@@ -827,6 +887,27 @@ Private Sub IActiveLock_Register(ByVal LibKey As String, Optional user As String
     ' Update last used date
     UpdateLastUsed Lic
     mKeyStore.Store Lic
+        
+    ' This works under NTFS and is needed to prevent clock tampering
+    If CheckStreamCapability() Then
+        ' Write the current date and time into the ads
+        Dim ok As Integer
+        Dim strStream As String
+        strStream = mSoftwareName & mSoftwareVer & mSoftwarePassword
+        ' Write the stream to the file
+        Dim fileno As Integer
+        Dim run As String
+        fileno = FreeFile
+        run = App.path & "\run.bat"
+        Open run For Append As fileno
+        Print #fileno, "@ECHO OFF"
+        Print #fileno, "echo " & UTC(Now) & " > " & """" & mKeyStorePath & """" & ":" & """" & strStream & """"
+        Close fileno
+        Dim rc As Double
+        rc = Shell(run, vbMinimizedFocus)
+        DoEvents
+        Kill run
+    End If
    
     ' Expire all trial licenses
     On Error Resume Next
@@ -1095,7 +1176,7 @@ Private Property Get IActiveLock_InstallationCode(Optional ByVal user As String 
     If mLicenseKeyTypes = alsShortKeyMD5 Then
         IActiveLock_InstallationCode = IActivelock_GenerateShortSerial(modHardware.GetHDSerialFirmware())
     
-    ElseIf mLicenseKeyTypes = alsALCryptoRSA Then
+    ElseIf mLicenseKeyTypes = alsRSA Then
 
         ' Generate Request code to Lock
         Dim strReq As String, strLock  As String
@@ -1179,7 +1260,7 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
         AppendLockString strLock, modHardware.GetHDSerial()
         AppendLockString strLock, modHardware.GetHDSerialFirmware()
         AppendLockString strLock, modHardware.GetWindowsSerial()
-        AppendLockString strLock, modHardware.GetBIOSserial()
+        AppendLockString strLock, modHardware.GeetBiosVersion()
         AppendLockString strLock, modHardware.GetMotherboardSerial()
         AppendLockString strLock, modHardware.GetIPaddress()
     Else
@@ -1209,7 +1290,7 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
             AppendLockString strLock, noKey
         End If
         If mLockTypes And lockBIOS Then
-            AppendLockString strLock, modHardware.GetBIOSserial()
+            AppendLockString strLock, modHardware.GeetBiosVersion()
         Else
             AppendLockString strLock, noKey
         End If
@@ -1296,7 +1377,7 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                 ElseIf j = LBound(a) + 5 Then
                     If aString <> noKey Then
                         IActiveLock_AddLockCode lockBIOS, SizeLockType  'dw1 build up lockTypes
-                        If aString <> modHardware.GetBIOSserial() Then
+                        If aString <> modHardware.GeetBiosVersion() Then
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If

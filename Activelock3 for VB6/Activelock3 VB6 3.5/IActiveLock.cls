@@ -250,10 +250,10 @@ End Enum
     
 ' License Key Type specifies the length/type
 '
-' @param alsALCryptoRSA    ' 1024-bit Long keys by RSA via ALCrypto DLL
+' @param alsRSA    ' 1024-bit Long keys by RSA via ALCrypto DLL
 ' @param alsShortKeyMD5    ' Short license keys by MD5
 Public Enum ALLicenseKeyTypes
-    alsALCryptoRSA = 0
+    alsRSA = 0
     alsShortKeyMD5 = 1
 End Enum
 
@@ -312,6 +312,16 @@ Public Enum ALTrialHideTypes
     trialRegistry = 4
 End Enum
 
+'###############################################################
+    
+' Enum for accessing the Time Servers
+'
+' @param alsDontCheckTimeServer  ' Skips checking a Time Server
+' @param alsCheckTimeServer      ' Checks a Time Server
+Public Enum ALTimeServerTypes
+    alsDontCheckTimeServer = 0
+    alsCheckTimeServer = 1
+End Enum
 
 '===============================================================================
 ' Name: Property Get RegisteredLevel
@@ -489,6 +499,18 @@ End Property
 ' Remarks: None
 '===============================================================================
 Public Property Let SoftwarePassword(ByVal sPassword As String)
+
+End Property
+
+'===============================================================================
+' Name: Property Let CheckTimeServerForClockTampering
+' Input:
+'   ByVal iServer As Integer - Flag being passed to check the time server
+' Output: None
+' Purpose: Specifies whether a Time Server should be used to check Clock Tampering
+' Remarks: None
+'===============================================================================
+Public Property Let CheckTimeServerForClockTampering(ByVal iServer As ALTimeServerTypes)
 
 End Property
 

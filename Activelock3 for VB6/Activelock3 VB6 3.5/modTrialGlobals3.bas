@@ -1867,10 +1867,10 @@ End Function
 ' This function is case independent
 ' Remarks: None
 '===============================================================================
-Public Function inString(ByVal x As String, ParamArray MyArray()) As Boolean
+Public Function inString(ByVal X As String, ParamArray MyArray()) As Boolean
 Dim y As Variant    'member of array that holds all arguments except the first
 For Each y In MyArray
-    If InStr(1, x, y, 1) > 0 Then 'the "ones" make the comparison case-insensitive
+    If InStr(1, X, y, 1) > 0 Then 'the "ones" make the comparison case-insensitive
         inString = True
         Exit Function
     End If
@@ -1890,7 +1890,7 @@ End Function
 ' Purpose: This function checks the authenticity and validity of the trial period/runs
 ' Remarks: This is the main call to activate the trial feature
 '===============================================================================
-Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As String, ByVal TrialType As Long, ByVal TrialLength As Long, ByVal TrialHideTypes As ALTrialHideTypes, ByRef strMsg As String, ByVal SoftwarePassword As String) As Boolean
+Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As String, ByVal TrialType As Long, ByVal TrialLength As Long, ByVal TrialHideTypes As ALTrialHideTypes, ByRef strMsg As String, ByVal SoftwarePassword As String, ByVal mCheckTimeServerForClockTampering As ALTimeServerTypes) As Boolean
     On Error GoTo NotRegistered
     Dim daysLeft As Integer, runsLeft As Integer
     Dim intEXPIREDWARNING As Integer
@@ -1975,10 +1975,11 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
             If fileExist(GetSteganographyFile()) = False And _
                 Dir(WinDir & DecryptMyString(myDir, PSWD), vbDirectory) = "" And _
                 dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
+                If SystemClockTampered Then
+                    Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                End If
                 If ClockTampering Then
-                    If SystemClockTampered Then
-                        Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
-                    End If
+                    Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
                 End If
             End If
             ' So far so good; trial mode seems to be fine
@@ -1999,10 +2000,11 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
             If fileExist(GetSteganographyFile()) = False And _
                 Dir(WinDir & DecryptMyString(myDir, PSWD), vbDirectory) = "" And _
                 dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
+                If SystemClockTampered Then
+                    Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                End If
                 If ClockTampering Then
-                    If SystemClockTampered Then
-                        Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
-                    End If
+                    Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
                 End If
             End If
             ' So far so good; trial mode seems to be fine
@@ -2054,12 +2056,16 @@ On Error Resume Next
     
 For i = 0 To 2
     Select Case i
-    Case 0
-        t = "c:"
-    Case 1
-        t = WinSysDir
-    Case Else
-        t = WinDir
+        Case 0
+            t = "c:"
+        Case 1
+            t = WinDir()
+        Case 2
+            t = WinDir() & "\Temp"
+        Case 3
+            t = WinDir() & "\Applog"
+        Case 4
+            t = WinDir() & "\Recent"
     End Select
     
     Count = 0
@@ -2284,21 +2290,21 @@ End Function
 '===============================================================================
 Public Function Unscramb(ByVal strString As String) As String
 
-Dim x As Integer, evenint As Integer, oddint As Integer
+Dim X As Integer, evenint As Integer, oddint As Integer
 Dim even As String, odd As String, fin As String
-x = Len(strString)
-x = Int(Len(strString) / 2) 'adding this returns the actual number like 1.5 instead of returning 2
-even = Mid(strString, 1, x)
-odd = Mid(strString, x + 1)
-For x = 1 To Len(strString)
-    If x Mod 2 = 0 Then
+X = Len(strString)
+X = Int(Len(strString) / 2) 'adding this returns the actual number like 1.5 instead of returning 2
+even = Mid(strString, 1, X)
+odd = Mid(strString, X + 1)
+For X = 1 To Len(strString)
+    If X Mod 2 = 0 Then
         evenint = evenint + 1
         fin = fin & Mid(even, evenint, 1)
     Else
         oddint = oddint + 1
         fin = fin & Mid(odd, oddint, 1)
     End If
-Next x
+Next X
 Unscramb = fin
 End Function
 
@@ -2954,7 +2960,7 @@ If InStr(ss, month1(i)) Then
 End If
 Next
 ss = Format$(CDate(ss), "short date")
-aa = Format(Now(), "short date")
+aa = Format(UTC(Now()), "short date")
 diff = Abs(DateDiff("d", ss, aa))
 If diff > 1 Then SystemClockTampered = True
 End Function

@@ -198,6 +198,81 @@ Public Declare Function GeneralWinDirApi Lib "kernel32" _
 Public Declare Function GetSystemDirectory Lib "kernel32.dll" Alias "GetSystemDirectoryA" _
     (ByVal lpBuffer As String, ByVal nSize As Long) As Long
 
+' APIs used for stream handling in NTFS
+Public Declare Function GetVolumeInformation Lib "kernel32.dll" Alias "GetVolumeInformationA" (ByVal lpRootPathName As String, ByVal lpVolumeNameBuffer As String, ByVal nVolumeNameSize As Long, lpVolumeSerialNumber As Long, lpMaximumComponentLength As Long, lpFileSystemFlags As Long, ByVal lpFileSystemNameBuffer As String, ByVal nFileSystemNameSize As Long) As Long
+Public Declare Function CreateFileW Lib "kernel32" (ByVal lpFileName As Long, ByVal dwDesiredAccess As Long, ByVal dwShareMode As Long, ByVal lpSecurityAttributes As Long, ByVal dwCreationDisposition As Long, ByVal dwFlagsAndAttributes As Long, ByVal hTemplateFile As Long) As Long
+Public Declare Function DeleteFile Lib "kernel32.dll" Alias "DeleteFileA" (ByVal lpFileName As String) As Long
+Public Declare Function GetFileSize Lib "kernel32.dll" (ByVal hFile As Long, lpFileSizeHigh As Long) As Long
+Public Declare Function ReadFileX Lib "kernel32.dll" Alias "ReadFile" (ByVal hFile As Long, lpBuffer As Any, ByVal nNumberOfBytesToRead As Long, lpNumberOfBytesRead As Long, ByVal lpOverlapped As Long) As Long
+
+' Constants for Create and Open File APIs, neatly organized into Enumerations
+'Public Enum OpenFileFlags
+'  NoFileFlags = 0
+'  PosixSemantics = &H1000000
+'  BackupSemantics = &H2000000
+'  DeleteOnClose = &H4000000
+'  SequentialScan = &H8000000
+'  RandomAccess = &H10000000
+'  NoBuffering = &H20000000
+'  OverlappedIO = &H40000000
+'  WriteThrough = &H80000000
+'End Enum
+Public Enum FileMode
+  CreateNew = 1
+  CreateAlways = 2
+  OpenExisting = 3
+  OpenOrCreate = 4
+  Truncate = 5
+  Append = 6
+End Enum
+Public Enum FileAccess
+  AccessRead = &H80000000
+  AccessWrite = &H40000000
+  AccessReadWrite = &H80000000 Or &H40000000
+  AccessDelete = &H10000
+  AccessReadControl = &H20000
+  AccessWriteDac = &H40000
+  AccessWriteOwner = &H80000
+  AccessSynchronize = &H100000
+  AccessStandardRightsRequired = &HF0000
+  AccessStandardRightsAll = &H1F0000
+  AccessSystemSecurity = &H1000000
+End Enum
+Public Enum FileShare
+  ShareNone = 0
+  ShareRead = 1
+  ShareWrite = 2
+  ShareReadWrite = 3
+  ShareDelete = 4
+End Enum
+' End Create/Open File Constants
+
+Public Function CheckStreamCapability() As Boolean
+'Checks if the current File System supports NTFS
+Dim name As String * 256
+Dim FileSystem As String * 256
+Dim SerialNumber As Long, MaxCompLen As Long
+Dim Flags As Long
+Const FILE_NAMED_STREAMS As Long = &H40000
+Call GetVolumeInformation("C:\", name, Len(name), SerialNumber, _
+    MaxCompLen, Flags, FileSystem, Len(FileSystem))
+If Flags And FILE_NAMED_STREAMS Then
+    CheckStreamCapability = True
+End If
+End Function
+
+Public Function ViewStream(StreamName As String) As String
+Dim hFile As Long, Size As Long, myBuffer As String, BytesRead As Long
+'Reads a stream into a buffer
+hFile = CreateFileW(StrPtr(StreamName), AccessRead, ShareRead, 0&, OpenExisting, 0&, 0&)
+If hFile = -1 Then Exit Function
+Size = GetFileSize(hFile, 0&)
+myBuffer = String$(Size, 0)
+ReadFileX hFile, ByVal myBuffer, Size, BytesRead, 0
+CloseHandle hFile
+ViewStream = myBuffer
+End Function
+
 Public Function MakeWord(ByVal LoByte As Byte, ByVal HiByte As Byte) As Integer
 '===============================================================================
 '   MakeWord - Packs 2 8-bit integers into a 16-bit integer.

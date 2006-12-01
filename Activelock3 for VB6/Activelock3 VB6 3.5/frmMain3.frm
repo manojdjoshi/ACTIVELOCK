@@ -55,19 +55,12 @@ Begin VB.Form frmMain
       TabPicture(0)   =   "frmMain3.frx":0CCA
       Tab(0).ControlEnabled=   0   'False
       Tab(0).Control(0)=   "cmdValidate"
-      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).Control(1)=   "Picture1"
-      Tab(0).Control(1).Enabled=   0   'False
       Tab(0).Control(2)=   "cmdRemove"
-      Tab(0).Control(2).Enabled=   0   'False
       Tab(0).Control(3)=   "fraProdNew"
-      Tab(0).Control(3).Enabled=   0   'False
       Tab(0).Control(4)=   "gridProds"
-      Tab(0).Control(4).Enabled=   0   'False
       Tab(0).Control(5)=   "Label17"
-      Tab(0).Control(5).Enabled=   0   'False
       Tab(0).Control(6)=   "Label1"
-      Tab(0).Control(6).Enabled=   0   'False
       Tab(0).ControlCount=   7
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
@@ -1058,6 +1051,9 @@ If systemEvent Then Exit Sub
 systemEvent = True
 txtReqCodeIn.Text = ReconstructedInstallationCode
 systemEvent = False
+If chkLockIP.Value = vbChecked Then
+    MsgBox "Warning: Use IP addresses cautiously since they may not be static.", vbExclamation, "Static IP Address Warning"
+End If
 End Sub
 
 Private Sub chkLockMACaddress_Click()
@@ -1368,7 +1364,7 @@ If Len(txtReqCodeIn.Text) = 8 Then  'Short Key License
             Exit For
         End If
     Next
-    strLibKey = ActiveLock.GenerateShortKey(usedVCode, txtReqCodeIn.Text, txtUser.Text, strExpire, varLicType, cmbRegisteredLevel.ListIndex + 200, 50)
+    strLibKey = ActiveLock.GenerateShortKey(usedVCode, txtReqCodeIn.Text, Trim(txtUser.Text), strExpire, varLicType, cmbRegisteredLevel.ListIndex + 200, 50)
     txtLibKey.Text = strLibKey
 Else 'ALCrypto License Key
     ' Pass it to IALUGenerator to generate the key
@@ -1416,7 +1412,7 @@ If MsgBox("Would you like to save the new license in the License Database?", vbY
         lockTypesString = lockTypesString & "IP Address"
     End If
     Call frmAlugenDatabase.ArchiveLicense(cmbProds.Text, _
-        txtUser.Text, _
+        Trim(txtUser.Text), _
         strRegDate, strExpire, cmbLicType, _
         cmbRegisteredLevel.Text, txtReqCodeIn.Text, txtLibKey.Text, lockTypesString)
     Unload frmAlugenDatabase
@@ -2074,11 +2070,11 @@ End Sub
 ' Add a Product Row to the GUI.
 ' If fUpdateStore is True, then product info is also saved to the store.
 '
-Private Sub AddRow(Name As String, Ver As String, Code1 As String, Code2 As String, Optional fUpdateStore As Boolean = True)
+Private Sub AddRow(name As String, Ver As String, Code1 As String, Code2 As String, Optional fUpdateStore As Boolean = True)
     ' Update the view
     With gridProds
         .Rows = .Rows + 1
-        .TextMatrix(.Rows - 1, 0) = Name
+        .TextMatrix(.Rows - 1, 0) = name
         .TextMatrix(.Rows - 1, 1) = Ver
         .TextMatrix(.Rows - 1, 2) = Code1
         .TextMatrix(.Rows - 1, 3) = Code2
@@ -2089,11 +2085,11 @@ Private Sub AddRow(Name As String, Ver As String, Code1 As String, Code2 As Stri
     End With
     ' Call Activelock3.IALUGenerator to add product
     Dim ProdInfo As ActiveLock3.ProductInfo
-    Set ProdInfo = ActiveLock3.CreateProductInfo(Name, Ver, Code1, Code2)
+    Set ProdInfo = ActiveLock3.CreateProductInfo(name, Ver, Code1, Code2)
     If fUpdateStore Then
         Call GeneratorInstance.SaveProduct(ProdInfo)
     End If
-    cmbProds.AddItem Name & " - " & Ver
+    cmbProds.AddItem name & " - " & Ver
     cmdRemove.Enabled = True
 End Sub
 
@@ -2201,7 +2197,7 @@ Else 'ALCrypto
         If fDisableNotifications Then Exit Sub
         
         fDisableNotifications = True
-        txtUser = GetUserFromInstallCode(txtReqCodeIn.Text)
+        txtUser.Text = GetUserFromInstallCode(txtReqCodeIn.Text)
         fDisableNotifications = False
         
 '        systemEvent = True
@@ -2242,7 +2238,7 @@ End Sub
 Private Sub txtUser_Change()
     If fDisableNotifications Then Exit Sub
     fDisableNotifications = True
-    If Len(txtReqCodeIn.Text) <> 8 Then txtReqCodeIn.Text = ActiveLock.installationCode(txtUser)
+    If Len(txtReqCodeIn.Text) <> 8 Then txtReqCodeIn.Text = ActiveLock.installationCode(Trim(txtUser.Text))
     fDisableNotifications = False
 End Sub
 
@@ -2313,11 +2309,11 @@ End Sub
 ''
 ' Validate and enable Add/Change button as appropriate
 '
-Private Function CheckDuplicate(Name As String, Ver As String) As Boolean
+Private Function CheckDuplicate(name As String, Ver As String) As Boolean
     CheckDuplicate = False
     Dim i%
     For i = 0 To gridProds.Rows - 1
-        If gridProds.TextMatrix(i, 0) = Name Then
+        If gridProds.TextMatrix(i, 0) = name Then
             If gridProds.TextMatrix(i, 1) = Ver Then
                 CheckDuplicate = True
                 Exit Function
@@ -2379,7 +2375,7 @@ End Function
 
 Private Sub PopulateUI(ProdInfo As ActiveLock3.ProductInfo)
     With ProdInfo
-        AddRow .Name, .Version, .VCode, .GCode, False
+        AddRow .name, .Version, .VCode, .GCode, False
     End With
 End Sub
 

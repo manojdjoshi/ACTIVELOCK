@@ -362,7 +362,7 @@ Public Type ADAPTER_STATUS
 End Type
    
 Public Type NAME_BUFFER
-   name        As String * NCBNAMSZ
+   Name        As String * NCBNAMSZ
    name_num    As Integer
    name_flags  As Integer
 End Type
@@ -791,24 +791,24 @@ End Sub
 '===============================================================================
 Function StripControlChars(Source As String, Optional KeepCRLF As Boolean = True) As String
 Dim Index As Long
-Dim bytes() As Byte
+Dim Bytes() As Byte
 
 ' the fastest way to process this string
 ' is copy it into an array of Bytes
-bytes() = Source
-For Index = 0 To UBound(bytes) Step 2
+Bytes() = Source
+For Index = 0 To UBound(Bytes) Step 2
     ' if this is a control character
-    If bytes(Index) < 32 And bytes(Index + 1) = 0 Then
-        If Not KeepCRLF Or (bytes(Index) <> 13 And bytes(Index) <> 10) Then
+    If Bytes(Index) < 32 And Bytes(Index + 1) = 0 Then
+        If Not KeepCRLF Or (Bytes(Index) <> 13 And Bytes(Index) <> 10) Then
             ' the user asked to trim CRLF or this
             ' character isn't a CR or a LF, so clear it
-            bytes(Index) = 0
+            Bytes(Index) = 0
         End If
     End If
 Next
 
 ' return this string, after filtering out all null chars
-StripControlChars = VBA.Replace(bytes(), vbNullChar, "")
+StripControlChars = VBA.Replace(Bytes(), vbNullChar, "")
 End Function
 
 '===============================================================================
@@ -1272,25 +1272,25 @@ GetWindowsSerial = strKey
 End Function
 
 '===============================================================================
-' Name: Function GetBIOSserial
+' Name: Function GeetBiosVersion
 ' Input: None
 ' Output:
 '   String - BIOS serial number
 ' Purpose: Gets the BIOS Serial Number
 ' Remarks: Uses the WMI
 '===============================================================================
-Public Function GetBIOSserial() As String
+Public Function GeetBiosVersion() As String
 Dim BiosSet As Object
 Dim obj As Object
-On Error GoTo GetBIOSSerialError
+On Error GoTo GeetBiosVersionError
 Set BiosSet = GetObject("WinMgmts:{impersonationLevel=impersonate}").InstancesOf("Win32_BIOS")
 For Each obj In BiosSet
-    GetBIOSserial = obj.Version
-    If GetBIOSserial <> "" Then Exit Function
+    GeetBiosVersion = obj.Version
+    If GeetBiosVersion <> "" Then Exit Function
 Next
-GetBIOSSerialError:
-If GetBIOSserial = "" Then
-    GetBIOSserial = "Not Available"
+GeetBiosVersionError:
+If GeetBiosVersion = "" Then
+    GeetBiosVersion = "Not Available"
 End If
 End Function
 
@@ -1312,9 +1312,9 @@ For Each obj In MotherboardSet
     GetMotherboardSerial = obj.SerialNumber
     If GetMotherboardSerial <> "" Then
         ' Strip any periods
-        Dim bytes() As Byte
-        bytes() = GetMotherboardSerial
-        GetMotherboardSerial = VBA.Replace(bytes(), ".", "")
+        Dim Bytes() As Byte
+        Bytes() = GetMotherboardSerial
+        GetMotherboardSerial = VBA.Replace(Bytes(), ".", "")
         Exit Function
     End If
 Next
