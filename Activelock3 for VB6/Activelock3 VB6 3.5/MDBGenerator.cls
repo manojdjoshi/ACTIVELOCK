@@ -148,13 +148,15 @@ Private Function IALUGenerator_RetrieveProduct(ByVal name As String, ByVal Ver A
     ProdInfo.Version = Ver
     
     'open connection to MDB file
+    Set oConnect = New ADODB.Connection
     oConnect.Open "Provider=Microsoft.Jet.OLEDB.4.0;" & _
       "Data Source= " & fileMDB & ";"
 
     'open recordset
+    Set oRST = New ADODB.Recordset
     oRST.Open "select * from products where name='" & name & "' AND version='" & Ver & "'", oConnect
     
-    If oRST.RecordCount > 0 Then
+    If oRST(1) = name And oRST(2) = Ver Then
       ProdInfo.VCode = oRST("vcode")
       ProdInfo.GCode = oRST("gcode")
     End If

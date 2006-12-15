@@ -58,7 +58,7 @@ Public VIDEO As String, OTHERFILE As String
 Public Const HIDDENFOLDER As String = "37436AE1A6BBB443B4B8535477D3B8F595E77FBD211E0326CB92D381B2D29FD6F8DB609FB3851CB666FA025A9E26F84F2284CE0BFFF9BC845E32854250833654"
 Public Const EXPIREDDAYS As String = "ExpiredDays"
 Public Const INITIALDATE As String = "01/01/2000"
-Public Const TRIALWARNING As String = "Trial Warning"
+Public Const TrialWarning As String = "Trial Warning"
 Public Const EXPIREDWARNING As String = "Expired Warning"
 Public Const CLSIDSTR As String = "{645FF040-5081-101B-9F08-00AA002F954E}"
 Public Const CHANNELS As String = "CTDChannels_Version."
@@ -1890,7 +1890,7 @@ End Function
 ' Purpose: This function checks the authenticity and validity of the trial period/runs
 ' Remarks: This is the main call to activate the trial feature
 '===============================================================================
-Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As String, ByVal TrialType As Long, ByVal TrialLength As Long, ByVal TrialHideTypes As ALTrialHideTypes, ByRef strMsg As String, ByVal SoftwarePassword As String, ByVal mCheckTimeServerForClockTampering As ALTimeServerTypes) As Boolean
+Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As String, ByVal TrialType As Long, ByVal TrialLength As Long, ByVal TrialHideTypes As ALTrialHideTypes, ByRef strMsg As String, ByVal SoftwarePassword As String, ByVal mCheckTimeServerForClockTampering As ALTimeServerTypes, ByVal mCheckSystemFilesForClockTampering As ALSystemFilesTypes, ByVal mTrialWarning As ALTrialWarningTypes, ByRef mUsedTrialDays As Long, ByRef mUsedTrialRuns As Long) As Boolean
     On Error GoTo NotRegistered
     Dim daysLeft As Integer, runsLeft As Integer
     Dim intEXPIREDWARNING As Integer
@@ -1930,7 +1930,7 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
     End If
     
     strMsg = ""
-    intEXPIREDWARNING = Int(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "1"), enc2(TRIALWARNING), enc2(EXPIREDWARNING), 0))
+    intEXPIREDWARNING = Int(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "1"), enc2(TrialWarning), enc2(EXPIREDWARNING), 0))
     
     On Error GoTo keepChecking
     HAD2HAMMER = False
@@ -1987,6 +1987,7 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
             strMsg = "You are running this program in its Trial Period Mode." & vbCrLf & _
                CStr(daysLeft) & " days left out of " & _
                CStr(alockDays) & " day trial."
+            mUsedTrialDays = daysLeft
             ActivateTrial = True
             Screen.MousePointer = vbDefault
             GoTo exitGracefully
@@ -2012,6 +2013,7 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
             strMsg = "You are running this program in its Trial Runs Mode." & vbCrLf & _
                 CStr(runsLeft) & " runs left out of " & _
                 CStr(alockRuns) & " run trial."
+            mUsedTrialRuns = runsLeft
             ActivateTrial = True
             Screen.MousePointer = vbDefault
             GoTo exitGracefully
@@ -2023,11 +2025,13 @@ keepChecking:
     ExpireTrial SoftwareName, SoftwareVer, TrialType, TrialLength, TrialHideTypes, SoftwarePassword
     If Err.Number = -10101 Then
         strMsg = TEXTMSG_DAYS
+        mUsedTrialDays = alockDays
     ElseIf Err.Number = -10102 Then
         strMsg = TEXTMSG_RUNS
+        mUsedTrialRuns = alockRuns
     End If
-    If intEXPIREDWARNING = 0 Then
-        Call SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "1"), enc2(TRIALWARNING), enc2(EXPIREDWARNING), -1)
+    If intEXPIREDWARNING = 0 Or mTrialWarning = ALTrialWarningTypes.trialWarningPersistent Then
+        Call SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "1"), enc2(TrialWarning), enc2(EXPIREDWARNING), -1)
         strMsg = "Free Trial for this application has ended."
     End If
     ActivateTrial = False
@@ -2831,7 +2835,7 @@ Private Sub PlusAttributes()
     ok = Shell("ATTRIB +h +s +r " & WinDir & DecryptMyString(HIDDENFOLDER, PSWD), vbHide)
 End Sub
 
-Private Function DecryptMyString(myStr As String, password As String) As String
+Public Function DecryptMyString(myStr As String, password As String) As String
 On Error GoTo DecryptMyStringError
 
 Dim oTest           As clsRijndael
@@ -2875,7 +2879,7 @@ DecryptMyString = bytClear
 Exit Function
 DecryptMyStringError:
 End Function
-Private Function EncryptMyString(myStr As String, password As String) As String
+Public Function EncryptMyString(myStr As String, password As String) As String
 On Error GoTo EncryptMyStringError
 
 Dim oTest           As clsRijndael

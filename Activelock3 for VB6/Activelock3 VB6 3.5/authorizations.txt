@@ -202,3 +202,36 @@ ckKzAwIDEwIDE4IDA5IDcxIDg1Ck1ZU1dFRVRCQUJZCjVDQTktNEIyQQozSlQyNk
 FBMAo1NTI3NC1PRU0tMDAxMTkwMy0wMDEwMgpERUxMICAgLSA3CkJGV0I3NDEKMT
 kyLjE2OC4wLjEKRXZhbHVhdGlvbiBVc2Vy
 Lock Types: HDD Firmware Serial
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Program Name and Version: TestAppxxx - 1.6
+User Name:  ÀH6¬u«H
+Registration Date: 2006/12/14
+Expires After: 2007/01/13
+License Type: Periodic
+Registered Level: Limited A
+Installation/Site Code: ASDASDasdasDSD
+Liberation/Unlock Code: VGVzdEFwcHh4eA0KMS42DQpTaW5nbGUNCjENCg0KTGltaXRlZCBBDQoyMDA2LzEy
+LzE0DQoyMDA3LzAxLzEzDQo1DQpBQUFBQjNOemFDMXljMkVBQUFDQU1EYjU2N1Jk
+WkQ1ZHhUR3c4N3dqVTc5N0JGbWhIeEZ6S2lFMHlPR1RJbS9EcDBSakpEN1V1MXl3
+L1NnM05sZGZ4OGd6cU43eDBYTU5Oa2trVDBxYVNWVVRQclVob3NLT3o2amczajJY
+c0xmamgvNHQvM2poZWU4bjFiMHJ0OXp6UUFYLzdUQnBtU0hoRnpPNWNISG4yc1Na
+M2ZxZWtRM2ljUVduSHludTRrcwaLckASDASDasdasDSD
+Lock Types: HDD Firmware Serial
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Program Name and Version: TestApp - 1.2
+User Name: ²Ë,²Ë,²Ë,²Ë,²Ë,²Ë,²Ë,²Ë,²Ë,²Ë,²Ë,²Ë,²Ë,²Ë,²Ë,²Ë,²Ë
+Registration Date: 2006/12/14
+Expires After: 2007/01/13
+License Type: Time Locked
+Registered Level: Limited A
+Installation/Site Code: sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
+Liberation/Unlock Code: VGVzdEFwcA0KMS4yDQpTaW5nbGUNCjMNCg0KTGltaXRlZCBBDQoyMDA2LzEyLzE0
+DQoyMDA3LzAxLzEzDQo1DQpBQUFBQjNOemFDMXljMkVBQUFDQVdoU3ZEWE95ekEx
+ZGVGUVpXZzNJUnB6QWhOcnhldXVsZlk2Y0RMU0txTXE0dnJOVUpERkVaTTljNnU4
+eFBqSUc0QXdWdzNZNWRZVnE3SEh5ZHZVREVhRlpBT0d0TU15RmlUc3Qxd05GdC9R
+WVBVa1daWnkwaFdISmVnWEZHdEZVNGlvdElHQ1VtUlcyNnhpTjNvNnMzK0QvSVpN
+ZUpUK2dIQmZxSklnQXgyOAaLckssssssssssssssssssssssssssssssssssssss
+sssssssssssssssssssssssssssss
+Lock Types: HDD Firmware Serial

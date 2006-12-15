@@ -323,6 +323,50 @@ Public Enum ALTimeServerTypes
     alsCheckTimeServer = 1
 End Enum
 
+'###############################################################
+
+' Enum for scanning the system folders/files to detect clock tampering
+'
+' @param alsDontCheckSystemFiles  ' Skips checking system files
+' @param alsCheckSystemFiles      ' Checks system files
+Public Enum ALSystemFilesTypes
+    alsDontCheckSystemFiles = 0
+    alsCheckSystemFiles = 1
+End Enum
+
+'###############################################################
+
+' Enum for license file encryption
+'
+' @param alsLicenseFileEncrypted    ' Encrypts the license file
+' @param alsLicenseFilePlain      ' Leaves the license file readable
+Public Enum ALLicenseFileTypes
+    alsLicenseFilePlain = 0
+    alsLicenseFileEncrypted = 1
+End Enum
+
+'###############################################################
+
+' Enum for Auto Registeration via ALL files
+'
+' @param alsEnableAutoRegistration      ' Enables auto license registration
+' @param alsDisableAutoRegistration     ' Disables auto license registration
+Public Enum ALAutoRegisterTypes
+    alsEnableAutoRegistration = 0
+    alsDisableAutoRegistration = 1
+End Enum
+
+'###############################################################
+    
+' Trial Warning can be persistent or temporary
+'
+' @param trialWarningTemporary       ' Trial Warning is Temporary (1-time only)
+' @param trialWarningPersistent      ' Trial Warning is Persistent
+Public Enum ALTrialWarningTypes
+    trialWarningTemporary = 0
+    trialWarningPersistent = 1
+End Enum
+
 '===============================================================================
 ' Name: Property Get RegisteredLevel
 ' Input: None
@@ -379,6 +423,18 @@ End Property
 ' Remarks: None
 '===============================================================================
 Public Property Let LicenseKeyType(ByVal LicenseKeyTypes As ALLicenseKeyTypes)
+
+End Property
+
+'===============================================================================
+' Name: Property Let LicenseFileType
+' Input:
+'    ByVal LicenseFileType As ALLicenseFileType - License File Type object
+' Output: None
+' Purpose: Interface Property. Specifies the license file type for this instance of ActiveLock.
+' Remarks: None
+'===============================================================================
+Public Property Let LicenseFileType(ByVal LicenseFileType As ALLicenseFileTypes)
 
 End Property
 
@@ -505,12 +561,48 @@ End Property
 '===============================================================================
 ' Name: Property Let CheckTimeServerForClockTampering
 ' Input:
-'   ByVal iServer As Integer - Flag being passed to check the time server
+'   ByVal iServer As ALTimeServerTypes - Flag being passed to check the time server
 ' Output: None
 ' Purpose: Specifies whether a Time Server should be used to check Clock Tampering
 ' Remarks: None
 '===============================================================================
 Public Property Let CheckTimeServerForClockTampering(ByVal iServer As ALTimeServerTypes)
+
+End Property
+
+'===============================================================================
+' Name: Property Let TrialWarning
+' Input:
+'   ByVal Value As ALTrialWarningTypes - Trial Warning is either Persistent or Temporary
+' Output: None
+' Purpose: Specifies whether the Trial Warning is either Persistent or Temporary
+' Remarks: None
+'===============================================================================
+Public Property Let TrialWarning(ByVal Value As ALTrialWarningTypes)
+
+End Property
+
+'===============================================================================
+' Name: Property Let AutoRegister
+' Input:
+'   ByVal iAuto As ALAutoRegisterTypes - Flag to indicate whether auto registration via an ALL file should be performed
+' Output: None
+' Purpose: Specifies whether auto registration via an ALL file should be performed
+' Remarks: None
+'===============================================================================
+Public Property Let AutoRegister(ByVal iAuto As ALAutoRegisterTypes)
+
+End Property
+
+'===============================================================================
+' Name: Property Let CheckSystemFilesForClockTampering
+' Input:
+'   ByVal iSystem As ALSystemFilesTypes - Flag being passed to check the system files
+' Output: None
+' Purpose: Specifies whether the system files should be scanned to check Clock Tampering
+' Remarks: None
+'===============================================================================
+Public Property Let CheckSystemFilesForClockTampering(ByVal iSystem As ALSystemFilesTypes)
 
 End Property
 
@@ -760,6 +852,28 @@ End Property
 '===============================================================================
 Public Property Get UsedDays() As Long
 Attribute UsedDays.VB_Description = "Returns the number of days this product has been used since its registration."
+
+End Property
+'===============================================================================
+' Name: Property Get UsedTrialDays
+' Input: None
+' Output:
+'   Long - Number of used trial days
+' Purpose: Returns the number of used trial days
+' Remarks: None
+'===============================================================================
+Public Property Get UsedTrialDays() As Long
+
+End Property
+'===============================================================================
+' Name: Property Get UsedTrialRuns
+' Input: None
+' Output:
+'   Long - Number of used trial runs
+' Purpose: Returns the number of used trial runs
+' Remarks: None
+'===============================================================================
+Public Property Get UsedTrialRuns() As Long
 
 End Property
 '===============================================================================

@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Begin VB.Form frmMain 
@@ -55,12 +55,19 @@ Begin VB.Form frmMain
       TabPicture(0)   =   "frmMain3.frx":0CCA
       Tab(0).ControlEnabled=   0   'False
       Tab(0).Control(0)=   "cmdValidate"
+      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).Control(1)=   "Picture1"
+      Tab(0).Control(1).Enabled=   0   'False
       Tab(0).Control(2)=   "cmdRemove"
+      Tab(0).Control(2).Enabled=   0   'False
       Tab(0).Control(3)=   "fraProdNew"
+      Tab(0).Control(3).Enabled=   0   'False
       Tab(0).Control(4)=   "gridProds"
+      Tab(0).Control(4).Enabled=   0   'False
       Tab(0).Control(5)=   "Label17"
+      Tab(0).Control(5).Enabled=   0   'False
       Tab(0).Control(6)=   "Label1"
+      Tab(0).Control(6).Enabled=   0   'False
       Tab(0).ControlCount=   7
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
@@ -118,6 +125,24 @@ Begin VB.Form frmMain
          TabIndex        =   13
          Top             =   450
          Width           =   9495
+         Begin VB.CommandButton cmdUncheckAll 
+            Caption         =   "Uncheck All"
+            Height          =   315
+            Left            =   0
+            TabIndex        =   71
+            ToolTipText     =   "Generate liberation key for the above request code (which should not be blank)."
+            Top             =   2655
+            Width           =   1110
+         End
+         Begin VB.CommandButton cmdCheckAll 
+            Caption         =   "Check All"
+            Height          =   315
+            Left            =   0
+            TabIndex        =   70
+            ToolTipText     =   "Generate liberation key for the above request code (which should not be blank)."
+            Top             =   2250
+            Width           =   1110
+         End
          Begin VB.ComboBox cmbProds 
             Height          =   315
             Left            =   1305
@@ -487,7 +512,7 @@ Begin VB.Form frmMain
       End
       Begin VB.Frame fraProdNew 
          Height          =   2835
-         Left            =   -74880
+         Left            =   -74910
          TabIndex        =   12
          Top             =   360
          Width           =   9495
@@ -504,11 +529,11 @@ Begin VB.Form frmMain
             Caption         =   "4096-bit"
             Height          =   240
             Index           =   1
-            Left            =   3105
+            Left            =   3060
             TabIndex        =   66
             Top             =   1215
             Value           =   -1  'True
-            Width           =   875
+            Width           =   960
          End
          Begin VB.OptionButton optStrength 
             Caption         =   "2048-bit"
@@ -517,7 +542,7 @@ Begin VB.Form frmMain
             Left            =   4005
             TabIndex        =   65
             Top             =   1215
-            Width           =   875
+            Width           =   1005
          End
          Begin VB.OptionButton optStrength 
             Caption         =   "1536-bit"
@@ -526,7 +551,7 @@ Begin VB.Form frmMain
             Left            =   4995
             TabIndex        =   64
             Top             =   1215
-            Width           =   875
+            Width           =   1005
          End
          Begin VB.OptionButton optStrength 
             Caption         =   "1024-bit"
@@ -535,7 +560,7 @@ Begin VB.Form frmMain
             Left            =   5985
             TabIndex        =   63
             Top             =   1215
-            Width           =   875
+            Width           =   960
          End
          Begin VB.OptionButton optStrength 
             Caption         =   "512-bit"
@@ -642,6 +667,25 @@ Begin VB.Form frmMain
             TabIndex        =   9
             Top             =   2415
             Width           =   1845
+         End
+         Begin VB.Frame Frame1 
+            Appearance      =   0  'Flat
+            Caption         =   "Crypto API"
+            BeginProperty Font 
+               Name            =   "Small Fonts"
+               Size            =   6.75
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H00FF0000&
+            Height          =   420
+            Left            =   3060
+            TabIndex        =   69
+            Top             =   945
+            Width           =   4650
          End
          Begin VB.Label Label19 
             Caption         =   "&Strength"
@@ -1157,6 +1201,17 @@ ErrHandler:
     ' no change
 End Sub
 
+Private Sub cmdCheckAll_Click()
+    chkLockMACaddress.Value = vbChecked
+    chkLockComputer.Value = vbChecked
+    chkLockHD.Value = vbChecked
+    chkLockHDfirmware.Value = vbChecked
+    chkLockWindows.Value = vbChecked
+    chkLockBIOS.Value = vbChecked
+    chkLockMotherboard.Value = vbChecked
+    chkLockIP.Value = vbChecked
+End Sub
+
 Private Sub cmdCodeGen_Click()
     If SSTab1.Tab <> 0 Then Exit Sub ' our tab not active - do nothing
 
@@ -1531,6 +1586,17 @@ Private Sub SaveLiberationKey(ByVal sLibKey As String, ByVal sFileName As String
     Close #hFile
 End Sub
 
+Private Sub cmdUncheckAll_Click()
+    chkLockMACaddress.Value = vbUnchecked
+    chkLockComputer.Value = vbUnchecked
+    chkLockHD.Value = vbUnchecked
+    chkLockHDfirmware.Value = vbUnchecked
+    chkLockWindows.Value = vbUnchecked
+    chkLockBIOS.Value = vbUnchecked
+    chkLockMotherboard.Value = vbUnchecked
+    chkLockIP.Value = vbUnchecked
+End Sub
+
 Private Sub cmdValidate_Click()
 Dim Key As RSAKey
 Dim strdata As String, strSig As String
@@ -1692,6 +1758,9 @@ Public Sub Form_Load()
         cmbRegisteredLevel.ListIndex = 0
     End If
     '</Modified by: kirtaph at 2/16/2006-13.06.25 on machine: KIRTAPHPC>
+    
+    'load form settings
+    LoadFormSetting
     
     'initialize ActiveLock instances
     InitActiveLock

@@ -91,13 +91,14 @@ End Property
 ' Name: Function Retrieve
 ' Input:
 '   ByRef ProductName As String - Product Name
+'   ByRef mLicenseFileType As ALLicenseFileTypes - License File Type
 ' Output:
 '   ProductLicense - ProductLicense object matching the specified product name.
 '   If no license found, then <code>Nothing</code> is returned.
 ' Purpose: Retrieves license info for the specified product name.
 ' Remarks: None
 '===============================================================================
-Public Function Retrieve(ProductName As String) As ProductLicense
+Public Function Retrieve(ProductName As String, mLicenseFileType As ALLicenseFileTypes) As ProductLicense
 
 End Function
 
@@ -105,10 +106,11 @@ End Function
 ' Name: Sub Store
 ' Input:
 '   ByRef Lic As ProductLicense - Product license
+'   ByRef mLicenseFileType As ALLicenseFileTypes - License File Type
 ' Output: None
 ' Purpose: Stores a license.
 ' Remarks: None
 '===============================================================================
-Public Sub Store(Lic As ProductLicense)
+Public Sub Store(Lic As ProductLicense, mLicenseFileType As ALLicenseFileTypes)
 
 End Sub

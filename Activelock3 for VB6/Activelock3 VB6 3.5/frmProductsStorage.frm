@@ -137,7 +137,27 @@ Private Sub cmdBrowseForStorageFile_Click()
   On Error GoTo cmdBrowseForStorageFile_ShowOpen_Error
   CommonDialog1.ShowOpen
   txtStorageFile.Text = CommonDialog1.FileName
-
+  Select Case LCase(Right(txtStorageFile.Text, 3))
+  Case "ini"
+    If optStorageIniFile.Value = False Then
+      MsgBox "INI file option must be selected for an INI file extension.", vbInformation
+      txtStorageFile.Text = ""
+      Exit Sub
+    End If
+  Case "xml"
+    If optStorageXmlFile.Value = False Then
+      MsgBox "XML file option must be selected for an XML file extension.", vbInformation
+      txtStorageFile.Text = ""
+      Exit Sub
+    End If
+  Case "mdb"
+    If optStorageMDBFile.Value = False Then
+      MsgBox "MDB file option must be selected for an MDB file extension.", vbInformation
+      txtStorageFile.Text = ""
+      Exit Sub
+    End If
+  End Select
+  
 cmdBrowseForStorageFile_ShowOpen_Error:
 
   On Error GoTo 0
@@ -152,7 +172,7 @@ Private Sub cmdCancel_Click()
   Unload Me
 End Sub
 
-Private Sub cmdOK_Click()
+Private Sub cmdOk_Click()
   SaveSettings
   frmMain.Form_Load
   Unload Me
@@ -198,3 +218,21 @@ SaveSettings_Error:
 
   MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure SaveSettings of Form frmProductsStorage"
 End Sub
+
+Private Sub optStorageIniFile_Click()
+mProductsStoreType = alsINIFile
+txtStorageFile.Text = Left(txtStorageFile.Text, Len(txtStorageFile.Text) - 3) & "ini"
+End Sub
+
+Private Sub optStorageMDBFile_Click()
+mProductsStoreType = alsMDBFile
+txtStorageFile.Text = Left(txtStorageFile.Text, Len(txtStorageFile.Text) - 3) & "mdb"
+End Sub
+
+
+Private Sub optStorageXmlFile_Click()
+mProductsStoreType = alsXMLFile
+txtStorageFile.Text = Left(txtStorageFile.Text, Len(txtStorageFile.Text) - 3) & "xml"
+End Sub
+
+

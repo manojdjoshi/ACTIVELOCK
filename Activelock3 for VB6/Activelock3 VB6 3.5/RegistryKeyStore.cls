@@ -76,12 +76,13 @@ Implements IKeyStoreProvider
 ' Name: Function IKeyStoreProvider_Retrieve
 ' Input:
 '   ProductCode As String - Product (software) code
+'    mLicenseFileType As ALLicenseFileTypes - License File Type
 ' Output:
 '   Productlicense - Product license object
 ' Purpose:  Not implemented yet
 ' Remarks: None
 '===============================================================================
-Private Function IKeyStoreProvider_Retrieve(ProductCode As String) As ProductLicense
+Private Function IKeyStoreProvider_Retrieve(ProductCode As String, mLicenseFileType As ALLicenseFileTypes) As ProductLicense
 ' TODO: Implement Me
 End Function
 
@@ -100,10 +101,11 @@ End Property
 ' Name: Sub IKeyStoreProvider_Store
 ' Input:
 '    Lic As ProductLicense - Product license object
+'    mLicenseFileType As ALLicenseFileTypes - License File Type
 ' Output: None
 ' Purpose: Not implemented yet
 ' Remarks: None
 '===============================================================================
-Private Sub IKeyStoreProvider_Store(Lic As ProductLicense)
+Private Sub IKeyStoreProvider_Store(Lic As ProductLicense, mLicenseFileType As ALLicenseFileTypes)
 ' TODO: Implement Me
 End Sub
