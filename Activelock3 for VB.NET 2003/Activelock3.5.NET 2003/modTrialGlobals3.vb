@@ -141,7 +141,6 @@ Module modTrial
 
     'Some common variables
     Public sWinPath As String
-    Public CryptAPI As New clsCryptAPI
     Public sLocalKey As String
     Public sMainFile As String
 
@@ -555,7 +554,6 @@ RunsGoodRegistryError:
             runsLeft = 0
         End If
     End Function
-
 
     Public Function DateGoodHiddenFolder(ByRef numDays As Short, ByRef daysLeft As Short) As Boolean
         'Hidden Folder Parameters:
@@ -1603,7 +1601,6 @@ IsFolderStampExpiredError:
     ' Remarks: None
     '===============================================================================
     Public Function IsEncryptedFileExpired() As Boolean
-        Dim clscrp As clsCryptAPI
         Dim strMyString As String
         Dim strSource, strDestination As String
         Dim intFF As Short
@@ -1905,7 +1902,7 @@ IsHiddenFolderExpiredError:
     ' Purpose: This function checks the authenticity and validity of the trial period/runs
     ' Remarks: This is the main call to activate the trial feature
     '===============================================================================
-    Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As String, ByVal TrialType As Integer, ByVal TrialLength As Integer, ByVal TrialHideTypes As IActiveLock.ALTrialHideTypes, ByRef strMsg As String, ByVal SoftwarePassword As String, ByVal mCheckTimeServerForClockTampering As IActiveLock.ALTimeServerTypes) As Boolean
+    Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As String, ByVal TrialType As Integer, ByVal TrialLength As Integer, ByVal TrialHideTypes As IActiveLock.ALTrialHideTypes, ByRef strMsg As String, ByVal SoftwarePassword As String, ByVal mCheckTimeServerForClockTampering As IActiveLock.ALTimeServerTypes, ByVal mChecksystemfilesForClockTampering As IActiveLock.ALSystemFilesTypes, ByVal mTrialWarning As IActiveLock.ALTrialWarningTypes, ByRef mUsedTrialDays As Integer, ByRef mUsedTrialRuns As Integer) As Boolean
         On Error GoTo NotRegistered
         Dim strVal As String
         Dim daysLeft, runsLeft As Short
@@ -2002,6 +1999,7 @@ IsHiddenFolderExpiredError:
                 ' So far so good; trial mode seems to be fine
                 HAD2HAMMER = False
                 strMsg = "You are running this program in its Trial Period Mode." & vbCrLf & CStr(daysLeft) & " days left out of " & CStr(alockDays) & " day trial."
+                mUsedTrialDays = daysLeft
                 ActivateTrial = True
                 System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default
                 GoTo exitGracefully
@@ -2023,6 +2021,7 @@ IsHiddenFolderExpiredError:
                 ' So far so good; trial mode seems to be fine
                 HAD2HAMMER = False
                 strMsg = "You are running this program in its Trial Runs Mode." & vbCrLf & CStr(runsLeft) & " runs left out of " & CStr(alockRuns) & " run trial."
+                mUsedTrialRuns = runsLeft
                 ActivateTrial = True
                 System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default
                 GoTo exitGracefully
@@ -2034,10 +2033,12 @@ keepChecking:
         ExpireTrial(SoftwareName, SoftwareVer, TrialType, TrialLength, TrialHideTypes, SoftwarePassword)
         If Err.Number = -10101 Then
             strMsg = TEXTMSG_DAYS
+            mUsedTrialDays = alockDays
         ElseIf Err.Number = -10102 Then
             strMsg = TEXTMSG_RUNS
+            mUsedTrialRuns = alockRuns
         End If
-        If intEXPIREDWARNING = 0 Then
+        If intEXPIREDWARNING = 0 And mTrialWarning = IActiveLock.ALTrialWarningTypes.trialWarningPersistent Then
             Call SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "1"), enc2(TRIALWARNING), enc2(EXPIREDWARNING), CStr(-1))
             strMsg = "Free Trial for this application has ended."
         End If

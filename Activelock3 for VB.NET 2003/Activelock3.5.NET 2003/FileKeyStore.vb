@@ -111,65 +111,138 @@ Friend Class FileKeyStoreProvider
 	' Purpose: Write license properties to INI file section
 	' Remarks: TODO: Perhaps we need to lock the file first.?
 	'===============================================================================
-	Private Sub IKeyStoreProvider_Store(ByRef Lic As ProductLicense) Implements _IKeyStoreProvider.Store
-		' Write license properties to INI file section
-		' TODO: Perhaps we need to lock the file first.?
-		mINIFile.Section = Lic.ProductName
-		With Lic
-            mINIFile.Values(KEY_PRODVER) = .ProductVer
-            mINIFile.Values(KEY_LICTYPE) = .LicenseType
-            mINIFile.Values(KEY_LICCLASS) = .LicenseClass
-            mINIFile.Values(KEY_LICENSEE) = .Licensee
-            mINIFile.Values(KEY_REGISTERED_LEVEL) = .RegisteredLevel
-            mINIFile.Values(KEY_MAXCOUNT) = CStr(.MaxCount)
-            mINIFile.Values(KEY_LICKEY) = .LicenseKey
-            mINIFile.Values(KEY_REGISTERED_DATE) = .RegisteredDate
-            mINIFile.Values(KEY_LASTRUN_DATE) = .LastUsed
-            mINIFile.Values(KEY_LASTRUN_DATE_HASH) = .Hash1
-            mINIFile.Values(KEY_EXP) = .Expiration
-            mINIFile.Values(KEY_LICCODE) = .LicenseCode ' New in v3.1
-		End With
-		
-	End Sub
+    Private Sub IKeyStoreProvider_Store(ByRef Lic As ProductLicense, ByVal mLicenseFileType As IActiveLock.ALLicenseFileTypes) Implements _IKeyStoreProvider.Store
+        PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
+        ' Write license properties to INI file section
+        mINIFile.Section = Lic.ProductName
+
+        If mLicenseFileType = IActiveLock.ALLicenseFileTypes.alsLicenseFileEncrypted Then
+            With Lic
+                mINIFile.Values(KEY_PRODVER) = EncryptString128Bit(.ProductVer, PSWD)
+                mINIFile.Values(KEY_LICTYPE) = EncryptString128Bit(.LicenseType, PSWD)
+                mINIFile.Values(KEY_LICCLASS) = EncryptString128Bit(.LicenseClass, PSWD)
+                mINIFile.Values(KEY_LICENSEE) = EncryptString128Bit(.Licensee, PSWD)
+                mINIFile.Values(KEY_REGISTERED_LEVEL) = EncryptString128Bit(.RegisteredLevel, PSWD)
+                mINIFile.Values(KEY_MAXCOUNT) = EncryptString128Bit(CStr(.MaxCount), PSWD)
+                mINIFile.Values(KEY_LICKEY) = EncryptString128Bit(.LicenseKey, PSWD)
+                mINIFile.Values(KEY_REGISTERED_DATE) = EncryptString128Bit(.RegisteredDate, PSWD)
+                mINIFile.Values(KEY_LASTRUN_DATE) = EncryptString128Bit(.LastUsed, PSWD)
+                mINIFile.Values(KEY_LASTRUN_DATE_HASH) = EncryptString128Bit(.Hash1, PSWD)
+                mINIFile.Values(KEY_EXP) = EncryptString128Bit(.Expiration, PSWD)
+                mINIFile.Values(KEY_LICCODE) = EncryptString128Bit(.LicenseCode, PSWD)
+            End With
+        Else
+            With Lic
+                mINIFile.Values(KEY_PRODVER) = .ProductVer
+                mINIFile.Values(KEY_LICTYPE) = .LicenseType
+                mINIFile.Values(KEY_LICCLASS) = .LicenseClass
+                mINIFile.Values(KEY_LICENSEE) = .Licensee
+                mINIFile.Values(KEY_REGISTERED_LEVEL) = .RegisteredLevel
+                mINIFile.Values(KEY_MAXCOUNT) = CStr(.MaxCount)
+                mINIFile.Values(KEY_LICKEY) = .LicenseKey
+                mINIFile.Values(KEY_REGISTERED_DATE) = .RegisteredDate
+                mINIFile.Values(KEY_LASTRUN_DATE) = .LastUsed
+                mINIFile.Values(KEY_LASTRUN_DATE_HASH) = .Hash1
+                mINIFile.Values(KEY_EXP) = .Expiration
+                mINIFile.Values(KEY_LICCODE) = .LicenseCode
+            End With
+
+        End If
+
+        ' This was the original idea... to read the file, and encrypt and write again
+        ' But since this is a stream based operation, it conflicts with the
+        ' ADS therefore should NOT be used
+        'If mLicenseFileType = IActiveLock.ALLicenseFileTypes.alsLicenseFileEncrypted Then
+        '    ' Read the LIC file again
+        '    Dim stream_reader2 As New IO.StreamReader(mINIFile.File)
+        '    Dim fileContents2 As String = stream_reader2.ReadToEnd()
+        '    stream_reader2.Close()
+        '    ' Encrypt the file and save it
+        '    Dim encryptedFile2 As String
+        '    encryptedFile2 = EncryptString128Bit(fileContents2, PSWD)
+        '    Dim stream_writer2 As New IO.StreamWriter(mINIFile.File, False)
+        '    stream_writer2.Write(encryptedFile2)
+        '    stream_writer2.Close()
+        'End If
+
+    End Sub
     '===============================================================================
-	' Name: Function IKeyStoreProvider_Retrieve
-	' Input:
-	'   ByRef ProductName As String - Product or application name
-	' Output:
-	'   ProductLicense - Returns the product license object
-	' Purpose: Retrieves the registered license for the specified product.
-	' Remarks: None
-	'===============================================================================
-	Private Function IKeyStoreProvider_Retrieve(ByRef ProductName As String) As ProductLicense Implements _IKeyStoreProvider.Retrieve
+    ' Name: Function IKeyStoreProvider_Retrieve
+    ' Input:
+    '   ByRef ProductName As String - Product or application name
+    ' Output:
+    '   ProductLicense - Returns the product license object
+    ' Purpose: Retrieves the registered license for the specified product.
+    ' Remarks: None
+    '===============================================================================
+    Private Function IKeyStoreProvider_Retrieve(ByRef ProductName As String, ByVal mLicenseFileType As IActiveLock.ALLicenseFileTypes) As ProductLicense Implements _IKeyStoreProvider.Retrieve
+        PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
+
         IKeyStoreProvider_Retrieve = Nothing
-		
-		' Read license properties from INI file section
-		' TODO: Perhaps we need to lock the file first.?
-		mINIFile.Section = ProductName
-		
-		' No license found
+
+        mINIFile.Section = ProductName
+
+        On Error GoTo InvalidValue
+        ' No license found
         If mINIFile.GetValue(KEY_LICKEY) = "" Then Exit Function
 
         Dim Lic As New ProductLicense
-        On Error GoTo InvalidValue
-        With Lic
-            .ProductName = ProductName
-            .ProductVer = mINIFile.GetValue(KEY_PRODVER)
-            .Licensee = mINIFile.GetValue(KEY_LICENSEE)
-            .RegisteredLevel = mINIFile.GetValue(KEY_REGISTERED_LEVEL)
-            .MaxCount = CInt(mINIFile.Values(KEY_MAXCOUNT))
-            .LicenseType = mINIFile.GetValue(KEY_LICTYPE)
-            .LicenseClass = mINIFile.GetValue(KEY_LICCLASS)
-            .LicenseKey = mINIFile.GetValue(KEY_LICKEY)
-            .Expiration = mINIFile.GetValue(KEY_EXP)
-            .RegisteredDate = mINIFile.Values(KEY_REGISTERED_DATE)
-            .LastUsed = mINIFile.Values(KEY_LASTRUN_DATE)
-            .Hash1 = mINIFile.Values(KEY_LASTRUN_DATE_HASH)
-            .LicenseCode = mINIFile.Values(KEY_LICCODE) ' New in v3.1
-        End With
+        If mLicenseFileType = IActiveLock.ALLicenseFileTypes.alsLicenseFileEncrypted And mINIFile.GetValue(KEY_LICCLASS) <> "Single" And mINIFile.GetValue(KEY_LICCLASS) <> "MultiUser" Then
+
+            ' This was the original idea... to read the file, and encrypt and write again
+            ' But since this is a stream based operation, it conflicts with the
+            ' ADS therefore should NOT be used
+            '' Read the LIC file
+            'Dim stream_reader1 As New IO.StreamReader(mINIFile.File)
+            'Dim fileContents1 As String = stream_reader1.ReadToEnd()
+            'stream_reader1.Close()
+            '' Decrypt the LIC file
+            'Dim decryptedFile1 As String
+            'decryptedFile1 = DecryptString128Bit(fileContents1, PSWD)
+            '' Save the LIC file again
+            'Dim stream_writer1 As New IO.StreamWriter(mINIFile.File, False)
+            'stream_writer1.Write(decryptedFile1)
+            'stream_writer1.Close()
+
+            ' Read license properties from INI file section
+            With Lic
+                .ProductName = ProductName
+                .ProductVer = DecryptString128Bit(mINIFile.GetValue(KEY_PRODVER), PSWD)
+                .Licensee = DecryptString128Bit(mINIFile.GetValue(KEY_LICENSEE), PSWD)
+                .RegisteredLevel = DecryptString128Bit(mINIFile.GetValue(KEY_REGISTERED_LEVEL), PSWD)
+                .MaxCount = CType(DecryptString128Bit(mINIFile.Values(KEY_MAXCOUNT), PSWD), Integer)
+                .LicenseType = DecryptString128Bit(mINIFile.GetValue(KEY_LICTYPE), PSWD)
+                .LicenseClass = DecryptString128Bit(mINIFile.GetValue(KEY_LICCLASS), PSWD)
+                .LicenseKey = DecryptString128Bit(mINIFile.GetValue(KEY_LICKEY), PSWD)
+                .Expiration = DecryptString128Bit(mINIFile.GetValue(KEY_EXP), PSWD)
+                .RegisteredDate = DecryptString128Bit(mINIFile.Values(KEY_REGISTERED_DATE), PSWD)
+                .LastUsed = DecryptString128Bit(mINIFile.Values(KEY_LASTRUN_DATE), PSWD)
+                .Hash1 = DecryptString128Bit(mINIFile.Values(KEY_LASTRUN_DATE_HASH), PSWD)
+                .LicenseCode = DecryptString128Bit(mINIFile.Values(KEY_LICCODE), PSWD)
+            End With
+        Else ' INI file (LIC) is in PLAIN format
+
+            ' Read license properties from INI file section
+            With Lic
+                .ProductName = ProductName
+                .ProductVer = mINIFile.GetValue(KEY_PRODVER)
+                .Licensee = mINIFile.GetValue(KEY_LICENSEE)
+                .RegisteredLevel = mINIFile.GetValue(KEY_REGISTERED_LEVEL)
+                .MaxCount = CInt(mINIFile.Values(KEY_MAXCOUNT))
+                .LicenseType = mINIFile.GetValue(KEY_LICTYPE)
+                .LicenseClass = mINIFile.GetValue(KEY_LICCLASS)
+                .LicenseKey = mINIFile.GetValue(KEY_LICKEY)
+                .Expiration = mINIFile.GetValue(KEY_EXP)
+                .RegisteredDate = mINIFile.Values(KEY_REGISTERED_DATE)
+                .LastUsed = mINIFile.Values(KEY_LASTRUN_DATE)
+                .Hash1 = mINIFile.Values(KEY_LASTRUN_DATE_HASH)
+                .LicenseCode = mINIFile.Values(KEY_LICCODE) ' New in v3.1
+            End With
+        End If
         IKeyStoreProvider_Retrieve = Lic
+
         Exit Function
 InvalidValue:
         Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREINVALID)
-	End Function
+    End Function
 End Class

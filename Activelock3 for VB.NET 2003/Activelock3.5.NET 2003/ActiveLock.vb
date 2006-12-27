@@ -68,6 +68,8 @@ Friend Class ActiveLock
     Private mUsedLockTypes() As IActiveLock.ALLockTypes
     Private mTrialType As Integer
     Private mTrialLength As Integer
+    Private mUsedTrialDays As Integer
+    Private mUsedTrialRuns As Integer
     Private mTrialHideTypes As IActiveLock.ALTrialHideTypes
     Private mKeyStore As _IKeyStoreProvider
     Private mKeyStorePath As String
@@ -75,6 +77,10 @@ Friend Class ActiveLock
     Private MyGlobals As New Globals_Renamed
     Private mLibKeyPath As String
     Private mCheckTimeServerForClockTampering As IActiveLock.ALTimeServerTypes
+    Private mChecksystemfilesForClockTampering As IActiveLock.ALSystemFilesTypes
+    Private mLicenseFileType As IActiveLock.ALLicenseFileTypes
+    Private mAutoRegister As IActiveLock.ALAutoRegisterTypes
+    Private mTrialWarning As IActiveLock.ALTrialWarningTypes
 
     ' Registry hive used to store Activelock settings.
     Private Const AL_REGISTRY_HIVE As String = "Software\ActiveLock\ActiveLock3"
@@ -111,7 +117,7 @@ Friend Class ActiveLock
     Private ReadOnly Property IActiveLock_RegisteredLevel() As String Implements _IActiveLock.RegisteredLevel
         Get
             Dim Lic As ProductLicense
-            Lic = mKeyStore.Retrieve(mSoftwareName)
+            Lic = mKeyStore.Retrieve(mSoftwareName, mLicenseFileType)
             If Lic Is Nothing Then
                 Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE)
             End If
@@ -131,13 +137,39 @@ Friend Class ActiveLock
     Private ReadOnly Property IActiveLock_LicenseClass() As String Implements _IActiveLock.LicenseClass
         Get
             Dim Lic As ProductLicense
-            Lic = mKeyStore.Retrieve(mSoftwareName)
+            Lic = mKeyStore.Retrieve(mSoftwareName, mLicenseFileType)
             If Lic Is Nothing Then
                 Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE)
             End If
             ' Validate the License.
             ValidateLic(Lic)
             Return Lic.LicenseClass
+        End Get
+    End Property
+    '===============================================================================
+    ' Name: Property Get IActiveLock_UsedTrialDays
+    ' Input: None
+    ' Output:
+    '   Integer - License Used Trial Days
+    ' Purpose: Gets the Number of Used Trial Days
+    ' Remarks: None
+    '===============================================================================
+    Private ReadOnly Property IActiveLock_UsedTrialDays() As Integer Implements _IActiveLock.UsedTrialDays
+        Get
+            Return mUsedTrialDays
+        End Get
+    End Property
+    '===============================================================================
+    ' Name: Property Get IActiveLock_UsedTrialRuns
+    ' Input: None
+    ' Output:
+    '   Integer - License Used Trial Runs
+    ' Purpose: Gets the Number of Used Trial Runs
+    ' Remarks: None
+    '===============================================================================
+    Private ReadOnly Property IActiveLock_UsedTrialRuns() As Integer Implements _IActiveLock.UsedTrialRuns
+        Get
+            Return mUsedTrialRuns
         End Get
     End Property
     '===============================================================================
@@ -151,7 +183,7 @@ Friend Class ActiveLock
     Private ReadOnly Property IActiveLock_MaxCount() As Integer Implements _IActiveLock.MaxCount
         Get
             Dim Lic As ProductLicense
-            Lic = mKeyStore.Retrieve(mSoftwareName)
+            Lic = mKeyStore.Retrieve(mSoftwareName, mLicenseFileType)
             If Lic Is Nothing Then
                 Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE)
             End If
@@ -212,7 +244,7 @@ Friend Class ActiveLock
     Private ReadOnly Property IActiveLock_RegisteredDate() As String Implements _IActiveLock.RegisteredDate
         Get
             Dim Lic As ProductLicense
-            Lic = mKeyStore.Retrieve(mSoftwareName)
+            Lic = mKeyStore.Retrieve(mSoftwareName, mLicenseFileType)
             If Lic Is Nothing Then
                 Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE)
             End If
@@ -232,7 +264,7 @@ Friend Class ActiveLock
     Private ReadOnly Property IActiveLock_RegisteredUser() As String Implements _IActiveLock.RegisteredUser
         Get
             Dim Lic As ProductLicense
-            Lic = mKeyStore.Retrieve(mSoftwareName)
+            Lic = mKeyStore.Retrieve(mSoftwareName, mLicenseFileType)
             If Lic Is Nothing Then
                 Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE)
             End If
@@ -252,7 +284,7 @@ Friend Class ActiveLock
     Private ReadOnly Property IActiveLock_ExpirationDate() As String Implements _IActiveLock.ExpirationDate
         Get
             Dim Lic As ProductLicense
-            Lic = mKeyStore.Retrieve(mSoftwareName)
+            Lic = mKeyStore.Retrieve(mSoftwareName, mLicenseFileType)
             If Lic Is Nothing Then
                 Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE)
             End If
@@ -436,6 +468,55 @@ Friend Class ActiveLock
         End Set
     End Property
     '===============================================================================
+    ' Name: Property Let IActiveLock_CheckSystemFilesForClockTampering
+    ' Input:
+    '   ByVal iServer As Integer - Flag being passed to check the time server
+    ' Output: None
+    ' Purpose: Specifies whether a Time Server should be used to check Clock Tampering
+    ' Remarks: None
+    '===============================================================================
+    Private WriteOnly Property IActiveLock_CheckSystemFilesForClockTampering() As IActiveLock.ALSystemFilesTypes Implements _IActiveLock.CheckSystemFilesForClockTampering
+        Set(ByVal Value As IActiveLock.ALSystemFilesTypes)
+            mChecksystemfilesForClockTampering = Value
+        End Set
+    End Property
+    ' Name: Property Let IActiveLock_LicenseFileType
+    ' Input:
+    '   ByVal Value As IActiveLock.ALLicenseFileTypes - Flag to indicate the license file will be encrypted or not
+    ' Output: None
+    ' Purpose: Specifies whether the License File should be encrypted or not
+    ' Remarks: None
+    '===============================================================================
+    Private WriteOnly Property IActiveLock_LicenseFileType() As IActiveLock.ALLicenseFileTypes Implements _IActiveLock.LicenseFileType
+        Set(ByVal Value As IActiveLock.ALLicenseFileTypes)
+            mLicenseFileType = Value
+        End Set
+    End Property
+    ' Name: Property Let IActiveLock_AutoRegister
+    ' Input:
+    '   ByVal Value As IActiveLock.ALLicenseFileTypes - Flag to indicate the license file will be encrypted or not
+    ' Output: None
+    ' Purpose: Specifies whether the License File should be encrypted or not
+    ' Remarks: None
+    '===============================================================================
+    Private WriteOnly Property IActiveLock_AutoRegister() As IActiveLock.ALAutoRegisterTypes Implements _IActiveLock.AutoRegister
+        Set(ByVal Value As IActiveLock.ALAutoRegisterTypes)
+            mAutoRegister = Value
+        End Set
+    End Property
+    ' Name: Property Let IActiveLock_TrialWarning
+    ' Input:
+    '   ByVal Value As IActiveLock.ALTrialWarningTypes - Flag to indicate the license file will be encrypted or not
+    ' Output: None
+    ' Purpose: Specifies whether the License File should be encrypted or not
+    ' Remarks: None
+    '===============================================================================
+    Private WriteOnly Property IActiveLock_TrialWarning() As IActiveLock.ALTrialWarningTypes Implements _IActiveLock.TrialWarning
+        Set(ByVal Value As IActiveLock.ALTrialWarningTypes)
+            mTrialWarning = Value
+        End Set
+    End Property
+    '===============================================================================
     ' Name: Property Get IActiveLock_TrialType
     ' Input: None
     ' Output:
@@ -571,7 +652,7 @@ Friend Class ActiveLock
     Private ReadOnly Property IActiveLock_UsedDays() As Integer Implements _IActiveLock.UsedDays
         Get
             Dim Lic As ProductLicense
-            Lic = mKeyStore.Retrieve(mSoftwareName)
+            Lic = mKeyStore.Retrieve(mSoftwareName, mLicenseFileType)
 
             If Lic Is Nothing Then Exit Property
 
@@ -637,7 +718,7 @@ Friend Class ActiveLock
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrFileTampered, ACTIVELOCKSTRING, STRFILETAMPERED)
         End If
         ' Perform automatic license registration
-        If AutoRegisterKeyPath <> "" Then
+        If AutoRegisterKeyPath <> "" And mAutoRegister = IActiveLock.ALAutoRegisterTypes.alsEnableAutoRegistration Then
             DoAutoRegistration(autoLicString)
             If Err.Number <> 0 Then autoLicString = ""
         End If
@@ -712,7 +793,7 @@ finally_Renamed:
         End If
 
         Dim Lic As ProductLicense
-        Lic = mKeyStore.Retrieve(mSoftwareName)
+        Lic = mKeyStore.Retrieve(mSoftwareName, mLicenseFileType)
 
         Dim trialStatus As Boolean
 
@@ -731,7 +812,7 @@ finally_Renamed:
             ' Using this trick to temporarily set the date format to mm/dd/yyyy
             Get_locale() ' Get the current date format and save it to regionalSymbol variable
             Set_locale((""))
-            trialStatus = ActivateTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, strMsg, mSoftwarePassword, mCheckTimeServerForClockTampering)
+            trialStatus = ActivateTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, strMsg, mSoftwarePassword, mCheckTimeServerForClockTampering, mChecksystemfilesForClockTampering, mTrialWarning, mUsedTrialDays, mUsedTrialRuns)
             ' Set the locale date format to what we had before; can't leave changed
             Set_locale((regionalSymbol))
             If trialStatus = True Then
@@ -744,24 +825,27 @@ noRegistration:
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE)
 
         Else  'Lic exists therefore we'll check the LIC file ADS
-            'If ClockTampering() Then
-            '    Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
-            'End If
             If mCheckTimeServerForClockTampering = IActiveLock.ALTimeServerTypes.alsCheckTimeServer Then
                 If SystemClockTampered() Then
                     Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                 End If
             End If
-            If CheckStreamCapability() Then
+            If mChecksystemfilesForClockTampering = IActiveLock.ALSystemFilesTypes.alsCheckSystemFiles Then
+                If ClockTampering() Then
+                    Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
+                End If
+            End If
+            If CheckStreamCapability() And Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
                 Dim fi As New FileInfo(mKeyStorePath)
                 If fi.Length = 0 Then GoTo continueRegistration
                 adsText = ADSFile.Read(mKeyStorePath, strStream)
+                If adsText = "" Then
+                    Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrLicenseTampered, ACTIVELOCKSTRING, STRLICENSETAMPERED)
+                End If
                 Dim dt1 As DateTime = Convert.ToDateTime(adsText)
                 Dim dt2 As DateTime = Now.UtcNow
                 Dim span As TimeSpan = dt2.Subtract(dt1)
-                If adsText = "" Then
-                    Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrLicenseTampered, ACTIVELOCKSTRING, STRLICENSETAMPERED)
-                ElseIf span.TotalHours < 0 Then
+                If span.TotalHours < 0 Then
                     Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                 End If
                 Dim ok As Integer
@@ -799,6 +883,7 @@ continueRegistration:
         If lsFileSystemNameBuffer.ToString = "NTFS" Then
             CheckStreamCapability = True
         End If
+
 
     End Function
     '===============================================================================
@@ -854,7 +939,6 @@ continueRegistration:
                 Dim rsaCSP As New System.Security.Cryptography.RSACryptoServiceProvider
                 Dim rsaPubParams As RSAParameters 'stores public key
                 Dim strPublicBlob As String
-                Dim userData As Byte() = Encoding.UTF8.GetBytes(strLic)
                 If strLeft(strPubKey, 6) = "RSA512" Then
                     strPublicBlob = strRight(strPubKey, Len(strPubKey) - 6)
                 Else
@@ -864,6 +948,9 @@ continueRegistration:
                 rsaPubParams = rsaCSP.ExportParameters(False)
                 ' import public key params into instance of RSACryptoServiceProvider
                 rsaCSP.ImportParameters(rsaPubParams)
+
+                Dim userData As Byte() = Encoding.UTF8.GetBytes(strLic)
+
                 Dim newsignature() As Byte
                 newsignature = Convert.FromBase64String(strLicKey)
                 Dim asd As AsymmetricSignatureDeformatter = New RSAPKCS1SignatureDeformatter(rsaCSP)
@@ -898,7 +985,7 @@ continueRegistration:
             ' might bypass the protection mechanism
             ' Update last used date
             UpdateLastUsed(Lic)
-            mKeyStore.Store(Lic)
+            mKeyStore.Store(Lic, mLicenseFileType)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrLicenseExpired, ACTIVELOCKSTRING, STRLICENSEEXPIRED)
         End If
     End Sub
@@ -988,7 +1075,7 @@ continueRegistration:
             ' might bypass the protection mechanism
             ' Update last used date
             UpdateLastUsed(Lic)
-            mKeyStore.Store(Lic)
+            mKeyStore.Store(Lic, mLicenseFileType)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrLicenseExpired, ACTIVELOCKSTRING, STRLICENSEEXPIRED)
         End If
     End Sub
@@ -1034,7 +1121,7 @@ continueRegistration:
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
         End If
         UpdateLastUsed(Lic)
-        mKeyStore.Store(Lic)
+        mKeyStore.Store(Lic, mLicenseFileType)
     End Sub
     '===============================================================================
     ' Name: Sub UpdateLastUsed
@@ -1071,7 +1158,7 @@ continueRegistration:
         If Mid(LibKey, 5, 1) = "-" And Mid(LibKey, 10, 1) = "-" And Mid(LibKey, 15, 1) = "-" And Mid(LibKey, 20, 1) = "-" Then
             Lic.LicenseKey = UCase(LibKey)
             ValidateShortKey(Lic, user)
-        Else 'ALCrypto RSA key
+        Else ' RSA key
             Lic.Load(LibKey)
             ' Validate that the license key.
             '   - registered user
@@ -1086,9 +1173,11 @@ continueRegistration:
                     Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                 End If
             End If
-            'If ClockTampering() Then
-            '    Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
-            'End If
+            If mChecksystemfilesForClockTampering = IActiveLock.ALSystemFilesTypes.alsCheckSystemFiles Then
+                If ClockTampering() Then
+                    Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
+                End If
+            End If
         End If
 
         ' License was validated successfuly.  Store it.
@@ -1098,10 +1187,10 @@ continueRegistration:
 
         ' Update last used date
         UpdateLastUsed(Lic)
-        mKeyStore.Store(Lic)
+        mKeyStore.Store(Lic, mLicenseFileType)
 
         ' This works under NTFS and is needed to prevent clock tampering
-        If CheckStreamCapability() Then
+        If CheckStreamCapability() And Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
             ' Write the current date and time into the ads
             Dim ok As Integer
             Dim strStream As String = String.Empty

@@ -289,6 +289,7 @@ RetrieveProductsError:
                 rsaCSP.ImportParameters(rsaPrivateParams)
 
                 Dim userData As Byte() = Encoding.UTF8.GetBytes(strLic)
+
                 Dim asf As AsymmetricSignatureFormatter = New RSAPKCS1SignatureFormatter(rsaCSP)
                 Dim algorithm As HashAlgorithm = New SHA1Managed
                 asf.SetHashAlgorithm(algorithm.ToString)

@@ -1,6 +1,8 @@
 Option Strict Off
 Option Explicit On
 Public Interface _IActiveLock
+    ReadOnly Property UsedTrialDays() As Integer
+    ReadOnly Property UsedTrialRuns() As Integer
     ReadOnly Property MaxCount() As Integer
     ReadOnly Property RegisteredLevel() As String
     ReadOnly Property LicenseClass() As String
@@ -13,6 +15,10 @@ Public Interface _IActiveLock
     Property SoftwareName() As String
     Property SoftwarePassword() As String
     WriteOnly Property CheckTimeServerForClockTampering() As IActiveLock.ALTimeServerTypes
+    WriteOnly Property CheckSystemFilesForClockTampering() As IActiveLock.ALSystemFilesTypes
+    WriteOnly Property LicenseFileType() As IActiveLock.ALLicenseFileTypes
+    WriteOnly Property AutoRegister() As IActiveLock.ALAutoRegisterTypes
+    WriteOnly Property TrialWarning() As IActiveLock.ALTrialWarningTypes
     WriteOnly Property SoftwareCode() As String
     Property SoftwareVersion() As String
     WriteOnly Property KeyStoreType() As IActiveLock.LicStoreType
@@ -336,7 +342,7 @@ End Interface
     End Enum
     '###############################################################
 
-    ' Enum for accessing the Time Servers
+    ' Enum for accessing the Time Server to check Clock Tampering
     '
     ' @param alsDontCheckTimeServer  ' Skips checking a Time Server
     ' @param alsCheckTimeServer      ' Checks a Time Server
@@ -344,6 +350,73 @@ End Interface
         alsDontCheckTimeServer = 0
         alsCheckTimeServer = 1
     End Enum
+    '###############################################################
+
+    ' Enum for scanning the system folders/files to detect clock tampering
+    '
+    ' @param alsDontCheckSystemFiles  ' Skips checking system files
+    ' @param alsCheckSystemFiles      ' Checks system files
+    Public Enum ALSystemFilesTypes
+        alsDontCheckSystemFiles = 0
+        alsCheckSystemFiles = 1
+    End Enum
+
+    '###############################################################
+
+    ' Enum for license file encryption
+    '
+    ' @param alsLicenseFileEncrypt    ' Encrypts the license file
+    ' @param alsLicenseFilePlain      ' Leaves the license file readable
+    Public Enum ALLicenseFileTypes
+        alsLicenseFilePlain = 0
+        alsLicenseFileEncrypted = 1
+    End Enum
+    '###############################################################
+
+    ' Enum for Auto Registeration via ALL files
+    '
+    ' @param alsEnableAutoRegistration      ' Enables auto license registration
+    ' @param alsDisableAutoRegistration     ' Disables auto license registration
+    Public Enum ALAutoRegisterTypes
+        alsEnableAutoRegistration = 0
+        alsDisableAutoRegistration = 1
+    End Enum
+    '###############################################################
+
+    ' Trial Warning can be persistent or temporary
+    '
+    ' @param trialWarningTemporary       ' Trial Warning is Temporary (1-time only)
+    ' @param trialWarningPersistent      ' Trial Warning is Persistent
+    Public Enum ALTrialWarningTypes
+        trialWarningTemporary = 0
+        trialWarningPersistent = 1
+    End Enum
+    '===============================================================================
+    ' Name: Property Get UsedTrialDays
+    ' Input: None
+    ' Output:
+    '   Integer - Number of Used Trial Days
+    ' Purpose: Returns the Number of Used Trial Days.
+    ' Remarks: None
+    '===============================================================================
+    Public ReadOnly Property UsedTrialDays() As Integer Implements _IActiveLock.UsedTrialDays
+        Get
+            UsedTrialDays = 0
+        End Get
+    End Property
+    '===============================================================================
+    ' Name: Property Get UsedTrialRuns
+    ' Input: None
+    ' Output:
+    '   Integer - Number of Used Trial Runs
+    ' Purpose: Returns the Number of Used Trial Runs.
+    ' Remarks: None
+    '===============================================================================
+    Public ReadOnly Property UsedTrialRuns() As Integer Implements _IActiveLock.UsedTrialRuns
+        Get
+            UsedTrialRuns = 0
+        End Get
+    End Property
 
     '===============================================================================
     ' Name: Property Get RegisteredLevel
@@ -513,7 +586,7 @@ End Interface
     '===============================================================================
     ' Name: Property Let CheckTimeServerForClockTampering
     ' Input:
-    '   Integer - Flag to use a Time Server or not
+    '   ByVal Value As ALTimeServerTypes - Flag to use a Time Server or not
     ' Output:
     '   None
     ' Purpose: Specifies whether a Time Server should be used to check Clock Tampering
@@ -524,7 +597,61 @@ End Interface
 
         End Set
     End Property
+    '===============================================================================
+    ' Name: Property Let CheckSystemFilesForClockTampering
+    ' Input:
+    '   ByVal Value As ALSystemFilesTypes - Flag to check system files or not
+    ' Output:
+    '   None
+    ' Purpose: Specifies whether the system files should be checked for Clock Tampering
+    ' Remarks: None
+    '===============================================================================
+    Public WriteOnly Property CheckSystemFilesForClockTampering() As ALSystemFilesTypes Implements _IActiveLock.CheckSystemFilesForClockTampering
+        Set(ByVal Value As ALSystemFilesTypes)
 
+        End Set
+    End Property
+    '===============================================================================
+    ' Name: Property Let LicenseFileType
+    ' Input:
+    '   ByVal Value As ALLicenseFileTypes - Encrypt License File or Leave it Plain
+    ' Output:
+    '   None
+    ' Purpose: Specifies whether the system files should be checked for Clock Tampering
+    ' Remarks: None
+    '===============================================================================
+    Public WriteOnly Property LicenseFileType() As ALLicenseFileTypes Implements _IActiveLock.LicenseFileType
+        Set(ByVal Value As ALLicenseFileTypes)
+
+        End Set
+    End Property
+    '===============================================================================
+    ' Name: Property Let AutoRegister
+    ' Input:
+    '   ByVal Value As ALAutoRegisterTypes - Flag to auto register a license or not
+    ' Output:
+    '   None
+    ' Purpose: Specifies whether the auto register mechanism via an ALL file should be enabled or disabled
+    ' Remarks: None
+    '===============================================================================
+    Public WriteOnly Property AutoRegister() As ALAutoRegisterTypes Implements _IActiveLock.AutoRegister
+        Set(ByVal Value As ALAutoRegisterTypes)
+
+        End Set
+    End Property
+    '===============================================================================
+    ' Name: Property Let TrialWarning
+    ' Input:
+    '   ByVal Value As ALTrialWarningTypes - Trial Warning is either Persistent or Temporary
+    ' Output: None
+    ' Purpose: Specifies whether the Trial Warning is either Persistent or Temporary
+    ' Remarks: None
+    '===============================================================================
+    Public WriteOnly Property TrialWarning() As ALTrialWarningTypes Implements _IActiveLock.TrialWarning
+        Set(ByVal Value As ALTrialWarningTypes)
+
+        End Set
+    End Property
     '===============================================================================
     ' Name: Property Let SoftwareCode
     ' Input:
@@ -769,5 +896,4 @@ End Interface
         Dim ActiveLock3 As Object
 
     End Function
-
 End Class

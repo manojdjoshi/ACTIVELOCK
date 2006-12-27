@@ -146,12 +146,17 @@
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "clsTrialCryptAPI.vb"
+                    RelPath = "CRC32.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
-                    RelPath = "CRC32.vb"
+                    RelPath = "Crypto2005.vb"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
+                    RelPath = "EncryptionRoutines.vb"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />

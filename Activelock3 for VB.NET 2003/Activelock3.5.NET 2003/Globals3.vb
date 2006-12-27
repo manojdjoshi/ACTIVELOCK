@@ -2,6 +2,7 @@ Option Strict Off
 Option Explicit On 
 Imports System.Security.Cryptography
 Imports System.Text
+Imports System.io
 
 'Class instancing was changed to public
 <System.Runtime.InteropServices.ProgId("Globals_Renamed_NET.Globals_Renamed")> Public Class Globals_Renamed
@@ -275,4 +276,5 @@ Imports System.Text
     Public Function Base64Decode(ByVal strEncoded As String) As String
         Base64Decode = modBase64.Base64_Decode(strEncoded)
     End Function
+
 End Class

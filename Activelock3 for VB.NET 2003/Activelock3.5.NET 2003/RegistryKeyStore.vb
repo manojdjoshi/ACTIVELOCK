@@ -70,32 +70,32 @@ Friend Class RegistryKeyStoreProvider
 	' Purpose:  Not implemented yet
 	' Remarks: None
 	'===============================================================================
-	Private Function IKeyStoreProvider_Retrieve(ByRef ProductCode As String) As ProductLicense Implements _IKeyStoreProvider.Retrieve
-		' TODO: Implement Me
-	End Function
-	
-	'===============================================================================
-	' Name: Property Let IKeyStoreProvider_KeyStorePath
-	' Input:
-	'   RHS As String - Key store file path
-	' Output: None
-	' Purpose:  Not implemented yet
-	' Remarks: None
-	'===============================================================================
-	Private WriteOnly Property IKeyStoreProvider_KeyStorePath() As String Implements _IKeyStoreProvider.KeyStorePath
-		Set(ByVal Value As String)
-			' TODO: Implement Me
-		End Set
-	End Property
-	'===============================================================================
-	' Name: Sub IKeyStoreProvider_Store
-	' Input:
-	'    Lic As ProductLicense - Product license object
-	' Output: None
-	' Purpose: Not implemented yet
-	' Remarks: None
-	'===============================================================================
-	Private Sub IKeyStoreProvider_Store(ByRef Lic As ProductLicense) Implements _IKeyStoreProvider.Store
-		' TODO: Implement Me
-	End Sub
+    Private Function IKeyStoreProvider_Retrieve(ByRef ProductCode As String, ByVal mLicenseFileType As IActiveLock.ALLicenseFileTypes) As ProductLicense Implements _IKeyStoreProvider.Retrieve
+        ' TODO: Implement Me
+    End Function
+
+    '===============================================================================
+    ' Name: Property Let IKeyStoreProvider_KeyStorePath
+    ' Input:
+    '   RHS As String - Key store file path
+    ' Output: None
+    ' Purpose:  Not implemented yet
+    ' Remarks: None
+    '===============================================================================
+    Private WriteOnly Property IKeyStoreProvider_KeyStorePath() As String Implements _IKeyStoreProvider.KeyStorePath
+        Set(ByVal Value As String)
+            ' TODO: Implement Me
+        End Set
+    End Property
+    '===============================================================================
+    ' Name: Sub IKeyStoreProvider_Store
+    ' Input:
+    '    Lic As ProductLicense - Product license object
+    ' Output: None
+    ' Purpose: Not implemented yet
+    ' Remarks: None
+    '===============================================================================
+    Private Sub IKeyStoreProvider_Store(ByRef Lic As ProductLicense, ByVal mLicenseFileType As IActiveLock.ALLicenseFileTypes) Implements _IKeyStoreProvider.Store
+        ' TODO: Implement Me
+    End Sub
 End Class

@@ -2,8 +2,8 @@ Option Strict Off
 Option Explicit On
 Interface _IKeyStoreProvider
 	WriteOnly Property KeyStorePath As String
-	Function Retrieve(ByRef ProductName As String) As ProductLicense
-	Sub Store(ByRef Lic As ProductLicense)
+    Function Retrieve(ByRef ProductName As String, ByVal mLicenseFileType As IActiveLock.ALLicenseFileTypes) As ProductLicense
+    Sub Store(ByRef Lic As ProductLicense, ByVal mLicenseFileType As IActiveLock.ALLicenseFileTypes)
 End Interface
 Friend Class IKeyStoreProvider
 	Implements _IKeyStoreProvider
@@ -74,7 +74,7 @@ Friend Class IKeyStoreProvider
 	' Purpose: Retrieves license info for the specified product name.
 	' Remarks: None
 	'===============================================================================
-	Public Function Retrieve(ByRef ProductName As String) As ProductLicense Implements _IKeyStoreProvider.Retrieve
+    Public Function Retrieve(ByRef ProductName As String, ByVal mLicenseFileType As IActiveLock.ALLicenseFileTypes) As ProductLicense Implements _IKeyStoreProvider.Retrieve
         Retrieve = Nothing
     End Function
 
@@ -86,7 +86,7 @@ Friend Class IKeyStoreProvider
     ' Purpose: Stores a license.
     ' Remarks: None
     '===============================================================================
-    Public Sub Store(ByRef Lic As ProductLicense) Implements _IKeyStoreProvider.Store
+    Public Sub Store(ByRef Lic As ProductLicense, ByVal mLicenseFileType As IActiveLock.ALLicenseFileTypes) Implements _IKeyStoreProvider.Store
 
     End Sub
 End Class
