@@ -199,6 +199,9 @@ Friend Class frmMain
     Friend WithEvents optStrength5 As System.Windows.Forms.RadioButton
     Friend WithEvents optStrength3 As System.Windows.Forms.RadioButton
     Friend WithEvents cmdValidate2 As System.Windows.Forms.Button
+    Friend WithEvents GroupBox1 As System.Windows.Forms.GroupBox
+    Friend WithEvents cmdCheckAll As System.Windows.Forms.Button
+    Friend WithEvents cmdUncheckAll As System.Windows.Forms.Button
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
         Dim resources As System.Resources.ResourceManager = New System.Resources.ResourceManager(GetType(frmMain))
@@ -255,8 +258,11 @@ Friend Class frmMain
         Me.lblVCode = New System.Windows.Forms.Label
         Me.Label2 = New System.Windows.Forms.Label
         Me.Label3 = New System.Windows.Forms.Label
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox
         Me._SSTab1_TabPage1 = New System.Windows.Forms.TabPage
         Me.frmKeyGen = New System.Windows.Forms.Panel
+        Me.cmdUncheckAll = New System.Windows.Forms.Button
+        Me.cmdCheckAll = New System.Windows.Forms.Button
         Me.lblConcurrentUsers = New System.Windows.Forms.Label
         Me.chkNetworkedLicense = New System.Windows.Forms.CheckBox
         Me.Label18 = New System.Windows.Forms.Label
@@ -397,7 +403,7 @@ Friend Class frmMain
         Me.lstvwProducts.Location = New System.Drawing.Point(3, 16)
         Me.lstvwProducts.MultiSelect = False
         Me.lstvwProducts.Name = "lstvwProducts"
-        Me.lstvwProducts.Size = New System.Drawing.Size(558, 241)
+        Me.lstvwProducts.Size = New System.Drawing.Size(558, 237)
         Me.lstvwProducts.Sorting = System.Windows.Forms.SortOrder.Ascending
         Me.lstvwProducts.TabIndex = 10
         Me.ToolTip1.SetToolTip(Me.lstvwProducts, "Products list")
@@ -477,7 +483,7 @@ Friend Class frmMain
         Me.cmdCodeGen.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdCodeGen.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdCodeGen.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdCodeGen.Location = New System.Drawing.Point(192, 42)
+        Me.cmdCodeGen.Location = New System.Drawing.Point(190, 36)
         Me.cmdCodeGen.Name = "cmdCodeGen"
         Me.cmdCodeGen.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdCodeGen.Size = New System.Drawing.Size(78, 23)
@@ -496,7 +502,7 @@ Friend Class frmMain
         Me.txtName.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtName.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtName.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtName.Location = New System.Drawing.Point(88, 20)
+        Me.txtName.Location = New System.Drawing.Point(86, 14)
         Me.txtName.MaxLength = 0
         Me.txtName.Name = "txtName"
         Me.txtName.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -515,7 +521,7 @@ Friend Class frmMain
         Me.txtVer.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtVer.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtVer.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtVer.Location = New System.Drawing.Point(88, 44)
+        Me.txtVer.Location = New System.Drawing.Point(86, 38)
         Me.txtVer.MaxLength = 0
         Me.txtVer.Name = "txtVer"
         Me.txtVer.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -534,7 +540,7 @@ Friend Class frmMain
         Me.cmdAdd.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdAdd.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdAdd.Location = New System.Drawing.Point(7, 223)
+        Me.cmdAdd.Location = New System.Drawing.Point(7, 228)
         Me.cmdAdd.Name = "cmdAdd"
         Me.cmdAdd.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdAdd.Size = New System.Drawing.Size(128, 23)
@@ -552,7 +558,7 @@ Friend Class frmMain
         Me.cmdValidate.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdValidate.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdValidate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdValidate.Location = New System.Drawing.Point(272, 42)
+        Me.cmdValidate.Location = New System.Drawing.Point(270, 36)
         Me.cmdValidate.Name = "cmdValidate"
         Me.cmdValidate.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdValidate.Size = New System.Drawing.Size(78, 23)
@@ -570,7 +576,7 @@ Friend Class frmMain
         Me.cmdRemove.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdRemove.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdRemove.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdRemove.Location = New System.Drawing.Point(139, 223)
+        Me.cmdRemove.Location = New System.Drawing.Point(139, 228)
         Me.cmdRemove.Name = "cmdRemove"
         Me.cmdRemove.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdRemove.Size = New System.Drawing.Size(154, 23)
@@ -734,7 +740,7 @@ Friend Class frmMain
         Me.cboRegisteredLevel.Location = New System.Drawing.Point(418, 4)
         Me.cboRegisteredLevel.Name = "cboRegisteredLevel"
         Me.cboRegisteredLevel.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cboRegisteredLevel.Size = New System.Drawing.Size(124, 20)
+        Me.cboRegisteredLevel.Size = New System.Drawing.Size(124, 22)
         Me.cboRegisteredLevel.TabIndex = 3
         Me.ToolTip1.SetToolTip(Me.cboRegisteredLevel, "Select desired registration level")
         '
@@ -810,7 +816,7 @@ Friend Class frmMain
         Me.cmdProductsStorage.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdProductsStorage.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdProductsStorage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdProductsStorage.Location = New System.Drawing.Point(420, 222)
+        Me.cmdProductsStorage.Location = New System.Drawing.Point(420, 228)
         Me.cmdProductsStorage.Name = "cmdProductsStorage"
         Me.cmdProductsStorage.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdProductsStorage.Size = New System.Drawing.Size(140, 23)
@@ -848,7 +854,7 @@ Friend Class frmMain
         Me.cmdValidate2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdValidate2.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdValidate2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdValidate2.Location = New System.Drawing.Point(352, 42)
+        Me.cmdValidate2.Location = New System.Drawing.Point(350, 36)
         Me.cmdValidate2.Name = "cmdValidate2"
         Me.cmdValidate2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdValidate2.Size = New System.Drawing.Size(78, 23)
@@ -889,9 +895,9 @@ Friend Class frmMain
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.grpProductsList.Controls.Add(Me.lstvwProducts)
-        Me.grpProductsList.Location = New System.Drawing.Point(4, 258)
+        Me.grpProductsList.Location = New System.Drawing.Point(4, 262)
         Me.grpProductsList.Name = "grpProductsList"
-        Me.grpProductsList.Size = New System.Drawing.Size(564, 260)
+        Me.grpProductsList.Size = New System.Drawing.Size(564, 256)
         Me.grpProductsList.TabIndex = 1
         Me.grpProductsList.TabStop = False
         Me.grpProductsList.Text = " Products list "
@@ -920,19 +926,20 @@ Friend Class frmMain
         Me.fraProdNew.Controls.Add(Me.Label3)
         Me.fraProdNew.Controls.Add(Me.cmdValidate)
         Me.fraProdNew.Controls.Add(Me.cmdRemove)
+        Me.fraProdNew.Controls.Add(Me.GroupBox1)
         Me.fraProdNew.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.fraProdNew.ForeColor = System.Drawing.SystemColors.ControlText
         Me.fraProdNew.Location = New System.Drawing.Point(0, 4)
         Me.fraProdNew.Name = "fraProdNew"
         Me.fraProdNew.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.fraProdNew.Size = New System.Drawing.Size(567, 250)
+        Me.fraProdNew.Size = New System.Drawing.Size(567, 256)
         Me.fraProdNew.TabIndex = 0
         Me.fraProdNew.TabStop = False
         Me.fraProdNew.Text = " Product details "
         '
         'optStrength3
         '
-        Me.optStrength3.Location = New System.Drawing.Point(334, 71)
+        Me.optStrength3.Location = New System.Drawing.Point(334, 76)
         Me.optStrength3.Name = "optStrength3"
         Me.optStrength3.Size = New System.Drawing.Size(62, 20)
         Me.optStrength3.TabIndex = 72
@@ -940,7 +947,7 @@ Friend Class frmMain
         '
         'optStrength5
         '
-        Me.optStrength5.Location = New System.Drawing.Point(460, 71)
+        Me.optStrength5.Location = New System.Drawing.Point(460, 76)
         Me.optStrength5.Name = "optStrength5"
         Me.optStrength5.Size = New System.Drawing.Size(62, 20)
         Me.optStrength5.TabIndex = 71
@@ -948,7 +955,7 @@ Friend Class frmMain
         '
         'optStrength4
         '
-        Me.optStrength4.Location = New System.Drawing.Point(396, 71)
+        Me.optStrength4.Location = New System.Drawing.Point(396, 76)
         Me.optStrength4.Name = "optStrength4"
         Me.optStrength4.Size = New System.Drawing.Size(62, 20)
         Me.optStrength4.TabIndex = 70
@@ -956,7 +963,7 @@ Friend Class frmMain
         '
         'optStrength2
         '
-        Me.optStrength2.Location = New System.Drawing.Point(270, 71)
+        Me.optStrength2.Location = New System.Drawing.Point(270, 76)
         Me.optStrength2.Name = "optStrength2"
         Me.optStrength2.Size = New System.Drawing.Size(62, 20)
         Me.optStrength2.TabIndex = 69
@@ -968,7 +975,7 @@ Friend Class frmMain
         Me.Label1.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label1.Location = New System.Drawing.Point(32, 74)
+        Me.Label1.Location = New System.Drawing.Point(32, 78)
         Me.Label1.Name = "Label1"
         Me.Label1.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Label1.Size = New System.Drawing.Size(54, 18)
@@ -977,7 +984,7 @@ Friend Class frmMain
         '
         'optStrength1
         '
-        Me.optStrength1.Location = New System.Drawing.Point(208, 71)
+        Me.optStrength1.Location = New System.Drawing.Point(208, 76)
         Me.optStrength1.Name = "optStrength1"
         Me.optStrength1.Size = New System.Drawing.Size(62, 20)
         Me.optStrength1.TabIndex = 67
@@ -986,7 +993,7 @@ Friend Class frmMain
         'optStrength0
         '
         Me.optStrength0.Checked = True
-        Me.optStrength0.Location = New System.Drawing.Point(90, 71)
+        Me.optStrength0.Location = New System.Drawing.Point(90, 76)
         Me.optStrength0.Name = "optStrength0"
         Me.optStrength0.Size = New System.Drawing.Size(116, 20)
         Me.optStrength0.TabIndex = 66
@@ -1003,7 +1010,7 @@ Friend Class frmMain
         Me.grpCodes.Controls.Add(Me.lblVCode)
         Me.grpCodes.Controls.Add(Me.cmdCopyVCode)
         Me.grpCodes.Controls.Add(Me.cmdCopyGCode)
-        Me.grpCodes.Location = New System.Drawing.Point(4, 92)
+        Me.grpCodes.Location = New System.Drawing.Point(4, 96)
         Me.grpCodes.Name = "grpCodes"
         Me.grpCodes.Size = New System.Drawing.Size(556, 129)
         Me.grpCodes.TabIndex = 6
@@ -1066,7 +1073,7 @@ Friend Class frmMain
         Me.Label2.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label2.Location = New System.Drawing.Point(32, 22)
+        Me.Label2.Location = New System.Drawing.Point(30, 16)
         Me.Label2.Name = "Label2"
         Me.Label2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Label2.Size = New System.Drawing.Size(40, 18)
@@ -1079,12 +1086,22 @@ Friend Class frmMain
         Me.Label3.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label3.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label3.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label3.Location = New System.Drawing.Point(32, 46)
+        Me.Label3.Location = New System.Drawing.Point(30, 40)
         Me.Label3.Name = "Label3"
         Me.Label3.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Label3.Size = New System.Drawing.Size(52, 18)
         Me.Label3.TabIndex = 2
         Me.Label3.Text = "V&ersion:"
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Font = New System.Drawing.Font("Arial", 7.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.GroupBox1.Location = New System.Drawing.Point(208, 62)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(302, 24)
+        Me.GroupBox1.TabIndex = 74
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = ".NET CLR RSA"
         '
         '_SSTab1_TabPage1
         '
@@ -1101,6 +1118,8 @@ Friend Class frmMain
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.frmKeyGen.BackColor = System.Drawing.SystemColors.Control
+        Me.frmKeyGen.Controls.Add(Me.cmdUncheckAll)
+        Me.frmKeyGen.Controls.Add(Me.cmdCheckAll)
         Me.frmKeyGen.Controls.Add(Me.lblConcurrentUsers)
         Me.frmKeyGen.Controls.Add(Me.txtMaxCount)
         Me.frmKeyGen.Controls.Add(Me.chkNetworkedLicense)
@@ -1150,6 +1169,22 @@ Friend Class frmMain
         Me.frmKeyGen.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.frmKeyGen.Size = New System.Drawing.Size(567, 519)
         Me.frmKeyGen.TabIndex = 0
+        '
+        'cmdUncheckAll
+        '
+        Me.cmdUncheckAll.Location = New System.Drawing.Point(4, 198)
+        Me.cmdUncheckAll.Name = "cmdUncheckAll"
+        Me.cmdUncheckAll.Size = New System.Drawing.Size(72, 20)
+        Me.cmdUncheckAll.TabIndex = 71
+        Me.cmdUncheckAll.Text = "Uncheck All"
+        '
+        'cmdCheckAll
+        '
+        Me.cmdCheckAll.Location = New System.Drawing.Point(4, 172)
+        Me.cmdCheckAll.Name = "cmdCheckAll"
+        Me.cmdCheckAll.Size = New System.Drawing.Size(72, 20)
+        Me.cmdCheckAll.TabIndex = 70
+        Me.cmdCheckAll.Text = "Check All"
         '
         'lblConcurrentUsers
         '
@@ -2709,7 +2744,7 @@ SaveFormSettings_Error:
                         Exit For
                     End If
                 Next
-                strLibKey = ActiveLock.GenerateShortKey(usedVCode, txtInstallCode.Text, txtUser.Text, strExpire, varLicType, cboRegisteredLevel.SelectedIndex + 200, maximumUsers)
+                strLibKey = ActiveLock.GenerateShortKey(usedVCode, txtInstallCode.Text, Trim(txtUser.Text), strExpire, varLicType, cboRegisteredLevel.SelectedIndex + 200, maximumUsers)
                 txtLicenseKey.Text = strLibKey
             Else 'ALCrypto License Key
                 ' Pass it to IALUGenerator to generate the key
@@ -2769,7 +2804,7 @@ SaveFormSettings_Error:
                 End If
 
                 'add license to database
-                Call frmAlugenDatabase.ArchiveLicense(strName, strVer, txtUser.Text, strRegDate, strExpire, cboLicType.Text, lockTypesString, cboRegisteredLevel.Text, txtInstallCode.Text, txtLicenseKey.Text)
+                Call frmAlugenDatabase.ArchiveLicense(strName, strVer, Trim(txtUser.Text), strRegDate, strExpire, cboLicType.Text, lockTypesString, cboRegisteredLevel.Text, txtInstallCode.Text, txtLicenseKey.Text)
 
             End If
         Catch ex As Exception
@@ -2842,6 +2877,7 @@ SaveFormSettings_Error:
         End If
 
         strdata = "I love Activelock"
+        'strdata = "TestApp" & vbCrLf & "3" & vbCrLf & "Single" & vbCrLf & "1" & vbCrLf & "Evaluation User" & vbCrLf & "0" & vbCrLf & "2006/11/22" & vbCrLf & "2006/12/22" & vbCrLf & "5" & vbLf & "+00 10 18 09 71 85" & vbCrLf & "MYSWEETBABY" & vbCrLf & "5CA9-4B2A" & vbCrLf & "3JT26AA0" & vbCrLf & "55274-OEM-0011903-00102" & vbCrLf & "DELL   - 7" & vbCrLf & "BFWB741" & vbCrLf & "192.168.0.1"
 
         ' ALCrypto DLL with 1024-bit strength
         If strLeft(txtVCode.Text, 3) <> "RSA" Then
@@ -2907,6 +2943,63 @@ SaveFormSettings_Error:
                 ' import public key params into instance of RSACryptoServiceProvider
                 rsaCSP.ImportParameters(rsaPubParams)
                 toEncrypt = enc.GetBytes(strdata)
+
+
+                '' The following Encrypt method works for long and short strings
+                '' =============================== ACTIVATE FOR LONG AND SHORT STRINGS =============================
+                ''The RSA algorithm works on individual blocks of unencoded bytes. In this case, the
+                ''maximum is 58 bytes. Therefore, we are required to break up the text into blocks and
+                ''encrypt each one individually. Each encrypted block will give us an output of 128 bytes.
+                ''If we do not break up the blocks in this manner, we will throw a "key not valid for use
+                ''in specified state" exception
+
+                ''Get the size of the final block
+                'Const RSA_BLOCKSIZE As Integer = 58
+                'Dim lastBlockLength As Integer = toEncrypt.Length Mod RSA_BLOCKSIZE
+                'Dim blockCount As Integer = CType(Math.Floor(toEncrypt.Length / RSA_BLOCKSIZE), Integer) ' CType not necessary in VB 2005
+                'Dim hasLastBlock As Boolean = False
+                'If Not lastBlockLength.Equals(0) Then
+                '    'We need to create a final block for the remaining characters
+                '    blockCount += 1
+                '    hasLastBlock = True
+                'End If
+
+                ''Initialize the result buffer
+                'Dim result() As Byte = New Byte() {}
+
+                ''Initialize the RSA Service Provider with the public key
+                ''rsaCSP.FromXmlString(strPublicBlob) 'This was taken care of already
+
+                ''Break the text into blocks and work on each block individually
+                'For blockIndex As Integer = 0 To blockCount - 1
+                '    Dim thisBlockLength As Integer
+
+                '    'If this is the last block and we have a remainder, then set the length accordingly
+                '    If blockCount.Equals(blockIndex + 1) AndAlso hasLastBlock Then
+                '        thisBlockLength = lastBlockLength
+                '    Else
+                '        thisBlockLength = RSA_BLOCKSIZE
+                '    End If
+                '    Dim startChar As Integer = blockIndex * RSA_BLOCKSIZE
+
+                '    'Define the block that we will be working on
+                '    Dim currentBlock(thisBlockLength - 1) As Byte
+                '    Array.Copy(toEncrypt, startChar, currentBlock, 0, thisBlockLength)
+
+                '    'Encrypt the current block and append it to the result stream
+                '    Dim encryptedBlock() As Byte = rsaCSP.Encrypt(currentBlock, False)
+                '    Dim originalResultLength As Integer = result.Length
+
+                '    ReDim Preserve result(originalResultLength + encryptedBlock.Length) ' This is for VB 2005
+                '    'Array.Resize(result, originalResultLength + encryptedBlock.Length)
+
+                '    encryptedBlock.CopyTo(result, originalResultLength)
+                'Next
+
+                'encrypted = result
+                ' =============================================================================================
+
+                ' The following Encrypt method works only for short strings
                 encrypted = rsaCSP.Encrypt(toEncrypt, False)
                 encryptedPlainText = Convert.ToBase64String(encrypted) ' convert to base64/Radix output
 
@@ -2964,19 +3057,73 @@ SaveFormSettings_Error:
                 ' THE FOLLOWING CODE BLOCK IS USED TO RETRIEVE THE ORIGINAL
                 ' STRING strData BUT IS NOT NEEDED FOR THE VALIDATION PROCESS
                 ' IT'S BEEN SHOWN HERE FOR DEMONSTRATION PURPOSES
+                ' This works for short strings only
                 Dim newencrypted() As Byte
                 newencrypted = Convert.FromBase64String(encryptedPlainText)
                 Dim fromEncrypt() As Byte ' a byte array to store decrypted bytes
-                Dim roundTrip As String ' holds orig nal message
+                Dim roundTrip As String ' holds original message
                 ' import  private key params into instance of RSACryptoServiceProvider
                 rsaCSP.ImportParameters(rsaPrivateParams)
+
+
+                '' The following Decrypt method works for long and short strings
+                '' It's currently not functioning correctly
+                '' =============================== ACTIVATE FOR LONG AND SHORT STRINGS =============================
+                ''When we encrypt a string using RSA, it works on individual blocks of up to
+                ''58 bytes. Each block generates an output of 128 encrypted bytes. Therefore, to
+                ''decrypt the message, we need to break the encrypted stream into individual
+                ''chunks of 128 bytes and decrypt them individually
+
+                ''Determine how many bytes are in the encrypted stream. The input is in hex format,
+                ''so we have to divide it by 2
+                'Const RSA_DECRYPTBLOCKSIZE As Integer = 128
+                'Dim maxBytes As Integer = CType(encryptedPlainText.Length / 2, Integer)  ' CType not necessary in VB 2005
+
+                ''Ensure that the length of the encrypted stream is divisible by 128
+                'If Not (maxBytes Mod RSA_DECRYPTBLOCKSIZE).Equals(0) Then
+                '    Throw New System.Security.Cryptography.CryptographicException("Encrypted text is an invalid length")
+                'End If
+
+                ''Calculate the number of blocks we will have to work on
+                'Dim blockCount2 As Integer = CType(maxBytes / RSA_DECRYPTBLOCKSIZE, Integer)
+
+                ''Initialize the result buffer
+                'Dim result2() As Byte = New Byte() {}
+
+                ''rsaCSP.FromXmlString(strPrivateBlob) ' This was done already
+
+                ''Iterate through each block and decrypt it
+                'For blockIndex As Integer = 0 To blockCount2 - 1
+                '    'Get the current block to work on
+                '    Dim currentBlockHex As String = encryptedPlainText.Substring(blockIndex * (RSA_DECRYPTBLOCKSIZE * 2), RSA_DECRYPTBLOCKSIZE * 2)
+                '    Dim currentBlockBytes As Byte() = HexToBytes(currentBlockHex)
+
+                '    'Decrypt the current block and append it to the result stream
+                '    Dim currentBlockDecrypted() As Byte = rsaCSP.Decrypt(currentBlockBytes, False)
+                '    Dim originalResultLength As Integer = result2.Length
+
+                '    ReDim Preserve result2(originalResultLength + currentBlockDecrypted.Length)
+                '    'Array.Resize(result, originalResultLength + currentBlockDecrypted.Length) ' This is for VB 2005
+
+                '    currentBlockDecrypted.CopyTo(result2, originalResultLength)
+                'Next
+                'fromEncrypt = result2
+                ' =============================================================================================
+
+
+                ' The following Decrypt works for short strings only
                 'store decrypted data into byte array
                 fromEncrypt = rsaCSP.Decrypt(newencrypted, False)
+
                 'convert bytes to string
                 roundTrip = enc.GetString(fromEncrypt)
                 If roundTrip <> strdata Then
                     UpdateStatus(txtName.Text & " (" & txtVer.Text & ") GCode-VCode mismatch!")
                 End If
+
+                'Release any resources held by the RSA Service Provider
+                rsaCSP.Clear()
+
             Catch ex As Exception
                 UpdateStatus(ex.Message)
             End Try
@@ -2990,6 +3137,30 @@ exitValidate:
         UpdateStatus(txtName.Text & " (" & txtVer.Text & ") GCode-VCode mismatch!")
         Cursor.Current = Cursors.Default
     End Sub
+    '********************************************************
+    '* HexToBytes: Converts a hex-encoded string to a
+    '*             byte array
+    '********************************************************
+    Private Shared Function HexToBytes(ByVal Hex As String) As Byte()
+        Dim numBytes As Integer = CType(Hex.Length / 2, Integer)  ' CType not necessary in VB 2005
+        Dim bytes(numBytes - 1) As Byte
+        For n As Integer = 0 To numBytes - 1
+            Dim hexByte As String = Hex.Substring(n * 2, 2)
+            bytes(n) = CType(Integer.Parse(hexByte, Globalization.NumberStyles.HexNumber), Byte) ' CType not necessary with VB 2005
+        Next
+        Return bytes
+    End Function
+    '********************************************************
+    '* BytesToHex: Converts a byte array to a hex-encoded
+    '*             string
+    '********************************************************
+    Private Shared Function BytesToHex(ByVal bytes() As Byte) As String
+        Dim hex As New StringBuilder
+        For n As Integer = 0 To bytes.Length - 1
+            hex.AppendFormat("{0:X2}", bytes(n))
+        Next
+        Return hex.ToString
+    End Function
 
     Private Sub cmdViewArchive_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdViewArchive.Click
         Dim lic As New frmAlugenDb
@@ -3074,7 +3245,7 @@ exitValidate:
     Private Sub txtUser_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtUser.TextChanged
         If fDisableNotifications Then Exit Sub
         fDisableNotifications = True
-        If Len(txtInstallCode.Text) <> 8 Then txtInstallCode.Text = ActiveLock.InstallationCode(txtUser.Text)
+        If Len(txtInstallCode.Text) <> 8 Then txtInstallCode.Text = ActiveLock.InstallationCode(Trim(txtUser.Text))
         fDisableNotifications = False
     End Sub
 
@@ -3131,16 +3302,6 @@ exitValidate:
                 txtUser.Text = GetUserFromInstallCode(txtInstallCode.Text)
                 fDisableNotifications = False
 
-                'systemEvent = True
-                'If chkLockMACaddress.Enabled = True Then chkLockMACaddress.CheckState = CheckState.Checked
-                'If chkLockComputer.Enabled = True Then chkLockComputer.CheckState = CheckState.Checked
-                'If chkLockHD.Enabled = True Then chkLockHD.CheckState = CheckState.Checked
-                'If chkLockHDfirmware.Enabled = True Then chkLockHDfirmware.CheckState = CheckState.Checked
-                'If chkLockWindows.Enabled = True Then chkLockWindows.CheckState = CheckState.Checked
-                'If chkLockBIOS.Enabled = True Then chkLockBIOS.CheckState = CheckState.Checked
-                'If chkLockMotherboard.Enabled = True Then chkLockMotherboard.CheckState = CheckState.Checked
-                'If chkLockIP.Enabled = True Then chkLockIP.CheckState = CheckState.Checked
-                'systemEvent = False
             Else
                 fDisableNotifications = True
                 chkLockComputer.Enabled = True
@@ -3355,10 +3516,42 @@ exitValidate:
                     UpdateStatus(txtName.Text & " (" & txtVer.Text & ") GCode-VCode mismatch!")
                     'MsgBox("Invalid Signature", MsgBoxStyle.Exclamation)
                 End If
+
+                'Release any resources held by the RSA Service Provider
+                rsaCSP.Clear()
+
             Catch ex As Exception
                 UpdateStatus(ex.Message)
             End Try
         End If
 
+    End Sub
+
+    Private Sub chkLockIP_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockIP.CheckedChanged
+        If chkLockIP.Checked Then
+            MsgBox("Warning: Use IP addresses cautiously since they may not be static.", MsgBoxStyle.Exclamation, "Static IP Address Warning")
+        End If
+    End Sub
+
+    Private Sub cmdCheckAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdCheckAll.Click
+        chkLockMACaddress.CheckState = CheckState.Checked
+        chkLockComputer.CheckState = CheckState.Checked
+        chkLockHD.CheckState = CheckState.Checked
+        chkLockHDfirmware.CheckState = CheckState.Checked
+        chkLockWindows.CheckState = CheckState.Checked
+        chkLockBIOS.CheckState = CheckState.Checked
+        chkLockMotherboard.CheckState = CheckState.Checked
+        chkLockIP.CheckState = CheckState.Checked
+    End Sub
+
+    Private Sub cmdUncheckAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdUncheckAll.Click
+        chkLockMACaddress.CheckState = CheckState.Unchecked
+        chkLockComputer.CheckState = CheckState.Unchecked
+        chkLockHD.CheckState = CheckState.Unchecked
+        chkLockHDfirmware.CheckState = CheckState.Unchecked
+        chkLockWindows.CheckState = CheckState.Unchecked
+        chkLockBIOS.CheckState = CheckState.Unchecked
+        chkLockMotherboard.CheckState = CheckState.Unchecked
+        chkLockIP.CheckState = CheckState.Unchecked
     End Sub
 End Class
