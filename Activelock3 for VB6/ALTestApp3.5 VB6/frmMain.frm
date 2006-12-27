@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Begin VB.Form frmMain 
    BorderStyle     =   1  'Fixed Single
@@ -58,11 +58,11 @@ Begin VB.Form frmMain
       TabCaption(1)   =   "Sample App"
       TabPicture(1)   =   "frmMain.frx":0CE6
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "fraViewport"
-      Tab(1).Control(1)=   "Frame1"
+      Tab(1).Control(0)=   "lblLockStatus"
+      Tab(1).Control(1)=   "lblLockStatus2"
       Tab(1).Control(2)=   "lblTrialInfo"
-      Tab(1).Control(3)=   "lblLockStatus2"
-      Tab(1).Control(4)=   "lblLockStatus"
+      Tab(1).Control(3)=   "Frame1"
+      Tab(1).Control(4)=   "fraViewport"
       Tab(1).ControlCount=   5
       Begin VB.Frame fraViewport 
          BorderStyle     =   0  'None
@@ -765,7 +765,7 @@ Private Sub Form_Load()
     Dim Msg As String
     Dim A() As String
     
-    On Error GoTo NotRegistered
+    On Error GoTo DLLnotRegistered
     Me.Caption = "ALTestApp - ActiveLock3 Test Application - v" & App.Major & "." & App.Minor & "." & App.Revision
     
     ' Check the existence of necessary files to run this application
@@ -796,7 +796,7 @@ Private Sub Form_Load()
         
         ' New in v3.5
         '.LicenseKeyType = alsShortKeyMD5
-        .LicenseKeyType = alsALCryptoRSA
+        .LicenseKeyType = alsRSA
         
         ' New in v3.1 - Trial Feature
         .TrialType = trialDays
@@ -812,12 +812,23 @@ Private Sub Form_Load()
         ' or don't use this property to use ALL techniques
         .TrialHideType = trialHiddenFolder Or trialRegistry Or trialSteganography
         
-        '.SoftwareCode = Dec(PUB_KEY)
-        .SoftwareCode = "RSA2048BgIAAAAkAABSU0ExAAgAAAEAAQDPXvRi8OsaXj7Zlf0kHDL9ZZiTFUK02rx0kluIooFQV3hF44+hmnb3O+vLq1DJd5NK9I/tQ9uMTfGGLhjKCXVWYT8SkU3+em0Er2hmZX4EW63kVxFQMFAAYjhN7IFxIMqZJ/2DG+awKlrszorZ8U+fwHKPMomiZDxAzFWmD78H4HC/hxPaG8Tso2AkoScjlYHN8zLh/jeQ6IKaFpIBqLwfLVQF9tCUnsZ8Po6Erk44xqNsH3n0yapqsjdl1jUONT8BOjHtD++7U3lEcyW+n2G4ZCMKCTzDeq7Qddqnz6ubnTUGJvPpXg3DTvfklbpNlcOftfxnr5M+k9MhFzTj2Yvu"
+        PUB_KEY = "386.391.2CB.226.210.23C.268.2D6.46D.323.2CB.2CB.2CB.2CB.499.2CB.2CB.2D6.391.3A7.210.2F7.528.2CB.2CB.46D.2CB.2CB.2CB.2F7.2CB.2CB.37B.2EC.370.3C8.512.386.483.268.365.4F1.42B.3C8.48E.25D.3DE.4A4.462.210.499.318.2EC.344.273.3DE.3DE.483.39C.302.3A7.339.210.226.4E6.528.210.499.4A4.507.323.4C5.4C5.302.37B.3B2.231.478.302.23C.23C.1D9.478.4AF"
+        PUB_KEY = PUB_KEY & ".4BA.436.231.365.1D9.512.344.4DB.21B.2EC.32E.44C.247.35A.339.273.323.205.4FC.37B.273.507.34F.39C.462.30D.30D.344.478.48E.339.2E1.3C8.3B2.3BD.3D3.39C.268.391.499.3A7.231.1D9.457.4AF.210.2F7.4E6.226.478.4AF.3DE.3C8.23C.2F7.3BD.252.231.499.3B2.528.302.37B.34F.302.2CB.2CB.3D3.48E.478.35A.25D.323.302.528.323.34F.4DB.3DE.32E.205.226.2EC.30D.1D9.42B.51D.339.4A4.4E6.4F1.53E.4C5.4E6.3DE.268.3A7.1D9.462.51D.318.339.370.34F.4C5.4AF.483.3DE.2EC.528.2CB.53E.302.3BD.4AF.2EC.25D.268.318.23C"
+        PUB_KEY = PUB_KEY & ".318.2E1.205.478.528.370.42B.30D.268.39C.4F1.4C5.226.2CB.499.4C5.391.441.48E.4A4.3D3.318.35A.268.53E.344.478.205.48E.457.37B.252.323.339.42B.302.4D0.323.2D6.4DB.344.51D.462.344.3B2.37B.302.273.4FC.2E1.3A7.4BA"
+        PUB_KEY = PUB_KEY & ".4F1.3DE.268.370.4C5.252.2F7.4E6.499.23C.23C.528.4DB.35A.4F1.318.231.4BA.210.533.42B.4D0.4DB.4F1.48E.44C.4A4.21B.48E.3A7.365.35A.39C.268.2D6.365.48E.318.4FC.2EC.1D9.1D9.25D.3A7.231.4A4.2F7.441.533.3BD.1D9.4BA.226.30D.23C.3DE.2E1.34F.339.2E1.39C.53E.2EC.457.4DB.25D.37B.44C.44C.4DB.4BA.53E.252.507.436.4BA.39C.3A7.30D.32E.512.370.4D0.3C8.46D.231.2EC.39C.512.462.499.4A4.436.4D0.35A.4A4.441.365.462.4FC.462.528.4BA.4E6.247.34F.1D9.499.273.34F.478.302.53E.39C.48E.226.3D3.512.507"
+        .SoftwareCode = Dec(PUB_KEY)
+        '.SoftwareCode = "RSA2048BgIAAAAkAABSU0ExAAgAAAEAAQDPXvRi8OsaXj7Zlf0kHDL9ZZiTFUK02rx0kluIooFQV3hF44+hmnb3O+vLq1DJd5NK9I/tQ9uMTfGGLhjKCXVWYT8SkU3+em0Er2hmZX4EW63kVxFQMFAAYjhN7IFxIMqZJ/2DG+awKlrszorZ8U+fwHKPMomiZDxAzFWmD78H4HC/hxPaG8Tso2AkoScjlYHN8zLh/jeQ6IKaFpIBqLwfLVQF9tCUnsZ8Po6Erk44xqNsH3n0yapqsjdl1jUONT8BOjHtD++7U3lEcyW+n2G4ZCMKCTzDeq7Qddqnz6ubnTUGJvPpXg3DTvfklbpNlcOftfxnr5M+k9MhFzTj2Yvu"
+        
         .LockType = lockNone  'lockWindows 'Or lockComp 'Or lockComp Or lockWindows
         strAutoRegisterKeyPath = App.Path & "\" & LICENSE_ROOT & ".all"
+        .AutoRegister = alsEnableAutoRegistration
         .AutoRegisterKeyPath = strAutoRegisterKeyPath
         If FileExist(strAutoRegisterKeyPath) Then boolAutoRegisterKeyPath = True
+        
+        .CheckTimeServerForClockTampering = alsDontCheckTimeServer      ' use alsCheckTimeServer to enforce time server check for clock tampering detection
+        .CheckSystemFilesForClockTampering = alsDontCheckSystemFiles    ' use alsCheckSystemFiles to enforce system files scanning for clock tampering detection
+        .LicenseFileType = alsLicenseFileEncrypted
+    
     End With
 
     ' Verify AL's authenticity
@@ -855,6 +866,10 @@ Private Sub Form_Load()
         A = Split(strMsg, vbCrLf)
         txtRegStatus.Text = A(0)
         txtUsedDays.Text = A(1)
+        
+        ' You can also get the UsedTrialDays or UsedTrialRuns directly by:
+        'txtUsedDays.Text = MyActiveLock.UsedTrialDays OR MyActiveLock.UsedTrialRuns
+
         FunctionalitiesEnabled = True
         frmSplash.lblInfo.Caption = vbCrLf & strMsg
         frmSplash.Show
