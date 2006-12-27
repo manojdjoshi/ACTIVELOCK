@@ -1211,7 +1211,7 @@ Friend Class frmMain
 
             ' Note: Do not use (App.Major & "." & App.Minor & "." & App.Revision)
             ' since the license will fail with version incremented exe builds
-            .SoftwareVersion = "1.0" ' WARNING *** WARNING *** DO NOT USE App.Major & "." & App.Minor & "." & App.Revision
+            .SoftwareVersion = "3.0" ' WARNING *** WARNING *** DO NOT USE App.Major & "." & App.Minor & "." & App.Revision
             txtVersion.Text = .SoftwareVersion
 
             ' New in v3.3
@@ -1221,7 +1221,7 @@ Friend Class frmMain
 
             ' New in v3.5
             '.LicenseKeyType = ActiveLock3_5NET.IActiveLock.ALLicenseKeyTypes.alsShortKeyMD5
-            .LicenseKeyType = ActiveLock3_5NET.IActiveLock.ALLicenseKeyTypes.alsALCryptoRSA
+            .LicenseKeyType = ActiveLock3_5NET.IActiveLock.ALLicenseKeyTypes.alsRSA
 
             ' New in v3.1 - Trial Feature
             .TrialType = ActiveLock3_5NET.IActiveLock.ALTrialTypes.trialDays
@@ -1244,8 +1244,13 @@ Friend Class frmMain
             '.LockType = ActiveLock3.ALLockTypes.lockNone
 
             strAutoRegisterKeyPath = AppPath() & "\" & LICENSE_ROOT & ".all"
+            .AutoRegister = ActiveLock3_5NET.IActiveLock.ALAutoRegisterTypes.alsEnableAutoRegistration
             .AutoRegisterKeyPath = strAutoRegisterKeyPath
             If File.Exists(strAutoRegisterKeyPath) Then boolAutoRegisterKeyPath = True
+
+            .CheckTimeServerForClockTampering = ActiveLock3_5NET.IActiveLock.ALTimeServerTypes.alsDontCheckTimeServer       ' use alsCheckTimeServer to enforce time server checks for clock tampering check
+            .CheckSystemFilesForClockTampering = ActiveLock3_5NET.IActiveLock.ALSystemFilesTypes.alsDontCheckSystemFiles    ' use alsCheckSystemFiles to enforce system files scanning for clock tampering check
+            .LicenseFileType = ActiveLock3_5NET.IActiveLock.ALLicenseFileTypes.alsLicenseFileEncrypted
         End With
 
         ' Verify AL's authenticity
@@ -1291,6 +1296,10 @@ Friend Class frmMain
             A = Split(strMsg, vbCrLf)
             txtRegStatus.Text = A(0)
             txtUsedDays.Text = A(1)
+
+            ' You can also get the UsedTrialDays or UsedTrialRuns directly by:
+            'txtUsedDays.Text = MyActiveLock.UsedTrialDays OR MyActiveLock.UsedTrialRuns
+
             FunctionalitiesEnabled = True
             Dim frmsplash As New frmSplash
             frmsplash.lblInfo.Text = vbCrLf & strMsg
