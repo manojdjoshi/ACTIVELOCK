@@ -7,7 +7,7 @@
 using namespace std;
 #include "comutilfix.h"
 
-#import "C:\\windows\\system32\\ActiveLock3.4.dll" 
+#import "C:\\windows\\system32\\ActiveLock3.5.dll" 
 using namespace ActiveLock3; 
 
 #include "ConnectionAdvisor.h"

@@ -27,7 +27,7 @@ public:
   void             PutTrialType (enum ALTrialTypes arg )              {m_ActiveLock->PutTrialType(arg); };
   void             PutTrialLength (long arg )                         {m_ActiveLock->PutTrialLength(arg); };
   ALLockTypes           GetLockType()       const                     {return m_ActiveLock->GetLockType(); };
-  ALLockTypes           GetUsedLockType()   const                     {return m_ActiveLock->GetUsedLockType(); };
+  //ALLockTypes           GetUsedLockType()   const                     {return m_ActiveLock->GetUsedLockType(); };
   enum ALTrialHideTypes GetTrialHideType ( )const                     {return m_ActiveLock->GetTrialHideType(); };
   enum ALTrialTypes     GetTrialType ( )    const                     {return m_ActiveLock->GetTrialType(); };
   long             GetTrialLength() const                             {return m_ActiveLock->GetTrialLength();  };
@@ -44,7 +44,7 @@ public:
   const CString    GetInstallationCode(const CString& strUsn) const; 
   void             PutAutoRegisterKeyPath (const CString& arg)        {m_ActiveLock->PutAutoRegisterKeyPath(LPCTSTR(arg)); };
   const CString    LockCode()             const;
-  const CString    Register(const CString& arg)                       {m_ActiveLock->Register(LPCTSTR(arg)); };
+  //const CString    Register(const CString& arg)                       {m_ActiveLock->Register(LPCTSTR(arg)); };
   void             Transfer (const CString& arg)                      {m_ActiveLock->Transfer(LPCTSTR(arg)); };
   const CString    InitBSTR(); 
   const CString    AcquireBSTR(); 
@@ -109,18 +109,6 @@ class CActiveLockMFC : public CActiveLockWrapEx
 { 
 public: 
   CActiveLockMFC(); 
-  CActiveLockMFC(CString&   softwareName, 
-    CString&                version, 
-    enum LicStoreType       licStoreType,
-    enum ALLicType          LicType,
-    enum ALLockTypes        LockType,
-    CString                 KeyStorePath,
-    CString                 AutoRegisterKeyPath,
-    enum ALTrialTypes       trialType,
-    int                     trialNo,
-    enum ALTrialHideTypes   HideType,
-    CString                 RegisteredLevel
-    );
   ~CActiveLockMFC(); 
 
   const CString    LicenseStatus()       const      { return m_strLicenseStatus;   } 
@@ -131,12 +119,9 @@ public:
   BOOL Create(); 
   BOOL Initialize(); 
   BOOL CheckLicense(); 
-  BOOL CheckLicenseMFC(); 
-  BOOL Register(const CString& strLibKey); 
+  //BOOL Register(const CString& strLibKey); 
   void ResetCollectionData(void); 
-  void DestroyAll() ;
 
-  void PutSoftwareData(); 
   BOOL CollectLicenseData(); 
   void SetSoftwareVersion (const CString& arg)       {m_strSoftwareVersion = arg; };
 

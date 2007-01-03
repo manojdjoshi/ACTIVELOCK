@@ -6,30 +6,30 @@
 --------------------Configuration: MFCSample - Win32 Debug--------------------
 </h3>
 <h3>Command Lines</h3>
-Creating command line "rc.exe /l 0x407 /fo"Debug/MFCSample.res" /d "_DEBUG" /d "_AFXDLL" "C:\Daves\Sauce\Activelock MFC C++ 3.4\MFCSample_VC 6.0\MFCSample.rc"" 
-Creating temporary file "c:\Tmp\RSP41.tmp" with contents
+Creating command line "rc.exe /l 0x407 /fo"Debug/MFCSample.res" /d "_DEBUG" /d "_AFXDLL" "C:\ActiveLock\ActiveLock\Activelock3 MFC\examples\MFCSample_VC 6.0\MFCSample.rc"" 
+Creating temporary file "c:\Tmp\RSP13.tmp" with contents
 [
 /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Fp"Debug/MFCSample.pch" /Yu"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
-"C:\Daves\Sauce\Activelock MFC C++ 3.4\MFCSample_VC 6.0\about.cpp"
-"C:\Daves\Sauce\Activelock MFC C++ 3.4\MFCSample_VC 6.0\MainFrm.cpp"
-"C:\Daves\Sauce\Activelock MFC C++ 3.4\MFCSample_VC 6.0\MFCSample.cpp"
-"C:\Daves\Sauce\Activelock MFC C++ 3.4\MFCSample_VC 6.0\MFCSampleDoc.cpp"
-"C:\Daves\Sauce\Activelock MFC C++ 3.4\MFCSample_VC 6.0\MFCSampleView.cpp"
-"C:\Daves\Sauce\Activelock MFC C++ 3.4\MFCSample_VC 6.0\LeftView.cpp"
-"C:\Daves\Sauce\common\active\activelockmfc.cpp"
-"C:\Daves\Sauce\common\active\ActiveLockUtil.cpp"
-"C:\Daves\Sauce\common\active\ConnectionAdvisor.cpp"
-"C:\Daves\Sauce\common\active\Crc32Static.cpp"
-"C:\Daves\Sauce\common\active\EventSink.cpp"
+"C:\ActiveLock\ActiveLock\Activelock3 MFC\examples\MFCSample_VC 6.0\about.cpp"
+"C:\ActiveLock\ActiveLock\Activelock3 MFC\examples\MFCSample_VC 6.0\MainFrm.cpp"
+"C:\ActiveLock\ActiveLock\Activelock3 MFC\examples\MFCSample_VC 6.0\MFCSample.cpp"
+"C:\ActiveLock\ActiveLock\Activelock3 MFC\examples\MFCSample_VC 6.0\MFCSampleDoc.cpp"
+"C:\ActiveLock\ActiveLock\Activelock3 MFC\examples\MFCSample_VC 6.0\MFCSampleView.cpp"
+"C:\ActiveLock\ActiveLock\Activelock3 MFC\examples\MFCSample_VC 6.0\LeftView.cpp"
+"C:\ActiveLock\ActiveLock\Activelock3 MFC\common\active\activelockmfc.cpp"
+"C:\ActiveLock\ActiveLock\Activelock3 MFC\common\active\ActiveLockUtil.cpp"
+"C:\ActiveLock\ActiveLock\Activelock3 MFC\common\active\ConnectionAdvisor.cpp"
+"C:\ActiveLock\ActiveLock\Activelock3 MFC\common\active\Crc32Static.cpp"
+"C:\ActiveLock\ActiveLock\Activelock3 MFC\common\active\EventSink.cpp"
 ]
-Creating command line "cl.exe @c:\Tmp\RSP41.tmp" 
-Creating temporary file "c:\Tmp\RSP42.tmp" with contents
+Creating command line "cl.exe @c:\Tmp\RSP13.tmp" 
+Creating temporary file "c:\Tmp\RSP14.tmp" with contents
 [
 /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Fp"Debug/MFCSample.pch" /Yc"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /GZ /c 
-"C:\Daves\Sauce\Activelock MFC C++ 3.4\MFCSample_VC 6.0\StdAfx.cpp"
+"C:\ActiveLock\ActiveLock\Activelock3 MFC\examples\MFCSample_VC 6.0\StdAfx.cpp"
 ]
-Creating command line "cl.exe @c:\Tmp\RSP42.tmp" 
-Creating temporary file "c:\Tmp\RSP43.tmp" with contents
+Creating command line "cl.exe @c:\Tmp\RSP14.tmp" 
+Creating temporary file "c:\Tmp\RSP15.tmp" with contents
 [
 /nologo /subsystem:windows /incremental:yes /pdb:"Debug/MFCSample.pdb" /debug /machine:I386 /out:"Debug/MFCSample.exe" /pdbtype:sept 
 ".\Debug\about.obj"
@@ -46,7 +46,7 @@ Creating temporary file "c:\Tmp\RSP43.tmp" with contents
 ".\Debug\EventSink.obj"
 ".\Debug\MFCSample.res"
 ]
-Creating command line "link.exe @c:\Tmp\RSP43.tmp"
+Creating command line "link.exe @c:\Tmp\RSP15.tmp"
 <h3>Output Window</h3>
 Compiling resources...
 Compiling...

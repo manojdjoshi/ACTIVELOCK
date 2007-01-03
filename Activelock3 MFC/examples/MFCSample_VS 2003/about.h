@@ -4,7 +4,7 @@
 #pragma once
 #include "afxwin.h"
 
-#import "C:\\windows\\system32\\ActiveLock3.4.dll" 
+#import "C:\\windows\\system32\\ActiveLock3.5.dll" 
 using namespace ActiveLock3; 
 #include "..\..\common\active\ActiveLockUtil.h"
 #include "..\..\common\active\ActiveLockMfc.h"

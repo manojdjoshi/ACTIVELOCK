@@ -63,7 +63,7 @@ using namespace std;
 
 #include "resource.h"       // main symbols
 
-#import "C:\\windows\\system32\\ActiveLock3.4.dll" 
+#import "C:\\windows\\system32\\ActiveLock3.5.dll" 
 using namespace ActiveLock3; 
 #include "..\..\common\active\ActiveLockUtil.h"
 #include "..\..\common\active\ActiveLockMFC.h"
@@ -93,8 +93,6 @@ protected:
   enum ALLockTypes lockType;
   COleTemplateServer m_server;
   
-  BOOL CheckLicenseWrapperLevel();
-  BOOL CheckLicenseMFCLevel();
   
   CString ProgramPath();
   BOOL CrcsEtc(int debug);

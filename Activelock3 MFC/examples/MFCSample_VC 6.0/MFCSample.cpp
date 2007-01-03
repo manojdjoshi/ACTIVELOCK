@@ -61,7 +61,6 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-BOOL oneApproach = TRUE;
 
 extern IID iid_IActiveLockEventSink;
 
@@ -230,46 +229,42 @@ BOOL CMFCSampleApp::InitInstance()
     GetPrivateProfileString (LPCTSTR(strApp), "User", "", UserName, 200, LPCTSTR(strIni)); 
     GetPrivateProfileString (LPCTSTR(strApp), "lockType", "", chLockType, 200, LPCTSTR(strIni)); 
 
-    if(oneApproach){
-      m_pActiveLockMfc = new CActiveLockMFC();
-      m_pActiveLockMfc->SetRegisteredUser(CString(UserName));
-      lockType = m_pActiveLockMfc->LockTypeFromInt(atoi(chLockType));
-      m_pActiveLockMfc->SetLockType(lockType);
+	m_pActiveLockMfc = new CActiveLockMFC();
+	m_pActiveLockMfc->SetRegisteredUser(CString(UserName));
+	lockType = m_pActiveLockMfc->LockTypeFromInt(atoi(chLockType));
+	m_pActiveLockMfc->SetLockType(lockType);
 
-      CheckLicenseWrapperLevel();
-    } else {
-      // the other approach
-      CString KeyStorePath				            = _T("TestApp.lic");  // license file name
-      CString AutoRegisterKeyPath             = _T("c:\\TestApp.all");// use the auto register facility from this file
-      CString softwareName				            = _T("TestApp");
-      CString version						              = _T("1.0"); // license does not contain version number !!!!
-      enum LicStoreType licStoreType          = alsFile;
-      enum ALLicType    LicType               = allicTimeLocked;
-      enum ALLockTypes  LockType              = lockType;
-      enum ALTrialTypes trialType             = trialRuns;
-      int  trialNo                            = 31;
-      enum ALTrialHideTypes   HideType        = trialSteganography;
-      CString  RegisteredLevel                = "Level 3";
+	m_pActiveLockMfc->Create(); 
 
+	m_pActiveLockMfc->PutSoftwareVersion(CString("1.0")); 
+	m_pActiveLockMfc->PutSoftwareName(CString("TestApp")); 
+	m_pActiveLockMfc->PutKeyStoreType(alsFile); // 1 = File 
+	m_pActiveLockMfc->PutLockType(lockType);
+	m_pActiveLockMfc->PutSoftwareCode(CString(GetIt().c_str())); 
+	m_pActiveLockMfc->PutSoftwarePassword("Somethink better than this"); 
 
-      m_pActiveLockMfc = new   CActiveLockMFC( softwareName, 
-        version,
-        licStoreType,
-        LicType,
-        LockType,
-        KeyStorePath,
-        AutoRegisterKeyPath,
-        trialType,
-        trialNo,
-        HideType,
-        RegisteredLevel
-        );
-      m_pActiveLockMfc->SetRegisteredUser(CString(UserName));
-      lockType = m_pActiveLockMfc->LockTypeFromInt(atoi(chLockType));
-      m_pActiveLockMfc->SetLockType(lockType);
-      CheckLicenseMFCLevel();
-    }
-  }
+	// license in application directory
+	//CString strTmpLic = ProgramPath() + _T("//testapp.lic"); 
+
+	// license in windows directory
+	CString strTmpLic = _T("testapp.lic"); 
+
+	m_pActiveLockMfc->PutKeyStorePath(strTmpLic); 
+
+	//CString strTmpAll = ProgramPath() + _T("\\testapp.all"); 
+	CString strTmpAll = _T("c:\\testapp.all"); 
+	m_pActiveLockMfc->PutAutoRegisterKeyPath(strTmpAll); 
+
+	// trialDays is more sensible but with runs you can see it change each activation, better than waiting 24 hours
+	m_pActiveLockMfc->PutTrialType(trialRuns);
+	m_pActiveLockMfc->PutTrialLength(31);
+	m_pActiveLockMfc->PutTrialHideType(trialSteganography);
+
+	m_pActiveLockMfc->Initialize(); 
+
+	m_pActiveLockMfc->CheckLicense(); 
+
+	}
   catch(int e)
   {
     switch(e)
@@ -290,12 +285,8 @@ BOOL CMFCSampleApp::InitInstance()
 
 int CMFCSampleApp::ExitInstance()
 {
-  if(oneApproach){
     m_pActiveLockMfc->DisconnectEvent();
     m_pActiveLockMfc->DestroyActiveLock();
-  } else {
-    m_pActiveLockMfc->DestroyAll();
-  }
   delete m_pActiveLockMfc;
   return CWinApp::ExitInstance();
 }
@@ -336,66 +327,6 @@ CString CMFCSampleApp::ProgramPath()
   return strPath;
 }
 
-
-BOOL CMFCSampleApp::CheckLicenseWrapperLevel() 
-{ 
-  BOOL bLimitedLicense;   // maybe this should be a member variable
-
-  m_pActiveLockMfc->Create(); 
-
-  m_pActiveLockMfc->PutSoftwareVersion(CString("1.0")); 
-  m_pActiveLockMfc->PutSoftwareName(CString("TestApp")); 
-  m_pActiveLockMfc->PutKeyStoreType(alsFile); // 1 = File 
-  m_pActiveLockMfc->PutLockType(lockType);
-  m_pActiveLockMfc->PutSoftwareCode(CString(GetIt().c_str())); 
-
-  // license in application directory
-  //CString strTmpLic = ProgramPath() + _T("//testapp.lic"); 
-
-  // license in windows directory
-  CString strTmpLic = _T("testapp.lic"); 
-
-  m_pActiveLockMfc->PutKeyStorePath(strTmpLic); 
-
-  //CString strTmpAll = ProgramPath() + _T("\\testapp.all"); 
-  CString strTmpAll = _T("c:\\testapp.all"); 
-  m_pActiveLockMfc->PutAutoRegisterKeyPath(strTmpAll); 
-
-  // trialDays is more sensible but with runs you can see it change each activation, better than waiting 24 hours
-  m_pActiveLockMfc->PutTrialType(trialRuns);
-  m_pActiveLockMfc->PutTrialLength(31);
-  m_pActiveLockMfc->PutTrialHideType(trialSteganography);
-
-  m_pActiveLockMfc->Initialize(); 
-
-  m_pActiveLockMfc->CheckLicense(); 
-
-  //   if(!m_pActiveLockMfc->RegStatus()  ||  m_pActiveLockMfc->IsTrialLicense()) 
-  //      ActiveLockRegister(); 
-
-  if(m_pActiveLockMfc->RegStatus()) 
-    bLimitedLicense = m_pActiveLockMfc->IsLimitedLicense(); 
-
-  return (m_pActiveLockMfc->RegStatus() &&  !m_pActiveLockMfc->IsTrialLicense()); 
-} 
-
-
-BOOL CMFCSampleApp::CheckLicenseMFCLevel() 
-{ 
-  BOOL bLimitedLicense;
-
-  //FindProgramPath(); 
-
-  m_pActiveLockMfc->CheckLicenseMFC(); 
-
-  //   if(!m_pActiveLockMfc->RegStatus()  ||  m_pActiveLockMfc->IsTrialLicense()) 
-  //      ActiveLockRegister(); 
-
-  if(m_pActiveLockMfc->RegStatus()) 
-    bLimitedLicense = m_pActiveLockMfc->IsLimitedLicense(); 
-
-  return (m_pActiveLockMfc->RegStatus() &&  !m_pActiveLockMfc->IsTrialLicense()); 
-} 
 
 
 BOOL  CMFCSampleApp::CrcsEtc(int debug)

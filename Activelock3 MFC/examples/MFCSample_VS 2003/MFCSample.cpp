@@ -61,11 +61,10 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-BOOL oneApproach = TRUE;
-
 extern IID iid_IActiveLockEventSink;
 
 // this procedure is produced by the StringHider Utility as output to file temp.c
+// ignore
 string GetIt(){
   typedef unsigned int integers;
   const int charsPerInt = 4;
@@ -106,7 +105,6 @@ string GetIt(){
   if(ileft){ stLic = stLic.substr(0, (int)stLic.length() - (charsPerInt-ileft)); }
   return stLic;
   //  return     "AAAAB3NzaC1yc2EAAAABJQAAAIB8/B2KWoai2WSGTRPcgmMoczeXpd8nv0Y4r1sJ1wV3vH21q4rTpEYuBiD4HFOpkbNBSRdpBHJGWec7jUi8ISV0pM6i2KznjhCms5CEtYHRybbiYvRXleGzFsAAP817PLN3JYo3WkErT2ofR5RCkfhmx060BT8waPoqnn3AB7sZ0Q==";
-    //          AAAAB3NzaC1yc2EAAAABJQAAAIB8/B2KWoai2WSGTRPcgmMoczeXpd8nv0Y4r1sJ1wV3vH21q4rTpEYuBiD4HFOpkbNBSRdpBHJGWec7jUi8ISV0pM6i2KznjhCms5CEtYHRybbiYvRXleGzFsAAP817PLN3JYo3WkErT2ofR5RCkfhmx060BT8waPoqnn3AB7sZ0Q==
 }
 
 //
@@ -217,7 +215,8 @@ BOOL CMFCSampleApp::InitInstance()
   m_pMainWnd->UpdateWindow();
 
 
-  // ActiveLock Section
+  // A c t i v e L o c k   S e c t i o n
+
   BOOL debug = 1; // best supplied in debug mode as crc values are usually wrong
   if( !CrcsEtc(debug))
   {
@@ -225,50 +224,48 @@ BOOL CMFCSampleApp::InitInstance()
   }
   try
   {
+    // username and locktype are stored in ini file
+    // locktype stored as integer and then converted to enum
     char chLockType[20];
     char UserName[200];
     GetPrivateProfileString (LPCTSTR(strApp), "User", "", UserName, 200, LPCTSTR(strIni)); 
     GetPrivateProfileString (LPCTSTR(strApp), "lockType", "", chLockType, 200, LPCTSTR(strIni)); 
 
-    if(oneApproach){
-      m_pActiveLockMfc = new CActiveLockMFC();
-      m_pActiveLockMfc->SetRegisteredUser(CString(UserName));
-      lockType = m_pActiveLockMfc->LockTypeFromInt(atoi(chLockType));
-      m_pActiveLockMfc->SetLockType(lockType);
+    m_pActiveLockMfc = new CActiveLockMFC();
+    m_pActiveLockMfc->SetRegisteredUser(CString(UserName));
+    lockType = m_pActiveLockMfc->LockTypeFromInt(atoi(chLockType));
+    m_pActiveLockMfc->SetLockType(lockType);
 
-      CheckLicenseWrapperLevel();
-    } else {
-      // the other approach
-      CString KeyStorePath				            = _T("TestApp.lic");  // license file name
-      CString AutoRegisterKeyPath             = _T("c:\\TestApp.all");// use the auto register facility from this file
-      CString softwareName				            = _T("TestApp");
-      CString version						              = _T("1.0"); // license does not contain version number !!!!
-      enum LicStoreType licStoreType          = alsFile;
-      enum ALLicType    LicType               = allicTimeLocked;
-      enum ALLockTypes  LockType              = lockType;
-      enum ALTrialTypes trialType             = trialRuns;
-      int  trialNo                            = 31;
-      enum ALTrialHideTypes   HideType        = trialSteganography;
-      CString  RegisteredLevel                = "Level 3";
+    m_pActiveLockMfc->Create(); 
+
+    m_pActiveLockMfc->PutSoftwarePassword("MyPassWord");
+    m_pActiveLockMfc->PutSoftwareVersion(CString("1.0")); 
+    m_pActiveLockMfc->PutSoftwareName(CString("TestApp")); 
+    m_pActiveLockMfc->PutKeyStoreType(alsFile); // 1 = File 
+    m_pActiveLockMfc->PutLockType(lockType);
+
+    // the following commented out line is a way of hiding the software code string from prying eyes
+    // but is a little advanced for a first attempt, and is only a suggestion
+    //m_pActiveLockMfc->PutSoftwareCode(CString(GetIt().c_str())); 
+    m_pActiveLockMfc->PutSoftwareCode( "AAAAB3NzaC1yc2EAAAABJQAAAIB8/B2KWoai2WSGTRPcgmMoczeXpd8nv0Y4r1sJ1wV3vH21q4rTpEYuBiD4HFOpkbNBSRdpBHJGWec7jUi8ISV0pM6i2KznjhCms5CEtYHRybbiYvRXleGzFsAAP817PLN3JYo3WkErT2ofR5RCkfhmx060BT8waPoqnn3AB7sZ0Q==");
 
 
-      m_pActiveLockMfc = new   CActiveLockMFC( softwareName, 
-        version,
-        licStoreType,
-        LicType,
-        LockType,
-        KeyStorePath,
-        AutoRegisterKeyPath,
-        trialType,
-        trialNo,
-        HideType,
-        RegisteredLevel
-        );
-      m_pActiveLockMfc->SetRegisteredUser(CString(UserName));
-      lockType = m_pActiveLockMfc->LockTypeFromInt(atoi(chLockType));
-      m_pActiveLockMfc->SetLockType(lockType);
-      CheckLicenseMFCLevel();
-    }
+    // license in application directory
+    CString strTmpLic = ProgramPath() + _T("\\testapp.lic"); 
+    m_pActiveLockMfc->PutKeyStorePath(strTmpLic); 
+
+    // liberation file in application directory
+    CString strTmpAll = ProgramPath() + _T("\\testapp.all"); 
+    m_pActiveLockMfc->PutAutoRegisterKeyPath(strTmpAll); 
+
+    // trialDays is more sensible but with runs you can see it change each activation, better than waiting 24 hours
+    m_pActiveLockMfc->PutTrialType(trialRuns);
+    m_pActiveLockMfc->PutTrialLength(31);
+    m_pActiveLockMfc->PutTrialHideType(trialSteganography);
+
+    m_pActiveLockMfc->Initialize(); 
+
+    m_pActiveLockMfc->CheckLicense(); 
   }
   catch(int e)
   {
@@ -290,12 +287,8 @@ BOOL CMFCSampleApp::InitInstance()
 
 int CMFCSampleApp::ExitInstance()
 {
-  if(oneApproach){
-    m_pActiveLockMfc->DisconnectEvent();
-    m_pActiveLockMfc->DestroyActiveLock();
-  } else {
-    m_pActiveLockMfc->DestroyAll();
-  }
+  m_pActiveLockMfc->DisconnectEvent();
+  m_pActiveLockMfc->DestroyActiveLock();
   delete m_pActiveLockMfc;
   return CWinApp::ExitInstance();
 }
@@ -337,67 +330,6 @@ CString CMFCSampleApp::ProgramPath()
 }
 
 
-BOOL CMFCSampleApp::CheckLicenseWrapperLevel() 
-{ 
-  BOOL bLimitedLicense;   // maybe this should be a member variable
-
-  m_pActiveLockMfc->Create(); 
-
-  m_pActiveLockMfc->PutSoftwareVersion(CString("1.0")); 
-  m_pActiveLockMfc->PutSoftwareName(CString("TestApp")); 
-  m_pActiveLockMfc->PutKeyStoreType(alsFile); // 1 = File 
-  m_pActiveLockMfc->PutLockType(lockType);
-  m_pActiveLockMfc->PutSoftwareCode(CString(GetIt().c_str())); 
-
-  // license in application directory
-  //CString strTmpLic = ProgramPath() + _T("//testapp.lic"); 
-
-  // license in windows directory
-  CString strTmpLic = _T("testapp.lic"); 
-
-  m_pActiveLockMfc->PutKeyStorePath(strTmpLic); 
-
-  //CString strTmpAll = ProgramPath() + _T("\\testapp.all"); 
-  CString strTmpAll = _T("c:\\testapp.all"); 
-  m_pActiveLockMfc->PutAutoRegisterKeyPath(strTmpAll); 
-
-  // trialDays is more sensible but with runs you can see it change each activation, better than waiting 24 hours
-  m_pActiveLockMfc->PutTrialType(trialRuns);
-  m_pActiveLockMfc->PutTrialLength(31);
-  m_pActiveLockMfc->PutTrialHideType(trialSteganography);
-
-  m_pActiveLockMfc->Initialize(); 
-
-  m_pActiveLockMfc->CheckLicense(); 
-
-  //   if(!m_pActiveLockMfc->RegStatus()  ||  m_pActiveLockMfc->IsTrialLicense()) 
-  //      ActiveLockRegister(); 
-
-  if(m_pActiveLockMfc->RegStatus()) 
-    bLimitedLicense = m_pActiveLockMfc->IsLimitedLicense(); 
-
-  return (m_pActiveLockMfc->RegStatus() &&  !m_pActiveLockMfc->IsTrialLicense()); 
-} 
-
-
-BOOL CMFCSampleApp::CheckLicenseMFCLevel() 
-{ 
-  BOOL bLimitedLicense;
-
-  //FindProgramPath(); 
-
-  m_pActiveLockMfc->CheckLicenseMFC(); 
-
-  //   if(!m_pActiveLockMfc->RegStatus()  ||  m_pActiveLockMfc->IsTrialLicense()) 
-  //      ActiveLockRegister(); 
-
-  if(m_pActiveLockMfc->RegStatus()) 
-    bLimitedLicense = m_pActiveLockMfc->IsLimitedLicense(); 
-
-  return (m_pActiveLockMfc->RegStatus() &&  !m_pActiveLockMfc->IsTrialLicense()); 
-} 
-
-
 BOOL  CMFCSampleApp::CrcsEtc(int debug)
 {
   if(debug) return TRUE;
@@ -412,7 +344,7 @@ BOOL  CMFCSampleApp::CrcsEtc(int debug)
     cnac.crc = activelock3Crc;
     cnac.msg = "Possible wrong version of activelock3.dll";
     cnac.name =  windowsSystem;
-    cnac.name += CString("\\activelock3.4.dll");
+    cnac.name += CString("\\activelock3.5.dll");
     vNameCrc.push_back(cnac);
   }
 

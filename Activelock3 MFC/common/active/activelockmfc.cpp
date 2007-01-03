@@ -5,7 +5,7 @@
 using namespace _com_util_fix; 
 
 
-#import "C:\\windows\\system32\\ActiveLock3.4.dll" 
+#import "C:\\windows\\system32\\ActiveLock3.5.dll" 
 using namespace ActiveLock3; 
 
 using namespace std;
@@ -167,34 +167,6 @@ CActiveLockMFC::CActiveLockMFC()
   Init();
 } 
 
-CActiveLockMFC::CActiveLockMFC(CString&                 softwareName, 
-                               CString&                 version, 
-                               enum LicStoreType        licStoreType,
-                               enum ALLicType           LicType,
-                               enum ALLockTypes         LockType,
-                               CString                  KeyStorePath,
-                               CString                  AutoRegisterKeyPath,
-                               enum ALTrialTypes        trialType,
-                               int                      trialNo,
-                               enum ALTrialHideTypes    HideType,
-                               CString                  RegisteredLevel
-                               )
-{
-  Init();
-  m_strSoftwareName             = softwareName; 
-  m_strSoftwareVersion          = version; 
-  m_licStoreType                = licStoreType;
-  m_strKeyStorePath             = KeyStorePath; 
-  m_strAutoRegisterKeyPath      = AutoRegisterKeyPath; 
-  m_strRegisteredLevel          = RegisteredLevel; 
-
-  m_lLockType                   = LockType; 
-  m_lLicType                    = LicType; 
-  m_lTrialType                  = trialType;; 
-  m_lTrialLength                = trialNo; 
-  m_lTrialHideType              = HideType; 
-}
-
 
 CActiveLockMFC::~CActiveLockMFC() 
 { 
@@ -242,21 +214,6 @@ BOOL CActiveLockMFC::CollectLicenseData()
     else 
       m_bLimited = FALSE; 
     CString strVersion   = GetSoftwareVersion(); 
-		// I do not believe version is in the license - so next test is rubbish. I could be wrong
-    /* remove
-    if(m_strSoftwareVersion != strVersion) 
-    { 
-      AfxMessageBox(_T("Wrong software version")); 
-      AfxThrowUserException(); 
-      //         return FALSE; 
-    } 
-    */
-    // only a proper license will get here
-    m_lLockType = GetUsedLockType();    // lockType used in the license 
-    // The above could be a combination of codes - this case is not handled here - future job
-    // in fact a combination can not be a legal enum type-my fault should report to forum
-    PutLockType(m_lLockType);                         // make them all agree
-
     m_bRegStatus         = TRUE; 
     m_strLicenseStatus   = _T("Registered"); 
   } 
@@ -358,8 +315,8 @@ BOOL CActiveLockMFC::CheckLicense()
 
     // if you have problems with the trial feature you may have to uncomment the 
     // following line and run the program and then reinsert the comments 
-    //ResetTrial();  // in case things go wrong 
-    //ResetTrial();  // a post said I should do it twice-easy enough-can not do any harm 
+    ResetTrial();  // in case things go wrong 
+    ResetTrial();  // a post said I should do it twice-easy enough-can not do any harm 
 
     CString strTmp = AcquireBSTR(); 
     m_strAcquireAnswer.Format(_T("%s"),strTmp); 
@@ -381,48 +338,4 @@ BOOL CActiveLockMFC::CheckLicense()
   return TRUE; 
 } 
 
-
-
-
-void CActiveLockMFC::PutSoftwareData() 
-{ 
-  // Initialize ActiveLock properties 
-  PutSoftwareName(m_strSoftwareName); 
-  PutSoftwareVersion(m_strSoftwareVersion); 
-  PutLockType(m_lLockType); 
-  PutSoftwareCode(CString(GetIt().c_str())); 
-  PutKeyStoreType(m_licStoreType);  
-  PutTrialType(m_lTrialType);
-  PutTrialHideType(m_lTrialHideType);
-  PutTrialLength(m_lTrialLength);
-
-  if(!m_strKeyStorePath.IsEmpty()) 
-    PutKeyStorePath(m_strKeyStorePath); 
-  if(!m_strAutoRegisterKeyPath.IsEmpty()) 
-    PutAutoRegisterKeyPath(m_strAutoRegisterKeyPath); 
-} 
-
-BOOL CActiveLockMFC::CheckLicenseMFC() 
-{ 
-  Create(); 
-  PutSoftwareData();
-
-  Initialize(); 
-  CheckLicense(); 
-  //   if(!m_pActiveLockMfc->RegStatus()  ||  m_pActiveLockMfc->IsTrialLicense()) 
-  //      ActiveLockRegister(); 
-  //DWif(RegStatus()) 
-  //DW  bLimitedLicense = IsLimitedLicense(); 
-  return (RegStatus() &&  !IsTrialLicense()); 
-  //return TRUE; 
-} 
-
-void CActiveLockMFC::DestroyAll() 
-{ 
-  DisconnectEvent();
-  DestroyActiveLock();
-
-  m_bCreated       = FALSE; 
-  m_bInitialized   = FALSE; 
-} 
 

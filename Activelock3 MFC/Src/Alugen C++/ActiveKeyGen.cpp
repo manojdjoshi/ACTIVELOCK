@@ -58,7 +58,7 @@
 using namespace std;
 
 #include "direct.h"
-#import "C:\\windows\\system32\\ActiveLock3.4.dll" 
+#import "C:\\windows\\system32\\ActiveLock3.5.dll" 
 using namespace ActiveLock3; 
 
 
@@ -100,7 +100,7 @@ int ActveLockKeyGen(
   _AlugenGlobalsPtr alugenGlobals;
   hr = alugenGlobals.CreateInstance(_T("ActiveLock3.AlugenGlobals"),NULL);
   _IALUGeneratorPtr alugen;
-  alugen = alugenGlobals->GeneratorInstance();
+  alugen = alugenGlobals->GeneratorInstance(0); // new parameter - this is a cop out 
 
   // finding products.ini is the biggest weakness of this program
   // currently this program must be placed in Src_v3 to find products.ini
