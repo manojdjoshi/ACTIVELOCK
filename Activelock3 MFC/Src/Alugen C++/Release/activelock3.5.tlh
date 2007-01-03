@@ -1,0 +1,858 @@
+// Created by Microsoft (R) C/C++ Compiler Version 13.10.3077 (e1da5ef3).
+//
+// c:\activelock\activelock mfc c++ csharp\src\alugen c++\release\activelock3.5.tlh
+//
+// C++ source equivalent of Win32 type library C:\\windows\\system32\\ActiveLock3.5.dll
+// compiler-generated file created 01/03/07 at 12:36:38 - DO NOT EDIT!
+
+#pragma once
+#pragma pack(push, 8)
+
+#include <comdef.h>
+
+namespace ActiveLock3 {
+
+//
+// Forward references and typedefs
+//
+
+struct __declspec(uuid("5aae0e25-9081-4d35-857e-090a5cfffe30"))
+/* LIBID */ __ActiveLock3;
+struct __declspec(uuid("984d774e-b893-4ed0-b44a-e25db13cf505"))
+/* dual interface */ _IActiveLock;
+struct /* coclass */ IActiveLock;
+typedef struct _IActiveLock IActiveLock___v0;
+typedef struct _IActiveLock IActiveLock___v1;
+struct __declspec(uuid("7e563b78-45b1-4f8b-bcb0-6d21b0110b94"))
+/* dual interface */ _AlugenGlobals;
+struct /* coclass */ AlugenGlobals;
+struct __declspec(uuid("21ae5a83-859f-4f96-9a82-2d67c85ee964"))
+/* dual interface */ _ProductLicense;
+struct /* coclass */ ProductLicense;
+struct __declspec(uuid("55707dce-dd35-482f-8a18-220e147ad18f"))
+/* dual interface */ _ActiveLockEventNotifier;
+struct /* coclass */ ActiveLockEventNotifier;
+struct __declspec(uuid("195a516c-3c0b-442d-9d34-65fc60ef57bc"))
+/* dual interface */ _Globals;
+struct /* coclass */ Globals;
+struct __declspec(uuid("8af19316-5010-4207-9295-dab065366566"))
+/* dual interface */ _IALUGenerator;
+struct /* coclass */ IALUGenerator;
+struct __declspec(uuid("17c97a4b-c0b5-4b5d-9c0c-5b85ec6209c3"))
+/* dual interface */ _ProductInfo;
+struct /* coclass */ ProductInfo;
+struct __declspec(uuid("b910f346-7b19-449f-82fc-c2b98495810b"))
+/* dispinterface */ __ActiveLockEventNotifier;
+enum ALLockTypes;
+enum ALLicenseKeyTypes;
+enum LicStoreType;
+enum ProductsStoreType;
+enum ALTrialTypes;
+enum ALTrialHideTypes;
+enum ALTimeServerTypes;
+enum ALSystemFilesTypes;
+enum ALLicenseFileTypes;
+enum ALAutoRegisterTypes;
+enum ALTrialWarningTypes;
+enum ALUGENErrCodeConstants;
+enum LicFlags;
+enum ALLicType;
+enum ActiveLockErrCodeConstants;
+
+//
+// Smart pointer typedef declarations
+//
+
+_COM_SMARTPTR_TYPEDEF(_ActiveLockEventNotifier, __uuidof(_ActiveLockEventNotifier));
+_COM_SMARTPTR_TYPEDEF(_ProductInfo, __uuidof(_ProductInfo));
+_COM_SMARTPTR_TYPEDEF(__ActiveLockEventNotifier, __uuidof(__ActiveLockEventNotifier));
+_COM_SMARTPTR_TYPEDEF(_ProductLicense, __uuidof(_ProductLicense));
+_COM_SMARTPTR_TYPEDEF(_IActiveLock, __uuidof(_IActiveLock));
+_COM_SMARTPTR_TYPEDEF(_Globals, __uuidof(_Globals));
+_COM_SMARTPTR_TYPEDEF(_IALUGenerator, __uuidof(_IALUGenerator));
+_COM_SMARTPTR_TYPEDEF(_AlugenGlobals, __uuidof(_AlugenGlobals));
+
+//
+// Type library items
+//
+
+struct __declspec(uuid("bbe02e39-6dd3-4f12-a655-4c254f4cdbba"))
+IActiveLock;
+    // [ default ] interface _IActiveLock
+
+struct __declspec(uuid("78830145-3285-4437-acf5-6b7b510fbfa4"))
+AlugenGlobals;
+    // [ default ] interface _AlugenGlobals
+
+struct __declspec(uuid("081c3c05-3126-4784-979b-e24d18c7fd15"))
+ProductLicense;
+    // [ default ] interface _ProductLicense
+
+struct __declspec(uuid("55707dce-dd35-482f-8a18-220e147ad18f"))
+_ActiveLockEventNotifier : IDispatch
+{};
+
+struct __declspec(uuid("425b29d1-7160-45f7-808f-0db627b4d6be"))
+ActiveLockEventNotifier;
+    // [ default ] interface _ActiveLockEventNotifier
+    // [ default, source ] dispinterface __ActiveLockEventNotifier
+
+struct __declspec(uuid("6d440066-fd0f-4f6b-bbfa-19a2d338add1"))
+Globals;
+    // [ default ] interface _Globals
+
+struct __declspec(uuid("385de912-a5b5-4d27-bcd3-8f7991725d22"))
+IALUGenerator;
+    // [ default ] interface _IALUGenerator
+
+struct __declspec(uuid("17c97a4b-c0b5-4b5d-9c0c-5b85ec6209c3"))
+_ProductInfo : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetGCode))
+    _bstr_t GCode;
+    __declspec(property(get=GetVCode))
+    _bstr_t VCode;
+    __declspec(property(get=GetVersion))
+    _bstr_t Version;
+    __declspec(property(get=Getname))
+    _bstr_t name;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _bstr_t Getname ( );
+    _bstr_t GetVersion ( );
+    _bstr_t GetVCode ( );
+    _bstr_t GetGCode ( );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_name (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_Version (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_VCode (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_GCode (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+};
+
+struct __declspec(uuid("fde956cc-4186-4b6c-885a-2dacb745c1de"))
+ProductInfo;
+    // [ default ] interface _ProductInfo
+
+struct __declspec(uuid("b910f346-7b19-449f-82fc-c2b98495810b"))
+__ActiveLockEventNotifier : IDispatch
+{
+    //
+    // Wrapper methods for error-handling
+    //
+
+    // Methods:
+    HRESULT ValidateValue (
+        BSTR * Value );
+};
+
+enum __declspec(uuid("5409b899-ee4a-47b2-a7ab-1b279fa82228"))
+ALLockTypes
+{
+    lockNone = 0,
+    lockWindows = 1,
+    lockComp = 2,
+    lockHD = 4,
+    lockMAC = 8,
+    lockBIOS = 16,
+    lockIP = 32,
+    lockMotherboard = 64,
+    lockHDFirmware = 256
+};
+
+enum __declspec(uuid("cf8cd3a7-e06a-4ab0-8e5f-2737a7ce6195"))
+ALLicenseKeyTypes
+{
+    alsRSA = 0,
+    alsShortKeyMD5 = 1
+};
+
+enum __declspec(uuid("a3da52cb-fd6b-436a-bc76-f3cd2a80ee1b"))
+LicStoreType
+{
+    alsRegistry = 0,
+    alsFile = 1
+};
+
+enum __declspec(uuid("91c4231e-d3ba-4c1e-9745-d1c8250228ab"))
+ProductsStoreType
+{
+    alsINIFile = 0,
+    alsXMLFile = 1,
+    alsMDBFile = 2
+};
+
+enum __declspec(uuid("6a0e0a7e-2f4e-416f-888c-38ee7063a886"))
+ALTrialTypes
+{
+    trialNone = 0,
+    trialDays = 1,
+    trialRuns = 2
+};
+
+enum __declspec(uuid("07f75a5e-d050-48c6-a3bd-a32efa887bbe"))
+ALTrialHideTypes
+{
+    trialSteganography = 1,
+    trialHiddenFolder = 2,
+    trialRegistry = 4
+};
+
+enum __declspec(uuid("34d1017e-6c5d-4d38-9fa7-b789b24e24c2"))
+ALTimeServerTypes
+{
+    alsDontCheckTimeServer = 0,
+    alsCheckTimeServer = 1
+};
+
+enum __declspec(uuid("feaede5d-d389-4ace-b507-a73852295f8b"))
+ALSystemFilesTypes
+{
+    alsDontCheckSystemFiles = 0,
+    alsCheckSystemFiles = 1
+};
+
+enum __declspec(uuid("addf45d3-2e5a-4516-b1fe-e64af30b7cdd"))
+ALLicenseFileTypes
+{
+    alsLicenseFilePlain = 0,
+    alsLicenseFileEncrypted = 1
+};
+
+enum __declspec(uuid("85565537-aa25-44fb-a0d0-db7743d7a7cc"))
+ALAutoRegisterTypes
+{
+    alsEnableAutoRegistration = 0,
+    alsDisableAutoRegistration = 1
+};
+
+enum __declspec(uuid("b036e213-de60-4676-b20c-ae4f7f1eb2d7"))
+ALTrialWarningTypes
+{
+    trialWarningTemporary = 0,
+    trialWarningPersistent = 1
+};
+
+enum __declspec(uuid("51a17590-48c3-4e9d-b47c-316c565ab289"))
+ALUGENErrCodeConstants
+{
+    alugenOK = 0,
+    alugenProdInvalid = -2147221248
+};
+
+enum __declspec(uuid("f9509b9b-586d-4728-8110-2f776d2986d4"))
+LicFlags
+{
+    alfSingle = 0,
+    alfMulti = 1
+};
+
+enum __declspec(uuid("4d892d5b-7bae-4ddf-a549-bb7e56879251"))
+ALLicType
+{
+    allicNone = 0,
+    allicPeriodic = 1,
+    allicPermanent = 2,
+    allicTimeLocked = 3
+};
+
+struct __declspec(uuid("21ae5a83-859f-4f96-9a82-2d67c85ee964"))
+_ProductLicense : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetHash1))
+    _bstr_t Hash1;
+    __declspec(property(get=GetLastUsed))
+    _bstr_t LastUsed;
+    __declspec(property(get=GetMaxCount))
+    long MaxCount;
+    __declspec(property(get=GetRegisteredDate))
+    _bstr_t RegisteredDate;
+    __declspec(property(get=GetExpiration))
+    _bstr_t Expiration;
+    __declspec(property(get=GetLicenseCode,put=PutLicenseCode))
+    _bstr_t LicenseCode;
+    __declspec(property(get=GetLicenseKey,put=PutLicenseKey))
+    _bstr_t LicenseKey;
+    __declspec(property(get=GetLicensee,put=PutLicensee))
+    _bstr_t Licensee;
+    __declspec(property(get=GetLicenseClass))
+    _bstr_t LicenseClass;
+    __declspec(property(get=GetProductKey,put=PutProductKey))
+    _bstr_t ProductKey;
+    __declspec(property(get=GetProductVer))
+    _bstr_t ProductVer;
+    __declspec(property(get=GetProductName))
+    _bstr_t ProductName;
+    __declspec(property(get=GetRegisteredLevel,put=PutRegisteredLevel))
+    _bstr_t RegisteredLevel;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    void PutRegisteredLevel (
+        _bstr_t _arg1 );
+    _bstr_t GetRegisteredLevel ( );
+    void PutLicenseType (
+        enum ALLicType * _arg1 );
+    enum ALLicType GetLicenseType ( );
+    _bstr_t GetProductName ( );
+    _bstr_t GetProductVer ( );
+    void PutProductKey (
+        _bstr_t _arg1 );
+    _bstr_t GetProductKey ( );
+    _bstr_t GetLicenseClass ( );
+    void PutLicensee (
+        _bstr_t _arg1 );
+    _bstr_t GetLicensee ( );
+    void PutLicenseKey (
+        _bstr_t _arg1 );
+    void PutLicenseCode (
+        _bstr_t _arg1 );
+    _bstr_t GetLicenseKey ( );
+    _bstr_t GetLicenseCode ( );
+    _bstr_t GetExpiration ( );
+    _bstr_t GetRegisteredDate ( );
+    long GetMaxCount ( );
+    _bstr_t GetLastUsed ( );
+    _bstr_t GetHash1 ( );
+    _bstr_t ToString ( );
+    HRESULT Load (
+        _bstr_t strLic );
+    HRESULT Save (
+        BSTR * strOut );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall put_RegisteredLevel (
+        /*[in]*/ BSTR _arg1 ) = 0;
+      virtual HRESULT __stdcall get_RegisteredLevel (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall put_LicenseType (
+        /*[in,out]*/ enum ALLicType * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_LicenseType (
+        /*[out,retval]*/ enum ALLicType * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_ProductName (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_ProductVer (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall put_ProductKey (
+        /*[in]*/ BSTR _arg1 ) = 0;
+      virtual HRESULT __stdcall get_ProductKey (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_LicenseClass (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall put_Licensee (
+        /*[in]*/ BSTR _arg1 ) = 0;
+      virtual HRESULT __stdcall get_Licensee (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall put_LicenseKey (
+        /*[in]*/ BSTR _arg1 ) = 0;
+      virtual HRESULT __stdcall put_LicenseCode (
+        /*[in]*/ BSTR _arg1 ) = 0;
+      virtual HRESULT __stdcall get_LicenseKey (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_LicenseCode (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_Expiration (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_RegisteredDate (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_MaxCount (
+        /*[out,retval]*/ long * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_LastUsed (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_Hash1 (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall raw_ToString (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall raw_Load (
+        /*[in]*/ BSTR strLic ) = 0;
+      virtual HRESULT __stdcall raw_Save (
+        /*[in,out]*/ BSTR * strOut ) = 0;
+};
+
+struct __declspec(uuid("984d774e-b893-4ed0-b44a-e25db13cf505"))
+_IActiveLock : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(get=GetExpirationDate))
+    _bstr_t ExpirationDate;
+    __declspec(property(get=GetRegisteredUser))
+    _bstr_t RegisteredUser;
+    __declspec(property(get=GetRegisteredDate))
+    _bstr_t RegisteredDate;
+    __declspec(property(get=GetUsedDays))
+    long UsedDays;
+    __declspec(property(get=GetEventNotifier))
+    _ActiveLockEventNotifierPtr EventNotifier;
+    __declspec(property(put=PutAutoRegisterKeyPath))
+    _bstr_t AutoRegisterKeyPath;
+    __declspec(property(put=PutKeyStorePath))
+    _bstr_t KeyStorePath;
+    __declspec(property(put=PutKeyStoreType))
+    enum LicStoreType KeyStoreType;
+    __declspec(property(get=GetSoftwareVersion,put=PutSoftwareVersion))
+    _bstr_t SoftwareVersion;
+    __declspec(property(put=PutSoftwareCode))
+    _bstr_t SoftwareCode;
+    __declspec(property(put=PutCheckSystemFilesForClockTampering))
+    enum ALSystemFilesTypes CheckSystemFilesForClockTampering;
+    __declspec(property(put=PutCheckTimeServerForClockTampering))
+    enum ALTimeServerTypes CheckTimeServerForClockTampering;
+    __declspec(property(get=GetSoftwarePassword,put=PutSoftwarePassword))
+    _bstr_t SoftwarePassword;
+    __declspec(property(get=GetSoftwareName,put=PutSoftwareName))
+    _bstr_t SoftwareName;
+    __declspec(property(get=GetUsedLockType))
+    SAFEARRAY * UsedLockType;
+    __declspec(property(get=GetTrialLength,put=PutTrialLength))
+    long TrialLength;
+    __declspec(property(get=GetTrialType,put=PutTrialType))
+    enum ALTrialTypes TrialType;
+    __declspec(property(get=GetTrialHideType,put=PutTrialHideType))
+    enum ALTrialHideTypes TrialHideType;
+    __declspec(property(put=PutLicenseFileType))
+    enum ALLicenseFileTypes LicenseFileType;
+    __declspec(property(put=PutLicenseKeyType))
+    enum ALLicenseKeyTypes LicenseKeyType;
+    __declspec(property(get=GetLockType,put=PutLockType))
+    enum ALLockTypes LockType;
+    __declspec(property(get=GetLicenseClass))
+    _bstr_t LicenseClass;
+    __declspec(property(get=GetMaxCount))
+    long MaxCount;
+    __declspec(property(get=GetRegisteredLevel))
+    _bstr_t RegisteredLevel;
+    __declspec(property(put=PutAutoRegister))
+    enum ALAutoRegisterTypes AutoRegister;
+    __declspec(property(get=GetUsedTrialRuns))
+    long UsedTrialRuns;
+    __declspec(property(get=GetUsedTrialDays))
+    long UsedTrialDays;
+    __declspec(property(put=PutTrialWarning))
+    enum ALTrialWarningTypes TrialWarning;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _bstr_t GetRegisteredLevel ( );
+    long GetMaxCount ( );
+    _bstr_t GetLicenseClass ( );
+    void PutLockType (
+        enum ALLockTypes _arg1 );
+    void PutLicenseKeyType (
+        enum ALLicenseKeyTypes _arg1 );
+    void PutLicenseFileType (
+        enum ALLicenseFileTypes _arg1 );
+    void PutTrialHideType (
+        enum ALTrialHideTypes _arg1 );
+    void PutTrialType (
+        enum ALTrialTypes _arg1 );
+    void PutTrialLength (
+        long _arg1 );
+    enum ALLockTypes GetLockType ( );
+    SAFEARRAY * GetUsedLockType ( );
+    enum ALTrialHideTypes GetTrialHideType ( );
+    enum ALTrialTypes GetTrialType ( );
+    long GetTrialLength ( );
+    void PutSoftwareName (
+        _bstr_t _arg1 );
+    void PutSoftwarePassword (
+        _bstr_t _arg1 );
+    void PutCheckTimeServerForClockTampering (
+        enum ALTimeServerTypes _arg1 );
+    void PutCheckSystemFilesForClockTampering (
+        enum ALSystemFilesTypes _arg1 );
+    _bstr_t GetSoftwareName ( );
+    _bstr_t GetSoftwarePassword ( );
+    void PutSoftwareCode (
+        _bstr_t _arg1 );
+    void PutSoftwareVersion (
+        _bstr_t _arg1 );
+    _bstr_t GetSoftwareVersion ( );
+    void PutKeyStoreType (
+        enum LicStoreType _arg1 );
+    void PutKeyStorePath (
+        _bstr_t _arg1 );
+    _bstr_t GetInstallationCode (
+        _bstr_t user,
+        struct _ProductLicense * * Lic );
+    void PutAutoRegisterKeyPath (
+        _bstr_t _arg1 );
+    _bstr_t LockCode (
+        struct _ProductLicense * * Lic );
+    HRESULT Register (
+        _bstr_t LibKey,
+        BSTR * user );
+    _bstr_t Transfer (
+        _bstr_t InstallCode );
+    HRESULT Init (
+        BSTR * autoLicString );
+    HRESULT Acquire (
+        BSTR * strMsg );
+    HRESULT ResetTrial ( );
+    HRESULT KillTrial ( );
+    _bstr_t GenerateShortSerial (
+        _bstr_t HDDfirmwareSerial );
+    _bstr_t GenerateShortKey (
+        _bstr_t SoftwareCode,
+        _bstr_t SerialNumber,
+        _bstr_t LicenseeAndRegisteredLevel,
+        _bstr_t Expiration,
+        enum ALLicType LicType,
+        long RegisteredLevel,
+        short MaxUsers );
+    _ActiveLockEventNotifierPtr GetEventNotifier ( );
+    long GetUsedDays ( );
+    _bstr_t GetRegisteredDate ( );
+    _bstr_t GetRegisteredUser ( );
+    _bstr_t GetExpirationDate ( );
+    void PutAutoRegister (
+        enum ALAutoRegisterTypes _arg1 );
+    void PutTrialWarning (
+        enum ALTrialWarningTypes _arg1 );
+    long GetUsedTrialDays ( );
+    long GetUsedTrialRuns ( );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall get_RegisteredLevel (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_MaxCount (
+        /*[out,retval]*/ long * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_LicenseClass (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall put_LockType (
+        /*[in]*/ enum ALLockTypes _arg1 ) = 0;
+      virtual HRESULT __stdcall put_LicenseKeyType (
+        /*[in]*/ enum ALLicenseKeyTypes _arg1 ) = 0;
+      virtual HRESULT __stdcall put_LicenseFileType (
+        /*[in]*/ enum ALLicenseFileTypes _arg1 ) = 0;
+      virtual HRESULT __stdcall put_TrialHideType (
+        /*[in]*/ enum ALTrialHideTypes _arg1 ) = 0;
+      virtual HRESULT __stdcall put_TrialType (
+        /*[in]*/ enum ALTrialTypes _arg1 ) = 0;
+      virtual HRESULT __stdcall put_TrialLength (
+        /*[in]*/ long _arg1 ) = 0;
+      virtual HRESULT __stdcall get_LockType (
+        /*[out,retval]*/ enum ALLockTypes * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_UsedLockType (
+        /*[out,retval]*/ SAFEARRAY * * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_TrialHideType (
+        /*[out,retval]*/ enum ALTrialHideTypes * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_TrialType (
+        /*[out,retval]*/ enum ALTrialTypes * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_TrialLength (
+        /*[out,retval]*/ long * _arg1 ) = 0;
+      virtual HRESULT __stdcall put_SoftwareName (
+        /*[in]*/ BSTR _arg1 ) = 0;
+      virtual HRESULT __stdcall put_SoftwarePassword (
+        /*[in]*/ BSTR _arg1 ) = 0;
+      virtual HRESULT __stdcall put_CheckTimeServerForClockTampering (
+        /*[in]*/ enum ALTimeServerTypes _arg1 ) = 0;
+      virtual HRESULT __stdcall put_CheckSystemFilesForClockTampering (
+        /*[in]*/ enum ALSystemFilesTypes _arg1 ) = 0;
+      virtual HRESULT __stdcall get_SoftwareName (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_SoftwarePassword (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall put_SoftwareCode (
+        /*[in]*/ BSTR _arg1 ) = 0;
+      virtual HRESULT __stdcall put_SoftwareVersion (
+        /*[in]*/ BSTR _arg1 ) = 0;
+      virtual HRESULT __stdcall get_SoftwareVersion (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall put_KeyStoreType (
+        /*[in]*/ enum LicStoreType _arg1 ) = 0;
+      virtual HRESULT __stdcall put_KeyStorePath (
+        /*[in]*/ BSTR _arg1 ) = 0;
+      virtual HRESULT __stdcall get_InstallationCode (
+        /*[in]*/ BSTR user,
+        /*[in,out]*/ struct _ProductLicense * * Lic,
+        /*[out,retval]*/ BSTR * _arg3 ) = 0;
+      virtual HRESULT __stdcall put_AutoRegisterKeyPath (
+        /*[in]*/ BSTR _arg1 ) = 0;
+      virtual HRESULT __stdcall raw_LockCode (
+        /*[in,out]*/ struct _ProductLicense * * Lic,
+        /*[out,retval]*/ BSTR * _arg2 ) = 0;
+      virtual HRESULT __stdcall raw_Register (
+        /*[in]*/ BSTR LibKey,
+        /*[in,out]*/ BSTR * user ) = 0;
+      virtual HRESULT __stdcall raw_Transfer (
+        /*[in]*/ BSTR InstallCode,
+        /*[out,retval]*/ BSTR * _arg2 ) = 0;
+      virtual HRESULT __stdcall raw_Init (
+        /*[in,out]*/ BSTR * autoLicString ) = 0;
+      virtual HRESULT __stdcall raw_Acquire (
+        /*[in,out]*/ BSTR * strMsg ) = 0;
+      virtual HRESULT __stdcall raw_ResetTrial ( ) = 0;
+      virtual HRESULT __stdcall raw_KillTrial ( ) = 0;
+      virtual HRESULT __stdcall raw_GenerateShortSerial (
+        /*[in]*/ BSTR HDDfirmwareSerial,
+        /*[out,retval]*/ BSTR * _arg2 ) = 0;
+      virtual HRESULT __stdcall raw_GenerateShortKey (
+        /*[in]*/ BSTR SoftwareCode,
+        /*[in]*/ BSTR SerialNumber,
+        /*[in]*/ BSTR LicenseeAndRegisteredLevel,
+        /*[in]*/ BSTR Expiration,
+        /*[in]*/ enum ALLicType LicType,
+        /*[in]*/ long RegisteredLevel,
+        /*[in]*/ short MaxUsers,
+        /*[out,retval]*/ BSTR * _arg8 ) = 0;
+      virtual HRESULT __stdcall get_EventNotifier (
+        /*[out,retval]*/ struct _ActiveLockEventNotifier * * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_UsedDays (
+        /*[out,retval]*/ long * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_RegisteredDate (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_RegisteredUser (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_ExpirationDate (
+        /*[out,retval]*/ BSTR * _arg1 ) = 0;
+      virtual HRESULT __stdcall put_AutoRegister (
+        /*[in]*/ enum ALAutoRegisterTypes _arg1 ) = 0;
+      virtual HRESULT __stdcall put_TrialWarning (
+        /*[in]*/ enum ALTrialWarningTypes _arg1 ) = 0;
+      virtual HRESULT __stdcall get_UsedTrialDays (
+        /*[out,retval]*/ long * _arg1 ) = 0;
+      virtual HRESULT __stdcall get_UsedTrialRuns (
+        /*[out,retval]*/ long * _arg1 ) = 0;
+};
+
+struct __declspec(uuid("195a516c-3c0b-442d-9d34-65fc60ef57bc"))
+_Globals : IDispatch
+{
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _variant_t ContainerChange (
+        _bstr_t containerName );
+    _variant_t CryptoAPIAction (
+        short * Index,
+        BSTR * containerName,
+        BSTR * plainText,
+        BSTR * signedText,
+        BSTR * publicKey,
+        BSTR * privateKey,
+        long * modulus );
+    _IActiveLockPtr NewInstance ( );
+    _ProductLicensePtr CreateProductLicense (
+        _bstr_t name,
+        _bstr_t Ver,
+        _bstr_t Code,
+        enum LicFlags Flags,
+        enum ALLicType LicType,
+        _bstr_t Licensee,
+        _bstr_t RegisteredLevel,
+        _bstr_t Expiration,
+        _bstr_t LicKey,
+        _bstr_t RegisteredDate,
+        _bstr_t Hash1,
+        short MaxUsers,
+        _bstr_t LicCode );
+    _bstr_t TrimNulls (
+        _bstr_t str );
+    _bstr_t MD5Hash (
+        _bstr_t str );
+    _bstr_t Base64Encode (
+        _bstr_t str );
+    _bstr_t Base64Decode (
+        _bstr_t strEncoded );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall raw_ContainerChange (
+        /*[in]*/ BSTR containerName,
+        /*[out,retval]*/ VARIANT * _arg2 ) = 0;
+      virtual HRESULT __stdcall raw_CryptoAPIAction (
+        /*[in,out]*/ short * Index,
+        /*[in,out]*/ BSTR * containerName,
+        /*[in,out]*/ BSTR * plainText,
+        /*[in,out]*/ BSTR * signedText,
+        /*[in,out]*/ BSTR * publicKey,
+        /*[in,out]*/ BSTR * privateKey,
+        /*[in,out]*/ long * modulus,
+        /*[out,retval]*/ VARIANT * _arg8 ) = 0;
+      virtual HRESULT __stdcall raw_NewInstance (
+        /*[out,retval]*/ struct _IActiveLock * * _arg1 ) = 0;
+      virtual HRESULT __stdcall raw_CreateProductLicense (
+        /*[in]*/ BSTR name,
+        /*[in]*/ BSTR Ver,
+        /*[in]*/ BSTR Code,
+        /*[in]*/ enum LicFlags Flags,
+        /*[in]*/ enum ALLicType LicType,
+        /*[in]*/ BSTR Licensee,
+        /*[in]*/ BSTR RegisteredLevel,
+        /*[in]*/ BSTR Expiration,
+        /*[in]*/ BSTR LicKey,
+        /*[in]*/ BSTR RegisteredDate,
+        /*[in]*/ BSTR Hash1,
+        /*[in]*/ short MaxUsers,
+        /*[in]*/ BSTR LicCode,
+        /*[out,retval]*/ struct _ProductLicense * * _arg14 ) = 0;
+      virtual HRESULT __stdcall raw_TrimNulls (
+        /*[in]*/ BSTR str,
+        /*[out,retval]*/ BSTR * _arg2 ) = 0;
+      virtual HRESULT __stdcall raw_MD5Hash (
+        /*[in]*/ BSTR str,
+        /*[out,retval]*/ BSTR * _arg2 ) = 0;
+      virtual HRESULT __stdcall raw_Base64Encode (
+        /*[in]*/ BSTR str,
+        /*[out,retval]*/ BSTR * _arg2 ) = 0;
+      virtual HRESULT __stdcall raw_Base64Decode (
+        /*[in]*/ BSTR strEncoded,
+        /*[out,retval]*/ BSTR * _arg2 ) = 0;
+};
+
+struct __declspec(uuid("8af19316-5010-4207-9295-dab065366566"))
+_IALUGenerator : IDispatch
+{
+    //
+    // Property data
+    //
+
+    __declspec(property(put=PutStoragePath))
+    _bstr_t StoragePath;
+
+    //
+    // Wrapper methods for error-handling
+    //
+
+    void PutStoragePath (
+        _bstr_t _arg1 );
+    HRESULT SaveProduct (
+        struct _ProductInfo * * ProdInfo );
+    _ProductInfoPtr RetrieveProduct (
+        _bstr_t name,
+        _bstr_t Ver );
+    SAFEARRAY * RetrieveProducts ( );
+    HRESULT DeleteProduct (
+        _bstr_t name,
+        _bstr_t Ver );
+    _bstr_t GenKey (
+        struct _ProductLicense * * Lic,
+        _bstr_t InstCode,
+        _bstr_t RegisteredLevel );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall put_StoragePath (
+        /*[in]*/ BSTR _arg1 ) = 0;
+      virtual HRESULT __stdcall raw_SaveProduct (
+        /*[in,out]*/ struct _ProductInfo * * ProdInfo ) = 0;
+      virtual HRESULT __stdcall raw_RetrieveProduct (
+        /*[in]*/ BSTR name,
+        /*[in]*/ BSTR Ver,
+        /*[out,retval]*/ struct _ProductInfo * * _arg3 ) = 0;
+      virtual HRESULT __stdcall raw_RetrieveProducts (
+        /*[out,retval]*/ SAFEARRAY * * _arg1 ) = 0;
+      virtual HRESULT __stdcall raw_DeleteProduct (
+        /*[in]*/ BSTR name,
+        /*[in]*/ BSTR Ver ) = 0;
+      virtual HRESULT __stdcall raw_GenKey (
+        /*[in,out]*/ struct _ProductLicense * * Lic,
+        /*[in]*/ BSTR InstCode,
+        /*[in]*/ BSTR RegisteredLevel,
+        /*[out,retval]*/ BSTR * _arg4 ) = 0;
+};
+
+struct __declspec(uuid("7e563b78-45b1-4f8b-bcb0-6d21b0110b94"))
+_AlugenGlobals : IDispatch
+{
+    //
+    // Wrapper methods for error-handling
+    //
+
+    _IALUGeneratorPtr GeneratorInstance (
+        enum ProductsStoreType * pProductStorageType );
+    _ProductInfoPtr CreateProductInfo (
+        _bstr_t name,
+        _bstr_t Ver,
+        _bstr_t VCode,
+        _bstr_t GCode );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall raw_GeneratorInstance (
+        /*[in,out]*/ enum ProductsStoreType * pProductStorageType,
+        /*[out,retval]*/ struct _IALUGenerator * * _arg2 ) = 0;
+      virtual HRESULT __stdcall raw_CreateProductInfo (
+        /*[in]*/ BSTR name,
+        /*[in]*/ BSTR Ver,
+        /*[in]*/ BSTR VCode,
+        /*[in]*/ BSTR GCode,
+        /*[out,retval]*/ struct _ProductInfo * * _arg5 ) = 0;
+};
+
+enum __declspec(uuid("22c062c0-5fb6-4ac2-8f41-979c5e20265c"))
+ActiveLockErrCodeConstants
+{
+    alerrOK = 0,
+    alerrNoLicense = -2147221503,
+    alerrLicenseInvalid = -2147221502,
+    alerrLicenseExpired = -2147221501,
+    alerrLicenseTampered = -2147221500,
+    AlerrClockChanged = -2147221499,
+    alerrWrongIPaddress = -2147221498,
+    alerrKeyStoreInvalid = -2147221488,
+    alerrFileTampered = -2147221487,
+    alerrNotInitialized = -2147221486,
+    alerrNotImplemented = -2147221485,
+    alerrUserNameTooLong = -2147221484,
+    alerrUserNameInvalid = -2147221483,
+    alerrInvalidTrialDays = -2147221472,
+    alerrInvalidTrialRuns = -2147221471,
+    alerrTrialInvalid = -2147221470,
+    alerrTrialDaysExpired = -2147221469,
+    alerrTrialRunsExpired = -2147221468,
+    alerrNoSoftwareName = -2147221467,
+    alerrNoSoftwareVersion = -2147221466,
+    alerrRSAError = -2147221465,
+    alerrKeyStorePathInvalid = -2147221464,
+    alerrCryptoAPIError = -2147221463,
+    alerrNoSoftwarePassword = -2147221456
+};
+
+//
+// Wrapper method implementations
+//
+
+#include "c:\activelock\activelock mfc c++ csharp\src\alugen c++\release\activelock3.5.tli"
+
+} // namespace ActiveLock3
+
+#pragma pack(pop)

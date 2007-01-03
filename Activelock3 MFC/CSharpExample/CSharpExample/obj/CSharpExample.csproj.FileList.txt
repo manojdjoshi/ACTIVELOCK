@@ -1,9 +1,0 @@
-bin\Debug\CSharpExample.exe
-bin\Debug\CSharpExample.pdb
-obj\Debug\ResolveAssemblyReference.cache
-obj\Debug\CSharpExample.Form1.resources
-obj\Debug\Licensing.AboutWithLicensing.resources
-obj\Debug\CSharpExample.Properties.Resources.resources
-obj\Debug\CSharpExample.csproj.GenerateResource.Cache
-obj\Debug\CSharpExample.exe
-obj\Debug\CSharpExample.pdb
