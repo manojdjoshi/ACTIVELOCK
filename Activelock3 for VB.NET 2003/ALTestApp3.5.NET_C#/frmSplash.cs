@@ -33,7 +33,7 @@ using System;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace Altestapp35net
+namespace ALTestApp35NET_CS
 {
 
 	internal class frmSplash : Form
@@ -77,7 +77,7 @@ namespace Altestapp35net
 			this.Label16.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.Label16.Size = new System.Drawing.Size(82, 16);
 			this.Label16.TabIndex = 4;
-			this.Label16.Text = "Activelock3NET";
+			this.Label16.Text = "Activelock3_5NET";
 			this.Label16.TextAlign = System.Drawing.ContentAlignment.TopCenter;
 			// 
 			// Image1

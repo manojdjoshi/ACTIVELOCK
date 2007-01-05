@@ -35,9 +35,9 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Runtime.InteropServices;
-using ActiveLock3_4NET;
+using ActiveLock3_5NET;
 
-namespace Altestapp35net
+namespace ALTestApp35NET_CS
 {
 	/// <summary>
 	/// Summary description for frmMain.
@@ -897,11 +897,11 @@ namespace Altestapp35net
 			this.cboSpeed.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
 			this.cboSpeed.ForeColor = System.Drawing.SystemColors.WindowText;
 			this.cboSpeed.Items.AddRange(new object[] {
-																									"Slowest",
-																									"Slow",
-																									"Normal",
-																									"Fast",
-																									"Fastest"});
+														  "Slowest",
+														  "Slow",
+														  "Normal",
+														  "Fast",
+														  "Fastest"});
 			this.cboSpeed.Location = new System.Drawing.Point(356, 4);
 			this.cboSpeed.Name = "cboSpeed";
 			this.cboSpeed.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -983,7 +983,7 @@ namespace Altestapp35net
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "frmMain";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "ALTestApp - ActiveLock Test Application for VB.NET 2003 v3.5";
+			this.Text = "ALTestApp - ActiveLock Test Application for C# 2003 v3.5";
 			this.Load += new System.EventHandler(this.frmMain_Load);
 			this.SStab1.ResumeLayout(false);
 			this._SSTab1_TabPage0.ResumeLayout(false);
@@ -1255,7 +1255,9 @@ namespace Altestapp35net
 			//Register this key
 			try
 			{
-				MyActiveLock.Register(txtLibKeyIn.Text); 
+				string userStr;
+				userStr = txtUser.Text;
+				MyActiveLock.Register(txtLibKeyIn.Text, ref userStr); 
 				MessageBox.Show(modMain.Dec("386.457.46D.483.4F1.4FC.4E6.42B.4FC.483.4C5.4BA.160.4F1.507.441.441.457.4F1.4F1.462.507.4A4.16B"), modMain.MSGBOXCAPTION, MessageBoxButtons.OK, MessageBoxIcon.Information); 
 				frmMain_Load(this, new System.EventArgs()); 
 				this.Visible = true; 

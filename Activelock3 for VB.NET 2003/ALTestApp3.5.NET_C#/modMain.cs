@@ -36,7 +36,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace Altestapp35net
+namespace ALTestApp35NET_CS
 {
 
 	internal class modMain
@@ -109,7 +109,7 @@ namespace Altestapp35net
 			string strMessage=null;
 			CRC32 crcObj = new CRC32();
 			int crcSum = 0;
-			string activelockFile = Application.StartupPath + @"\Activelock3_4NET.dll";
+			string activelockFile = Application.StartupPath + @"\Activelock3_5NET.dll";
 			if (File.Exists(activelockFile))
 			{
 				FileStream streamFileActiveLock = new FileStream(activelockFile, FileMode.Open, FileAccess.Read, FileShare.Read, 0x2000);
@@ -120,10 +120,10 @@ namespace Altestapp35net
 
 				Debug.WriteLine("Hash: " + crcSum.ToString());
 
-				strActiveLockCrcSum = "226.25D.2CB.247.21B.210.252.2F7"; //crcSum of Activelock
+				strActiveLockCrcSum = "25D.252.23C.2D6.2D6.2EC.273.302"; //crcSum of Activelock
 				if (String.Compare(crcSumHEX, modMain.Dec(strActiveLockCrcSum), true)!=0)
 				{
-					strMessage = "2CB.441.4FC.483.512.457.4A4.4C5.441.499.231.415.23C.35A.2F7.39C.1FA.44C.4A4.4A4.160.478.42B.4F1.160.436.457.457.4BA.160.441.4C5.4E6.4E6.507.4D0.4FC.457.44C.1FA";
+					strMessage = "42B.441.4FC.483.512.457.4A4.4C5.441.499.231.35A.2F7.39C.1FA.44C.4A4.4A4.160.478.42B.4F1.160.436.457.457.4BA.160.441.4C5.4E6.4E6.507.4D0.4FC.457.44C.1FA";
 					MessageBox.Show(modMain.Dec(strMessage), modMain.MSGBOXCAPTION, MessageBoxButtons.OK);
 					Application.Exit();
 				}

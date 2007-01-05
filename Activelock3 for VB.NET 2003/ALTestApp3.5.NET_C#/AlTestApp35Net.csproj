@@ -9,7 +9,7 @@
             <Settings
                 ApplicationIcon = "ALTestApp.ico"
                 AssemblyKeyContainerName = ""
-                AssemblyName = "Altestapp35net"
+                AssemblyName = "ALTestApp35NET_CS"
                 AssemblyOriginatorKeyFile = ""
                 DefaultClientScript = "JScript"
                 DefaultHTMLPageLayout = "Grid"
@@ -18,7 +18,7 @@
                 OutputType = "WinExe"
                 PreBuildEvent = ""
                 PostBuildEvent = ""
-                RootNamespace = "Altestapp35net"
+                RootNamespace = "ALTestApp35NET_CS"
                 RunPostBuildEvent = "OnBuildSuccess"
                 StartupObject = ""
             >
@@ -90,9 +90,9 @@
                     HintPath = "..\..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
                 />
                 <Reference
-                    Name = "Activelock3_4NET"
-                    AssemblyName = "Activelock3_4NET"
-                    HintPath = "Activelock3_4NET.dll"
+                    Name = "ActiveLock3_5NET"
+                    AssemblyName = "ActiveLock3_5Net"
+                    HintPath = "..\ActiveLock3.5.Net\ActiveLock3_5NET.dll"
                 />
             </References>
         </Build>

@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 using System;
 using System.IO;
 
-namespace Altestapp35net
+namespace ALTestApp35NET_CS
 {
 	public class CRC32
   {
