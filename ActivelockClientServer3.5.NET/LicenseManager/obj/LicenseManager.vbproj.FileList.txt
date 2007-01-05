@@ -1,0 +1,15 @@
+bin\Debug\LicenseServer.exe
+bin\Debug\LicenseServer.pdb
+bin\Debug\LicenseServer.xml
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\LicenseServer.LicenseManager.resources
+obj\Debug\LicenseServer.Resources.resources
+obj\Debug\LicenseManager.vbproj.GenerateResource.Cache
+obj\Debug\LicenseServer.exe
+obj\Debug\LicenseServer.xml
+obj\Debug\LicenseServer.pdb
+bin\Debug\ActiveLockServer.exe
+bin\Debug\ActiveLockServer.pdb
+bin\Debug\ActiveLockServer.xml
+bin\Debug\ActiveLock3_5Net.dll
+bin\Debug\ActiveLock3_5Net.pdb

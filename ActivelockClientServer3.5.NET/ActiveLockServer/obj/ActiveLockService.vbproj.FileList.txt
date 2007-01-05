@@ -1,0 +1,17 @@
+bin\Debug\ActiveLockServer.exe
+bin\Debug\ActiveLockServer.pdb
+bin\Debug\ActiveLockServer.xml
+bin\Debug\LicenseData.dll
+bin\Debug\LicenseData.pdb
+bin\Debug\LicenseData.xml
+bin\Debug\Interop.ActiveLock3.dll
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\Interop.ActiveLock3.dll
+obj\Debug\ActiveLockService.vbproj.ResolveComReference.cache
+obj\Debug\ActiveLockServer.Resources.resources
+obj\Debug\ActiveLockServer.ProjectInstaller.resources
+obj\Debug\ActiveLockServer.Service.resources
+obj\Debug\ActiveLockService.vbproj.GenerateResource.Cache
+obj\Debug\ActiveLockServer.exe
+obj\Debug\ActiveLockServer.xml
+obj\Debug\ActiveLockServer.pdb
