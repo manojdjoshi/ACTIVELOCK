@@ -55,19 +55,12 @@ Begin VB.Form frmMain
       TabPicture(0)   =   "frmMain3.frx":0CCA
       Tab(0).ControlEnabled=   0   'False
       Tab(0).Control(0)=   "cmdValidate"
-      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).Control(1)=   "Picture1"
-      Tab(0).Control(1).Enabled=   0   'False
       Tab(0).Control(2)=   "cmdRemove"
-      Tab(0).Control(2).Enabled=   0   'False
       Tab(0).Control(3)=   "fraProdNew"
-      Tab(0).Control(3).Enabled=   0   'False
       Tab(0).Control(4)=   "gridProds"
-      Tab(0).Control(4).Enabled=   0   'False
       Tab(0).Control(5)=   "Label17"
-      Tab(0).Control(5).Enabled=   0   'False
       Tab(0).Control(6)=   "Label1"
-      Tab(0).Control(6).Enabled=   0   'False
       Tab(0).ControlCount=   7
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
@@ -2235,10 +2228,10 @@ If Len(txtReqCodeIn.Text) = 8 Then 'Short key authorization is much simpler
     txtUser.Locked = False
     txtUser.BackColor = vbWhite
     
-    Label5.Visible = False
-    txtLibFile.Visible = False
-    cmdBrowse.Visible = False
-    cmdSave.Visible = False
+'    Label5.Enabled = False
+'    txtLibFile.Enabled = False
+'    cmdBrowse.Enabled = False
+'    cmdSave.Enabled = False
     Exit Sub
 
 Else 'ALCrypto
@@ -2255,10 +2248,11 @@ Else 'ALCrypto
     txtUser.Enabled = False
     txtUser.Locked = True
     txtUser.BackColor = vbButtonFace
-    Label5.Visible = False
-    txtLibFile.Visible = False
-    cmdBrowse.Visible = False
-    cmdSave.Visible = False
+    
+'    Label5.Enabled = False
+'    txtLibFile.Enabled = False
+'    cmdBrowse.Enabled = False
+'    cmdSave.Enabled = False
 
     If Len(txtReqCodeIn.Text) > 0 Then
         If systemEvent Then Exit Sub
