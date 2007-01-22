@@ -78,10 +78,12 @@ const CString CActiveLockWrap::LockCode() const
 // next 2 procs bury details of providing an "out" string to acquire.
 const CString CActiveLockWrap::InitBSTR() 
 { 
+  //if(0){
   _ActiveLockEventNotifier* alen = GetEventNotifier(); 
   BOOL bRes = m_ActiveLockEventSink.Advise(alen, iid_IActiveLockEventSink); 
   if(!bRes) 
     AfxMessageBox(_T("m_ActiveLockEventSink.Advise(...) == FALSE")); 
+  //}
 
   BSTR autoLicString = SysAllocStringByteLen( "", 1000); // license could be large 
   m_ActiveLock->Init(&autoLicString); 

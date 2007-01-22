@@ -92,11 +92,11 @@ inline void CCrc32Static::CalcCrc32(const BYTE byte, DWORD &dwCrc32)
 }
 
 //***********************************************
-bool CCrc32Static::GetFileSizeQW(const HANDLE hFile, QWORD &qwSize)
+BOOL CCrc32Static::GetFileSizeQW(const HANDLE hFile, QWORD &qwSize)
 {
 	_ASSERTE(hFile != INVALID_HANDLE_VALUE);
 
-	bool bSuccess = true;
+	BOOL bSuccess = true;
 
 	try
 	{
