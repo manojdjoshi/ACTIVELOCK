@@ -47,7 +47,7 @@ Public Class frmAlugenDb
 
 #Region "Private members"
   Private conn As OleDbConnection
-  Private stringaconn As String = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=license.mdb"
+    Private stringaconn As String = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=licenses.mdb"
   Private LicensesTableMapping As String = "Licenses"
   Private DefaultQueryTemplate As String = "SELECT * FROM License WHERE LockType Like @locktype AND username Like @username AND progname Like @progname " & _
                     " AND progver Like @progver AND LicType Like @selcboLicType AND RegLevel Like @selcboRegisteredLevel"

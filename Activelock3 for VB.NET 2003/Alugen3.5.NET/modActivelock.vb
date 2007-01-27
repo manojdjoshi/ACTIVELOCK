@@ -44,7 +44,7 @@
 '  ///////////////////////////////////////////////////////////////////////
 '
 ' @bug rsa_createkey() sometimes causes crash.  This is due to a bug in
-'      ALCrypto3.dll in which a bad keyset is sometimes generated
+'      ALCrypto3NET.dll in which a bad keyset is sometimes generated
 '      (either caused by <code>rsa_generate()</code> or one of <code>rsa_private_key_blob()</code>
 '      and <code>rsa_public_key_blob()</code>--we're not sure which is the culprit yet.
 '      This causes the <code>rsa_createkey()</code> call encryption routines to crash.
@@ -72,7 +72,7 @@ Module modActiveLock
   Public Const STRCLOCKCHANGED As String = STRLICENSEINVALID & " System clock has been tampered."
   Public Const STRINVALIDTRIALDAYS As String = "Zero Free Trial days allowed."
   Public Const STRINVALIDTRIALRUNS As String = "Zero Free Trial runs allowed."
-  Public Const STRFILETAMPERED As String = "Alcrypto3.dll has been tampered."
+    Public Const STRFILETAMPERED As String = "Alcrypto3NET.dll has been tampered."
   Public Const STRKEYSTOREUNINITIALIZED As String = "Key Store Provider hasn't been initialized yet."
   Public Const STRNOSOFTWARECODE As String = "Software code has not been set."
   Public Const STRNOSOFTWARENAME As String = "Software Name has not been set."
@@ -261,7 +261,7 @@ Hell:
     '   ByVal phase As Long - Current phase
     '   ByVal iprogress As Long - Percent complete
     ' Output: None
-    ' Purpose: [INTERNAL] Call-back routine used by ALCrypto3.dll during key generation process.
+        ' Purpose: [INTERNAL] Call-back routine used by ALCrypto3NET.dll during key generation process.
     ' Remarks: None
     '===============================================================================
     System.Diagnostics.Debug.WriteLine("Progress Update received " & param & ", action: " & action & ", iprogress: " & iprogress)

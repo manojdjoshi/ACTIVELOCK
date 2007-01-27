@@ -1796,7 +1796,7 @@ Friend Class frmMain
 
                 If s.Substring(0, 1) = "#" Then
                     pathName = Application.StartupPath
-                    s = s.Substring(2)
+                    s = s.Substring(1)
                 ElseIf s.IndexOf("\") > 0 Then
                     j = s.LastIndexOf("\") 'InStrRev(s, "\")
                     '!!!!!!!!!!!!!! TODO ?
@@ -1844,6 +1844,11 @@ Friend Class frmMain
         'so a call should be made to this function early on to "lock" the paths.
 
         'Add a call at the beginning of checkForResources
+
+        If T = "" Then
+            WhereIsDLL = ""
+            Exit Function
+        End If
 
         Static a As String() 'Object
         Dim s, D As String
@@ -2167,8 +2172,7 @@ Friend Class frmMain
         strRegisteredLevelDBName = AddBackSlash(Application.StartupPath) & "RegisteredLevelDB.dat"
 
         ' Check the existence of necessary files to run this application
-        'Call CheckForResources("Alcrypto3.dll", "comdlg32.ocx", "msflxgrd.ocx", "comctl32.ocx", "tabctl32.ocx")
-        Call CheckForResources("Alcrypto3.dll")
+        Call CheckForResources("#Alcrypto3NET.dll")
 
         'load RegisteredLevels
         If Not File.Exists(strRegisteredLevelDBName) Then
