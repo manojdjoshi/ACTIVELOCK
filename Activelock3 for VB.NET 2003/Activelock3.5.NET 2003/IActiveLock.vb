@@ -1,8 +1,8 @@
 Option Strict Off
 Option Explicit On
 Public Interface _IActiveLock
-    ReadOnly Property UsedTrialDays() As Integer
-    ReadOnly Property UsedTrialRuns() As Integer
+    ReadOnly Property RemainingTrialDays() As Integer
+    ReadOnly Property RemainingTrialRuns() As Integer
     ReadOnly Property MaxCount() As Integer
     ReadOnly Property RegisteredLevel() As String
     ReadOnly Property LicenseClass() As String
@@ -392,29 +392,29 @@ End Interface
         trialWarningPersistent = 1
     End Enum
     '===============================================================================
-    ' Name: Property Get UsedTrialDays
+    ' Name: Property Get RemainingTrialDays
     ' Input: None
     ' Output:
     '   Integer - Number of Used Trial Days
     ' Purpose: Returns the Number of Used Trial Days.
     ' Remarks: None
     '===============================================================================
-    Public ReadOnly Property UsedTrialDays() As Integer Implements _IActiveLock.UsedTrialDays
+    Public ReadOnly Property RemainingTrialDays() As Integer Implements _IActiveLock.RemainingTrialDays
         Get
-            UsedTrialDays = 0
+            RemainingTrialDays = 0
         End Get
     End Property
     '===============================================================================
-    ' Name: Property Get UsedTrialRuns
+    ' Name: Property Get RemainingTrialRuns
     ' Input: None
     ' Output:
     '   Integer - Number of Used Trial Runs
     ' Purpose: Returns the Number of Used Trial Runs.
     ' Remarks: None
     '===============================================================================
-    Public ReadOnly Property UsedTrialRuns() As Integer Implements _IActiveLock.UsedTrialRuns
+    Public ReadOnly Property RemainingTrialRuns() As Integer Implements _IActiveLock.RemainingTrialRuns
         Get
-            UsedTrialRuns = 0
+            RemainingTrialRuns = 0
         End Get
     End Property
 

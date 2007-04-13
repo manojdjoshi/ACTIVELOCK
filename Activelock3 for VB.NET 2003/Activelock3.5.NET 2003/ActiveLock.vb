@@ -68,8 +68,8 @@ Friend Class ActiveLock
     Private mUsedLockTypes() As IActiveLock.ALLockTypes
     Private mTrialType As Integer
     Private mTrialLength As Integer
-    Private mUsedTrialDays As Integer
-    Private mUsedTrialRuns As Integer
+    Private mRemainingTrialDays As Integer
+    Private mRemainingTrialRuns As Integer
     Private mTrialHideTypes As IActiveLock.ALTrialHideTypes
     Private mKeyStore As _IKeyStoreProvider
     Private mKeyStorePath As String
@@ -147,29 +147,29 @@ Friend Class ActiveLock
         End Get
     End Property
     '===============================================================================
-    ' Name: Property Get IActiveLock_UsedTrialDays
+    ' Name: Property Get IActiveLock_RemainingTrialDays
     ' Input: None
     ' Output:
     '   Integer - License Used Trial Days
     ' Purpose: Gets the Number of Used Trial Days
     ' Remarks: None
     '===============================================================================
-    Private ReadOnly Property IActiveLock_UsedTrialDays() As Integer Implements _IActiveLock.UsedTrialDays
+    Private ReadOnly Property IActiveLock_RemainingTrialDays() As Integer Implements _IActiveLock.RemainingTrialDays
         Get
-            Return mUsedTrialDays
+            Return mRemainingTrialDays
         End Get
     End Property
     '===============================================================================
-    ' Name: Property Get IActiveLock_UsedTrialRuns
+    ' Name: Property Get IActiveLock_RemainingTrialRuns
     ' Input: None
     ' Output:
     '   Integer - License Used Trial Runs
     ' Purpose: Gets the Number of Used Trial Runs
     ' Remarks: None
     '===============================================================================
-    Private ReadOnly Property IActiveLock_UsedTrialRuns() As Integer Implements _IActiveLock.UsedTrialRuns
+    Private ReadOnly Property IActiveLock_RemainingTrialRuns() As Integer Implements _IActiveLock.RemainingTrialRuns
         Get
-            Return mUsedTrialRuns
+            Return mRemainingTrialRuns
         End Get
     End Property
     '===============================================================================
@@ -812,7 +812,7 @@ finally_Renamed:
             ' Using this trick to temporarily set the date format to mm/dd/yyyy
             Get_locale() ' Get the current date format and save it to regionalSymbol variable
             Set_locale((""))
-            trialStatus = ActivateTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, strMsg, mSoftwarePassword, mCheckTimeServerForClockTampering, mChecksystemfilesForClockTampering, mTrialWarning, mUsedTrialDays, mUsedTrialRuns)
+            trialStatus = ActivateTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, strMsg, mSoftwarePassword, mCheckTimeServerForClockTampering, mChecksystemfilesForClockTampering, mTrialWarning, mRemainingTrialDays, mRemainingTrialRuns)
             ' Set the locale date format to what we had before; can't leave changed
             Set_locale((regionalSymbol))
             If trialStatus = True Then
