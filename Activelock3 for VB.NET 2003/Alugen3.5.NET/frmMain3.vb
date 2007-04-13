@@ -1679,7 +1679,7 @@ Friend Class frmMain
         Dim strInstCode As String
         strInstCode = ActiveLock3Globals_definst.Base64Decode(txtInstallCode.Text)
 
-        If strInstCode Is Nothing Then Exit Function
+        If strInstCode = "" Then Exit Function
 
         If Not strInstCode Is Nothing _
           AndAlso strInstCode.Substring(0, 1) = "+" Then
@@ -3292,10 +3292,11 @@ exitValidate:
             txtUser.Enabled = False
             txtUser.ReadOnly = True
             txtUser.BackColor = System.Drawing.SystemColors.Control
-            Label5.Visible = False
-            txtLicenseFile.Visible = False
-            cmdBrowse.Visible = False
-            cmdSave.Visible = False
+
+            Label5.Visible = True
+            txtLicenseFile.Visible = True
+            cmdBrowse.Visible = True
+            cmdSave.Visible = True
 
             If Len(txtInstallCode.Text) > 0 Then
                 If systemEvent Then Exit Sub
