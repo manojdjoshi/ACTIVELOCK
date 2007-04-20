@@ -1,0 +1,11 @@
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\ActiveLockVB2005.MainForm.resources
+obj\Debug\ActiveLockVB2005.MenuPrin.resources
+obj\Debug\ActiveLockVB2005.Resources.resources
+obj\Debug\ActiveLockVB2005.vbproj.GenerateResource.Cache
+obj\Debug\ActiveLockVB2005.exe
+obj\Debug\ActiveLockVB2005.xml
+obj\Debug\ActiveLockVB2005.pdb
+.\ActiveLockVB2005.exe
+.\ActiveLockVB2005.pdb
+.\ActiveLockVB2005.xml
