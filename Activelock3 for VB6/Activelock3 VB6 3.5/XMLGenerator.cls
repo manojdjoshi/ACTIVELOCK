@@ -339,7 +339,7 @@ If Left(ProdInfo.VCode, 3) <> "RSA" Then
 Else
     
     Dim MyGlobals As Globals
-    Dim ok As String, strPrivateBlob As String
+    Dim ok As String, strPrivateBlob As String, modulus As Long
     Set MyGlobals = New Globals
     'ok = MyGlobals.ContainerChange(Lic.ProductName & Lic.ProductVer)
     strPrivateBlob = ProdInfo.GCode
@@ -349,10 +349,12 @@ Else
     ' Sign a string
     If Left(ProdInfo.GCode, 6) = "RSA512" Then
         strPrivateBlob = Right(ProdInfo.GCode, Len(ProdInfo.GCode) - 6)
+        modulus = CInt(Mid(ProdInfo.VCode, 4, 3))
     Else
         strPrivateBlob = Right(ProdInfo.GCode, Len(ProdInfo.GCode) - 7)
+        modulus = CInt(Mid(ProdInfo.VCode, 4, 4))
     End If
-    ok = MyGlobals.CryptoAPIAction(4, Lic.ProductName & Lic.ProductVer, strLic, strSig, "", strPrivateBlob, 0)
+    ok = MyGlobals.CryptoAPIAction(4, Lic.ProductName & Lic.ProductVer, strLic, strSig, "", strPrivateBlob, modulus)
     ' Create liberation key.  This will be a base-64 encoded string of the whole license.
     ' 05.13.05 - ialkan Modified to merge DLLs into one
     strLicKey = Base64_Encode(strSig)

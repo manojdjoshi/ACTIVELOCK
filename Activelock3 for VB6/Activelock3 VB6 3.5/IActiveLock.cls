@@ -855,25 +855,25 @@ Attribute UsedDays.VB_Description = "Returns the number of days this product has
 
 End Property
 '===============================================================================
-' Name: Property Get UsedTrialDays
+' Name: Property Get RemainingTrialDays
 ' Input: None
 ' Output:
 '   Long - Number of used trial days
 ' Purpose: Returns the number of used trial days
 ' Remarks: None
 '===============================================================================
-Public Property Get UsedTrialDays() As Long
+Public Property Get RemainingTrialDays() As Long
 
 End Property
 '===============================================================================
-' Name: Property Get UsedTrialRuns
+' Name: Property Get RemainingTrialRuns
 ' Input: None
 ' Output:
 '   Long - Number of used trial runs
 ' Purpose: Returns the number of used trial runs
 ' Remarks: None
 '===============================================================================
-Public Property Get UsedTrialRuns() As Long
+Public Property Get RemainingTrialRuns() As Long
 
 End Property
 '===============================================================================

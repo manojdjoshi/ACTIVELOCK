@@ -359,7 +359,7 @@ Public Sub Get_locale() ' Retrieve the regional setting
       Pos = InStr(Symbol, Chr$(0))
       If Pos > 0 Then
            Symbol = Left$(Symbol, Pos - 1)
-           If Symbol <> "MM/dd/yyyy" Then regionalSymbol = Symbol
+           If Symbol <> "yyyy/MM/dd" Then regionalSymbol = Symbol
       End If
 End Sub
 
@@ -369,7 +369,7 @@ Public Sub Set_locale(Optional ByVal localSymbol As String = "") 'Change the reg
       Dim Locale As Long
       Locale = GetUserDefaultLCID() 'Get user Locale ID
       If localSymbol = "" Then
-        Symbol = "MM/dd/yyyy" 'New character for the locale
+        Symbol = "yyyy/MM/dd" 'New character for the locale
       Else
         Symbol = localSymbol
       End If
@@ -1041,7 +1041,7 @@ DateGoodSteganographyError:
 End Function
 
 Private Function ActiveLockDate(ByVal dt As Date) As Date
-    ActiveLockDate = CDate(Format(dt, "mm/dd/yyyy"))   ' CDate(Format(dt, "m/d/yy h:m:ss"))
+    ActiveLockDate = CDate(Format(dt, "yyyy/MM/dd"))   ' CDate(Format(dt, "m/d/yy h:m:ss"))
 End Function
 Public Function RunsGoodSteganography(numRuns As Integer, runsLeft As Integer) As Boolean
 On Error GoTo RunsGoodSteganographyError
@@ -1890,7 +1890,7 @@ End Function
 ' Purpose: This function checks the authenticity and validity of the trial period/runs
 ' Remarks: This is the main call to activate the trial feature
 '===============================================================================
-Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As String, ByVal TrialType As Long, ByVal TrialLength As Long, ByVal TrialHideTypes As ALTrialHideTypes, ByRef strMsg As String, ByVal SoftwarePassword As String, ByVal mCheckTimeServerForClockTampering As ALTimeServerTypes, ByVal mCheckSystemFilesForClockTampering As ALSystemFilesTypes, ByVal mTrialWarning As ALTrialWarningTypes, ByRef mUsedTrialDays As Long, ByRef mUsedTrialRuns As Long) As Boolean
+Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As String, ByVal TrialType As Long, ByVal TrialLength As Long, ByVal TrialHideTypes As ALTrialHideTypes, ByRef strMsg As String, ByVal SoftwarePassword As String, ByVal mCheckTimeServerForClockTampering As ALTimeServerTypes, ByVal mCheckSystemFilesForClockTampering As ALSystemFilesTypes, ByVal mTrialWarning As ALTrialWarningTypes, ByRef mRemainingTrialDays As Long, ByRef mRemainingTrialRuns As Long) As Boolean
     On Error GoTo NotRegistered
     Dim daysLeft As Integer, runsLeft As Integer
     Dim intEXPIREDWARNING As Integer
@@ -1987,7 +1987,7 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
             strMsg = "You are running this program in its Trial Period Mode." & vbCrLf & _
                CStr(daysLeft) & " days left out of " & _
                CStr(alockDays) & " day trial."
-            mUsedTrialDays = daysLeft
+            mRemainingTrialDays = daysLeft
             ActivateTrial = True
             Screen.MousePointer = vbDefault
             GoTo exitGracefully
@@ -2013,7 +2013,7 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
             strMsg = "You are running this program in its Trial Runs Mode." & vbCrLf & _
                 CStr(runsLeft) & " runs left out of " & _
                 CStr(alockRuns) & " run trial."
-            mUsedTrialRuns = runsLeft
+            mRemainingTrialRuns = runsLeft
             ActivateTrial = True
             Screen.MousePointer = vbDefault
             GoTo exitGracefully
@@ -2025,10 +2025,10 @@ keepChecking:
     ExpireTrial SoftwareName, SoftwareVer, TrialType, TrialLength, TrialHideTypes, SoftwarePassword
     If Err.Number = -10101 Then
         strMsg = TEXTMSG_DAYS
-        mUsedTrialDays = alockDays
+        mRemainingTrialDays = alockDays
     ElseIf Err.Number = -10102 Then
         strMsg = TEXTMSG_RUNS
-        mUsedTrialRuns = alockRuns
+        mRemainingTrialRuns = alockRuns
     End If
     If intEXPIREDWARNING = 0 Or mTrialWarning = ALTrialWarningTypes.trialWarningPersistent Then
         Call SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "1"), enc2(TrialWarning), enc2(EXPIREDWARNING), -1)
@@ -2053,7 +2053,7 @@ exitGracefully:
 
 End Function
 Public Function ClockTampering() As Boolean
-Dim t As String, s As String
+Dim t As String, S As String
 Dim fileDate As Date
 Dim i As Integer, Count As Integer
 On Error Resume Next
@@ -2073,11 +2073,11 @@ For i = 0 To 2
     End Select
     
     Count = 0
-    s = Dir(t & "\*.*")
-    Do While s <> ""
-        If Not inString(Left$(s, 1), "$", "?") Then
-            fileDate = FileDateTime(t & "\" & s)
-            If DateDiff("h", CDate(Format(modActiveLock.UTC(Now()), "YYYY/MM/DD")), CDate(Format(modActiveLock.UTC(fileDate), "YYYY/MM/DD"))) > 24 Then
+    S = Dir(t & "\*.*")
+    Do While S <> ""
+        If Not inString(Left$(S, 1), "$", "?") Then
+            fileDate = FileDateTime(t & "\" & S)
+            If DateDiff("h", CDate(Format(modActiveLock.UTC(Now()), "yyyy/MM/dd")), CDate(Format(modActiveLock.UTC(fileDate), "yyyy/MM/dd"))) > 24 Then
                 If Count > 1 Then
                     ClockTampering = True
                     Exit Function
@@ -2087,7 +2087,7 @@ For i = 0 To 2
                 End If
             End If
         End If
-        s = Dir
+        S = Dir
     Loop
 Next i
 
@@ -2579,13 +2579,13 @@ End Sub
 '===============================================================================
 Public Function CSD() As Boolean
     Dim Timer_start As Single, Timer_time As Single
-    Dim s As Integer
+    Dim S As Integer
     'Check for Step Debugger
     Timer_start = Timer
-    For s = 1 To 25
+    For S = 1 To 25
     PSub 'Pointless Sub
-    PFunction (s + Int(Rnd * 20)) 'Pointless Function
-    Next s
+    PFunction (S + Int(Rnd * 20)) 'Pointless Function
+    Next S
     Timer_time = Timer - Timer_start
     
     'Step-debugging Detected...

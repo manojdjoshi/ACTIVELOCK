@@ -13,6 +13,7 @@ Begin VB.Form frmMain
    ClientWidth     =   9735
    Icon            =   "frmMain3.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    ScaleHeight     =   8490
    ScaleWidth      =   9735
    StartUpPosition =   3  'Windows Default
@@ -54,13 +55,13 @@ Begin VB.Form frmMain
       TabCaption(0)   =   "Pro&duct Code Generator"
       TabPicture(0)   =   "frmMain3.frx":0CCA
       Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "cmdValidate"
-      Tab(0).Control(1)=   "Picture1"
-      Tab(0).Control(2)=   "cmdRemove"
+      Tab(0).Control(0)=   "Label1"
+      Tab(0).Control(1)=   "Label17"
+      Tab(0).Control(2)=   "gridProds"
       Tab(0).Control(3)=   "fraProdNew"
-      Tab(0).Control(4)=   "gridProds"
-      Tab(0).Control(5)=   "Label17"
-      Tab(0).Control(6)=   "Label1"
+      Tab(0).Control(4)=   "cmdRemove"
+      Tab(0).Control(5)=   "Picture1"
+      Tab(0).Control(6)=   "cmdValidate"
       Tab(0).ControlCount=   7
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
@@ -855,7 +856,7 @@ Attribute VB_Exposed = False
 '                             (only the user app can do that). So instead, we  save the liberation key to a file
 '                             and provide the ability automatically register upon initialization, which is being handled
 '                             in the current IActiveLock implementation.
-' 28.04.04 - th2tran        - Normalize date format to YYYY/MM/DD to handle different regional settings.
+' 28.04.04 - th2tran        - Normalize date format to yyyy/MM/dd to handle different regional settings.
 '                             This fixes the "type mismatch error" encountered by IActiveLock_Register() when
 '                             it tried to call CDate() on a date string of the format yyyy.mm.dd.
 ' 11.07.04 - th2tran        - Changed liberation file extension from .alb to .all
@@ -1139,7 +1140,7 @@ Private Sub cmbLicType_Click()
     If cmbLicType = "Time Locked" Then
         lblExpiry = "&Expires on Date:"
         txtDays = ActiveLockDateFormat(Now() + 30)
-        lblDays = "YYYY/MM/DD"
+        lblDays = "yyyy/MM/dd"
     Else
         lblExpiry = "&Expires after:"
         txtDays = "30"
@@ -1152,7 +1153,7 @@ End Sub
 '
 Private Function ActiveLockDateFormat(dt As Date) As String
     'ActiveLockDateFormat = Year(dt) & "/" & Month(dt) & "/" & Day(dt)
-    ActiveLockDateFormat = Format(UTC(dt), "YYYY/MM/DD")
+    ActiveLockDateFormat = Format(UTC(dt), "yyyy/MM/dd")
 End Function
 
 Private Sub cmbProds_Click()
@@ -1392,7 +1393,7 @@ Else
 End If
 
 strExpire = GetExpirationDate()
-strRegDate = Format(UTC(Now()), "YYYY/MM/DD")
+strRegDate = Format(UTC(Now()), "yyyy/MM/dd")
 
 'Take care of the networked licenses
 If chkNetworkedLicense.Value = vbChecked Then

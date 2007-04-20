@@ -153,7 +153,7 @@ Friend Function CreateShortKey(ByVal SerialNumber As String, _
     ' convert each segment value to a hex string
     KeySegs(iProdCode) = HexWORD(ProductCode)
     KeySegs(iExpire) = HexWORD(DateDiff("d", _
-        DateValue(#1/1/1970#), DateValue(CDate(Format(ExpireDate, "YYYY/MM/DD")))))
+        DateValue(#1/1/1970#), DateValue(CDate(Format(ExpireDate, "yyyy/MM/dd")))))
     KeySegs(iUserData) = HexWORD(UserData)
 
     ' Compute CRC against pertinent info.
@@ -554,17 +554,17 @@ Private Function HexWORD(ByVal WORD As Long, _
 '   NOTE:  It's up to the caller to ensure the subject value is a 16-bit number.
 '===============================================================================
 
-    Dim bytes(1 To 2)   As Byte
+    Dim Bytes(1 To 2)   As Byte
     Dim i               As Long
     
-    CopyMemory ByVal VarPtr(bytes(1)), ByVal VarPtr(WORD), 2
+    CopyMemory ByVal VarPtr(Bytes(1)), ByVal VarPtr(WORD), 2
 
     HexWORD = Prefix
-    For i = UBound(bytes) To LBound(bytes) Step -1
-        If Len(Hex$(bytes(i))) = 1 Then
-            HexWORD = HexWORD & "0" & LCase$(Hex$(bytes(i)))
+    For i = UBound(Bytes) To LBound(Bytes) Step -1
+        If Len(Hex$(Bytes(i))) = 1 Then
+            HexWORD = HexWORD & "0" & LCase$(Hex$(Bytes(i)))
         Else
-            HexWORD = HexWORD & LCase$(Hex$(bytes(i)))
+            HexWORD = HexWORD & LCase$(Hex$(Bytes(i)))
         End If
     Next i
     
