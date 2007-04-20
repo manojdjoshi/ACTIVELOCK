@@ -313,7 +313,7 @@ Option Explicit On
 	' Input: None
 	' Output:
 	'   String - Expiration date
-    ' Purpose: Returns the expiration date string in YYYY/MM/DD format.
+    ' Purpose: Returns the expiration date string in "yyyy/MM/dd" format.
 	' Remarks: None
 	'===============================================================================
 	Public Property Expiration() As String
@@ -329,7 +329,7 @@ Option Explicit On
 	' Input: None
 	' Output:
 	'   String - Product registration date
-    ' Purpose: Returns the date in YYYY/MM/DD format on which the product was registered.
+    ' Purpose: Returns the date in "yyyy/MM/dd" format on which the product was registered.
 	' Remarks: None
 	'===============================================================================
 	'===============================================================================
@@ -378,7 +378,7 @@ Option Explicit On
 	' Input: None
 	' Output:
 	'   String - DateTiem string
-    ' Purpose: Returns the date and time, in YYYY/MM/DD format, when the product was last run.
+    ' Purpose: Returns the date and time, in "yyyy/MM/dd" format, when the product was last run.
 	' Remarks: None
 	'===============================================================================
     '===============================================================================

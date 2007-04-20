@@ -776,27 +776,36 @@ finally_Renamed:
         Dim trialActivated As Boolean
         Dim adsText As String = String.Empty
         Dim strStream As String = String.Empty
+        Dim Lic As ProductLicense
+        Dim trialStatus As Boolean
+
         strStream = mSoftwareName & mSoftwareVer & mSoftwarePassword
+
+        ' Get the current date format and save it to regionalSymbol variable
+        Get_locale()
+        ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
+        Set_locale("")
 
         'Check the Key Store Provider
         If mKeyStore Is Nothing Then
+            Set_locale(regionalSymbol)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREUNINITIALIZED)
             'Check the Key Store Path (LIC file path)
         ElseIf mKeyStorePath = "" Then
+            Set_locale(regionalSymbol)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrKeyStorePathInvalid, ACTIVELOCKSTRING, STRKEYSTOREPATHISEMPTY)
         ElseIf mSoftwareName = "" Then
+            Set_locale(regionalSymbol)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNoSoftwareName, ACTIVELOCKSTRING, STRNOSOFTWARENAME)
         ElseIf mSoftwareVer = "" Then
+            Set_locale(regionalSymbol)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNoSoftwareVersion, ACTIVELOCKSTRING, STRNOSOFTWAREVERSION)
         ElseIf mSoftwarePassword = "" Then
+            Set_locale(regionalSymbol)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNoSoftwarePassword, ACTIVELOCKSTRING, STRNOSOFTWAREPASSWORD)
         End If
 
-        Dim Lic As ProductLicense
         Lic = mKeyStore.Retrieve(mSoftwareName, mLicenseFileType)
-
-        Dim trialStatus As Boolean
-
         If Lic Is Nothing Then
             ' There's no valid license, so let's see if we can grant this user a "Trial License"
             If mTrialType = IActiveLock.ALTrialTypes.trialNone Then 'No Trial
@@ -809,9 +818,6 @@ finally_Renamed:
                 mTrialHideTypes = IActiveLock.ALTrialHideTypes.trialHiddenFolder Or IActiveLock.ALTrialHideTypes.trialRegistry Or IActiveLock.ALTrialHideTypes.trialSteganography
             End If
 
-            ' Using this trick to temporarily set the date format to mm/dd/yyyy
-            Get_locale() ' Get the current date format and save it to regionalSymbol variable
-            Set_locale((""))
             trialStatus = ActivateTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, strMsg, mSoftwarePassword, mCheckTimeServerForClockTampering, mChecksystemfilesForClockTampering, mTrialWarning, mRemainingTrialDays, mRemainingTrialRuns)
             ' Set the locale date format to what we had before; can't leave changed
             Set_locale((regionalSymbol))
@@ -821,17 +827,19 @@ finally_Renamed:
             GoTo continueRegistration
 
 noRegistration:
-            Set_locale((regionalSymbol))
+            Set_locale(regionalSymbol)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE)
 
         Else  'Lic exists therefore we'll check the LIC file ADS
             If mCheckTimeServerForClockTampering = IActiveLock.ALTimeServerTypes.alsCheckTimeServer Then
                 If SystemClockTampered() Then
+                    Set_locale(regionalSymbol)
                     Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                 End If
             End If
             If mChecksystemfilesForClockTampering = IActiveLock.ALSystemFilesTypes.alsCheckSystemFiles Then
                 If ClockTampering() Then
+                    Set_locale(regionalSymbol)
                     Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                 End If
             End If
@@ -840,16 +848,18 @@ noRegistration:
                 If fi.Length = 0 Then GoTo continueRegistration
                 adsText = ADSFile.Read(mKeyStorePath, strStream)
                 If adsText = "" Then
+                    Set_locale(regionalSymbol)
                     Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrLicenseTampered, ACTIVELOCKSTRING, STRLICENSETAMPERED)
                 End If
                 Dim dt1 As DateTime = Convert.ToDateTime(adsText)
                 Dim dt2 As DateTime = Now.UtcNow
                 Dim span As TimeSpan = dt2.Subtract(dt1)
                 If span.TotalHours < 0 Then
+                    Set_locale(regionalSymbol)
                     Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                 End If
                 Dim ok As Integer
-                ok = ADSFile.Write(Now.UtcNow, mKeyStorePath, strStream)
+                ok = ADSFile.Write(Now.UtcNow.ToString("yyyy/MM/dd"), mKeyStorePath, strStream)
                 GoTo continueRegistration
             End If
         End If
@@ -857,6 +867,8 @@ noRegistration:
 continueRegistration:
         ' Validate license
         ValidateLic(Lic)
+        Set_locale(regionalSymbol)
+
     End Sub
     Public Function CheckStreamCapability() As Boolean
         ' The following WMI call also works but it seems to be a bit slower than the GetVolumeInformation
@@ -1045,11 +1057,11 @@ continueRegistration:
                 Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
             End If
             If Lic.RegisteredDate = "" Then
-                Lic.RegisteredDate = Microsoft.VisualBasic.Compatibility.VB6.Format(Now.UtcNow, "YYYY/MM/DD")
+                Lic.RegisteredDate = Now.UtcNow.ToString("yyyy/MM/dd")
             End If
             ' ignore expiration date if license type is "permanent"
             If Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
-                Lic.Expiration = Microsoft.VisualBasic.Compatibility.VB6.Format(ExpireDate, "YYYY/MM/DD")
+                Lic.Expiration = ExpireDate.ToString("yyyy/MM/dd")
             End If
             Lic.MaxCount = CInt(CStr(modActiveLock.LoByte(UserData)))
             ' Finally check if the serial number is Ok
@@ -1069,7 +1081,7 @@ continueRegistration:
         If Lic.Expiration = "" Then Exit Sub
         Dim dtExp As Date
         dtExp = CDate(Lic.Expiration)
-        If Microsoft.VisualBasic.Compatibility.VB6.Format(Now.UtcNow, "YYYY/MM/DD") > Microsoft.VisualBasic.Compatibility.VB6.Format(dtExp, "YYYY/MM/DD") And Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
+        If Now.UtcNow.ToString("yyyy/MM/dd") > dtExp.ToString("yyyy/MM/dd") And Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
             ' ialkan - 9-23-2005 added the following to update and store the license
             ' with the new LastUsed property; otherwise setting the clock back next time
             ' might bypass the protection mechanism
@@ -1113,9 +1125,9 @@ continueRegistration:
         ' Need to account for Daylight Savings Time
         Dim strNow As String
         ' Normalize to the format of the saved date-time, before we compare
-        strNow = Microsoft.VisualBasic.Compatibility.VB6.Format(Now.UtcNow, "YYYY/MM/DD")
+        strNow = Now.UtcNow.ToString("yyyy/MM/dd")
         'If strNow < Lic.LastUsed And Lic.LicenseType <> allicPermanent Then
-        If DateValue(strNow) < DateValue(Microsoft.VisualBasic.Compatibility.VB6.Format(Lic.LastUsed, "YYYY/MM/DD")) And Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
+        If DateValue(strNow) < DateValue(VB6.Format(Lic.LastUsed, "yyyy/MM/dd")) And Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
             'System.Diagnostics.Debug.WriteLine("UTC Now: " & strNow)
             'System.Diagnostics.Debug.WriteLine("LastUsed: " & CDate(Lic.LastUsed))
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
@@ -1135,7 +1147,7 @@ continueRegistration:
         ' Update license store with LastRunDate
         ' Dim strEncrypted As String
         Dim strLastUsed As String
-        strLastUsed = Microsoft.VisualBasic.Compatibility.VB6.Format(Now.UtcNow, "YYYY/MM/DD")
+        strLastUsed = Now.UtcNow.ToString("yyyy/MM/dd")
         Lic.LastUsed = strLastUsed
         MyNotifier.Notify("ValidateValue", strLastUsed)
         Lic.Hash1 = modMD5.Hash(strLastUsed)
@@ -1154,6 +1166,11 @@ continueRegistration:
         Dim varResult As Object
         Dim trialStatus As Boolean
 
+        ' Get the current date format and save it to regionalSymbol variable
+        Get_locale()
+        ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
+        Set_locale("")
+
         ' Check to see if this is a Short License Key
         If Mid(LibKey, 5, 1) = "-" And Mid(LibKey, 10, 1) = "-" And Mid(LibKey, 15, 1) = "-" And Mid(LibKey, 20, 1) = "-" Then
             Lic.LicenseKey = UCase(LibKey)
@@ -1170,11 +1187,13 @@ continueRegistration:
         If Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
             If mCheckTimeServerForClockTampering = IActiveLock.ALTimeServerTypes.alsCheckTimeServer Then
                 If SystemClockTampered() Then
+                    Set_locale(regionalSymbol)
                     Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                 End If
             End If
             If mChecksystemfilesForClockTampering = IActiveLock.ALSystemFilesTypes.alsCheckSystemFiles Then
                 If ClockTampering() Then
+                    Set_locale(regionalSymbol)
                     Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                 End If
             End If
@@ -1182,6 +1201,7 @@ continueRegistration:
 
         ' License was validated successfuly.  Store it.
         If mKeyStore Is Nothing Then
+            Set_locale(regionalSymbol)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREUNINITIALIZED)
         End If
 
@@ -1195,7 +1215,7 @@ continueRegistration:
             Dim ok As Integer
             Dim strStream As String = String.Empty
             strStream = mSoftwareName & mSoftwareVer & mSoftwarePassword
-            ok = ADSFile.Write(Now.UtcNow, mKeyStorePath, strStream)
+            ok = ADSFile.Write(Now.UtcNow.ToString("yyyy/MM/dd"), mKeyStorePath, strStream)
         End If
 
         ' Expire all trial licenses
@@ -1204,6 +1224,7 @@ continueRegistration:
         If mTrialType <> IActiveLock.ALTrialTypes.trialNone Then
             trialStatus = ExpireTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, mSoftwarePassword)
         End If
+        Set_locale(regionalSymbol)
 
     End Sub
     '===============================================================================

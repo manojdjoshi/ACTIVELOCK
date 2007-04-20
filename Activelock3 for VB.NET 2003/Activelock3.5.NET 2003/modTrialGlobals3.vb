@@ -328,7 +328,7 @@ Module modTrial
 
         On Error GoTo DateGoodRegistryError
 
-        'TmpCRD = Format(Now, "m/d/yyyy")
+        'TmpCRD = Format(Now, "yyyy/MM/dd")
         TmpCRD = ActiveLockDate(Now)
         TmpLRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
         TmpFRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
@@ -995,7 +995,7 @@ DateGoodSteganographyError:
     End Function
 
     Private Function ActiveLockDate(ByVal dt As Date) As Date
-        ActiveLockDate = CDate(VB6.Format(dt, "mm/dd/yyyy")) ' CDate(Format(dt, "m/d/yy h:m:ss"))
+        ActiveLockDate = CDate(dt.ToString("yyyy/MM/dd")) ' CDate(Format(dt, "m/d/yy h:m:ss"))
     End Function
     Public Function RunsGoodSteganography(ByRef numRuns As Short, ByRef runsLeft As Short) As Boolean
         On Error GoTo RunsGoodSteganographyError
@@ -2085,7 +2085,7 @@ exitGracefully:
             Do While s <> ""
                 If Left(s, 1) <> "$" And Left(s, 1) <> "?" Then
                     fileDate = FileDateTime(t & "\" & s)
-                    If DateDiff(Microsoft.VisualBasic.DateInterval.Hour, CDate(VB6.Format(Now.UtcNow, "YYYY/MM/DD")), CDate(VB6.Format(fileDate.UtcNow, "YYYY/MM/DD"))) > 24 Then
+                    If DateDiff(Microsoft.VisualBasic.DateInterval.Hour, CDate(Now.UtcNow.ToString("yyyy/MM/dd")), CDate(fileDate.UtcNow.ToString("yyyy/MM/dd"))) > 24 Then
                         If Count > 1 Then
                             ClockTampering = True
                             Exit Function
@@ -3079,7 +3079,7 @@ minusAttributesError:
         Pos = InStr(Symbol, Chr(0))
         If Pos > 0 Then
             Symbol = VB.Left(Symbol, Pos - 1)
-            If Symbol <> "MM/dd/yyyy" Then regionalSymbol = Symbol
+            If Symbol <> "yyyy/MM/dd" Then regionalSymbol = Symbol
         End If
     End Sub
     Public Sub Set_locale(Optional ByVal localSymbol As String = "") 'Change the regional setting
@@ -3088,7 +3088,7 @@ minusAttributesError:
         Dim Locale As Integer
         Locale = GetUserDefaultLCID() 'Get user Locale ID
         If localSymbol = "" Then
-            Symbol = "MM/dd/yyyy" 'New character for the locale
+            Symbol = "yyyy/MM/dd" 'New character for the locale
         Else
             Symbol = localSymbol
         End If

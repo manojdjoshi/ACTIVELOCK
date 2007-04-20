@@ -137,7 +137,7 @@ Friend Class clsShortLicenseKey
 		
 		' convert each segment value to a hex string
 		KeySegs(Segments.iProdCode) = HexWORD(ProductCode)
-		KeySegs(Segments.iExpire) = HexWORD(DateDiff(Microsoft.VisualBasic.DateInterval.Day, DateValue(CStr(#1/1/1970#)), DateValue(CStr(CDate(VB6.Format(ExpireDate, "YYYY/MM/DD"))))))
+        KeySegs(Segments.iExpire) = HexWORD(DateDiff(Microsoft.VisualBasic.DateInterval.Day, DateValue(CStr(#1/1/1970#)), DateValue(CStr(CDate(ExpireDate.ToString("yyyy/MM/dd"))))))
 		KeySegs(Segments.iUserData) = HexWORD(UserData)
 		
 		' Compute CRC against pertinent info.
