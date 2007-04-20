@@ -62,9 +62,9 @@ Module modBase64
     Dim N As Integer
     Dim retry As String = String.Empty
     For N = 1 To DecryptedText.Length Step 3
-      c1 = Convert.ToInt16(DecryptedText.Substring(N - 1, 1).Chars(0))
-      c2 = Convert.ToInt16(DecryptedText.Substring(N, 1).Chars(0))
-      c3 = Convert.ToInt16(DecryptedText.Substring(N + 1, 1).Chars(0))
+            c1 = Convert.ToInt16(DecryptedText.Substring(N - 1, 1).Chars(0))
+            c2 = Convert.ToInt16(DecryptedText.Substring(N, 1).Chars(0))
+            c3 = Convert.ToInt16(DecryptedText.Substring(N + 1, 1).Chars(0))
 
       w1 = Int(c1 / 4)
       w2 = CShort(c1 And 3) * 16 + Int(c2 / 16)

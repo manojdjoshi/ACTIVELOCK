@@ -1690,18 +1690,18 @@ Friend Class frmMain
         ' Get to the last vbLf, which denotes the ending of the lock code and beginning of user name.
         Do While i > 0
             i = strInstCode.IndexOf(vbLf, Index) 'InStr(Index + 1, strInstCode, vbLf)
-            If i > 0 Then Index = i
+            If i > 0 Then Index = i + 1
         Loop
         ' user name starts from Index+1 to the end
         Dim user As String
-        user = strInstCode.Substring(Index + 1)
+        user = strInstCode.Substring(Index)
 
         ' combine with user name
         strReq = strLock & vbLf & user
 
         ' base-64 encode the request
         Dim strReq2 As String
-        strReq2 = modBase64.Base64_Encode("+" & strReq)
+        strReq2 = ActiveLock3Globals_definst.Base64Encode("+" & strReq)
         ReconstructedInstallationCode = strReq2
 
     End Function
@@ -2237,7 +2237,7 @@ Friend Class frmMain
 
         On Error Resume Next
         'Read the program INI file to retrieve control settings
-        PROJECT_INI_FILENAME = WinDir() & "\" & Application.ProductName & Application.ProductVersion & ".ini"
+        PROJECT_INI_FILENAME = WinDir() & "\" & Application.ProductName & ".ini"
 
         SSTab1.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", CStr(0)))
         cboProducts.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboProducts", CStr(0)))
@@ -3533,6 +3533,10 @@ exitValidate:
     End Sub
 
     Private Sub chkLockIP_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockIP.CheckedChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
         If chkLockIP.Checked Then
             MsgBox("Warning: Use IP addresses cautiously since they may not be static.", MsgBoxStyle.Exclamation, "Static IP Address Warning")
         End If
@@ -3558,5 +3562,54 @@ exitValidate:
         chkLockBIOS.CheckState = CheckState.Unchecked
         chkLockMotherboard.CheckState = CheckState.Unchecked
         chkLockIP.CheckState = CheckState.Unchecked
+    End Sub
+
+    Private Sub chkLockMACaddress_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockMACaddress.CheckedChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
+
+    Private Sub chkLockComputer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockComputer.CheckedChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
+
+    Private Sub chkLockHD_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockHD.CheckedChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
+
+    Private Sub chkLockHDfirmware_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockHDfirmware.CheckedChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
+
+    Private Sub chkLockWindows_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockWindows.CheckedChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
+
+    Private Sub chkLockBIOS_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockBIOS.CheckedChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
+
+    Private Sub chkLockMotherboard_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockMotherboard.CheckedChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
     End Sub
 End Class
