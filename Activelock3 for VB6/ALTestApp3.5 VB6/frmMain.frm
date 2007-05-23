@@ -10,6 +10,7 @@ Begin VB.Form frmMain
    ClientWidth     =   9720
    Icon            =   "frmMain.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    ScaleHeight     =   7995
    ScaleWidth      =   9720
@@ -58,11 +59,11 @@ Begin VB.Form frmMain
       TabCaption(1)   =   "Sample App"
       TabPicture(1)   =   "frmMain.frx":0CE6
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "lblLockStatus"
-      Tab(1).Control(1)=   "lblLockStatus2"
+      Tab(1).Control(0)=   "fraViewport"
+      Tab(1).Control(1)=   "Frame1"
       Tab(1).Control(2)=   "lblTrialInfo"
-      Tab(1).Control(3)=   "Frame1"
-      Tab(1).Control(4)=   "fraViewport"
+      Tab(1).Control(3)=   "lblLockStatus2"
+      Tab(1).Control(4)=   "lblLockStatus"
       Tab(1).ControlCount=   5
       Begin VB.Frame fraViewport 
          BorderStyle     =   0  'None
@@ -786,7 +787,7 @@ Private Sub Form_Load()
         ' Note: Do not use (App.Major & "." & App.Minor & "." & App.Revision)
         ' since the license will fail with version incremented exe builds
         '.SoftwareVersion = "1.0"   ' WARNING *** WARNING *** DO NOT USE App.Major & "." & App.Minor & "." & App.Revision
-        .SoftwareVersion = "2.0"
+        .SoftwareVersion = "3.0"
         txtVersion.Text = .SoftwareVersion
         
         ' New in v3.3
@@ -825,7 +826,8 @@ Private Sub Form_Load()
 '        PUB_KEY = PUB_KEY & ".1D9.507.323.39C.39C.268.53E.4E6.4C5.268.2F7.4C5.528.4AF.53E.370.436.4D0.3C8.4C5.35A.51D.2CB.3D3.2CB.252.4C5.231.3D3.37B.35A.4BA"
 '        PUB_KEY = PUB_KEY & ".499.344.4C5.34F.231.25D.37B.247.39C.1D9.302.210.4E6.30D.4DB.4BA.512.35A.25D.441.339.3B2"
 '        .SoftwareCode = Dec(PUB_KEY)
-        .SoftwareCode = "RSA2048BgIAAAAkAABSU0ExAAgAAAEAAQC7QRQAugyetDowjseqszSAkX3hLvOj69Cu8J7fs7T0sIlM2gVK6WIEN026KcnILfb/Gs+jDvyb2mpPOL1HfyEmIl2tgK5qQG3Di0uaEgiyDaHRl8IYsMLyBNjJYyB3bnKHk+5c7W1c6MAZft5Iyl5v6Xj6KtJ7s73ICMQ7UzaEcRslbkRaRkW1AAXjKEk/rhzDu4dNHX6XsCUlpgAxhopAuONJIZyh6dYzqSMTOS0A3gmC6f8vC9HYtLKls1Ap/jxwjLH6pwc1Su+7KtfGkGB/ZQdOZau/wNEkoLbodXypGAf5TiJ4NMb6ODTl1CfLVEKHApXsC9nQR8/N3Z5Yt36p"
+'        .SoftwareCode = "RSA2048BgIAAAAkAABSU0ExAAgAAAEAAQC7QRQAugyetDowjseqszSAkX3hLvOj69Cu8J7fs7T0sIlM2gVK6WIEN026KcnILfb/Gs+jDvyb2mpPOL1HfyEmIl2tgK5qQG3Di0uaEgiyDaHRl8IYsMLyBNjJYyB3bnKHk+5c7W1c6MAZft5Iyl5v6Xj6KtJ7s73ICMQ7UzaEcRslbkRaRkW1AAXjKEk/rhzDu4dNHX6XsCUlpgAxhopAuONJIZyh6dYzqSMTOS0A3gmC6f8vC9HYtLKls1Ap/jxwjLH6pwc1Su+7KtfGkGB/ZQdOZau/wNEkoLbodXypGAf5TiJ4NMb6ODTl1CfLVEKHApXsC9nQR8/N3Z5Yt36p"
+        .SoftwareCode = "RSA1024BgIAAAAkAABSU0ExAAQAAAEAAQCBgUkipNjyTDuVPVP407gCcRy3eAeppZHHV3cD0uLBb+8HXmSGD25HBqCExX1UJyFOb8ZD98MXCTY3p34ppRPW3oUCiK5QdOOwaoY4vtsoQQTn/+n1ztjiSRMMekpQwfNppfvC3Tf3kL+bdqNPUYSPANDVhbjLYDpvQzvPoAPl4g=="
         
         .LockType = lockNone  'lockWindows 'Or lockComp 'Or lockComp Or lockWindows
         strAutoRegisterKeyPath = App.Path & "\" & LICENSE_ROOT & ".all"
@@ -1149,6 +1151,10 @@ End Function
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Private Sub cmdReqGen_Click()
     Dim instCode As String
+    If txtUser.Text = "" Then
+        MsgBox "User Name field is blank.", vbExclamation
+        Exit Sub
+    End If
     ' Generate Request code to Lock
     If MyActiveLock Is Nothing Then
         noTrialThisTime = True
