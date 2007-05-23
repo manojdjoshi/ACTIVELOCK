@@ -353,15 +353,15 @@ End Function
 #If TESTMODE = 1 Then
 
   Public Sub gPrintPrimes()
-  Dim i As Long, s As String, C As Long
+  Dim i As Long, S As String, C As Long
   
   For i = cRANGEFROM To cRANGETO
     If gCheckPrimeInRange(i) Then
-      s = s & FInt(i, 5): C = C + 1
-      If C Mod 10 = 0 Then Debug.Print s: s = vbNullString: C = 0
+      S = S & FInt(i, 5): C = C + 1
+      If C Mod 10 = 0 Then Debug.Print S: S = vbNullString: C = 0
     End If
   Next i
-  If C <> 0 Then Debug.Print s
+  If C <> 0 Then Debug.Print S
   End Sub
 
   Private Function FInt(ByVal Val As String, ByVal PadLen As Long) As String
@@ -408,11 +408,14 @@ Public Sub gRaiseError(ByRef ClassName As String, _
                        Optional ByVal Number As Long)
 
 If Err.Number = 0 Then
+    Set_locale regionalSymbol
     Err.Raise Number, ClassName & "." & MethodName, Description
 Else
     If Len(Description) = 0 Then
+        Set_locale regionalSymbol
         Err.Raise Err.Number, ClassName & "." & MethodName & vbCrLf & Err.Source, Err.Description
     Else
+        Set_locale regionalSymbol
         Err.Raise Err.Number, ClassName & "." & MethodName & vbCrLf & Err.Source, Description & vbCrLf & Err.Description
     End If
 End If

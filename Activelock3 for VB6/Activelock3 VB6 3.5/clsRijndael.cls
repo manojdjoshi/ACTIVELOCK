@@ -182,6 +182,7 @@ Private Function LShift(ByVal lValue As Long, _
         End If
         Exit Function
     ElseIf iShiftBits < 0 Or iShiftBits > 31 Then
+        Set_locale regionalSymbol
         Err.Raise 6
     End If
     
@@ -210,6 +211,7 @@ Private Function RShift(ByVal lValue As Long, _
         End If
         Exit Function
     ElseIf iShiftBits < 0 Or iShiftBits > 31 Then
+        Set_locale regionalSymbol
         Err.Raise 6
     End If
     
@@ -236,6 +238,7 @@ Private Function LShiftByte(ByVal bytValue As Byte, _
         End If
         Exit Function
     ElseIf bytShiftBits < 0 Or bytShiftBits > 7 Then
+        Set_locale regionalSymbol
         Err.Raise 6
     End If
     
@@ -259,6 +262,7 @@ Private Function RShiftByte(ByVal bytValue As Byte, _
         End If
         Exit Function
     ElseIf bytShiftBits < 0 Or bytShiftBits > 7 Then
+        Set_locale regionalSymbol
         Err.Raise 6
     End If
     
@@ -353,10 +357,10 @@ End Function
 '*******************************************************************************
 ' bmul (FUNCTION)
 '*******************************************************************************
-Private Function bmul(ByVal x As Byte, _
+Private Function bmul(ByVal X As Byte, _
                       y As Byte) As Byte
-    If x <> 0 And y <> 0 Then
-        bmul = m_ptab((CLng(m_ltab(x)) + CLng(m_ltab(y))) Mod 255)
+    If X <> 0 And y <> 0 Then
+        bmul = m_ptab((CLng(m_ltab(X)) + CLng(m_ltab(y))) Mod 255)
     Else
         bmul = 0
     End If
@@ -380,12 +384,12 @@ End Function
 '*******************************************************************************
 ' product (FUNCTION)
 '*******************************************************************************
-Private Function product(ByVal x As Long, _
+Private Function product(ByVal X As Long, _
                          ByVal y As Long) As Long
     Dim xb(3) As Byte
     Dim yb(3) As Byte
     
-    Unpack x, xb
+    Unpack X, xb
     Unpack y, yb
     product = bmul(xb(0), yb(0)) Xor bmul(xb(1), yb(1)) Xor bmul(xb(2), yb(2)) _
         Xor bmul(xb(3), yb(3))
@@ -394,19 +398,19 @@ End Function
 '*******************************************************************************
 ' InvMixCol (FUNCTION)
 '*******************************************************************************
-Private Function InvMixCol(ByVal x As Long) As Long
+Private Function InvMixCol(ByVal X As Long) As Long
     Dim y       As Long
     Dim m       As Long
     Dim b(3)    As Byte
     
     m = Pack(m_InCo)
-    b(3) = product(m, x)
+    b(3) = product(m, X)
     m = RotateLeft(m, 24)
-    b(2) = product(m, x)
+    b(2) = product(m, X)
     m = RotateLeft(m, 24)
-    b(1) = product(m, x)
+    b(1) = product(m, X)
     m = RotateLeft(m, 24)
-    b(0) = product(m, x)
+    b(0) = product(m, X)
     y = Pack(b)
     
     InvMixCol = y
@@ -415,19 +419,19 @@ End Function
 '*******************************************************************************
 ' ByteSub (FUNCTION)
 '*******************************************************************************
-Private Function ByteSub(ByVal x As Byte) As Byte
+Private Function ByteSub(ByVal X As Byte) As Byte
     Dim y As Byte
     
-    y = m_ptab(255 - m_ltab(x))
-    x = y
-    x = RotateLeftByte(x, 1)
-    y = y Xor x
-    x = RotateLeftByte(x, 1)
-    y = y Xor x
-    x = RotateLeftByte(x, 1)
-    y = y Xor x
-    x = RotateLeftByte(x, 1)
-    y = y Xor x
+    y = m_ptab(255 - m_ltab(X))
+    X = y
+    X = RotateLeftByte(X, 1)
+    y = y Xor X
+    X = RotateLeftByte(X, 1)
+    y = y Xor X
+    X = RotateLeftByte(X, 1)
+    y = y Xor X
+    X = RotateLeftByte(X, 1)
+    y = y Xor X
     y = y Xor &H63
     
     ByteSub = y
@@ -609,7 +613,7 @@ Public Sub Encrypt(buff() As Byte)
     Dim m       As Long
     Dim a(7)    As Long
     Dim b(7)    As Long
-    Dim x()     As Long
+    Dim X()     As Long
     Dim y()     As Long
     Dim t()     As Long
     
@@ -621,36 +625,36 @@ Public Sub Encrypt(buff() As Byte)
     Next
     
     k = m_Nb
-    x = a
+    X = a
     y = b
     
     For i = 1 To m_Nr - 1
         For j = 0 To m_Nb - 1
             m = j * 3
-            y(j) = m_fkey(k) Xor m_ftable(x(j) And m_lOnBits(7)) Xor _
-                RotateLeft(m_ftable(RShift(x(m_fi(m)), 8) And m_lOnBits(7)), 8) Xor _
-                RotateLeft(m_ftable(RShift(x(m_fi(m + 1)), 16) And m_lOnBits(7)), 16) Xor _
-                RotateLeft(m_ftable(RShift(x(m_fi(m + 2)), 24) And m_lOnBits(7)), 24)
+            y(j) = m_fkey(k) Xor m_ftable(X(j) And m_lOnBits(7)) Xor _
+                RotateLeft(m_ftable(RShift(X(m_fi(m)), 8) And m_lOnBits(7)), 8) Xor _
+                RotateLeft(m_ftable(RShift(X(m_fi(m + 1)), 16) And m_lOnBits(7)), 16) Xor _
+                RotateLeft(m_ftable(RShift(X(m_fi(m + 2)), 24) And m_lOnBits(7)), 24)
             k = k + 1
         Next
-        t = x
-        x = y
+        t = X
+        X = y
         y = t
     Next
     
     For j = 0 To m_Nb - 1
         m = j * 3
-        y(j) = m_fkey(k) Xor m_fbsub(x(j) And m_lOnBits(7)) Xor _
-            RotateLeft(m_fbsub(RShift(x(m_fi(m)), 8) And m_lOnBits(7)), 8) Xor _
-            RotateLeft(m_fbsub(RShift(x(m_fi(m + 1)), 16) And m_lOnBits(7)), 16) Xor _
-            RotateLeft(m_fbsub(RShift(x(m_fi(m + 2)), 24) And m_lOnBits(7)), 24)
+        y(j) = m_fkey(k) Xor m_fbsub(X(j) And m_lOnBits(7)) Xor _
+            RotateLeft(m_fbsub(RShift(X(m_fi(m)), 8) And m_lOnBits(7)), 8) Xor _
+            RotateLeft(m_fbsub(RShift(X(m_fi(m + 1)), 16) And m_lOnBits(7)), 16) Xor _
+            RotateLeft(m_fbsub(RShift(X(m_fi(m + 2)), 24) And m_lOnBits(7)), 24)
         k = k + 1
     Next
     
     For i = 0 To m_Nb - 1
         j = i * 4
         UnpackFrom y(i), buff, j
-        x(i) = 0
+        X(i) = 0
         y(i) = 0
     Next
 End Sub
@@ -665,7 +669,7 @@ Public Sub Decrypt(buff() As Byte)
     Dim m As Long
     Dim a(7) As Long
     Dim b(7) As Long
-    Dim x() As Long
+    Dim X() As Long
     Dim y() As Long
     Dim t() As Long
     
@@ -676,30 +680,30 @@ Public Sub Decrypt(buff() As Byte)
     Next
     
     k = m_Nb
-    x = a
+    X = a
     y = b
     
     For i = 1 To m_Nr - 1
         For j = 0 To m_Nb - 1
             m = j * 3
-            y(j) = m_rkey(k) Xor m_rtable(x(j) And m_lOnBits(7)) Xor _
-                RotateLeft(m_rtable(RShift(x(m_ri(m)), 8) And m_lOnBits(7)), 8) Xor _
-                RotateLeft(m_rtable(RShift(x(m_ri(m + 1)), 16) And m_lOnBits(7)), 16) Xor _
-                RotateLeft(m_rtable(RShift(x(m_ri(m + 2)), 24) And m_lOnBits(7)), 24)
+            y(j) = m_rkey(k) Xor m_rtable(X(j) And m_lOnBits(7)) Xor _
+                RotateLeft(m_rtable(RShift(X(m_ri(m)), 8) And m_lOnBits(7)), 8) Xor _
+                RotateLeft(m_rtable(RShift(X(m_ri(m + 1)), 16) And m_lOnBits(7)), 16) Xor _
+                RotateLeft(m_rtable(RShift(X(m_ri(m + 2)), 24) And m_lOnBits(7)), 24)
             k = k + 1
         Next
-        t = x
-        x = y
+        t = X
+        X = y
         y = t
     Next
     
     For j = 0 To m_Nb - 1
         m = j * 3
         
-        y(j) = m_rkey(k) Xor m_rbsub(x(j) And m_lOnBits(7)) Xor _
-            RotateLeft(m_rbsub(RShift(x(m_ri(m)), 8) And m_lOnBits(7)), 8) Xor _
-            RotateLeft(m_rbsub(RShift(x(m_ri(m + 1)), 16) And m_lOnBits(7)), 16) Xor _
-            RotateLeft(m_rbsub(RShift(x(m_ri(m + 2)), 24) And m_lOnBits(7)), 24)
+        y(j) = m_rkey(k) Xor m_rbsub(X(j) And m_lOnBits(7)) Xor _
+            RotateLeft(m_rbsub(RShift(X(m_ri(m)), 8) And m_lOnBits(7)), 8) Xor _
+            RotateLeft(m_rbsub(RShift(X(m_ri(m + 1)), 16) And m_lOnBits(7)), 16) Xor _
+            RotateLeft(m_rbsub(RShift(X(m_ri(m + 2)), 24) And m_lOnBits(7)), 24)
         k = k + 1
     Next
     
@@ -707,7 +711,7 @@ Public Sub Decrypt(buff() As Byte)
         j = i * 4
         
         UnpackFrom y(i), buff, j
-        x(i) = 0
+        X(i) = 0
         y(i) = 0
     Next
 End Sub

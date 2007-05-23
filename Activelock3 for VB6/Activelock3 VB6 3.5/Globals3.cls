@@ -123,7 +123,7 @@ Public Enum ActiveLockErrCodeConstants
     alerrLicenseInvalid = &H80040002
     alerrLicenseExpired = &H80040003
     alerrLicenseTampered = &H80040004
-    alerrClockChanged = &H80040005
+    AlerrClockChanged = &H80040005
     alerrWrongIPaddress = &H80040006
     
     alerrKeyStoreInvalid = &H80040010
@@ -222,6 +222,7 @@ Case 0   'create container
         cryptSession.SessionEnd
     Else
         Set cryptSession = Nothing
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, "Crypto API Error: This System Unable to Perform Cryptographic Functions"
     End If
     Set cryptSession = Nothing
@@ -250,6 +251,7 @@ Case 1   'generate exchange or signature key
         cryptSession.SessionEnd
     Else
         Set cryptSession = Nothing
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, "Crypto API Error: This System Unable to Perform Cryptographic Functions"
     End If
     Set cryptSession = Nothing
@@ -265,6 +267,7 @@ Case 2    'destroy container
         strCypherText = vbNullString
     Else
         Set cryptSession = Nothing
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, "Crypto API Error: This System Unable to Perform Cryptographic Functions"
     End If
     Set cryptSession = Nothing
@@ -289,12 +292,14 @@ Case 3   'encrypt/decrypt
         End If
         cryptSession.SessionEnd
     Else
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, "Crypto API Error"
     End If
     Set cryptSession = Nothing
 
 Case 4    'sign the key
     If plainText = "" Then
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, "Crypto API Error: There's no string to sign"
         Exit Function
     End If
@@ -327,12 +332,14 @@ Case 5   'validate the key
         
         inputText = signedText
         If inputText = "" Then
+            Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, "Crypto API Error: There's no string to validate"
         End If
         If cryptSession.ValidateString(inputText) = True Then
             ' Stay quiet here... everything is allright
             'MsgBox "Valid signature !!", vbInformation
         Else
+            Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, "Crypto API Error: Invalid signature"
         End If
     End If

@@ -600,6 +600,7 @@ Dim lngReturnValue As Long
            )
         'and if the new key container fails...raise the error
         If lngReturnValue = 0 Then
+            Set_locale regionalSymbol
             Err.Raise Err.LastDllError, Err.Source, _
             "DLL error code shown above.  " & vbCrLf & _
             "Error during CryptAcquireContext for key container: " & sKeyCon
@@ -626,6 +627,7 @@ Dim lngReturnValue As Long
                )
             'and if the new key container fails...raise the error
             If lngReturnValue = 0 Then
+                Set_locale regionalSymbol
                 Err.Raise Err.LastDllError, Err.Source, _
                 "DLL error code shown above.  " & vbCrLf & _
                 "Error during CryptAcquireContext for key container: " & sKeyCon
@@ -725,6 +727,7 @@ Dim abKeyBlob() As Byte
     ' Added by Ismail
     
     If Not (lngPubBlobLength > 0 And UBound(abPublicBlob) = lngPubBlobLength - 1) Then
+        Set_locale regionalSymbol
         Err.Raise vbObjectError + 1, , "The Public blob must hold a valid key"
     End If
     ReDim abKeyBlob(lngPubBlobLength)
@@ -734,8 +737,10 @@ Dim abKeyBlob() As Byte
     If hKeyPair <> 0 Then CryptDestroyKey hKeyPair
     lngReturnValue = CryptImportKey( _
         hCryptProv, abKeyBlob(0), lngLength, 0, lngType, hKeyPair)
-    If lngReturnValue = 0 Then Err.Raise Err.LastDllError, , "DLL error code shown above. " & _
-        "Could not import the Public key"
+    If lngReturnValue = 0 Then
+        Set_locale regionalSymbol
+        Err.Raise Err.LastDllError, , "DLL error code shown above. " & "Could not import the Public key"
+    End If
     If hSessionKey <> 0 Then CryptDestroyKey hSessionKey
 End Sub
 
@@ -762,6 +767,7 @@ Dim lLen As Long
     
     If Not (lngPvtBlobLength > 0 And UBound(abPrivateBlob) = lngPvtBlobLength - 1) Or _
             sPassPhrase = vbNullString Then
+        Set_locale regionalSymbol
         Err.Raise vbObjectError + 1, , "The Private blob must hold a valid key and Passphrase parameter must not be null"
     End If
     
@@ -1896,25 +1902,36 @@ abText = abData
 
 'Create a hash object to sign/validate
 lngReturnValue = CryptCreateHash(hCryptProv, CALG_SHA, 0, 0, hHash)
-If lngReturnValue = 0 Then Err.Raise Err.LastDllError, , "DLL error code shown above. Could not create a Hash Object (CryptCreateHash API)"
+If lngReturnValue = 0 Then
+    Set_locale regionalSymbol
+    Err.Raise Err.LastDllError, , "DLL error code shown above. Could not create a Hash Object (CryptCreateHash API)"
+End If
 'Hash the data
 lngW = UBound(abText) + 1
 lngReturnValue = CryptHashData(hHash, abText(0), lngW, 0)
-If lngReturnValue = 0 Then Err.Raise Err.LastDllError, , "DLL error code shown above. Could not calculate a Hash Value (CryptHashData API)"
+If lngReturnValue = 0 Then
+    Set_locale regionalSymbol
+    Err.Raise Err.LastDllError, , "DLL error code shown above. Could not calculate a Hash Value (CryptHashData API)"
+End If
 
 If bSigned Then
     'release old key pair handle
     If hKeyPair <> 0 Then CryptDestroyKey hKeyPair
     'get a handle to the signature key pair
     lngReturnValue = CryptGetUserKey(hCryptProv, AT_SIGNATURE, hKeyPair)
-    If lngReturnValue = 0 Then Err.Raise Err.LastDllError, , _
-        "DLL error code shown above. Could not obtain key pair"
+    If lngReturnValue = 0 Then
+        Set_locale regionalSymbol
+        Err.Raise Err.LastDllError, , "DLL error code shown above. Could not obtain key pair"
+    End If
     'Determine the size of the signature
     lngReturnValue = CryptSignHash(hHash, AT_SIGNATURE, 0, 0, vbNull, lngSigLength)
     If lngSigLength > 0 Then ReDim abSig(lngSigLength - 1)
     'Sign the hash object
     lngReturnValue = CryptSignHash(hHash, AT_SIGNATURE, 0, 0, abSig(0), lngSigLength)
-    If lngReturnValue = 0 Then Err.Raise Err.LastDllError, , "DLL error code shown above. Could not sign the hash"
+    If lngReturnValue = 0 Then
+        Set_locale regionalSymbol
+        Err.Raise Err.LastDllError, , "DLL error code shown above. Could not sign the hash"
+    End If
     ' the signature is now available
     ' size returned array to signature length
     ReDim abSigned(UBound(abSig))

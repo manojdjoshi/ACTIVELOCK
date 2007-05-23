@@ -249,6 +249,44 @@ End Enum
 
 Private Declare Function CloseHandle Lib "kernel32" (ByVal hObject As Long) As Long
 
+' The following code is used by the locale date format settings
+Private Declare Function GetLocaleInfo Lib "kernel32" Alias "GetLocaleInfoA" (ByVal Locale As Long, ByVal LCType As Long, ByVal lpLCData As String, ByVal cchData As Long) As Long
+Private Declare Function SetLocaleInfo Lib "kernel32" Alias "SetLocaleInfoA" (ByVal Locale As Long, ByVal LCType As Long, ByVal lpLCData As String) As Boolean
+Private Declare Function GetUserDefaultLCID% Lib "kernel32" ()
+Const LOCALE_SSHORTDATE = &H1F
+Public regionalSymbol As String
+
+Public Sub Get_locale() ' Retrieve the regional setting
+    Dim Symbol As String
+    Dim iRet1 As Long
+    Dim iRet2 As Long
+    Dim lpLCDataVar As String
+    Dim Pos As Integer
+    Dim Locale As Long
+    Locale = GetUserDefaultLCID()
+    iRet1 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, lpLCDataVar, 0)
+    Symbol = String$(iRet1, 0)
+    iRet2 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol, iRet1)
+    Pos = InStr(Symbol, Chr$(0))
+    If Pos > 0 Then
+         Symbol = Left$(Symbol, Pos - 1)
+         If Symbol <> "yyyy/MM/dd" Then regionalSymbol = Symbol
+    End If
+End Sub
+
+Public Sub Set_locale(Optional ByVal localSymbol As String = "") 'Change the regional setting
+    Dim Symbol As String
+    Dim iRet As Long
+    Dim Locale As Long
+    Locale = GetUserDefaultLCID() 'Get user Locale ID
+    If localSymbol = "" Then
+      Symbol = "yyyy/MM/dd" 'New character for the locale
+    Else
+      Symbol = localSymbol
+    End If
+    
+    iRet = SetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol)
+End Sub
 Public Function CheckStreamCapability() As Boolean
 'Checks if the current File System supports NTFS
 Dim name As String * 256
@@ -343,7 +381,8 @@ Public Function ReadFile(ByVal sPath As String, ByRef sData As String) As Long
     Exit Function
 Hell:
     Close #hFile
-    Err.Raise Err.Number, "Activelock3", Err.Description
+    Set_locale regionalSymbol
+    Err.Raise Err.Number, "Activelock", Err.Description
 End Function
 
 
@@ -588,20 +627,24 @@ Public Function RSASign(ByVal strPub As String, ByVal strPriv As String, ByVal s
     Dim Key As RSAKey
     ' create the key from the key blobs
     If rsa_createkey(strPub, Len(strPub), strPriv, Len(strPriv), Key) = RETVAL_ON_ERROR Then
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
 
     ' sign the data using the created key
     Dim sLen&
     If rsa_sign(Key, strdata, Len(strdata), vbNullString, sLen) = RETVAL_ON_ERROR Then
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
     Dim strSig As String: strSig = String(sLen, 0)
     If rsa_sign(Key, strdata, Len(strdata), strSig, sLen) = RETVAL_ON_ERROR Then
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
     ' throw away the key
     If rsa_freekey(Key) = RETVAL_ON_ERROR Then
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
     RSASign = strSig
@@ -623,15 +666,18 @@ Public Function RSAVerify(ByVal strPub As String, ByVal strdata As String, ByVal
     Dim rc As Long
     ' create the key from the public key blob
     If rsa_createkey(strPub, Len(strPub), vbNullString, 0, Key) = RETVAL_ON_ERROR Then
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
     ' validate the key
     rc = rsa_verifysig(Key, strSig, Len(strSig), strdata, Len(strdata))
     If rc = RETVAL_ON_ERROR Then
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
     ' de-allocate memory used by the key
     If rsa_freekey(Key) = RETVAL_ON_ERROR Then
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
     RSAVerify = rc

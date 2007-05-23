@@ -114,6 +114,7 @@ Private Property Let IKeyStoreProvider_KeyStorePath(RHS As String)
         CreateEmptyFile RHS
     Else 'the file exists, but check to see if it has read-only attribute
         If (GetAttr(RHS) And vbReadOnly) Or (GetAttr(RHS) And vbReadOnly And vbArchive) Then
+            Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
         End If
     End If
@@ -248,5 +249,6 @@ Private Function IKeyStoreProvider_Retrieve(ProductName As String, mLicenseFileT
     Exit Function
 
 InvalidValue:
+    Set_locale regionalSymbol
     Err.Raise ActiveLockErrCodeConstants.alerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREINVALID
 End Function
