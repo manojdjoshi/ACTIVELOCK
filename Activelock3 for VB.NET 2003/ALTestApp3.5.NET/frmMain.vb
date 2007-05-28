@@ -1193,7 +1193,7 @@ Friend Class frmMain
         Dim A() As String
 
         On Error GoTo NotRegistered
-        Me.Text = "ALTestApp3NET - ActiveLock3NET Test Application - v3.5" '& Application.ProductVersion
+        Me.Text = "ALTestApp3NET - ActiveLock3NET Test Application - v3.5.4" '& Application.ProductVersion
 
         ' Check the existence of necessary files to run this application
         Call CheckForResources("comctl32.ocx", "tabctl32.ocx")
@@ -1542,6 +1542,10 @@ checkForResourcesError:
     '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     Private Sub cmdReqGen_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdReqGen.Click
         Dim instCode As String
+        If txtUser.Text = "" Then
+            MsgBox("User Name field is blank.", vbExclamation)
+            Exit Sub
+        End If
         ' Generate Request code to Lock
         If MyActiveLock Is Nothing Then
             noTrialThisTime = True
