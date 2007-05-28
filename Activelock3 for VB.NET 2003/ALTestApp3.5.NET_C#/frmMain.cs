@@ -1233,7 +1233,12 @@ namespace ALTestApp35NET_CS
 
 		private void cmdReqGen_Click(object sender, System.EventArgs e)
 		{
-			//Generate Request code to Lock
+			if (txtUser.Text.Length == 0)
+			{
+				MessageBox.Show("User Name field is blank."  ,modMain.MSGBOXCAPTION, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+				return;
+			}
+//Generate Request code to Lock
 			if (MyActiveLock == null) 
 			{ 
 				noTrialThisTime = true; 
