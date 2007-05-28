@@ -2225,7 +2225,7 @@ Friend Class frmMain
         txtUser.ReadOnly = True
         txtUser.BackColor = System.Drawing.ColorTranslator.FromOle(&H8000000F)
 
-        Me.Text = "ActiveLock3 Universal GENerator (Alugen) for VB.NET 2003 - v" & Application.ProductVersion
+        Me.Text = "Alugen (ActiveLock Universal GENerator) for VB.NET 2003 - v3.5.4" '& Application.ProductVersion
 
     End Sub
 
