@@ -197,7 +197,8 @@ Friend Class XMLGenerator
     'Set MyXMLDoc.schemas = schemaCache
     'Set result = MyXMLDoc.Validate
     'If result.errorCode = 0 Then
-    '    Err.Raise ("XML Validation Error:" & result.reason)
+        '    Set_locale(regionalSymbol)
+        '    Err.Raise ("XML Validation Error:" & result.reason)
     'End If
     MyXMLDoc.Save(fileXML)
   End Sub
@@ -268,7 +269,8 @@ RetrieveProductsError:
       End With
     Next
     If ProdInfo.VCode = "" Or ProdInfo.GCode = "" Then
-      Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, "Product code set is invalid.")
+            Set_locale(regionalSymbol)
+            Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, "Product code set is invalid.")
     End If
     IALUGenerator_RetrieveProduct = ProdInfo
   End Function
@@ -408,6 +410,7 @@ RetrieveProductsError:
                 Dim mySignatureBlock As String
                 mySignatureBlock = Convert.ToBase64String(mysignature)
             Catch ex As Exception
+                Set_locale(regionalSymbol)
                 Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, ex.Message)
             End Try
 

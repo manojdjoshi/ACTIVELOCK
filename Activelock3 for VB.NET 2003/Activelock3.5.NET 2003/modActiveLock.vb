@@ -179,6 +179,14 @@ Module modActiveLock
     Public Declare Function GeneralWinDirApi Lib "kernel32" Alias "GetWindowsDirectoryA" (ByVal lpBuffer As String, ByVal nSize As Integer) As Integer
 
     Public Declare Function GetSystemDirectory Lib "kernel32.dll" Alias "GetSystemDirectoryA" (ByVal lpBuffer As String, ByVal nSize As Integer) As Integer
+
+    ' The following constants and declares are used to Get/Set Locale Date format
+    Private Declare Function GetLocaleInfo Lib "kernel32" Alias "GetLocaleInfoA" (ByVal Locale As Integer, ByVal LCType As Integer, ByVal lpLCData As String, ByVal cchData As Integer) As Integer
+    Private Declare Function SetLocaleInfo Lib "kernel32" Alias "SetLocaleInfoA" (ByVal Locale As Integer, ByVal LCType As Integer, ByVal lpLCData As String) As Boolean
+    Private Declare Function GetUserDefaultLCID Lib "kernel32" () As Short
+    Const LOCALE_SSHORTDATE As Short = &H1FS
+    Public regionalSymbol As String
+
     '===============================================================================
     ' Name: Function TrimNulls
     ' Input:
@@ -253,6 +261,7 @@ Module modActiveLock
         ReadFile = Len(sData)
         Exit Function
 Hell:
+        Set_locale(regionalSymbol)
         Err.Raise(Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext)
     End Function
     '===============================================================================
@@ -401,20 +410,24 @@ Hell:
         Dim KEY As RSAKey
         ' create the key from the key blobs
         If rsa_createkey(strPub, Len(strPub), strPriv, Len(strPriv), KEY) = RETVAL_ON_ERROR Then
+            Set_locale(regionalSymbol)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
 
         ' sign the data using the created key
         Dim sLen As Integer
         If rsa_sign(KEY, strdata, Len(strdata), vbNullString, sLen) = RETVAL_ON_ERROR Then
+            Set_locale(regionalSymbol)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         Dim strSig As String : strSig = New String(Chr(0), sLen)
         If rsa_sign(KEY, strdata, Len(strdata), strSig, sLen) = RETVAL_ON_ERROR Then
+            Set_locale(regionalSymbol)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         ' throw away the key
         If rsa_freekey(KEY) = RETVAL_ON_ERROR Then
+            Set_locale(regionalSymbol)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         RSASign = strSig
@@ -435,15 +448,18 @@ Hell:
         Dim rc As Integer
         ' create the key from the public key blob
         If rsa_createkey(strPub, Len(strPub), vbNullString, 0, KEY) = RETVAL_ON_ERROR Then
+            Set_locale(regionalSymbol)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         ' validate the key
         rc = rsa_verifysig(KEY, strSig, Len(strSig), strdata, Len(strdata))
         If rc = RETVAL_ON_ERROR Then
+            Set_locale(regionalSymbol)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         ' de-allocate memory used by the key
         If rsa_freekey(KEY) = RETVAL_ON_ERROR Then
+            Set_locale(regionalSymbol)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         RSAVerify = rc
@@ -537,5 +553,35 @@ Hell:
         '  Returns current UTC date-time.
         UTC = DateAdd(Microsoft.VisualBasic.DateInterval.Minute, LocalTimeZone(TimeZoneReturn.UTC_Offset), dt)
     End Function
+    Public Sub Get_locale() ' Retrieve the regional setting
+        Dim Symbol As String
+        Dim iRet1 As Integer
+        Dim iRet2 As Integer
+        Dim lpLCDataVar As String = String.Empty
+        Dim Pos As Short
+        Dim Locale As Integer
+        Locale = GetUserDefaultLCID()
+        iRet1 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, lpLCDataVar, 0)
+        Symbol = New String(Chr(0), iRet1)
+        iRet2 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol, iRet1)
+        Pos = InStr(Symbol, Chr(0))
+        If Pos > 0 Then
+            Symbol = Left(Symbol, Pos - 1)
+            If Symbol <> "yyyy/MM/dd" Then regionalSymbol = Symbol
+        End If
+    End Sub
+    Public Sub Set_locale(Optional ByVal localSymbol As String = "") 'Change the regional setting
+        Dim Symbol As String
+        Dim iRet As Integer
+        Dim Locale As Integer
+        Locale = GetUserDefaultLCID() 'Get user Locale ID
+        If localSymbol = "" Then
+            Symbol = "yyyy/MM/dd" 'New character for the locale
+        Else
+            Symbol = localSymbol
+        End If
+
+        iRet = SetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol)
+    End Sub
 
 End Module

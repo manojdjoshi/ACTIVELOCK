@@ -14,7 +14,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Activelock Classic - VB6 version")>
 <Assembly: AssemblyCompany("The ActiveLock Software Group")>
 <Assembly: AssemblyProduct("ActiveLock")>
-<Assembly: AssemblyCopyright("Copyright 2003-2006")> 
+<Assembly: AssemblyCopyright("Copyright 2003-2007")> 
 <Assembly: AssemblyTrademark("")>
 <Assembly: AssemblyCulture("")>
 

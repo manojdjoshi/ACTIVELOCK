@@ -336,12 +336,14 @@ ExitLabel:
 		
 		' This implementation hardcodes keys that are 8 bytes/4 words
 		If Word1 < 0 Or Word1 > 3 Or Word2 < 0 Or Word2 > 3 Then
-			Err.Raise(5, Module_Renamed, "Word specification is not within 0-3.")
+            Set_locale(regionalSymbol)
+            Err.Raise(5, Module_Renamed, "Word specification is not within 0-3.")
 		End If
 		
 		' There are only 16 bits to a word.
 		If Bit1 < 0 Or Bit1 > 15 Or Bit2 < 0 Or Bit2 > 15 Then
-			Err.Raise(5, Module_Renamed, "Bit specification is not within 0-15.")
+            Set_locale(regionalSymbol)
+            Err.Raise(5, Module_Renamed, "Bit specification is not within 0-15.")
 		End If
 		
 		' Save the bits to be swapped

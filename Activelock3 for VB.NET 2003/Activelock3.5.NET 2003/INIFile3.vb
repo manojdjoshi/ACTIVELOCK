@@ -573,7 +573,9 @@ catch_Renamed:
     End Get
     Set(ByVal Value As String)
       ' TODO: Check if File exists.
-      ' If file not found: Err.Raise vbObjectError, , "File not found: " & rValue
+            ' If file not found: 
+            ' Set_locale(regionalSymbol)
+            ' Err.Raise(vbObjectError, , "File not found: " & rValue)
       m_sFileName = Value
       m_sSection = "" '// clear the section
     End Set

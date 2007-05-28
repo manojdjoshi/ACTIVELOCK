@@ -105,13 +105,6 @@ Module modTrial
 
     Private Const MAX_PATH As Short = 260
 
-    ' The following constants and declares are used to Get/Set Locale Date format
-    Private Declare Function GetLocaleInfo Lib "kernel32" Alias "GetLocaleInfoA" (ByVal Locale As Integer, ByVal LCType As Integer, ByVal lpLCData As String, ByVal cchData As Integer) As Integer
-    Private Declare Function SetLocaleInfo Lib "kernel32" Alias "SetLocaleInfoA" (ByVal Locale As Integer, ByVal LCType As Integer, ByVal lpLCData As String) As Boolean
-    Private Declare Function GetUserDefaultLCID Lib "kernel32" () As Short
-    Const LOCALE_SSHORTDATE As Short = &H1FS
-    Public regionalSymbol As String
-
     Private Structure FILETIME
         Dim lngLowDateTime As Integer
         Dim lngHighDateTime As Integer
@@ -447,6 +440,7 @@ RunsGoodRegistryError:
 
         If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialSteganography) Then
             If DateGoodSteganography(numDays, daysLeft2) = False Then
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
                 'MsgBox "DateGoodSteganography " & daysLeft2
                 Exit Function
@@ -455,6 +449,7 @@ RunsGoodRegistryError:
         End If
         If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialHiddenFolder) Then
             If DateGoodHiddenFolder(numDays, daysLeft3) = False Then
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
                 'MsgBox "DateGoodHiddenFolder " & daysLeft3
                 Exit Function
@@ -463,6 +458,7 @@ RunsGoodRegistryError:
         End If
         If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialRegistry) Then
             If DateGoodRegistry(numDays, daysLeft4) = False Then
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
                 'MsgBox "DateGoodRegistry " & daysLeft4
                 Exit Function
@@ -505,6 +501,7 @@ RunsGoodRegistryError:
 
         If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialSteganography) Then
             If RunsGoodSteganography(numRuns, runsLeft2) = False Then
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
                 'MsgBox "RunsGoodSteganography " & runsLeft2
                 Exit Function
@@ -514,6 +511,7 @@ RunsGoodRegistryError:
 
         If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialHiddenFolder) Then
             If RunsGoodHiddenFolder(numRuns, runsLeft3) = False Then
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
                 'MsgBox "RunsGoodHiddenFolder " & runsLeft3
                 Exit Function
@@ -523,6 +521,7 @@ RunsGoodRegistryError:
 
         If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialRegistry) Then
             If RunsGoodRegistry(numRuns, runsLeft4) = False Then
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
                 'MsgBox "RunsGoodRegistry " & runsLeft4
                 Exit Function
@@ -1187,15 +1186,15 @@ FileExistErrors:  'error handling routine, including File Not Found
         ' The following are created only when the license expires
         On Error Resume Next
 
-        secondRegistryKey = CreateRegistryKey(HKEY_CLASSES_ROOT, DecryptString128Bit("5985D6B80E543AFCA67570BF9924469349EDA3A8695B75E656E95ACA55360118A4128395B2B070E8DC04FFB01C7509B18CF9831F36EF68D4A438130BF5F94587C76AE48AD5D6A210DAAB895120982C3426D3EA65C253A39B0C1131D1848D6518", PSWD) & Left(EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD, PSWD), 12))
-        secondRegistryKey = CreateRegistryKey(HKEY_LOCAL_MACHINE, "SOFTWARE\Microsoft\Internet Explorer\Extension Compatibility-" & Left(EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD, PSWD), 8))
+        secondRegistryKey = CreateRegistryKey(HKEY_CLASSES_ROOT, DecryptString128Bit("5985D6B80E543AFCA67570BF9924469349EDA3A8695B75E656E95ACA55360118A4128395B2B070E8DC04FFB01C7509B18CF9831F36EF68D4A438130BF5F94587C76AE48AD5D6A210DAAB895120982C3426D3EA65C253A39B0C1131D1848D6518", PSWD) & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8))
+        secondRegistryKey = CreateRegistryKey(HKEY_LOCAL_MACHINE, "SOFTWARE\Microsoft\Internet Explorer\Extension Compatibility-" & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8))
         Dim intFF As Short
         intFF = FreeFile()
-        FileOpen(intFF, WinDir() & "\" & CHANNELS & Left(EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD, PSWD), 8) & "." & Chr(99) & Chr(100) & Chr(102), OpenMode.Output)
+        FileOpen(intFF, WinDir() & "\" & CHANNELS & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(99) & Chr(100) & Chr(102), OpenMode.Output)
         PrintLine(intFF, "23g5985hb587b27eb")
         FileClose(intFF)
         intFF = FreeFile()
-        FileOpen(intFF, WinSysDir() & VIDEO & Left(EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD, PSWD), 8) & OTHERFILE, OpenMode.Output)
+        FileOpen(intFF, WinSysDir() & VIDEO & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & OTHERFILE, OpenMode.Output)
         PrintLine(intFF, "012234trliug2gb88y53")
         FileClose(intFF)
 
@@ -1315,10 +1314,10 @@ triAlerror:
         DeleteSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "1"))
 
         ' The following were created only when the license expired
-        secondRegistryKey = DeleteKey(HKEY_CLASSES_ROOT, DecryptString128Bit("5985D6B80E543AFCA67570BF9924469349EDA3A8695B75E656E95ACA55360118A4128395B2B070E8DC04FFB01C7509B18CF9831F36EF68D4A438130BF5F94587C76AE48AD5D6A210DAAB895120982C3426D3EA65C253A39B0C1131D1848D6518", PSWD) & Left(EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD, PSWD), 12))
-        secondRegistryKey = DeleteKey(HKEY_LOCAL_MACHINE, "SOFTWARE\Microsoft\Internet Explorer\Extension Compatibility-" & Left(EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD, PSWD), 8))
-        If fileExist(WinDir() & "\" & CHANNELS & Left(EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD, PSWD), 8) & "." & Chr(99) & Chr(100) & Chr(102)) Then Kill(WinDir() & "\" & CHANNELS & Left(EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD, PSWD), 8) & "." & Chr(99) & Chr(100) & Chr(102))
-        If fileExist(WinSysDir() & VIDEO & Left(EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD, PSWD), 8) & OTHERFILE) Then Kill(WinSysDir() & VIDEO & Left(EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD, PSWD), 8) & OTHERFILE)
+        secondRegistryKey = DeleteKey(HKEY_CLASSES_ROOT, DecryptString128Bit("5985D6B80E543AFCA67570BF9924469349EDA3A8695B75E656E95ACA55360118A4128395B2B070E8DC04FFB01C7509B18CF9831F36EF68D4A438130BF5F94587C76AE48AD5D6A210DAAB895120982C3426D3EA65C253A39B0C1131D1848D6518", PSWD) & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8))
+        secondRegistryKey = DeleteKey(HKEY_LOCAL_MACHINE, "SOFTWARE\Microsoft\Internet Explorer\Extension Compatibility-" & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8))
+        If fileExist(WinDir() & "\" & CHANNELS & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(99) & Chr(100) & Chr(102)) Then Kill(WinDir() & "\" & CHANNELS & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(99) & Chr(100) & Chr(102))
+        If fileExist(WinSysDir() & VIDEO & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & OTHERFILE) Then Kill(WinSysDir() & VIDEO & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & OTHERFILE)
 
         ' Registry stuff
         On Error Resume Next
@@ -1394,7 +1393,7 @@ triAlerror:
 
         On Error GoTo IsRegistryExpired1Error
 
-        savedRegistryKey = CheckRegistryKey(HKEY_CLASSES_ROOT, DecryptString128Bit("5985D6B80E543AFCA67570BF9924469349EDA3A8695B75E656E95ACA55360118A4128395B2B070E8DC04FFB01C7509B18CF9831F36EF68D4A438130BF5F94587C76AE48AD5D6A210DAAB895120982C3426D3EA65C253A39B0C1131D1848D6518", PSWD) & Left(EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD, PSWD), 12))
+        savedRegistryKey = CheckRegistryKey(HKEY_CLASSES_ROOT, DecryptString128Bit("5985D6B80E543AFCA67570BF9924469349EDA3A8695B75E656E95ACA55360118A4128395B2B070E8DC04FFB01C7509B18CF9831F36EF68D4A438130BF5F94587C76AE48AD5D6A210DAAB895120982C3426D3EA65C253A39B0C1131D1848D6518", PSWD) & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8))
         If savedRegistryKey = True Then
             IsRegistryExpired1 = True
         Else
@@ -1442,7 +1441,7 @@ IsRegistryExpiredError:
 
         On Error GoTo IsRegistryExpired2Error
 
-        savedRegistryKey = CheckRegistryKey(HKEY_LOCAL_MACHINE, "SOFTWARE\Microsoft\Internet Explorer\Extension Compatibility-" & Left(EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD, PSWD), 8))
+        savedRegistryKey = CheckRegistryKey(HKEY_LOCAL_MACHINE, "SOFTWARE\Microsoft\Internet Explorer\Extension Compatibility-" & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8))
         If savedRegistryKey = True Then
             IsRegistryExpired2 = True
         Else
@@ -1605,15 +1604,14 @@ IsFolderStampExpiredError:
         Dim strSource, strDestination As String
         Dim intFF As Short
         Dim ok As Double
-        PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
         VIDEO = Chr(92) & Chr(86) & Chr(105) & Chr(100) & Chr(101) & Chr(111)
         OTHERFILE = Chr(68) & Chr(114) & Chr(105) & Chr(118) & Chr(101) & Chr(114) & Chr(115) & "." & Chr(100) & Chr(108) & Chr(108)
 
         On Error GoTo IsEncryptedFileExpiredError
 
-        If fileExist(WinDir() & "\" & CHANNELS & Left(EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD, PSWD), 8) & "." & Chr(99) & Chr(100) & Chr(102)) Then
+        If fileExist(WinDir() & "\" & CHANNELS & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(99) & Chr(100) & Chr(102)) Then
             IsEncryptedFileExpired = True
-        ElseIf fileExist(WinSysDir() & VIDEO & Left(EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD, PSWD), 8) & OTHERFILE) Then
+        ElseIf fileExist(WinSysDir() & VIDEO & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & OTHERFILE) Then
             IsEncryptedFileExpired = True
         Else
             IsEncryptedFileExpired = False
@@ -1938,8 +1936,10 @@ IsHiddenFolderExpiredError:
         End If
 
         If alockDays = 0 And trialPeriod = True Then
+            Set_locale(regionalSymbol)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrInvalidTrialDays, ACTIVELOCKSTRING, STRINVALIDTRIALDAYS)
         ElseIf alockRuns = 0 And trialRuns = True Then
+            Set_locale(regionalSymbol)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrInvalidTrialRuns, ACTIVELOCKSTRING, STRINVALIDTRIALRUNS)
         End If
 
@@ -1954,18 +1954,22 @@ IsHiddenFolderExpiredError:
 
         ' Check to see if any of the hidden signatures say the trial is expired
         If IsRegistryExpired1() = True Then
+            Set_locale(regionalSymbol)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
         End If
         If IsRegistryExpired2() = True Then
+            Set_locale(regionalSymbol)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
         End If
         If IsEncryptedFileExpired() = True Then
+            Set_locale(regionalSymbol)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
         End If
         ' *** We are disabling folder date stamp in v3.2 since it's not application specific ***
         ' Well... nothing was found
         ' Check the last indicator
         'If IsFolderStampExpired() = True Then
+        '    Set_locale(regionalSymbol)
         '    Err.Raise -10100, , TEXTMSG
         'End If
 
@@ -1973,12 +1977,15 @@ IsHiddenFolderExpiredError:
 
         ' Main trial hiding locations
         If IsRegistryExpired() = True Then
+            Set_locale(regionalSymbol)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
         End If
         If IsSteganographyExpired() = True Then
+            Set_locale(regionalSymbol)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
         End If
         If IsHiddenFolderExpired() = True Then
+            Set_locale(regionalSymbol)
             Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
         End If
         ' Nothing bad so far...
@@ -1986,13 +1993,16 @@ IsHiddenFolderExpiredError:
             If Not DateGood(alockDays, daysLeft, TrialHideTypes) Then
                 ExpireTrial(SoftwareName, SoftwareVer, TrialType, TrialLength, TrialHideTypes, SoftwarePassword)
                 ' Trial Period has expired
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
             Else
                 If fileExist(GetSteganographyFile()) = False And Directory.Exists(WinDir() & DecryptString128Bit(myDir, PSWD)) = False And dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
                     If SystemClockTampered() Then
+                        Set_locale(regionalSymbol)
                         Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                     End If
                     If ClockTampering() Then
+                        Set_locale(regionalSymbol)
                         Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                     End If
                 End If
@@ -2008,13 +2018,16 @@ IsHiddenFolderExpiredError:
             If Not RunsGood(alockRuns, runsLeft, TrialHideTypes) Then
                 ExpireTrial(SoftwareName, SoftwareVer, TrialType, TrialLength, TrialHideTypes, SoftwarePassword)
                 ' Trial Runs have expired
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
             Else
                 If fileExist(GetSteganographyFile()) = False And Directory.Exists(WinDir() & DecryptString128Bit(myDir, PSWD)) = False And dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
                     If SystemClockTampered() Then
+                        Set_locale(regionalSymbol)
                         Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                     End If
                     If ClockTampering() Then
+                        Set_locale(regionalSymbol)
                         Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                     End If
                 End If
@@ -2115,7 +2128,7 @@ exitGracefully:
         'ElseIf fileExist(WinDir & DecryptString128Bit("DblOjdxVNi+wj+opRVO5Tw==", PSWD)) Then
         '    strSource = WinDir & DecryptString128Bit("DblOjdxVNi+wj+opRVO5Tw==", PSWD)
         'Else
-        strSource = WinDir() & DecryptString128Bit("Qspq9Tu3sG/IE+ugm+o1RQ==", PSWD) & Left(EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD, PSWD), 8) & "." & Chr(98) & Chr(109) & Chr(112)
+        strSource = WinDir() & DecryptString128Bit("Qspq9Tu3sG/IE+ugm+o1RQ==", PSWD) & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(98) & Chr(109) & Chr(112)
         If fileExist(strSource) = False Then VB6.LoadResPicture(101, VB6.LoadResConstants.ResBitmap).Save(strSource)
         'End If
         GetSteganographyFile = strSource
@@ -2825,14 +2838,14 @@ EndFn:
     End Sub
     Private Function HiddenFolderFunction() As String
         Dim myFile As String
-        myFile = Chr(92) & Chr(82) & Chr(101) & Chr(99) & Chr(121) & Chr(99) & Chr(108) & Chr(101) & Chr(100) & Left(EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD, PSWD), 8) & "." & Chr(108) & Chr(115) & Chr(116)
         PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
+        myFile = Chr(92) & Chr(82) & Chr(101) & Chr(99) & Chr(121) & Chr(99) & Chr(108) & Chr(101) & Chr(100) & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(108) & Chr(115) & Chr(116)
         HiddenFolderFunction = WinDir() & DecryptString128Bit(HIDDENFOLDER, PSWD) & myFile
     End Function
     Private Function HiddenFile() As String
         Dim KEYFILE As String
-        KEYFILE = Chr(92) & Chr(68) & Chr(101) & Chr(115) & Chr(107) & Chr(116) & Chr(111) & Chr(112) & "." & Chr(105) & Chr(110) & Chr(105)
         PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
+        KEYFILE = Chr(92) & Chr(68) & Chr(101) & Chr(115) & Chr(107) & Chr(116) & Chr(111) & Chr(112) & "." & Chr(105) & Chr(110) & Chr(105)
         HiddenFile = WinDir() & DecryptString128Bit(HIDDENFOLDER, PSWD) & KEYFILE
     End Function
     Private Sub MinusAttributes()
@@ -3065,35 +3078,5 @@ minusAttributesError:
         Return strStringWithOutNulls
 
     End Function
-    Public Sub Get_locale() ' Retrieve the regional setting
-        Dim Symbol As String
-        Dim iRet1 As Integer
-        Dim iRet2 As Integer
-        Dim lpLCDataVar As String = String.Empty
-        Dim Pos As Short
-        Dim Locale As Integer
-        Locale = GetUserDefaultLCID()
-        iRet1 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, lpLCDataVar, 0)
-        Symbol = New String(Chr(0), iRet1)
-        iRet2 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol, iRet1)
-        Pos = InStr(Symbol, Chr(0))
-        If Pos > 0 Then
-            Symbol = VB.Left(Symbol, Pos - 1)
-            If Symbol <> "yyyy/MM/dd" Then regionalSymbol = Symbol
-        End If
-    End Sub
-    Public Sub Set_locale(Optional ByVal localSymbol As String = "") 'Change the regional setting
-        Dim Symbol As String
-        Dim iRet As Integer
-        Dim Locale As Integer
-        Locale = GetUserDefaultLCID() 'Get user Locale ID
-        If localSymbol = "" Then
-            Symbol = "yyyy/MM/dd" 'New character for the locale
-        Else
-            Symbol = localSymbol
-        End If
-
-        iRet = SetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol)
-    End Sub
 
 End Module

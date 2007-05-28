@@ -77,7 +77,8 @@ Option Explicit On
         'Case ProductsStoreType.alsMSSQL
         '  Set GeneratorInstance = New MSSQLGenerator
       Case Else
-        Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNotImplemented, ACTIVELOCKSTRING, STRNOTIMPLEMENTED)
+                Set_locale(regionalSymbol)
+                Err.Raise(Globals_Renamed.ActiveLockErrCodeConstants.AlerrNotImplemented, ACTIVELOCKSTRING, STRNOTIMPLEMENTED)
     End Select
   End Function
 
