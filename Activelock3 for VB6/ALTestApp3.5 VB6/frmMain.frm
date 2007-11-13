@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TabCtl32.ocx"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Begin VB.Form frmMain 
    BorderStyle     =   1  'Fixed Single
@@ -59,11 +59,11 @@ Begin VB.Form frmMain
       TabCaption(1)   =   "Sample App"
       TabPicture(1)   =   "frmMain.frx":0CE6
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "fraViewport"
-      Tab(1).Control(1)=   "Frame1"
+      Tab(1).Control(0)=   "lblLockStatus"
+      Tab(1).Control(1)=   "lblLockStatus2"
       Tab(1).Control(2)=   "lblTrialInfo"
-      Tab(1).Control(3)=   "lblLockStatus2"
-      Tab(1).Control(4)=   "lblLockStatus"
+      Tab(1).Control(3)=   "Frame1"
+      Tab(1).Control(4)=   "fraViewport"
       Tab(1).ControlCount=   5
       Begin VB.Frame fraViewport 
          BorderStyle     =   0  'None
@@ -827,7 +827,7 @@ Private Sub Form_Load()
 '        PUB_KEY = PUB_KEY & ".499.344.4C5.34F.231.25D.37B.247.39C.1D9.302.210.4E6.30D.4DB.4BA.512.35A.25D.441.339.3B2"
 '        .SoftwareCode = Dec(PUB_KEY)
 '        .SoftwareCode = "RSA2048BgIAAAAkAABSU0ExAAgAAAEAAQC7QRQAugyetDowjseqszSAkX3hLvOj69Cu8J7fs7T0sIlM2gVK6WIEN026KcnILfb/Gs+jDvyb2mpPOL1HfyEmIl2tgK5qQG3Di0uaEgiyDaHRl8IYsMLyBNjJYyB3bnKHk+5c7W1c6MAZft5Iyl5v6Xj6KtJ7s73ICMQ7UzaEcRslbkRaRkW1AAXjKEk/rhzDu4dNHX6XsCUlpgAxhopAuONJIZyh6dYzqSMTOS0A3gmC6f8vC9HYtLKls1Ap/jxwjLH6pwc1Su+7KtfGkGB/ZQdOZau/wNEkoLbodXypGAf5TiJ4NMb6ODTl1CfLVEKHApXsC9nQR8/N3Z5Yt36p"
-        .SoftwareCode = "RSA1024BgIAAAAkAABSU0ExAAQAAAEAAQCBgUkipNjyTDuVPVP407gCcRy3eAeppZHHV3cD0uLBb+8HXmSGD25HBqCExX1UJyFOb8ZD98MXCTY3p34ppRPW3oUCiK5QdOOwaoY4vtsoQQTn/+n1ztjiSRMMekpQwfNppfvC3Tf3kL+bdqNPUYSPANDVhbjLYDpvQzvPoAPl4g=="
+        .SoftwareCode = "RSA1024BgIAAAAkAABSU0ExAAQAAAEAAQBzS/M72hPk7up8p8DEusFjABY3+me/88SiGVFrUe/ZguftxajYee0buK3yBPCBHP356vxob82JQtPKyB4TwIPRnGyocFbX52L/Lm8Qad+Cpo3kv+7c0ogVOCR36i+hqQgYA6kkoDs1o6luHe0PojPY+53Hckgyz7Bf1NjE9l3i1g=="
         
         .LockType = lockNone  'lockWindows 'Or lockComp 'Or lockComp Or lockWindows
         strAutoRegisterKeyPath = App.Path & "\" & LICENSE_ROOT & ".all"
@@ -837,7 +837,7 @@ Private Sub Form_Load()
         
         .CheckTimeServerForClockTampering = alsDontCheckTimeServer      ' use alsCheckTimeServer to enforce time server check for clock tampering detection
         .CheckSystemFilesForClockTampering = alsDontCheckSystemFiles    ' use alsCheckSystemFiles to enforce system files scanning for clock tampering detection
-        .LicenseFileType = alsLicenseFileEncrypted
+        '.LicenseFileType = alsLicenseFileEncrypted
     
     End With
 
