@@ -219,13 +219,17 @@ Case 0   'create container
         publicPublicKeyBlob = publicKey
         cryptSession.ImportPublicKey False
         cryptSession.ExportPublicKey False
+        
+        ' This code is causing trouble -  investigate
         cryptSession.DestroyContainer containerName
+        
         cryptSession.SessionEnd
     Else
         Set cryptSession = Nothing
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, "Crypto API Error: This System Unable to Perform Cryptographic Functions"
     End If
+    Set cryptSession = Nothing
 
 Case 1   'generate exchange or signature key
     Set cryptSession = New clsCryptoAPI
@@ -248,6 +252,8 @@ Case 1   'generate exchange or signature key
         cryptSession.ExportPublicKey False
         privateKey = "RSA" & modulus & publicPrivateKeyBlob
         publicKey = "RSA" & modulus & publicPublicKeyBlob
+        
+        ' This code is causing trouble -  investigate
         cryptSession.DestroyContainer containerName
         cryptSession.SessionEnd
     Else
@@ -255,6 +261,7 @@ Case 1   'generate exchange or signature key
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, "Crypto API Error: This System Unable to Perform Cryptographic Functions"
     End If
+    Set cryptSession = Nothing
 
 Case 2    'destroy container
     Set cryptSession = New clsCryptoAPI
@@ -270,6 +277,7 @@ Case 2    'destroy container
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, "Crypto API Error: This System Unable to Perform Cryptographic Functions"
     End If
+    Set cryptSession = Nothing
 
 Case 3   'encrypt/decrypt
     Dim iChr As Integer
@@ -289,13 +297,17 @@ Case 3   'encrypt/decrypt
             strCypherText = vbNullString
             bCypherOn = False
         End If
+        
+        ' This code is causing trouble -  investigate
         cryptSession.DestroyContainer containerName
+        
         cryptSession.SessionEnd
     Else
         Set cryptSession = Nothing
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, "Crypto API Error"
     End If
+    Set cryptSession = Nothing
 
 Case 4    'sign the key
     If plainText = "" Then
@@ -317,6 +329,8 @@ Case 4    'sign the key
         inputText = plainText
         Call cryptSession.SignString(inputText, True)
         signedText = inputText
+        
+        ' This code is causing trouble -  investigate
         cryptSession.DestroyContainer containerName
         cryptSession.SessionEnd
     End If
@@ -333,8 +347,7 @@ Case 5   'validate the key
         cryptSession.ImportPublicKey False
         
         inputText = signedText
-        cryptSession.DestroyContainer containerName
-        cryptSession.SessionEnd
+        
         If inputText = "" Then
             Set cryptSession = Nothing
             Set_locale regionalSymbol
@@ -348,6 +361,11 @@ Case 5   'validate the key
             Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, "Crypto API Error: Invalid signature"
         End If
+        
+        ' This code is causing trouble -  investigate
+        cryptSession.DestroyContainer containerName
+        cryptSession.SessionEnd
+        
     End If
 
 End Select

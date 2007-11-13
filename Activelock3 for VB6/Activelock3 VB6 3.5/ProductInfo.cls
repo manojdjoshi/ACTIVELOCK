@@ -177,3 +177,4 @@ End Property
 Friend Property Let GCode(sCode As String)
     mstrCode2 = sCode
 End Property
+
