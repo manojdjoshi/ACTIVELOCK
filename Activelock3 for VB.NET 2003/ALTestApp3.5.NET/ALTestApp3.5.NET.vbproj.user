@@ -1,7 +1,7 @@
 <VisualStudioProject>
     <VisualBasic LastOpenVersion = "7.10.3077" >
         <Build>
-            <Settings ReferencePath = "C:\ActiveLockCommunity\ActiveLock3.5.Net\" >
+            <Settings ReferencePath = "C:\ActiveLockCommunity\ActiveLock3.5.Net\;C:\ActiveLockCommunity\Activelock3 for VB.NET 2003\ALTestApp3.5.NET\" >
                 <Config
                     Name = "Debug"
                     EnableASPDebugging = "false"
