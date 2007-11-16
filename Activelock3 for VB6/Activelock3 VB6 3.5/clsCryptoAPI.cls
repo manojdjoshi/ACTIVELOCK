@@ -1606,237 +1606,88 @@ Public Function SignString(ByRef sData As String, _
     Optional bReturnText As Boolean = True) As Boolean
 Dim abData() As Byte
 Dim abSigned() As Byte
-Dim sText As String
 Dim sSigned As String
-Dim sReturn As String
-Dim lngX As Long
 Dim lngText As Long
-Dim lngSign As Long
 
 SignString = False
-lngText = Len(sData)
-lngSign = 0
-If lngText < 1 Then Exit Function
-sText = sData
-ReDim abData(lngText - 1)
-ReDim abSigned(0)
-abSigned(0) = 0
-If bolUnicode Then
-    abData = StrConv(sText, vbFromUnicode, 1033)
-Else
-    abData = sText
-End If
-ReDim Preserve abData(lngText - 1)
+'lngText = Len(sData)
+'If lngText < 1 Then Exit Function
+'sData = sData
+'ReDim abData(lngText - 1)
+'ReDim abSigned(0)
+'abSigned(0) = 0
+'If bolUnicode Then
+    abData = StrConv(sData, vbFromUnicode, 1033)
+'Else
+'    abData = sData
+'End If
+'ReDim Preserve abData(lngText - 1)
 
 If SignValidate(abData, abSigned, True) = 0 Then
-    sText = sData
-    lngSign = UBound(abSigned) + 1
-'        sSigned = Space(lngSign + Len(CStr(lngSign) & ":"))
-'        sSigned = CStr(lngSign) & ":"
-'        For lngX = 0 To lngSign - 1
-'            sSigned = sSigned & Chr(abSigned(lngX))
-'        Next lngX
-'        sReturn = CStr(Len(sSigned)) & "|" & CStr(Len(sText)) & "|" _
-'            & sSigned
-'        If bReturnText Then sReturn = sReturn & sText
-'        sData = Space(Len(sReturn))
-'        sData = sReturn
+    
     SignString = True
 
-    Dim lenabSigned As Long, i As Long
-    lenabSigned = UBound(abSigned)
-    ReDim Preserve abSigned(lenabSigned + 2)
-    abSigned(lenabSigned + 1) = 0
-    abSigned(lenabSigned + 2) = 124 '|
-    ReDim Preserve abSigned(lenabSigned + 2 + 1 + lngText - 1)
-    For i = lenabSigned + 2 + 1 To lenabSigned + 2 + 1 + lngText - 1
-        abSigned(i) = abData(i - lenabSigned - 2 - 1)
-    Next
+'    Dim lenabSigned As Long, i As Long
+'    lenabSigned = UBound(abSigned)
+'    ReDim Preserve abSigned(lenabSigned + 2)
+'    abSigned(lenabSigned + 1) = 0
+'    abSigned(lenabSigned + 2) = 124 '|
+'    ReDim Preserve abSigned(lenabSigned + 2 + 1 + lngText - 1)
+'    For i = lenabSigned + 2 + 1 To lenabSigned + 2 + 1 + lngText - 1
+'        abSigned(i) = abData(i - lenabSigned - 2 - 1)
+'    Next
     
-'        lenabSigned = lenabSigned + 2 + 1 + lngText - 1 + 1
-'        ReDim Preserve abSigned(lenabSigned + 2)
-'        abSigned(lenabSigned + 1) = 0
-'        abSigned(lenabSigned + 2) = 58 ':
-'        ReDim Preserve abSigned(19 + lenabSigned + 3)
-'        i = lenabSigned + 3
-'        abSigned(i + 0) = 49
-'        abSigned(i + 1) = 0
-'        abSigned(i + 2) = 0
-'        abSigned(i + 3) = 0
-'        abSigned(i + 4) = 48
-'        abSigned(i + 5) = 0
-'        abSigned(i + 6) = 0
-'        abSigned(i + 7) = 0
-'        abSigned(i + 8) = 48
-'        abSigned(i + 9) = 0
-'        abSigned(i + 10) = 0
-'        abSigned(i + 11) = 0
-'        abSigned(i + 12) = 48
-'        abSigned(i + 13) = 0
-'        abSigned(i + 14) = 0
-'        abSigned(i + 15) = 0
-'        abSigned(i + 16) = 48
-'        abSigned(i + 17) = 0
-'        abSigned(i + 18) = 0
-'        abSigned(i + 19) = 0
-'        Dim finalUBound As Long
-'        finalUBound = UBound(abSigned)
-'        Select Case Len(CStr(finalUBound))
-'        Case 1
-'            abSigned(i + 16) = finalUBound + 48
-'        Case 2
-'            abSigned(i + 12) = CLng(Mid(CStr(finalUBound), 1, 1)) + 48
-'            abSigned(i + 16) = CLng(Mid(CStr(finalUBound), 2, 1)) + 48
-'        Case 3
-'            abSigned(i + 8) = CLng(Mid(CStr(finalUBound), 1, 1)) + 48
-'            abSigned(i + 12) = CLng(Mid(CStr(finalUBound), 2, 1)) + 48
-'            abSigned(i + 16) = CLng(Mid(CStr(finalUBound), 3, 1)) + 48
-'        Case 4
-'            abSigned(i + 4) = CLng(Mid(CStr(finalUBound), 1, 1)) + 48
-'            abSigned(i + 8) = CLng(Mid(CStr(finalUBound), 2, 1)) + 48
-'            abSigned(i + 12) = CLng(Mid(CStr(finalUBound), 3, 1)) + 48
-'            abSigned(i + 16) = CLng(Mid(CStr(finalUBound), 4, 1)) + 48
-'        Case 5
-'            abSigned(i + 0) = CLng(Mid(CStr(finalUBound), 1, 1)) + 48
-'            abSigned(i + 4) = CLng(Mid(CStr(finalUBound), 2, 1)) + 48
-'            abSigned(i + 8) = CLng(Mid(CStr(finalUBound), 3, 1)) + 48
-'            abSigned(i + 12) = CLng(Mid(CStr(finalUBound), 4, 1)) + 48
-'            abSigned(i + 16) = CLng(Mid(CStr(finalUBound), 5, 1)) + 48
-'        End Select
-    
-    ' Added by Ismail
-    'Dim b64 As clsCryptoAPIBase64
-    'Set b64 = New clsCryptoAPIBase64
-    'sData = b64.encode(abSigned)
-    'sData = b64.EncodeBytes64(abSigned)
     Dim b64 As clsCryptoAPIBase64
     Set b64 = New clsCryptoAPIBase64
     sData = b64.Encode(abSigned)
-    ' Added by Ismail
 
-''        ' Added by Ismail
-'        Dim b64 As clsCryptoAPIBase64
-'        Set b64 = New clsCryptoAPIBase64
-'        sData = b64.encode(abSigned)
-''        ' Added by Ismail
 End If
 End Function
 
-Public Function ValidateString(ByRef sText As String, _
+Public Function ValidateString(ByVal sData As String, ByVal sSigned As String, _
     Optional sNoText As String = vbNullString) As Boolean
 Dim abSigned() As Byte
-Dim abText() As Byte
+Dim abData() As Byte
 Dim strSigned As String
 Dim strText As String
-Dim lngX As Long
-Dim lngL As Long
-Dim lngY As Long
-Dim lngM As Long, i As Long, j As Long
-Dim newLimitabSigned As Long
-Dim totalLen() As Byte
-Dim uboundStr As String
+Dim lngText As Long
 
-' Added by Ismail
-'Dim b64 As clsCryptoAPIBase64
-'Set b64 = New clsCryptoAPIBase64
-'abSigned = b64.decode(sText)
-'abSigned = b64.DecodeBytes64(sText)
 Dim b64 As clsCryptoAPIBase64
 Set b64 = New clsCryptoAPIBase64
-abSigned = b64.Decode(sText)
-' Scan the byte array to find the ":"
+abSigned = b64.Decode(sSigned)
+
+'lngText = Len(sData)
+'If lngText < 1 Then Exit Function
+'ReDim abData(lngText - 1)
+'ReDim abSigned(0)
+'abSigned(0) = 0
+'If bolUnicode Then
+    abData = StrConv(sData, vbFromUnicode, 1033)
+'Else
+'    abData = sData
+'End If
+'ReDim Preserve abData(lngText - 1)
+
 On Error GoTo validateError
 
 'For i = 0 To UBound(abSigned)
-'    If abSigned(i) = 0 And abSigned(i + 1) = 58 Then
+'    If abSigned(i) = 0 And abSigned(i + 1) = 124 Then
+'        ReDim abData(UBound(abSigned) - i - 2)
 '        For j = i + 2 To UBound(abSigned)
-'            If abSigned(j) <> 0 Then uboundStr = uboundStr & CStr(abSigned(j) - 48)
+'            abData(j - i - 2) = abSigned(j)
 '        Next
-'        If CLng(CLng(uboundStr) - 10000) <> UBound(abSigned) Then GoTo validateError
 '        Exit For
 '    End If
 'Next
-'ReDim Preserve abSigned(i - 2)
+'ReDim Preserve abSigned(i - 1)
 
-For i = 0 To UBound(abSigned)
-    If abSigned(i) = 0 And abSigned(i + 1) = 124 Then
-        ReDim abText(UBound(abSigned) - i - 2)
-        For j = i + 2 To UBound(abSigned)
-            abText(j - i - 2) = abSigned(j)
-        Next
-        Exit For
-        newLimitabSigned = i - 2
-    
-    End If
-Next
-ReDim Preserve abSigned(i - 1)
-
-' Added by Ismail
-
-'' Added by Ismail
-'Dim b64 As clsCryptoAPIBase64
-'Set b64 = New clsCryptoAPIBase64
-'sText = b64.DecodeToString(sText)
-'' Added by Ismail
-'
-'ValidateString = False
-'lngM = 0
-'lngX = InStr(1, sText, "|")
-'If lngX > 1 And lngX < 5 Then
-'    lngL = CLng(Mid(sText, 1, lngX - 1)) ' lngL = length of Signature
-'    If lngL > 0 Then
-'        lngY = InStr(lngX + 2, sText, "|")
-'        If lngY > lngX + 1 And lngY < lngX + 6 Then
-'            lngM = CLng(Mid(sText, lngX + 1, lngY - lngX - 1)) ' lngM = length of Text
-'            If lngM > 0 And Len(sText) + Len(sNoText) > lngL + lngM + lngY - 1 Then
-'                strSigned = Mid(sText, lngY + 1, lngL)
-'                If sNoText <> vbNullString Then
-'                    strText = CStr(lngM) & ":" & sNoText
-'                Else
-'                    strText = CStr(lngM) & ":" & Mid(sText, lngY + 1 + lngL, lngM)
-'                End If
-'            Else
-'                lngM = 0
-'            End If
-'        End If
+If SignValidate(abData, abSigned, False) = 0 Then
+'    If bolUnicode Then
+'        sSigned = StrConv(abData, vbUnicode, 1033)
+'    Else
+'        sSigned = abData
 '    End If
-'End If
-'
-'lngY = 0
-'lngX = InStr(1, strSigned, Chr(58))
-'If lngX > 1 And lngX < 5 Then
-'    lngL = CLng(Mid(strSigned, 1, lngX - 1)) ' lngL = length of Signature array
-'    strSigned = Mid(strSigned, lngX + 1, lngL)
-'    If lngL > 0 Then
-'        ReDim Preserve abSigned(lngL - 1)
-'        For lngY = 0 To lngL - 1
-'            abSigned(lngY) = Asc(Mid(strSigned, lngY + 1, 1))
-'        Next lngY
-'    End If
-'End If
-'
-'lngY = 0
-'lngX = InStr(1, strText, Chr(58))
-'If lngX > 1 And lngX < 5 Then
-'    lngL = CLng(Mid(strText, 1, lngX - 1)) ' lngL = length of Text array
-'    strText = Mid(strText, lngX + 1, lngL)
-'    If lngL > 0 Then
-'        ReDim Preserve abText(lngL - 1)
-'        For lngY = 0 To lngL - 1
-'            abText(lngY) = Asc(Mid(strText, lngY + 1, 1))
-'        Next lngY
-'    End If
-'End If
-
-'    If strText = "" Then Exit Function
-
-If SignValidate(abText, abSigned, False) = 0 Then
-    If bolUnicode Then
-        sText = StrConv(abText, vbUnicode, 1033)
-    Else
-        sText = abText
-    End If
-    sText = strText
+'    sSigned = strText
     ValidateString = True
 Else
     ValidateString = False

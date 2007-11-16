@@ -638,7 +638,7 @@ Private Sub ValidateKey(Lic As ProductLicense)
             strPublicBlob = Right(strPubKey, Len(strPubKey) - 7)
             modulus = CInt(Mid(strPubKey, 4, 4))
         End If
-        ok = MyGlobals.CryptoAPIAction(5, mSoftwareName & mSoftwareVer, "", strSig, strPublicBlob, "", modulus)
+        ok = MyGlobals.CryptoAPIAction(5, mSoftwareName & mSoftwareVer, strLic, strSig, strPublicBlob, "", modulus)
     End If
 
     ' Check if license has not expired

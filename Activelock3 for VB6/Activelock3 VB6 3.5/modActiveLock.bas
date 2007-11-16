@@ -105,6 +105,7 @@ Public Const STRUSERNAMEINVALID As String = "User Name invalid."
 Public Const STRRSAERROR As String = "Internal RSA Error."
 Public Const RETVAL_ON_ERROR As Long = -999
 Public Const STRWRONGIPADDRESS As String = "Wrong IP Address."
+Public Const STRCRYPTOAPIINVALIDSIGNATURE As String = "Crypto API Error: Invalid signature."
 
 ' RSA encrypts the data.
 ' @param CryptType CryptType = 0 for public&#59; 1 for private
