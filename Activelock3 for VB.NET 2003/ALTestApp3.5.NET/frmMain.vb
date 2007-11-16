@@ -1250,11 +1250,11 @@ Friend Class frmMain
 
             .CheckTimeServerForClockTampering = ActiveLock3_5NET.IActiveLock.ALTimeServerTypes.alsDontCheckTimeServer       ' use alsCheckTimeServer to enforce time server checks for clock tampering check
             .CheckSystemFilesForClockTampering = ActiveLock3_5NET.IActiveLock.ALSystemFilesTypes.alsDontCheckSystemFiles    ' use alsCheckSystemFiles to enforce system files scanning for clock tampering check
-            .LicenseFileType = ActiveLock3_5NET.IActiveLock.ALLicenseFileTypes.alsLicenseFileEncrypted
+            '.LicenseFileType = ActiveLock3_5NET.IActiveLock.ALLicenseFileTypes.alsLicenseFileEncrypted
         End With
 
         ' Verify AL's authenticity
-        txtChecksum.Text = modMain.VerifyActiveLockNETdll()
+        'txtChecksum.Text = modMain.VerifyActiveLockNETdll()
 
         ' Initialize the keystore. We use a File keystore in this case.
         System.Diagnostics.Debug.WriteLine("License path is " & AppPath() & "\" & LICENSE_ROOT & ".lic")
