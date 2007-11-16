@@ -225,9 +225,11 @@ Case 0   'create container
         
         cryptSession.SessionEnd
     Else
+        cryptSession.DestroyContainer containerName
+        cryptSession.SessionEnd
         Set cryptSession = Nothing
         Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, "Crypto API Error: This System Unable to Perform Cryptographic Functions"
+        Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE
     End If
     Set cryptSession = Nothing
 
@@ -257,9 +259,11 @@ Case 1   'generate exchange or signature key
         cryptSession.DestroyContainer containerName
         cryptSession.SessionEnd
     Else
+        cryptSession.DestroyContainer containerName
+        cryptSession.SessionEnd
         Set cryptSession = Nothing
         Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, "Crypto API Error: This System Unable to Perform Cryptographic Functions"
+        Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE
     End If
     Set cryptSession = Nothing
 
@@ -273,9 +277,11 @@ Case 2    'destroy container
         signedText = vbNullString
         strCypherText = vbNullString
     Else
+        cryptSession.DestroyContainer containerName
+        cryptSession.SessionEnd
         Set cryptSession = Nothing
         Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, "Crypto API Error: This System Unable to Perform Cryptographic Functions"
+        Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE
     End If
     Set cryptSession = Nothing
 
@@ -303,17 +309,20 @@ Case 3   'encrypt/decrypt
         
         cryptSession.SessionEnd
     Else
+        cryptSession.DestroyContainer containerName
+        cryptSession.SessionEnd
         Set cryptSession = Nothing
         Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, "Crypto API Error"
+        Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE
     End If
     Set cryptSession = Nothing
 
 Case 4    'sign the key
     If plainText = "" Then
+        cryptSession.DestroyContainer containerName
+        cryptSession.SessionEnd
         Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, "Crypto API Error: There's no string to sign"
-        Exit Function
+        Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE
     End If
     Set cryptSession = New clsCryptoAPI
     If cryptSession.VerifyContainer(containerName, False) = True Then
@@ -349,17 +358,21 @@ Case 5   'validate the key
         inputText = signedText
         
         If inputText = "" Then
+            cryptSession.DestroyContainer containerName
+            cryptSession.SessionEnd
             Set cryptSession = Nothing
             Set_locale regionalSymbol
-            Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, "Crypto API Error: There's no string to validate"
+            Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE
         End If
-        If cryptSession.ValidateString(inputText) = True Then
+        If cryptSession.ValidateString(plainText, inputText) = True Then
             ' Stay quiet here... everything is allright
             'MsgBox "Valid signature !!", vbInformation
         Else
+            cryptSession.DestroyContainer containerName
+            cryptSession.SessionEnd
             Set cryptSession = Nothing
             Set_locale regionalSymbol
-            Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, "Crypto API Error: Invalid signature"
+            Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE
         End If
         
         ' This code is causing trouble -  investigate
