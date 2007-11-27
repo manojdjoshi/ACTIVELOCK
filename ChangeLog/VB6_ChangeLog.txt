@@ -1,0 +1,311 @@
+Change Log For Activelock VB6 
+Last Updated: 27 November 2007 
+
+ 
+ v3.5.4 Updates:
+- FIX: Program was not functioning for multiple users in the same machine. It was working Ok for the first user, however switching users and running the same that's already registered causes an error 5 and the application won't run. The fix was accomplished by adding several  "cryptSession.DestroyContainer containerName " statements to the Globals3 class, CryptoAPIaction function. The problem is with the creation of an RSA container with one user account and the inability to access it with a different user account. By deleting the container after it's used, the problem has been eliminated. As long as the license is Ok (valid and not tampered with), switching between user accounts does no harm to the license, but once the license is tampered with, even after it's restored to its original condition, switching between users seemed to still cause problems; however, since we're dealing with a tampered license here, this is acceptable. While writing this note I was still trying to add more DestroyContainer statements within the validation routines right before errors are raised.
+- FIX: CryptoAPI class SignString and ValidateString functions were not configured correctly. Because of this, it was possible to tamper with the LIC file. For example, the Expiration date could be changed with no problems. Fixed. Rewrote parts of these routines. Tested. Works as it should. This problem is only for the CryptoAPI keys. No problem with ALCrypto-1024 bit key.
+
+v3.5.4 Updates:
+- FIX: Activelock was changing the Date Format of the target machine and sometimes not returning to the original format. The root of the problem seemed to be any Err.Raise was causing the date format reset to be skipped. Therefore, we've added "Set_locale regionalSymbol" before every Err.Raise in the entire code base. This problem was reported by many people.
+- FIX: Changing the revision number of the software was NOT causing a new Trial Period to begin. Software name alone was. The problem was related with the Rijndael algorithm not changing the first 12 or so characters of the encrypted text when the version number alone is changed. Changed from Rijndael to MD5 which always yields a completely new encrypted with even a minor change in the software name, version number and password combination.
+- User Name should always be entered. Missing user names are no longer allowed.
+- This and the future setup packages will always install new versions of Activelock into separate directories not overwriting the existing versions. This applies to even minor revisions.
+
+v3.5.3 Updates:
+- FIX: Changed all internal date formats to yyyy/MM/dd to be consistent throughout the program. This also fixed the problem reported by vsdlh. Activelock was causing runtime error 13 with Thailand (and eastern Asian) settings because of different date formats used in the licensing procedures. There was no problem with the Trial feature.
+- FIX: Acquire and Register methods now set the computer date settings to yyyy/MM/dd before anything takes place and set it back to the original date setting upon completion of the methods or any errors that might be encountered.
+
+v3.5.2 Updates:
+- The implementation of CryptoAPI was not complete. This was causing license registration problems in machines where the original VCode was not generated. Fixed.
+
+v3.5.1 Updates:
+- UsedTrialDays and UsedTrialRuns properties have been renamed as RemainingTrialDays and RemainingTrialRuns.
+
+v3.5 Updates:
+- Concurrent Licensing Support via the use of MaxUsers property and the new "MultiUser" LicenseClass property. Network licensing can be activated through Alugen directly.
+- FIX: Clicking on the checkboxes in Alugen without entering the installation code first was causing problems. Fixed.
+- FIX: Implemented the changes proposed by David Weatherall in IActivelock_LockCode() have been implemented. This should speed up the process of loading the form while the MAC Address is used as the hardware key and when there's an existing license.
+- NEW: Added a new method to retrieve the MAC address. This method uses the GetIfTable() Windows API. It is considerably faster than the WMI method used previously. Also, the NETBios method has been removed since its results are wrong and it's mostly unreliable.
+- NEW: Added new implementation of Generator interface into Alugen3: XMLGenerator.cls, MDBGenerator.cls
+- NEW: Defined new enumeration in IActiveLock.cls: ProductsStoreType
+- NEW: Updated AlugenGlobals.cls accordingly: Function GeneratorInstance; Updated frmMain3.frm accordingly
+- NEW: - Unified storage naming - licenses.ini, licenses.xml, licenses.mdb in Alugen3.5
+- NEW: Renamed Generator.cls to INIGenerator.cls
+- NEW: Added products storage selector in frmMain3 (new form frmProductsStorage)
+- NEW: Persistent ProductsStoreType, ProductsStoragePath, KeyStoreType in frmMain3 through Alugen3.ini
+- NEW: Short Key Support has been added !!! This was a feature requested by many users. Short keys are not very strong protection like RSA, and there's no key signing/verification involved, however they are still very secure and pretty convenient to use. Short keys can be specified by using the MyActivelock.LicenseKeyType property. The old key type can be accessed via alsALCryptoRSA, while short keys are specified using alsShortKeyMD5.
+- NEW: MyActivelock.UsedLockType returns an array of used lock types instead of a single ORed number. Thanks to David Weatherall who supplied the modifications for the code to implement this feature.
+- NEW: Alugen keeps the LockTypes checkbox status in the ini file so that every time the program is loaded, the checkbox values are read from the ini file.
+- NEW: Alugen does not check all LockTypes checkboxes automatically upon pasting a new installation code.
+- FIX: MACaddress code execution speed has been improved drastically.
+- FIX: GetHDSerialFirmware was incorrectly using "Exit For" instead of "Exit Function" which could return "Not Available" strings for Win98/Me OS. Thanks Jaegermeister !!!
+- Activeloc3.5.dll has been scanned with DeepLook to find the unused variables and several unused variables have been removed.
+- NEW: CryptoAPI based protection added. Implemented the CryptoAPI classes and added options to protect using different cypher strengths and the CryptoAPI. The following cypher strengths are currently available:
+1. ALCrypto3.NET 1024-bit (old method)
+2. CryptoAPI 512-bit
+3. CryptoAPI 1024-bit
+4. CryptoAPI 1536-bit
+5. CryptoAPI 2048-bit
+6. CryptoAPI 4096-bit (This may not be practical to use since it's very slow)
+- ALCrypto3 returns an error code indicating an error, and these are trapped by Activelock. Thanks to Jeroen (Zoenie) who has added these traps to ALCrypto3
+- Per request, the HDSerial function in modHardware has been made Public so that it could be accessed directly by external programs.
+- Added modWindowsVersion module that consolidates all Windows version detection routines as well as functions for retrieving the Windows and system directories.
+- FIX: Activelock will no longer accept cases where the KeyStorePath was not specified. An error alerrKeyStorePathInvalid will be returned by the DLL. This should take care of the "Double LIC" file problem with one being blank (observed by David Weatherall)
+- FIX: Alugen was not saving some of the control values properly in the INI file. Fixed.
+- GetBiosSerial function name has been changed to GetBiosVersion to reflect the actual intended use.
+- When the lock to IP address option is used, Alugen now displays the following message: "Warning: Use IP addresses cautiously since they may not be static.". Use of an IP address might expire the license unexpectedly when the IP address changes.
+- NEW: CheckTimeServerForClockTampering property has been added. When this is set to a non-zero value, Activelock checks a well known, stable time server to get the current date and compares this with the system clock, and if the difference is more than one day, it decides that the system clocked has been tampered with. This is an optional property and if not set, its value is zero, meaning the time server is not checked automatically. For the Trial Feature, this is turned on automatically if some of the trial signature files are missing.
+- NEW: Aggressive new system clock tampering measures have been added to the program. One of them is the Alternate Data Streams based clock checking. Details are available in the source code. This should prevent the reuse of old lic files with system clock set back.
+- System Files scan for clock tampering has been modified to include only relevant folders.
+- UserName is now trimmed of any left/right spaces before it is used by Alugen (Jeroen, are you listening?:)))
+- For Windows 95/98/Me, the Smartvsd code for HDD checking uses the smart vxd drivers which are not always available. In such cases, it was thought that perhaps Activelock would put the necessary file (Smartvsd.vxd) under the \Windows\syetem\IOSubSys folder. However, these systems are fading very quickly, and there's not a big base of these OS's anymore. Even in case this happens, the HDD code simply returns the "not available" which makes it obvious that the serial cannot be retrieved. Therefore, we decided not to pursue such additional development only for Win 95/98/Me systems.
+- NEW: LicenseFileType property gives two options to the user: alsLicenseFileEncrypted and alsLicenseFilePlain.
+- NEW: Auto registration can now be controlled via the AutoRegistration property and the options are alsEnableAutoRegistration and alsDisableAutoRegistration.
+- NEW: TrialWarningType property allows the trial expired warnings become persistent. The options are trialWarningPersistent and trialWarningTemporary which is really a one time warning for expired trials.
+- NEW: UsedTrialDays and UsedTrialRuns properties are now available to directly access the number of used number of days/runs for the trial mode.
+
+v3.4 Updates:
+- FIX: RefreshProcessList() has been removed since it has been observed to cause problems in some machines.
+- FIX: Used the new Get_Locale() and Set_Locale() functions in the DLL to handle the date formats in the DLL. This hopefully takes care of all date handling problems observed in some Regional Settings such as German.
+- FIX: FnE() function has been eliminated. It was causing problem with some regional settings.
+- FIX: GetSystemTime1() has been revisited to remove hard-coded strings that were not friendly with some regional settings.
+- DoScan() has been added to GetSystemTime1 as an additional security measure.
+- FIX: frmC form has been removed from the DLL since it was causing trouble with language settings under different regional settings. This form has also been removed from the setup package.
+- FIX: chkItemData.CheckState was not being preserved between different runs. Fixed.
+- FIX: GetTypeLibPathFromObject() has been corrected such that it no longer determines the DLL CLSID from the registry. The main reason for this is the migration of the DLL to the system32 directory and the name is changed after every release build. Subsequently, the DLL path is no longer derived and is simply set as follows:
+GetTypeLibPathFromObject = WinSysDir() & "\activelock" & CStr(App.Major) & "." & CStr(App.Minor) & ".dll"
+- IActivelock_UsedDays has been modified again to roll back to the original v3.3 form.
+- FIX: Eliminated "HH:MM:SS" from all Date formats. This was causing trouble with some regional settings.
+- FIX: "Registered Level Form" caption has been fixed.
+- FIX: ItemData > 32767 was causing a crash on the RegisteredLevel form. Fixed to show a warning message whenever necessary.
+- Activelock COM DLL has been added to the Redistribution folder.
+- All old "ATVIEW Control" references, declarations and constants have been removed from ALTestApp3.
+- Removed "Sub Release" and "IActivelock_Release()" due to conflicts with the C++ compiles.
+- Added Trim() to all HDD Firmware Serial Number function output. Some results have to be left trimmed.
+- HDD Firmware Serial Number Detection Routine Updates:
+1. Windows98/Me: VB based SMART VXD based method has been added. This method works fine under Windows98/Me. If this fails due to a missing VXD driver, ALCrypto routine is called. It seems like the VB API fails for these operating systems. Activelock uses the SMART check only with Windows98/Me (also with Windows 2003 server as explained below).
+2. Windows 2000: All methods seemed to run under Windows2K, however SMART VXD approach seems to fail under non-admin accounts. Activelock calls the VB API directly as the first attempt and if this fails then the ALCrypto routine is called. 
+3. Windows XP Pro/Home: All methods work with this operating system although the SMART VXD approach failed under 2 out of 10 cases. That's why Activelock will try the VB API with this OS and will call the ALCrypto routine if the API fails.
+4. Windows 2003 Server: For some reason, the VB API methods failed in some of the cases reported. Activelock starts with calling the VB API, and then calls the ALCrypto if the former method is not successful. It's been observed that the SMART VXD method was successful when the VB API was not, therefore if the ALCrypto method fails, Activelock will call the SMART routines as the last option for this OS.
+Conclusion: It seems like it's necessary to use all available methods to retrieve the HDD Firmware Serial Number. There's always a possibility that all three methods could fail also.
+- FIX: BIOS Serial Number was being obtained using the WMI using Win32_BIOS instance. This always matched the CIM_Chassis instance of the same WinMgmts object. At the same time, some computers did not return anything for the Win32_Baseboard instance for the motherboard object. A search on Internet also revealed that the class that should be used for the motherboard serial number is CIM_Chassis, not Win32_Baseboard. Therefore we've switched the motherboard serial number from Win32_Baseboard to CIM_Chassis. Also, since this value is the same as Win32_BIOS, we'll use the BIOS version instead of its serial number from now on. Using this approach, both BIOS (version) and Motherboard Serial numbers seem to be returned from all tested computers.
+- NEW: ALCrypto3.dll has been overhauled based on the work by Jeroen (Zoenie). ALcrypto3.dll has been rewritten as an ANSI C++ code and has been recompiled under MS VC++ v6. Nice work done Jeroen !!!
+- FIX: ALCrypto3.dll no longer strips the preceding "WD-W" from the HDD firmware serial number since neither the SMART VXD nor the VB6 API procedure does that. 
+
+v3.3 Updates:
+- FIX: MAX_BUFFER As Long = 4096 was added to the INIFiles3 class to fix the problem with very long user names.
+- If SoftwareName and SoftwareVersion are vbNullString then IActivelock_ResetTrial and IActivelock_KillTrial generate the new alerrNoSoftwareName and alerrNoSoftwareVersion errors.
+- If the user name is too long (longer than 2000 characters), then the InstallationCode procedure throws and error of alerrUserNameTooLong.
+- "Activelock3.dll has been corrupted!" warning message has been modified as "Activelock DLL has been corrupted !" to account for version changes in the DLL.
+- FIX: Reported performance problems in the LockCode function have been corrected. If statements handling the hardware keys have been restructured to eliminate redundant and unnecessary code execution. Rearranged this function to improve the performance drastically.
+- ALTestApp no longer allows copy and paste of the Installation Code into the Liberation Key textbox (Reported by Zoenie: "The Evil Tester")
+- If TrialType=TrialNone then ExpireTrial() function is never called, and therefore no trial related traces are left in the directories and the registry (should make Pinheiro happy)
+- ALTestApp Form_Load event now includes a warning about the usage of Activelock.SoftwareVersion. Users are warned against the use of "App.Major & "\" App.Minor & "\" & App.Revision" since this is not a permanent constant value and could change if the version numbers are incremented. Correct usage is like "Activelock.SoftwareVersion = 2.1"
+- NEW: Rijndael class which is used primarily by the Trial code has been replaced with a new, more stable and correct version. This also fixed the reported problem of running the Trial under "Vietnamese Regional Settings".
+- NEW: lockHDfirmware is now obtained from a pure native VB6 API function :-)
+- Activelock maintains binary compatibility with v3.1 Unfortunately, due to many changes in the classes, v3.3 cannot be compatible with v3.0.5
+- This version of the program introduces and uses many new error alerts in the DLL. Please read the FAQ on this topic: http://forum.activelocksoftware.com/viewtopic.php?t=304
+- There have been reports of double LIC files being generated by Activelock. This is perhaps true for version 3.0.5 or 3.2.1, but the same behavior could not be generated under v3.3 We'll wait to see if a similar observation is made by anyone else and then take corrective action if necessary.
+- When compiled as Native Code, Activelock DLL must be compiled with "No Optimizations". If any optimizations are used, the HDD Firmware Serial number API functions will not work. This is very important. Alternatively, p-code will also work if you're not concerned about Native Code or Binary Compatibility. See the FAQ on this also: http://forum.activelocksoftware.com/viewtopic.php?t=294
+- NEW: Thanks to Patrizio Cuscito, Alugen3 now has a new "Level Manager" that facilitates Addition of new levels and Removal of existing ones. All levels are kept in a data file. An optional checkbox also allows the use of Item Data in code instead of the item names. Nifty feature Patrizio :)
+- In IActivelock_LockCode(), if LicenseCode="" then an invalid license error is generated.
+- ExpireTrial is applied only for the TrialTypes that were specified in the protected app.
+- CheckTrial is applied only for the TrialTypes that were specified in the protected app.
+- ClockTampering is bypassed for Permanent Licenses (thanks Tuan)
+- "One file forgiveness" inside ClockTampering. This happened to be the case for two different occasions so far. A suggestion to check files in the system32 directory for clock tampering was not implemented since this may not be adequate or true all the time.
+- FIX: Trial mark kept in the registry key "...Extension Compatibility" was not application specific. This was preventing multiple applications from being independently controlled for Trial license. (thanks Tuan)
+- FIX: Simultaneous Trial versions of the same program with different Software name and version numbers were not running correctly. Fixed. This is the same fix as in the item above.
+- FIX: Activelock Classic distribution package has been fixed to include AllowUnsafeFiles for the DLL. Recommended by Patrizio.
+- FIX: Some Trial module functions were not using any password. Fixed.
+- Two reports were received that v3.2.1 Trial feature was not running under Windows XP Home Edition. Several tests have been performed under two XP Home Edition boxes, one XP Pro box and two Windows 2000 machines all with success. Independent tests also confirmed that the Trial feature is indeed working fine under Windows XP Home Edition.
+- IActivelock_LockCode has been modified such that LockTypes is made accessible to the protected application. In cases when lockNone was used to allow selection of the hardware keys from Alugen, trying to access LockTypes from the app was not successful (0 was being returned from the DLL). Code sample received from David Weatherall.
+- NEW: In order to make ResetTrial not accessible by the users, SoftwarePassword property has been added to the program. Users will have to know the Software Name, Version Number and the password in order to use ResetTrial successfully through code. Software Name and Version could even be seen on the application form, but there's no way the user will know the password (do not use an obvious string in your app; conceal your password).
+- Enc2() and Dec2() functions have been modified.
+- FIX: ActivelockFormat() function used in the Trial module has been revised to exclude the time (hours, minutes, seconds). This eliminated the am/pm flag carried along. This flag was causing problems in different regional settings, particularly the Egyptian Regional Settings. (thanks Maher).
+- Unavailable hardware signatures are now marked with "Not Available" and when this happens, they become unavailable for selection inside Alugen.
+- FIX: The fact that Alugen and Activelock were using two different date type in IActivelock_UsedDays was causing problems. One problem had to do with running ALTestApp in a PC with "/" as the date separator and trying to authorize the installation code in another PC with "." as the date separator (different Regional Settings). IActivelock_UsedDays has been modified to fix this problem.
+- FIX: In some cases, it was reported that strDecrypt(Hex2Str(HIDDENFOLDER),PSWD) was returning an empty string causing problems with the trial feature functioning. The new revised Rijndael class prevents this kind of problems.
+- It was reported that auto registration with ALL files might not be working. ALL file registration works fine. However, we're reviewing the auto registration method once more to possibly eliminate from Activelock since it might be abused by the users to re-register the license for many times. (Suggested by Jeroen). For the time being DoAutoRegistration will be called after system clock tampering is checked.
+- Eliminated some redundant functions from both Activelock and Alugen.
+- NEW: SystemClockTampered function (in addition to the existing ClockTampering function) has been added to detect system clock changes. This function reaches a reliable time server to get the current date. If no internet connection is present, then the function is simply bypassed, and ClockTampering kicks in.
+- The following function calls will trigger the ClockTampering and SystemClockTampered functions be called internally:
+DoAutoRegisteration() inside Init(), Acquire() which includes trial mode, and Register().
+- NEW: Three new LockTypes have been added to Activelock: lockMotherboard, lockBIOS, and lockIP. In case any of these cannot be retrieved successfully, they are shown as "Not Available".
+- FIX: After the last revision of the program, and because of the modifications to fix the function ActivelockDate() function (to fix other problems related with the Regional Settings), Trial days were always starting one less than the correct day. Fixed.
+
+v3.2.1 Updates:
+- FIX: Activelock3.2.dll goes to the system32 directory (promise)
+- FIX: Some shortcuts created by the setup program were incorrect. Fixed.
+- When the old style LockTypes are used by specifying them inside the protected application, Alugen was trying to interpret them by checking the serial number format and structure. For most serials, such as the Windows Serial Number and the MAC Addresses, this is easy, however this method could fail to distinguish between other serials, for instance, in one occasion it confused a HDD firmware serial number with a computer name. This was not good. Revamped this code to add space holders for each unused keys eliminating the possibility of misinterpreting the passed keys.
+- Copy button images were strange looking in some machines. Fixed.
+- If the MAC address passed with the Installation Code is all zeros (no network card present), Alugen automatically unchecks the MAC option and disables it as well.
+- Improved some of the trial coding. Eliminated some redundant code.
+- ALTestApp3 and Alugen3 executables now have the version 3.2.1
+- Rijndael encryption algorithm fails with some Regional Settings in the Trial mode. It will be replaced by another working class in the next release.
+
+v3.2 Updates:
+- FIX: Free Trial "Reset Trial" feature was failing under Regional Settings other than English. Fixed.
+- FIX: v3.1 feature in Alugen that allows selection of LockTypes from within Alugen was not locking the licenses correctly. The problem was in IActivelock_LockCode. Fixed.
+- FIX: Clock Tampering code was causing a false alarm with a valid license upon switching to a different Regional Setting. Fixed.
+- FIX: ValidateLic was not working when switched to a different Regional Settings and the License Type was Permanent. Fixed.
+- Maintained binary compatibility with v3.1
+- All EXE version numbers and the DLL name changed to 3.2
+- Setup package installs the program into c:\Program Files\Activelock3.2 automatically if not manually selected.
+- Activelock3.2.dll is now installed and registered into system32.
+- A zip version of the VB6 package is provided per request (Activelock3.2.dll should be manually registered if using this zip package).
+- All error constants have been revisited. Missing constants for the Trial code have been added.
+- FIX: Folder Date Stamp feature has been removed from the Trial feature code since this was controlling the trial behavior of multiple apps protected by the same Activelock DLL in the same machine.
+- Considered moving the "VB and VBA Program Settings" registry key to elsewhere but did not accomplish this because the problem was elsewhere (Regional Settings).
+- FIX: The line "c:\Program Files\Activelock3\Examples\VB\ALTestApp.exe" was wrong in the setup package. Fixed.
+- Renamed ALTestApp folder as ALTestApp3.
+- Made Italian Regional Settings permanent setting in the development machine :)
+- More leftover DataLock stuff has been cleaned-up.
+
+v3.1 Updates:
+- NEW: Overhauled the Free Trial Feature. Eliminated DataLock. This feature was excluded from v3.1 due to lack of stability and reliability. It was also adding unnecessary congestion to the system folders, causing slowness in executing the trial feature in general, and making the DLL fatter unnecessarily.
+- NEW: With the removal DataLock and revamping the existing logic, Trial Mode now executes much faster, and is more reliable.
+- NEW: Trial Feature can be added to a protected application by setting just a few properties.
+a. TrialType. Available options are TrialNone, TrialDays and TrialRuns
+b. TrialLength. This property must be set if the TrialType is set to TrialDays or TrialRuns
+c. TrialHideMode. v3.1 of Activelock supports 3 different methods to hide the trial information: TrialSteganography, TrialRegistry and TrialHiddenFolder.
+- NEW: If TrialSteganography option is used, then Activelock searches system drives for a suitable image file, but if it can't locate one, it creates one by itself.
+- NEW: Care has been taken to hide all strings, and other relevant information in the Trial feature source code. Strings are constructed on the fly, recreated from Chr(), or decrypted from encrypted strings during the Trial mode execution. 
+- NEW: In addition to the supported trial information hiding methods, Activelock hides more information in the registry and other locations in the system (!), to reduce the chances of discovery by the user. These kick in especially when the trial mode ends.
+- NEW: ALTestApp now has two form buttons that allow easy "Reset Trial" and "Kill Trial" (End Trial) of an active Trial Mode. Obviously, these should never be placed on a real application.
+- NEW: Trial feature uses the new AES Rijndael encryption method along with others available in Activelock.
+- NEW: When activated, the Trial mode information is briefly displayed to the user. This is a self displaying, self closing splash form. It is not necessary to use this form; a message box could be used as before.
+- NEW: When active Activelock tries to repair discovered trial information if more than one trial hiding mechanism was used. Activelock replaces all missing information on the fly when necessary.
+- FIX: Activelock Installer (InnoSetup), no longer overwrites an existing "products.ini" file.
+- Due to so many changes in v3.1, Activelock now installs the new version under the Activelock3.1 folder, and re-registers the new Activelock3.dll. There's no binary compatibility between v3.0.5 and v3.1 Activelock3.DLLs.
+- Consolidated many BAS files in the Activelock COM project into single, more descriptive and easy to handle modules, eliminating some of the redundant code. For example, all Trial feature related modules have been combined under modTrial. There's still more to be done in the new versions.
+- FIX: HeapFree() API used in GetMACAddress also needed ByVal before "lpMem As Long" per David Weatherall.
+- FIX: While registering a license, if the clock is set backward, it was possible to re-register the original license file. This is now prevented. Thanks to Kirtaph for detecting this.
+- All MsgBox's have been removed from Activelock3.dll (except the ones commented out; to be used for debugging purposes)
+- Removed the TrialPeriodTest project and application from the installation package. This program is no longer supported.
+- FIX: Port32.h Winio.h sources with CR/F conversion have been added. Courtesy of Jeroen.
+- FIX: Alugen date handling was not in synch with Activelock3.dll This has been fixed. Alugen3 was not using UTC/GMT dates which was causing conflicts with the main DLL. Converted all date handling in Alugen3 to UTC and date format used is YYYY/MM/DD HH:MM:SS. Please search for the thread that explains the details on this.
+- NEW: Both Alugen3 and ALTestApp now display the full version numbers in the caption of the main forms.
+- NEW: Activelock now allows not specifying the LockType property in the protected application. If you don't specify LockType in your app, then it is now possible to lock the application to any hardware key in Alugen. If the LockType is specified inside the app however, then Alugen shows the lock type(s), but does not allow developers change them by displaying the hardware key checkboxes. When the license information is added to the text based customer/license database, the lock types used are also stored for future re-use or reference, so that the same keys could be generated. In order to alert the app with the right hardware key information, Alugen modifies the installation code and appends it to the liberation (license) key. This new modified installation code is also saved in the LIC file and cannot be tampered with. For this reason, the liberation key in v3.1 is longer than the v3.0 key. Existing v3.0 installation codes can be used in v3.1 Alugen to generate v3.1 license keys. Existing LIC files should also be compatible with v3.1
+- NEW: When a username or any license information in the Alugen customer database is very long, a horizontal scroll bar is added to database form to allow viewing of the entire contents of the long text.
+- NEW: Since many users were asking the same question: "How can kill a license?", we've added a "Kill License" button on ALTestApp form. This can be also provided with a real application since there might be a need to kill an existing license.
+- NEW: When Init() method successfully registers an existing ALL license key (Auto Register), it now returns an optional argument for developer's use and processing. This is made available in case anyone wants to process a registered license before granting the authorization (check against previous license keys, etc.)
+- NEW: ALTestApp now shows the License Type along with other license information. Free Trial information is also detected and displayed if applicable.
+- NEW: Alugen3 now saves the control settings (active tab number, combo/listbox indexes, etc.) in an INI file upon exiting.; and retrieves them upon running again.
+- FIX: Copy buttons in Alugen3 were not working. Fixed. Also improved the GUI and added the same copy/paste buttons to ALTestApp.
+- FIX: Removing a product on the Product Code Generator tab of Alugen was not refreshing the Product Listbox on the Key Generator tab. This has been fixed.
+- FIX: ALTestApp was not updating the txtName and txtVersion textboxes with the SoftwareName and SoftwareVersion used. Fixed.
+- Setting the focus on the Liberation Key textbox now highlights the entire textbox for easy copying.
+
+v3.0.5 Updates:
+- "As Any" declaration for the HeapFree function in modMACAddress is reported to be a problem (per David Weatherall). Switched to "As Long" which seems to work without problems.
+- The Inno Setup project file (Activelock3.iss itself) used to distribute Activelock3 has been added to the setup package.
+- FIX: GetAPIErrorMessageDescription function used in ALTestApp was prone to errors. Test users reported "Runtime Error 6" generated by this function. Removed from the application since it wasn't needed.
+- Renamed the folder "Library Files" as "Redistribution" per David Weatherall.
+- Activelock3 setup package now creates the "Redistribution" folder under Activelock3 directory upon installation. This folder includes all the necessary files needed to be distributed along with your application. Inno Setup package uses this folder to create the setup executable. You may also use this folder to create your own setup executable (perhaps with the exception of some OCXs used by ALTestApp).
+- FIX: Setting the clock forward and the resetting backwards was not working properly with the Permanent Licenses. Reported by the test users. Fixed.
+- Error handling has been made simpler in the Form_Load event of ALTestApp. Now all error messages appear inside the txtRegStatus TextBox.
+- ignoreversion flag has been removed from the Activelock3.dll registration code in the iss file.
+- Alugen now automatically uses the current application name for the ALL file name. ALL file name is not shown until the Liberation Key is generated. The Browse button always shows ALL as the default extension and uses the current application name as the default ALL file name to be saved.
+- Alugen3 C++ is the C++ Console version of Alugen rebuilt by David Weatherall. Alugen3 for VB6 is the preferred application for generating Liberation Keys, however C++ programmers might find this code useful. Alugen3 C++ has been added to the distribution package and it can be compiled with VS.NET 2003 only.
+- A new checkbox "Using LockType=LockNone Only" has been added to Alugen. It's been observed that some users would just enter the user name into the User textbox and generate a liberation key without using any installation code. This is ok only if LockType=LockNone only in the protected application. The checkbox draws the user's attention to this, and disables the use of the user name box if LockTypes other LockNone are used (such LockComputer, LockHDfirmware, etc.)
+
+v3.0.4 Updates:
+- Modified ALTestApp PUB_KEY constant such that it is now the Enc(PUB_KEY). Therefore. Activelock.SoftwareName = PUB_KEY has been modified as Activelock.SoftwareName = Dec(PUB_KEY). This the additional security measure, the documentation is talking about.
+- FIX: Fixed the instring function usage in GetTrial function. This could cause problems with retrieving the trial correctly.
+- Tested the program to investigate the behavior when both LIC and ALL files exist in the application directory. Since the DoAutoRegistration in Activelock is performed prior to checking the license file, the ALL file is processed first, the license generated is transferred into the LIC file and then ALL is killed. This is the way it should work. No action was necessary. Tried making a copy of the LIC file into an ALL file. Then wrong ALL format cannot be processed by Activelock, and it generates an error, which is good. The error information is not very clear, but this could be improved in the next releases.
+- FIX: TrialPeriodTest can no longer reset ALTestApp with different AppName, AppPassword and AppSlot string combinations. TestTrial function now checks the system level files for Trial activation prior to checking the registry entries. This fixes the problem.
+- FIX: When the "License expired" error is encountered, the UpdateLastUsed function has to be called and the LastUsed property has to be resaved in the LIC file, otherwise the scenario below bypasses the security: SCENARIO: Today is 9-22-2005. System clock is actually showing 9-22-2005. Authorize the app with expiration set at 10-22-2005 (Time limited). Set the system clock to 1-21-2005 (last day). App shows Days Used as 29 (correct). Set the clock again to 1-3-2005 this time. App says "License expired" (correct). Now set the clock to 10-21-2005, App will work since when it expired, it did not change the LastUsed property in the LIC file. [Sub ValidateKey]
+- The MsgBox's in TestTrial are now only activated when the App.ProductName is TRIALTEST which is for TrialPeriodTest application. Otherwise, only the variable strMsg is passed byref. This will prevent any MsgBox's popping up from within Activelock3.dll At the same time, added code to ALTestApp to catch such strMsg's coming from the GetTrial call.
+- Modified the checks for LIC and ALL files prior to Trial Mode check in ALTestApp such that both LIC and ALL are checked separately. If either one exists, and the file is not empty, then the Trial Mode is not checked. This will allow registering an app with ALL only while the Trial Mode is still active.
+- Added textboxes for AppName, AppPassword and AppSlot on the TrialPeriodTest application main form. This will allow users Activate, Reset and Expire Trial modes for different application string combinations. Developers can now play with different strings to check the behavior. The textbox entries are saved in an ini file for use in other sessions.
+- FIX: The setup for 3.0.3 was registered in Windows as 3.0.33. There was a typo in Inno Setup package.
+- FIX: Program now checks if the LIC file has a read-only attribute set. If so, an invalid license error is returned. [Property Let IKeyStoreProvider_KeyStorePath]. The following scenario bypasses the security if the read-only attribute is set: SCENARIO: Today is 9-22-2005. System clock is actually showing 9-22-2005. Authorize the app with expiration set at 10-22-2005 (Time limited). Make the LIC file Read-Only. Set the clock to 10-21-2005. Days used indicate 29 (correct). Set the clock to 10-3-2005. App claims "License expired" (correct). Now, set the clock to 10-10-2005. Program claims it's still registered (wrong).
+- FIX: UsedDays in Activelock3.dll must always be >=0 [Property Get IActivelock_UsedDays]. Otherwise the following scenario bypasses the security: SCENARIO: Today is 9-22-2005. Set the system clock to 9-21-2005. Authorize the app with expiration set at 9-22-2005. App registers fine and shows the expiration date of 9-22-2005. Set the clock to 9-21-2005. Days Used is now shown as -2 !!!
+- Removed detailed descriptions from ActivelockErrCodeConstants in Activelock3.dll All descriptions now read "Activelock3".
+- Removed atViewPort.ctl from ALTestApp. This simplified the Functionalities Tab. This custom control was simply causing a lot of confusion and unnecessary problems. Also removed it from the setup package.
+- Changed the code in ALTestApp that is used to check if the LIC and ALL are empty. Instead of a binary read with the Open/Close statements, we're now using the FileLen statement.
+- Updated MFCsample to phase 3 files that were received from David Weatherall, our C++ expert There are still some issues to be resolved on this sample. The updated sample now includes the CRC check, Trial activation and an About form which you can use to generate the installation code for authorization. Users interested in instructions on how to use the sample to receive authorization should contact the admins directly. 
+
+v3.0.3 Updates:
+- Added current version numbers to Activelock3.dll, Alugen.exe and ALTestApp.exe
+- Added major.minor.revision numbers to the setup package dialog text.
+- ignoreversion flag added to the InnoSetup package for Activelock3.dll
+- Added UnregisterServer Pascal function into the InnoSetup to force the Unregister of Activelock3.dll before copying and registering the new version. This along with the ignoreversion flag in InnoSetup package and the updated file version numbers should eliminate the Runtime Error 430 problem altogether.
+- Added a new boolean variable called "expireTrialLicense" to ALTestApp. This variable is now used in combination with the noTrialThisTime variable to control the behavior of the application.
+- "Activelock3.ExpireTrial" has the same functionality of "Activelock3.Globals.Acquire". Use either:
+expireTrialLicense = False and noTrialThisTime = True with ExpireTrial under the Register button code or use expireTrialLicense = True and noTrialThisTime = False only under the Register button code and let Acquire method with arguments handle the expiration of the Trial mode in the Form_Load event. Note that the variable noTrialThisTime has been replaced with expireTrialLicense as needed in Form_Load.
+- Along with the above changes, FunctionalitiesEnabled = False has been added after the NotRegistered flag.
+- FunctionalitiesEnabled itself has been modified to fix a reported bug that was not disabling some of the form controls based on the Level selected and/or registration mode.
+- msflxgrd.ocx was missing in the setup package. Added.
+- GetMACAddress = "" was set incorrectly at the end of the GetMACAddress function. Removed.
+- If the authorizations.txt file does not exist, Runtime Error 53: File Not Found is encountered inside the ArchiveLicense sub. In such cases, and empty license database file is created.
+- Added a Close button on the License Database form of Alugen.
+- License Database in Alugen no longer automatically loads upon adding new license details to the file. The DB file can be opened only by clicking on the "View" button.
+- restartreplace flag has been added to Activelock3.dll in the Inno setup package. Just in case there's an application using Activelock3.dll during the installation, this will help.
+- Added the updated MFC application code to the setup package. This work was done completely by David Weatherall to whom we extend our appreciation. Thanks for the great work Dave. The MFC sample application is a C++ code that is compiled with VS 2003 only. Several missing files have been added to the setup package. Currently, program runs but ends with "No valid license" message. More updates on this project will be released with the next version.
+
+v3.0.2 Updates:
+- Alugen now checks if "alcrypto3.dll", "comdlg32.ocx", "msflxgrd.ocx", "comctl32.ocx", "tabctl32.ocx" exist, and if not exits the application. This is done via the new function "CheckForResources".
+- ALTestApp now checks if "alcrypto3.dll", "comctl32.ocx", "tabctl32.ocx" exist and if not exits the application. This is done via the new function "CheckForResources".
+- MFCsample application has been revisited to change all Activelock2 references to Activelock3. Program compiles but crashes upon loading. This is still under investigation.
+- Added "atviewport.ctx" to the setup package. This is not necessary but was done to avoid any confusion by the users.
+- Activelock3.dll now checks the existence of the "Products.ini" file. If it doesn't exist, it creates an empty file. This was a problem in Activelock2.dll as well.
+- Activelock3.dll now checks if the "Products.ini" file is empty. If it is, then it does not go into an endless loop by keeping the CPU level high. It simply returns with no products. Activelock3 "StoragePath" and "RetrieveProducts" functions have been modified to fix this. This was a problem in Activelock2.dll as well.
+- "ProcessID" array in modC of the Trial code has been made Long instead of Integer to avoid any potential problems.
+- Saving the generated licenses into the customer database (text file) was generating "Runtime Error 55 - File already open" error. Fixed.
+- Alugen was missing an "End" statement. Added. DO NOT add End to Form_Unload of ALTestApp, since ALTestApp main form might be reloaded during the same session.
+- Removed the custom, public "Split" function from the modJoinSplitFunctions module. This is the cause for some of the problems reported. Entire program now uses the VB6 Split function.
+- Permanent Licenses could not be created. Lic.Load method in IActivelock_Register was causing problems with permanent licenses only, and the root of the problem turned out to be incorrectly functioning custom Split function, as described above. Program now generates Permanent Licenses correctly.
+- Now using form level constants LICENSE_SOFTWARE_NAME, APPLICATION_PASSWORD and APPLICATION_SLOT in ALTestApp to make the implementation of Trial license easier. Note: If you intend to use Trial Mode in your applications, you must make these constants different from what's used in Activelock3, in both your application and the TrialPeriodTest application, for your own security.
+- Added "ExpireTrial" method to Activelock3.dll. This method is intended to be used whenever a license is registered when it's still in a Trial Mode. At that time, the programmer has the option to "Expire" the Trial license permanently or not use it at all.
+- ALTestApp now shows the Expiry Date as "Permanent" for Permanent Licenses.
+- Alugen no longer shows any days in the "Days" textbox for Permanent Licenses.
+- Upon loading, Alugen License Key Generator shows the first product in the product list automatically.
+- Trial Mode implementation in ALTestApp has been revisited to correct some problems and handle
+  the following in a logical way:
+  a. The application root name is now a constant, such as "TestApp". This is actually the
+      SoftwareName in Activelock. The same root is used for .LIC and .ALL filenames.
+  b. If a .LIC or .ALL file is found, and the license file is not empty, then the Trial Mode is by-passed
+      altogether.
+  c. Once the trial mode is activated, it's possible to generate the Installation Code and doing so will
+      not have any side effects.
+  d. Entering the Liberation Code and Registering the application while in the Trial Mode "Expires" the
+      Trial Mode indefinitely, unless the "ExpireLicense" method is not used under the Registration
+      button code. Therefore restarting the application will not go into the Trial Mode in any
+      way.
+  e. If an existing license is deleted, then the application will never go into the Trial Mode again since
+     it's expired, and the form will display as "Unregistered".
+  f. Using the TrialPeriodTest application, it's possible to reset the Trial Mode, but if the application
+     has already a license file, it will not go into the Trial Mode again.
+  g. Using TrialPeriodTest, you can reset the application, and delete the .LIC or .ALL file and then the
+     application will go into the Trial Mode again. Since this is a possible scenario with your customers,
+     always change the ApplicationName, ApplicationPassword and ApplicationSlot used in your app and
+     your personal copy of TrialPeriodTest.
+
+v3.0.1 Updates:
+- Setup package updated to include PrivelegesRequired=Admin, RestartReplace for all OCXs, UninsNeverUninstall for the VB6 Runtimes, and removed the minimum requirement of Win2KSP2
+- Fixed "Error 52" in dhFindAllFiles Sub of TrialPeriodTest and Activelock3.dll
+
+NEW FEATURES IN V3:
+- Ability to "Lock to HDD Firmware Serial Number" (Physical Drive Manufacturer Serial Number)
+- HDD Firmware Serial Number works for both Admin and Power User/User accounts
+- Fixed the "Product Code Creation Bug" with Multiple Products in Alugen (Activelock Key Generator) 
+- Fixed the Test Application (ALTestApp) such that form reflects the registered state upon registration
+- Eliminated alugen.dll and alutil.dll; Only activelock3.dll and alcrypto3.dll are needed. 
+- Registration to Level X (Allows you to deactivate certain features of your program) 
+- Optional Trial Period Feature (gives users a trial period of X many days upon first use) 
+- Optional Trial Runs Feature (gives users certain number of runs upon first use) 
+- Optional Searchable, Sortable, Text Based License/Customer Database in Alugen 
+- GetMACAddress code has been improved to account for Virtual Network Adapters 
+- Decrypted Installation Code Optional View in Alugen 
+- Global Documentation Update for Activelock3 - Compiled for VBDOX 2.0.30 
+- Fixed the incorrect Product Name used in Alugen Validation Message 
+- Activelock3.dll registration is now checked in ALTestApp
+- Added the TrialPeriodTest app to Test, End or Reset the Trial Period/Runs. For Developers Only.
+
+ 
+--------------------------------------------------------------------------------
+Copyright © 2001-2007 Activelock Software Group
+Project Administrator:
+Ismail Alkan 
