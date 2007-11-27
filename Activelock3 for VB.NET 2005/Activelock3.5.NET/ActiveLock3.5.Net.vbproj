@@ -1,0 +1,217 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{35CA9E6D-C72B-45A2-8588-55979C455E3B}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>ActiveLock3_5Net</AssemblyName>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyMode>None</AssemblyOriginatorKeyMode>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>Library</OutputType>
+    <OptionCompare>Binary</OptionCompare>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionStrict>On</OptionStrict>
+    <RootNamespace>ActiveLock3_5NET</RootNamespace>
+    <StartupObject>ActiveLock3_5NET.%28None%29</StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <MyType>Windows</MyType>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>.\</OutputPath>
+    <DocumentationFile>ActiveLock3_5Net.xml</DocumentationFile>
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>Win32 = True</DefineConstants>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>42016,42017,42018,42019,42032</NoWarn>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>.\</OutputPath>
+    <DocumentationFile>ActiveLock3_5Net.xml</DocumentationFile>
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>Win32 = True</DefineConstants>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>42016,42017,42018,42019,42032</NoWarn>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic.Compatibility" />
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Data">
+      <Name>System.Data</Name>
+    </Reference>
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.Management">
+      <Name>System.Management</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="Microsoft.VisualBasic.Compatibility" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Data" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Drawing" />
+    <Import Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ActiveLock.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ActiveLockEventNotifier.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ADSFile.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AlugenGlobals.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AssemblyInfo.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CCoder.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsGetMACs_IfTable.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsShortLicenseKey.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="clsShortSerial.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CRC32.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Crypto2005.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="EncryptionRoutines.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FileKeyStore.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Globals3.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IActiveLock.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IALUGenerator.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IKeyStoreProvider.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="INIFile3.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="INIGenerator.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MDBGenerator.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modActiveLock.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modALUGEN.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modBase64.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modComputerName.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modMD5.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modRegistryAPIs.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modSHA1.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modTrialGlobals3.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mSmartCall.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OSVersion.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProductInfo.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ProductLicense.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RegistryKeyStore.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="XMLGenerator.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <EmbeddedResource Include="ProjectResources.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="My Project\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
