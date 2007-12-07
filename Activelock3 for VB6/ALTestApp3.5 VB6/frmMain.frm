@@ -767,12 +767,12 @@ Private Sub Form_Load()
     Dim A() As String
     
     On Error GoTo DLLnotRegistered
-    Me.Caption = "ALTestApp - ActiveLock3 Test Application - v" & App.Major & "." & App.Minor & "." & App.Revision
+    Me.Caption = "ALTestApp - ActiveLock" & App.Minor & "." & App.Revision & " Test Application"
     
     ' Check the existence of necessary files to run this application
     Call CheckForResources("Alcrypto3.dll", "comctl32.ocx", "tabctl32.ocx")
 
-    ' Check if the Activelock3.dll is registered. If not no need to continue.
+    ' Check if the Activelock3.x.y.dll is registered. If not no need to continue.
     If CheckIfDLLIsRegistered = False Then End
     
     On Error GoTo NotRegistered
@@ -786,29 +786,26 @@ Private Sub Form_Load()
         
         ' Note: Do not use (App.Major & "." & App.Minor & "." & App.Revision)
         ' since the license will fail with version incremented exe builds
-        '.SoftwareVersion = "1.0"   ' WARNING *** WARNING *** DO NOT USE App.Major & "." & App.Minor & "." & App.Revision
+        ' THE FOLLOWING IS A SAMPLE USAGE
+        '.SoftwareVersion = "1.3.2"   ' WARNING *** WARNING *** DO NOT USE App.Major & "." & App.Minor & "." & App.Revision
         .SoftwareVersion = "3.5.5"
         txtVersion.Text = .SoftwareVersion
         
-        ' New in v3.3
         ' This should be set to protect yourself against ResetTrial abuse
         ' The password is also used by the Short License Key type below
         .SoftwarePassword = Chr(99) & Chr(111) & Chr(111) & Chr(108)
         
-        ' New in v3.5
         '.LicenseKeyType = alsShortKeyMD5
         .LicenseKeyType = alsRSA
         
-        ' New in v3.1 - Trial Feature
         .TrialType = trialDays
         .TrialLength = 15
         If .TrialType <> trialNone And .TrialLength = 0 Then
-            ' Do Nothing
             ' In such cases Activelock automatically generates errors -11001100 or -11001101
             ' to indicate that you're using the trial feature but, trial length was not specified
         End If
         
-        ' Uncomment the following statement to use a certain trial data hiding technique
+        ' Change the following statement to use a certain trial data hiding technique
         ' Use OR to combine one or more trial hiding techniques
         ' or don't use this property to use ALL techniques
         .TrialHideType = trialHiddenFolder Or trialRegistry Or trialSteganography
@@ -829,7 +826,9 @@ Private Sub Form_Load()
 '        .SoftwareCode = "RSA2048BgIAAAAkAABSU0ExAAgAAAEAAQC7QRQAugyetDowjseqszSAkX3hLvOj69Cu8J7fs7T0sIlM2gVK6WIEN026KcnILfb/Gs+jDvyb2mpPOL1HfyEmIl2tgK5qQG3Di0uaEgiyDaHRl8IYsMLyBNjJYyB3bnKHk+5c7W1c6MAZft5Iyl5v6Xj6KtJ7s73ICMQ7UzaEcRslbkRaRkW1AAXjKEk/rhzDu4dNHX6XsCUlpgAxhopAuONJIZyh6dYzqSMTOS0A3gmC6f8vC9HYtLKls1Ap/jxwjLH6pwc1Su+7KtfGkGB/ZQdOZau/wNEkoLbodXypGAf5TiJ4NMb6ODTl1CfLVEKHApXsC9nQR8/N3Z5Yt36p"
         .SoftwareCode = "RSA1024BgIAAAAkAABSU0ExAAQAAAEAAQAVA49YKYWBobRVeKs6ro0aZA8j+CxZ3irhOs6QlaHWiYrGSWQrn1kGfxn3EKUZM9oyxbP8s8gGl6aNurU8fCAsAO6Hb20UIDSnA4qYCSJmKP7xunv071zdzRMmwUESm3bcwjj21vAn/wtnDN+TlXOOEWXjsJAb3DTuIF5d2Bjgmg=="
         
-        .LockType = lockNone  'lockWindows 'Or lockComp 'Or lockComp Or lockWindows
+        ' Use lockWindows Or lockComp
+        ' You can combine any lockType(s) using OR as above
+        .LockType = lockNone
         strAutoRegisterKeyPath = App.Path & "\" & LICENSE_ROOT & ".all"
         .AutoRegister = alsEnableAutoRegistration
         .AutoRegisterKeyPath = strAutoRegisterKeyPath
