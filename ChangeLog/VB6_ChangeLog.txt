@@ -1,5 +1,5 @@
 Change Log For Activelock VB6 
-Last Updated: 27 November 2007 
+Last Updated: 6 December 2007 
 
  
  v3.5.5 Updates:
