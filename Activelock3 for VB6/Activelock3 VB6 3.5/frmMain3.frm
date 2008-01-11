@@ -72,10 +72,8 @@ Begin VB.Form frmMain
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "frmKeyGen"
-      Tab(1).Control(0).Enabled=   0   'False
-      Tab(1).Control(1)=   "cmdViewArchive"
-      Tab(1).Control(1).Enabled=   0   'False
+      Tab(1).Control(0)=   "cmdViewArchive"
+      Tab(1).Control(1)=   "frmKeyGen"
       Tab(1).ControlCount=   2
       Begin VB.CommandButton cmdValidate 
          Caption         =   "&Validate"
@@ -2216,6 +2214,24 @@ Private Sub txtName_Change()
     UpdateAddButtonStatus
 End Sub
 
+Private Sub txtName_KeyPress(KeyAscii As Integer)
+  Select Case KeyAscii
+    Case 48 To 57, 8, 65 To 90, 97 To 122
+      'Valid chars, do nothing.
+    Case 46 'Allow more than one period
+'      'Decimal point, valid only once.
+'      If InStr(txtName.Text, ".") > 0 Then
+'        'Decimal point already there.
+'        KeyAscii = 0
+'      End If
+    Case Else
+      'Whatever else, invalid.
+      KeyAscii = 0
+  End Select
+
+End Sub
+
+
 Private Sub txtReqCodeIn_Change()
 If Len(txtReqCodeIn.Text) = 8 Then 'Short key authorization is much simpler
     UpdateKeyGenButtonStatus
@@ -2603,4 +2619,22 @@ End If
 systemEvent = False
 
 End Function
+
+Private Sub txtVer_KeyPress(KeyAscii As Integer)
+  Select Case KeyAscii
+    Case 48 To 57, 8, 65 To 90, 97 To 122
+      'Valid chars, do nothing.
+    Case 46 'Allow more than one period
+'      'Decimal point, valid only once.
+'      If InStr(txtVer.Text, ".") > 0 Then
+'        'Decimal point already there.
+'        KeyAscii = 0
+'      End If
+    Case Else
+      'Whatever else, invalid.
+      KeyAscii = 0
+  End Select
+
+End Sub
+
 
