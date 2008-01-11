@@ -1,8 +1,11 @@
 Change Log For Activelock VB6 
-Last Updated: 6 December 2007 
+Last Updated: 10 January 2008 
 
+
+v3.6 Updates:
+- Alugen restricts the use illegal and non-standard characters for the software name and version number fields. Only alphanumeric characters, the decimal point, and backspace are allowed.
  
- v3.5.5 Updates:
+v3.5.5 Updates:
 - FIX: Program was not functioning for multiple users in the same machine. It was working Ok for the first user, however switching users and running the same that's already registered causes an error 5 and the application won't run. The fix was accomplished by adding several  "cryptSession.DestroyContainer containerName " statements to the Globals3 class, CryptoAPIaction function. The problem is with the creation of an RSA container with one user account and the inability to access it with a different user account. By deleting the container after it's used, the problem has been eliminated. As long as the license is Ok (valid and not tampered with), switching between user accounts does no harm to the license, but once the license is tampered with, even after it's restored to its original condition, switching between users seemed to still cause problems; however, since we're dealing with a tampered license here, this is acceptable. While writing this note I was still trying to add more DestroyContainer statements within the validation routines right before errors are raised.
 - FIX: CryptoAPI class SignString and ValidateString functions were not configured correctly. Because of this, it was possible to tamper with the LIC file. For example, the Expiration date could be changed with no problems. Fixed. Rewrote parts of these routines. Tested. Works as it should. This problem is only for the CryptoAPI keys. No problem with ALCrypto-1024 bit key.
 - FIX: In CryptoAPI, added DestroyContainer before every Err.Raise statement. This fix was related with the previous fix in CryptoAPI.
