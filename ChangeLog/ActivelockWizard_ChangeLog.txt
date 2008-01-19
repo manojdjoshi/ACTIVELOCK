@@ -1,0 +1,18 @@
+Change Log For Activelock Wizard 
+Last Updated: 20 January 2008 
+
+
+Activelock Wizard Updates:
+- NEW: Alugen passes the Development Environment to the Wizard
+- NEW: Alugen passes the Application Password to the Wizard
+- FIX: Some spelling
+- UPDATE: VB2008 in List of Development Environments (Not implemented yet)
+
+Activelock Wizard v1.0.0 Updates:
+- NEW: First Release
+
+
+--------------------------------------------------------------------------------
+Copyright © 2001-2007 Activelock Software Group
+Project Administrator:
+Ismail Alkan
