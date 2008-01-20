@@ -1,6 +1,8 @@
 Change Log For Activelock VB2005 
 Last Updated: 25 November 2007 
 
+VB.NET 2005 v3.6 Updates:
+- Comprressed the setup package which reduced the package size substantially.
 
 VB.NET 2005 v3.5.5 Updates:
 - FIX: Reading of MAC address caused problems in Windows VISTA, changed some values from 32 bit Integer to a 64 bit Integer
