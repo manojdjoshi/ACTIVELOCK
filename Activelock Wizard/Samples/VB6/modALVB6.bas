@@ -132,7 +132,7 @@ Public Function InitActivelock() As Boolean
        .TrialType = trialRuns
        .TrialLength = 10
        .TrialHideType = trialHiddenFolder Or trialRegistry
-       .SoftwareCode = PUB_KEY
+       .SoftwareCode = Dec(PUB_KEY)
        .LockType = lockBIOS Or lockComp Or lockHD Or lockHDFirmware Or lockIP Or lockMAC Or lockMotherboard Or lockWindows
        strAutoRegisterKeyPath = App.Path & "\" & .SoftwareName & ".all"
        .AutoRegister = alsEnableAutoRegistration
