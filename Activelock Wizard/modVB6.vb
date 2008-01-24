@@ -52,7 +52,7 @@ Module modVB6
             WriteToFile("       .TrialLength = " & TrialLength.ToString & vbCrLf)
             WriteToFile("       .TrialHideType = " & GetHideTypeStringVB6(TrialHideType) & vbCrLf)
         End If
-        WriteToFile("       .SoftwareCode = PUB_KEY" & vbCrLf)
+        WriteToFile("       .SoftwareCode = dec(PUB_KEY)" & vbCrLf)
         WriteToFile("       .LockType = " & GetLockTypesStringVB6(LockTypes) & vbCrLf)
         WriteToFile("       strAutoRegisterKeyPath = App.Path & " & Chr(34) & "\" & Chr(34) & " & .SoftwareName & " & Chr(34) & ".all" & Chr(34) & vbCrLf)
         WriteToFile("       .AutoRegister = " & AutoRegister.ToString & vbCrLf)

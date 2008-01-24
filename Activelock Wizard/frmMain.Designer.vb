@@ -902,7 +902,7 @@ Partial Class frmMain
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "frmMain"
-        Me.Text = "Activelock Protection Source Code Generation Wizard V1.0.1"
+        Me.Text = "Activelock Protection Source Code Generation Wizard V1.0.2"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         CType(Me.ImageApplicationHelp11, System.ComponentModel.ISupportInitialize).EndInit()

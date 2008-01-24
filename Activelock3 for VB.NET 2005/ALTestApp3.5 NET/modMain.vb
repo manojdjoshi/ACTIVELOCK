@@ -78,8 +78,8 @@ Module modMain
             System.Diagnostics.Debug.WriteLine("Hash: " & crc)
             If VerifyActiveLockNETdll <> Dec("210.247.23C.2CB.210.2E1.226.25D") Then
                 ' Encrypted version of "activelock3NET.dll has been corrupted. If you were running a real application, it should terminate at this point."
-                MsgBox(Dec("42B.441.4FC.483.512.457.4A4.4C5.441.499.231.35A.2F7.39C.1FA.44C.4A4.4A4.160.478.42B.4F1.160.436.457.457.4BA.160.441.4C5.4E6.4E6.507.4D0.4FC.457.44C.1FA"))
-                End
+                'walter'MsgBox(Dec("42B.441.4FC.483.512.457.4A4.4C5.441.499.231.35A.2F7.39C.1FA.44C.4A4.4A4.160.478.42B.4F1.160.436.457.457.4BA.160.441.4C5.4E6.4E6.507.4D0.4FC.457.44C.1FA"))
+                'walter'End
             End If
         Else
             MsgBox(Dec("42B.441.4FC.483.512.457.4A4.4C5.441.499.231.35A.2F7.39C.1FA.44C.4A4.4A4.160.4BA.4C5.4FC.160.462.4C5.507.4BA.44C"))

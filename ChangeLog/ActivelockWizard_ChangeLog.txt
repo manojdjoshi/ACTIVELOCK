@@ -1,8 +1,10 @@
 Change Log For Activelock Wizard 
 Last Updated: 20 January 2008 
 
+Activelock Wizard V1.0.2 Updates:
+- FIX: VCode decoded before used
 
-Activelock Wizard Updates:
+Activelock Wizard V1.0.1 Updates:
 - NEW: Alugen passes the Development Environment to the Wizard
 - NEW: Alugen passes the Application Password to the Wizard
 - FIX: Some spelling
