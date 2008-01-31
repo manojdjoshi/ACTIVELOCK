@@ -72,8 +72,8 @@ Begin VB.Form frmMain
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
       Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "cmdViewArchive"
-      Tab(1).Control(1)=   "frmKeyGen"
+      Tab(1).Control(0)=   "frmKeyGen"
+      Tab(1).Control(1)=   "cmdViewArchive"
       Tab(1).ControlCount=   2
       Begin VB.CommandButton cmdValidate 
          Caption         =   "&Validate"
@@ -1786,7 +1786,7 @@ On Error GoTo LoadFormSetting_Error
 
 If Not blnIsFirstLaunch Then Exit Sub
 
-PROJECT_INI_FILENAME = WinDir() & "\Alugen3.ini"
+PROJECT_INI_FILENAME = App.path & "\Alugen3.ini"
 On Error Resume Next
 SSTab1.Tab = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", 0))
 cmbProds.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbProds", 0))
