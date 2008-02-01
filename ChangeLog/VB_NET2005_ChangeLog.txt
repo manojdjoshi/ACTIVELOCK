@@ -1,12 +1,14 @@
 Change Log For Activelock VB2005 
-Last Updated: 25 November 2007 
+Last Updated: 2 February 2008 
 
 VB.NET 2005 v3.6 Updates:
 - Comprressed the setup package which reduced the package size substantially.
+- Moved Alugen.ini to the application directory from the Windows directory.
+- Alugen now restricts the characters in the Software Name and Number textboxes to 0-9,A-B,a-b, and multiple decimal digits.
 
 VB.NET 2005 v3.5.5 Updates:
 - FIX: Reading of MAC address caused problems in Windows VISTA, changed some values from 32 bit Integer to a 64 bit Integer
-- FIX: The Steganography file was ready twice (even if you do not want this protection)Now it will only read this file once if it was selected to be read otherwise it will skip this file completely
+- FIX: The Steganography file was ready twice (even if you do not want this protection) Now it will only read this file once if it was selected to be read otherwise it will skip this file completely.
 - NEW: Added support for the Activelock Wizard in Alugen
 
 
@@ -14,7 +16,6 @@ VB.NET 2005 v3.5.4 Updates:
 - NEW: Ported to VB2005 from VB2003
 
 *****************************************************************************************************************************
-
 
 VB.NET 2003 v3.5.4 Updates:
 - FIX: Activelock was changing the Date Format of the target machine and sometimes not returning to the original format. The root of the problem seemed to be any Err.Raise was causing the date format reset to be skipped. Therefore, we've added "Set_locale regionalSymbol" before every Err.Raise in the entire code base. This problem was reported by many people.
@@ -128,6 +129,6 @@ Private MyActiveLock As ActiveLock3.IActiveLock
 
 
 --------------------------------------------------------------------------------
-Copyright © 2001-2007 Activelock Software Group
+Copyright © 2001-2008 Activelock Software Group
 Project Administrator:
 Ismail Alkan
