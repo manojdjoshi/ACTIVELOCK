@@ -1,0 +1,13 @@
+Change Log For Activelock ASPNETAlugen2005 
+Last Updated: 1 February 2008 
+
+ASP.NET 2005 v3.6 Updates:
+- Migrated both Simple and AJAX versions from .NET 1.1 to .NET 2.0 framework. Using VS2005 with VB2005.
+- ASPNETAlugen now restricts the characters in the Software Name and Number textboxes to 0-9,A-B,a-b, and multiple decimal digits.
+
+
+
+--------------------------------------------------------------------------------
+Copyright © 2001-2008 Activelock Software Group
+Project Administrator:
+Ismail Alkan
