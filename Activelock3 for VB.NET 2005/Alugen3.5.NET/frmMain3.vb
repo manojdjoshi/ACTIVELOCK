@@ -1,6 +1,6 @@
 '*   ActiveLock
 '*   Copyright 1998-2002 Nelson Ferraz
-'*   Copyright 2003-2006 The ActiveLock Software Group (ASG)
+'*   Copyright 2003-2008 The ActiveLock Software Group (ASG)
 '*   All material is the property of the contributing authors.
 '*
 '*   Redistribution and use in source and binary forms, with or without
@@ -68,6 +68,7 @@ Friend Class frmMain
 
     Public Shared resxList As New Collections.Specialized.ListDictionary
     Friend WithEvents cmdStartWizard As System.Windows.Forms.Button
+    Friend WithEvents optStrength4 As System.Windows.Forms.RadioButton
 
     Private printPreviewDialog1 As New PrintPreviewDialog
 
@@ -196,7 +197,6 @@ Friend Class frmMain
     Friend WithEvents optStrength1 As System.Windows.Forms.RadioButton
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents optStrength2 As System.Windows.Forms.RadioButton
-    Friend WithEvents optStrength4 As System.Windows.Forms.RadioButton
     Friend WithEvents optStrength5 As System.Windows.Forms.RadioButton
     Friend WithEvents optStrength3 As System.Windows.Forms.RadioButton
     Friend WithEvents cmdValidate2 As System.Windows.Forms.Button
@@ -246,9 +246,10 @@ Friend Class frmMain
         Me._SSTab1_TabPage0 = New System.Windows.Forms.TabPage
         Me.grpProductsList = New System.Windows.Forms.GroupBox
         Me.fraProdNew = New System.Windows.Forms.GroupBox
+        Me.optStrength4 = New System.Windows.Forms.RadioButton
+        Me.cmdStartWizard = New System.Windows.Forms.Button
         Me.optStrength3 = New System.Windows.Forms.RadioButton
         Me.optStrength5 = New System.Windows.Forms.RadioButton
-        Me.optStrength4 = New System.Windows.Forms.RadioButton
         Me.optStrength2 = New System.Windows.Forms.RadioButton
         Me.Label1 = New System.Windows.Forms.Label
         Me.optStrength1 = New System.Windows.Forms.RadioButton
@@ -291,7 +292,6 @@ Friend Class frmMain
         Me.mainStatusBarPanel = New System.Windows.Forms.StatusBarPanel
         Me.saveDlg = New System.Windows.Forms.SaveFileDialog
         Me.lnkActivelockSoftwareGroup = New System.Windows.Forms.LinkLabel
-        Me.cmdStartWizard = New System.Windows.Forms.Button
         CType(Me.picALBanner2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.picALBanner, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SSTab1.SuspendLayout()
@@ -515,7 +515,7 @@ Friend Class frmMain
         Me.txtName.MaxLength = 0
         Me.txtName.Name = "txtName"
         Me.txtName.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtName.Size = New System.Drawing.Size(181, 21)
+        Me.txtName.Size = New System.Drawing.Size(181, 20)
         Me.txtName.TabIndex = 1
         Me.ToolTip1.SetToolTip(Me.txtName, "Product Name")
         '
@@ -532,7 +532,7 @@ Friend Class frmMain
         Me.txtVer.MaxLength = 0
         Me.txtVer.Name = "txtVer"
         Me.txtVer.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtVer.Size = New System.Drawing.Size(100, 21)
+        Me.txtVer.Size = New System.Drawing.Size(100, 20)
         Me.txtVer.TabIndex = 3
         Me.ToolTip1.SetToolTip(Me.txtVer, "Product Version")
         '
@@ -657,7 +657,7 @@ Friend Class frmMain
         Me.txtUser.MaxLength = 0
         Me.txtUser.Name = "txtUser"
         Me.txtUser.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtUser.Size = New System.Drawing.Size(475, 21)
+        Me.txtUser.Size = New System.Drawing.Size(475, 20)
         Me.txtUser.TabIndex = 16
         Me.ToolTip1.SetToolTip(Me.txtUser, "Here will apear user name based on the instalation code")
         '
@@ -674,7 +674,7 @@ Friend Class frmMain
         Me.txtLicenseFile.MaxLength = 0
         Me.txtLicenseFile.Name = "txtLicenseFile"
         Me.txtLicenseFile.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtLicenseFile.Size = New System.Drawing.Size(388, 21)
+        Me.txtLicenseFile.Size = New System.Drawing.Size(388, 20)
         Me.txtLicenseFile.TabIndex = 31
         Me.ToolTip1.SetToolTip(Me.txtLicenseFile, "Enter or select license file")
         '
@@ -706,7 +706,7 @@ Friend Class frmMain
         Me.txtInstallCode.MaxLength = 0
         Me.txtInstallCode.Name = "txtInstallCode"
         Me.txtInstallCode.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtInstallCode.Size = New System.Drawing.Size(389, 21)
+        Me.txtInstallCode.Size = New System.Drawing.Size(389, 20)
         Me.txtInstallCode.TabIndex = 13
         Me.ToolTip1.SetToolTip(Me.txtInstallCode, "Enter here installation code")
         '
@@ -846,7 +846,7 @@ Friend Class frmMain
         Me.txtMaxCount.MaxLength = 2
         Me.txtMaxCount.Name = "txtMaxCount"
         Me.txtMaxCount.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtMaxCount.Size = New System.Drawing.Size(22, 21)
+        Me.txtMaxCount.Size = New System.Drawing.Size(22, 20)
         Me.txtMaxCount.TabIndex = 68
         Me.txtMaxCount.Text = "5"
         Me.ToolTip1.SetToolTip(Me.txtMaxCount, "Enter or select license file")
@@ -915,11 +915,11 @@ Friend Class frmMain
         Me.fraProdNew.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.fraProdNew.BackColor = System.Drawing.SystemColors.Control
+        Me.fraProdNew.Controls.Add(Me.optStrength4)
         Me.fraProdNew.Controls.Add(Me.cmdStartWizard)
         Me.fraProdNew.Controls.Add(Me.cmdValidate2)
         Me.fraProdNew.Controls.Add(Me.optStrength3)
         Me.fraProdNew.Controls.Add(Me.optStrength5)
-        Me.fraProdNew.Controls.Add(Me.optStrength4)
         Me.fraProdNew.Controls.Add(Me.optStrength2)
         Me.fraProdNew.Controls.Add(Me.Label1)
         Me.fraProdNew.Controls.Add(Me.optStrength1)
@@ -946,35 +946,53 @@ Friend Class frmMain
         Me.fraProdNew.TabStop = False
         Me.fraProdNew.Text = " Product details "
         '
+        'optStrength4
+        '
+        Me.optStrength4.Location = New System.Drawing.Point(404, 76)
+        Me.optStrength4.Name = "optStrength4"
+        Me.optStrength4.Size = New System.Drawing.Size(65, 20)
+        Me.optStrength4.TabIndex = 76
+        Me.optStrength4.Text = "1024-bit"
+        '
+        'cmdStartWizard
+        '
+        Me.cmdStartWizard.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.cmdStartWizard.BackColor = System.Drawing.SystemColors.Control
+        Me.cmdStartWizard.Cursor = System.Windows.Forms.Cursors.Default
+        Me.cmdStartWizard.FlatStyle = System.Windows.Forms.FlatStyle.Popup
+        Me.cmdStartWizard.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.cmdStartWizard.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.cmdStartWizard.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
+        Me.cmdStartWizard.Location = New System.Drawing.Point(270, 12)
+        Me.cmdStartWizard.Name = "cmdStartWizard"
+        Me.cmdStartWizard.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.cmdStartWizard.Size = New System.Drawing.Size(78, 23)
+        Me.cmdStartWizard.TabIndex = 75
+        Me.cmdStartWizard.Text = "&Wizard"
+        Me.cmdStartWizard.TextAlign = System.Drawing.ContentAlignment.MiddleRight
+        Me.cmdStartWizard.UseVisualStyleBackColor = False
+        '
         'optStrength3
         '
-        Me.optStrength3.Location = New System.Drawing.Point(334, 76)
+        Me.optStrength3.Location = New System.Drawing.Point(339, 76)
         Me.optStrength3.Name = "optStrength3"
-        Me.optStrength3.Size = New System.Drawing.Size(62, 20)
+        Me.optStrength3.Size = New System.Drawing.Size(65, 20)
         Me.optStrength3.TabIndex = 72
         Me.optStrength3.Text = "1536-bit"
         '
         'optStrength5
         '
-        Me.optStrength5.Location = New System.Drawing.Point(460, 76)
+        Me.optStrength5.Location = New System.Drawing.Point(469, 76)
         Me.optStrength5.Name = "optStrength5"
         Me.optStrength5.Size = New System.Drawing.Size(62, 20)
         Me.optStrength5.TabIndex = 71
         Me.optStrength5.Text = "512-bit"
         '
-        'optStrength4
-        '
-        Me.optStrength4.Location = New System.Drawing.Point(396, 76)
-        Me.optStrength4.Name = "optStrength4"
-        Me.optStrength4.Size = New System.Drawing.Size(62, 20)
-        Me.optStrength4.TabIndex = 70
-        Me.optStrength4.Text = "1024-bit"
-        '
         'optStrength2
         '
-        Me.optStrength2.Location = New System.Drawing.Point(270, 76)
+        Me.optStrength2.Location = New System.Drawing.Point(274, 76)
         Me.optStrength2.Name = "optStrength2"
-        Me.optStrength2.Size = New System.Drawing.Size(62, 20)
+        Me.optStrength2.Size = New System.Drawing.Size(65, 20)
         Me.optStrength2.TabIndex = 69
         Me.optStrength2.Text = "2048-bit"
         '
@@ -995,7 +1013,7 @@ Friend Class frmMain
         '
         Me.optStrength1.Location = New System.Drawing.Point(208, 76)
         Me.optStrength1.Name = "optStrength1"
-        Me.optStrength1.Size = New System.Drawing.Size(62, 20)
+        Me.optStrength1.Size = New System.Drawing.Size(66, 20)
         Me.optStrength1.TabIndex = 67
         Me.optStrength1.Text = "4096-bit"
         '
@@ -1103,9 +1121,9 @@ Friend Class frmMain
         'GroupBox1
         '
         Me.GroupBox1.Font = New System.Drawing.Font("Arial", 7.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox1.Location = New System.Drawing.Point(208, 62)
+        Me.GroupBox1.Location = New System.Drawing.Point(204, 63)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(302, 24)
+        Me.GroupBox1.Size = New System.Drawing.Size(332, 37)
         Me.GroupBox1.TabIndex = 74
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = ".NET CLR RSA"
@@ -1399,7 +1417,7 @@ Friend Class frmMain
         Me.txtDays.Name = "txtDays"
         Me.txtDays.ReadOnly = True
         Me.txtDays.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtDays.Size = New System.Drawing.Size(117, 21)
+        Me.txtDays.Size = New System.Drawing.Size(117, 20)
         Me.txtDays.TabIndex = 9
         Me.txtDays.Text = "30"
         Me.txtDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
@@ -1553,24 +1571,6 @@ Friend Class frmMain
         Me.lnkActivelockSoftwareGroup.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.lnkActivelockSoftwareGroup.VisitedLinkColor = System.Drawing.Color.Blue
         '
-        'cmdStartWizard
-        '
-        Me.cmdStartWizard.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.cmdStartWizard.BackColor = System.Drawing.SystemColors.Control
-        Me.cmdStartWizard.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cmdStartWizard.FlatStyle = System.Windows.Forms.FlatStyle.Popup
-        Me.cmdStartWizard.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.cmdStartWizard.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdStartWizard.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdStartWizard.Location = New System.Drawing.Point(270, 12)
-        Me.cmdStartWizard.Name = "cmdStartWizard"
-        Me.cmdStartWizard.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cmdStartWizard.Size = New System.Drawing.Size(78, 23)
-        Me.cmdStartWizard.TabIndex = 75
-        Me.cmdStartWizard.Text = "&Wizard"
-        Me.cmdStartWizard.TextAlign = System.Drawing.ContentAlignment.MiddleRight
-        Me.cmdStartWizard.UseVisualStyleBackColor = False
-        '
         'frmMain
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
@@ -1594,9 +1594,12 @@ Friend Class frmMain
         Me._SSTab1_TabPage0.ResumeLayout(False)
         Me.grpProductsList.ResumeLayout(False)
         Me.fraProdNew.ResumeLayout(False)
+        Me.fraProdNew.PerformLayout()
         Me.grpCodes.ResumeLayout(False)
+        Me.grpCodes.PerformLayout()
         Me._SSTab1_TabPage1.ResumeLayout(False)
         Me.frmKeyGen.ResumeLayout(False)
+        Me.frmKeyGen.PerformLayout()
         CType(Me.mainStatusBarPanel, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
@@ -1801,7 +1804,6 @@ Friend Class frmMain
         'write status on fist status bar panel
         sbStatus.Panels(0).Text = Msg
     End Sub
-
 
     Function CheckForResources(ByVal ParamArray MyArray() As Object) As Boolean
         'MyArray is a list of things to check
@@ -2071,15 +2073,6 @@ Friend Class frmMain
         chkLockMotherboard.Enabled = True
         chkLockIP.Enabled = True
 
-        'chkLockMACaddress.CheckState = CheckState.Unchecked
-        'chkLockComputer.CheckState = CheckState.Unchecked
-        'chkLockHD.CheckState = CheckState.Unchecked
-        'chkLockHDfirmware.CheckState = CheckState.Unchecked
-        'chkLockWindows.CheckState = CheckState.Unchecked
-        'chkLockBIOS.CheckState = CheckState.Unchecked
-        'chkLockMotherboard.CheckState = CheckState.Unchecked
-        'chkLockIP.CheckState = CheckState.Unchecked
-
         a = Split(strInstCode, vbLf)
         If usedLockNone = True Then
             For i = LBound(a) To UBound(a) - 1
@@ -2263,7 +2256,7 @@ Friend Class frmMain
         txtUser.ReadOnly = True
         txtUser.BackColor = System.Drawing.ColorTranslator.FromOle(&H8000000F)
 
-        Me.Text = "Alugen (ActiveLock Universal GENerator) for VB.NET 2005 - v3.5.5" '& Application.ProductVersion
+        Me.Text = "Alugen - ActiveLock Key Generator for VB2005 - v3.6" '& Application.ProductVersion
 
     End Sub
 
@@ -2275,7 +2268,7 @@ Friend Class frmMain
 
         On Error Resume Next
         'Read the program INI file to retrieve control settings
-        PROJECT_INI_FILENAME = WinDir() & "\" & Application.ProductName & ".ini"
+        PROJECT_INI_FILENAME = AppPath() & "\" & Application.ProductName & ".ini"
 
         SSTab1.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", CStr(0)))
         cboProducts.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboProducts", CStr(0)))
@@ -2547,7 +2540,7 @@ SaveFormSettings_Error:
     Private Sub cmdCodeGen_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCodeGen.Click
         If SSTab1.SelectedIndex <> 0 Then Exit Sub ' our tab not active - do nothing
 
-        Cursor.Current = Cursors.WaitCursor
+        Cursor = Cursors.WaitCursor
         UpdateStatus("Generating product codes! Please wait ...")
         fDisableNotifications = True
         txtVCode.Text = ""
@@ -2569,22 +2562,28 @@ SaveFormSettings_Error:
                 'Adding a delegate for AddressOf CryptoProgressUpdate did not work
                 'for now. Modified alcrypto3NET.dll to create a second generate function
                 'rsa_generate2 that does not deal with progress monitoring
+
+                ' Get the current date format and save it to regionalSymbol variable
+                Get_locale()
+                ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
+                Set_locale("")
+
                 If modALUGEN.rsa_generate2(KEY, 1024) = RETVAL_ON_ERROR Then
-                    'walter'wrong reference'Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                    Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
                 End If
                 ' extract private and public key blobs
                 Dim strBlob As String
                 Dim blobLen As Integer
                 If rsa_public_key_blob(KEY, vbNullString, blobLen) = RETVAL_ON_ERROR Then
-                    'walter'wrong reference'Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                    Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
                 End If
 
                 If blobLen > 0 Then
                     strBlob = New String(Chr(0), blobLen)
                     If rsa_public_key_blob(KEY, strBlob, blobLen) = RETVAL_ON_ERROR Then
-                        'walter'wrong reference'Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                        Set_locale(regionalSymbol)
                         Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
                     End If
 
@@ -2593,14 +2592,14 @@ SaveFormSettings_Error:
                 End If
 
                 If modALUGEN.rsa_private_key_blob(KEY, vbNullString, blobLen) = RETVAL_ON_ERROR Then
-                    'walter'wrong reference'Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                    Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
                 End If
 
                 If blobLen > 0 Then
                     strBlob = New String(Chr(0), blobLen)
                     If modALUGEN.rsa_private_key_blob(KEY, strBlob, blobLen) = RETVAL_ON_ERROR Then
-                        'walter'wrong reference'Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                        Set_locale(regionalSymbol)
                         Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
                     End If
 
@@ -2609,7 +2608,7 @@ SaveFormSettings_Error:
                 End If
                 ' done with the key - throw it away
                 If modALUGEN.rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-                    'walter'wrong reference'Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                    Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
                 End If
 
@@ -2622,20 +2621,19 @@ SaveFormSettings_Error:
                 ' you'll get a valid keyset that no longer crashes.
                 Dim strdata As String : strdata = "This is a test string to be encrypted."
                 If modALUGEN.rsa_createkey(txtVCode.Text, txtVCode.Text.Length, txtGCode.Text, txtGCode.Text.Length, KEY) = RETVAL_ON_ERROR Then
-                    'walter'wrong reference'Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                    Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
                 End If
 
                 ' It worked! We're all set to go.
                 If modALUGEN.rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-                    'walter'wrong reference'Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                    Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
                 End If
 
             Else  ' CryptoAPI - RSA with given strength
 
                 Dim strPublicBlob As String, strPrivateBlob As String
-                'walter'unused'Dim ok As String
                 Dim imodulus As Integer
 
                 If optStrength1.Checked = True Then
@@ -2683,16 +2681,19 @@ SaveFormSettings_Error:
                 rsaPrivateParams = Nothing
                 rsaCSP = Nothing
             End If
+            Set_locale(regionalSymbol)
 
         Catch ex As Exception
+            Set_locale(regionalSymbol)
             MessageBox.Show(ex.Message, ACTIVELOCKSTRING, MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
             'update controls
             fDisableNotifications = True
             UpdateAddButtonStatus()
             UpdateStatus("Product codes generated successfully.")
-            Cursor.Current = Cursors.Default
+            Cursor = Cursors.Default
             Enabled = True
+            Set_locale(regionalSymbol)
         End Try
     End Sub
 
@@ -2734,8 +2735,12 @@ SaveFormSettings_Error:
         End If
 
         ' get product and version
-        Cursor.Current = Cursors.WaitCursor
+        Cursor = Cursors.WaitCursor
         UpdateStatus("Generating license key...")
+        ' Get the current date format and save it to regionalSymbol variable
+        Get_locale()
+        ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
+        Set_locale("")
 
         Try
             Dim itemProductInfo As ProductInfoItem = CType(cboProducts.SelectedItem, ProductInfoItem)
@@ -2815,13 +2820,13 @@ SaveFormSettings_Error:
                 txtLicenseFile.Text = Application.StartupPath & "\" & strName & ".all"
             End If
 
-            Cursor.Current = Cursors.Default
+            Cursor = Cursors.Default
             UpdateStatus("Ready")
 
             'add license to database
             Dim lockTypesString As String
             Dim frmAlugenDatabase As New frmAlugenDb
-            If MessageBox.Show("Would you like to save the new license in the License Database?", ACTIVELOCKSTRING, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = DialogResult.Yes Then
+            If MessageBox.Show("Would you like to save the new license in the License Database?", ACTIVELOCKSTRING, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) = Windows.Forms.DialogResult.Yes Then
                 lockTypesString = ""
                 If chkLockMACaddress.CheckState = CheckState.Checked Then
                     lockTypesString = lockTypesString & "MAC Address"
@@ -2859,10 +2864,13 @@ SaveFormSettings_Error:
                 Call frmAlugenDatabase.ArchiveLicense(strName, strVer, Trim(txtUser.Text), strRegDate, strExpire, cboLicType.Text, lockTypesString, cboRegisteredLevel.Text, txtInstallCode.Text, txtLicenseKey.Text)
 
             End If
+            Set_locale(regionalSymbol)
         Catch ex As Exception
+            Set_locale(regionalSymbol)
             UpdateStatus("Error: " & ex.Message)
         Finally
-            Cursor.Current = Cursors.Default
+            Set_locale(regionalSymbol)
+            Cursor = Cursors.Default
         End Try
     End Sub
 
@@ -2923,7 +2931,7 @@ SaveFormSettings_Error:
         Dim strdata As String
         Dim strSig As String, rc As Integer
 
-        Cursor.Current = Cursors.WaitCursor
+        Cursor = Cursors.WaitCursor
         If txtVCode.Text = "" And txtGCode.Text = "" Then
             UpdateStatus("GCode and VCode fields are blank.  Nothing to validate.")
             Exit Sub ' nothing to validate
@@ -2932,14 +2940,19 @@ SaveFormSettings_Error:
         strdata = "I love Activelock"
         'strdata = "TestApp" & vbCrLf & "3" & vbCrLf & "Single" & vbCrLf & "1" & vbCrLf & "Evaluation User" & vbCrLf & "0" & vbCrLf & "2006/11/22" & vbCrLf & "2006/12/22" & vbCrLf & "5" & vbLf & "+00 10 18 09 71 85" & vbCrLf & "MYSWEETBABY" & vbCrLf & "5CA9-4B2A" & vbCrLf & "3JT26AA0" & vbCrLf & "55274-OEM-0011903-00102" & vbCrLf & "DELL   - 7" & vbCrLf & "BFWB741" & vbCrLf & "192.168.0.1"
 
+        ' Get the current date format and save it to regionalSymbol variable
+        Get_locale()
+        ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
+        Set_locale("")
+
         ' ALCrypto DLL with 1024-bit strength
         If strLeft(txtVCode.Text, 3) <> "RSA" Then
             ' Validate to keyset to make sure it's valid.
             UpdateStatus("Validating keyset...")
             rc = modALUGEN.rsa_createkey(txtVCode.Text, txtVCode.Text.Length, txtGCode.Text, txtGCode.Text.Length, KEY)
             If rc = RETVAL_ON_ERROR Then
+                Set_locale(regionalSymbol)
                 MessageBox.Show("Code not valid! " & vbCrLf & STRRSAERROR, ACTIVELOCKSTRING, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                'Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
                 UpdateStatus(txtName.Text & " (" & txtVer.Text & ") " & STRRSAERROR)
                 Exit Sub
             End If
@@ -2954,7 +2967,7 @@ SaveFormSettings_Error:
             End If
             ' It worked! We're all set to go.
             If modALUGEN.rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-                'walter'wrong reference'Err.Raise(ActiveLock3Globals_definst.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
             End If
         Else  '.NET RSA
@@ -3177,19 +3190,22 @@ SaveFormSettings_Error:
 
                 'Release any resources held by the RSA Service Provider
                 rsaCSP.Clear()
+                Set_locale(regionalSymbol)
 
             Catch ex As Exception
+                Set_locale(regionalSymbol)
                 UpdateStatus(ex.Message)
             End Try
 
         End If
 
-        Cursor.Current = Cursors.Default
+        Cursor = Cursors.Default
         Exit Sub
 
 exitValidate:
+        Set_locale(regionalSymbol)
         UpdateStatus(txtName.Text & " (" & txtVer.Text & ") GCode-VCode mismatch!")
-        Cursor.Current = Cursors.Default
+        Cursor = Cursors.Default
     End Sub
     '********************************************************
     '* HexToBytes: Converts a hex-encoded string to a
@@ -3241,8 +3257,6 @@ exitValidate:
 
             txtVCode.Text = selListItem.SubItems(2).Text
             txtGCode.Text = selListItem.SubItems(3).Text
-            'txtVCode.Text = ""
-            'txtGCode.Text = ""
 
             cmdRemove.Enabled = True
             cmdValidate.Enabled = True
@@ -3283,10 +3297,32 @@ exitValidate:
         cmdSave.Enabled = CBool(txtLicenseKey.Text.Length > 0)
     End Sub
 
+    Private Sub txtName_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtName.KeyPress
+        If Char.IsControl(e.KeyChar) = False Then
+            If Char.IsLetter(e.KeyChar) = False And Char.IsNumber(e.KeyChar) = False Then
+                If e.KeyChar <> "." Then
+                    e.Handled = True
+                End If
+            Else
+            End If
+        End If
+    End Sub
+
     Private Sub txtName_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtName.TextChanged
         fDisableNotifications = False
         UpdateCodeGenButtonStatus()
         UpdateAddButtonStatus()
+    End Sub
+
+    Private Sub txtVer_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtVer.KeyPress
+        If Char.IsControl(e.KeyChar) = False Then
+            If Char.IsLetter(e.KeyChar) = False And Char.IsNumber(e.KeyChar) = False Then
+                If e.KeyChar <> "." Then
+                    e.Handled = True
+                End If
+            Else
+            End If
+        End If
     End Sub
 
     Private Sub txtVer_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtVer.TextChanged
@@ -3503,6 +3539,11 @@ exitValidate:
         ' Similar code can be found under SourceForge in project NCrypto
         ' ------------------ end Message from Ismail ------------------
 
+        ' Get the current date format and save it to regionalSymbol variable
+        Get_locale()
+        ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
+        Set_locale("")
+
         If strLeft(txtVCode.Text, 3) = "RSA" Then
 
             Try
@@ -3574,8 +3615,10 @@ exitValidate:
 
                 'Release any resources held by the RSA Service Provider
                 rsaCSP.Clear()
+                Set_locale(regionalSymbol)
 
             Catch ex As Exception
+                Set_locale(regionalSymbol)
                 UpdateStatus(ex.Message)
             End Try
         End If
@@ -3672,4 +3715,5 @@ exitValidate:
         Arguments = Arguments & Chr(34) & "PUB_KEY=" & txtVCode.Text & Chr(34)
         Shell("Activelock Wizard.exe " & Arguments, AppWinStyle.NormalFocus) 'Make Sure The Wizard Is the Alugen Directory
     End Sub
+
 End Class

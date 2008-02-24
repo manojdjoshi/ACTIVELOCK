@@ -253,9 +253,9 @@ SaveSettings_Error:
       OpenFileDialog1.RestoreDirectory = True
       OpenFileDialog1.Title = "Select products storage file"
 
-      If OpenFileDialog1.ShowDialog(Me) = DialogResult.OK Then
-        txtStorageFile.Text = OpenFileDialog1.FileName
-      End If
+            If OpenFileDialog1.ShowDialog(Me) = Windows.Forms.DialogResult.OK Then
+                txtStorageFile.Text = OpenFileDialog1.FileName
+            End If
     Catch
       MessageBox.Show("Error " & Err.Number & " (" & Err.Description & ") in procedure cmdBrowseForStorageFile_Click of Form frmProductsStorage", modALUGEN.ACTIVELOCKSTRING)
     End Try
