@@ -1,7 +1,7 @@
 /*
 '*   ActiveLock
 '*   Copyright 1998-2002 Nelson Ferraz
-'*   Copyright 2003-2006 The ActiveLock Software Group (ASG)
+'*   Copyright 2003-2008 The ActiveLock Software Group (ASG)
 '*   All material is the property of the contributing authors.
 '*
 '*   Redistribution and use in source and binary forms, with or without
@@ -66,4 +66,32 @@ function PrintLicenseKey(content, mWidth, mHeight)
   var generator=window.open('','name','height=' + mHeight + ',width=' + mWidth);
   generator.document.write(content);
   generator.document.close();
+}
+
+// copyright 1999 Idocs, Inc. http://www.idocs.com
+// Distribute this script freely but keep this notice in place
+function letternumber(e)
+{
+var key;
+var keychar;
+
+if (window.event)
+   key = window.event.keyCode;
+else if (e)
+   key = e.which;
+else
+   return true;
+keychar = String.fromCharCode(key);
+keychar = keychar.toLowerCase();
+
+// control keys
+if ((key==null) || (key==0) || (key==8) || 
+    (key==9) || (key==13) || (key==27) )
+   return true;
+
+// alphas and numbers
+else if ((("abcdefghijklmnopqrstuvwxyz0123456789.").indexOf(keychar) > -1))
+   return true;
+else
+   return false;
 }

@@ -1,4 +1,6 @@
-Public Class ImageTextButton
+Namespace ASPNETAlugen3
+
+Partial Class ImageTextButton
     Inherits System.Web.UI.UserControl
 
   Private _imageUrl As String
@@ -9,12 +11,7 @@ Public Class ImageTextButton
   <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
 
   End Sub
-  Protected WithEvents Image1 As New System.Web.UI.WebControls.Image
-  Protected WithEvents Label1 As New System.Web.UI.WebControls.Label
 
-  'NOTE: The following placeholder declaration is required by the Web Form Designer.
-  'Do not delete or move it.
-  Private designerPlaceholderDeclaration As System.Object
 
   Private Sub Page_Init(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Init
     'CODEGEN: This method call is required by the Web Form Designer
@@ -51,3 +48,5 @@ Public Class ImageTextButton
     End Set
   End Property
 End Class
+
+End Namespace
