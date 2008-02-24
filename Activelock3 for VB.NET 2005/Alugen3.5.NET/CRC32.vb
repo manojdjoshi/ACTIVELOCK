@@ -1,6 +1,6 @@
 '*   ActiveLock
 '*   Copyright 1998-2002 Nelson Ferraz
-'*   Copyright 2003-2006 The ActiveLock Software Group (ASG)
+'*   Copyright 2003-2008 The ActiveLock Software Group (ASG)
 '*   All material is the property of the contributing authors.
 '*
 '*   Redistribution and use in source and binary forms, with or without
@@ -48,15 +48,14 @@ Public Class CRC32
     Dim count As Integer = stream.Read(buffer, 0, readSize)
     Dim i As Integer
     Dim iLookup As Integer
-    Dim tot As Integer = 0
-    Do While (count > 0)
-      For i = 0 To count - 1
-        iLookup = (crc32Result And &HFF) Xor buffer(i)
-        crc32Result = ((crc32Result And &HFFFFFF00) \ &H100) And &HFFFFFF   ' nasty shr 8 with vb :/
-        crc32Result = crc32Result Xor crc32Table(iLookup)
-      Next i
-      count = stream.Read(buffer, 0, readSize)
-    Loop
+        Do While (count > 0)
+            For i = 0 To count - 1
+                iLookup = (crc32Result And &HFF) Xor buffer(i)
+                crc32Result = ((crc32Result And &HFFFFFF00) \ &H100) And &HFFFFFF   ' nasty shr 8 with vb :/
+                crc32Result = crc32Result Xor crc32Table(iLookup)
+            Next i
+            count = stream.Read(buffer, 0, readSize)
+        Loop
 
     GetCrc32 = Not (crc32Result)
 

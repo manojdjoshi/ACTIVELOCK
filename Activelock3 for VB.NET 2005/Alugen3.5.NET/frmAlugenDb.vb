@@ -1,6 +1,6 @@
 '*   ActiveLock
 '*   Copyright 1998-2002 Nelson Ferraz
-'*   Copyright 2003-2006 The ActiveLock Software Group (ASG)
+'*   Copyright 2003-2008 The ActiveLock Software Group (ASG)
 '*   All material is the property of the contributing authors.
 '*
 '*   Redistribution and use in source and binary forms, with or without
@@ -118,10 +118,10 @@ Public Class frmAlugenDb
     Me.grdLicenses = New System.Windows.Forms.DataGrid
     Me.GroupBox1 = New System.Windows.Forms.GroupBox
     Me.cmdPrintLicensesList = New System.Windows.Forms.Button
-        Me.dtpExpDateTo = New ALUGEN3_5NET.NullableDateTimePicker
-        Me.dtpExpDateFrom = New ALUGEN3_5NET.NullableDateTimePicker
-        Me.dtpRegDateTo = New ALUGEN3_5NET.NullableDateTimePicker
-        Me.dtpRegDateFrom = New ALUGEN3_5NET.NullableDateTimePicker
+        Me.dtpExpDateTo = New ALUGEN3_6NET.NullableDateTimePicker
+        Me.dtpExpDateFrom = New ALUGEN3_6NET.NullableDateTimePicker
+        Me.dtpRegDateTo = New ALUGEN3_6NET.NullableDateTimePicker
+        Me.dtpRegDateFrom = New ALUGEN3_6NET.NullableDateTimePicker
     Me.cmdReset = New System.Windows.Forms.Button
     Me.cmdFilter = New System.Windows.Forms.Button
     Me.Label9 = New System.Windows.Forms.Label
@@ -780,7 +780,7 @@ ByVal registeredLevel As String, ByVal installationCode As String, ByVal license
       conn.Close()
     End Try
 
-        Cursor.Current = Cursors.Default
+        Cursor = Cursors.Default
   End Sub
 
   Public Sub PopulateCboProductName()
