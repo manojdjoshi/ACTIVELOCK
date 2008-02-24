@@ -1,20 +1,35 @@
-Microsoft Visual Studio Solution File, Format Version 8.00
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "ASPNETAlugen3", "http://localhost/ASPNETAlugen3.5 Simple/ASPNETAlugen3.vbproj", "{73EEFC3A-6595-4472-B826-016554551A44}"
-	ProjectSection(ProjectDependencies) = postProject
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "http://localhost/ASPNETAlugen3.5 Simple/", "http://localhost/ASPNETAlugen3.5 Simple", "{73EEFC3A-6595-4472-B826-016554551A44}"
+	ProjectSection(WebsiteProperties) = preProject
+		Debug.AspNetCompiler.VirtualPath = "/ASPNETAlugen3.5 Simple"
+		Debug.AspNetCompiler.PhysicalPath = "..\ASPNETAlugen3.5 Simple\"
+		Debug.AspNetCompiler.TargetPath = "..\PrecompiledWeb\ASPNETAlugen3.5 Simple\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/ASPNETAlugen3.5 Simple"
+		Release.AspNetCompiler.PhysicalPath = "..\ASPNETAlugen3.5 Simple\"
+		Release.AspNetCompiler.TargetPath = "..\PrecompiledWeb\ASPNETAlugen3.5 Simple\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		SlnRelativePath = "..\ASPNETAlugen3.5 Simple\"
 	EndProjectSection
 EndProject
 Global
-	GlobalSection(SolutionConfiguration) = preSolution
-		Debug = Debug
-		Release = Release
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|.NET = Debug|.NET
+		Release|.NET = Release|.NET
 	EndGlobalSection
-	GlobalSection(ProjectConfiguration) = postSolution
-		{73EEFC3A-6595-4472-B826-016554551A44}.Debug.ActiveCfg = Debug|.NET
-		{73EEFC3A-6595-4472-B826-016554551A44}.Debug.Build.0 = Debug|.NET
-		{73EEFC3A-6595-4472-B826-016554551A44}.Release.ActiveCfg = Debug|.NET
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{73EEFC3A-6595-4472-B826-016554551A44}.Debug|.NET.ActiveCfg = Debug|.NET
+		{73EEFC3A-6595-4472-B826-016554551A44}.Debug|.NET.Build.0 = Debug|.NET
+		{73EEFC3A-6595-4472-B826-016554551A44}.Release|.NET.ActiveCfg = Debug|.NET
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-	EndGlobalSection
-	GlobalSection(ExtensibilityAddIns) = postSolution
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

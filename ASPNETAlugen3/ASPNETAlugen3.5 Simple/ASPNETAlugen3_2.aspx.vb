@@ -4,43 +4,18 @@ Imports System.Text
 Imports System.Runtime.InteropServices
 Imports ActiveLock3_5NET
 
-Public Class Form1
+Namespace ASPNETAlugen3
+
+Partial Class Form1
     Inherits System.Web.UI.Page
 
     Public ActiveLock3AlugenGlobals_definst As New AlugenGlobals
-    Public ActiveLock3Globals_definst As New Globals_Renamed
+        Public ActiveLock3Globals_definst As New Globals
     Public GeneratorInstance As _IALUGenerator
     Public AL As ActiveLock3_5NET._IActiveLock
     Public mKeyStoreType As IActiveLock.LicStoreType
     Public mProductsStoreType As IActiveLock.ProductsStoreType
     Public mProductsStoragePath As String
-
-    Protected WithEvents Button2 As System.Web.UI.WebControls.Button
-    Protected WithEvents Label10 As System.Web.UI.WebControls.Label
-    Protected WithEvents Label11 As System.Web.UI.WebControls.Label
-    Protected WithEvents Button3 As System.Web.UI.WebControls.Button
-    Protected WithEvents txtLibFile As System.Web.UI.WebControls.TextBox
-    Protected WithEvents Label9 As System.Web.UI.WebControls.Label
-    Protected WithEvents Label1 As System.Web.UI.WebControls.Label
-    Protected WithEvents txtLibKey As System.Web.UI.WebControls.TextBox
-    Protected WithEvents cmdKeyGen As System.Web.UI.WebControls.Button
-    Protected WithEvents txtUser As System.Web.UI.WebControls.TextBox
-    Protected WithEvents Label2 As System.Web.UI.WebControls.Label
-    Protected WithEvents txtReqCodeIn As System.Web.UI.WebControls.TextBox
-    Protected WithEvents Label3 As System.Web.UI.WebControls.Label
-    Protected WithEvents lblDays As System.Web.UI.WebControls.Label
-    Protected WithEvents txtDays As System.Web.UI.WebControls.TextBox
-    Protected WithEvents lblExpiry As System.Web.UI.WebControls.Label
-    Protected WithEvents cmbLicType As System.Web.UI.WebControls.DropDownList
-    Protected WithEvents Label6 As System.Web.UI.WebControls.Label
-    Protected WithEvents cmbRegisteredLevel As System.Web.UI.WebControls.DropDownList
-    Protected WithEvents Label8 As System.Web.UI.WebControls.Label
-    Protected WithEvents cmbProds As System.Web.UI.WebControls.DropDownList
-    Protected WithEvents Label7 As System.Web.UI.WebControls.Label
-    Protected WithEvents cmdProductCodeGenerator As System.Web.UI.WebControls.Button
-
-
-    'Private WithEvents ActiveLockEventSink As ActiveLock3.ActiveLockEventNotifier
 
 #Region " Web Form Designer Generated Code "
 
@@ -49,9 +24,6 @@ Public Class Form1
 
     End Sub
 
-    'NOTE: The following placeholder declaration is required by the Web Form Designer.
-    'Do not delete or move it.
-    Private designerPlaceholderDeclaration As System.Object
 
     Private Sub Page_Init(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Init
         'CODEGEN: This method call is required by the Web Form Designer
@@ -106,7 +78,8 @@ Public Class Form1
             txtDays.Text = dtExpire.Year & "/" & dtExpire.Month & "/" & dtExpire.Day()
             lblDays.Text = "YYYY/MM/DD"
             InitUI()
-        End If
+
+            End If
     End Sub
 
     Private Function Make64ByteChunks(ByVal strData As String) As String
@@ -135,12 +108,12 @@ Public Class Form1
         '    .ColAlignment(3) = flexAlignLeftCenter
         'End With
         ' Populate Product List on Product Code Generator tab
-        ' and Key Gen tab with product info from products.ini
+            ' and Key Gen tab with product info from licenses.ini
         Dim arrProdInfos() As ProductInfo
         Dim GeneratorInstance As ActiveLock3_5NET._IALUGenerator
         Dim MyGen As New ActiveLock3_5NET.AlugenGlobals
         GeneratorInstance = MyGen.GeneratorInstance(mProductsStoreType)
-        GeneratorInstance.StoragePath = AppPath() & "\products.ini"
+            GeneratorInstance.StoragePath = AppPath() & "\licenses.ini"
 
         arrProdInfos = GeneratorInstance.RetrieveProducts()
         If arrProdInfos.Length = 0 Then Exit Sub
@@ -235,20 +208,26 @@ Public Class Form1
         'End With
 
         AL.KeyStoreType = ActiveLock3_5NET.IActiveLock.LicStoreType.alsFile
-        txtLibFile.Text = AppPath() & "\ASPNETAlugen3.all"
+            txtLibFile.Text = AppPath() & "\" & strName & "_" & strVer & ".all"
 
         AL.Init(AppPath() & "\bin")
 
-        Dim MyAL As New ActiveLock3_5NET.Globals_Renamed
-        Dim Generator As New ActiveLock3_5NET.AlugenGlobals
+            'Dim MyAL As New Globals
+            'Dim Generator As New AlugenGlobals
 
-        'GeneratorInstance = ActiveLock3_5NET._IALUGenerator.GeneratorInstance()
-        GeneratorInstance.StoragePath = AppPath() & "\products.ini"
+            Dim MyGen As New AlugenGlobals
+            GeneratorInstance = MyGen.GeneratorInstance(IActiveLock.ProductsStoreType.alsINIFile)
+            GeneratorInstance.StoragePath = AppPath() & "\licenses.ini"
 
-        Dim strExpire As String
+            ' Get the current date format and save it to regionalSymbol variable
+            Get_locale()
+            ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
+            Set_locale("")
+
+            Dim strExpire As String
         strExpire = GetExpirationDate()
         Dim strRegDate As String
-        strRegDate = ActiveLockDateFormat(Now)
+            strRegDate = Date.UtcNow.ToString("yyyy/MM/dd")
 
         Dim Lic As ActiveLock3_5NET.ProductLicense
         Lic = ActiveLock3Globals_definst.CreateProductLicense(strName, strVer, "", ActiveLock3_5NET.ProductLicense.LicFlags.alfSingle, varLicType, "", cmbRegisteredLevel.SelectedValue, strExpire, , strRegDate)
@@ -256,7 +235,10 @@ Public Class Form1
         alugenproduct = GeneratorInstance.RetrieveProduct(strName, strVer)
         Dim LibKey As String
         LibKey = GeneratorInstance.GenKey(Lic, txtReqCodeIn.Text, cmbRegisteredLevel.SelectedValue)
-        txtLibKey.Text = Make64ByteChunks(LibKey)
+            txtLibKey.Text = Make64ByteChunks(LibKey)
+
+            Set_locale(regionalSymbol)
+
     End Sub
 
     Private Sub cmdProductCodeGenerator_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdProductCodeGenerator.Click
@@ -265,22 +247,46 @@ Public Class Form1
         siteNameUrl = Request.ServerVariables.Get("SERVER_NAME")
         Select Case siteNameUrl
             Case "localhost"
-                Response.Redirect("../ASPNETAlugen3/ASPNETAlugen3_1.aspx")
+                    Response.Redirect("../ASPNETAlugen3.5 Simple/ASPNETAlugen3_1.aspx")
             Case Else
                 Response.Redirect("ASPNETAlugen3_1.aspx")
         End Select
     End Sub
     Private Function GetExpirationDate() As String
-        If cmbLicType.SelectedValue = "Time Locked" Then
-            GetExpirationDate = txtDays.Text
-        Else
-            GetExpirationDate = ActiveLockDateFormat(System.DateTime.FromOADate(Now.ToOADate + CShort(txtDays.Text)))
-        End If
-    End Function
+            If cmbLicType.SelectedValue = "Time Locked" Then 'Time Locked
+                If txtDays.Text.Trim.Length = 0 Then txtDays.Text = Date.UtcNow.AddDays(30).ToString("yyyy/MM/dd")
+                GetExpirationDate = CType(txtDays.Text, DateTime).ToString("yyyy/MM/dd")
+            Else
+                If txtDays.Text.Trim.Length = 0 Then txtDays.Text = "30"
+                GetExpirationDate = Date.UtcNow.AddDays(CShort(txtDays.Text)).ToString("yyyy/MM/dd")
+            End If
+        End Function
     Public Function AppPath() As String
-        Dim siteNameUrl As String
+            'Dim siteNameUrl As String
         AppPath = System.IO.Path.GetDirectoryName(Server.MapPath("ASPNETAlugen3_2.aspx"))
     End Function
 
-End Class
+        Protected Sub Button3_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles Button3.Click
+            ' save the license key
+            SaveLicenseKey(txtLibKey.Text, txtLibFile.Text)
+        End Sub
+        Private Sub SaveLicenseKey(ByVal sLibKey As String, ByVal sFileName As String)
+            Dim hFile As Integer
+            hFile = FreeFile()
+            FileOpen(hFile, sFileName, OpenMode.Output)
+            PrintLine(hFile, sLibKey)
+            FileClose(hFile)
+
+            Response.Clear()
+            Response.ContentType = "text/plain"
+            Response.AddHeader("content-disposition", "attachment; filename=" + IO.Path.GetFileName(sFileName))
+
+            Response.TransmitFile(sFileName)
+            Response.Flush()
+            Response.End()
+        End Sub
+
+    End Class
+
+End Namespace
 
