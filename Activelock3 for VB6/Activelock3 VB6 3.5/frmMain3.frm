@@ -1222,34 +1222,44 @@ Private Sub cmdCodeGen_Click()
     DoEvents
     On Error GoTo Done
     
+    ' Get the current date format and save it to regionalSymbol variable
+    Get_locale
+    ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
+    Set_locale ("")
+    
     ' ALCrypto DLL with 1024-bit strength
     If optStrength(0).Value = True Then
         Dim Key As RSAKey
         Dim progress As ProgressType
         ' generate the key
         If modALUGEN.rsa_generate(Key, 1024, AddressOf CryptoProgressUpdate, VarPtr(progress)) = RETVAL_ON_ERROR Then
+            Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
         End If
         ' extract private and public key blobs
         Dim strBlob As String
         Dim blobLen As Long
         If rsa_public_key_blob(Key, vbNullString, blobLen) = RETVAL_ON_ERROR Then
+            Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
         End If
         If blobLen > 0 Then
             strBlob = String(blobLen, 0)
             If rsa_public_key_blob(Key, strBlob, blobLen) = RETVAL_ON_ERROR Then
+                Set_locale regionalSymbol
                 Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
             End If
             Debug.Print "Public blob: " & strBlob
             txtCode1.Text = strBlob
         End If
         If modALUGEN.rsa_private_key_blob(Key, vbNullString, blobLen) = RETVAL_ON_ERROR Then
+            Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
         End If
         If blobLen > 0 Then
             strBlob = String(blobLen, 0)
             If modALUGEN.rsa_private_key_blob(Key, strBlob, blobLen) = RETVAL_ON_ERROR Then
+                Set_locale regionalSymbol
                 Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
             End If
             Debug.Print "Private blob: " & strBlob
@@ -1257,6 +1267,7 @@ Private Sub cmdCodeGen_Click()
         End If
         ' done with the key - throw it away
         If modALUGEN.rsa_freekey(Key) = RETVAL_ON_ERROR Then
+            Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
         End If
         ' Test generated key for correctness by recreating it from the blobs
@@ -1268,10 +1279,12 @@ Private Sub cmdCodeGen_Click()
         ' you'll get a valid keyset that no longer crashes.
         Dim strdata$: strdata = "This is a test string to be encrypted."
         If modALUGEN.rsa_createkey(txtCode1, Len(txtCode1), txtCode2, Len(txtCode2), Key) = RETVAL_ON_ERROR Then
+            Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
         End If
         ' It worked! We're all set to go.
         If modALUGEN.rsa_freekey(Key) = RETVAL_ON_ERROR Then
+            Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
         End If
 
@@ -1298,6 +1311,7 @@ Private Sub cmdCodeGen_Click()
     End If
 
 Done:
+    Set_locale regionalSymbol
     Screen.MousePointer = vbDefault
     Enabled = True
 End Sub
@@ -1396,6 +1410,11 @@ Else
     varLicType = allicNone
 End If
 
+' Get the current date format and save it to regionalSymbol variable
+Get_locale
+' Use this trick to temporarily set the date format to "yyyy/MM/dd"
+Set_locale ("")
+
 strExpire = GetExpirationDate()
 strRegDate = Format(UTC(Now()), "yyyy/MM/dd")
 
@@ -1472,9 +1491,10 @@ If MsgBox("Would you like to save the new license in the License Database?", vbY
     Set frmAlugenDatabase = Nothing
 End If
 
-
+Set_locale regionalSymbol
 Exit Sub
 ErrHandler:
+    Set_locale regionalSymbol
     UpdateStatus "Error: " + Err.Description
     Screen.MousePointer = vbNormal
 End Sub
@@ -1611,11 +1631,17 @@ If txtCode1.Text = "" And txtCode2.Text = "" Then
     Exit Sub ' nothing to validate
 End If
 
+' Get the current date format and save it to regionalSymbol variable
+Get_locale
+' Use this trick to temporarily set the date format to "yyyy/MM/dd"
+Set_locale ("")
+
 ' ALCrypto DLL with 1024-bit strength
 If Left(txtCode1.Text, 3) <> "RSA" Then
     ' Validate to keyset to make sure it's valid.
     UpdateStatus "Validating keyset..."
     If modALUGEN.rsa_createkey(txtCode1.Text, Len(txtCode1), txtCode2.Text, Len(txtCode2), Key) = RETVAL_ON_ERROR Then
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
     ' sign it
@@ -1628,6 +1654,7 @@ If Left(txtCode1.Text, 3) <> "RSA" Then
     End If
     ' It worked! We're all set to go.
     If modALUGEN.rsa_freekey(Key) = RETVAL_ON_ERROR Then
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
 Else
@@ -1656,10 +1683,12 @@ Else
     UpdateStatus gridProds.TextMatrix(gridProds.Row, 0) & " (" + gridProds.TextMatrix(gridProds.Row, 1) + ") validated successfully."
 
 End If
+Set_locale regionalSymbol
 Screen.MousePointer = vbDefault
 Exit Sub
 
 exitValidate:
+Set_locale regionalSymbol
 UpdateStatus gridProds.TextMatrix(gridProds.Row, 0) & " (" + gridProds.TextMatrix(gridProds.Row, 1) + ") GCode-VCode mismatch!"
 Screen.MousePointer = vbDefault
 
@@ -1775,7 +1804,7 @@ Public Sub Form_Load()
     txtUser.Locked = True
     txtUser.BackColor = vbButtonFace
 
-    Me.Caption = "ALUGEN - ActiveLock3 Universal GENerator - v" & App.Major & "." & App.Minor & "." & App.Revision
+    Me.Caption = "ALUGEN - ActiveLock Key Generator - v" & App.Major & "." & App.Minor & "." & App.Revision
     Move (Screen.Width - Me.Width) / 2, (Screen.Height - Me.Height) / 2
 
 End Sub
