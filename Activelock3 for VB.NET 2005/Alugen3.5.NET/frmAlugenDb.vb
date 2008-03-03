@@ -118,10 +118,10 @@ Public Class frmAlugenDb
     Me.grdLicenses = New System.Windows.Forms.DataGrid
     Me.GroupBox1 = New System.Windows.Forms.GroupBox
     Me.cmdPrintLicensesList = New System.Windows.Forms.Button
-        Me.dtpExpDateTo = New ALUGEN3_6NET.NullableDateTimePicker
-        Me.dtpExpDateFrom = New ALUGEN3_6NET.NullableDateTimePicker
-        Me.dtpRegDateTo = New ALUGEN3_6NET.NullableDateTimePicker
-        Me.dtpRegDateFrom = New ALUGEN3_6NET.NullableDateTimePicker
+        Me.dtpExpDateTo = New ALUGEN3_5NET.NullableDateTimePicker
+        Me.dtpExpDateFrom = New ALUGEN3_5NET.NullableDateTimePicker
+        Me.dtpRegDateTo = New ALUGEN3_5NET.NullableDateTimePicker
+        Me.dtpRegDateFrom = New ALUGEN3_5NET.NullableDateTimePicker
     Me.cmdReset = New System.Windows.Forms.Button
     Me.cmdFilter = New System.Windows.Forms.Button
     Me.Label9 = New System.Windows.Forms.Label

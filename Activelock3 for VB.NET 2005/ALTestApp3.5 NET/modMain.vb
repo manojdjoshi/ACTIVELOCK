@@ -73,10 +73,14 @@ Module modMain
             Dim f As FileStream = New FileStream(System.Windows.Forms.Application.StartupPath & "\ActiveLock3_5Net.dll", FileMode.Open, FileAccess.Read, FileShare.Read, 8192)
             crc = c.GetCrc32(f)
             ' as the most commonly known format
+
+
             VerifyActiveLockNETdll = String.Format("{0:X8}", crc)
             f.Close()
             System.Diagnostics.Debug.WriteLine("Hash: " & crc)
-            If VerifyActiveLockNETdll <> Dec("210.247.23C.2CB.210.2E1.226.25D") Then
+            'Use Following Line only to get the CRC in Encoded format
+            'Dim GetCRC As String = Enc(VerifyActiveLockNETdll)
+            If VerifyActiveLockNETdll <> Dec("273.210.231.302.2E1.273.252.2EC") Then
                 ' Encrypted version of "activelock3NET.dll has been corrupted. If you were running a real application, it should terminate at this point."
                 'walter'MsgBox(Dec("42B.441.4FC.483.512.457.4A4.4C5.441.499.231.35A.2F7.39C.1FA.44C.4A4.4A4.160.478.42B.4F1.160.436.457.457.4BA.160.441.4C5.4E6.4E6.507.4D0.4FC.457.44C.1FA"))
                 'walter'End
