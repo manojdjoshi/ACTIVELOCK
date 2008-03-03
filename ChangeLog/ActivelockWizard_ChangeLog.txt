@@ -3,6 +3,7 @@ Last Updated: 20 January 2008
 
 Activelock Wizard V1.0.2 Updates:
 - FIX: VCode decoded before used
+- KNOWN BUG - Does not calculate the CRC for your own DLL.
 
 Activelock Wizard V1.0.1 Updates:
 - NEW: Alugen passes the Development Environment to the Wizard
