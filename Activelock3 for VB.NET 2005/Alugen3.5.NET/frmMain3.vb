@@ -2257,9 +2257,16 @@ Friend Class frmMain
         txtUser.BackColor = System.Drawing.ColorTranslator.FromOle(&H8000000F)
 
         Me.Text = "Alugen - ActiveLock Key Generator for VB2005 - v3.6" '& Application.ProductVersion
-
+        CheckIfWizardPresent()
     End Sub
-
+    Private Sub CheckIfWizardPresent()
+        Dim fileName As String = System.Windows.Forms.Application.StartupPath & "\Activelock Wizard.exe"
+        If File.Exists(fileName) Then
+            cmdStartWizard.Visible = True
+        Else
+            cmdStartWizard.Visible = False
+        End If
+    End Sub
     Private Sub LoadFormSetting()
         'Read the program INI file to retrieve control settings
         On Error GoTo LoadFormSetting_Error
@@ -3708,12 +3715,17 @@ exitValidate:
 
     Private Sub cmdStartWizard_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdStartWizard.Click
         Dim Arguments As String = Nothing
-        Arguments = Chr(34) & "AppName=" & txtName.Text & Chr(34)
-        Arguments = Arguments & " "
-        Arguments = Arguments & Chr(34) & "AppVersion=" & txtVer.Text & Chr(34)
-        Arguments = Arguments & " "
-        Arguments = Arguments & Chr(34) & "PUB_KEY=" & txtVCode.Text & Chr(34)
-        Shell("Activelock Wizard.exe " & Arguments, AppWinStyle.NormalFocus) 'Make Sure The Wizard Is the Alugen Directory
+        Try
+            Arguments = Chr(34) & "AppName=" & txtName.Text & Chr(34)
+            Arguments = Arguments & " "
+            Arguments = Arguments & Chr(34) & "AppVersion=" & txtVer.Text & Chr(34)
+            Arguments = Arguments & " "
+            Arguments = Arguments & Chr(34) & "PUB_KEY=" & txtVCode.Text & Chr(34)
+            Shell("Activelock Wizard.exe " & Arguments, AppWinStyle.NormalFocus) 'Make Sure The Wizard Is the Alugen Directory
+        Catch ex As Exception
+            cmdStartWizard.Visible = False
+        End Try
+
     End Sub
 
 End Class
