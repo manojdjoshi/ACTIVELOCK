@@ -1,8 +1,8 @@
 VERSION 5.00
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "Comdlg32.ocx"
 Begin VB.Form frmMain 
    Appearance      =   0  'Flat
    BorderStyle     =   1  'Fixed Single
@@ -50,35 +50,31 @@ Begin VB.Form frmMain
       _ExtentY        =   14446
       _Version        =   393216
       Tabs            =   2
+      Tab             =   1
       TabHeight       =   520
       TabCaption(0)   =   "Pro&duct Code Generator"
       TabPicture(0)   =   "frmMain3.frx":0CCA
-      Tab(0).ControlEnabled=   -1  'True
+      Tab(0).ControlEnabled=   0   'False
       Tab(0).Control(0)=   "Label1"
-      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).Control(1)=   "Label17"
-      Tab(0).Control(1).Enabled=   0   'False
       Tab(0).Control(2)=   "gridProds"
-      Tab(0).Control(2).Enabled=   0   'False
       Tab(0).Control(3)=   "fraProdNew"
-      Tab(0).Control(3).Enabled=   0   'False
       Tab(0).Control(4)=   "cmdRemove"
-      Tab(0).Control(4).Enabled=   0   'False
       Tab(0).Control(5)=   "Picture1"
-      Tab(0).Control(5).Enabled=   0   'False
       Tab(0).Control(6)=   "cmdValidate"
-      Tab(0).Control(6).Enabled=   0   'False
       Tab(0).ControlCount=   7
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
-      Tab(1).ControlEnabled=   0   'False
+      Tab(1).ControlEnabled=   -1  'True
       Tab(1).Control(0)=   "frmKeyGen"
+      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).Control(1)=   "cmdViewArchive"
+      Tab(1).Control(1).Enabled=   0   'False
       Tab(1).ControlCount=   2
       Begin VB.CommandButton cmdValidate 
          Caption         =   "&Validate"
          Height          =   315
-         Left            =   8520
+         Left            =   -66480
          TabIndex        =   40
          Top             =   4755
          Width           =   1005
@@ -90,7 +86,7 @@ Begin VB.Form frmMain
          BorderStyle     =   0  'None
          ForeColor       =   &H80000008&
          Height          =   825
-         Left            =   8730
+         Left            =   -66270
          Picture         =   "frmMain3.frx":0D02
          ScaleHeight     =   825
          ScaleWidth      =   825
@@ -101,7 +97,7 @@ Begin VB.Form frmMain
       Begin VB.CommandButton cmdViewArchive 
          Caption         =   "&View License Database"
          Height          =   315
-         Left            =   -73530
+         Left            =   1470
          TabIndex        =   37
          ToolTipText     =   "View License Archive"
          Top             =   7785
@@ -111,7 +107,7 @@ Begin VB.Form frmMain
          Caption         =   "&Remove"
          Enabled         =   0   'False
          Height          =   315
-         Left            =   8520
+         Left            =   -66480
          TabIndex        =   11
          Top             =   5175
          Width           =   1000
@@ -119,7 +115,7 @@ Begin VB.Form frmMain
       Begin VB.Frame frmKeyGen 
          BorderStyle     =   0  'None
          Height          =   7305
-         Left            =   -74865
+         Left            =   135
          TabIndex        =   13
          Top             =   450
          Width           =   9495
@@ -510,7 +506,7 @@ Begin VB.Form frmMain
       End
       Begin VB.Frame fraProdNew 
          Height          =   2835
-         Left            =   90
+         Left            =   -74910
          TabIndex        =   12
          Top             =   360
          Width           =   9495
@@ -736,7 +732,7 @@ Begin VB.Form frmMain
       End
       Begin MSFlexGridLib.MSFlexGrid gridProds 
          Height          =   4425
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   10
          Top             =   3585
          Width           =   8265
@@ -763,7 +759,7 @@ Begin VB.Form frmMain
          Caption         =   "Activelock V3"
          ForeColor       =   &H00FF0000&
          Height          =   165
-         Left            =   8610
+         Left            =   -66390
          TabIndex        =   39
          Top             =   7335
          Width           =   1065
@@ -771,7 +767,7 @@ Begin VB.Form frmMain
       Begin VB.Label Label1 
          Caption         =   "&Product List:"
          Height          =   255
-         Left            =   135
+         Left            =   -74865
          TabIndex        =   30
          Top             =   3330
          Width           =   1215
@@ -1436,7 +1432,7 @@ If Len(txtReqCodeIn.Text) = 8 Then  'Short Key License
             Exit For
         End If
     Next
-    strLibKey = ActiveLock.GenerateShortKey(usedVCode, txtReqCodeIn.Text, Trim(txtUser.Text), strExpire, varLicType, cmbRegisteredLevel.ListIndex + 200, 50)
+    strLibKey = ActiveLock.GenerateShortKey(usedVCode, txtReqCodeIn.Text, Trim(txtUser.Text), strExpire, varLicType, cmbRegisteredLevel.ListIndex + 200, maximumUsers)
     txtLibKey.Text = strLibKey
 Else 'ALCrypto License Key
     ' Pass it to IALUGenerator to generate the key
