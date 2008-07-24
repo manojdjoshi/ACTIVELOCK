@@ -37,8 +37,7 @@ Imports MagicAjax
 
 Namespace ASPNETAlugen3
 
-
-    Partial Class ASPNETAlugen3
+    Public Class ASPNETAlugen3
         Inherits System.Web.UI.Page
 
         Public ActiveLock3AlugenGlobals_definst As New AlugenGlobals
@@ -379,15 +378,34 @@ Namespace ASPNETAlugen3
                 'Adding a delegate for AddressOf CryptoProgressUpdate did not work
                 'for now. Modified alcrypto3NET.dll to create a second generate function
                 'rsa_generate2 that does not deal with progress monitoring - ialkan
-                modALUGEN.rsa_generate2(Key, 1024)
+                'retrieve url info
+                Dim siteNameUrl As String
+                siteNameUrl = Request.ServerVariables.Get("SERVER_NAME")
+                Select Case siteNameUrl
+                    Case "localhost"
+                        rsa_generate2_local(Key, 1024)
+                    Case Else
+                        rsa_generate2(Key, 1024)
+                End Select
 
                 ' extract private and public key blobs
                 Dim strBlob As String
                 Dim blobLen As Integer
-                rsa_public_key_blob(Key, vbNullString, blobLen)
+                Select Case siteNameUrl
+                    Case "localhost"
+                        rsa_public_key_blob_local(Key, vbNullString, blobLen)
+                    Case Else
+                        rsa_public_key_blob(Key, vbNullString, blobLen)
+                End Select
+
                 If blobLen > 0 Then
                     strBlob = New String(Chr(0), blobLen)
-                    rsa_public_key_blob(Key, strBlob, blobLen)
+                    Select Case siteNameUrl
+                        Case "localhost"
+                            rsa_public_key_blob_local(Key, strBlob, blobLen)
+                        Case Else
+                            rsa_public_key_blob(Key, strBlob, blobLen)
+                    End Select
                     'System.Diagnostics.Debug.WriteLine("Public blob: " & strBlob)
                     txtVCode.Text = strBlob
                 End If
@@ -402,16 +420,32 @@ Namespace ASPNETAlugen3
                 'txtCode1.Text = xmlPublicKey
                 'txtCode2.Text = xmlPrivateKey
 
-                modALUGEN.rsa_private_key_blob(Key, vbNullString, blobLen)
+                Select Case siteNameUrl
+                    Case "localhost"
+                        rsa_private_key_blob_local(Key, vbNullString, blobLen)
+                    Case Else
+                        rsa_private_key_blob(Key, vbNullString, blobLen)
+                End Select
+
                 If blobLen > 0 Then
                     strBlob = New String(Chr(0), blobLen)
-                    modALUGEN.rsa_private_key_blob(Key, strBlob, blobLen)
+                    Select Case siteNameUrl
+                        Case "localhost"
+                            rsa_private_key_blob_local(Key, strBlob, blobLen)
+                        Case Else
+                            rsa_private_key_blob(Key, strBlob, blobLen)
+                    End Select
                     'System.Diagnostics.Debug.WriteLine("Private blob: " & strBlob)
                     txtGCode.Text = strBlob
                 End If
 
                 ' done with the key - throw it away
-                modALUGEN.rsa_freekey(Key)
+                Select Case siteNameUrl
+                    Case "localhost"
+                        rsa_freekey_local(Key)
+                    Case Else
+                        rsa_freekey(Key)
+                End Select
 
                 ' Test generated key for correctness by recreating it from the blobs
                 ' Note:
@@ -420,9 +454,16 @@ Namespace ASPNETAlugen3
                 ' the generated keyset is bad.
                 ' The work-around for the time being is to keep regenerating the keyset until eventually
                 ' you'll get a valid keyset that no longer crashes.
-                modALUGEN.rsa_createkey(txtVCode.Text, txtVCode.Text.Length, txtGCode.Text, txtGCode.Text.Length, Key)
-                ' It worked! We're all set to go.
-                modALUGEN.rsa_freekey(Key)
+                Select Case siteNameUrl
+                    Case "localhost"
+                        rsa_createkey_local(txtVCode.Text, Len(txtVCode.Text), txtGCode.Text, Len(txtGCode.Text), Key)
+                        ' It worked! We're all set to go.
+                        rsa_freekey_local(Key)
+                    Case Else
+                        rsa_createkey(txtVCode.Text, Len(txtVCode.Text), txtGCode.Text, Len(txtGCode.Text), Key)
+                        ' It worked! We're all set to go.
+                        rsa_freekey(Key)
+                End Select
 
                 'cmdGenerateCode.Enabled = False
 
@@ -484,11 +525,20 @@ Namespace ASPNETAlugen3
                 len1 = txtVCode.Text.Length
                 txt2 = txtGCode.Text
                 len2 = txtGCode.Text.Length
-                modALUGEN.rsa_createkey(txt1, len1, txt2, len2, Key)
+
+                Dim siteNameUrl As String
+                siteNameUrl = Request.ServerVariables.Get("SERVER_NAME")
+                Select Case siteNameUrl
+                    Case "localhost"
+                        rsa_createkey_local(txt1, len1, txt2, len2, Key)
+                    Case Else
+                        rsa_createkey(txt1, len1, txt2, len2, Key)
+                End Select
+
                 ' sign it
-                strSig = RSASign(txtVCode.Text, txtGCode.Text, strdata)
+                strSig = RSASign(txtVCode.Text, txtGCode.Text, strdata, siteNameUrl)
                 Dim rc As Integer
-                rc = RSAVerify(txtVCode.Text, strdata, strSig)
+                rc = RSAVerify(txtVCode.Text, strdata, strSig, siteNameUrl)
                 Dim dr As DataRow
                 dr = dt.Rows(grdProducts.SelectedIndex)
                 If rc = 0 Then
@@ -497,8 +547,13 @@ Namespace ASPNETAlugen3
                     SayAjax(CType(dr(0), String) & " (" & CType(dr(1), String) & ") GCode-VCode mismatch!")
                 End If
                 ' It worked! We're all set to go.
-                modALUGEN.rsa_freekey(Key)
-                Set_locale(regionalsymbol)
+                Select Case siteNameUrl
+                    Case "localhost"
+                        rsa_freekey_local(Key)
+                    Case Else
+                        rsa_freekey(Key)
+                End Select
+                Set_locale(regionalSymbol)
 
             Catch ex As Exception
                 SayAjax(ex.Message & ex.StackTrace)
