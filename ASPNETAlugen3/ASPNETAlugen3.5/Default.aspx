@@ -1,4 +1,4 @@
-<%@ Page Language="vb" AutoEventWireup="false" Inherits="ASPNETAlugen3.ASPNETAlugen3" CodeFile="Default.aspx.vb" %>
+<%@ Page Language="vb" AutoEventWireup="false" Inherits="ASPNETAlugen3.ASPNETAlugen3" CodeFile="~/Default.aspx.vb" %>
 <%@ Register TagPrefix="ajax" Namespace="MagicAjax.UI.Controls" Assembly="MagicAjax" %>
 <%@ Register TagPrefix="cc1" Namespace="msWebControlsLibrary" Assembly="msWebControlsLibrary" %>
 <%@ Register TagPrefix="uc1" TagName="ImageTextButton" Src="ImageTextButton.ascx" %>
