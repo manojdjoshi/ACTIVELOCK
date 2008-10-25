@@ -1,0 +1,9 @@
+C:\ActiveLockCommunity\Activelock3.6 for VB2008\ALTestApp3.6.NET\obj\Release\ResolveAssemblyReference.cache
+C:\ActiveLockCommunity\Activelock3.6 for VB2008\ALTestApp3.6.NET\obj\Release\ALTestApp3_6NET.frmMain.resources
+C:\ActiveLockCommunity\Activelock3.6 for VB2008\ALTestApp3.6.NET\obj\Release\ALTestApp3_6NET.frmSplash.resources
+C:\ActiveLockCommunity\Activelock3.6 for VB2008\ALTestApp3.6.NET\obj\Release\ALTestApp3.6.NET.vbproj.GenerateResource.Cache
+C:\ActiveLockCommunity\Activelock3.6 for VB2008\ALTestApp3.6.NET\obj\Release\ALTestApp3.6.NET.exe
+C:\ActiveLockCommunity\Activelock3.6 for VB2008\ALTestApp3.6.NET\obj\Release\ALTestApp3.6.NET.xml
+C:\ActiveLockCommunity\Activelock3.6 for VB2008\ALTestApp3.6.NET\ALTestApp3.6.NET.exe
+C:\ActiveLockCommunity\Activelock3.6 for VB2008\ALTestApp3.6.NET\ALTestApp3.6.NET.xml
+C:\ActiveLockCommunity\Activelock3.6 for VB2008\ALTestApp3.6.NET\ActiveLock3_6Net.dll

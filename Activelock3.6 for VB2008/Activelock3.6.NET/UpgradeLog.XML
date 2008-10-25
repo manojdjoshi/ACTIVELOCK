@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="Activelock3.5.NET">
+</Property><Property Name="Solution File" Value="C:\ActiveLockCommunity\Activelock for VB2008\Activelock3.6.NET\Activelock3.5.NET.sln">
+</Property><Property Name="Date" Value="Wednesday, July 23, 2008">
+</Property><Property Name="Time" Value="21:55 PM">
+</Property></Properties><Event ErrorLevel="0" Project="ActiveLock3.5.Net" Source="ActiveLock3.5.Net.vbproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="ActiveLock3.5.Net" Source="ActiveLock3.5.Net.vbproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="Activelock3.5.NET.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="Activelock3.5.NET.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="ActiveLock3.5.Net" Source="ActiveLock3.5.Net.vbproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

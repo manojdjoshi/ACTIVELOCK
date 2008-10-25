@@ -1,0 +1,24 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+ALUGEN3_6NET
+</name>
+</assembly>
+<members>
+<member name="P:ALUGEN3_6NET.My.Resources.Alugen3NET.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:ALUGEN3_6NET.My.Resources.Alugen3NET.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:ALUGEN3_6NET.My.Resources.Alugen3NET">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+</members>
+</doc>
