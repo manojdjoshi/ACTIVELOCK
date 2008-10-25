@@ -1,42 +1,38 @@
 VERSION 5.00
 Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "Comdlg32.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmMain 
    Appearance      =   0  'Flat
    BorderStyle     =   1  'Fixed Single
    Caption         =   "ALUGEN - ActiveLock3 Universal GENerator"
-   ClientHeight    =   8490
+   ClientHeight    =   8550
    ClientLeft      =   45
    ClientTop       =   330
    ClientWidth     =   9735
    Icon            =   "frmMain3.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
-   ScaleHeight     =   8490
+   ScaleHeight     =   8550
    ScaleWidth      =   9735
    StartUpPosition =   3  'Windows Default
-   Begin ComctlLib.StatusBar sbStatus 
+   Begin MSComctlLib.StatusBar sbStatus 
       Align           =   2  'Align Bottom
-      Height          =   315
+      Height          =   375
       Left            =   0
-      TabIndex        =   33
+      TabIndex        =   71
       Top             =   8175
       Width           =   9735
       _ExtentX        =   17171
-      _ExtentY        =   556
-      SimpleText      =   ""
-      _Version        =   327682
-      BeginProperty Panels {0713E89E-850A-101B-AFC0-4210102A8DA7} 
+      _ExtentY        =   661
+      _Version        =   393216
+      BeginProperty Panels {8E3867A5-8586-11D1-B16A-00C0F0283628} 
          NumPanels       =   1
-         BeginProperty Panel1 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
+         BeginProperty Panel1 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   1
             Object.Width           =   17119
             Text            =   "Ready"
             TextSave        =   "Ready"
-            Key             =   ""
-            Object.Tag             =   ""
          EndProperty
       EndProperty
    End
@@ -55,13 +51,13 @@ Begin VB.Form frmMain
       TabCaption(0)   =   "Pro&duct Code Generator"
       TabPicture(0)   =   "frmMain3.frx":0CCA
       Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "Label1"
-      Tab(0).Control(1)=   "Label17"
-      Tab(0).Control(2)=   "gridProds"
+      Tab(0).Control(0)=   "cmdValidate"
+      Tab(0).Control(1)=   "Picture1"
+      Tab(0).Control(2)=   "cmdRemove"
       Tab(0).Control(3)=   "fraProdNew"
-      Tab(0).Control(4)=   "cmdRemove"
-      Tab(0).Control(5)=   "Picture1"
-      Tab(0).Control(6)=   "cmdValidate"
+      Tab(0).Control(4)=   "gridProds"
+      Tab(0).Control(5)=   "Label17"
+      Tab(0).Control(6)=   "Label1"
       Tab(0).ControlCount=   7
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
@@ -75,7 +71,7 @@ Begin VB.Form frmMain
          Caption         =   "&Validate"
          Height          =   315
          Left            =   -66480
-         TabIndex        =   40
+         TabIndex        =   39
          Top             =   4755
          Width           =   1005
       End
@@ -90,7 +86,7 @@ Begin VB.Form frmMain
          Picture         =   "frmMain3.frx":0D02
          ScaleHeight     =   825
          ScaleWidth      =   825
-         TabIndex        =   38
+         TabIndex        =   37
          Top             =   6495
          Width           =   825
       End
@@ -98,7 +94,7 @@ Begin VB.Form frmMain
          Caption         =   "&View License Database"
          Height          =   315
          Left            =   1470
-         TabIndex        =   37
+         TabIndex        =   36
          ToolTipText     =   "View License Archive"
          Top             =   7785
          Width           =   2115
@@ -123,7 +119,7 @@ Begin VB.Form frmMain
             Caption         =   "Uncheck All"
             Height          =   315
             Left            =   0
-            TabIndex        =   71
+            TabIndex        =   70
             ToolTipText     =   "Generate liberation key for the above request code (which should not be blank)."
             Top             =   2655
             Width           =   1110
@@ -132,7 +128,7 @@ Begin VB.Form frmMain
             Caption         =   "Check All"
             Height          =   315
             Left            =   0
-            TabIndex        =   70
+            TabIndex        =   69
             ToolTipText     =   "Generate liberation key for the above request code (which should not be blank)."
             Top             =   2250
             Width           =   1110
@@ -141,7 +137,7 @@ Begin VB.Form frmMain
             Height          =   315
             Left            =   1305
             Style           =   2  'Dropdown List
-            TabIndex        =   61
+            TabIndex        =   60
             Top             =   90
             Width           =   3615
          End
@@ -149,7 +145,7 @@ Begin VB.Form frmMain
             Height          =   315
             Left            =   6480
             Style           =   2  'Dropdown List
-            TabIndex        =   60
+            TabIndex        =   59
             Top             =   90
             Width           =   2625
          End
@@ -157,7 +153,7 @@ Begin VB.Form frmMain
             Height          =   315
             Left            =   3105
             MaxLength       =   2
-            TabIndex        =   56
+            TabIndex        =   55
             Text            =   "5"
             Top             =   1185
             Visible         =   0   'False
@@ -167,7 +163,7 @@ Begin VB.Form frmMain
             Caption         =   "Networked Licence"
             Height          =   330
             Left            =   1305
-            TabIndex        =   55
+            TabIndex        =   54
             Top             =   1170
             Width           =   1770
          End
@@ -175,7 +171,7 @@ Begin VB.Form frmMain
             Caption         =   "Lock to IP Address"
             Height          =   195
             Left            =   1305
-            TabIndex        =   52
+            TabIndex        =   51
             Top             =   4185
             Width           =   7095
          End
@@ -183,7 +179,7 @@ Begin VB.Form frmMain
             Caption         =   "Lock to Motherboard Serial"
             Height          =   195
             Left            =   1305
-            TabIndex        =   51
+            TabIndex        =   50
             Top             =   3915
             Width           =   7095
          End
@@ -191,7 +187,7 @@ Begin VB.Form frmMain
             Caption         =   "Lock to BIOS Version"
             Height          =   195
             Left            =   1305
-            TabIndex        =   50
+            TabIndex        =   49
             Top             =   3645
             Width           =   7095
          End
@@ -199,7 +195,7 @@ Begin VB.Form frmMain
             Caption         =   "Lock to Windows Serial"
             Height          =   195
             Left            =   1305
-            TabIndex        =   49
+            TabIndex        =   48
             Top             =   3375
             Width           =   7095
          End
@@ -207,7 +203,7 @@ Begin VB.Form frmMain
             Caption         =   "Lock to HDD Firmware Serial"
             Height          =   195
             Left            =   1305
-            TabIndex        =   48
+            TabIndex        =   47
             Top             =   3105
             Width           =   7095
          End
@@ -215,7 +211,7 @@ Begin VB.Form frmMain
             Caption         =   "Lock to HDD Volume Serial"
             Height          =   195
             Left            =   1305
-            TabIndex        =   47
+            TabIndex        =   46
             Top             =   2835
             Width           =   7095
          End
@@ -223,7 +219,7 @@ Begin VB.Form frmMain
             Caption         =   "Lock to Computer Name"
             Height          =   195
             Left            =   1305
-            TabIndex        =   46
+            TabIndex        =   45
             Top             =   2565
             Width           =   7095
          End
@@ -231,7 +227,7 @@ Begin VB.Form frmMain
             Caption         =   "Lock to MAC Address"
             Height          =   195
             Left            =   1305
-            TabIndex        =   45
+            TabIndex        =   44
             Top             =   2295
             Width           =   7095
          End
@@ -246,7 +242,7 @@ Begin VB.Form frmMain
             Picture         =   "frmMain3.frx":3C8A
             ScaleHeight     =   825
             ScaleWidth      =   825
-            TabIndex        =   43
+            TabIndex        =   42
             Top             =   5385
             Width           =   825
          End
@@ -254,7 +250,7 @@ Begin VB.Form frmMain
             Caption         =   "Use ItemData instead of ListIndex"
             Height          =   330
             Left            =   6480
-            TabIndex        =   42
+            TabIndex        =   41
             Top             =   405
             Width           =   2805
          End
@@ -264,7 +260,7 @@ Begin VB.Form frmMain
             MaskColor       =   &H8000000F&
             Picture         =   "frmMain3.frx":6C12
             Style           =   1  'Graphical
-            TabIndex        =   36
+            TabIndex        =   35
             Top             =   4905
             Width           =   345
          End
@@ -273,7 +269,7 @@ Begin VB.Form frmMain
             Left            =   8520
             Picture         =   "frmMain3.frx":6D5C
             Style           =   1  'Graphical
-            TabIndex        =   35
+            TabIndex        =   34
             Top             =   1530
             Width           =   345
          End
@@ -390,7 +386,7 @@ Begin VB.Form frmMain
             Caption         =   "&Product:"
             Height          =   255
             Left            =   0
-            TabIndex        =   59
+            TabIndex        =   58
             Top             =   150
             Width           =   975
          End
@@ -398,7 +394,7 @@ Begin VB.Form frmMain
             Caption         =   "Registered Level:"
             Height          =   255
             Left            =   5175
-            TabIndex        =   58
+            TabIndex        =   57
             Top             =   135
             Width           =   1275
          End
@@ -415,7 +411,7 @@ Begin VB.Form frmMain
             Caption         =   "Concurrent Users"
             Height          =   255
             Left            =   3465
-            TabIndex        =   57
+            TabIndex        =   56
             Top             =   1260
             Visible         =   0   'False
             Width           =   1335
@@ -424,7 +420,7 @@ Begin VB.Form frmMain
             Caption         =   "Note: IP address may be Dynamic!"
             Height          =   390
             Left            =   0
-            TabIndex        =   53
+            TabIndex        =   52
             Top             =   4140
             Width           =   1335
          End
@@ -434,7 +430,7 @@ Begin VB.Form frmMain
             ForeColor       =   &H00FF0000&
             Height          =   165
             Left            =   0
-            TabIndex        =   44
+            TabIndex        =   43
             Top             =   6225
             Width           =   1065
          End
@@ -515,7 +511,7 @@ Begin VB.Form frmMain
             Height          =   240
             Index           =   0
             Left            =   1305
-            TabIndex        =   68
+            TabIndex        =   67
             Top             =   1215
             Width           =   1590
          End
@@ -524,7 +520,7 @@ Begin VB.Form frmMain
             Height          =   240
             Index           =   1
             Left            =   3060
-            TabIndex        =   66
+            TabIndex        =   65
             Top             =   1215
             Value           =   -1  'True
             Width           =   960
@@ -534,7 +530,7 @@ Begin VB.Form frmMain
             Height          =   240
             Index           =   2
             Left            =   4005
-            TabIndex        =   65
+            TabIndex        =   64
             Top             =   1215
             Width           =   1005
          End
@@ -543,7 +539,7 @@ Begin VB.Form frmMain
             Height          =   240
             Index           =   3
             Left            =   4995
-            TabIndex        =   64
+            TabIndex        =   63
             Top             =   1215
             Width           =   1005
          End
@@ -552,7 +548,7 @@ Begin VB.Form frmMain
             Height          =   240
             Index           =   4
             Left            =   5985
-            TabIndex        =   63
+            TabIndex        =   62
             Top             =   1215
             Width           =   960
          End
@@ -561,7 +557,7 @@ Begin VB.Form frmMain
             Height          =   240
             Index           =   5
             Left            =   6930
-            TabIndex        =   62
+            TabIndex        =   61
             Top             =   1215
             Width           =   875
          End
@@ -569,7 +565,7 @@ Begin VB.Form frmMain
             Caption         =   "Products st&orage ..."
             Height          =   345
             Left            =   7770
-            TabIndex        =   54
+            TabIndex        =   53
             Top             =   360
             Width           =   1575
          End
@@ -578,7 +574,7 @@ Begin VB.Form frmMain
             Left            =   7920
             Picture         =   "frmMain3.frx":79A8
             Style           =   1  'Graphical
-            TabIndex        =   41
+            TabIndex        =   40
             Top             =   2400
             Width           =   345
          End
@@ -587,7 +583,7 @@ Begin VB.Form frmMain
             Left            =   4680
             Picture         =   "frmMain3.frx":7AF2
             Style           =   1  'Graphical
-            TabIndex        =   34
+            TabIndex        =   33
             Top             =   2400
             Width           =   345
          End
@@ -677,7 +673,7 @@ Begin VB.Form frmMain
             ForeColor       =   &H00FF0000&
             Height          =   420
             Left            =   3060
-            TabIndex        =   69
+            TabIndex        =   68
             Top             =   945
             Width           =   4650
          End
@@ -685,7 +681,7 @@ Begin VB.Form frmMain
             Caption         =   "&Strength"
             Height          =   375
             Left            =   135
-            TabIndex        =   67
+            TabIndex        =   66
             Top             =   1215
             Width           =   1095
          End
@@ -760,7 +756,7 @@ Begin VB.Form frmMain
          ForeColor       =   &H00FF0000&
          Height          =   165
          Left            =   -66390
-         TabIndex        =   39
+         TabIndex        =   38
          Top             =   7335
          Width           =   1065
       End
@@ -1782,9 +1778,6 @@ Public Sub Form_Load()
     End If
     '</Modified by: kirtaph at 2/16/2006-13.06.25 on machine: KIRTAPHPC>
     
-    'load form settings
-    LoadFormSetting
-    
     'initialize ActiveLock instances
     InitActiveLock
     
@@ -1812,7 +1805,7 @@ On Error GoTo LoadFormSetting_Error
 If Not blnIsFirstLaunch Then Exit Sub
 
 PROJECT_INI_FILENAME = App.path & "\Alugen3.ini"
-On Error Resume Next
+'On Error Resume Next
 SSTab1.Tab = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", 0))
 cmbProds.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbProds", 0))
 cmbLicType.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbLicType", 1))
