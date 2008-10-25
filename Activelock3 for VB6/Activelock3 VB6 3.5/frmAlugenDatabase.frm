@@ -96,12 +96,12 @@ systemEvent = False
 Close fileNumber
 Screen.MousePointer = vbDefault
 End Sub
-Function inString(ByVal x As String, ParamArray MyArray()) As Boolean
+Function inString(ByVal X As String, ParamArray MyArray()) As Boolean
 'Do ANY of a group of sub-strings appear in within the first string?
 'Case doesn't count and we don't care WHERE or WHICH
 Dim Y As Variant    'member of array that holds all arguments except the first
     For Each Y In MyArray
-    If InStr(1, x, Y, 1) > 0 Then 'the "ones" make the comparison case-insensitive
+    If InStr(1, X, Y, 1) > 0 Then 'the "ones" make the comparison case-insensitive
         inString = True
         Exit Function
     End If
@@ -176,7 +176,7 @@ Private Sub Form_Unload(Cancel As Integer)
 Set frmAlugenDatabase = Nothing
 End Sub
 
-Private Sub List1_MouseUp(Button As Integer, Shift As Integer, x As Single, Y As Single)
+Private Sub List1_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
 If List1.SelCount = 1 Then List1.Selected(List1.ListIndex) = False
 End Sub
 
