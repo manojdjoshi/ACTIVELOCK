@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Begin VB.Form frmMain 
    BorderStyle     =   1  'Fixed Single
@@ -788,7 +788,7 @@ Private Sub Form_Load()
         ' since the license will fail with version incremented exe builds
         ' THE FOLLOWING IS A SAMPLE USAGE
         '.SoftwareVersion = "1.3.2"   ' WARNING *** WARNING *** DO NOT USE App.Major & "." & App.Minor & "." & App.Revision
-        .SoftwareVersion = "3.5.5"
+        .SoftwareVersion = "3.6"
         txtVersion.Text = .SoftwareVersion
         
         ' This should be set to protect yourself against ResetTrial abuse
@@ -824,7 +824,8 @@ Private Sub Form_Load()
 '        PUB_KEY = PUB_KEY & ".499.344.4C5.34F.231.25D.37B.247.39C.1D9.302.210.4E6.30D.4DB.4BA.512.35A.25D.441.339.3B2"
 '        .SoftwareCode = Dec(PUB_KEY)
 '        .SoftwareCode = "RSA2048BgIAAAAkAABSU0ExAAgAAAEAAQC7QRQAugyetDowjseqszSAkX3hLvOj69Cu8J7fs7T0sIlM2gVK6WIEN026KcnILfb/Gs+jDvyb2mpPOL1HfyEmIl2tgK5qQG3Di0uaEgiyDaHRl8IYsMLyBNjJYyB3bnKHk+5c7W1c6MAZft5Iyl5v6Xj6KtJ7s73ICMQ7UzaEcRslbkRaRkW1AAXjKEk/rhzDu4dNHX6XsCUlpgAxhopAuONJIZyh6dYzqSMTOS0A3gmC6f8vC9HYtLKls1Ap/jxwjLH6pwc1Su+7KtfGkGB/ZQdOZau/wNEkoLbodXypGAf5TiJ4NMb6ODTl1CfLVEKHApXsC9nQR8/N3Z5Yt36p"
-        .SoftwareCode = "RSA1024BgIAAAAkAABSU0ExAAQAAAEAAQAVA49YKYWBobRVeKs6ro0aZA8j+CxZ3irhOs6QlaHWiYrGSWQrn1kGfxn3EKUZM9oyxbP8s8gGl6aNurU8fCAsAO6Hb20UIDSnA4qYCSJmKP7xunv071zdzRMmwUESm3bcwjj21vAn/wtnDN+TlXOOEWXjsJAb3DTuIF5d2Bjgmg=="
+'        .SoftwareCode = "RSA1024BgIAAAAkAABSU0ExAAQAAAEAAQAVA49YKYWBobRVeKs6ro0aZA8j+CxZ3irhOs6QlaHWiYrGSWQrn1kGfxn3EKUZM9oyxbP8s8gGl6aNurU8fCAsAO6Hb20UIDSnA4qYCSJmKP7xunv071zdzRMmwUESm3bcwjj21vAn/wtnDN+TlXOOEWXjsJAb3DTuIF5d2Bjgmg=="
+        .SoftwareCode = "RSA1024BgIAAAAkAABSU0ExAAQAAAEAAQDtBBS0EHzJOzwm3Q01ZDyf72Hw/CUVJWW+tM/5tvuXBoDgZbZAJbNYo3NTGWgUOLIyt09R86Pqdbjt7R9pkRUB4IQO+nvnDhRu62//qYxRfZjS4PsCajnRQ/OqkDdEpnpe/8HHrnICxbzG6bmdKAxIHz0p7pskZ0IU3EtosVCAwA=="
         
         ' Use lockWindows Or lockComp
         ' You can combine any lockType(s) using OR as above
