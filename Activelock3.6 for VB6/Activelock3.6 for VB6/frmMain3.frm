@@ -10,11 +10,11 @@ Begin VB.Form frmMain
    ClientHeight    =   8550
    ClientLeft      =   45
    ClientTop       =   330
-   ClientWidth     =   9735
+   ClientWidth     =   9750
    Icon            =   "frmMain3.frx":0000
    LinkTopic       =   "Form1"
    ScaleHeight     =   8550
-   ScaleWidth      =   9735
+   ScaleWidth      =   9750
    StartUpPosition =   3  'Windows Default
    Begin MSComctlLib.StatusBar sbStatus 
       Align           =   2  'Align Bottom
@@ -22,15 +22,15 @@ Begin VB.Form frmMain
       Left            =   0
       TabIndex        =   71
       Top             =   8175
-      Width           =   9735
-      _ExtentX        =   17171
+      Width           =   9750
+      _ExtentX        =   17198
       _ExtentY        =   661
       _Version        =   393216
       BeginProperty Panels {8E3867A5-8586-11D1-B16A-00C0F0283628} 
          NumPanels       =   1
          BeginProperty Panel1 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   1
-            Object.Width           =   17119
+            Object.Width           =   17145
             Text            =   "Ready"
             TextSave        =   "Ready"
          EndProperty
