@@ -47,7 +47,7 @@ ExeName32="activelock3.6.dll"
 Command32=""
 Name="ActiveLock3"
 HelpContextID="0"
-Description="ActiveLock Object Library 3.5"
+Description="ActiveLock Object Library 3.6"
 CompatibleMode="2"
 CompatibleEXE32="..\..\WINDOWS\SYSTEM32\activelock3.6.dll"
 VersionCompatible32="1"
@@ -78,7 +78,7 @@ ThreadPerObject=0
 MaxNumberOfThreads=1
 ThreadingModel=1
 DebugStartupOption=2
-DebugStartupComponent=C:\ActiveLockCommunity\ALTestApp3.5 VB6\ALTestApp3.5.exe
+DebugStartupComponent=C:\ActiveLockCommunity\ALTestApp3.6 for VB6\ALTestApp3.6.exe
 
 [MS Transaction Server]
 AutoRefresh=1
