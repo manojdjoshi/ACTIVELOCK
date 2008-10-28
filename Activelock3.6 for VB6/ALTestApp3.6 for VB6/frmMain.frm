@@ -726,7 +726,7 @@ Private Sub Form_Load()
     Dim A() As String
     
     On Error GoTo DLLnotRegistered
-    Me.Caption = "ALTestApp - ActiveLock" & App.Minor & "." & App.Revision & " Test Application"
+    Me.Caption = "ALTestApp - ActiveLock" & App.Major & "." & App.Minor & " Test Application"
     
     ' Check the existence of necessary files to run this application
     Call CheckForResources("Alcrypto3.dll", "comctl32.ocx")
@@ -1219,7 +1219,7 @@ If Result Then
     ' MsgBox "Activelock3.dll is Registered !"
     ' Just quietly proceed
 Else
-    MsgBox "Activelock3.dll is Not Registered!"
+    MsgBox "Activelock" & CStr(App.Major) & "." & CStr(App.Minor) & ".dll is Not Registered!"
     CheckIfDLLIsRegistered = False
 End If
 
