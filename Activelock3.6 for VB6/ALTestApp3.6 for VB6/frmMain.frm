@@ -456,6 +456,7 @@ Begin VB.Form frmMain
       BeginProperty Panels {0713E89E-850A-101B-AFC0-4210102A8DA7} 
          NumPanels       =   1
          BeginProperty Panel1 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -728,7 +729,7 @@ Private Sub Form_Load()
     Me.Caption = "ALTestApp - ActiveLock" & App.Minor & "." & App.Revision & " Test Application"
     
     ' Check the existence of necessary files to run this application
-    Call CheckForResources("Alcrypto3.dll", "comctl32.ocx", "tabctl32.ocx")
+    Call CheckForResources("Alcrypto3.dll", "comctl32.ocx")
 
     ' Check if the Activelock3.x.y.dll is registered. If not no need to continue.
     If CheckIfDLLIsRegistered = False Then End
