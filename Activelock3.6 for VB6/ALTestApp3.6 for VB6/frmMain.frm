@@ -1,28 +1,454 @@
 VERSION 5.00
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Begin VB.Form frmMain 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "ALTestApp - ActiveLock3 Test Application"
-   ClientHeight    =   7995
+   ClientHeight    =   10215
    ClientLeft      =   45
    ClientTop       =   330
-   ClientWidth     =   9720
+   ClientWidth     =   9510
    Icon            =   "frmMain.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    MaxButton       =   0   'False
-   ScaleHeight     =   7995
-   ScaleWidth      =   9720
+   ScaleHeight     =   10215
+   ScaleWidth      =   9510
    StartUpPosition =   2  'CenterScreen
+   Begin VB.Frame fraRegStatus 
+      Caption         =   "Status"
+      ForeColor       =   &H00FF0000&
+      Height          =   2745
+      Left            =   0
+      TabIndex        =   25
+      Top             =   0
+      Width           =   9495
+      Begin VB.TextBox txtMaxCount 
+         BackColor       =   &H80000013&
+         Height          =   285
+         Left            =   5355
+         Locked          =   -1  'True
+         TabIndex        =   38
+         Top             =   2340
+         Width           =   540
+      End
+      Begin VB.TextBox txtNetworkedLicense 
+         BackColor       =   &H80000013&
+         Height          =   285
+         Left            =   1560
+         Locked          =   -1  'True
+         TabIndex        =   37
+         Top             =   2340
+         Width           =   1890
+      End
+      Begin VB.TextBox txtLicenseType 
+         BackColor       =   &H80000013&
+         Height          =   285
+         Left            =   4140
+         Locked          =   -1  'True
+         TabIndex        =   36
+         Top             =   2040
+         Width           =   1755
+      End
+      Begin VB.CommandButton cmdResetTrial 
+         Caption         =   "&Reset Trial"
+         Height          =   315
+         Left            =   8280
+         TabIndex        =   35
+         ToolTipText     =   "Reset the Free Trial"
+         Top             =   1320
+         Width           =   1095
+      End
+      Begin VB.CommandButton cmdKillTrial 
+         Caption         =   "&Kill Trial"
+         Height          =   315
+         Left            =   8280
+         TabIndex        =   34
+         ToolTipText     =   "End the Free Trial"
+         Top             =   1740
+         Width           =   1095
+      End
+      Begin VB.PictureBox Picture2 
+         Appearance      =   0  'Flat
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BorderStyle     =   0  'None
+         ForeColor       =   &H80000008&
+         Height          =   825
+         Left            =   8370
+         Picture         =   "frmMain.frx":0CCA
+         ScaleHeight     =   825
+         ScaleWidth      =   825
+         TabIndex        =   33
+         Top             =   210
+         Width           =   825
+      End
+      Begin VB.TextBox txtRegisteredLevel 
+         BackColor       =   &H80000013&
+         Height          =   285
+         Left            =   1560
+         Locked          =   -1  'True
+         TabIndex        =   32
+         Top             =   1740
+         Width           =   4335
+      End
+      Begin VB.TextBox txtChecksum 
+         BackColor       =   &H80000013&
+         Height          =   285
+         Left            =   1560
+         Locked          =   -1  'True
+         TabIndex        =   31
+         Top             =   2040
+         Width           =   1215
+      End
+      Begin VB.TextBox txtVersion 
+         BackColor       =   &H80000013&
+         Height          =   285
+         Left            =   1560
+         Locked          =   -1  'True
+         TabIndex        =   30
+         Text            =   "1.0"
+         Top             =   540
+         Width           =   4335
+      End
+      Begin VB.TextBox txtName 
+         BackColor       =   &H80000013&
+         Height          =   285
+         Left            =   1560
+         Locked          =   -1  'True
+         TabIndex        =   29
+         Text            =   "TestApp"
+         Top             =   240
+         Width           =   4335
+      End
+      Begin VB.TextBox txtExpiration 
+         BackColor       =   &H80000013&
+         Height          =   285
+         Left            =   1560
+         Locked          =   -1  'True
+         TabIndex        =   28
+         Top             =   1440
+         Width           =   4335
+      End
+      Begin VB.TextBox txtUsedDays 
+         BackColor       =   &H80000013&
+         Height          =   285
+         Left            =   1560
+         Locked          =   -1  'True
+         TabIndex        =   27
+         Top             =   1140
+         Width           =   4335
+      End
+      Begin VB.TextBox txtRegStatus 
+         BackColor       =   &H80000013&
+         Height          =   285
+         Left            =   1560
+         Locked          =   -1  'True
+         TabIndex        =   26
+         Top             =   840
+         Width           =   4335
+      End
+      Begin VB.Label lblConcurrentUsers 
+         Caption         =   "No. of Concurrent Users:"
+         Height          =   255
+         Left            =   3555
+         TabIndex        =   49
+         Top             =   2385
+         Width           =   1785
+      End
+      Begin VB.Label Label10 
+         Caption         =   "License Class:"
+         Height          =   255
+         Left            =   135
+         TabIndex        =   48
+         Top             =   2340
+         Width           =   1335
+      End
+      Begin VB.Label Label9 
+         Alignment       =   1  'Right Justify
+         Caption         =   "License Type:"
+         Height          =   255
+         Left            =   2940
+         TabIndex        =   47
+         Top             =   2070
+         Width           =   1155
+      End
+      Begin VB.Label Label16 
+         Alignment       =   2  'Center
+         Caption         =   "Activelock V3"
+         ForeColor       =   &H00FF0000&
+         Height          =   165
+         Left            =   8250
+         TabIndex        =   46
+         Top             =   1050
+         Width           =   1065
+      End
+      Begin VB.Label Label5 
+         Caption         =   "Registered Level:"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   45
+         Top             =   1770
+         Width           =   1335
+      End
+      Begin VB.Label Label3 
+         Caption         =   "DLL Checksum:"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   44
+         Top             =   2070
+         Width           =   1335
+      End
+      Begin VB.Label Label2 
+         Caption         =   "App Version:"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   43
+         Top             =   570
+         Width           =   975
+      End
+      Begin VB.Label Label1 
+         Caption         =   "App Name:"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   42
+         Top             =   270
+         Width           =   975
+      End
+      Begin VB.Label Label8 
+         Caption         =   "Expiry Date:"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   41
+         Top             =   1470
+         Width           =   975
+      End
+      Begin VB.Label Label7 
+         Caption         =   "Days Used:"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   40
+         Top             =   1170
+         Width           =   975
+      End
+      Begin VB.Label Label6 
+         Caption         =   "License Status:"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   39
+         Top             =   870
+         Width           =   1380
+      End
+   End
+   Begin VB.Frame fraReg 
+      Caption         =   "Register"
+      ForeColor       =   &H00FF0000&
+      Height          =   4380
+      Left            =   0
+      TabIndex        =   13
+      Top             =   2820
+      Width           =   9495
+      Begin VB.CommandButton cmdPaste 
+         Height          =   345
+         Left            =   8220
+         Picture         =   "frmMain.frx":3C52
+         Style           =   1  'Graphical
+         TabIndex        =   21
+         Top             =   2070
+         Width           =   345
+      End
+      Begin VB.CommandButton cmdCopy 
+         Height          =   345
+         Left            =   8220
+         MaskColor       =   &H8000000F&
+         Picture         =   "frmMain.frx":3F94
+         Style           =   1  'Graphical
+         TabIndex        =   20
+         Top             =   900
+         Width           =   345
+      End
+      Begin VB.CommandButton cmdKillLicense 
+         Caption         =   "&Kill License"
+         Height          =   315
+         Left            =   8220
+         TabIndex        =   19
+         ToolTipText     =   "Kill the License"
+         Top             =   2880
+         Width           =   1095
+      End
+      Begin VB.TextBox txtUser 
+         Height          =   285
+         Left            =   1440
+         TabIndex        =   18
+         Text            =   "Evaluation User"
+         Top             =   300
+         Width           =   6675
+      End
+      Begin VB.CommandButton cmdReqGen 
+         Caption         =   "&Generate"
+         Height          =   315
+         Left            =   8220
+         TabIndex        =   17
+         ToolTipText     =   "Generate Installation Code"
+         Top             =   540
+         Width           =   1095
+      End
+      Begin VB.TextBox txtReqCodeGen 
+         BackColor       =   &H80000013&
+         BeginProperty Font 
+            Name            =   "Courier New"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   1080
+         Left            =   1440
+         MultiLine       =   -1  'True
+         TabIndex        =   16
+         Top             =   600
+         Width           =   6675
+      End
+      Begin VB.CommandButton cmdRegister 
+         Caption         =   "&Register"
+         Enabled         =   0   'False
+         Height          =   315
+         Left            =   8220
+         TabIndex        =   15
+         ToolTipText     =   "Register the License"
+         Top             =   2475
+         Width           =   1095
+      End
+      Begin VB.TextBox txtLibKeyIn 
+         BackColor       =   &H80000013&
+         BeginProperty Font 
+            Name            =   "Courier New"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   2565
+         Left            =   1440
+         MultiLine       =   -1  'True
+         ScrollBars      =   3  'Both
+         TabIndex        =   14
+         Top             =   1710
+         Width           =   6675
+      End
+      Begin VB.Label Label13 
+         Caption         =   "User Name:"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   24
+         Top             =   300
+         Width           =   1335
+      End
+      Begin VB.Label Label11 
+         Caption         =   "Installation Code:"
+         Height          =   255
+         Left            =   120
+         TabIndex        =   23
+         Top             =   600
+         Width           =   1335
+      End
+      Begin VB.Label Label4 
+         Caption         =   "Liberation Key:"
+         Height          =   255
+         Left            =   135
+         TabIndex        =   22
+         Top             =   1710
+         Width           =   1335
+      End
+   End
+   Begin VB.Frame Frame1 
+      BorderStyle     =   0  'None
+      Height          =   1650
+      Left            =   495
+      TabIndex        =   1
+      Top             =   8280
+      Width           =   6825
+      Begin VB.OptionButton optForm 
+         Caption         =   "Option 2"
+         Height          =   225
+         Index           =   1
+         Left            =   3030
+         TabIndex        =   7
+         Top             =   1245
+         Width           =   1395
+      End
+      Begin VB.OptionButton optForm 
+         Caption         =   "Option 1"
+         Height          =   225
+         Index           =   0
+         Left            =   3030
+         TabIndex        =   6
+         Top             =   990
+         Value           =   -1  'True
+         Width           =   1395
+      End
+      Begin VB.ComboBox cboSpeed 
+         Height          =   315
+         ItemData        =   "frmMain.frx":42A6
+         Left            =   5070
+         List            =   "frmMain.frx":42B9
+         Style           =   2  'Dropdown List
+         TabIndex        =   5
+         Top             =   30
+         Width           =   1635
+      End
+      Begin VB.CheckBox chkPause 
+         Caption         =   "Checkbox for Level 3 only"
+         Height          =   315
+         Left            =   0
+         TabIndex        =   4
+         Top             =   390
+         Width           =   2565
+      End
+      Begin VB.CheckBox chkFlash 
+         Caption         =   "Checkbox for ALL Levels"
+         Height          =   495
+         Left            =   0
+         TabIndex        =   3
+         Top             =   690
+         Width           =   2610
+      End
+      Begin VB.CheckBox chkScroll 
+         Caption         =   "Checkbox for ALL Levels"
+         Height          =   225
+         Left            =   0
+         TabIndex        =   2
+         Top             =   90
+         Value           =   1  'Checked
+         Width           =   2535
+      End
+      Begin VB.Label lblHost 
+         Caption         =   "Option Buttons for ALL Levels:"
+         Height          =   255
+         Left            =   3060
+         TabIndex        =   9
+         Top             =   690
+         Width           =   2280
+      End
+      Begin VB.Label lblSpeed 
+         Caption         =   "Activated with Level 4 Only"
+         Height          =   255
+         Left            =   3030
+         TabIndex        =   8
+         Top             =   90
+         Width           =   2025
+      End
+   End
    Begin ComctlLib.StatusBar sbStatus 
       Align           =   2  'Align Bottom
       Height          =   255
       Left            =   0
       TabIndex        =   0
-      Top             =   7740
-      Width           =   9720
-      _ExtentX        =   17145
+      Top             =   9960
+      Width           =   9510
+      _ExtentX        =   16775
       _ExtentY        =   450
       Style           =   1
       SimpleText      =   "Ready"
@@ -30,510 +456,42 @@ Begin VB.Form frmMain
       BeginProperty Panels {0713E89E-850A-101B-AFC0-4210102A8DA7} 
          NumPanels       =   1
          BeginProperty Panel1 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
    End
-   Begin TabDlg.SSTab SSTab1 
-      Height          =   7755
-      Left            =   0
+   Begin VB.Label lblLockStatus 
+      Caption         =   "Application Functionalities Are Currently: "
+      Height          =   375
+      Left            =   495
       TabIndex        =   12
-      Top             =   0
-      Width           =   9735
-      _ExtentX        =   17171
-      _ExtentY        =   13679
-      _Version        =   393216
-      Tabs            =   2
-      TabsPerRow      =   2
-      TabHeight       =   520
-      ForeColor       =   16711680
-      TabCaption(0)   =   "Registration"
-      TabPicture(0)   =   "frmMain.frx":0CCA
-      Tab(0).ControlEnabled=   -1  'True
-      Tab(0).Control(0)=   "fraRegStatus"
-      Tab(0).Control(0).Enabled=   0   'False
-      Tab(0).Control(1)=   "fraReg"
-      Tab(0).Control(1).Enabled=   0   'False
-      Tab(0).ControlCount=   2
-      TabCaption(1)   =   "Sample App"
-      TabPicture(1)   =   "frmMain.frx":0CE6
-      Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "lblLockStatus"
-      Tab(1).Control(1)=   "lblLockStatus2"
-      Tab(1).Control(2)=   "lblTrialInfo"
-      Tab(1).Control(3)=   "Frame1"
-      Tab(1).Control(4)=   "fraViewport"
-      Tab(1).ControlCount=   5
-      Begin VB.Frame fraViewport 
-         BorderStyle     =   0  'None
-         Height          =   525
-         Left            =   -74950
-         TabIndex        =   30
-         Top             =   5510
-         Width           =   7850
-      End
-      Begin VB.Frame Frame1 
-         BorderStyle     =   0  'None
-         Height          =   1875
-         Left            =   -74850
-         TabIndex        =   21
-         Top             =   1440
-         Width           =   7545
-         Begin VB.OptionButton optForm 
-            Caption         =   "Option 2"
-            Height          =   225
-            Index           =   1
-            Left            =   3030
-            TabIndex        =   27
-            Top             =   1245
-            Width           =   1395
-         End
-         Begin VB.OptionButton optForm 
-            Caption         =   "Option 1"
-            Height          =   225
-            Index           =   0
-            Left            =   3030
-            TabIndex        =   26
-            Top             =   990
-            Value           =   -1  'True
-            Width           =   1395
-         End
-         Begin VB.ComboBox cboSpeed 
-            Height          =   315
-            ItemData        =   "frmMain.frx":0D02
-            Left            =   5070
-            List            =   "frmMain.frx":0D15
-            Style           =   2  'Dropdown List
-            TabIndex        =   25
-            Top             =   30
-            Width           =   1635
-         End
-         Begin VB.CheckBox chkPause 
-            Caption         =   "Checkbox for Level 3 only"
-            Height          =   315
-            Left            =   0
-            TabIndex        =   24
-            Top             =   390
-            Width           =   2565
-         End
-         Begin VB.CheckBox chkFlash 
-            Caption         =   "Checkbox for ALL Levels"
-            Height          =   495
-            Left            =   0
-            TabIndex        =   23
-            Top             =   690
-            Width           =   2610
-         End
-         Begin VB.CheckBox chkScroll 
-            Caption         =   "Checkbox for ALL Levels"
-            Height          =   225
-            Left            =   0
-            TabIndex        =   22
-            Top             =   90
-            Value           =   1  'Checked
-            Width           =   2535
-         End
-         Begin VB.Label lblHost 
-            Caption         =   "Option Buttons for ALL Levels:"
-            Height          =   255
-            Left            =   3060
-            TabIndex        =   29
-            Top             =   690
-            Width           =   2280
-         End
-         Begin VB.Label lblSpeed 
-            Caption         =   "Activated with Level 4 Only"
-            Height          =   255
-            Left            =   3030
-            TabIndex        =   28
-            Top             =   90
-            Width           =   2025
-         End
-      End
-      Begin VB.Frame fraReg 
-         Caption         =   "Register"
-         ForeColor       =   &H00FF0000&
-         Height          =   4380
-         Left            =   120
-         TabIndex        =   17
-         Top             =   3240
-         Width           =   9495
-         Begin VB.CommandButton cmdPaste 
-            Height          =   345
-            Left            =   8220
-            Picture         =   "frmMain.frx":0D3F
-            Style           =   1  'Graphical
-            TabIndex        =   47
-            Top             =   2070
-            Width           =   345
-         End
-         Begin VB.CommandButton cmdCopy 
-            Height          =   345
-            Left            =   8220
-            MaskColor       =   &H8000000F&
-            Picture         =   "frmMain.frx":1081
-            Style           =   1  'Graphical
-            TabIndex        =   46
-            Top             =   900
-            Width           =   345
-         End
-         Begin VB.CommandButton cmdKillLicense 
-            Caption         =   "&Kill License"
-            Height          =   315
-            Left            =   8220
-            TabIndex        =   43
-            ToolTipText     =   "Kill the License"
-            Top             =   2880
-            Width           =   1095
-         End
-         Begin VB.TextBox txtUser 
-            Height          =   285
-            Left            =   1440
-            TabIndex        =   7
-            Text            =   "Evaluation User"
-            Top             =   300
-            Width           =   6675
-         End
-         Begin VB.CommandButton cmdReqGen 
-            Caption         =   "&Generate"
-            Height          =   315
-            Left            =   8220
-            TabIndex        =   9
-            ToolTipText     =   "Generate Installation Code"
-            Top             =   540
-            Width           =   1095
-         End
-         Begin VB.TextBox txtReqCodeGen 
-            BackColor       =   &H80000013&
-            BeginProperty Font 
-               Name            =   "Courier New"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   1080
-            Left            =   1440
-            MultiLine       =   -1  'True
-            TabIndex        =   8
-            Top             =   600
-            Width           =   6675
-         End
-         Begin VB.CommandButton cmdRegister 
-            Caption         =   "&Register"
-            Enabled         =   0   'False
-            Height          =   315
-            Left            =   8220
-            TabIndex        =   11
-            ToolTipText     =   "Register the License"
-            Top             =   2475
-            Width           =   1095
-         End
-         Begin VB.TextBox txtLibKeyIn 
-            BackColor       =   &H80000013&
-            BeginProperty Font 
-               Name            =   "Courier New"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   2565
-            Left            =   1440
-            MultiLine       =   -1  'True
-            ScrollBars      =   3  'Both
-            TabIndex        =   10
-            Top             =   1710
-            Width           =   6675
-         End
-         Begin VB.Label Label13 
-            Caption         =   "User Name:"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   20
-            Top             =   300
-            Width           =   1335
-         End
-         Begin VB.Label Label11 
-            Caption         =   "Installation Code:"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   19
-            Top             =   600
-            Width           =   1335
-         End
-         Begin VB.Label Label4 
-            Caption         =   "Liberation Key:"
-            Height          =   255
-            Left            =   135
-            TabIndex        =   18
-            Top             =   1710
-            Width           =   1335
-         End
-      End
-      Begin VB.Frame fraRegStatus 
-         Caption         =   "Status"
-         ForeColor       =   &H00FF0000&
-         Height          =   2745
-         Left            =   120
-         TabIndex        =   13
-         Top             =   420
-         Width           =   9495
-         Begin VB.TextBox txtMaxCount 
-            BackColor       =   &H80000013&
-            Height          =   285
-            Left            =   5355
-            Locked          =   -1  'True
-            TabIndex        =   51
-            Top             =   2340
-            Width           =   540
-         End
-         Begin VB.TextBox txtNetworkedLicense 
-            BackColor       =   &H80000013&
-            Height          =   285
-            Left            =   1560
-            Locked          =   -1  'True
-            TabIndex        =   48
-            Top             =   2340
-            Width           =   1890
-         End
-         Begin VB.TextBox txtLicenseType 
-            BackColor       =   &H80000013&
-            Height          =   285
-            Left            =   4140
-            Locked          =   -1  'True
-            TabIndex        =   45
-            Top             =   2040
-            Width           =   1755
-         End
-         Begin VB.CommandButton cmdResetTrial 
-            Caption         =   "&Reset Trial"
-            Height          =   315
-            Left            =   8280
-            TabIndex        =   42
-            ToolTipText     =   "Reset the Free Trial"
-            Top             =   1320
-            Width           =   1095
-         End
-         Begin VB.CommandButton cmdKillTrial 
-            Caption         =   "&Kill Trial"
-            Height          =   315
-            Left            =   8280
-            TabIndex        =   41
-            ToolTipText     =   "End the Free Trial"
-            Top             =   1740
-            Width           =   1095
-         End
-         Begin VB.PictureBox Picture2 
-            Appearance      =   0  'Flat
-            AutoSize        =   -1  'True
-            BackColor       =   &H80000005&
-            BorderStyle     =   0  'None
-            ForeColor       =   &H80000008&
-            Height          =   825
-            Left            =   8370
-            Picture         =   "frmMain.frx":1393
-            ScaleHeight     =   825
-            ScaleWidth      =   825
-            TabIndex        =   39
-            Top             =   210
-            Width           =   825
-         End
-         Begin VB.TextBox txtRegisteredLevel 
-            BackColor       =   &H80000013&
-            Height          =   285
-            Left            =   1560
-            Locked          =   -1  'True
-            TabIndex        =   36
-            Top             =   1740
-            Width           =   4335
-         End
-         Begin VB.TextBox txtChecksum 
-            BackColor       =   &H80000013&
-            Height          =   285
-            Left            =   1560
-            Locked          =   -1  'True
-            TabIndex        =   6
-            Top             =   2040
-            Width           =   1215
-         End
-         Begin VB.TextBox txtVersion 
-            BackColor       =   &H80000013&
-            Height          =   285
-            Left            =   1560
-            Locked          =   -1  'True
-            TabIndex        =   2
-            Text            =   "1.0"
-            Top             =   540
-            Width           =   4335
-         End
-         Begin VB.TextBox txtName 
-            BackColor       =   &H80000013&
-            Height          =   285
-            Left            =   1560
-            Locked          =   -1  'True
-            TabIndex        =   1
-            Text            =   "TestApp"
-            Top             =   240
-            Width           =   4335
-         End
-         Begin VB.TextBox txtExpiration 
-            BackColor       =   &H80000013&
-            Height          =   285
-            Left            =   1560
-            Locked          =   -1  'True
-            TabIndex        =   5
-            Top             =   1440
-            Width           =   4335
-         End
-         Begin VB.TextBox txtUsedDays 
-            BackColor       =   &H80000013&
-            Height          =   285
-            Left            =   1560
-            Locked          =   -1  'True
-            TabIndex        =   4
-            Top             =   1140
-            Width           =   4335
-         End
-         Begin VB.TextBox txtRegStatus 
-            BackColor       =   &H80000013&
-            Height          =   285
-            Left            =   1560
-            Locked          =   -1  'True
-            TabIndex        =   3
-            Top             =   840
-            Width           =   4335
-         End
-         Begin VB.Label lblConcurrentUsers 
-            Caption         =   "No. of Concurrent Users:"
-            Height          =   255
-            Left            =   3555
-            TabIndex        =   50
-            Top             =   2385
-            Width           =   1785
-         End
-         Begin VB.Label Label10 
-            Caption         =   "License Class:"
-            Height          =   255
-            Left            =   135
-            TabIndex        =   49
-            Top             =   2340
-            Width           =   1335
-         End
-         Begin VB.Label Label9 
-            Alignment       =   1  'Right Justify
-            Caption         =   "License Type:"
-            Height          =   255
-            Left            =   2940
-            TabIndex        =   44
-            Top             =   2070
-            Width           =   1155
-         End
-         Begin VB.Label Label16 
-            Alignment       =   2  'Center
-            Caption         =   "Activelock V3"
-            ForeColor       =   &H00FF0000&
-            Height          =   165
-            Left            =   8250
-            TabIndex        =   40
-            Top             =   1050
-            Width           =   1065
-         End
-         Begin VB.Label Label5 
-            Caption         =   "Registered Level:"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   37
-            Top             =   1770
-            Width           =   1335
-         End
-         Begin VB.Label Label3 
-            Caption         =   "DLL Checksum:"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   35
-            Top             =   2070
-            Width           =   1335
-         End
-         Begin VB.Label Label2 
-            Caption         =   "App Version:"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   32
-            Top             =   570
-            Width           =   975
-         End
-         Begin VB.Label Label1 
-            Caption         =   "App Name:"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   31
-            Top             =   270
-            Width           =   975
-         End
-         Begin VB.Label Label8 
-            Caption         =   "Expiry Date:"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   16
-            Top             =   1470
-            Width           =   975
-         End
-         Begin VB.Label Label7 
-            Caption         =   "Days Used:"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   15
-            Top             =   1170
-            Width           =   975
-         End
-         Begin VB.Label Label6 
-            Caption         =   "License Status:"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   14
-            Top             =   870
-            Width           =   1380
-         End
-      End
-      Begin VB.Label lblTrialInfo 
-         Caption         =   "NOTE: All application functionalities are available in Trial Mode."
-         Height          =   375
-         Left            =   -74910
-         TabIndex        =   38
-         Top             =   870
-         Width           =   4545
-      End
-      Begin VB.Label lblLockStatus2 
-         Caption         =   "Disabled"
-         BeginProperty Font 
-            Name            =   "MS Sans Serif"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   255
-         Left            =   -71880
-         TabIndex        =   34
-         Top             =   480
-         Width           =   4515
-      End
-      Begin VB.Label lblLockStatus 
-         Caption         =   "Application Functionalities Are Currently: "
-         Height          =   375
-         Left            =   -74880
-         TabIndex        =   33
-         Top             =   480
-         Width           =   2895
-      End
+      Top             =   7470
+      Width           =   2895
+   End
+   Begin VB.Label lblLockStatus2 
+      Caption         =   "Disabled"
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      Height          =   255
+      Left            =   3525
+      TabIndex        =   11
+      Top             =   7470
+      Width           =   4515
+   End
+   Begin VB.Label lblTrialInfo 
+      Caption         =   "NOTE: All application functionalities are available in Trial Mode."
+      Height          =   375
+      Left            =   495
+      TabIndex        =   10
+      Top             =   7860
+      Width           =   4545
    End
 End
 Attribute VB_Name = "frmMain"
