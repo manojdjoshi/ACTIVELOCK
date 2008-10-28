@@ -362,7 +362,7 @@ Public Type ADAPTER_STATUS
 End Type
    
 Public Type NAME_BUFFER
-   Name        As String * NCBNAMSZ
+   name        As String * NCBNAMSZ
    name_num    As Integer
    name_flags  As Integer
 End Type
@@ -690,8 +690,6 @@ For jj = 0 To 15 ' Controller index
     If GetHDSerialFirmware <> "" Then Exit Function
 Next
    
-' Still nothing... Use WMI per Jaegermeister
-
 ' Still nothing...... :( Use ALCrypto DLL
 Dim mU As MyUDT2
 Call getHardDriveFirmware(mU)
@@ -700,6 +698,16 @@ If GetHDSerialFirmware <> "" Then Exit Function
 ' For WinNT+ OSs, try the SMART approach as the last option
 di = GetDriveInfo(PRIMARY_MASTER)
 GetHDSerialFirmware = Trim(di.SerialNumber)
+If GetHDSerialFirmware <> "" Then Exit Function
+  
+' Still nothing keep trying.
+' This code was supplied by daniel Gochin because the Vista code works without admin and under UAC !!!
+If IsWinVista = True Then
+    GetHDSerialFirmware = Trim(GetSerialNumberForVista())
+    If GetHDSerialFirmware = "" Then GetHDSerialFirmware = Trim(GetSerialNumberForXP())
+Else
+    GetHDSerialFirmware = Trim(GetSerialNumberForXP())
+End If
 If GetHDSerialFirmware <> "" Then Exit Function
    
 ' Well, this is not so good, because we still don't have
@@ -710,6 +718,87 @@ If GetHDSerialFirmware = "" Then
     GetHDSerialFirmware = "Not Available"
 End If
 
+End Function
+Private Function GetSerialNumberForVista() As String
+    Dim o As Integer
+    Dim sHDNoHex, reversedStr As String
+    Dim sHDNoHexToChar As String
+    Dim str1, str2 As String
+    Dim jj As Integer
+    Dim svc As Object
+    Dim objEnum As WbemScripting.SWbemObjectSet
+    Dim obj As WbemScripting.SWbemObject
+    Set svc = GetObject("winmgmts:root\cimv2")
+    Set objEnum = svc.ExecQuery("select * from Win32_DiskDrive")
+    For Each obj In objEnum
+        Dim i As WbemScripting.SWbemProperty
+
+        For Each i In obj.Properties_
+            If IsNull2(i.name, "") = "SerialNumber" Then
+                'Debug.Print i.Value
+                sHDNoHex = IsNull2(i.Value, "")
+            End If
+        Next i
+    Next obj
+    If Len(sHDNoHex) > 20 Then
+        sHDNoHexToChar = ""
+        For o = 1 To Len(sHDNoHex) Step 2
+            sHDNoHexToChar = sHDNoHexToChar & Chr(CDec(("&H" & Trim(Mid(sHDNoHex, o, 2)))))
+        Next
+        reversedStr = ""
+        For jj = 0 To Len(sHDNoHexToChar) / 2
+            str1 = Mid(sHDNoHexToChar, jj * 2 + 1, 1)
+            str2 = Mid(sHDNoHexToChar, jj * 2 + 2, 1)
+            reversedStr = reversedStr & str2 & str1
+        Next
+        GetSerialNumberForVista = StripControlChars(Trim(reversedStr), False)
+    Else
+        GetSerialNumberForVista = sHDNoHex
+    End If
+End Function
+Private Function GetSerialNumberForXP() As String
+    Dim o As Integer
+    Dim sHDNoHex, reversedStr As String
+    Dim sHDNoHexToChar As String
+    Dim str1, str2 As String
+    Dim jj As Integer
+    Dim svc As Object
+    Dim objEnum As WbemScripting.SWbemObjectSet
+    Dim obj As WbemScripting.SWbemObject
+    Set svc = GetObject("winmgmts:root\cimv2")
+    Set objEnum = svc.ExecQuery("select * from win32_physicalMedia")
+    For Each obj In objEnum
+        Dim i As WbemScripting.SWbemProperty
+
+        For Each i In obj.Properties_
+            If IsNull2(i.name, "") = "SerialNumber" Then
+                'Debug.Print i.Value
+                sHDNoHex = IsNull2(i.Value, "")
+            End If
+        Next i
+    Next obj
+    If Len(sHDNoHex) > 20 Then
+        sHDNoHexToChar = ""
+        For o = 1 To Len(sHDNoHex) Step 2
+            sHDNoHexToChar = sHDNoHexToChar & Chr(CDec(("&H" & Trim(Mid(sHDNoHex, o, 2)))))
+        Next
+        reversedStr = ""
+        For jj = 0 To Len(sHDNoHexToChar) / 2
+            str1 = Mid(sHDNoHexToChar, jj * 2 + 1, 1)
+            str2 = Mid(sHDNoHexToChar, jj * 2 + 2, 1)
+            reversedStr = reversedStr & str2 & str1
+        Next
+        GetSerialNumberForXP = StripControlChars(Trim(reversedStr), False)
+    Else
+        GetSerialNumberForXP = sHDNoHex
+    End If
+End Function
+Private Function IsNull2(vValue As Variant, vReturnValue As Variant) As Variant
+    If IsNull(vValue) = True Then
+        IsNull2 = vReturnValue
+    Else
+        IsNull2 = vValue
+    End If
 End Function
 '****************************************************************************
 ' CheckSMARTEnable - Check if SMART enable
