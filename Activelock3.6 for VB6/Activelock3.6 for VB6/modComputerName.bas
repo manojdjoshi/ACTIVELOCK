@@ -701,13 +701,10 @@ GetHDSerialFirmware = Trim(di.SerialNumber)
 If GetHDSerialFirmware <> "" Then Exit Function
   
 ' Still nothing keep trying.
-' This code was supplied by daniel Gochin because the Vista code works without admin and under UAC !!!
-If IsWinVista = True Then
-    GetHDSerialFirmware = Trim(GetSerialNumberForVista())
-    If GetHDSerialFirmware = "" Then GetHDSerialFirmware = Trim(GetSerialNumberForXP())
-Else
-    GetHDSerialFirmware = Trim(GetSerialNumberForXP())
-End If
+' This code was supplied by Daniel Gochin because the Vista code works without admin rights and under UAC !!!
+' Modified a bit by Ismail Alkan - Nov'2008
+GetHDSerialFirmware = GetSerialNumberFromWMI("Win32_PhysicalMedia")
+If GetHDSerialFirmware = "" Then GetHDSerialFirmware = GetSerialNumberFromWMI("Win32_DiskDrive")
 If GetHDSerialFirmware <> "" Then Exit Function
    
 ' Well, this is not so good, because we still don't have
@@ -719,7 +716,14 @@ If GetHDSerialFirmware = "" Then
 End If
 
 End Function
-Private Function GetSerialNumberForVista() As String
+Private Function IsNull2(vValue As Variant, vReturnValue As Variant) As Variant
+    If IsNull(vValue) = True Then
+        IsNull2 = vReturnValue
+    Else
+        IsNull2 = vValue
+    End If
+End Function
+Private Function GetSerialNumberFromWMI(wmi_selection As String) As String
     Dim o As Integer
     Dim sHDNoHex, reversedStr As String
     Dim sHDNoHexToChar As String
@@ -729,7 +733,7 @@ Private Function GetSerialNumberForVista() As String
     Dim objEnum As WbemScripting.SWbemObjectSet
     Dim obj As WbemScripting.SWbemObject
     Set svc = GetObject("winmgmts:root\cimv2")
-    Set objEnum = svc.ExecQuery("select * from Win32_DiskDrive")
+    Set objEnum = svc.ExecQuery("select * from " & wmi_selection)
     
     ' Check SerialNumber property
     For Each obj In objEnum
@@ -742,7 +746,7 @@ Private Function GetSerialNumberForVista() As String
             End If
         Next I
     Next obj
-    If Len(sHDNoHex) > 20 Then
+    If Len(sHDNoHex) > 0 Then
         sHDNoHexToChar = ""
         For o = 1 To Len(sHDNoHex) Step 2
             sHDNoHexToChar = sHDNoHexToChar & Chr(CDec(("&H" & Trim(Mid(sHDNoHex, o, 2)))))
@@ -753,25 +757,28 @@ Private Function GetSerialNumberForVista() As String
             str2 = Mid(sHDNoHexToChar, jj * 2 + 2, 1)
             reversedStr = reversedStr & str2 & str1
         Next
-        GetSerialNumberForVista = StripControlChars(Trim(reversedStr), False)
+        GetSerialNumberFromWMI = StripControlChars(Trim(reversedStr), False)
     Else
-        GetSerialNumberForVista = sHDNoHex
+        GetSerialNumberFromWMI = sHDNoHex
     End If
-    
+
     Dim mPos  As Integer
     Dim k As Integer
     Dim mChar As String
     Dim mChars As String
     Dim mSerial As String
     ' Check PNPDevideID property
-    If GetSerialNumberForVista = "" Then
+    If GetSerialNumberFromWMI = "" Then
         For Each obj In objEnum
             Dim ii As WbemScripting.SWbemProperty
     
             For Each ii In obj.Properties_
-                If IsNull2(ii.name, "") = "PNPDevideID" Then
+                If IsNull2(ii.name, "") = "PNPDeviceID" Then
                     'Debug.Print ii.Value
-                    sHDNoHex = IsNull2(ii.Value, "")
+                    If Left(ii.Value, 3) = "IDE" Or Left(ii.Value, 4) = "SCSI" Then
+                        sHDNoHex = IsNull2(ii.Value, "")
+                        Exit For
+                    End If
                 End If
             Next ii
         Next obj
@@ -779,76 +786,26 @@ Private Function GetSerialNumberForVista() As String
         mPos = InStrRev(sHDNoHex, "\")
         If mPos > 0 Then
             sHDNoHex = Mid(sHDNoHex, mPos + 1)
-            If Len(sHDNoHex) Mod 2 <> 0 Then
-                sHDNoHex = sHDNoHex + "0"
-            End If
-            mChars = ""
-            For k = 1 To Len(sHDNoHex) Step 2
-                mChar = Mid(sHDNoHex, k, 2)
-                If IsNumeric("&H" & mChar) Then
-                    mChars = mChars & Chr(CInt("&H" & mChar))
-                Else
-                    mChars = mChars & Chr(32)
+
+            ' Strip & characters
+            Dim Index As Long
+            Dim Bytes() As Byte
+            
+            Bytes() = sHDNoHex
+            For Index = 0 To UBound(Bytes) Step 2
+                If Bytes(Index) = 38 Then
+                    Bytes(Index) = 0
                 End If
             Next
-            If Len(mChars) Mod 2 <> 0 Then
-                mChars = mChars & Chr(32)
-            End If
-            mSerial = ""
-            For k = 1 To Len(mChars) Step 2
-                mSerial = mSerial & Mid(mChars, k + 1, 1) & Mid(mChars, k, 1)
-            Next
-            mSerial = Replace(mSerial, " ", "")
+            sHDNoHex = VBA.Replace(Bytes(), vbNullChar, "")
+            mSerial = sHDNoHex
+
         End If
                 
-        GetSerialNumberForVista = StripControlChars(Trim(mSerial), False)
+        GetSerialNumberFromWMI = StripControlChars(Trim(mSerial), False)
     End If
+End Function
 
-End Function
-Private Function GetSerialNumberForXP() As String
-    Dim o As Integer
-    Dim sHDNoHex, reversedStr As String
-    Dim sHDNoHexToChar As String
-    Dim str1, str2 As String
-    Dim jj As Integer
-    Dim svc As Object
-    Dim objEnum As WbemScripting.SWbemObjectSet
-    Dim obj As WbemScripting.SWbemObject
-    Set svc = GetObject("winmgmts:root\cimv2")
-    Set objEnum = svc.ExecQuery("select * from win32_physicalMedia")
-    For Each obj In objEnum
-        Dim I As WbemScripting.SWbemProperty
-
-        For Each I In obj.Properties_
-            If IsNull2(I.name, "") = "SerialNumber" Then
-                'Debug.Print i.Value
-                sHDNoHex = IsNull2(I.Value, "")
-            End If
-        Next I
-    Next obj
-    If Len(sHDNoHex) > 20 Then
-        sHDNoHexToChar = ""
-        For o = 1 To Len(sHDNoHex) Step 2
-            sHDNoHexToChar = sHDNoHexToChar & Chr(CDec(("&H" & Trim(Mid(sHDNoHex, o, 2)))))
-        Next
-        reversedStr = ""
-        For jj = 0 To Len(sHDNoHexToChar) / 2
-            str1 = Mid(sHDNoHexToChar, jj * 2 + 1, 1)
-            str2 = Mid(sHDNoHexToChar, jj * 2 + 2, 1)
-            reversedStr = reversedStr & str2 & str1
-        Next
-        GetSerialNumberForXP = StripControlChars(Trim(reversedStr), False)
-    Else
-        GetSerialNumberForXP = sHDNoHex
-    End If
-End Function
-Private Function IsNull2(vValue As Variant, vReturnValue As Variant) As Variant
-    If IsNull(vValue) = True Then
-        IsNull2 = vReturnValue
-    Else
-        IsNull2 = vValue
-    End If
-End Function
 '****************************************************************************
 ' CheckSMARTEnable - Check if SMART enable
 ' FUNCTION: Send a SMART_ENABLE_SMART_OPERATIONS command to the drive
