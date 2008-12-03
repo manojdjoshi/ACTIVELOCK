@@ -1,11 +1,31 @@
 Change Log For Activelock VB6 
-Last Updated: 31 January 2008 
+Last Updated: 31 October 2008 
 
 
 v3.6 Updates:
 - Alugen restricts the use illegal and non-standard characters for the software name and version number fields. Only alphanumeric characters, the decimal point, and backspace are allowed.
 - Comprressed the setup package which reduced the package size substantially.
 - Alugen3.ini moved from Windows directory to the application directory.
+- Added HDD firmware serial number retrieval code utilizing the WMI scripting library v2.1. This utilizes the file C:\WINDOWS\system32\wbem\wbemdisp.tlb.  This trick was given by Daniel Gochin. This is supposed to bypass the UAC under Vista as well.
+- Removed the tab control from ALTestApp sample application. This simplified the sample.
+- Renamed both ALTestApp3.5.dll and Alugen3.5.dll to ALTestApp3_6.dll and Alugen3_6.dll, respectively. Do not use periods, use underscores in the exe name. Otherwise the manifest method doesn't work.
+- In order to bypass the Vista UAC, app.exe.manifest file should be added to the same directory where the exe file resides. This manifest file should include the following:
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0"> 
+    <assemblyIdentity version="1.0.0.0"
+	processorArchitecture="X86"
+	name="alugen3.6"
+	type="win32"/> 
+<description>elevate execution level</description> 
+   <trustInfo xmlns="urn:schemas-microsoft-com:asm.v2">
+      <security>
+         <requestedPrivileges>
+            <requestedExecutionLevel level="requireAdministrator" uiAccess="false"/>
+         </requestedPrivileges>
+      </security>
+   </trustInfo>
+</assembly>
+
  
 v3.5.5 Updates:
 - FIX: Program was not functioning for multiple users in the same machine. It was working Ok for the first user, however switching users and running the same that's already registered causes an error 5 and the application won't run. The fix was accomplished by adding several  "cryptSession.DestroyContainer containerName " statements to the Globals3 class, CryptoAPIaction function. The problem is with the creation of an RSA container with one user account and the inability to access it with a different user account. By deleting the container after it's used, the problem has been eliminated. As long as the license is Ok (valid and not tampered with), switching between user accounts does no harm to the license, but once the license is tampered with, even after it's restored to its original condition, switching between users seemed to still cause problems; however, since we're dealing with a tampered license here, this is acceptable. While writing this note I was still trying to add more DestroyContainer statements within the validation routines right before errors are raised.
