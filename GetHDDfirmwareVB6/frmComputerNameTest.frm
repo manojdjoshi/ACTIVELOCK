@@ -225,7 +225,7 @@ Text3.Text = GetHDSerialFirmware(2)
 Dim i As Integer
 For i = 0 To 15
     Text4.Text = GetSerial(i, True)
-    If Text4.Text <> "" Then Exit Sub
+    If Text4.Text <> "" Then Exit For
 Next i
 Text5.Text = GetHDSerialFirmware(3)
 Text6.Text = GetHDSerialFirmware(4)
