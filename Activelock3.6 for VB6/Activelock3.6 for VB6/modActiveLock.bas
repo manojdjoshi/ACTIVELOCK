@@ -257,6 +257,9 @@ Private Declare Function GetUserDefaultLCID% Lib "kernel32" ()
 Const LOCALE_SSHORTDATE = &H1F
 Public regionalSymbol As String
 
+' For debugging via DBGVIEW.EXE, etc.
+Public Declare Sub OutputDebugString Lib "kernel32" Alias "OutputDebugStringA" (ByVal lpOutputString As String)
+
 Public Sub Get_locale() ' Retrieve the regional setting
     Dim Symbol As String
     Dim iRet1 As Long
