@@ -360,7 +360,7 @@ Public Function IsWinNT4() As Boolean
 End Function
 
 '===============================================================================
-' Name: Function IsWindowsNT
+' Name: Function IsWinNT4Plus
 ' Input: None
 ' Output:
 '   Boolean - True if WinNT4 or later

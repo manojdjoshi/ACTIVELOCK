@@ -413,6 +413,11 @@ Private Sub IActiveLock_Acquire(Optional strMsg As String)
     Dim fileno As Integer
     Dim run As String
 
+    ' This sample code is for debugging purposes
+    ' For debugging via DBGVIEW.EXE, etc.
+    ' Use calls like this in every location you want to debug
+    OutputDebugString "Entered the IActiveLock_Acquire function"
+    
     strStream = mSoftwareName & mSoftwareVer & mSoftwarePassword
     
     ' Get the current date format and save it to regionalSymbol variable
