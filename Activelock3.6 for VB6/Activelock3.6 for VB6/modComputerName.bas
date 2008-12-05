@@ -669,15 +669,14 @@ Function GetHDSerialFirmware() As String
 Dim jj As Integer
 On Error GoTo GetHDSerialFirmwareError
 
+' ******* METHOD 1 - SMART *******
 Dim di As DRIVE_INFO
 Dim drvNumber As Long
+di = GetDriveInfo(PRIMARY_MASTER)
+GetHDSerialFirmware = Trim(di.SerialNumber)
+If GetHDSerialFirmware <> "" Then Exit Function
 
-If IsWindowsNT = False Then
-    di = GetDriveInfo(PRIMARY_MASTER)
-    GetHDSerialFirmware = Trim(di.SerialNumber)
-    If GetHDSerialFirmware <> "" Then Exit Function
-End If
-
+' ******* METHOD 2 - SCSI - PURE VB6 *******
 ' ialkan 2-12-06
 ' Pure VB6 version of the code found in several online resources
 ' described in GetHDSerialFirmwareVB6 function
@@ -690,17 +689,15 @@ For jj = 0 To 15 ' Controller index
     If GetHDSerialFirmware <> "" Then Exit Function
 Next
    
-' Still nothing...... :( Use ALCrypto DLL
+' ******* METHOD 3 - ALCRYPTO *******
+' Use ALCrypto DLL
 Dim mU As MyUDT2
 Call getHardDriveFirmware(mU)
 GetHDSerialFirmware = Trim(StripControlChars(mU.myStr, False))
 If GetHDSerialFirmware <> "" Then Exit Function
-' For WinNT+ OSs, try the SMART approach as the last option
-di = GetDriveInfo(PRIMARY_MASTER)
-GetHDSerialFirmware = Trim(di.SerialNumber)
-If GetHDSerialFirmware <> "" Then Exit Function
-  
-' Still nothing keep trying.
+
+' ******* METHOD 4 - WMI *******
+' Works under Vista and with UAC
 ' This code was supplied by Daniel Gochin because the Vista code works without admin rights and under UAC !!!
 ' Modified a bit by Ismail Alkan - Nov'2008
 GetHDSerialFirmware = GetSerialNumberFromWMI("Win32_PhysicalMedia")
@@ -737,14 +734,14 @@ Private Function GetSerialNumberFromWMI(wmi_selection As String) As String
     
     ' Check SerialNumber property
     For Each obj In objEnum
-        Dim I As WbemScripting.SWbemProperty
+        Dim i As WbemScripting.SWbemProperty
 
-        For Each I In obj.Properties_
-            If IsNull2(I.name, "") = "SerialNumber" Then
+        For Each i In obj.Properties_
+            If IsNull2(i.name, "") = "SerialNumber" Then
                 'Debug.Print i.Value
-                sHDNoHex = IsNull2(I.Value, "")
+                sHDNoHex = IsNull2(i.Value, "")
             End If
-        Next I
+        Next i
     Next obj
     If Len(sHDNoHex) > 0 Then
         sHDNoHexToChar = ""
@@ -956,7 +953,7 @@ Private Function IdentifyDrive(ByVal hDrive As Long, ByVal IDCmd As Byte, ByVal 
     Dim sMsg As String
     Dim lpcbBytesReturned As Long
     Dim barrfound(100) As Long
-    Dim I As Long
+    Dim i As Long
     Dim lng As Long
 '   Set up data structures for IDENTIFY command.
     With SCIP
@@ -970,7 +967,7 @@ Private Function IdentifyDrive(ByVal hDrive As Long, ByVal IDCmd As Byte, ByVal 
              .bCylHighReg = 0
 ' Compute the drive number.
              .bDriveHeadReg = &HA0
-             If Not IsWindowsNT Then .bDriveHeadReg = .bDriveHeadReg Or (DriveNum And 1) * 16
+             If Not IsWinNT4Plus Then .bDriveHeadReg = .bDriveHeadReg Or (DriveNum And 1) * 16
 ' The command can either be IDE identify or ATAPI identify.
              .bCommandReg = CByte(IDCmd)
         End With
@@ -1081,7 +1078,7 @@ End Function
 ' Remarks: None
 '===============================================================================
 Private Function OpenSmart(drv_num As IDE_DRIVE_NUMBER) As Long
-   If IsWindowsNT Then
+   If IsWinNT4Plus Then
       OpenSmart = CreateFile("\\.\PhysicalDrive" & CStr(drv_num), GENERIC_READ Or GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, ByVal 0&, OPEN_EXISTING, 0, 0)
    Else
       OpenSmart = CreateFile("\\.\SMARTVSD", 0, 0, ByVal 0&, CREATE_NEW, 0, 0)
@@ -1098,7 +1095,7 @@ Private Function ReadAttributesCmd(ByVal hDrive As Long, DriveNum As IDE_DRIVE_N
    Dim drv_attr As DRIVEATTRIBUTE
    Dim bArrOut(OUTPUT_DATA_SIZE - 1) As Byte
    Dim sMsg As String
-   Dim I As Long
+   Dim i As Long
    With SCIP
  ' Set up data structures for Read Attributes SMART Command.
        .cBufferSize = READ_ATTRIBUTE_BUFFER_SIZE
@@ -1111,24 +1108,24 @@ Private Function ReadAttributesCmd(ByVal hDrive As Long, DriveNum As IDE_DRIVE_N
             .bCylHighReg = SMART_CYL_HI
 '  Compute the drive number.
             .bDriveHeadReg = &HA0
-            If Not IsWindowsNT Then .bDriveHeadReg = .bDriveHeadReg Or (DriveNum And 1) * 16
+            If Not IsWinNT4Plus Then .bDriveHeadReg = .bDriveHeadReg Or (DriveNum And 1) * 16
             .bCommandReg = IDE_EXECUTE_SMART_FUNCTION
        End With
   End With
   ReadAttributesCmd = DeviceIoControl(hDrive, DFP_RECEIVE_DRIVE_DATA, SCIP, Len(SCIP) - 4, bArrOut(0), OUTPUT_DATA_SIZE, cbBytesReturned, ByVal 0&)
   On Error Resume Next
-  For I = 0 To NUM_ATTRIBUTE_STRUCTS - 1
-      If bArrOut(18 + I * 12) > 0 Then
-         di.Attributes(di.NumAttributes).AttrID = bArrOut(18 + I * 12)
-         di.Attributes(di.NumAttributes).AttrName = "Unknown value (" & bArrOut(18 + I * 12) & ")"
-         di.Attributes(di.NumAttributes).AttrName = colAttrNames(CStr(bArrOut(18 + I * 12)))
+  For i = 0 To NUM_ATTRIBUTE_STRUCTS - 1
+      If bArrOut(18 + i * 12) > 0 Then
+         di.Attributes(di.NumAttributes).AttrID = bArrOut(18 + i * 12)
+         di.Attributes(di.NumAttributes).AttrName = "Unknown value (" & bArrOut(18 + i * 12) & ")"
+         di.Attributes(di.NumAttributes).AttrName = colAttrNames(CStr(bArrOut(18 + i * 12)))
          di.NumAttributes = di.NumAttributes + 1
          ReDim Preserve di.Attributes(di.NumAttributes)
-         CopyMemory di.Attributes(di.NumAttributes).StatusFlags, bArrOut(19 + I * 12), 2
-         di.Attributes(di.NumAttributes).AttrValue = bArrOut(21 + I * 12)
-         di.Attributes(di.NumAttributes).WorstValue = bArrOut(22 + I * 12)
+         CopyMemory di.Attributes(di.NumAttributes).StatusFlags, bArrOut(19 + i * 12), 2
+         di.Attributes(di.NumAttributes).AttrValue = bArrOut(21 + i * 12)
+         di.Attributes(di.NumAttributes).WorstValue = bArrOut(22 + i * 12)
       End If
-  Next I
+  Next i
 End Function
 Private Function ReadThresholdsCmd(ByVal hDrive As Long, DriveNum As IDE_DRIVE_NUMBER) As Boolean
    Dim cbBytesReturned As Long
@@ -1137,7 +1134,7 @@ Private Function ReadThresholdsCmd(ByVal hDrive As Long, DriveNum As IDE_DRIVE_N
    Dim bArrOut(OUTPUT_DATA_SIZE - 1) As Byte
    Dim sMsg As String
    Dim thr_attr As ATTRTHRESHOLD
-   Dim I As Long, J As Long
+   Dim i As Long, j As Long
    With SCIP
  ' Set up data structures for Read Attributes SMART Command.
        .cBufferSize = READ_THRESHOLD_BUFFER_SIZE
@@ -1150,22 +1147,22 @@ Private Function ReadThresholdsCmd(ByVal hDrive As Long, DriveNum As IDE_DRIVE_N
             .bCylHighReg = SMART_CYL_HI
 '  Compute the drive number.
             .bDriveHeadReg = &HA0
-            If Not IsWindowsNT Then .bDriveHeadReg = .bDriveHeadReg Or (DriveNum And 1) * 16
+            If Not IsWinNT4Plus Then .bDriveHeadReg = .bDriveHeadReg Or (DriveNum And 1) * 16
             .bCommandReg = IDE_EXECUTE_SMART_FUNCTION
        End With
   End With
   ReadThresholdsCmd = DeviceIoControl(hDrive, DFP_RECEIVE_DRIVE_DATA, SCIP, Len(SCIP) - 4, bArrOut(0), OUTPUT_DATA_SIZE, cbBytesReturned, ByVal 0&)
-  For I = 0 To NUM_ATTRIBUTE_STRUCTS - 1
-      CopyMemory thr_attr, bArrOut(18 + I * Len(thr_attr)), Len(thr_attr)
+  For i = 0 To NUM_ATTRIBUTE_STRUCTS - 1
+      CopyMemory thr_attr, bArrOut(18 + i * Len(thr_attr)), Len(thr_attr)
       If thr_attr.bAttrID > 0 Then
-         For J = 0 To UBound(di.Attributes)
-             If thr_attr.bAttrID = di.Attributes(J).AttrID Then
-                di.Attributes(J).ThresholdValue = thr_attr.bWarrantyThreshold
+         For j = 0 To UBound(di.Attributes)
+             If thr_attr.bAttrID = di.Attributes(j).AttrID Then
+                di.Attributes(j).ThresholdValue = thr_attr.bWarrantyThreshold
                 Exit For
              End If
-         Next J
+         Next j
       End If
-  Next I
+  Next i
 End Function
 
 '===============================================================================
@@ -1179,12 +1176,12 @@ End Function
 '===============================================================================
 Private Function SwapStringBytes(ByVal sIn As String) As String
    Dim sTemp As String
-   Dim I As Integer
+   Dim i As Integer
    sTemp = Space(Len(sIn))
-   For I = 1 To Len(sIn) - 1 Step 2
-       Mid(sTemp, I, 1) = Mid(sIn, I + 1, 1)
-       Mid(sTemp, I + 1, 1) = Mid(sIn, I, 1)
-   Next I
+   For i = 1 To Len(sIn) - 1 Step 2
+       Mid(sTemp, i, 1) = Mid(sIn, i + 1, 1)
+       Mid(sTemp, i + 1, 1) = Mid(sIn, i, 1)
+   Next i
    SwapStringBytes = sTemp
 End Function
 '===============================================================================
@@ -1199,7 +1196,7 @@ Public Function GetMACAddress() As String
 
 ' v3.5 introduces the use of the GetIfTable method which
 ' works very fast
-If IsWindowsNT = True Then
+If IsWinNT4Plus = True Then
     GetMACAddress = GetMACs_IfTable
     If GetMACAddress <> "" Then Exit Function
 End If
@@ -1290,7 +1287,7 @@ End Function
 '-----------------------------------------------------------------------------------
 Public Function GetMACs_IfTable() As String
 
-    Dim NumAdapts As Long, nRowSize As Long, I%, retStr As String
+    Dim NumAdapts As Long, nRowSize As Long, i%, retStr As String
     Dim IfInfo As MIB_IFROW, IPinfoBuf() As Byte, bufLen As Long, sts As Long
 
     ' Get # of interfaces defined (sometimes 1 more than GetIfTable)
@@ -1309,9 +1306,9 @@ Public Function GetMACs_IfTable() As String
     nRowSize = Len(IfInfo)
     'retStr = NumAdapts & " Interface(s):" & vbCrLf
 
-    For I = 1 To NumAdapts
+    For i = 1 To NumAdapts
         ' copy one IfRow chunk of byte data into an MIB_IFROW structure
-        Call CopyMemory(IfInfo, IPinfoBuf(4 + (I - 1) * nRowSize), nRowSize)
+        Call CopyMemory(IfInfo, IPinfoBuf(4 + (i - 1) * nRowSize), nRowSize)
 
         ' Take adapter address if correct type
         With IfInfo
@@ -1320,7 +1317,7 @@ Public Function GetMACs_IfTable() As String
                 retStr = Replace(MAC2String(.bPhysAddr), "-", " ") 'retStr & vbTab & MAC2String(.bPhysAddr) & vbCrLf
             End If
         End With
-    Next I
+    Next i
 
     GetMACs_IfTable = retStr
 
@@ -1328,19 +1325,19 @@ End Function
 
 ' Convert a byte array containing a MAC address to a hex string
 Private Function MAC2String(AdrArray() As Byte) As String
-    Dim aStr As String, hexStr As String, I%
+    Dim aStr As String, hexStr As String, i%
     
-    For I = 0 To 5
-        If (I > UBound(AdrArray)) Then
+    For i = 0 To 5
+        If (i > UBound(AdrArray)) Then
             hexStr = "00"
         Else
-            hexStr = Hex$(AdrArray(I))
+            hexStr = Hex$(AdrArray(i))
         End If
         
         If (Len(hexStr) < 2) Then hexStr = "0" & hexStr
         aStr = aStr & hexStr
-        If (I < 5) Then aStr = aStr & "-"
-    Next I
+        If (i < 5) Then aStr = aStr & "-"
+    Next i
     
     MAC2String = aStr
     
@@ -1436,7 +1433,7 @@ Dim lpHost As Long
 Dim HOST As HOSTENT
 Dim dwIPAddr As Long
 Dim tmpIPAddr() As Byte
-Dim I As Integer
+Dim i As Integer
 Dim sIPAddr As String
 If Not SocketsInitialize() Then
     GetIPaddress = ""
@@ -1460,8 +1457,8 @@ CopyMemoryIP HOST, lpHost, Len(HOST)
 CopyMemoryIP dwIPAddr, HOST.hAddrList, 4
 ReDim tmpIPAddr(1 To HOST.hLen)
 CopyMemoryIP tmpIPAddr(1), dwIPAddr, HOST.hLen
-For I = 1 To HOST.hLen
-    sIPAddr = sIPAddr & tmpIPAddr(I) & "."
+For i = 1 To HOST.hLen
+    sIPAddr = sIPAddr & tmpIPAddr(i) & "."
 Next
 GetIPaddress = Mid$(sIPAddr, 1, Len(sIPAddr) - 1)
 SocketsCleanup
