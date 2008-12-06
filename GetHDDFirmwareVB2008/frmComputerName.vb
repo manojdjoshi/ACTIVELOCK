@@ -39,7 +39,11 @@ Friend Class Form1
 	Public WithEvents Text1 As System.Windows.Forms.TextBox
     Public WithEvents Label3 As System.Windows.Forms.Label
 	Public WithEvents Label2 As System.Windows.Forms.Label
-	Public WithEvents Label1 As System.Windows.Forms.Label
+    Public WithEvents Label1 As System.Windows.Forms.Label
+    Public WithEvents TextBox1 As System.Windows.Forms.TextBox
+    Public WithEvents Label5 As System.Windows.Forms.Label
+    Public WithEvents TextBox2 As System.Windows.Forms.TextBox
+    Public WithEvents Label6 As System.Windows.Forms.Label
 	'NOTE: The following procedure is required by the Windows Form Designer
 	'It can be modified using the Windows Form Designer.
 	'Do not modify it using the code editor.
@@ -55,6 +59,10 @@ Friend Class Form1
         Me.Label2 = New System.Windows.Forms.Label
         Me.Label1 = New System.Windows.Forms.Label
         Me.Label4 = New System.Windows.Forms.Label
+        Me.TextBox1 = New System.Windows.Forms.TextBox
+        Me.Label5 = New System.Windows.Forms.Label
+        Me.TextBox2 = New System.Windows.Forms.TextBox
+        Me.Label6 = New System.Windows.Forms.Label
         Me.SuspendLayout()
         '
         'Command1
@@ -63,7 +71,7 @@ Friend Class Form1
         Me.Command1.Cursor = System.Windows.Forms.Cursors.Default
         Me.Command1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Command1.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Command1.Location = New System.Drawing.Point(114, 158)
+        Me.Command1.Location = New System.Drawing.Point(116, 213)
         Me.Command1.Name = "Command1"
         Me.Command1.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Command1.Size = New System.Drawing.Size(295, 64)
@@ -78,11 +86,11 @@ Friend Class Form1
         Me.Text3.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.Text3.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Text3.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.Text3.Location = New System.Drawing.Point(170, 82)
+        Me.Text3.Location = New System.Drawing.Point(220, 82)
         Me.Text3.MaxLength = 0
         Me.Text3.Name = "Text3"
         Me.Text3.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Text3.Size = New System.Drawing.Size(340, 22)
+        Me.Text3.Size = New System.Drawing.Size(290, 20)
         Me.Text3.TabIndex = 5
         '
         'Text2
@@ -92,11 +100,11 @@ Friend Class Form1
         Me.Text2.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.Text2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Text2.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.Text2.Location = New System.Drawing.Point(170, 56)
+        Me.Text2.Location = New System.Drawing.Point(220, 56)
         Me.Text2.MaxLength = 0
         Me.Text2.Name = "Text2"
         Me.Text2.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Text2.Size = New System.Drawing.Size(340, 22)
+        Me.Text2.Size = New System.Drawing.Size(290, 20)
         Me.Text2.TabIndex = 3
         '
         'Text1
@@ -106,11 +114,11 @@ Friend Class Form1
         Me.Text1.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.Text1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Text1.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.Text1.Location = New System.Drawing.Point(170, 28)
+        Me.Text1.Location = New System.Drawing.Point(220, 28)
         Me.Text1.MaxLength = 0
         Me.Text1.Name = "Text1"
         Me.Text1.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Text1.Size = New System.Drawing.Size(340, 22)
+        Me.Text1.Size = New System.Drawing.Size(290, 20)
         Me.Text1.TabIndex = 1
         '
         'Label3
@@ -124,7 +132,7 @@ Friend Class Form1
         Me.Label3.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Label3.Size = New System.Drawing.Size(141, 22)
         Me.Label3.TabIndex = 4
-        Me.Label3.Text = "VB6 API with SCSI"
+        Me.Label3.Text = "VB2008 API with SCSI"
         '
         'Label2
         '
@@ -154,18 +162,76 @@ Friend Class Form1
         '
         'Label4
         '
-        Me.Label4.Location = New System.Drawing.Point(122, 132)
+        Me.Label4.Location = New System.Drawing.Point(124, 179)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(278, 22)
         Me.Label4.TabIndex = 7
         Me.Label4.Text = "VB2008 Version"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
+        'TextBox1
+        '
+        Me.TextBox1.AcceptsReturn = True
+        Me.TextBox1.BackColor = System.Drawing.SystemColors.Window
+        Me.TextBox1.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.TextBox1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBox1.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.TextBox1.Location = New System.Drawing.Point(220, 108)
+        Me.TextBox1.MaxLength = 0
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.TextBox1.Size = New System.Drawing.Size(290, 20)
+        Me.TextBox1.TabIndex = 9
+        '
+        'Label5
+        '
+        Me.Label5.BackColor = System.Drawing.SystemColors.Control
+        Me.Label5.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label5.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label5.Location = New System.Drawing.Point(21, 108)
+        Me.Label5.Name = "Label5"
+        Me.Label5.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label5.Size = New System.Drawing.Size(194, 22)
+        Me.Label5.TabIndex = 8
+        Me.Label5.Text = "VB2008 WMI (Win32_PhysicalMedia)"
+        '
+        'TextBox2
+        '
+        Me.TextBox2.AcceptsReturn = True
+        Me.TextBox2.BackColor = System.Drawing.SystemColors.Window
+        Me.TextBox2.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.TextBox2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.TextBox2.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.TextBox2.Location = New System.Drawing.Point(220, 134)
+        Me.TextBox2.MaxLength = 0
+        Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.TextBox2.Size = New System.Drawing.Size(290, 20)
+        Me.TextBox2.TabIndex = 11
+        '
+        'Label6
+        '
+        Me.Label6.BackColor = System.Drawing.SystemColors.Control
+        Me.Label6.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label6.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label6.Location = New System.Drawing.Point(21, 133)
+        Me.Label6.Name = "Label6"
+        Me.Label6.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label6.Size = New System.Drawing.Size(180, 22)
+        Me.Label6.TabIndex = 10
+        Me.Label6.Text = "VB2008 WMI (Win32_DiskDrive)"
+        '
         'Form1
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(524, 254)
+        Me.ClientSize = New System.Drawing.Size(524, 289)
+        Me.Controls.Add(Me.TextBox2)
+        Me.Controls.Add(Me.Label6)
+        Me.Controls.Add(Me.TextBox1)
+        Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Command1)
         Me.Controls.Add(Me.Text3)
@@ -182,6 +248,7 @@ Friend Class Form1
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Form1"
         Me.ResumeLayout(False)
+        Me.PerformLayout()
 
     End Sub
 #End Region 
@@ -226,5 +293,7 @@ Friend Class Form1
 		Text1.Text = GetHDSerialFirmware(0)
 		Text2.Text = GetHDSerialFirmware(1)
 		Text3.Text = GetHDSerialFirmware(2)
+        Text4.Text = GetHDSerialFirmware(3)
+        Text5.Text = GetHDSerialFirmware(4)
     End Sub
 End Class
