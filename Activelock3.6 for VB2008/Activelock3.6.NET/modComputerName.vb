@@ -561,11 +561,9 @@ GetHDSeriAlerror:
         Dim mU As MyUDT2 = Nothing
         Dim a As String
 
-        If IsWindowsNT() = False Then
-            GetHDSerialFirmware = Trim(GetDriveInfo(IDE_DRIVE_NUMBER.PRIMARY_MASTER))
-            If GetHDSerialFirmware <> "" Then
-                Exit Function
-            End If
+        GetHDSerialFirmware = Trim(GetDriveInfo(IDE_DRIVE_NUMBER.PRIMARY_MASTER))
+        If GetHDSerialFirmware <> "" Then
+            Exit Function
         End If
 
         ' ialkan 2-12-06
@@ -587,9 +585,6 @@ GetHDSeriAlerror:
         ' Still nothing... Use ALCrypto DLL
         Call getHardDriveFirmware(mU)
         GetHDSerialFirmware = Trim(StripControlChars(mU.myStr, False))
-        If GetHDSerialFirmware <> "" Then Exit Function
-        ' For WinNT+ OSs, try the SMART approach as the last option
-        GetHDSerialFirmware = Trim(GetDriveInfo(IDE_DRIVE_NUMBER.PRIMARY_MASTER))
         If GetHDSerialFirmware <> "" Then Exit Function
 
         Exit Function
@@ -1099,6 +1094,11 @@ GetIPaddressError:
 
         System.Runtime.InteropServices.Marshal.FreeHGlobal(bout)
         CloseHandle2(hdh)
+
+    End Function
+
+    Private Function GetSerialNumberFromWMI(ByVal wmi_selection As String) As String
+        GetSerialNumberFromWMI = ""
 
     End Function
 End Module
