@@ -162,7 +162,8 @@ Friend Class Form1
         '
         'Label4
         '
-        Me.Label4.Location = New System.Drawing.Point(102, 152)
+        Me.Label4.ForeColor = System.Drawing.Color.Blue
+        Me.Label4.Location = New System.Drawing.Point(111, 162)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(278, 22)
         Me.Label4.TabIndex = 7
