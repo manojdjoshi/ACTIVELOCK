@@ -699,12 +699,10 @@ GetHDSerialFirmwareError:
                 Dim split As String() = pnpDeviceID.Split(New String() {"\"}, StringSplitOptions.None)
                 If split.Length = 3 Then
                     If Not split(2).Contains("&") Then
-                        If split(2).Contains("_") Then
-                            split(2) = split(2).Substring(0, split(2).IndexOf("_"))
-                            Dim bytes As Byte() = GetHexStringBytes(split(2))
-                            If bytes.Length > 0 Then
-                                GetHDSerialFirmwareWMI = ReverseSerialNumber(System.Text.Encoding.UTF8.GetString(bytes)).Trim()
-                            End If
+                        If split(2).Contains("_") Then split(2) = split(2).Substring(0, split(2).IndexOf("_"))
+                        Dim bytes As Byte() = GetHexStringBytes(split(2))
+                        If bytes.Length > 0 Then
+                            GetHDSerialFirmwareWMI = ReverseSerialNumber(System.Text.Encoding.UTF8.GetString(bytes)).Trim()
                         End If
                     Else
                         ' Custom checks go into here
