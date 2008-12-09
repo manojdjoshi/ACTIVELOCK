@@ -1,6 +1,6 @@
 Type=Exe
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\Windows\system32\stdole2.tlb#OLE Automation
-Reference=*\G{565783C6-CB41-11D1-8B02-00600806D9B6}#1.2#0#..\..\Windows\system32\wbem\wbemdisp.TLB#Microsoft WMI Scripting V1.2 Library
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\WINDOWS\system32\STDOLE2.TLB#OLE Automation
+Reference=*\G{565783C6-CB41-11D1-8B02-00600806D9B6}#1.2#0#..\..\WINDOWS\system32\wbem\wbemdisp.TLB#Microsoft WMI Scripting V1.2 Library
 Form=frmComputerNameTest.frm
 Module=modHardware; modComputerNameTest.bas
 Module=modWindowsVersion; modWindowsVersionTest.bas

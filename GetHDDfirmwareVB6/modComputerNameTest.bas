@@ -794,10 +794,10 @@ Private Function GetSerialNumberFromWMI(wmi_selection As String) As String
                 sHDNoHex = VBA.Replace(Bytes(), vbNullChar, "")
                 mSerial = sHDNoHex
             
+                GetSerialNumberFromWMI = StripControlChars(Trim(mSerial), False)
             End If
         End If
         
-        GetSerialNumberFromWMI = StripControlChars(Trim(mSerial), False)
     End If
 End Function
 
