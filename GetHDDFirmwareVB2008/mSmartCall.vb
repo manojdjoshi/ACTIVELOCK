@@ -152,8 +152,8 @@ Module mSmartCall
     '***************************************************************************
     Private Function CheckSMARTEnable(ByVal hDrive As Integer, ByVal DriveNum As IDE_DRIVE_NUMBER) As Boolean
         'Set up data structures for Enable SMART Command.
-        Dim SCIP As SENDCMDINPARAMS
-        Dim SCOP As SENDCMDOUTPARAMS
+        Dim SCIP As SENDCMDINPARAMS = Nothing
+        Dim SCOP As SENDCMDOUTPARAMS = Nothing
         Dim lpcbBytesReturned As Integer
         With SCIP
             .cBufferSize = 0
@@ -178,10 +178,12 @@ Module mSmartCall
     ' IDCmd = IDE_ID_FUNCTION or IDE_ATAPI_ID
     '***************************************************************************
     Private Function IdentifyDrive(ByVal hDrive As Integer, ByVal IDCmd As Byte, ByVal DriveNum As IDE_DRIVE_NUMBER) As String
-        Dim SCIP As SENDCMDINPARAMS
+        Dim SCIP As SENDCMDINPARAMS = Nothing
         Dim bArrOut(OUTPUT_DATA_SIZE - 1) As Byte
         Dim bSerial(19) As Byte
         Dim lpcbBytesReturned As Integer
+        IdentifyDrive = ""
+
         '   Set up data structures for IDENTIFY command.
 
         ' Compute the drive number.
@@ -215,7 +217,7 @@ Module mSmartCall
 
     Public Function GetDriveInfo(ByVal DriveNum As IDE_DRIVE_NUMBER) As String
         Dim hDrive As Integer
-
+        GetDriveInfo = ""
         hDrive = OpenSmart(DriveNum)
         If hDrive = INVALID_HANDLE_VALUE Then Exit Function
 

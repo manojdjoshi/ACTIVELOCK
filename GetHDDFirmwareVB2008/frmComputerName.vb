@@ -40,13 +40,11 @@ Friend Class Form1
     Public WithEvents Label3 As System.Windows.Forms.Label
 	Public WithEvents Label2 As System.Windows.Forms.Label
     Public WithEvents Label1 As System.Windows.Forms.Label
-    Public WithEvents TextBox1 As System.Windows.Forms.TextBox
-    Public WithEvents Label5 As System.Windows.Forms.Label
-    Public WithEvents TextBox2 As System.Windows.Forms.TextBox
+    Public WithEvents Text4 As System.Windows.Forms.TextBox
     Public WithEvents Label6 As System.Windows.Forms.Label
-	'NOTE: The following procedure is required by the Windows Form Designer
-	'It can be modified using the Windows Form Designer.
-	'Do not modify it using the code editor.
+    'NOTE: The following procedure is required by the Windows Form Designer
+    'It can be modified using the Windows Form Designer.
+    'Do not modify it using the code editor.
     Friend WithEvents Label4 As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
@@ -59,9 +57,7 @@ Friend Class Form1
         Me.Label2 = New System.Windows.Forms.Label
         Me.Label1 = New System.Windows.Forms.Label
         Me.Label4 = New System.Windows.Forms.Label
-        Me.TextBox1 = New System.Windows.Forms.TextBox
-        Me.Label5 = New System.Windows.Forms.Label
-        Me.TextBox2 = New System.Windows.Forms.TextBox
+        Me.Text4 = New System.Windows.Forms.TextBox
         Me.Label6 = New System.Windows.Forms.Label
         Me.SuspendLayout()
         '
@@ -169,46 +165,19 @@ Friend Class Form1
         Me.Label4.Text = "VB2008 Version"
         Me.Label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
         '
-        'TextBox1
+        'Text4
         '
-        Me.TextBox1.AcceptsReturn = True
-        Me.TextBox1.BackColor = System.Drawing.SystemColors.Window
-        Me.TextBox1.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.TextBox1.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox1.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.TextBox1.Location = New System.Drawing.Point(220, 108)
-        Me.TextBox1.MaxLength = 0
-        Me.TextBox1.Name = "TextBox1"
-        Me.TextBox1.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.TextBox1.Size = New System.Drawing.Size(290, 20)
-        Me.TextBox1.TabIndex = 9
-        '
-        'Label5
-        '
-        Me.Label5.BackColor = System.Drawing.SystemColors.Control
-        Me.Label5.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label5.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label5.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label5.Location = New System.Drawing.Point(21, 108)
-        Me.Label5.Name = "Label5"
-        Me.Label5.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label5.Size = New System.Drawing.Size(194, 22)
-        Me.Label5.TabIndex = 8
-        Me.Label5.Text = "VB2008 WMI (Win32_PhysicalMedia)"
-        '
-        'TextBox2
-        '
-        Me.TextBox2.AcceptsReturn = True
-        Me.TextBox2.BackColor = System.Drawing.SystemColors.Window
-        Me.TextBox2.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.TextBox2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.TextBox2.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.TextBox2.Location = New System.Drawing.Point(220, 134)
-        Me.TextBox2.MaxLength = 0
-        Me.TextBox2.Name = "TextBox2"
-        Me.TextBox2.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.TextBox2.Size = New System.Drawing.Size(290, 20)
-        Me.TextBox2.TabIndex = 11
+        Me.Text4.AcceptsReturn = True
+        Me.Text4.BackColor = System.Drawing.SystemColors.Window
+        Me.Text4.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.Text4.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Text4.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.Text4.Location = New System.Drawing.Point(220, 111)
+        Me.Text4.MaxLength = 0
+        Me.Text4.Name = "Text4"
+        Me.Text4.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Text4.Size = New System.Drawing.Size(290, 20)
+        Me.Text4.TabIndex = 11
         '
         'Label6
         '
@@ -216,7 +185,7 @@ Friend Class Form1
         Me.Label6.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label6.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label6.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label6.Location = New System.Drawing.Point(21, 133)
+        Me.Label6.Location = New System.Drawing.Point(21, 111)
         Me.Label6.Name = "Label6"
         Me.Label6.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Label6.Size = New System.Drawing.Size(180, 22)
@@ -228,10 +197,8 @@ Friend Class Form1
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.BackColor = System.Drawing.SystemColors.Control
         Me.ClientSize = New System.Drawing.Size(524, 289)
-        Me.Controls.Add(Me.TextBox2)
+        Me.Controls.Add(Me.Text4)
         Me.Controls.Add(Me.Label6)
-        Me.Controls.Add(Me.TextBox1)
-        Me.Controls.Add(Me.Label5)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Command1)
         Me.Controls.Add(Me.Text3)
@@ -251,49 +218,45 @@ Friend Class Form1
         Me.PerformLayout()
 
     End Sub
-#End Region 
+#End Region
 #Region "Upgrade Support "
-	Private Shared m_vb6FormDefInstance As Form1
-	Private Shared m_InitializingDefInstance As Boolean
-	Public Shared Property DefInstance() As Form1
-		Get
-			If m_vb6FormDefInstance Is Nothing OrElse m_vb6FormDefInstance.IsDisposed Then
-				m_InitializingDefInstance = True
-				m_vb6FormDefInstance = New Form1()
-				m_InitializingDefInstance = False
-			End If
-			DefInstance = m_vb6FormDefInstance
-		End Get
-		Set
-			m_vb6FormDefInstance = Value
-		End Set
-	End Property
-#End Region 
-	
-	'UPGRADE_ISSUE: Declaring a parameter 'As Any' is not supported. Click for more: 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="vbup1016"'
-	'UPGRADE_ISSUE: Declaring a parameter 'As Any' is not supported. Click for more: 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="vbup1016"'
-	'UPGRADE_ISSUE: Declaring a parameter 'As Any' is not supported. Click for more: 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="vbup1016"'
+    Private Shared m_vb6FormDefInstance As Form1
+    Private Shared m_InitializingDefInstance As Boolean
+    Public Shared Property DefInstance() As Form1
+        Get
+            If m_vb6FormDefInstance Is Nothing OrElse m_vb6FormDefInstance.IsDisposed Then
+                m_InitializingDefInstance = True
+                m_vb6FormDefInstance = New Form1()
+                m_InitializingDefInstance = False
+            End If
+            DefInstance = m_vb6FormDefInstance
+        End Get
+        Set(ByVal value As Form1)
+            m_vb6FormDefInstance = value
+        End Set
+    End Property
+#End Region
+
+    'UPGRADE_ISSUE: Declaring a parameter 'As Any' is not supported. Click for more: 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="vbup1016"'
+    'UPGRADE_ISSUE: Declaring a parameter 'As Any' is not supported. Click for more: 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="vbup1016"'
+    'UPGRADE_ISSUE: Declaring a parameter 'As Any' is not supported. Click for more: 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="vbup1016"'
     Private Declare Function DeviceIoControl Lib "kernel32" (ByVal hDevice As Integer, ByVal dwIoControlCode As Integer, ByRef lpInBuffer As Integer, ByVal nInBufferSize As Integer, ByRef lpOutBuffer As Integer, ByVal nOutBufferSize As Integer, ByRef lpBytesReturned As Integer, ByRef lpOverlapped As Integer) As Integer
-	Private Declare Function CloseHandle Lib "kernel32" (ByVal hObject As Integer) As Integer
-	Private Declare Function CreateFile Lib "kernel32"  Alias "CreateFileA"(ByVal lpFileName As String, ByVal dwDesiredAccess As Integer, ByVal dwShareMode As Integer, ByVal lpSecurityAttributes As Integer, ByVal dwCreationDisposition As Integer, ByVal dwFlagsAndAttributes As Integer, ByVal hTemplateFile As Integer) As Integer
-	
-	Private Structure XBUFFER
-		<VBFixedArray(559)> Dim Buff() As Byte
-		
-		'UPGRADE_TODO: "Initialize" must be called to initialize instances of this structure. Click for more: 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="vbup1026"'
-		Public Sub Initialize()
-			ReDim Buff(559)
-		End Sub
-	End Structure
-	Public Function GetSerial(ByVal iController As Short, Optional ByVal isMaster As Boolean = True) As String
+    Private Declare Function CloseHandle Lib "kernel32" (ByVal hObject As Integer) As Integer
+    Private Declare Function CreateFile Lib "kernel32" Alias "CreateFileA" (ByVal lpFileName As String, ByVal dwDesiredAccess As Integer, ByVal dwShareMode As Integer, ByVal lpSecurityAttributes As Integer, ByVal dwCreationDisposition As Integer, ByVal dwFlagsAndAttributes As Integer, ByVal hTemplateFile As Integer) As Integer
 
-	End Function
+    Private Structure XBUFFER
+        <VBFixedArray(559)> Dim Buff() As Byte
 
-	Private Sub Command1_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles Command1.Click
-		Text1.Text = GetHDSerialFirmware(0)
-		Text2.Text = GetHDSerialFirmware(1)
-		Text3.Text = GetHDSerialFirmware(2)
-        Text4.Text = GetHDSerialFirmware(3)
-        Text5.Text = GetHDSerialFirmware(4)
+        'UPGRADE_TODO: "Initialize" must be called to initialize instances of this structure. Click for more: 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="vbup1026"'
+        Public Sub Initialize()
+            ReDim Buff(559)
+        End Sub
+    End Structure
+
+    Private Sub Command1_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles Command1.Click
+        Text1.Text = GetHDSerialFirmware(0)
+        Text2.Text = GetHDSerialFirmware(1)
+        Text3.Text = GetHDSerialFirmware(2)
+        Text4.Text = GetHDSerialFirmwareWMI()
     End Sub
 End Class
