@@ -673,10 +673,10 @@ End If
 ' Works under Vista and with UAC
 ' This code was supplied by Daniel Gochin because the Vista code works without admin rights and under UAC !!!
 ' Modified a bit by Ismail Alkan - Nov'2008
-If ii = 3 Then
-    GetHDSerialFirmware = GetSerialNumberFromWMI("Win32_PhysicalMedia")
-    Exit Function
-End If
+'If ii = 3 Then
+'    GetHDSerialFirmware = GetSerialNumberFromWMI("Win32_PhysicalMedia")
+'    Exit Function
+'End If
 If ii = 4 Then
     GetHDSerialFirmware = GetSerialNumberFromWMI("Win32_DiskDrive")
     Exit Function
@@ -711,31 +711,31 @@ Private Function GetSerialNumberFromWMI(wmi_selection As String) As String
     Set objEnum = svc.ExecQuery("select * from " & wmi_selection)
     
     ' Check SerialNumber property
-    For Each obj In objEnum
-        Dim i As WbemScripting.SWbemProperty
-
-        For Each i In obj.Properties_
-            If IsNull2(i.name, "") = "SerialNumber" Then
-                'Debug.Print i.Value
-                sHDNoHex = IsNull2(i.Value, "")
-            End If
-        Next i
-    Next obj
-    If Len(sHDNoHex) > 0 Then
-        sHDNoHexToChar = ""
-        For o = 1 To Len(sHDNoHex) Step 2
-            sHDNoHexToChar = sHDNoHexToChar & Chr(CDec(("&H" & Trim(Mid(sHDNoHex, o, 2)))))
-        Next
-        reversedStr = ""
-        For jj = 0 To Len(sHDNoHexToChar) / 2
-            str1 = Mid(sHDNoHexToChar, jj * 2 + 1, 1)
-            str2 = Mid(sHDNoHexToChar, jj * 2 + 2, 1)
-            reversedStr = reversedStr & str2 & str1
-        Next
-        GetSerialNumberFromWMI = StripControlChars(Trim(reversedStr), False)
-    Else
-        GetSerialNumberFromWMI = sHDNoHex
-    End If
+'    For Each obj In objEnum
+'        Dim i As WbemScripting.SWbemProperty
+'
+'        For Each i In obj.Properties_
+'            If IsNull2(i.name, "") = "SerialNumber" Then
+'                'Debug.Print i.Value
+'                sHDNoHex = IsNull2(i.Value, "")
+'            End If
+'        Next i
+'    Next obj
+'    If Len(sHDNoHex) > 0 Then
+'        sHDNoHexToChar = ""
+'        For o = 1 To Len(sHDNoHex) Step 2
+'            sHDNoHexToChar = sHDNoHexToChar & Chr(CDec(("&H" & Trim(Mid(sHDNoHex, o, 2)))))
+'        Next
+'        reversedStr = ""
+'        For jj = 0 To Len(sHDNoHexToChar) / 2
+'            str1 = Mid(sHDNoHexToChar, jj * 2 + 1, 1)
+'            str2 = Mid(sHDNoHexToChar, jj * 2 + 2, 1)
+'            reversedStr = reversedStr & str2 & str1
+'        Next
+'        GetSerialNumberFromWMI = StripControlChars(Trim(reversedStr), False)
+'    Else
+'        GetSerialNumberFromWMI = sHDNoHex
+'    End If
 
     Dim mPos  As Integer
     Dim k As Integer
@@ -758,25 +758,45 @@ Private Function GetSerialNumberFromWMI(wmi_selection As String) As String
             Next ii
         Next obj
         
-        mPos = InStrRev(sHDNoHex, "\")
-        If mPos > 0 Then
-            sHDNoHex = Mid(sHDNoHex, mPos + 1)
-
-            ' Strip & characters
-            Dim Index As Long
-            Dim Bytes() As Byte
-            
-            Bytes() = sHDNoHex
-            For Index = 0 To UBound(Bytes) Step 2
-                If Bytes(Index) = 38 Then
-                    Bytes(Index) = 0
-                End If
+        Dim myString() As String
+        myString = Split(sHDNoHex, "\", , vbTextCompare)
+        
+        If InStr(1, myString(2), "&") = 0 Then
+            If InStr(1, myString(2), "_") Then myString(2) = Mid(myString(2), InStr(1, myString(2), "_"))
+            sHDNoHexToChar = ""
+            sHDNoHex = myString(2)
+            For o = 1 To Len(sHDNoHex) Step 2
+                sHDNoHexToChar = sHDNoHexToChar & Chr(CDec(("&H" & Trim(Mid(sHDNoHex, o, 2)))))
             Next
-            sHDNoHex = VBA.Replace(Bytes(), vbNullChar, "")
-            mSerial = sHDNoHex
-
-        End If
+            reversedStr = ""
+            For jj = 0 To Len(sHDNoHexToChar) / 2
+                str1 = Mid(sHDNoHexToChar, jj * 2 + 1, 1)
+                str2 = Mid(sHDNoHexToChar, jj * 2 + 2, 1)
+                reversedStr = reversedStr & str2 & str1
+            Next
+            GetSerialNumberFromWMI = StripControlChars(Trim(reversedStr), False)
+        Else
+        
+            mPos = InStrRev(sHDNoHex, "\")
+            If mPos > 0 Then
+                sHDNoHex = Mid(sHDNoHex, mPos + 1)
+    
+                ' Strip & characters
+                Dim Index As Long
+                Dim Bytes() As Byte
                 
+                Bytes() = sHDNoHex
+                For Index = 0 To UBound(Bytes) Step 2
+                    If Bytes(Index) = 38 Then
+                        Bytes(Index) = 0
+                    End If
+                Next
+                sHDNoHex = VBA.Replace(Bytes(), vbNullChar, "")
+                mSerial = sHDNoHex
+            
+            End If
+        End If
+        
         GetSerialNumberFromWMI = StripControlChars(Trim(mSerial), False)
     End If
 End Function

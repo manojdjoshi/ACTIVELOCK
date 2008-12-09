@@ -1,22 +1,26 @@
 VERSION 5.00
 Begin VB.Form Form1 
-   Caption         =   "Form1"
-   ClientHeight    =   4455
+   Caption         =   "Activelock HDD Firmware Serial Number Detection Routines"
+   ClientHeight    =   4155
    ClientLeft      =   60
    ClientTop       =   450
    ClientWidth     =   7380
    LinkTopic       =   "Form1"
-   ScaleHeight     =   4455
+   ScaleHeight     =   4155
    ScaleWidth      =   7380
    StartUpPosition =   2  'CenterScreen
-   Begin VB.TextBox Text6 
-      Height          =   330
-      Left            =   3600
+   Begin VB.PictureBox Picture1 
+      BorderStyle     =   0  'None
+      Height          =   735
+      Left            =   6240
+      Picture         =   "frmComputerNameTest.frx":0000
+      ScaleHeight     =   735
+      ScaleWidth      =   975
       TabIndex        =   11
-      Top             =   2460
-      Width           =   3000
+      Top             =   3120
+      Width           =   975
    End
-   Begin VB.TextBox Text5 
+   Begin VB.TextBox Text6 
       Height          =   330
       Left            =   3600
       TabIndex        =   9
@@ -33,9 +37,9 @@ Begin VB.Form Form1
    Begin VB.CommandButton Command1 
       Caption         =   "Get the HDD Firmware Serial Number"
       Height          =   960
-      Left            =   1560
+      Left            =   1440
       TabIndex        =   6
-      Top             =   3120
+      Top             =   3000
       Width           =   4425
    End
    Begin VB.TextBox Text3 
@@ -59,16 +63,18 @@ Begin VB.Form Form1
       Top             =   405
       Width           =   3000
    End
-   Begin VB.Label Label6 
-      Caption         =   "VB6 API with WMI (Win32_DiskDrive)"
-      Height          =   330
-      Left            =   360
+   Begin VB.Label Label5 
+      Alignment       =   2  'Center
+      Caption         =   "VB6 Version"
+      ForeColor       =   &H00FF0000&
+      Height          =   255
+      Left            =   2280
       TabIndex        =   12
-      Top             =   2460
+      Top             =   2640
       Width           =   3255
    End
-   Begin VB.Label Label5 
-      Caption         =   "VB6 API with WMI (Win32_PhysicalMedia)"
+   Begin VB.Label Label6 
+      Caption         =   "VB6 API with WMI (Win32_DiskDrive)"
       Height          =   330
       Left            =   360
       TabIndex        =   10
@@ -76,7 +82,7 @@ Begin VB.Form Form1
       Width           =   3255
    End
    Begin VB.Label Label4 
-      Caption         =   "VB6 API with SCSI Modified"
+      Caption         =   "VB6 API with SCSI Modified (NOT in AL)"
       Height          =   330
       Left            =   360
       TabIndex        =   8
@@ -84,7 +90,7 @@ Begin VB.Form Form1
       Width           =   3255
    End
    Begin VB.Label Label3 
-      Caption         =   "VB6 API with SCSI"
+      Caption         =   "VB6 API with SCSI Backdoor"
       Height          =   330
       Left            =   360
       TabIndex        =   4
@@ -92,7 +98,7 @@ Begin VB.Form Form1
       Width           =   3255
    End
    Begin VB.Label Label2 
-      Caption         =   "VB6 with ALCrypto"
+      Caption         =   "VB6 with ALCrypto (WinSim DISKID32)"
       Height          =   330
       Left            =   360
       TabIndex        =   2
@@ -100,7 +106,7 @@ Begin VB.Form Form1
       Width           =   3255
    End
    Begin VB.Label Label1 
-      Caption         =   "VB6 Smart for Win98/Me"
+      Caption         =   "VB6 with SMART VxD"
       Height          =   330
       Left            =   360
       TabIndex        =   0
@@ -227,7 +233,7 @@ For i = 0 To 15
     Text4.Text = GetSerial(i, True)
     If Text4.Text <> "" Then Exit For
 Next i
-Text5.Text = GetHDSerialFirmware(3)
+'Text5.Text = GetHDSerialFirmware(3)
 Text6.Text = GetHDSerialFirmware(4)
 
 End Sub
