@@ -762,7 +762,7 @@ Private Function GetSerialNumberFromWMI(wmi_selection As String) As String
         myString = Split(sHDNoHex, "\", , vbTextCompare)
         
         If InStr(1, myString(2), "&") = 0 Then
-            If InStr(1, myString(2), "_") Then myString(2) = Mid(myString(2), InStr(1, myString(2), "_"))
+            If InStr(1, myString(2), "_") Then myString(2) = Mid(myString(2), 1, InStr(1, myString(2), "_") - 1)
             sHDNoHexToChar = ""
             sHDNoHex = myString(2)
             For o = 1 To Len(sHDNoHex) Step 2
