@@ -689,13 +689,15 @@ GetHDSerialFirmwareError:
     End Function
     Public Function GetHDSerialFirmwareWMI() As String
         GetHDSerialFirmwareWMI = ""
+
         Dim managementScope As New ManagementScope("\root\cimv2")
         managementScope.Options.Impersonation = System.Management.ImpersonationLevel.Impersonate
+
         Dim searcher As New ManagementObjectSearcher(managementScope, New ObjectQuery("SELECT * FROM Win32_DiskDrive WHERE InterfaceType=""IDE"" or InterfaceType=""SCSI"""))
         For Each disk As ManagementObject In searcher.[Get]()
             If disk("PNPDeviceID") IsNot Nothing Then
                 Dim pnpDeviceID As String = disk("PNPDeviceID").ToString()
-                'Dim split As String() = pnpDeviceID.Split("\"c)
+
                 Dim split As String() = pnpDeviceID.Split(New String() {"\"}, StringSplitOptions.None)
                 If split.Length = 3 Then
                     If Not split(2).Contains("&") Then
