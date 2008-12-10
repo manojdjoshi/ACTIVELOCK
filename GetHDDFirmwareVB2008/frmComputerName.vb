@@ -130,9 +130,9 @@ Friend Class Form1
         Me.Label3.Location = New System.Drawing.Point(21, 81)
         Me.Label3.Name = "Label3"
         Me.Label3.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label3.Size = New System.Drawing.Size(165, 22)
+        Me.Label3.Size = New System.Drawing.Size(180, 22)
         Me.Label3.TabIndex = 4
-        Me.Label3.Text = "VB2008 API with SCSI Backdoor"
+        Me.Label3.Text = "VB2008 API with SCSI Back Door"
         '
         'Label2
         '
