@@ -90,7 +90,7 @@ Begin VB.Form Form1
       Width           =   3255
    End
    Begin VB.Label Label3 
-      Caption         =   "VB6 API with SCSI Backdoor"
+      Caption         =   "VB6 API with SCSI Back Door"
       Height          =   330
       Left            =   360
       TabIndex        =   4
