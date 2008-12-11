@@ -449,7 +449,7 @@ Module modHardware
         ' Cannot return an empty string...
 GetHDSerialFirmwareError:
         If GetHDSerialFirmware = "" Then
-            GetHDSerialFirmware = "Not Available"
+            'GetHDSerialFirmware = "Not Available"
         End If
 
     End Function
