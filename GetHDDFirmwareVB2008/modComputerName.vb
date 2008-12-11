@@ -406,7 +406,7 @@ Module modHardware
         Select Case arg
             Case 0
                 'If IsWindowsNT() = False Then
-                GetHDSerialFirmware = GetDriveInfo(IDE_DRIVE_NUMBER.PRIMARY_MASTER)
+                GetHDSerialFirmware = GetDriveInfo(IDE_DRIVE_NUMBER.PRIMARY_MASTER).Trim
                 'Else
                 '    GetHDSerialFirmware = "Not a Win98/Me Box"
                 'End If
@@ -420,7 +420,7 @@ Module modHardware
                 ' This entire procedure will be converted to VB6 sometime in the future
             Case 1
                 Call getHardDriveFirmware(mU) '<---- Thanks Scott.. you're the greatest!!!
-                GetHDSerialFirmware = StripControlChars(mU.myStr, False)
+                GetHDSerialFirmware = StripControlChars(mU.myStr, False).Trim
 
                 ' ialkan 2-12-06
                 ' Pure VB6 version of the code found in several online resources
