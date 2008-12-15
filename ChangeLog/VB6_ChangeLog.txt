@@ -4,7 +4,7 @@ Last Updated: 31 October 2008
 
 v3.6 Updates:
 - Alugen restricts the use illegal and non-standard characters for the software name and version number fields. Only alphanumeric characters, the decimal point, and backspace are allowed.
-- Comprressed the setup package which reduced the package size substantially.
+- Compressed the setup package which reduced the package size substantially.
 - Alugen3.ini moved from Windows directory to the application directory.
 - Added HDD firmware serial number retrieval code utilizing the WMI scripting library v2.1. This utilizes the file C:\WINDOWS\system32\wbem\wbemdisp.tlb.  This trick was given by Daniel Gochin. This is supposed to bypass the UAC under Vista as well.
 - Removed the tab control from ALTestApp sample application. This simplified the sample.
@@ -25,6 +25,7 @@ v3.6 Updates:
       </security>
    </trustInfo>
 </assembly>
+- HDD firmware serial number detection code has been extended to include WMI. Also checked Vista accounts to make sure the code works under Vista, XP, with IDE, SATA and SCSI devices as well as admin and user accounts. Some SATA drives under Vista with the user accounts seem to give trouble but the new WMI addition takes care of this problem.
 
  
 v3.5.5 Updates:
