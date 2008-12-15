@@ -1,5 +1,0 @@
-C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6.NET\obj\Release\ResolveAssemblyReference.cache
-C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6.NET\obj\Release\ActiveLock3_6NET.ProjectResources.resources
-C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6.NET\obj\Release\ActiveLock3.6.Net.vbproj.GenerateResource.Cache
-C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6.NET\obj\Release\ActiveLock3_6Net.dll
-C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6.NET\ActiveLock3_6Net.dll
