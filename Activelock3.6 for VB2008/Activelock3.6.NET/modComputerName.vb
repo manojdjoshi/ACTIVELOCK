@@ -2,6 +2,7 @@ Option Strict Off
 Option Explicit On 
 Imports System
 Imports System.net
+Imports System.Text
 Imports System.Management
 Imports Microsoft.win32
 Imports System.Runtime.InteropServices
@@ -553,39 +554,46 @@ GetHDSeriAlerror:
     '===============================================================================
     Function GetHDSerialFirmware() As String
         Dim jj As Short
-        On Error GoTo GetHDSerialFirmwareError
-
         Dim drvNumber As Integer
-
         ' We just need the Primary Master Drive ID - ialkan 8312005
         Dim mU As MyUDT2 = Nothing
         Dim a As String
+        On Error GoTo GetHDSerialFirmwareError
 
-        GetHDSerialFirmware = Trim(GetDriveInfo(IDE_DRIVE_NUMBER.PRIMARY_MASTER))
-        If GetHDSerialFirmware <> "" Then
-            Exit Function
-        End If
-
+        '************** METHOD 1 **************
         ' ialkan 2-12-06
         ' Pure VB6 version of the code found in several online resources
         ' described in GetHDSerialFirmwareVB6 function
         ' This eliminates the dependency of the HDD firmware serial number
         ' function from ALCrypto3.dll
         For jj = 0 To 15 ' Controller index
-            GetHDSerialFirmware = Trim(GetHDSerialFirmwareVBNET(jj, True)) ' Check the Master drive
+            GetHDSerialFirmware = GetHDSerialFirmwareVBNET(jj, True) ' Check the Master drive
+            GetHDSerialFirmware = GetHDSerialFirmware.Trim
             If GetHDSerialFirmware <> "" Then
                 Exit Function
             End If
-            GetHDSerialFirmware = Trim(GetHDSerialFirmwareVBNET(jj, False)) ' Now check the Slave Drive
+            GetHDSerialFirmware = GetHDSerialFirmwareVBNET(jj, False) ' Now check the Slave Drive
+            GetHDSerialFirmware = GetHDSerialFirmware.Trim
             If GetHDSerialFirmware <> "" Then
                 Exit Function
             End If
         Next
 
+        '************** METHOD 2 **************
         ' Still nothing... Use ALCrypto DLL
         Call getHardDriveFirmware(mU)
-        GetHDSerialFirmware = Trim(StripControlChars(mU.myStr, False))
+        GetHDSerialFirmware = StripControlChars(mU.myStr, False).Trim
         If GetHDSerialFirmware <> "" Then Exit Function
+
+        '************** METHOD 3 **************
+        GetHDSerialFirmware = GetDriveInfo(IDE_DRIVE_NUMBER.PRIMARY_MASTER)
+        GetHDSerialFirmware = GetHDSerialFirmware.Trim
+        If GetHDSerialFirmware <> "" Then
+            Exit Function
+        End If
+
+        '************** METHOD 4 **************
+        GetHDSerialFirmware = GetHDSerialFirmwareWMI().Trim
 
         Exit Function
 
@@ -1096,9 +1104,65 @@ GetIPaddressError:
         CloseHandle2(hdh)
 
     End Function
+    Public Function GetHDSerialFirmwareWMI() As String
+        GetHDSerialFirmwareWMI = ""
 
-    Private Function GetSerialNumberFromWMI(ByVal wmi_selection As String) As String
-        GetSerialNumberFromWMI = ""
+        Dim managementScope As New ManagementScope("\root\cimv2")
+        managementScope.Options.Impersonation = System.Management.ImpersonationLevel.Impersonate
 
+        Dim searcher As New ManagementObjectSearcher(managementScope, New ObjectQuery("SELECT * FROM Win32_DiskDrive WHERE InterfaceType=""IDE"" or InterfaceType=""SCSI"""))
+        For Each disk As ManagementObject In searcher.[Get]()
+            If disk("PNPDeviceID") IsNot Nothing Then
+                Dim pnpDeviceID As String = disk("PNPDeviceID").ToString()
+
+                Dim split As String() = pnpDeviceID.Split(New String() {"\"}, StringSplitOptions.None)
+                If split.Length = 3 Then
+                    If Not split(2).Contains("&") Then
+                        If split(2).Contains("_") Then split(2) = split(2).Substring(0, split(2).IndexOf("_"))
+                        Dim bytes As Byte() = GetHexStringBytes(split(2))
+                        If bytes.Length > 0 Then
+                            GetHDSerialFirmwareWMI = ReverseSerialNumber(System.Text.Encoding.UTF8.GetString(bytes)).Trim()
+                        End If
+                    Else
+                        ' Custom checks go into here
+                        Dim parts() As String
+                        parts = pnpDeviceID.Split("\".ToCharArray)
+                        ' The serial number should be the next to the last element
+                        GetHDSerialFirmwareWMI = parts(parts.Length - 1)
+                        GetHDSerialFirmwareWMI = Replace(GetHDSerialFirmwareWMI, "&", "")
+                    End If
+                End If
+            End If
+        Next
+    End Function
+
+    Private Function ReverseSerialNumber(ByVal serialNumber As String) As String
+        serialNumber = serialNumber.Trim()
+        Dim sb As New StringBuilder()
+        For i As Integer = 0 To serialNumber.Length - 1 Step 2
+            sb.Append(serialNumber(i + 1).ToString() + serialNumber(i).ToString())
+        Next
+        serialNumber = sb.ToString()
+        sb = Nothing
+        Return serialNumber
+    End Function
+
+    Private Function GetHexStringBytes(ByVal hex As String) As Byte()
+        Try
+            If hex.Contains([String].Empty) Then
+                hex = hex.Replace(" ", [String].Empty)
+            End If
+            If hex.Length Mod 2 = 1 Then
+                hex = "0" & hex
+            End If
+            Dim size As Integer = CInt(CDbl(hex.Length) / CDbl(2))
+            Dim bytes As Byte() = New Byte(size - 1) {}
+            For i As Integer = 0 To size - 1
+                bytes(i) = Convert.ToByte(hex.Substring(i * 2, 2), 16)
+            Next
+            Return bytes
+        Catch
+            Return New Byte() {}
+        End Try
     End Function
 End Module
