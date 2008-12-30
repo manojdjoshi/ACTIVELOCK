@@ -334,11 +334,12 @@ End Interface
     '
     ' @param trialSteganography     ' Trial information is hidden in BMP files
     ' @param trialHiddenFolder      ' Trial information is hidden in a folder which uses a default namespace
-    ' @param trialRegistry          ' Trial information is encrypted and hidden in several registry locations
+    ' @param trialRegistryPerUser        ' Trial information is encrypted and hidden in registry (per user)
     Public Enum ALTrialHideTypes
         trialSteganography = 1
         trialHiddenFolder = 2
-        trialRegistry = 4
+        trialRegistryPerUser = 4
+        trialRegistryIsolatedStorage = 8
     End Enum
     '###############################################################
 

@@ -216,7 +216,7 @@ Class clsNetworkStats
                 hexStr = Hex$(AdrArray(i))
             End If
 
-            If (Len(hexStr) < 2) Then hexStr = "0" & hexStr
+            If (hexStr.Length < 2) Then hexStr = "0" & hexStr
             aStr = aStr & hexStr
             If (i < 5) Then aStr = aStr & "-"
         Next i

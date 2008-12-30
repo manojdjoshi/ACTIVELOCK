@@ -82,7 +82,7 @@ Friend Class FileKeyStoreProvider
 				CreateEmptyFile(Value)
 			Else 'the file exists, but check to see if it has read-only attribute
 				If (GetAttr(Value) And FileAttribute.ReadOnly) Or (GetAttr(Value) And FileAttribute.ReadOnly And FileAttribute.Archive) Then
-                    Set_locale(regionalSymbol)
+                    'Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
                 End If
             End If
@@ -113,7 +113,6 @@ Friend Class FileKeyStoreProvider
     ' Remarks: TODO: Perhaps we need to lock the file first.?
     '===============================================================================
     Private Sub IKeyStoreProvider_Store(ByRef Lic As ProductLicense, ByVal mLicenseFileType As IActiveLock.ALLicenseFileTypes) Implements _IKeyStoreProvider.Store
-        PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
         ' Write license properties to INI file section
         mINIFile.Section = Lic.ProductName
 
@@ -177,7 +176,6 @@ Friend Class FileKeyStoreProvider
     ' Remarks: None
     '===============================================================================
     Private Function IKeyStoreProvider_Retrieve(ByRef ProductName As String, ByVal mLicenseFileType As IActiveLock.ALLicenseFileTypes) As ProductLicense Implements _IKeyStoreProvider.Retrieve
-        PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
 
         IKeyStoreProvider_Retrieve = Nothing
 
@@ -244,7 +242,7 @@ Friend Class FileKeyStoreProvider
 
         Exit Function
 InvalidValue:
-        Set_locale(regionalSymbol)
+        'Set_locale(regionalSymbol)
         Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREINVALID)
     End Function
 End Class

@@ -540,7 +540,7 @@ Module modRegistry
 				If Length <> UBound(resBinary) + 1 Then
 					ReDim Preserve resBinary(Length - 1)
 				End If
-				GetRegistryValue = VB6.CopyArray(resBinary)
+                GetRegistryValue = resBinary    ' VB6.CopyArray(resBinary)
 			Case REG_MULTI_SZ
 				' copy everything but the 2 trailing null chars
 				resString = Space(Length - 2)
@@ -548,7 +548,7 @@ Module modRegistry
                 GetRegistryValue = resString
 			Case Else
 				RegCloseKey(handle)
-                Set_locale(regionalSymbol)
+                'Set_locale(regionalSymbol)
                 Err.Raise(1001, ACTIVELOCKSTRING, "Unsupported value type")
 		End Select
 		
@@ -606,7 +606,7 @@ Module modRegistry
                 retVal = RegSetValueEx(handle, ValueName, 0, REG_BINARY, binValue(LBound(binValue)), Length)
             Case Else
                 RegCloseKey(handle)
-                Set_locale(regionalSymbol)
+                'Set_locale(regionalSymbol)
                 Err.Raise(1001, ACTIVELOCKSTRING, "Unsupported value type")
         End Select
 
@@ -808,7 +808,7 @@ Module modRegistry
 		Dim SEC As SECURITY_ATTRIBUTES
 		
 		If RegCreateKeyEx(hKey, KeyName, 0, CStr(0), 0, 0, SEC, handle, disposition) Then
-            Set_locale(regionalSymbol)
+            'Set_locale(regionalSymbol)
             Err.Raise(1001, ACTIVELOCKSTRING, "Unable to create the registry key")
 		Else
 			' Return True if the key already existed.
