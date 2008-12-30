@@ -201,7 +201,7 @@ Friend Class INIFile
 finally_Renamed: 
 		'// See if we have success
 		If iCounter > -1 Then
-            ArrayResult = VB6.CopyArray(asEnumKeys)
+            ArrayResult = asEnumKeys    ' VB6.CopyArray(asEnumKeys)
 		Else
             ArrayResult = System.DBNull.Value
 		End If
@@ -284,7 +284,7 @@ finally_Renamed:
 		
 		'// See if we have success
 		If iCounter > -1 Then
-            ArrayResult = VB6.CopyArray(asEnumValues)
+            ArrayResult = asEnumValues  ' VB6.CopyArray(asEnumValues)
 		Else
             ArrayResult = System.DBNull.Value
 		End If
@@ -368,7 +368,7 @@ finally_Renamed:
 
     '// See if we have success
     If iCounter > -1 Then
-      ArrayResult = VB6.CopyArray(asEnumSections)
+            ArrayResult = asEnumSections  ' VB6.CopyArray(asEnumSections)
     Else
       ArrayResult = Nothing 'System.DBNull.Value
     End If
@@ -489,7 +489,7 @@ finally_Renamed:
     Exit Function
 catch_Renamed:
     '// Ah, hello :)
-    System.Diagnostics.Debug.WriteLine(VB6.TabLayout(Err.Number, Err.Description))
+        System.Diagnostics.Debug.WriteLine(Err.Number, Err.Description)
     System.Diagnostics.Debug.Assert(0, "")
     iCounter = -1
     Resume finally_Renamed

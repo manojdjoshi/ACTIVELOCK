@@ -268,7 +268,7 @@ RetrieveProductsError:
       End With
     Next
     If ProdInfo.VCode = "" Or ProdInfo.GCode = "" Then
-            Set_locale(regionalSymbol)
+            'Set_locale(regionalSymbol)
             Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, "Product code set is invalid.")
     End If
     IALUGenerator_RetrieveProduct = ProdInfo
@@ -408,7 +408,7 @@ RetrieveProductsError:
                 Dim mySignatureBlock As String
                 mySignatureBlock = Convert.ToBase64String(mysignature)
             Catch ex As Exception
-                Set_locale(regionalSymbol)
+                'Set_locale(regionalSymbol)
                 Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, ex.Message)
             End Try
 

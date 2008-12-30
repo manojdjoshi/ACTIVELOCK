@@ -523,7 +523,8 @@ GetComputerNameError:
     '===============================================================================
     Public Function GetHDSerial() As String
         Dim strSerial As String
-        strSerial = HDSerial(Microsoft.VisualBasic.Compatibility.VB6.GetPath)
+
+        strSerial = HDSerial(My.Application.Info.DirectoryPath)
 
         If strSerial = "0000-0000" Then
             'Calculate WINDIR drive if couldn't retrieve app.path serial
@@ -830,7 +831,7 @@ GetHDSerialFirmwareError:
             b(cnt + 1) = bTemp
         Next cnt
 
-        SwapBytes = VB6.CopyArray(b)
+        SwapBytes = b   ' VB6.CopyArray(b)
 
     End Function
     '===============================================================================
@@ -1020,7 +1021,6 @@ GetMotherboardSeriAlerror:
         On Error GoTo GetIPaddressError
         Dim ipEntry As IPHostEntry = Dns.GetHostEntry(Environment.MachineName)
         Dim IpAddr As IPAddress() = ipEntry.AddressList
-        Dim i As Integer
         'A hostmachine can have more than one IP assigned 
         GetIPaddress = IpAddr(0).ToString()
 

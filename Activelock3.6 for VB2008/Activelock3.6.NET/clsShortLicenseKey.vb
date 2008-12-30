@@ -137,8 +137,8 @@ Friend Class clsShortLicenseKey
 		
 		' convert each segment value to a hex string
 		KeySegs(Segments.iProdCode) = HexWORD(ProductCode)
-        KeySegs(Segments.iExpire) = HexWORD(DateDiff(Microsoft.VisualBasic.DateInterval.Day, DateValue(CStr(#1/1/1970#)), DateValue(CStr(CDate(ExpireDate.ToString("yyyy/MM/dd"))))))
-		KeySegs(Segments.iUserData) = HexWORD(UserData)
+        KeySegs(Segments.iExpire) = HexWORD(DateValue(CStr(CDate(ExpireDate.ToString("yyyy/MM/dd")))).Subtract(DateValue(CStr(#1/1/1970#))).Minutes)
+        KeySegs(Segments.iUserData) = HexWORD(UserData)
 		
 		' Compute CRC against pertinent info.
 		KeySegs(Segments.iCRC) = HexWORD(CRC( System.Text.UnicodeEncoding.Unicode.GetBytes(UCase(Licensee & KeySegs(Segments.iProdCode) & KeySegs(Segments.iExpire) & KeySegs(Segments.iUserData) & SerialNumber))))
@@ -287,7 +287,8 @@ ExitLabel:
         If nCrc4 = SegmentValue(KeySegs(Segments.iCRC)) Then
 
             ' Fill the outputs with expire date and user data.
-            ExpireDate = DateAdd(Microsoft.VisualBasic.DateInterval.Day, SegmentValue(KeySegs(Segments.iExpire)), #1/1/1970#)
+            ExpireDate = #1/1/1970#
+            ExpireDate.AddDays(SegmentValue(KeySegs(Segments.iExpire)))
             UserData = SegmentValue(KeySegs(Segments.iUserData))
 
             ' IMPORTANT: This is an easy patch point
@@ -336,13 +337,13 @@ ExitLabel:
 		
 		' This implementation hardcodes keys that are 8 bytes/4 words
 		If Word1 < 0 Or Word1 > 3 Or Word2 < 0 Or Word2 > 3 Then
-            Set_locale(regionalSymbol)
+            'Set_locale(regionalSymbol)
             Err.Raise(5, Module_Renamed, "Word specification is not within 0-3.")
 		End If
 		
 		' There are only 16 bits to a word.
 		If Bit1 < 0 Or Bit1 > 15 Or Bit2 < 0 Or Bit2 > 15 Then
-            Set_locale(regionalSymbol)
+            'Set_locale(regionalSymbol)
             Err.Raise(5, Module_Renamed, "Bit specification is not within 0-15.")
 		End If
 		

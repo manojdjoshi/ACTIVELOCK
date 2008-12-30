@@ -57,29 +57,32 @@ Imports System.io
     ' ActiveLock Error Codes.
     ' These error codes are used for <code>Err.Number</code> whenever ActiveLock raises an error.
     '
-    ' @param AlerrOK                    No error. Operation was successful.
-    ' @param AlerrNoLicense             No license available.
-    ' @param AlerrLicenseInvalid        License is invalid.
-    ' @param AlerrLicenseExpired        License has expired.
-    ' @param AlerrLicenseTampered       License has been tampered.
-    ' @param AlerrClockChanged          System clock has been changed.
-    ' @param AlerrWrongIPaddress        Wrong IP Address.
-    ' @param AlerrKeyStoreInvalid       Key Store Provider has not been initialized yet.
+    ' @param alerrOK                    No error. Operation was successful.
+    ' @param alerrNoLicense             No license available.
+    ' @param alerrLicenseInvalid        License is invalid.
+    ' @param alerrLicenseExpired        License has expired.
+    ' @param alerrLicenseTampered       License has been tampered.
+    ' @param alerrClockChanged          System clock has been changed.
+    ' @param alerrWrongIPaddress        Wrong IP Address.
+    ' @param alerrKeyStoreInvalid       Key Store Provider has not been initialized yet.
     ' @param alerrKeyStorePathInvalid   Key Store Path (LIC file path) hasn't been specified.
-    ' @param AlerrFileTampered          ActiveLock DLL file has been tampered.
-    ' @param AlerrNotInitialized        ActiveLock has not been initialized yet.
-    ' @param AlerrNotImplemented        An ActiveLock operation has not been implemented.
-    ' @param AlerrUserNameTooLong       Maximum User Name length of 2000 characters has been exceeded.
-    ' @param AlerrInvalidTrialDays      Specified number of Free Trial Days is invalid (possibly <=0).
-    ' @param AlerrInvalidTrialRuns      Specified number of Free Trial Runs is invalid (possibly <=0).
-    ' @param AlerrTrialInvalid          Trial is invalid.
-    ' @param AlerrTrialDaysExpired      Trial Days have expired.
-    ' @param AlerrTrialRunsExpired      Trial Runs have expired.
-    ' @param AlerrNoSoftwareName        Software Name has not been specified.
-    ' @param AlerrNoSoftwareVersion     Software Version has not been specified.
-    ' @param AlerrRSAError              Something went wrong in the RSA routines.
-
+    ' @param alerrFileTampered          ActiveLock DLL file has been tampered.
+    ' @param alerrNotInitialized        ActiveLock has not been initialized yet.
+    ' @param alerrNotImplemented        An ActiveLock operation has not been implemented.
+    ' @param alerrUserNameTooLong       Maximum User Name length of 2000 characters has been exceeded.
+    ' @param alerrUserNameInvalid       Used User name does not match with the license key.
+    ' @param alerrInvalidTrialDays      Specified number of Free Trial Days is invalid (possibly <=0).
+    ' @param alerrInvalidTrialRuns      Specified number of Free Trial Runs is invalid (possibly <=0).
+    ' @param alerrTrialInvalid          Trial is invalid.
+    ' @param alerrTrialDaysExpired      Trial Days have expired.
+    ' @param alerrTrialRunsExpired      Trial Runs have expired.
+    ' @param alerrNoSoftwareName        Software Name has not been specified.
+    ' @param alerrNoSoftwareVersion     Software Version has not been specified.
+    ' @param alerrRSAError              Something went wrong in the RSA routines.
+    ' @param alerrNoSoftwarePassword    Software Password has not been specified.
     ' @param alerrCryptoAPIError        Crypto API error in CryptoAPI class.
+    ' @param alerrUndefinedSpecialFolder        The special folder used by Activelock is not defined or Virtual folder.
+    ' @param alerrDateError             There's an error in setting a date used by Activelock.
 
     Public Enum ActiveLockErrCodeConstants
         AlerrOK = 0 ' successful
@@ -105,6 +108,9 @@ Imports System.io
         AlerrKeyStorePathInvalid = &H80040028
         AlerrCryptoAPIError = &H80040029
         AlerrNoSoftwarePassword = &H80040030
+        AlerrUndefinedSpecialFolder = &H80040031
+        alerrDateError = &H80040032
+
     End Enum
     Private strCypherText As String
     Private bCypherOn As Boolean
