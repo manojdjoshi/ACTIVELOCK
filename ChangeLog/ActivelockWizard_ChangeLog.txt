@@ -1,5 +1,10 @@
 Change Log For Activelock Wizard 
-Last Updated: 20 January 2008 
+Last Updated: 28 December 2008 
+
+Activelock Wizard V1.0.3 Updates:
+- NEW: Modified both VB6 and VB2005 outputs for the encoded CRC. 
+- NEW: Now output the CRC32.vb Class as well into the selected folder.
+- NEW: Added tooltips telling you to include this class in your project to keep a consistent CRC output as some CRC equations give different results. 
 
 Activelock Wizard V1.0.2 Updates:
 - FIX: VCode decoded before used
