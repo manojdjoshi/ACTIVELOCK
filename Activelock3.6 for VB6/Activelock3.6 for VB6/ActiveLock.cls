@@ -455,7 +455,7 @@ Private Sub IActiveLock_Acquire(Optional strMsg As String)
         On Error GoTo noRegistration
         strMsg = ""
         If mTrialHideTypes = 0 Then
-            mTrialHideTypes = trialHiddenFolder Or trialRegistry Or trialSteganography
+            mTrialHideTypes = trialHiddenFolder Or trialRegistryPerUser Or trialSteganography
         End If
         
         trialStatus = ActivateTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, strMsg, mSoftwarePassword, mCheckTimeServerForClockTampering, mCheckSystemFilesForClockTampering, mTrialWarning, mRemainingTrialDays, mRemainingTrialRuns)
@@ -497,8 +497,8 @@ noRegistration:
                 Set_locale regionalSymbol
                 Err.Raise ActiveLockErrCodeConstants.alerrLicenseTampered, ACTIVELOCKSTRING, STRLICENSETAMPERED
             End If
-            dt1 = CDate(adsText)
-            dt2 = UTC(Now)
+            dt1 = ActiveLockDate(CDate(adsText))
+            dt2 = ActiveLockDate(UTC(Now))
             If dt2 < dt1 Then
                 Set_locale regionalSymbol
                 Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
@@ -509,7 +509,7 @@ noRegistration:
             If fileExist(run) Then Kill run
             Open run For Append As fileno
             Print #fileno, "@ECHO OFF"
-            Print #fileno, "echo " & Format(UTC(Now), "yyyy/MM/dd") & " > " & """" & mKeyStorePath & ":" & strStream & """"
+            Print #fileno, "echo " & ActiveLockDate(UTC(Now)) & " > " & """" & mKeyStorePath & ":" & strStream & """"
             Close fileno
             Dim rc As Double
             rc = Shell(run, vbMinimizedFocus)
@@ -650,8 +650,8 @@ Private Sub ValidateKey(Lic As ProductLicense)
     ' but don't do it if there's no expiration date
     If Lic.Expiration = "" Then Exit Sub
     Dim dtExp As Date
-    dtExp = CDate(Lic.Expiration)
-    If modActiveLock.UTC(Now) > dtExp And Lic.LicenseType <> allicPermanent Then
+    dtExp = ActiveLockDate(CDate(Lic.Expiration))
+    If ActiveLockDate(UTC(Now)) > dtExp And Lic.LicenseType <> allicPermanent Then
         ' ialkan - 9-23-2005 added the following to update and store the license
         ' with the new LastUsed property; otherwise setting the clock back next time
         ' might bypass the protection mechanism
@@ -723,11 +723,11 @@ Private Sub ValidateShortKey(Lic As ProductLicense, ByVal user As String)
                 Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
             End If
            If Lic.RegisteredDate = "" Then
-                Lic.RegisteredDate = Format(modActiveLock.UTC(Now), "yyyy/MM/dd")
+                Lic.RegisteredDate = CStr(ActiveLockDate(UTC(Now)))
             End If
          ' ignore expiration date if license type is "permanent"
             If Lic.LicenseType <> allicPermanent Then
-                Lic.Expiration = Format(modActiveLock.UTC(ExpireDate), "yyyy/MM/dd")
+                Lic.Expiration = CStr(ActiveLockDate(ExpireDate))
             End If
             Lic.MaxCount = CLng(CStr(modActiveLock.LoByte(UserData)))
             ' Finally check if the serial number is Ok
@@ -748,8 +748,8 @@ Private Sub ValidateShortKey(Lic As ProductLicense, ByVal user As String)
     ' but don't do it if there's no expiration date
     If Lic.Expiration = "" Then Exit Sub
     Dim dtExp As Date
-    dtExp = CDate(Lic.Expiration)
-    If modActiveLock.UTC(Now) > dtExp And Lic.LicenseType <> allicPermanent Then
+    dtExp = ActiveLockDate(CDate(Lic.Expiration))
+    If ActiveLockDate(UTC(Now)) > dtExp And Lic.LicenseType <> allicPermanent Then
         ' ialkan - 9-23-2005 added the following to update and store the license
         ' with the new LastUsed property; otherwise setting the clock back next time
         ' might bypass the protection mechanism
@@ -794,13 +794,11 @@ Private Sub ValidateLic(Lic As ProductLicense)
     End If
     ' try to detect the user setting their system clock back
     ' Need to account for Daylight Savings Time
-    'Dim dtNow As Date
-    'dtNow = modActiveLock.UTC(Now)
     Dim strNow As String
     ' Normalize to the format of the saved date-time, before we compare
-    strNow = Format(modActiveLock.UTC(Now()), "yyyy/MM/dd")
+    strNow = ActiveLockDate(UTC(Now))
     'If strNow < Lic.LastUsed And Lic.LicenseType <> allicPermanent Then
-    If strNow < Format(Lic.LastUsed, "yyyy/MM/dd") And Lic.LicenseType <> allicPermanent Then
+    If strNow < ActiveLockDate(CDate(Lic.LastUsed)) And Lic.LicenseType <> allicPermanent Then
         'MsgBox "UTC Now: " & strNow
         'MsgBox "LastUsed: " & CDate(Lic.LastUsed)
         Set_locale regionalSymbol
@@ -822,7 +820,8 @@ End Sub
 Private Sub UpdateLastUsed(Lic As ProductLicense)
     ' Update license store with LastRunDate
     Dim strLastUsed As String
-    strLastUsed = Format(modActiveLock.UTC(Now()), "yyyy/MM/dd")
+    strLastUsed = ActiveLockDate(UTC(Now))
+    strLastUsed = ActiveLockDate(CDate(strLastUsed))
     Lic.LastUsed = strLastUsed
     MyNotifier.Notify "ValidateValue", strLastUsed
     Lic.Hash1 = modMD5.Hash(strLastUsed)
@@ -1019,7 +1018,7 @@ Private Sub IActiveLock_Register(ByVal LibKey As String, Optional user As String
         If fileExist(run) Then Kill run
         Open run For Append As fileno
         Print #fileno, "@ECHO OFF"
-        Print #fileno, "echo " & Format(UTC(Now), "yyyy/MM/dd") & " > " & """" & mKeyStorePath & ":" & strStream & """"
+        Print #fileno, "echo " & CStr(ActiveLockDate(UTC(Now))) & " > " & """" & mKeyStorePath & ":" & strStream & """"
         Close fileno
         rc = Shell(run, vbMinimizedFocus)
         DoEvents
@@ -1660,7 +1659,8 @@ Private Property Get IActiveLock_UsedDays() As Long
     ' validate the license
     ValidateLic Lic
     'IActiveLock_UsedDays = CLng(DateDiff("d", Lic.RegisteredDate, modActiveLock.UTC(Now)))
-    IActiveLock_UsedDays = CLng(DateDiff("d", CDate(Replace(Lic.RegisteredDate, ".", "-")), modActiveLock.UTC(Now())))
+    'IActiveLock_UsedDays = CLng(DateDiff("d", CDate(Replace(Lic.RegisteredDate, ".", "-")), modActiveLock.UTC(Now())))
+    IActiveLock_UsedDays = CLng(DateDiff("d", ActiveLockDate(CDate(Lic.RegisteredDate)), ActiveLockDate(UTC(Now))))
     If IActiveLock_UsedDays < 0 Then
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID

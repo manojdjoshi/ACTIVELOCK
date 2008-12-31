@@ -101,6 +101,7 @@ If GetVersionEx(osv) = 1 Then
             Case 1:  GetWinVer = "WinXP"
             Case 2:  GetWinVer = "Win2003"
             End Select
+        Case 6: GetWinVer = "WinVista"
         End Select
     Case VER_PLATFORM_WIN32_WINDOWS:
         'dwVerMinor bit tells if its 95 or 98.
