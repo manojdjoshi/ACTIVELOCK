@@ -178,7 +178,7 @@ Public Sub EncryptFile(SourceFile As String, DestFile As String, Optional Key As
   
   'Make sure the source file do exist
   If (Not fileExist(SourceFile)) Then
-    'Set_locale regionalSymbol
+    Set_locale regionalSymbol
     'Err.Raise(vbObjectError, , "Error in Skipjack EncryptFile procedure (Source file does not exist).")
     Exit Sub
   End If
@@ -226,7 +226,7 @@ Public Sub DecryptFile(SourceFile As String, DestFile As String, Optional Key As
   
   'Make sure the source file do exist
   If (Not fileExist(SourceFile)) Then
-    'Set_locale regionalSymbol
+    Set_locale regionalSymbol
     'Err.Raise(vbObjectError, , "Error in Skipjack EncryptFile procedure (Source file does not exist).")
     Exit Sub
   End If
@@ -275,7 +275,7 @@ Private Function EncryptDecrypt(ByVal Text As String, Encrypt As Boolean) As Str
   'Get handle to CSP
   If (CryptAcquireContext(hCryptProv, KEY_CONTAINER, SERVICE_PROVIDER, PROV_RSA_FULL, CRYPT_NEWKEYSET) = 0) Then
     If (CryptAcquireContext(hCryptProv, KEY_CONTAINER, SERVICE_PROVIDER, PROV_RSA_FULL, 0) = 0) Then
-      'Set_locale regionalSymbol
+      Set_locale regionalSymbol
       'Err.Raise(vbObjectError, , "Error during CryptAcquireContext for a new key container." & vbCrLf & "A container with this name probably already exists.")
     End If
   End If
@@ -284,19 +284,19 @@ Private Function EncryptDecrypt(ByVal Text As String, Encrypt As Boolean) As Str
   'key from the password (instead of encrypting
   'with the actual key)
   If (CryptCreateHash(hCryptProv, CALG_MD5, 0, 0, hHash) = 0) Then
-    'Set_locale regionalSymbol
+    Set_locale regionalSymbol
     'Err.Raise(vbObjectError, , "Could not create a Hash Object (CryptCreateHash API)")
   End If
   
   'Hash the password
   If (CryptHashData(hHash, m_Key, Len(m_Key), 0) = 0) Then
-    'Set_locale regionalSymbol
+    Set_locale regionalSymbol
     'Err.Raise(vbObjectError, , "Could not calculate a Hash Value (CryptHashData API)")
   End If
   
   'Derive a session key from the hash object
   If (CryptDeriveKey(hCryptProv, ENCRYPT_ALGORITHM, hHash, 0, hKey) = 0) Then
-    'Set_locale regionalSymbol
+    Set_locale regionalSymbol
     'Err.Raise(vbObjectError, , "Could not create a session key (CryptDeriveKey API)")
   End If
   
@@ -304,12 +304,12 @@ Private Function EncryptDecrypt(ByVal Text As String, Encrypt As Boolean) As Str
   lLength = Len(Text)
   If (Encrypt) Then
     If (CryptEncrypt(hKey, 0, 1, 0, Text, lLength, lLength) = 0) Then
-      'Set_locale regionalSymbol
+      Set_locale regionalSymbol
       'Err.Raise(vbObjectError, , "Error during CryptEncrypt.")
     End If
   Else
     If (CryptDecrypt(hKey, 0, 1, 0, Text, lLength) = 0) Then
-      'Set_locale regionalSymbol
+      Set_locale regionalSymbol
       'Err.Raise(vbObjectError, , "Error during CryptDecrypt.")
     End If
   End If

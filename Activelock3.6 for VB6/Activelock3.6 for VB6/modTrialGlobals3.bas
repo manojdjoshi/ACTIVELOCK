@@ -46,7 +46,6 @@ Private oTest As clsRijndael
 
 Public EXPIRED_RUNS As String
 Public EXPIRED_DAYS As String
-Public PSWD As String
 Public LICENSE_SOFTWARE_NAME As String
 Public LICENSE_SOFTWARE_PASSWORD As String
 Public LICENSE_SOFTWARE_VERSION As String
@@ -399,9 +398,9 @@ Dim TmpFRD As Date
 
 On Error GoTo DateGoodRegistryError
 
-TmpCRD = ActiveLockDate(Now())
-TmpLRD = dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) '1/1/2000
-TmpFRD = dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90")) '1/1/2000
+TmpCRD = ActiveLockDate(UTC(Now))
+TmpLRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+TmpFRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
 DateGoodRegistry = False
 
 'If this is the applications first load, write initial settings
@@ -412,12 +411,12 @@ If TmpLRD = dec2("93.8D.93.8D.96.90.90.90") Then '1/1/2000
     SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2("0")
 End If
 'Read LRD and FRD from registry
-TmpLRD = dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) '1/1/2000
-TmpFRD = dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90")) '1/1/2000
+TmpLRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+TmpFRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
 
 If ActiveLockDate(TmpFRD) > ActiveLockDate(TmpCRD) Then 'System clock rolled back
     DateGoodRegistry = False
-ElseIf ActiveLockDate(Now()) > DateAdd("d", numDays, ActiveLockDate(TmpFRD)) Then 'trial expired
+ElseIf ActiveLockDate(UTC(Now)) > DateAdd("d", numDays, ActiveLockDate(TmpFRD)) Then 'trial expired
     SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & EXPIRED_DAYS & "_" & EXPIRED_DAYS & "_" & EXPIRED_RUNS)
     DateGoodRegistry = False
 ElseIf ActiveLockDate(TmpCRD) > ActiveLockDate(TmpLRD) Then 'Everything OK write New LRD date
@@ -429,7 +428,7 @@ Else
     DateGoodRegistry = False
 End If
 If DateGoodRegistry Then
-    daysLeft = DateAdd("d", numDays, ActiveLockDate(TmpFRD)) - ActiveLockDate(Now())
+    daysLeft = DateAdd("d", numDays, ActiveLockDate(TmpFRD)) - ActiveLockDate(UTC(Now))
 Else
     daysLeft = 0
 End If
@@ -510,7 +509,6 @@ Dim use2 As Boolean
 Dim use3 As Boolean, use4 As Boolean
 Dim daysLeft1 As Integer, daysLeft2 As Integer
 Dim daysLeft3 As Integer, daysLeft4 As Integer
-PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
 
 TEXTMSG_DAYS = DecryptMyString("0DEAD685B3E70293A72D7BF2A5947CBED433B490DE5286509B9A4953B71190634432E5E20DCEFACC22E237072924B18B2DD7D1355E284B65DF70BD6D536B1D8E", PSWD)
 DateGood = False
@@ -533,7 +531,7 @@ If (TrialHideTypes And ALTrialHideTypes.trialHiddenFolder) Then
     End If
     use3 = True
 End If
-If (TrialHideTypes And ALTrialHideTypes.trialRegistry) Then
+If (TrialHideTypes And ALTrialHideTypes.trialRegistryPerUser) Then
     If DateGoodRegistry(numDays, daysLeft4) = False Then
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS
@@ -571,7 +569,6 @@ Dim use2 As Boolean
 Dim use3 As Boolean, use4 As Boolean
 Dim runsLeft1 As Integer, runsLeft2 As Integer
 Dim runsLeft3 As Integer, runsLeft4 As Integer
-PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
 TEXTMSG_RUNS = DecryptMyString("2FD15B7C7C504433519133B9D336D12627384959E9D4D4157F12158C92DF57B234B46AFEFBD8C8FA5463FD614BFD13AF9FBD86B0C042663111253C50C05F6931", PSWD)
 
 RunsGood = False
@@ -596,7 +593,7 @@ If (TrialHideTypes And ALTrialHideTypes.trialHiddenFolder) Then
     use3 = True
 End If
 
-If (TrialHideTypes And ALTrialHideTypes.trialRegistry) Then
+If (TrialHideTypes And ALTrialHideTypes.trialRegistryPerUser) Then
     If RunsGoodRegistry(numRuns, runsLeft4) = False Then
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS
@@ -645,40 +642,29 @@ Dim intFF As Integer
 Dim myDir As String
 
 myDir = "3BFE841EE459E0EC0DDBDCB91CA0A5879D751E21622A19741A6EEC92B19E1B5C"
-PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
 
 On Error GoTo DateGoodHiddenFolderError
-If Dir(WinDir & DecryptMyString(myDir, PSWD), vbDirectory) = "" Then MkDir WinDir & DecryptMyString(myDir, PSWD)
+If Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD), vbDirectory) = "" Then MkDir ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD)
 strSource = HiddenFolderFunction()
-If Dir(WinDir() & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory + vbHidden + vbReadOnly + vbSystem) <> "" Then
+If Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory + vbHidden + vbReadOnly + vbSystem) <> "" Then
     MinusAttributes
     'Check to see if our file is there
     If fileExist(strSource) Then
         SetAttr strSource, vbNormal
-'    Else
-'        ' User found the file and deleted it; expire
-'        PlusAttributes
-'        DateGoodHiddenFolder = False
-'        Exit Function
     End If
-ElseIf Dir(WinDir & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory) <> "" Then
+ElseIf Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory) <> "" Then
     'Ok, the folder is there with no hidden, system attributes
     'Check to see if our file is there
     If fileExist(strSource) Then
         SetAttr strSource, vbNormal
-'    Else
-'        ' User found the file and deleted it; expire
-'        PlusAttributes
-'        DateGoodHiddenFolder = False
-'        Exit Function
     End If
 Else
-    MkDir WinDir & DecryptMyString(HIDDENFOLDER, PSWD)
+    MkDir ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD)
 End If
 
 CreateHdnFile
 
-TmpCRD = ActiveLockDate(Now())
+TmpCRD = ActiveLockDate(UTC(Now))
 Dim a() As String
 If fileExist(strSource) Then
     ' Read the file...
@@ -743,7 +729,7 @@ If TmpFRD = vbEmpty Then TmpFRD = INITIALDATE
 
 If ActiveLockDate(TmpFRD) > ActiveLockDate(TmpCRD) Then 'System clock rolled back
     DateGoodHiddenFolder = False
-ElseIf ActiveLockDate(Now()) > DateAdd("d", numDays, ActiveLockDate(TmpFRD)) Then 'Trial expired
+ElseIf ActiveLockDate(UTC(Now)) > DateAdd("d", numDays, ActiveLockDate(TmpFRD)) Then 'Trial expired
     ' Write to the file...
     intFF = FreeFile
     Open strSource For Output As #intFF
@@ -767,7 +753,7 @@ SetAttr strSource, vbReadOnly + vbHidden + vbSystem
 PlusAttributes
 
 If DateGoodHiddenFolder Then
-    daysLeft = DateAdd("d", numDays, ActiveLockDate(TmpFRD)) - ActiveLockDate(Now())
+    daysLeft = DateAdd("d", numDays, ActiveLockDate(TmpFRD)) - ActiveLockDate(UTC(Now))
 Else
     daysLeft = 0
 End If
@@ -785,35 +771,24 @@ Dim intFF As Integer
 Dim myDir As String
 
 myDir = "3BFE841EE459E0EC0DDBDCB91CA0A5879D751E21622A19741A6EEC92B19E1B5C"
-PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
 
 On Error GoTo RunsGoodHiddenFolderError
-If Dir(WinDir & DecryptMyString(myDir, PSWD), vbDirectory) = "" Then MkDir WinDir & DecryptMyString(myDir, PSWD)
+If Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD), vbDirectory) = "" Then MkDir ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD)
 strSource = HiddenFolderFunction()
-If Dir(WinDir & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory + vbHidden + vbReadOnly + vbSystem) <> "" Then
+If Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory + vbHidden + vbReadOnly + vbSystem) <> "" Then
     MinusAttributes
     'Check to see if our file is there
     If fileExist(strSource) Then
         SetAttr strSource, vbNormal
-'    Else
-'        ' User found the file and deleted it; expire
-'        PlusAttributes
-'        RunsGoodHiddenFolder = False
-'        Exit Function
     End If
-ElseIf Dir(WinDir & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory) <> "" Then
+ElseIf Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory) <> "" Then
     'Ok, the folder is there with no hidden, system attributes
     'Check to see if our file is there
     If fileExist(strSource) Then
         SetAttr strSource, vbNormal
-'    Else
-'        ' User found the file and deleted it; expire
-'        PlusAttributes
-'        RunsGoodHiddenFolder = False
-'        Exit Function
     End If
 Else
-    MkDir WinDir & DecryptMyString(HIDDENFOLDER, PSWD)
+    MkDir ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD)
 End If
 
 CreateHdnFile
@@ -863,7 +838,7 @@ If TmpLRD = INITIALDATE Then
     ' Write to the file...
     intFF = FreeFile
     Open strSource For Output As #intFF
-        Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & Now & "_" & TmpFRD & "_" & CStr(numRuns - 1), PSWD)
+        Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(numRuns - 1), PSWD)
     Close #intFF
 End If
 'Read LRD and FRD from Hidden Folder
@@ -906,9 +881,9 @@ ElseIf numRuns >= runsLeft Then 'Everything OK write the remaining number of run
     intFF = FreeFile
     Open strSource For Output As #intFF
         If TmpLRD = INITIALDATE Then
-            Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & Now & "_" & TmpFRD & "_" & CStr(numRuns - 1), PSWD)
+            Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(numRuns - 1), PSWD)
         Else
-            Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & Now & "_" & TmpFRD & "_" & CStr(runsLeft - 1), PSWD)
+            Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(runsLeft - 1), PSWD)
         End If
     Close #intFF
     RunsGoodHiddenFolder = True
@@ -945,7 +920,7 @@ If strSource = "" Then
     Exit Function
 End If
 
-TmpCRD = ActiveLockDate(Now())
+TmpCRD = ActiveLockDate(UTC(Now))
 Dim a() As String, aa As String
 aa = SteganographyPull(strSource)
 If aa <> "" Then
@@ -985,7 +960,7 @@ If TmpFRD = vbEmpty Then TmpFRD = INITIALDATE
 
 If ActiveLockDate(TmpFRD) > ActiveLockDate(TmpCRD) Then 'System clock rolled back
     DateGoodSteganography = False
-ElseIf ActiveLockDate(Now()) > DateAdd("d", numDays, ActiveLockDate(TmpFRD)) Then 'Trial expired
+ElseIf ActiveLockDate(UTC(Now)) > DateAdd("d", numDays, ActiveLockDate(TmpFRD)) Then 'Trial expired
     SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & EXPIRED_DAYS & "_" & EXPIRED_DAYS & "_" & EXPIRED_RUNS
     DateGoodSteganography = False
 ElseIf ActiveLockDate(TmpCRD) > ActiveLockDate(TmpLRD) Then 'Everything OK write New LRD date
@@ -997,7 +972,7 @@ Else
     DateGoodSteganography = False
 End If
 If DateGoodSteganography Then
-    daysLeft = DateAdd("d", numDays, ActiveLockDate(TmpFRD)) - ActiveLockDate(Now())
+    daysLeft = DateAdd("d", numDays, ActiveLockDate(TmpFRD)) - ActiveLockDate(UTC(Now))
 Else
     daysLeft = 0
 End If
@@ -1008,8 +983,18 @@ DateGoodSteganographyError:
     Exit Function
 End Function
 
-Private Function ActiveLockDate(ByVal dt As Date) As Date
-    ActiveLockDate = CDate(Format(dt, "yyyy/MM/dd"))   ' CDate(Format(dt, "m/d/yy h:m:ss"))
+Public Function ActiveLockDate(ByVal dt As Date) As Date
+' CDate(Format(dt, "m/d/yy h:m:ss"))
+Dim newDate As Date
+Dim m As Long
+Dim d As Long
+Dim y As Long
+newDate = dt
+m = Month(newDate)
+d = Day(newDate)
+y = Year(newDate)
+ActiveLockDate = CDate(Format$(y, "0000") & "/" & Format$(m, "00") & "/" & Format$(d, "00"))
+'Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE
 End Function
 Public Function RunsGoodSteganography(numRuns As Integer, runsLeft As Integer) As Boolean
 On Error GoTo RunsGoodSteganographyError
@@ -1051,7 +1036,7 @@ RunsGoodSteganography = False
 If TmpLRD = INITIALDATE Then
     TmpFRD = INITIALDATE
     runsLeft = numRuns - 1
-    SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & Now & "_" & TmpFRD & "_" & CStr(numRuns - 1)
+    SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(numRuns - 1)
 End If
 'Read LRD and FRD from the hidden text in the image
 Dim b() As String
@@ -1076,9 +1061,9 @@ ElseIf runsLeft > numRuns Then 'Trial runs expired
     RunsGoodSteganography = False
 ElseIf numRuns >= runsLeft Then 'Everything OK write the remaining number of runs
     If TmpLRD = INITIALDATE Then
-        SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & Now & "_" & TmpFRD & "_" & CStr(numRuns - 1)
+        SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(numRuns - 1)
     Else
-        SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & Now & "_" & TmpFRD & "_" & CStr(runsLeft - 1)
+        SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(runsLeft - 1)
     End If
     RunsGoodSteganography = True
 Else
@@ -1187,7 +1172,7 @@ End Function
 ' Remarks: None
 '===============================================================================
 Public Function ExpireTrial(ByVal SoftwareName As String, ByVal SoftwareVer As String, ByVal TrialType As Long, ByVal TrialLength As Long, ByVal TrialHideTypes As ALTrialHideTypes, ByVal SoftwarePassword As String) As Boolean
-Dim secondRegistryKey As Boolean
+'Dim secondRegistryKey As Boolean
 Dim strSource As String
 Dim myDir As String
 Dim oMD5 As clsMD5
@@ -1203,27 +1188,33 @@ LICENSE_SOFTWARE_PASSWORD = SoftwarePassword
 
 EXPIRED_RUNS = Chr(101) & Chr(120) & Chr(112) & Chr(105) & Chr(114) & Chr(101) & Chr(100)
 EXPIRED_DAYS = EXPIRED_RUNS
-PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
 VIDEO = Chr(92) & Chr(86) & Chr(105) & Chr(100) & Chr(101) & Chr(111)
 OTHERFILE = Chr(68) & Chr(114) & Chr(105) & Chr(118) & Chr(101) & Chr(114) & Chr(115) & "." & Chr(100) & Chr(108) & Chr(108)
 
 ' The following are created only when the license expires
 On Error Resume Next
 
-secondRegistryKey = CreateRegistryKey(HKEY_CLASSES_ROOT, DecryptMyString("5985D6B80E543AFCA67570BF9924469349EDA3A8695B75E656E95ACA55360118A4128395B2B070E8DC04FFB01C7509B18CF9831F36EF68D4A438130BF5F94587C76AE48AD5D6A210DAAB895120982C3426D3EA65C253A39B0C1131D1848D6518", PSWD) & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8))
-secondRegistryKey = CreateRegistryKey(HKEY_LOCAL_MACHINE, "SOFTWARE\Microsoft\Internet Explorer\Extension Compatibility-" & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8))
+' The following two keys are not compatible with Vista
+' A regular user account cannot have write access to these two registry hives
+' I am removing these from v3.6 - ialkan 12-27-2008
+'secondRegistryKey = CreateRegistryKey(HKEY_CLASSES_ROOT, DecryptMyString("5985D6B80E543AFCA67570BF9924469349EDA3A8695B75E656E95ACA55360118A4128395B2B070E8DC04FFB01C7509B18CF9831F36EF68D4A438130BF5F94587C76AE48AD5D6A210DAAB895120982C3426D3EA65C253A39B0C1131D1848D6518", PSWD) & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8))
+'secondRegistryKey = CreateRegistryKey(HKEY_LOCAL_MACHINE, "SOFTWARE\Microsoft\Internet Explorer\Extension Compatibility-" & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8))
+
 Dim intFF As Integer
 intFF = FreeFile
-Open WinDir & "\" & CHANNELS & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(99) & Chr(100) & Chr(102) For Output As #intFF
+Open ActivelockGetSpecialFolder(46) & "\" & CHANNELS & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(99) & Chr(100) & Chr(102) For Output As #intFF
     Print #intFF, "23g5985hb587b27eb"
 Close #intFF
 intFF = FreeFile
-Open WinSysDir & VIDEO & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & OTHERFILE For Output As #intFF
+If Dir(ActivelockGetSpecialFolder(55) & "\Sample Videos") = "" Then
+    MkDir (ActivelockGetSpecialFolder(55) & "\Sample Videos")
+End If
+Open ActivelockGetSpecialFolder(55) & "\Sample Videos" & VIDEO & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & OTHERFILE For Output As #intFF
     Print #intFF, "012234trliug2gb88y53"
 Close #intFF
 
 ' Registry stuff
-If TrialHideTypes And trialRegistry Then
+If TrialHideTypes And trialRegistryPerUser Then
     SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & EXPIRED_DAYS & "_" & EXPIRED_DAYS & "_" & EXPIRED_RUNS)
 End If
 
@@ -1237,18 +1228,18 @@ End If
 
 ' Hidden folder stuff
 If TrialHideTypes And trialHiddenFolder Then
-    If Dir(WinDir & DecryptMyString(myDir, PSWD), vbDirectory) = "" Then
-        MkDir WinDir & DecryptMyString(myDir, PSWD)
+    If Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD), vbDirectory) = "" Then
+        MkDir ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD)
     End If
     strSource = HiddenFolderFunction()
-    If Dir(WinDir & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory + vbHidden + vbReadOnly + vbSystem) <> "" Then
+    If Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory + vbHidden + vbReadOnly + vbSystem) <> "" Then
         MinusAttributes
         'Check to see if our file is there
         If fileExist(strSource) Then
             SetAttr strSource, vbNormal
             Kill strSource
         End If
-    ElseIf Dir(WinDir & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory) <> "" Then
+    ElseIf Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory) <> "" Then
         'Ok, the folder is there with no system, hidden attributes
         'Check to see if our file is there
         If fileExist(strSource) Then
@@ -1256,7 +1247,7 @@ If TrialHideTypes And trialHiddenFolder Then
             Kill strSource
         End If
     Else
-        MkDir WinDir & DecryptMyString(HIDDENFOLDER, PSWD)
+        MkDir ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD)
     End If
     CreateHdnFile
     If fileExist(strSource) Then
@@ -1309,7 +1300,7 @@ End Function
 ' Remarks: None
 '===============================================================================
 Public Function ResetTrial(ByVal SoftwareName As String, ByVal SoftwareVer As String, ByVal TrialType As Long, ByVal TrialLength As Long, ByVal TrialHideTypes As ALTrialHideTypes, ByVal SoftwarePassword As String) As Boolean
-Dim secondRegistryKey
+'Dim secondRegistryKey
 Dim strSourceFile As String
 Dim rtn As Byte
 Dim myDir As String
@@ -1326,32 +1317,39 @@ LICENSE_SOFTWARE_PASSWORD = SoftwarePassword
 
 EXPIRED_RUNS = Chr(101) & Chr(120) & Chr(112) & Chr(105) & Chr(114) & Chr(101) & Chr(100)
 EXPIRED_DAYS = EXPIRED_RUNS
-PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
 VIDEO = Chr(92) & Chr(86) & Chr(105) & Chr(100) & Chr(101) & Chr(111)
 OTHERFILE = Chr(68) & Chr(114) & Chr(105) & Chr(118) & Chr(101) & Chr(114) & Chr(115) & "." & Chr(100) & Chr(108) & Chr(108)
 
 'Expire warning
 DeleteSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "1")
 
+' The following two keys are not compatible with Vista
+' A regular user account cannot have write access to these two registry hives
+' I am removing these from v3.6 - ialkan 12-27-2008
 ' The following were created only when the license expired
-secondRegistryKey = DeleteKey(HKEY_CLASSES_ROOT, DecryptMyString("5985D6B80E543AFCA67570BF9924469349EDA3A8695B75E656E95ACA55360118A4128395B2B070E8DC04FFB01C7509B18CF9831F36EF68D4A438130BF5F94587C76AE48AD5D6A210DAAB895120982C3426D3EA65C253A39B0C1131D1848D6518", PSWD) & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8))
-secondRegistryKey = DeleteKey(HKEY_LOCAL_MACHINE, "SOFTWARE\Microsoft\Internet Explorer\Extension Compatibility-" & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8))
-If fileExist(WinDir & "\" & CHANNELS & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(99) & Chr(100) & Chr(102)) Then Kill WinDir & "\" & CHANNELS & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(99) & Chr(100) & Chr(102)
-If fileExist(WinSysDir & VIDEO & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & OTHERFILE) Then Kill WinSysDir & VIDEO & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & OTHERFILE
+'secondRegistryKey = DeleteKey(HKEY_CLASSES_ROOT, DecryptMyString("5985D6B80E543AFCA67570BF9924469349EDA3A8695B75E656E95ACA55360118A4128395B2B070E8DC04FFB01C7509B18CF9831F36EF68D4A438130BF5F94587C76AE48AD5D6A210DAAB895120982C3426D3EA65C253A39B0C1131D1848D6518", PSWD) & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8))
+'secondRegistryKey = DeleteKey(HKEY_LOCAL_MACHINE, "SOFTWARE\Microsoft\Internet Explorer\Extension Compatibility-" & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8))
+
+If fileExist(ActivelockGetSpecialFolder(46) & "\" & CHANNELS & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(99) & Chr(100) & Chr(102)) Then
+    Kill ActivelockGetSpecialFolder(46) & "\" & CHANNELS & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(99) & Chr(100) & Chr(102)
+End If
+If fileExist(ActivelockGetSpecialFolder(55) & "\Sample Videos" & VIDEO & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & OTHERFILE) Then
+    Kill ActivelockGetSpecialFolder(55) & "\Sample Videos" & VIDEO & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & OTHERFILE
+End If
 
 ' Registry stuff
 On Error Resume Next
-If TrialHideTypes And trialRegistry Then
+If TrialHideTypes And trialRegistryPerUser Then
     DeleteSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD)
 End If
 
 ' Steganography stuff
 If TrialHideTypes And trialSteganography Then
     strSourceFile = GetSteganographyFile()
-    'If fileExist(strSourceFile) Then Kill strSourceFile
-    If strSourceFile <> "" Then
-        rtn = SteganographyEmbed(strSourceFile, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & "" & "_" & "" & "_" & "")
-    End If
+    If fileExist(strSourceFile) Then Kill strSourceFile
+'    If strSourceFile <> "" Then
+'        rtn = SteganographyEmbed(strSourceFile, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & "" & "_" & "" & "_" & "")
+'    End If
 End If
 
 ' *** We are disabling folder date stamp in v3.2 since it's not application specific ***
@@ -1374,7 +1372,7 @@ End If
 ' Hidden folder stuff
 On Error GoTo trialError
 If TrialHideTypes And trialHiddenFolder Then
-    If Dir(WinDir & DecryptMyString(myDir, PSWD), vbDirectory) <> "" Then
+    If Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD), vbDirectory) <> "" Then
         MinusAttributes
         strSourceFile = HiddenFolderFunction()
         If fileExist(strSourceFile) Then
@@ -1382,12 +1380,6 @@ If TrialHideTypes And trialHiddenFolder Then
             Kill strSourceFile
         End If
         PlusAttributes
-        'strSourceFile = HiddenFile()
-        'If fileExist(strSourceFile) Then
-        '    SetAttr strSourceFile, vbNormal
-        '    Kill strSourceFile
-        'End If
-        'RmDir WinDir & DecryptMyString(HIDDENFOLDER, PSWD)
     End If
 End If
 
@@ -1414,7 +1406,6 @@ Public Function IsRegistryExpired1() As Boolean
 Dim savedRegistryKey As Boolean
 Dim oMD5 As clsMD5
 Set oMD5 = New clsMD5
-PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
 
 On Error GoTo IsRegistryExpired1Error
 
@@ -1655,9 +1646,9 @@ OTHERFILE = Chr(68) & Chr(114) & Chr(105) & Chr(118) & Chr(101) & Chr(114) & Chr
 
 On Error GoTo IsEncryptedFileExpiredError
 
-If fileExist(WinDir & "\" & CHANNELS & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(99) & Chr(100) & Chr(102)) Then
+If fileExist(ActivelockGetSpecialFolder(46) & "\" & CHANNELS & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(99) & Chr(100) & Chr(102)) Then
     IsEncryptedFileExpired = True
-ElseIf fileExist(WinSysDir & VIDEO & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & OTHERFILE) Then
+ElseIf fileExist(ActivelockGetSpecialFolder(55) & "\Sample Videos" & VIDEO & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & OTHERFILE) Then
     IsEncryptedFileExpired = True
 Else
     IsEncryptedFileExpired = False
@@ -1714,13 +1705,12 @@ Dim intFF As Integer
 Dim myDir As String
 
 myDir = "3BFE841EE459E0EC0DDBDCB91CA0A5879D751E21622A19741A6EEC92B19E1B5C"
-PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
 
 On Error GoTo IsHiddenFolderExpiredError
 
-If Dir(WinDir & DecryptMyString(myDir, PSWD), vbDirectory) = "" Then Exit Function
+If Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD), vbDirectory) = "" Then Exit Function
 strSource = HiddenFolderFunction()
-If Dir(WinDir & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory + vbHidden + vbReadOnly + vbSystem) <> "" Then
+If Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory + vbHidden + vbReadOnly + vbSystem) <> "" Then
     MinusAttributes
     'Check to see if our file is there
     If fileExist(strSource) Then
@@ -1741,7 +1731,7 @@ If Dir(WinDir & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory + vbHidden + vb
         PlusAttributes
         Exit Function
     End If
-ElseIf Dir(WinDir & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory) <> "" Then
+ElseIf Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory) <> "" Then
     'Ok, the folder is there with no system, hidden attributes
     'Check to see if our file is there
     If fileExist(strSource) Then
@@ -1886,7 +1876,6 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
     myDir = "3BFE841EE459E0EC0DDBDCB91CA0A5879D751E21622A19741A6EEC92B19E1B5C"
     EXPIRED_RUNS = Chr(101) & Chr(120) & Chr(112) & Chr(105) & Chr(114) & Chr(101) & Chr(100) & Chr(114) & Chr(117) & Chr(110) & Chr(115)
     EXPIRED_DAYS = Chr(101) & Chr(120) & Chr(112) & Chr(105) & Chr(114) & Chr(101) & Chr(100) & Chr(100) & Chr(97) & Chr(121) & Chr(115)
-    PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
     TEXTMSG_DAYS = DecryptMyString("0DEAD685B3E70293A72D7BF2A5947CBED433B490DE5286509B9A4953B71190634432E5E20DCEFACC22E237072924B18B2DD7D1355E284B65DF70BD6D536B1D8E", PSWD)
     TEXTMSG_RUNS = DecryptMyString("2FD15B7C7C504433519133B9D336D12627384959E9D4D4157F12158C92DF57B234B46AFEFBD8C8FA5463FD614BFD13AF9FBD86B0C042663111253C50C05F6931", PSWD)
     TEXTMSG = DecryptMyString("7E149B630C0A89A2F8B84B47C8E7D96F4B784F14CBAA93E86A6654C4D8B54EBED4CB36B28AB6916C45DD69E370536B94786E64567B6EC76F833EE4FE1C927D0142D62E251315E94603CA548179F2E74FD826F65FEDAFF3D7A4B927DED5D1B1AE2A160739BFF06CEE77231C0F09168BA950C8AA72E470EF8E3721A15286787170", PSWD)
@@ -1927,15 +1916,18 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
 
     Screen.MousePointer = vbHourglass
     
+    ' The following two keys are not compatible with Vista
+    ' A regular user account cannot have write access to these two registry hives
+    ' I am removing these from v3.6 - ialkan 12-27-2008
     ' Check to see if any of the hidden signatures say the trial is expired
-    If IsRegistryExpired1() = True Then
-        Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG
-    End If
-    If IsRegistryExpired2() = True Then
-        Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG
-    End If
+    'If IsRegistryExpired1() = True Then
+    '    Set_locale regionalSymbol
+    '    Err.Raise ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG
+    'End If
+    'If IsRegistryExpired2() = True Then
+    '    Set_locale regionalSymbol
+    '    Err.Raise ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG
+    'End If
     If IsEncryptedFileExpired() = True Then
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG
@@ -1971,7 +1963,7 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
             Err.Raise ActiveLockErrCodeConstants.alerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS
          Else
             If fileExist(GetSteganographyFile()) = False And _
-                Dir(WinDir & DecryptMyString(myDir, PSWD), vbDirectory) = "" And _
+                Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD), vbDirectory) = "" And _
                 dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
                 If SystemClockTampered Then
                     Set_locale regionalSymbol
@@ -2000,7 +1992,7 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
             Err.Raise ActiveLockErrCodeConstants.alerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS
         Else
             If fileExist(GetSteganographyFile()) = False And _
-                Dir(WinDir & DecryptMyString(myDir, PSWD), vbDirectory) = "" And _
+                Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD), vbDirectory) = "" And _
                 dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
                 If SystemClockTampered Then
                     Set_locale regionalSymbol
@@ -2080,7 +2072,7 @@ For i = 0 To 2
     Do While S <> ""
         If Not inString(Left$(S, 1), "$", "?") Then
             fileDate = FileDateTime(t & "\" & S)
-            If DateDiff("h", CDate(Format(modActiveLock.UTC(Now()), "yyyy/MM/dd")), CDate(Format(modActiveLock.UTC(fileDate), "yyyy/MM/dd"))) > 24 Then
+            If DateDiff("h", ActiveLockDate(UTC(Now)), ActiveLockDate(fileDate)) > 1 Then
                 If Count > 1 Then
                     ClockTampering = True
                     Exit Function
@@ -2101,24 +2093,15 @@ End Function
 
 Private Function GetSteganographyFile()
 Dim strSource As String
-PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
 Dim oMD5 As clsMD5
 Set oMD5 = New clsMD5
-' Unfortunately, some of the following do not seem to work with
-' Administrative Rights; we'll use the built-in source that works
-' under all types of accounts
-'If fileExist(WinSysDir & DecryptMyString("736D1DB6F19847EA01E7F769F8E7E42E1C3AC56C291D3DBFBD80C51BD9E49215", PSWD)) Then
-'    strSource = WinSysDir & DecryptMyString("736D1DB6F19847EA01E7F769F8E7E42E1C3AC56C291D3DBFBD80C51BD9E49215", PSWD)
-'ElseIf fileExist(WinDir & DecryptMyString("736D1DB6F19847EA01E7F769F8E7E42E1C3AC56C291D3DBFBD80C51BD9E49215", PSWD)) Then
-'    strSource = WinDir & DecryptMyString("736D1DB6F19847EA01E7F769F8E7E42E1C3AC56C291D3DBFBD80C51BD9E49215", PSWD)
-'ElseIf fileExist(WinDir & DecryptMyString("5EA0C27C825BE879A54AD52EF81D77CF884DD52B4875EA20844D3061D5B4F68C", PSWD)) Then
-'    strSource = WinDir & DecryptMyString("5EA0C27C825BE879A54AD52EF81D77CF884DD52B4875EA20844D3061D5B4F68C", PSWD)
-'ElseIf fileExist(WinDir & DecryptMyString("0CE6DA9EF2BAC19FF10480E6F46C3E9317C34B06FF91D26679EDF40E278269D9", PSWD)) Then
-'    strSource = WinDir & DecryptMyString("0CE6DA9EF2BAC19FF10480E6F46C3E9317C34B06FF91D26679EDF40E278269D9", PSWD)
-'Else
-    strSource = WinDir & DecryptMyString("E7E3221D952287CBAE2F5ED363E923CE547F8075C9E093A1138DC7D03A76D0A1", PSWD) & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(98) & Chr(109) & Chr(112)
-    If fileExist(strSource) = False Then SavePicture LoadResPicture(101, vbResBitmap), strSource
-'End If
+strSource = ActivelockGetSpecialFolder(54) & "\Sample Pictures" & DecryptMyString("E7E3221D952287CBAE2F5ED363E923CE547F8075C9E093A1138DC7D03A76D0A1", PSWD) & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(98) & Chr(109) & Chr(112)
+If Dir(ActivelockGetSpecialFolder(54) & "\Sample Pictures") = "" Then
+    MkDir (ActivelockGetSpecialFolder(54) & "\Sample Pictures")
+End If
+If fileExist(strSource) = False Then
+    SavePicture LoadResPicture(101, vbResBitmap), strSource
+End If
 GetSteganographyFile = strSource
 Set oMD5 = Nothing
 End Function
@@ -2813,35 +2796,31 @@ End If
 End Sub
 
 Private Function HiddenFolderFunction() As String
-PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
 Dim myFile As String
 Dim oMD5 As clsMD5
 Set oMD5 = New clsMD5
 myFile = Chr(92) & Chr(82) & Chr(101) & Chr(99) & Chr(121) & Chr(99) & Chr(108) & Chr(101) & Chr(100) & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(108) & Chr(115) & Chr(116)
-HiddenFolderFunction = WinDir & DecryptMyString(HIDDENFOLDER, PSWD) & myFile
+HiddenFolderFunction = ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD) & myFile
 Set oMD5 = Nothing
 End Function
 
 Private Function HiddenFile() As String
 Dim KEYFILE As String
 KEYFILE = Chr(92) & Chr(68) & Chr(101) & Chr(115) & Chr(107) & Chr(116) & Chr(111) & Chr(112) & "." & Chr(105) & Chr(110) & Chr(105)
-PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
-HiddenFile = WinDir & DecryptMyString(HIDDENFOLDER, PSWD) & KEYFILE
+HiddenFile = ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD) & KEYFILE
 End Function
 
 Private Sub MinusAttributes()
     On Error GoTo minusAttributesError
     Dim ok As Double
-    PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
     'Ok, the folder is there, let's change its attributes
-    ok = Shell("ATTRIB -h -s -r " & WinDir & DecryptMyString(HIDDENFOLDER, PSWD), vbHide)
+    ok = Shell("ATTRIB -h -s -r " & ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD), vbHide)
 minusAttributesError:
 End Sub
 Private Sub PlusAttributes()
     Dim ok As Double
-    PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
     'Ok, the folder is there, let's change its attributes
-    ok = Shell("ATTRIB +h +s +r " & WinDir & DecryptMyString(HIDDENFOLDER, PSWD), vbHide)
+    ok = Shell("ATTRIB +h +s +r " & ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD), vbHide)
 End Sub
 
 Public Function DecryptMyString(myStr As String, password As String) As String
@@ -2972,8 +2951,8 @@ If InStr(ss, month1(i)) Then
     Exit For
 End If
 Next
-ss = Format$(CDate(ss), "short date")
-aa = Format(UTC(Now()), "short date")
+ss = Format(CDate(ss), "short date")
+aa = Format(UTC(Now), "short date")
 diff = Abs(DateDiff("d", ss, aa))
 If diff > 1 Then SystemClockTampered = True
 End Function

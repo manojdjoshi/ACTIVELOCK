@@ -146,7 +146,6 @@ End Sub
 ' Remarks: TODO: Perhaps we need to lock the file first.?
 '===============================================================================
 Private Sub IKeyStoreProvider_Store(Lic As ProductLicense, mLicenseFileType As ALLicenseFileTypes)
-    PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
     ' Write license properties to INI file section
     mINIFile.Section = Lic.ProductName
     
@@ -196,7 +195,6 @@ End Sub
 ' Remarks: None
 '===============================================================================
 Private Function IKeyStoreProvider_Retrieve(ProductName As String, mLicenseFileType As ALLicenseFileTypes) As ProductLicense
-    PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
 
     Set IKeyStoreProvider_Retrieve = Nothing
 

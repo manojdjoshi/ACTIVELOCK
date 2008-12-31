@@ -114,8 +114,10 @@ Option Explicit
 ' @param alerrNoSoftwareName        Software Name has not been specified.
 ' @param alerrNoSoftwareVersion     Software Version has not been specified.
 ' @param alerrRSAError              Something went wrong in the RSA routines.
-
+' @param alerrNoSoftwarePassword    Software Password has not been specified.
 ' @param alerrCryptoAPIError        Crypto API error in CryptoAPI class.
+' @param alerrUndefinedSpecialFolder        The special folder used by Activelock is not defined or Virtual folder.
+' @param alerrDateError             There's an error in setting a date used by Activelock.
 
 Public Enum ActiveLockErrCodeConstants
     alerrOK = 0   ' successful
@@ -144,6 +146,9 @@ Public Enum ActiveLockErrCodeConstants
     alerrKeyStorePathInvalid = &H80040028
     alerrCryptoAPIError = &H80040029
     alerrNoSoftwarePassword = &H80040030
+    
+    alerrUndefinedSpecialFolder = &H80040031
+    alerrDateError = &H80040032
     
 End Enum
 
