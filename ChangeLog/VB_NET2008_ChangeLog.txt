@@ -2,11 +2,22 @@ Change Log For Activelock VB2008
 Last Updated: 4 December 2008 
 
 VB2008 v3.6 Updates:
-- Comprressed the setup package which reduced the package size substantially.
+- Compressed the setup package which reduced the package size substantially.
 - Moved Alugen.ini to the application directory from the Windows directory.
-- Alugen now restricts the characters in the Software Name and Number textboxes to 0-9,A-B,a-b, and multiple decimal digits.
-- IsWindowsNT now uses IsWinNTPlus.
+- FIX: Alugen now restricts the characters in the Software Name and Number textboxes to 0-9,A-B,a-b, and multiple decimal digits.
+- FIX: IsWindowsNT now uses IsWinNTPlus.
 - HDD firmware serial number detection code has been extended to include WMI. Also checked Vista accounts to make sure the code works under Vista, XP, with IDE, SATA and SCSI devices as well as admin and user accounts. Some SATA drives under Vista with the user accounts seem to give trouble but the new WMI addition takes care of this problem.
+- Added ActivelockGetSpecialFolder function that gets a desired Windows shell folder. Calls either the XPGetSpecialFolder or VistaGetSpecialFolder depending on the Windows version.
+- Removed the registry key usages for HKEY_CLASSES_ROOT and HKEY_LOCAL_MACHINE since these are not supported for write access in a limited rights Vista user account. Even an admin account cannot write to these keys without an elevated access.
+- Changed the trialRegistry property name to trialRegistryPerUser to indicate that this trial hiding technique will be valid per user.
+- Changed more methods and functions to the .NET native classes, but there are still several to migrate. That's why we still can not remove the "Microsoft.VisualBasic.Compatibility" library from the Activelock DLL.
+- FIX: Due to problems with Vista's handling of the registry keys and files hidden in the admin accessible parts of the file system and registry, the Trial routines have been overhauled to move everything into common shared folders and user accessible registry locations. Obviously system and Windows folders are no longer used; likewise HKLM and HKCR for the registry. Several users reported Trial feature malfunctioning under Vista due to these reasons. Vista is now presenting a big challenge for the trial feature.
+- Added a long description of each property to the Form_Load event. This should address some of the questions asked by the developers during the implementation stage.
+- Reviewed Activelock's short date handling feature, and decided that it's the best approach that could be used to address different locale short date formats.
+- FIX: Fixed the UpdateLastUsed method in Activelock. This was causing problems while switching between different regional settings. Checked both the trial and licensing features to make sure both work correctly while switching between different regional settings such as romanian to English and vice versa.
+
+
+
 
 VB.NET 2005 v3.5.5 Updates:
 - FIX: Reading of MAC address caused problems in Windows VISTA, changed some values from 32 bit Integer to a 64 bit Integer
