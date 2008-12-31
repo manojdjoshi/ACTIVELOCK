@@ -268,52 +268,52 @@ RetrieveProductsError:
       End With
     Next
     If ProdInfo.VCode = "" Or ProdInfo.GCode = "" Then
-            'Set_locale(regionalSymbol)
+            Set_Locale(regionalSymbol)
             Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, "Product code set is invalid.")
-    End If
-    IALUGenerator_RetrieveProduct = ProdInfo
-  End Function
-  '===============================================================================
-  ' Name: Sub IALUGenerator_DeleteProduct
-  ' Input:
-  '   ByVal name As String - Product name
-  '   ByVal Ver As String - Product version
-  ' Output: None
-  ' Purpose: Removes the license keys section from a INI file, i.e. deletes product details in the license database
-  ' Remarks: Removes a section from the INI file
-  '===============================================================================
-  Private Sub IALUGenerator_DeleteProduct(ByVal name As String, ByVal Ver As String) Implements _IALUGenerator.DeleteProduct
-    ' Remove the section from XML file
-    Dim xmlCount As Integer
-    Dim Count As Integer
-    Count = 0
+        End If
+        IALUGenerator_RetrieveProduct = ProdInfo
+    End Function
+    '===============================================================================
+    ' Name: Sub IALUGenerator_DeleteProduct
+    ' Input:
+    '   ByVal name As String - Product name
+    '   ByVal Ver As String - Product version
+    ' Output: None
+    ' Purpose: Removes the license keys section from a INI file, i.e. deletes product details in the license database
+    ' Remarks: Removes a section from the INI file
+    '===============================================================================
+    Private Sub IALUGenerator_DeleteProduct(ByVal name As String, ByVal Ver As String) Implements _IALUGenerator.DeleteProduct
+        ' Remove the section from XML file
+        Dim xmlCount As Integer
+        Dim Count As Integer
+        Count = 0
 
-    Dim rootProducts As XmlNodeList
-    rootProducts = MyXMLDoc.GetElementsByTagName("Products")
+        Dim rootProducts As XmlNodeList
+        rootProducts = MyXMLDoc.GetElementsByTagName("Products")
 
-    xmlCount = rootProducts.Count
+        xmlCount = rootProducts.Count
 
-    For Count = 0 To xmlCount - 1
-      If rootProducts(Count).SelectSingleNode("name").InnerText = name And _
-            rootProducts(Count).SelectSingleNode("version").InnerText = Ver Then
-        rootProducts(Count).ParentNode.RemoveChild(rootProducts(Count))
-        Exit For
-      End If
-    Next
+        For Count = 0 To xmlCount - 1
+            If rootProducts(Count).SelectSingleNode("name").InnerText = name And _
+                  rootProducts(Count).SelectSingleNode("version").InnerText = Ver Then
+                rootProducts(Count).ParentNode.RemoveChild(rootProducts(Count))
+                Exit For
+            End If
+        Next
 
-    MyXMLDoc.Save(fileXML)
-  End Sub
-  '===============================================================================
-  ' Name: Function IALUGenerator_GenKey
-  ' Input:
-  '   ByRef Lic As ActiveLock3.ProductLicense - Product license
-  '   ByVal InstCode As String - Installation Code sent by the user
-  '   ByVal RegisteredLevel As String - Registration Level for the license. Default is "0"
-  ' Output:
-  '   String - Liberation key for the license
-  ' Purpose: Given the Installation Code, generates an Activelock license liberation key.
-  ' Remarks: None
-  '===============================================================================
+        MyXMLDoc.Save(fileXML)
+    End Sub
+    '===============================================================================
+    ' Name: Function IALUGenerator_GenKey
+    ' Input:
+    '   ByRef Lic As ActiveLock3.ProductLicense - Product license
+    '   ByVal InstCode As String - Installation Code sent by the user
+    '   ByVal RegisteredLevel As String - Registration Level for the license. Default is "0"
+    ' Output:
+    '   String - Liberation key for the license
+    ' Purpose: Given the Installation Code, generates an Activelock license liberation key.
+    ' Remarks: None
+    '===============================================================================
     Private Function IALUGenerator_GenKey(ByRef Lic As ActiveLock3_6NET.ProductLicense, ByVal InstCode As String, Optional ByVal RegisteredLevel As String = "0") As String Implements _IALUGenerator.GenKey
         ' Take request code and decrypt it.
         Dim strReq As String
@@ -408,7 +408,7 @@ RetrieveProductsError:
                 Dim mySignatureBlock As String
                 mySignatureBlock = Convert.ToBase64String(mysignature)
             Catch ex As Exception
-                'Set_locale(regionalSymbol)
+                Set_Locale(regionalSymbol)
                 Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, ex.Message)
             End Try
 

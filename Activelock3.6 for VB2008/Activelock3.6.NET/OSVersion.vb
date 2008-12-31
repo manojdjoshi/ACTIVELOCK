@@ -954,7 +954,6 @@ Namespace CWindows
             'Windows 2003 (.NET) Server Release 2
             If IsWin2003Server() Then
                 IsWin2003ServerR2 = CType(GetSystemMetrics(VerSuiteMask.VER_SM_SERVERR2), Boolean)
-                MsgBox(IsWin2003ServerR2)
             End If
         End Function
 

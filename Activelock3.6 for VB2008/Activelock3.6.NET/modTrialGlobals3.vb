@@ -4,6 +4,7 @@ Imports System.IO
 Imports System.Security.Cryptography
 Imports System.Text
 Imports System.String
+Imports System.DateTime
 Module modTrial
     '*   ActiveLock
     '*   Copyright 1998-2002 Nelson Ferraz
@@ -321,7 +322,7 @@ Module modTrial
 
         On Error GoTo DateGoodRegistryError
 
-        TmpCRD = ActiveLockDate(Now)
+        TmpCRD = ActiveLockDate(Date.UtcNow)
         TmpLRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
         TmpFRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
         DateGoodRegistry = False
@@ -339,7 +340,7 @@ Module modTrial
 
         If ActiveLockDate(TmpFRD) > ActiveLockDate(TmpCRD) Then 'System clock rolled back
             DateGoodRegistry = False
-        ElseIf ActiveLockDate(Now) > ActiveLockDate(TmpFRD).AddDays(numDays) Then  'trial expired
+        ElseIf ActiveLockDate(Date.UtcNow) > ActiveLockDate(TmpFRD).AddDays(numDays) Then  'trial expired
             SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & EXPIRED_DAYS & "_" & EXPIRED_DAYS & "_" & EXPIRED_RUNS))
             DateGoodRegistry = False
         ElseIf ActiveLockDate(TmpCRD) > ActiveLockDate(TmpLRD) Then  'Everything OK write New LRD date
@@ -351,7 +352,7 @@ Module modTrial
             DateGoodRegistry = False
         End If
         If DateGoodRegistry Then
-            daysLeft = ActiveLockDate(Now).Subtract(ActiveLockDate(TmpFRD)).Days + numDays
+            daysLeft = ActiveLockDate(Date.UtcNow).Subtract(ActiveLockDate(TmpFRD)).Days + numDays
         Else
             daysLeft = 0
         End If
@@ -438,7 +439,7 @@ RunsGoodRegistryError:
 
         If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialSteganography) Then
             If DateGoodSteganography(numDays, daysLeft2) = False Then
-                'Set_locale(regionalSymbol)
+                Set_Locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
                 'MsgBox "DateGoodSteganography " & daysLeft2
                 Exit Function
@@ -447,7 +448,7 @@ RunsGoodRegistryError:
         End If
         If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialHiddenFolder) Then
             If DateGoodHiddenFolder(numDays, daysLeft3) = False Then
-                'Set_locale(regionalSymbol)
+                Set_Locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
                 'MsgBox "DateGoodHiddenFolder " & daysLeft3
                 Exit Function
@@ -456,7 +457,7 @@ RunsGoodRegistryError:
         End If
         If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialRegistryPerUser) Then
             If DateGoodRegistry(numDays, daysLeft4) = False Then
-                'Set_locale(regionalSymbol)
+                Set_Locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
                 'MsgBox "DateGoodRegistry " & daysLeft4
                 Exit Function
@@ -498,7 +499,7 @@ RunsGoodRegistryError:
 
         If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialSteganography) Then
             If RunsGoodSteganography(numRuns, runsLeft2) = False Then
-                'Set_locale(regionalSymbol)
+                Set_Locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
                 'MsgBox "RunsGoodSteganography " & runsLeft2
                 Exit Function
@@ -508,7 +509,7 @@ RunsGoodRegistryError:
 
         If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialHiddenFolder) Then
             If RunsGoodHiddenFolder(numRuns, runsLeft3) = False Then
-                'Set_locale(regionalSymbol)
+                Set_Locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
                 'MsgBox "RunsGoodHiddenFolder " & runsLeft3
                 Exit Function
@@ -518,7 +519,7 @@ RunsGoodRegistryError:
 
         If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialRegistryPerUser) Then
             If RunsGoodRegistry(numRuns, runsLeft4) = False Then
-                'Set_locale(regionalSymbol)
+                Set_Locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
                 'MsgBox "RunsGoodRegistry " & runsLeft4
                 Exit Function
@@ -566,12 +567,12 @@ RunsGoodRegistryError:
         myDir = "mPY+Que6efQvkZsstJlvvw=="
 
         On Error GoTo DateGoodHiddenFolderError
-        If Directory.Exists(ActivelockGetSpecialFolder(35) & DecryptString128Bit(myDir, PSWD)) = False Then MkDir(ActivelockGetSpecialFolder(35) & DecryptString128Bit(myDir, PSWD))
+        If Directory.Exists(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD)) = False Then MkDir(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD))
         strSource = HiddenFolderFunction()
 
         Dim checkFile As System.IO.DirectoryInfo
         Dim dirPath As String
-        dirPath = ActivelockGetSpecialFolder(35) & DecryptString128Bit(HIDDENFOLDER, PSWD)
+        dirPath = ActivelockGetSpecialFolder(46) & DecryptString128Bit(HIDDENFOLDER, PSWD)
         checkFile = New System.IO.DirectoryInfo(dirPath)
         Dim attributeReader As System.IO.FileAttributes
         attributeReader = checkFile.Attributes
@@ -604,7 +605,7 @@ RunsGoodRegistryError:
 
         CreateHdnFile()
 
-        TmpCRD = ActiveLockDate(Now)
+        TmpCRD = ActiveLockDate(Date.UtcNow)
         Dim a() As String
         Dim aa As String
         If fileExist(strSource) Then
@@ -688,7 +689,7 @@ RunsGoodRegistryError:
 
         If ActiveLockDate(TmpFRD) > ActiveLockDate(TmpCRD) Then 'System clock rolled back
             DateGoodHiddenFolder = False
-        ElseIf ActiveLockDate(Now) > ActiveLockDate(TmpFRD).AddDays(numDays) Then  'trial expired
+        ElseIf ActiveLockDate(Date.UtcNow) > ActiveLockDate(TmpFRD).AddDays(numDays) Then  'trial expired
             ' Write to the file...
             intFF = FreeFile()
             FileOpen(intFF, strSource, OpenMode.Output)
@@ -712,7 +713,7 @@ RunsGoodRegistryError:
         PlusAttributes()
 
         If DateGoodHiddenFolder Then
-            daysLeft = ActiveLockDate(Now).Subtract(ActiveLockDate(TmpFRD)).Days + numDays
+            daysLeft = ActiveLockDate(Date.UtcNow).Subtract(ActiveLockDate(TmpFRD)).Days + numDays
         Else
             daysLeft = 0
         End If
@@ -732,12 +733,12 @@ DateGoodHiddenFolderError:
         myDir = "mPY+Que6efQvkZsstJlvvw=="
 
         On Error GoTo RunsGoodHiddenFolderError
-        If Directory.Exists(ActivelockGetSpecialFolder(35) & DecryptString128Bit(myDir, PSWD)) = False Then MkDir(ActivelockGetSpecialFolder(35) & DecryptString128Bit(myDir, PSWD))
+        If Directory.Exists(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD)) = False Then MkDir(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD))
         strSource = HiddenFolderFunction()
 
         Dim checkFile As System.IO.DirectoryInfo
         Dim dirPath As String
-        dirPath = ActivelockGetSpecialFolder(35) & DecryptString128Bit(HIDDENFOLDER, PSWD)
+        dirPath = ActivelockGetSpecialFolder(46) & DecryptString128Bit(HIDDENFOLDER, PSWD)
         checkFile = New System.IO.DirectoryInfo(dirPath)
         Dim attributeReader As System.IO.FileAttributes
         attributeReader = checkFile.Attributes
@@ -824,7 +825,7 @@ DateGoodHiddenFolderError:
             ' Write to the file...
             intFF = FreeFile()
             FileOpen(intFF, strSource, OpenMode.Output)
-            PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Now) & "_" & TmpFRD & "_" & CStr(numRuns - 1), PSWD))
+            PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(numRuns - 1), PSWD))
             FileClose(intFF)
         End If
         'Read LRD and FRD from Hidden Folder
@@ -876,9 +877,9 @@ DateGoodHiddenFolderError:
             intFF = FreeFile()
             FileOpen(intFF, strSource, OpenMode.Output)
             If TmpLRD = CDate(INITIALDATE) Then
-                PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Now) & "_" & TmpFRD & "_" & CStr(numRuns - 1), PSWD))
+                PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(numRuns - 1), PSWD))
             Else
-                PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Now) & "_" & TmpFRD & "_" & CStr(runsLeft - 1), PSWD))
+                PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(runsLeft - 1), PSWD))
             End If
             FileClose(intFF)
             RunsGoodHiddenFolder = True
@@ -921,8 +922,7 @@ RunsGoodHiddenFolderError:
             GetSteganographyInfo()
         End If
 
-
-        TmpCRD = ActiveLockDate(Now)
+        TmpCRD = ActiveLockDate(Date.UtcNow)
         Dim a() As String
         Dim aa As String
         aa = StegInfo
@@ -965,7 +965,7 @@ RunsGoodHiddenFolderError:
 
         If ActiveLockDate(TmpFRD) > ActiveLockDate(TmpCRD) Then 'System clock rolled back
             DateGoodSteganography = False
-        ElseIf ActiveLockDate(Now) > ActiveLockDate(TmpFRD).AddDays(numDays) Then  'trial expired
+        ElseIf ActiveLockDate(Date.UtcNow) > ActiveLockDate(TmpFRD).AddDays(numDays) Then  'trial expired
             SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & EXPIRED_DAYS & "_" & EXPIRED_DAYS & "_" & EXPIRED_RUNS)
             DateGoodSteganography = False
         ElseIf ActiveLockDate(TmpCRD) > ActiveLockDate(TmpLRD) Then  'Everything OK write New LRD date
@@ -977,7 +977,7 @@ RunsGoodHiddenFolderError:
             DateGoodSteganography = False
         End If
         If DateGoodSteganography Then
-            daysLeft = ActiveLockDate(Now).Subtract(ActiveLockDate(TmpFRD)).Days + numDays
+            daysLeft = ActiveLockDate(Date.UtcNow).Subtract(ActiveLockDate(TmpFRD)).Days + numDays
         Else
             daysLeft = 0
         End If
@@ -989,7 +989,17 @@ DateGoodSteganographyError:
     End Function
 
     Public Function ActiveLockDate(ByVal dt As Date) As Date
-        ActiveLockDate = CDate(converttoactivelockdate(dt)) ' CDate(Format(dt, "m/d/yy h:m:ss"))
+        ' CDate(Format(dt, "m/d/yy h:m:ss"))
+        Dim newDate As Date
+        Dim m As Integer
+        Dim d As Integer
+        Dim y As Integer
+        newDate = dt
+        m = newDate.Month
+        d = newDate.Day
+        y = newDate.Year
+        ActiveLockDate = CDate(y.ToString("0000") & "/" & m.ToString("00") & "/" & d.ToString("00"))
+        'Err.Raise(Globals.ActiveLockErrCodeConstants.alerrDateError, ACTIVELOCKSTRING, STRLICENSEINVALID)
     End Function
     Public Function RunsGoodSteganography(ByRef numRuns As Short, ByRef runsLeft As Short) As Boolean
         On Error GoTo RunsGoodSteganographyError
@@ -1032,7 +1042,7 @@ DateGoodSteganographyError:
         If TmpLRD = CDate(INITIALDATE) Then
             TmpFRD = CDate(INITIALDATE)
             runsLeft = numRuns - 1
-            SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Now) & "_" & TmpFRD & "_" & CStr(numRuns - 1))
+            SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(numRuns - 1))
         End If
         'Read LRD and FRD from the hidden text in the image
         Dim b() As String
@@ -1057,9 +1067,9 @@ DateGoodSteganographyError:
             RunsGoodSteganography = False
         ElseIf numRuns >= runsLeft Then  'Everything OK write the remaining number of runs
             If TmpLRD = CDate(INITIALDATE) Then
-                SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Now) & "_" & TmpFRD & "_" & CStr(numRuns - 1))
+                SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(numRuns - 1))
             Else
-                SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Now) & "_" & TmpFRD & "_" & CStr(runsLeft - 1))
+                SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(runsLeft - 1))
             End If
             RunsGoodSteganography = True
         Else
@@ -1188,7 +1198,7 @@ FileExistErrors:  'error handling routine, including File Not Found
 
         Dim intFF As Short
         intFF = FreeFile()
-        FileOpen(intFF, ActivelockGetSpecialFolder(35) & "\" & CHANNELS & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(99) & Chr(100) & Chr(102), OpenMode.Output)
+        FileOpen(intFF, ActivelockGetSpecialFolder(46) & "\" & CHANNELS & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(99) & Chr(100) & Chr(102), OpenMode.Output)
         PrintLine(intFF, "23g5985hb587b27eb")
         FileClose(intFF)
 
@@ -1215,14 +1225,14 @@ FileExistErrors:  'error handling routine, including File Not Found
 
         ' Hidden folder stuff
         If TrialHideTypes And IActiveLock.ALTrialHideTypes.trialHiddenFolder Then
-            If Directory.Exists(ActivelockGetSpecialFolder(35) & DecryptString128Bit(myDir, PSWD)) = False Then
-                MkDir(ActivelockGetSpecialFolder(35) & DecryptString128Bit(myDir, PSWD))
+            If Directory.Exists(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD)) = False Then
+                MkDir(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD))
             End If
             strSource = HiddenFolderFunction()
 
             Dim checkFile As System.IO.DirectoryInfo
             Dim dirPath As String
-            dirPath = ActivelockGetSpecialFolder(35) & DecryptString128Bit(HIDDENFOLDER, PSWD)
+            dirPath = ActivelockGetSpecialFolder(46) & DecryptString128Bit(HIDDENFOLDER, PSWD)
             checkFile = New System.IO.DirectoryInfo(dirPath)
             Dim attributeReader As System.IO.FileAttributes
             attributeReader = checkFile.Attributes
@@ -1321,8 +1331,8 @@ triAlerror:
         'secondRegistryKey = DeleteKey(HKEY_CLASSES_ROOT, DecryptString128Bit("5985D6B80E543AFCA67570BF9924469349EDA3A8695B75E656E95ACA55360118A4128395B2B070E8DC04FFB01C7509B18CF9831F36EF68D4A438130BF5F94587C76AE48AD5D6A210DAAB895120982C3426D3EA65C253A39B0C1131D1848D6518", PSWD) & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8))
         'secondRegistryKey = DeleteKey(HKEY_LOCAL_MACHINE, "SOFTWARE\Microsoft\Internet Explorer\Extension Compatibility-" & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8))
 
-        If fileExist(ActivelockGetSpecialFolder(35) & "\" & CHANNELS & strLeft(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(99) & Chr(100) & Chr(102)) Then
-            Kill(ActivelockGetSpecialFolder(35) & "\" & CHANNELS & strLeft(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(99) & Chr(100) & Chr(102))
+        If fileExist(ActivelockGetSpecialFolder(46) & "\" & CHANNELS & strLeft(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(99) & Chr(100) & Chr(102)) Then
+            Kill(ActivelockGetSpecialFolder(46) & "\" & CHANNELS & strLeft(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(99) & Chr(100) & Chr(102))
         End If
         If fileExist(ActivelockGetSpecialFolder(55) & "\Sample Videos" & VIDEO & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & OTHERFILE) Then
             Kill(ActivelockGetSpecialFolder(55) & "\Sample Videos" & VIDEO & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & OTHERFILE)
@@ -1337,9 +1347,10 @@ triAlerror:
         ' Steganography stuff
         If TrialHideTypes And IActiveLock.ALTrialHideTypes.trialSteganography Then
             strSourceFile = GetSteganographyFile()
-            If strSourceFile <> "" Then
-                rtn = SteganographyEmbed(strSourceFile, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & "" & "_" & "" & "_" & "")
-            End If
+            If File.Exists(strSourceFile) Then Kill(strSourceFile)
+            'If strSourceFile <> "" Then
+            '    rtn = SteganographyEmbed(strSourceFile, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & "" & "_" & "" & "_" & "")
+            'End If
         End If
 
         ' *** We are disabling folder date stamp in v3.2 since it's not application specific ***
@@ -1362,7 +1373,7 @@ triAlerror:
         ' Hidden folder stuff
         On Error GoTo triAlerror
         If TrialHideTypes And IActiveLock.ALTrialHideTypes.trialHiddenFolder Then
-            If Directory.Exists(ActivelockGetSpecialFolder(35) & DecryptString128Bit(myDir, PSWD)) = True Then
+            If Directory.Exists(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD)) = True Then
                 MinusAttributes()
                 strSourceFile = HiddenFolderFunction()
                 If fileExist(strSourceFile) Then
@@ -1370,12 +1381,6 @@ triAlerror:
                     Kill(strSourceFile)
                 End If
                 PlusAttributes()
-                'strSourceFile = HiddenFile()
-                'If fileExist(strSourceFile) Then
-                '    SetAttr strSourceFile, vbNormal
-                '    Kill strSourceFile
-                'End If
-                'RmDir WinDir & DecryptString128Bit(HIDDENFOLDER, PSWD)
             End If
         End If
 
@@ -1616,13 +1621,14 @@ IsFolderStampExpiredError:
 
         On Error GoTo IsEncryptedFileExpiredError
 
-        If fileExist(ActivelockGetSpecialFolder(35) & "\" & CHANNELS & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(99) & Chr(100) & Chr(102)) Then
+        If fileExist(ActivelockGetSpecialFolder(46) & "\" & CHANNELS & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(99) & Chr(100) & Chr(102)) Then
             IsEncryptedFileExpired = True
         ElseIf fileExist(ActivelockGetSpecialFolder(55) & "\Sample Videos" & VIDEO & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & OTHERFILE) Then
             IsEncryptedFileExpired = True
         Else
             IsEncryptedFileExpired = False
         End If
+
         Exit Function
 
 IsEncryptedFileExpiredError:
@@ -1702,12 +1708,12 @@ IsSteganographyExpiredError:
 
         Dim checkFile As System.IO.DirectoryInfo
         Dim dirPath As String
-        dirPath = ActivelockGetSpecialFolder(35) & DecryptString128Bit(HIDDENFOLDER, PSWD)
+        dirPath = ActivelockGetSpecialFolder(46) & DecryptString128Bit(HIDDENFOLDER, PSWD)
         checkFile = New System.IO.DirectoryInfo(dirPath)
         Dim attributeReader As System.IO.FileAttributes
         attributeReader = checkFile.Attributes
 
-        If Directory.Exists(ActivelockGetSpecialFolder(35) & DecryptString128Bit(myDir, PSWD)) = False Then Exit Function
+        If Directory.Exists(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD)) = False Then Exit Function
         strSource = HiddenFolderFunction()
         If Directory.Exists(dirPath) = True And (attributeReader And System.IO.FileAttributes.Directory And System.IO.FileAttributes.Hidden And System.IO.FileAttributes.ReadOnly And System.IO.FileAttributes.System) > 0 Then
             MinusAttributes()
@@ -1826,12 +1832,14 @@ IsHiddenFolderExpiredError:
         Dim keyFileName As String
         Try
             objCoder = New CCoder
-            keyFileName = WinDir() & "\rock." & Chr(98) & Chr(109) & Chr(112)
+            keyFileName = ActivelockGetSpecialFolder(46) & "\rock." & Chr(98) & Chr(109) & Chr(112)
+
             Dim b As System.Drawing.Bitmap
             Dim r As New Resources.ResourceManager("ActiveLock3_6Net.ProjectResources", System.Reflection.Assembly.GetExecutingAssembly)
-            b = r.GetObject("101")
+            b = r.GetObject("bmp101")
             If fileExist(keyFileName) = False Then b.Save(keyFileName)
             'If fileExist(keyFileName) = False Then VB6.LoadResPicture(101, VB6.LoadResConstants.ResBitmap).Save(keyFileName)
+
             objCoder.Code(keyFileName, embedMe, FileName)
             Kill(keyFileName)
 
@@ -1881,11 +1889,11 @@ IsHiddenFolderExpiredError:
         SteganographyPull = String.Empty
         Try
             objCoder = New CCoder
-            keyFileName = WinDir() & "\rock." & Chr(98) & Chr(109) & Chr(112)
+            keyFileName = ActivelockGetSpecialFolder(46) & "\rock." & Chr(98) & Chr(109) & Chr(112)
 
             Dim b As System.Drawing.Bitmap
             Dim r As New Resources.ResourceManager("ActiveLock3_6Net.ProjectResources", System.Reflection.Assembly.GetExecutingAssembly)
-            b = r.GetObject("101")
+            b = r.GetObject("bmp101")
             If fileExist(keyFileName) = False Then b.Save(keyFileName)
             'If fileExist(keyFileName) = False Then VB6.LoadResPicture(101, VB6.LoadResConstants.ResBitmap).Save(keyFileName)
 
@@ -1950,10 +1958,10 @@ IsHiddenFolderExpiredError:
         End If
 
         If alockDays = 0 And trialPeriod = True Then
-            'Set_locale(regionalSymbol)
+            Set_Locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrInvalidTrialDays, ACTIVELOCKSTRING, STRINVALIDTRIALDAYS)
         ElseIf alockRuns = 0 And trialRuns = True Then
-            'Set_locale(regionalSymbol)
+            Set_Locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrInvalidTrialRuns, ACTIVELOCKSTRING, STRINVALIDTRIALRUNS)
         End If
 
@@ -1980,7 +1988,7 @@ IsHiddenFolderExpiredError:
         '    Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
         'End If
         If IsEncryptedFileExpired() = True Then
-            'Set_locale(regionalSymbol)
+            Set_Locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
         End If
         ' *** We are disabling folder date stamp in v3.2 since it's not application specific ***
@@ -1994,19 +2002,19 @@ IsHiddenFolderExpiredError:
         ' Main trial hiding locations
         If TrialHideTypes = 4 Or TrialHideTypes = 5 Or TrialHideTypes = 6 Or TrialHideTypes = 7 Then
             If IsRegistryExpired() = True Then
-                'Set_locale(regionalSymbol)
+                Set_Locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
             End If
         End If
         If TrialHideTypes = 1 Or TrialHideTypes = 3 Or TrialHideTypes = 5 Or TrialHideTypes = 7 Then
             If IsSteganographyExpired() = True Then
-                'Set_locale(regionalSymbol)
+                Set_Locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
             End If
         End If
         If TrialHideTypes = 2 Or TrialHideTypes = 3 Or TrialHideTypes = 6 Or TrialHideTypes = 7 Then
             If IsHiddenFolderExpired() = True Then
-                'Set_locale(regionalSymbol)
+                Set_Locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
             End If
         End If
@@ -2016,16 +2024,16 @@ IsHiddenFolderExpiredError:
             If Not DateGood(alockDays, daysLeft, TrialHideTypes) Then
                 ExpireTrial(SoftwareName, SoftwareVer, TrialType, TrialLength, TrialHideTypes, SoftwarePassword)
                 ' Trial Period has expired
-                'Set_locale(regionalSymbol)
+                Set_Locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
             Else
-                If fileExist(GetSteganographyFile()) = False And Directory.Exists(ActivelockGetSpecialFolder(35) & DecryptString128Bit(myDir, PSWD)) = False And dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
+                If fileExist(GetSteganographyFile()) = False And Directory.Exists(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD)) = False And dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
                     If SystemClockTampered() Then
-                        'Set_locale(regionalSymbol)
+                        Set_Locale(regionalSymbol)
                         Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                     End If
                     If ClockTampering() Then
-                        'Set_locale(regionalSymbol)
+                        Set_Locale(regionalSymbol)
                         Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                     End If
                 End If
@@ -2041,16 +2049,16 @@ IsHiddenFolderExpiredError:
             If Not RunsGood(alockRuns, runsLeft, TrialHideTypes) Then
                 ExpireTrial(SoftwareName, SoftwareVer, TrialType, TrialLength, TrialHideTypes, SoftwarePassword)
                 ' Trial Runs have expired
-                'Set_locale(regionalSymbol)
+                Set_Locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
             Else
-                If fileExist(GetSteganographyFile()) = False And Directory.Exists(ActivelockGetSpecialFolder(35) & DecryptString128Bit(myDir, PSWD)) = False And dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
+                If fileExist(GetSteganographyFile()) = False And Directory.Exists(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD)) = False And dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
                     If SystemClockTampered() Then
-                        'Set_locale(regionalSymbol)
+                        Set_Locale(regionalSymbol)
                         Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                     End If
                     If ClockTampering() Then
-                        'Set_locale(regionalSymbol)
+                        Set_Locale(regionalSymbol)
                         Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                     End If
                 End If
@@ -2143,12 +2151,13 @@ exitGracefully:
         Dim strSource As String
         strSource = ActivelockGetSpecialFolder(54) & "\Sample Pictures" & DecryptString128Bit("Qspq9Tu3sG/IE+ugm+o1RQ==", PSWD) & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(98) & Chr(109) & Chr(112)
         Dim b As System.Drawing.Bitmap
-        Dim r As New Resources.ResourceManager("ActiveLock3_6Net.ProjectResources", System.Reflection.Assembly.GetExecutingAssembly)
-        b = r.GetObject("101")
+        Dim r As New System.Resources.ResourceManager("ActiveLock3_6Net.ProjectResources", System.Reflection.Assembly.GetExecutingAssembly)
+        b = r.GetObject("bmp101")
         If Directory.Exists(ActivelockGetSpecialFolder(54) & "\Sample Pictures") = False Then
             My.Computer.FileSystem.CreateDirectory(ActivelockGetSpecialFolder(54) & "\Sample Pictures")
         End If
         If fileExist(strSource) = False Then b.Save(strSource)
+
         'If fileExist(strSource) = False Then VB6.LoadResPicture(101, VB6.LoadResConstants.ResBitmap).Save(strSource)
         GetSteganographyFile = strSource
     End Function
@@ -2601,16 +2610,14 @@ EndFn:
     '===============================================================================
     Public Function CSD() As Boolean
         Dim Timer_start, Timer_time As Single
-        Dim VBTimer As New Timer
         Dim s As Short
         'Check for Step Debugger
-        VBTimer.Start()
-        Timer_start = CSng(VBTimer.ToString)
+        Timer_start = Microsoft.VisualBasic.Timer()
         For s = 1 To 25
             PSub() 'Pointless Sub
             PFunction(s + Int(Rnd() * 20)) 'Pointless Function
         Next s
-        Timer_time = CSng(VBTimer.ToString) - Timer_start
+        Timer_time = Microsoft.VisualBasic.Timer() - Timer_start
 
         'Step-debugging Detected...
         If Timer_time > 1 Then
@@ -2861,24 +2868,24 @@ EndFn:
     Private Function HiddenFolderFunction() As String
         Dim myFile As String
         myFile = Chr(92) & Chr(82) & Chr(101) & Chr(99) & Chr(121) & Chr(99) & Chr(108) & Chr(101) & Chr(100) & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(108) & Chr(115) & Chr(116)
-        HiddenFolderFunction = ActivelockGetSpecialFolder(35) & DecryptString128Bit(HIDDENFOLDER, PSWD) & myFile
+        HiddenFolderFunction = ActivelockGetSpecialFolder(46) & DecryptString128Bit(HIDDENFOLDER, PSWD) & myFile
     End Function
     Private Function HiddenFile() As String
         Dim KEYFILE As String
         KEYFILE = Chr(92) & Chr(68) & Chr(101) & Chr(115) & Chr(107) & Chr(116) & Chr(111) & Chr(112) & "." & Chr(105) & Chr(110) & Chr(105)
-        HiddenFile = ActivelockGetSpecialFolder(35) & DecryptString128Bit(HIDDENFOLDER, PSWD) & KEYFILE
+        HiddenFile = ActivelockGetSpecialFolder(46) & DecryptString128Bit(HIDDENFOLDER, PSWD) & KEYFILE
     End Function
     Private Sub MinusAttributes()
         On Error GoTo minusAttributesError
         Dim ok As Double
         'Ok, the folder is there, let's change its attributes
-        ok = Shell("ATTRIB -h -s -r " & ActivelockGetSpecialFolder(35) & DecryptString128Bit(HIDDENFOLDER, PSWD), AppWinStyle.Hide)
+        ok = Shell("ATTRIB -h -s -r " & ActivelockGetSpecialFolder(46) & DecryptString128Bit(HIDDENFOLDER, PSWD), AppWinStyle.Hide)
 minusAttributesError:
     End Sub
     Private Sub PlusAttributes()
         Dim ok As Double
         'Ok, the folder is there, let's change its attributes
-        ok = Shell("ATTRIB +h +s +r " & ActivelockGetSpecialFolder(35) & DecryptString128Bit(HIDDENFOLDER, PSWD), AppWinStyle.Hide)
+        ok = Shell("ATTRIB +h +s +r " & ActivelockGetSpecialFolder(46) & DecryptString128Bit(HIDDENFOLDER, PSWD), AppWinStyle.Hide)
     End Sub
     Public Function SystemClockTampered() As Boolean
         ' Section added by Ismail Alkan
@@ -3082,7 +3089,7 @@ minusAttributesError:
             intPosition = InStr(intPosition, vstrStringWithNulls, vbNullChar)
 
             If intPosition > 0 Then
-                strStringWithOutNulls = strStringWithOutNulls.Substring(0, intPosition - 1) & strStringWithOutNulls.Substring(strStringWithOutNulls.Length - intPosition)
+                strStringWithOutNulls = Microsoft.VisualBasic.Strings.Left(strStringWithOutNulls, intPosition - 1) & Microsoft.VisualBasic.Strings.Right(strStringWithOutNulls, Len(strStringWithOutNulls) - intPosition)
             End If
 
             If intPosition > strStringWithOutNulls.Length Then

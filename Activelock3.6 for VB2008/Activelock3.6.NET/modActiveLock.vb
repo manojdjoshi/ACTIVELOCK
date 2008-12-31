@@ -125,6 +125,9 @@ Module modActiveLock
     Private Declare Function GetModuleFileName Lib "kernel32" Alias "GetModuleFileNameA" (ByVal hModule As Integer, ByVal lpFileName As String, ByVal nSize As Integer) As Integer
     Private Declare Function MapFileAndCheckSum Lib "imagehlp" Alias "MapFileAndCheckSumA" (ByVal FileName As String, ByRef HeaderSum As Integer, ByRef CheckSum As Integer) As Integer
 
+    Private Declare Function SHGetSpecialFolderPath Lib "SHELL32.DLL" Alias "SHGetSpecialFolderPathA" (ByVal hWnd As IntPtr, ByVal lpszPath As String, ByVal nFolder As Integer, ByVal fCreate As Boolean) As Boolean
+
+
     Structure SYSTEMTIME
         Dim wYear As Short
         Dim wMonth As Short
@@ -263,7 +266,7 @@ Module modActiveLock
         ReadFile = Len(sData)
         Exit Function
 Hell:
-        'Set_locale(regionalSymbol)
+        Set_Locale(regionalSymbol)
         Err.Raise(Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext)
     End Function
     '===============================================================================
@@ -350,7 +353,7 @@ Hell:
         rc = GetTimeZoneInformation(tzi)
         Select Case rc
             ' if not daylight assume standard
-        Case TIME_ZONE_ID_DAYLIGHT
+            Case TIME_ZONE_ID_DAYLIGHT
                 strName = System.Text.UnicodeEncoding.Unicode.GetString(tzi.DaylightName) ' convert to string
                 bDST = True
             Case Else
@@ -412,24 +415,24 @@ Hell:
         Dim KEY As RSAKey = Nothing
         ' create the key from the key blobs
         If rsa_createkey(strPub, Len(strPub), strPriv, Len(strPriv), KEY) = RETVAL_ON_ERROR Then
-            'Set_locale(regionalSymbol)
+            Set_Locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
 
         ' sign the data using the created key
         Dim sLen As Integer
         If rsa_sign(KEY, strdata, Len(strdata), vbNullString, sLen) = RETVAL_ON_ERROR Then
-            'Set_locale(regionalSymbol)
+            Set_Locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         Dim strSig As String : strSig = New String(Chr(0), sLen)
         If rsa_sign(KEY, strdata, Len(strdata), strSig, sLen) = RETVAL_ON_ERROR Then
-            'Set_locale(regionalSymbol)
+            Set_Locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         ' throw away the key
         If rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-            'Set_locale(regionalSymbol)
+            Set_Locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         RSASign = strSig
@@ -450,18 +453,18 @@ Hell:
         Dim rc As Integer
         ' create the key from the public key blob
         If rsa_createkey(strPub, Len(strPub), vbNullString, 0, KEY) = RETVAL_ON_ERROR Then
-            'Set_locale(regionalSymbol)
+            Set_Locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         ' validate the key
         rc = rsa_verifysig(KEY, strSig, Len(strSig), strdata, Len(strdata))
         If rc = RETVAL_ON_ERROR Then
-            'Set_locale(regionalSymbol)
+            Set_Locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         ' de-allocate memory used by the key
         If rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-            'Set_locale(regionalSymbol)
+            Set_Locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         RSAVerify = rc
@@ -551,7 +554,7 @@ Hell:
     ' Purpose: Converts a local date-time into UTC/GMT date-time
     ' Remarks: None
     '===============================================================================
-    Public Function UTC(ByRef dt As Date) As Date
+    Public Function UTC(ByVal dt As Date) As Date
         '  Returns current UTC date-time.
         UTC = dt.AddMinutes(LocalTimeZone(TimeZoneReturn.UTC_Offset))
     End Function
@@ -1093,39 +1096,25 @@ Hell:
         '        FOLDERID_OriginalImages = "{2C36C0AA-5812-4b87-BFD0-4CD0DFB19B39}"
         '        sRfid = FOLDERID_OriginalImages
         'End Select
-
-        ActivelockGetSpecialFolder = System.Environment.GetFolderPath(CSIDL)
-        If ActivelockGetSpecialFolder = "" Then
+        Dim Ret As Long
+        Dim Trash As String
+        Trash = Space$(260)
+        ActivelockGetSpecialFolder = ""
+        Try
+            Ret = SHGetSpecialFolderPath(0, Trash, CSIDL, False)
+            If Trim$(Trash) <> Chr(0) Then
+                Trash = Left$(Trash, InStr(Trash, Chr(0)) - 1)
+            End If
+            ActivelockGetSpecialFolder = Trash
+            Return ActivelockGetSpecialFolder
+        Catch ex As Exception
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrUndefinedSpecialFolder, ACTIVELOCKSTRING, STRUNDEFINEDSPECIALFOLDER)
-        End If
+        End Try
 
-        On Error GoTo 0
-        Exit Function
-
-fGetSpecialFolder_Error:
-        Err.Clear()
-        Resume Next
     End Function
     Public Function PSWD() As String
         ' Do not modify this unless you change all encrypted strings in the entire project
         PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
-    End Function
-    Public Function ConvertToActivelockDate(ByVal myDate As Object) As String
-        Dim newDate As DateTime
-        Dim m As Integer
-        Dim d As Integer
-        Dim y As Integer
-        ConvertToActivelockDate = ""
-        If IsDate(myDate) Then
-            newDate = CDate(myDate)
-            newDate = UTC(newDate)
-            m = newDate.Month
-            d = newDate.Day
-            y = newDate.Year
-            ConvertToActivelockDate = y.ToString("0000") & "/" & m.ToString("00") & "/" & d.ToString("00")
-        Else
-            Err.Raise(Globals.ActiveLockErrCodeConstants.alerrDateError, ACTIVELOCKSTRING, STRLICENSEINVALID)
-        End If
     End Function
 
 End Module
