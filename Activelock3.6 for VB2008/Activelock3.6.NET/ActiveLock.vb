@@ -118,7 +118,7 @@ Friend Class ActiveLock
             Dim Lic As ProductLicense
             Lic = mKeyStore.Retrieve(mSoftwareName, mLicenseFileType)
             If Lic Is Nothing Then
-                'Set_locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE)
             End If
             ' Validate the License.
@@ -139,7 +139,7 @@ Friend Class ActiveLock
             Dim Lic As ProductLicense
             Lic = mKeyStore.Retrieve(mSoftwareName, mLicenseFileType)
             If Lic Is Nothing Then
-                'Set_locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE)
             End If
             ' Validate the License.
@@ -186,7 +186,7 @@ Friend Class ActiveLock
             Dim Lic As ProductLicense
             Lic = mKeyStore.Retrieve(mSoftwareName, mLicenseFileType)
             If Lic Is Nothing Then
-                'Set_locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE)
             End If
             ' Validate the License.
@@ -248,7 +248,7 @@ Friend Class ActiveLock
             Dim Lic As ProductLicense
             Lic = mKeyStore.Retrieve(mSoftwareName, mLicenseFileType)
             If Lic Is Nothing Then
-                'Set_locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE)
             End If
             ' Validate the License.
@@ -269,7 +269,7 @@ Friend Class ActiveLock
             Dim Lic As ProductLicense
             Lic = mKeyStore.Retrieve(mSoftwareName, mLicenseFileType)
             If Lic Is Nothing Then
-                'Set_locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE)
             End If
             ' Validate the License.
@@ -290,7 +290,7 @@ Friend Class ActiveLock
             Dim Lic As ProductLicense
             Lic = mKeyStore.Retrieve(mSoftwareName, mLicenseFileType)
             If Lic Is Nothing Then
-                'Set_locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE)
             End If
             ' Validate the License.
@@ -331,7 +331,7 @@ Friend Class ActiveLock
             Else
                 ' Set mKeyStore = New RegistryKeyStoreProvider
                 ' TODO: Implement me!
-                'Set_locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNotImplemented, ACTIVELOCKSTRING, STRNOTIMPLEMENTED)
             End If
             ' Set Key Store Path in KeyStoreProvider
@@ -577,7 +577,7 @@ Friend Class ActiveLock
 
                 'Restrict user name to 2000 characters; need more? why?
                 If Len(User) > 2000 Then
-                    'Set_locale(regionalSymbol)
+                    Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrUserNameTooLong, ACTIVELOCKSTRING, STRUSERNAMETOOLONG)
                 End If
 
@@ -669,10 +669,10 @@ Friend Class ActiveLock
             ' validate the license
             ValidateLic(Lic)
             'IActiveLock_UsedDays = CInt(DateDiff("d", Lic.RegisteredDate, Now.UtcNow))
-            Dim mydate As DateTime = ActiveLockDate(Now)
+            Dim mydate As DateTime = ActiveLockDate(Date.UtcNow)
             IActiveLock_UsedDays = mydate.Subtract(ActiveLockDate(CDate(Lic.RegisteredDate))).Days      'CInt(DateDiff("d", CDate(Replace(Lic.RegisteredDate, ".", "-")), Date.UtcNow))
             If IActiveLock_UsedDays < 0 Then
-                'Set_locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
             End If
         End Get
@@ -718,7 +718,7 @@ Friend Class ActiveLock
             usedFile = WinSysDir() & "\alcrypto3NET.dll"
         End If
         If File.Exists(usedFile) = False Then
-            'Set_locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrFileTampered, "ActiveLock3", "Alcrypto3Net.dll could not be found.")
         End If
         Call modActiveLock.ReadFile(usedFile, strdata)
@@ -728,7 +728,7 @@ Friend Class ActiveLock
 
         If strMD5 <> ALCRYPTO_MD5 Then
 
-            'Set_locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrFileTampered, ACTIVELOCKSTRING, STRFILETAMPERED)
         End If
         ' Perform automatic license registration
@@ -796,26 +796,26 @@ finally_Renamed:
         strStream = mSoftwareName & mSoftwareVer & mSoftwarePassword
 
         ' Get the current date format and save it to regionalSymbol variable
-        'Get_locale()
+        Get_locale()
         ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
-        'Set_locale("")
+        Set_locale("")
 
         'Check the Key Store Provider
         If mKeyStore Is Nothing Then
-            'Set_locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREUNINITIALIZED)
             'Check the Key Store Path (LIC file path)
         ElseIf mKeyStorePath = "" Then
-            'Set_locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrKeyStorePathInvalid, ACTIVELOCKSTRING, STRKEYSTOREPATHISEMPTY)
         ElseIf mSoftwareName = "" Then
-            'Set_locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNoSoftwareName, ACTIVELOCKSTRING, STRNOSOFTWARENAME)
         ElseIf mSoftwareVer = "" Then
-            'Set_locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNoSoftwareVersion, ACTIVELOCKSTRING, STRNOSOFTWAREVERSION)
         ElseIf mSoftwarePassword = "" Then
-            'Set_locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNoSoftwarePassword, ACTIVELOCKSTRING, STRNOSOFTWAREPASSWORD)
         End If
 
@@ -834,26 +834,26 @@ finally_Renamed:
 
             trialStatus = ActivateTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, strMsg, mSoftwarePassword, mCheckTimeServerForClockTampering, mChecksystemfilesForClockTampering, mTrialWarning, mRemainingTrialDays, mRemainingTrialRuns)
             ' Set the locale date format to what we had before; can't leave changed
-            'Set_locale((regionalSymbol))
+            Set_locale((regionalSymbol))
             If trialStatus = True Then
                 Exit Sub
             End If
             GoTo continueRegistration
 
 noRegistration:
-            'Set_locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE)
 
         Else  'Lic exists therefore we'll check the LIC file ADS
             If mCheckTimeServerForClockTampering = IActiveLock.ALTimeServerTypes.alsCheckTimeServer Then
                 If SystemClockTampered() Then
-                    'Set_locale(regionalSymbol)
+                    Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                 End If
             End If
             If mChecksystemfilesForClockTampering = IActiveLock.ALSystemFilesTypes.alsCheckSystemFiles Then
                 If ClockTampering() Then
-                    'Set_locale(regionalSymbol)
+                    Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                 End If
             End If
@@ -862,18 +862,18 @@ noRegistration:
                 If fi.Length = 0 Then GoTo continueRegistration
                 adsText = ADSFile.Read(mKeyStorePath, strStream)
                 If adsText = "" Then
-                    'Set_locale(regionalSymbol)
+                    Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseTampered, ACTIVELOCKSTRING, STRLICENSETAMPERED)
                 End If
                 Dim dt1 As DateTime = Convert.ToDateTime(adsText)
-                Dim dt2 As DateTime = ActiveLockDate(Now)
+                Dim dt2 As DateTime = ActiveLockDate(Date.UtcNow)
                 Dim span As TimeSpan = dt2.Subtract(dt1)
                 If span.TotalHours < 0 Then
-                    'Set_locale(regionalSymbol)
+                    Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                 End If
                 Dim ok As Integer
-                ok = ADSFile.Write(ActiveLockDate(Now), mKeyStorePath, strStream)
+                ok = ADSFile.Write(ActiveLockDate(Date.UtcNow), mKeyStorePath, strStream)
                 GoTo continueRegistration
             End If
         End If
@@ -881,7 +881,7 @@ noRegistration:
 continueRegistration:
         ' Validate license
         ValidateLic(Lic)
-        'Set_locale(regionalSymbol)
+        Set_locale(regionalSymbol)
 
     End Sub
     Public Function CheckStreamCapability() As Boolean
@@ -931,7 +931,7 @@ continueRegistration:
 
         ' make sure software code is set
         If mSoftwareCode = "" Then
-            'Set_locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNotInitialized, ACTIVELOCKSTRING, STRNOSOFTWARECODE)
         End If
 
@@ -955,7 +955,7 @@ continueRegistration:
             Dim rc As Integer
             rc = RSAVerify(strPubKey, strLic, strSig)
             If rc <> 0 Then
-                'Set_locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
             End If
         Else    ' .NET RSA
@@ -993,12 +993,12 @@ continueRegistration:
                 If verified Then
                     'MsgBox("Signature Valid", MsgBoxStyle.Information)
                 Else
-                    'Set_locale(regionalSymbol)
+                    Set_locale(regionalSymbol)
                     Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
                     'MsgBox("Invalid Signature", MsgBoxStyle.Exclamation)
                 End If
             Catch ex As Exception
-                'Set_locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, ex.Message)
             End Try
 
@@ -1009,14 +1009,14 @@ continueRegistration:
         If Lic.Expiration = "" Then Exit Sub
         Dim dtExp As Date
         dtExp = ActiveLockDate(CDate(Lic.Expiration))
-        If ActiveLockDate(Now) > dtExp And Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
+        If ActiveLockDate(Date.UtcNow) > dtExp And Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
             ' ialkan - 9-23-2005 added the following to update and store the license
             ' with the new LastUsed property; otherwise setting the clock back next time
             ' might bypass the protection mechanism
             ' Update last used date
             UpdateLastUsed(Lic)
             mKeyStore.Store(Lic, mLicenseFileType)
-            'Set_locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseExpired, ACTIVELOCKSTRING, STRLICENSEEXPIRED)
         End If
     End Sub
@@ -1041,7 +1041,7 @@ continueRegistration:
 
         ' make sure software code is set
         If mSoftwareCode = "" Then
-            'Set_locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNotInitialized, ACTIVELOCKSTRING, STRNOSOFTWARECODE)
         End If
 
@@ -1074,11 +1074,11 @@ continueRegistration:
             If Lic.RegisteredLevel = 0 Then
                 Lic.RegisteredLevel = CStr(RegisteredLevel)
             ElseIf Lic.RegisteredLevel <> CStr(RegisteredLevel) Then
-                'Set_locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
             End If
             If Lic.RegisteredDate = "" Then
-                Lic.RegisteredDate = ActiveLockDate(Now)
+                Lic.RegisteredDate = ActiveLockDate(Date.UtcNow)
             End If
             ' ignore expiration date if license type is "permanent"
             If Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
@@ -1088,14 +1088,14 @@ continueRegistration:
             ' Finally check if the serial number is Ok
             If Not oReg.IsKeyOK(SerialNumber, mSoftwareName & mSoftwareVer & mSoftwarePassword, modHardware.GetHDSerialFirmware()) Then
                 ' Something wrong with the serial number used
-                'Set_locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
             End If
             Lic.LicenseCode = "Short Key"
             '"Key is valid."
         Else
             'MsgBox "Invalid license key."
-            'Set_locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
         End If
 
@@ -1104,14 +1104,14 @@ continueRegistration:
         If Lic.Expiration = "" Then Exit Sub
         Dim dtExp As Date
         dtExp = ActiveLockDate(CDate(Lic.Expiration))
-        If ActiveLockDate(Now) > dtExp And Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
+        If ActiveLockDate(Date.UtcNow) > dtExp And Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
             ' ialkan - 9-23-2005 added the following to update and store the license
             ' with the new LastUsed property; otherwise setting the clock back next time
             ' might bypass the protection mechanism
             ' Update last used date
             UpdateLastUsed(Lic)
             mKeyStore.Store(Lic, mLicenseFileType)
-            'Set_locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseExpired, ACTIVELOCKSTRING, STRLICENSEEXPIRED)
         End If
     End Sub
@@ -1126,7 +1126,7 @@ continueRegistration:
     Private Sub ValidateLic(ByRef Lic As ProductLicense)
         ' make sure we're initialized.
         If Not mfInit Then
-            'Set_locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNotInitialized, ACTIVELOCKSTRING, STRNOTINITIALIZED)
         End If
 
@@ -1143,7 +1143,7 @@ continueRegistration:
         MyNotifier.Notify("ValidateValue", strEncrypted)
         strHash = modMD5.Hash(strEncrypted)
         If strHash <> Lic.Hash1 Then
-            'Set_locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseTampered, ACTIVELOCKSTRING, STRLICENSETAMPERED)
         End If
 
@@ -1151,11 +1151,11 @@ continueRegistration:
         ' Need to account for Daylight Savings Time
         Dim strNow As String
         ' Normalize to the format of the saved date-time, before we compare
-        strNow = ActiveLockDate(Now)
+        strNow = ActiveLockDate(Date.UtcNow)
         If DateValue(strNow) < DateValue(ActiveLockDate(CDate(Lic.LastUsed))) And Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
             'System.Diagnostics.Debug.WriteLine("UTC Now: " & strNow)
             'System.Diagnostics.Debug.WriteLine("LastUsed: " & CDate(Lic.LastUsed))
-            'Set_locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
         End If
         UpdateLastUsed(Lic)
@@ -1171,9 +1171,9 @@ continueRegistration:
     '===============================================================================
     Private Sub UpdateLastUsed(ByRef Lic As ProductLicense)
         ' Update license store with LastRunDate
-        ' Dim strEncrypted As String
         Dim strLastUsed As String
-        strLastUsed = ActiveLockDate(Now)
+        strLastUsed = ActiveLockDate(Date.UtcNow)
+        strLastUsed = ActiveLockDate(CDate(strLastUsed))
         Lic.LastUsed = strLastUsed
         MyNotifier.Notify("ValidateValue", strLastUsed)
         Lic.Hash1 = modMD5.Hash(strLastUsed)
@@ -1193,9 +1193,9 @@ continueRegistration:
         Dim trialStatus As Boolean
 
         ' Get the current date format and save it to regionalSymbol variable
-        'Get_locale()
+        Get_locale()
         ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
-        'Set_locale("")
+        Set_locale("")
 
         ' Check to see if this is a Short License Key
         If Mid(LibKey, 5, 1) = "-" And Mid(LibKey, 10, 1) = "-" And Mid(LibKey, 15, 1) = "-" And Mid(LibKey, 20, 1) = "-" Then
@@ -1213,13 +1213,13 @@ continueRegistration:
         If Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
             If mCheckTimeServerForClockTampering = IActiveLock.ALTimeServerTypes.alsCheckTimeServer Then
                 If SystemClockTampered() Then
-                    'Set_locale(regionalSymbol)
+                    Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                 End If
             End If
             If mChecksystemfilesForClockTampering = IActiveLock.ALSystemFilesTypes.alsCheckSystemFiles Then
                 If ClockTampering() Then
-                    'Set_locale(regionalSymbol)
+                    Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                 End If
             End If
@@ -1227,7 +1227,7 @@ continueRegistration:
 
         ' License was validated successfuly.  Store it.
         If mKeyStore Is Nothing Then
-            'Set_locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREUNINITIALIZED)
         End If
 
@@ -1241,7 +1241,7 @@ continueRegistration:
             Dim ok As Integer
             Dim strStream As String = String.Empty
             strStream = mSoftwareName & mSoftwareVer & mSoftwarePassword
-            ok = ADSFile.Write(ActiveLockDate(Now).ToString, mKeyStorePath, strStream)
+            ok = ADSFile.Write(ActiveLockDate(Date.UtcNow).ToString, mKeyStorePath, strStream)
         End If
 
         ' Expire all trial licenses
@@ -1250,7 +1250,7 @@ continueRegistration:
         If mTrialType <> IActiveLock.ALTrialTypes.trialNone Then
             trialStatus = ExpireTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, mSoftwarePassword)
         End If
-        'Set_locale(regionalSymbol)
+        Set_locale(regionalSymbol)
 
     End Sub
     '===============================================================================
@@ -1265,13 +1265,13 @@ continueRegistration:
         'Expire the Trial
         Dim trialStatus As Boolean
         If mSoftwareName = "" Then
-            'Set_locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNoSoftwareName, ACTIVELOCKSTRING, STRNOSOFTWARENAME)
         ElseIf mSoftwareVer = "" Then
-            'Set_locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNoSoftwareVersion, ACTIVELOCKSTRING, STRNOSOFTWAREVERSION)
         ElseIf mSoftwarePassword = "" Then
-            'Set_locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNoSoftwarePassword, ACTIVELOCKSTRING, STRNOSOFTWAREPASSWORD)
         Else
             trialStatus = ExpireTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, mSoftwarePassword)
@@ -1321,10 +1321,10 @@ ErrHandler:
         'Reset the Trial
         Dim trialStatus As Boolean
         If mSoftwareName = "" Then
-            'Set_locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNoSoftwareName, ACTIVELOCKSTRING, STRNOSOFTWARENAME)
         ElseIf mSoftwareVer = "" Then
-            'Set_locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNoSoftwareVersion, ACTIVELOCKSTRING, STRNOSOFTWAREVERSION)
         Else
             trialStatus = ResetTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, mSoftwarePassword)
@@ -1451,7 +1451,7 @@ ErrHandler:
                         If aString <> noKey Then
                             IActiveLock_AddLockCode(IActiveLock.ALLockTypes.lockMAC, SizeLockType)
                             If aString <> modHardware.GetMACAddress() Then
-                                'Set_locale(regionalSymbol)
+                                Set_locale(regionalSymbol)
                                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
                             End If
                         End If
@@ -1459,7 +1459,7 @@ ErrHandler:
                         If aString <> noKey Then
                             IActiveLock_AddLockCode(IActiveLock.ALLockTypes.lockComp, SizeLockType)
                             If aString <> modHardware.GetComputerName() Then
-                                'Set_locale(regionalSymbol)
+                                Set_locale(regionalSymbol)
                                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
                             End If
                         End If
@@ -1467,7 +1467,7 @@ ErrHandler:
                         If aString <> noKey Then
                             IActiveLock_AddLockCode(IActiveLock.ALLockTypes.lockHD, SizeLockType)
                             If aString <> modHardware.GetHDSerial() Then
-                                'Set_locale(regionalSymbol)
+                                Set_locale(regionalSymbol)
                                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
                             End If
                         End If
@@ -1475,7 +1475,7 @@ ErrHandler:
                         If aString <> noKey Then
                             IActiveLock_AddLockCode(IActiveLock.ALLockTypes.lockHDFirmware, SizeLockType)
                             If aString <> modHardware.GetHDSerialFirmware() Then
-                                'Set_locale(regionalSymbol)
+                                Set_locale(regionalSymbol)
                                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
                             End If
                         End If
@@ -1483,7 +1483,7 @@ ErrHandler:
                         If aString <> noKey Then
                             IActiveLock_AddLockCode(IActiveLock.ALLockTypes.lockWindows, SizeLockType)
                             If aString <> modHardware.GetWindowsSerial() Then
-                                'Set_locale(regionalSymbol)
+                                Set_locale(regionalSymbol)
                                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
                             End If
                         End If
@@ -1491,7 +1491,7 @@ ErrHandler:
                         If aString <> noKey Then
                             IActiveLock_AddLockCode(IActiveLock.ALLockTypes.lockBIOS, SizeLockType)
                             If aString <> modHardware.GetBiosVersion() Then
-                                'Set_locale(regionalSymbol)
+                                Set_locale(regionalSymbol)
                                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
                             End If
                         End If
@@ -1499,7 +1499,7 @@ ErrHandler:
                         If aString <> noKey Then
                             IActiveLock_AddLockCode(IActiveLock.ALLockTypes.lockMotherboard, SizeLockType)
                             If aString <> modHardware.GetMotherboardSerial() Then
-                                'Set_locale(regionalSymbol)
+                                Set_locale(regionalSymbol)
                                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
                             End If
                         End If
@@ -1507,7 +1507,7 @@ ErrHandler:
                         If aString <> noKey Then
                             IActiveLock_AddLockCode(IActiveLock.ALLockTypes.lockIP, SizeLockType)
                             If aString <> modHardware.GetIPaddress() Then
-                                'Set_locale(regionalSymbol)
+                                Set_locale(regionalSymbol)
                                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrWrongIPaddress, ACTIVELOCKSTRING, STRWRONGIPADDRESS)
                             End If
                         End If
@@ -1525,7 +1525,7 @@ ErrHandler:
                 userFromInstallCode = Mid(usedcode, Index + 1)
                 ' Check to see if this user name matches the one in the liberation key
                 If userFromInstallCode <> Lic.Licensee Then
-                    'Set_locale(regionalSymbol)
+                    Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
                 End If
                 ' above is last possible failure point
@@ -1535,7 +1535,7 @@ ErrHandler:
 
                 IActiveLock_LockCode = Lic.ToString_Renamed() & vbLf & usedcode
             Else
-                'Set_locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
                 Return Nothing
             End If
@@ -1568,7 +1568,7 @@ ErrHandler:
     '===============================================================================
     Private Function IActiveLock_Transfer(ByVal OtherSoftwareCode As String) As String Implements _IActiveLock.Transfer
         ' TODO: Implement me!
-        'Set_locale(regionalSymbol)
+        Set_locale(regionalSymbol)
         Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNotImplemented, ACTIVELOCKSTRING, STRNOTIMPLEMENTED)
         Return Nothing
     End Function

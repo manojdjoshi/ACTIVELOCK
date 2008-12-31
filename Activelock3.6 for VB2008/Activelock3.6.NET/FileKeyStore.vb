@@ -82,7 +82,7 @@ Friend Class FileKeyStoreProvider
 				CreateEmptyFile(Value)
 			Else 'the file exists, but check to see if it has read-only attribute
 				If (GetAttr(Value) And FileAttribute.ReadOnly) Or (GetAttr(Value) And FileAttribute.ReadOnly And FileAttribute.Archive) Then
-                    'Set_locale(regionalSymbol)
+                    Set_Locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
                 End If
             End If
@@ -242,7 +242,7 @@ Friend Class FileKeyStoreProvider
 
         Exit Function
 InvalidValue:
-        'Set_locale(regionalSymbol)
+        Set_Locale(regionalSymbol)
         Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREINVALID)
     End Function
 End Class

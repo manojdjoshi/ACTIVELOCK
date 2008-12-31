@@ -548,51 +548,51 @@ Module modRegistry
                 GetRegistryValue = resString
 			Case Else
 				RegCloseKey(handle)
-                'Set_locale(regionalSymbol)
+                Set_Locale(regionalSymbol)
                 Err.Raise(1001, ACTIVELOCKSTRING, "Unsupported value type")
-		End Select
-		
-		' close the registry key
-		RegCloseKey(handle)
-	End Function
-	
-	'===============================================================================
-	' Name: Function SetRegistryValue
-	' Input:
-	'   ByVal hKey As Long - HKEY
-	'   ByVal KeyName As String - Key Name
-	'   ByVal ValueName As String - Value Name
-	'   ByRef Value As Variant - Key Value.
-	'   Value can be an integer value (REG_DWORD), a string (REG_SZ) or an array of binary (REG_BINARY). Raises an error otherwise.
-	' Output:
-	'   Boolean - True if successful
-	' Purpose: Writes or Creates a Registry value
-	' Remarks: Use KeyName = "" for the default value
-	'===============================================================================
-	Public Function SetRegistryValue(ByVal hKey As Integer, ByVal KeyName As String, ByVal ValueName As String, ByRef Value As Object) As Boolean
-		Const KEY_WRITE As Integer = &H20006 '((STANDARD_RIGHTS_WRITE Or KEY_SET_VALUE Or
-		' KEY_CREATE_SUB_KEY) And (Not SYNCHRONIZE))
-		
-		' Write or Create a Registry value
-		' returns True if successful
-		'
-		' Use KeyName = "" for the default value
-		'
-		' Value can be an integer value (REG_DWORD), a string (REG_SZ)
-		' or an array of binary (REG_BINARY). Raises an error otherwise.
-		Dim handle As Integer
-		Dim lngValue As Integer
-		Dim strValue As String
-		Dim binValue() As Byte
-		Dim Length As Integer
-		Dim retVal As Integer
-		
-		' Open the key, exit if not found
-		If RegOpenKeyEx(hKey, KeyName, 0, KEY_WRITE, handle) Then
-			Exit Function
-		End If
-		
-		' three cases, according to the data type in Value
+        End Select
+
+        ' close the registry key
+        RegCloseKey(handle)
+    End Function
+
+    '===============================================================================
+    ' Name: Function SetRegistryValue
+    ' Input:
+    '   ByVal hKey As Long - HKEY
+    '   ByVal KeyName As String - Key Name
+    '   ByVal ValueName As String - Value Name
+    '   ByRef Value As Variant - Key Value.
+    '   Value can be an integer value (REG_DWORD), a string (REG_SZ) or an array of binary (REG_BINARY). Raises an error otherwise.
+    ' Output:
+    '   Boolean - True if successful
+    ' Purpose: Writes or Creates a Registry value
+    ' Remarks: Use KeyName = "" for the default value
+    '===============================================================================
+    Public Function SetRegistryValue(ByVal hKey As Integer, ByVal KeyName As String, ByVal ValueName As String, ByRef Value As Object) As Boolean
+        Const KEY_WRITE As Integer = &H20006 '((STANDARD_RIGHTS_WRITE Or KEY_SET_VALUE Or
+        ' KEY_CREATE_SUB_KEY) And (Not SYNCHRONIZE))
+
+        ' Write or Create a Registry value
+        ' returns True if successful
+        '
+        ' Use KeyName = "" for the default value
+        '
+        ' Value can be an integer value (REG_DWORD), a string (REG_SZ)
+        ' or an array of binary (REG_BINARY). Raises an error otherwise.
+        Dim handle As Integer
+        Dim lngValue As Integer
+        Dim strValue As String
+        Dim binValue() As Byte
+        Dim Length As Integer
+        Dim retVal As Integer
+
+        ' Open the key, exit if not found
+        If RegOpenKeyEx(hKey, KeyName, 0, KEY_WRITE, handle) Then
+            Exit Function
+        End If
+
+        ' three cases, according to the data type in Value
         Select Case VarType(Value)
             Case VariantType.Short, VariantType.Integer
                 lngValue = Value
@@ -606,7 +606,7 @@ Module modRegistry
                 retVal = RegSetValueEx(handle, ValueName, 0, REG_BINARY, binValue(LBound(binValue)), Length)
             Case Else
                 RegCloseKey(handle)
-                'Set_locale(regionalSymbol)
+                Set_Locale(regionalSymbol)
                 Err.Raise(1001, ACTIVELOCKSTRING, "Unsupported value type")
         End Select
 
@@ -614,209 +614,209 @@ Module modRegistry
         RegCloseKey(handle)
         ' signal success if the value was written correctly
         SetRegistryValue = (retVal = 0)
-	End Function
-	
-	
-	
-	
-	
-	
-	'===============================================================================
-	' Name: Function SaveString
-	' Input:
-	'   ByRef hKey As Long - HKEY
-	'   ByRef strPath As String - Key Name
-	'   ByRef strValue As String - Value Name
-	'   ByRef strdata As String - Key Value
-	' Output:
-	'   Variant - Returns "Success" if successful
-	' Purpose: Saves a string in the registry
-	' Remarks:  EXAMPLE:<br>
-	'   text1.text= savestring(HKEY_CURRENT_USER, "Software\VBW\Registry", "String", text1.text)
-	'===============================================================================
-	Public Function SaveString(ByRef hKey As Integer, ByRef strPath As String, ByRef strValue As String, ByRef strdata As String) As Object
-		'EXAMPLE:
-		'
-		'text1.text= savestring(HKEY_CURRENT_USER, "Sof
-		'     tware\VBW\Registry", "String", text1.tex
-		'     t)
-		'
-		Dim keyhand As Integer
-		Dim r As Integer
-		r = RegCreateKey(hKey, strPath, keyhand)
-		r = RegSetValueEx(keyhand, strValue, 0, REG_SZ, strdata, Len(strdata))
-		r = RegCloseKey(keyhand)
-		If r = 0 Then
+    End Function
+
+
+
+
+
+
+    '===============================================================================
+    ' Name: Function SaveString
+    ' Input:
+    '   ByRef hKey As Long - HKEY
+    '   ByRef strPath As String - Key Name
+    '   ByRef strValue As String - Value Name
+    '   ByRef strdata As String - Key Value
+    ' Output:
+    '   Variant - Returns "Success" if successful
+    ' Purpose: Saves a string in the registry
+    ' Remarks:  EXAMPLE:<br>
+    '   text1.text= savestring(HKEY_CURRENT_USER, "Software\VBW\Registry", "String", text1.text)
+    '===============================================================================
+    Public Function SaveString(ByRef hKey As Integer, ByRef strPath As String, ByRef strValue As String, ByRef strdata As String) As Object
+        'EXAMPLE:
+        '
+        'text1.text= savestring(HKEY_CURRENT_USER, "Sof
+        '     tware\VBW\Registry", "String", text1.tex
+        '     t)
+        '
+        Dim keyhand As Integer
+        Dim r As Integer
+        r = RegCreateKey(hKey, strPath, keyhand)
+        r = RegSetValueEx(keyhand, strValue, 0, REG_SZ, strdata, Len(strdata))
+        r = RegCloseKey(keyhand)
+        If r = 0 Then
             SaveString = "Success"
-		Else
+        Else
             SaveString = "Key to Delete Or Key Not Found"
-		End If
-		
-	End Function
-	
-	
-	
-	'===============================================================================
-	' Name: Function Getdword
-	' Input:
-	'   ByVal hKey As Long - HKEY
-	'   ByVal strPath As String - Key Name
-	'   ByVal strValueName As String - Value Name
-	' Output:
-	'   Variant - Returns the DWORD if successful
-	' Purpose: Gets the DWORD of a key from the registry
-	' Remarks: EXAMPLE:<br>
-	'   text1.text = getdword(HKEY_CURRENT_USER, "Software\VBW\Registry", "Dword")
-	'===============================================================================
-	Function Getdword(ByVal hKey As Integer, ByVal strPath As String, ByVal strValueName As String) As Object
-		'EXAMPLE:
-		'
-		'text1.text = getdword(HKEY_CURRENT_USER
-		'     , "Software\VBW\Registry", "Dword")
-		'
-		Dim lResult As Integer
-		Dim lValueType As Integer
-		Dim lBuf As Integer
-		Dim lDataBufSize As Integer
-		Dim r As Integer
-		Dim keyhand As Integer
+        End If
+
+    End Function
+
+
+
+    '===============================================================================
+    ' Name: Function Getdword
+    ' Input:
+    '   ByVal hKey As Long - HKEY
+    '   ByVal strPath As String - Key Name
+    '   ByVal strValueName As String - Value Name
+    ' Output:
+    '   Variant - Returns the DWORD if successful
+    ' Purpose: Gets the DWORD of a key from the registry
+    ' Remarks: EXAMPLE:<br>
+    '   text1.text = getdword(HKEY_CURRENT_USER, "Software\VBW\Registry", "Dword")
+    '===============================================================================
+    Function Getdword(ByVal hKey As Integer, ByVal strPath As String, ByVal strValueName As String) As Object
+        'EXAMPLE:
+        '
+        'text1.text = getdword(HKEY_CURRENT_USER
+        '     , "Software\VBW\Registry", "Dword")
+        '
+        Dim lResult As Integer
+        Dim lValueType As Integer
+        Dim lBuf As Integer
+        Dim lDataBufSize As Integer
+        Dim r As Integer
+        Dim keyhand As Integer
 
         Getdword = String.Empty
 
         r = RegOpenKey(hKey, strPath, keyhand)
-		' Get length/data type
-		lDataBufSize = 4
-		lResult = RegQueryValueEx(keyhand, strValueName, 0, lValueType, lBuf, lDataBufSize)
-		
-		If lResult = ERROR_SUCCESS Then
-			If lValueType = REG_DWORD Then
+        ' Get length/data type
+        lDataBufSize = 4
+        lResult = RegQueryValueEx(keyhand, strValueName, 0, lValueType, lBuf, lDataBufSize)
+
+        If lResult = ERROR_SUCCESS Then
+            If lValueType = REG_DWORD Then
                 Getdword = lBuf
-			End If
-		End If
-		r = RegCloseKey(keyhand)
+            End If
+        End If
+        r = RegCloseKey(keyhand)
         If Getdword = "" Then
             Getdword = " Value or key does not exist"
         End If
-		
-	End Function
-	
-	
-	
-	'===============================================================================
-	' Name: Function SaveDword
-	' Input:
-	'   ByVal hKey As Long - HKEY
-	'   ByVal strPath As String - Key Name
-	'   ByVal strValueName As String - Value Name
-	'   ByVal lData As Long - Key Value
-	' Output:
-	'   Variant - Returns "Success" if successful
-	' Purpose: None
-	' Remarks: None
-	'===============================================================================
-	' Saves a DWORD in the registry
-	' @param hKey           HKEY
-	' @param strPath        Key Name
-	' @param strValueName   Value Name
-	' @param lData          Value
-	' @return               "Success" if success
-	'
-	Function SaveDword(ByVal hKey As Integer, ByVal strPath As String, ByVal strValueName As String, ByVal lData As Integer) As Object
-		'EXAMPLE"
-		'
-		'Text1.text= SaveDword(HKEY_CURRENT_USER, "Soft
-		'     ware\VBW\Registry", "Dword", text1.text)
-		'
-		'
-		Dim lResult As Integer
-		Dim keyhand As Integer
-		Dim r As Integer
-		r = RegCreateKey(hKey, strPath, keyhand)
-		lResult = RegSetValueEx(keyhand, strValueName, 0, REG_DWORD, lData, 4)
-		'If lResult <> error_success Then Call e
-		'     rrlog("SetDWORD", False)
-		r = RegCloseKey(keyhand)
-		If r = 0 Then
+
+    End Function
+
+
+
+    '===============================================================================
+    ' Name: Function SaveDword
+    ' Input:
+    '   ByVal hKey As Long - HKEY
+    '   ByVal strPath As String - Key Name
+    '   ByVal strValueName As String - Value Name
+    '   ByVal lData As Long - Key Value
+    ' Output:
+    '   Variant - Returns "Success" if successful
+    ' Purpose: None
+    ' Remarks: None
+    '===============================================================================
+    ' Saves a DWORD in the registry
+    ' @param hKey           HKEY
+    ' @param strPath        Key Name
+    ' @param strValueName   Value Name
+    ' @param lData          Value
+    ' @return               "Success" if success
+    '
+    Function SaveDword(ByVal hKey As Integer, ByVal strPath As String, ByVal strValueName As String, ByVal lData As Integer) As Object
+        'EXAMPLE"
+        '
+        'Text1.text= SaveDword(HKEY_CURRENT_USER, "Soft
+        '     ware\VBW\Registry", "Dword", text1.text)
+        '
+        '
+        Dim lResult As Integer
+        Dim keyhand As Integer
+        Dim r As Integer
+        r = RegCreateKey(hKey, strPath, keyhand)
+        lResult = RegSetValueEx(keyhand, strValueName, 0, REG_DWORD, lData, 4)
+        'If lResult <> error_success Then Call e
+        '     rrlog("SetDWORD", False)
+        r = RegCloseKey(keyhand)
+        If r = 0 Then
             SaveDword = "Success"
-		Else
+        Else
             SaveDword = " Failed to save Value"
-		End If
-		
-	End Function
-	
-	'===============================================================================
-	' Name: Function DeleteKey
-	' Input:
-	'   ByVal hKey As Long - HKEY
-	'   ByVal strKey As String - Key Name
-	' Output:
-	'   Variant - Returns "Success" if successful
-	' Purpose: Deletes a key in the registry
-	' Remarks: EXAMPLE:<br>
-	'   Call DeleteKey(HKEY_CURRENT_USER, "Software\VBW")
-	'===============================================================================
-	Public Function DeleteKey(ByVal hKey As Integer, ByVal strKey As String) As Object
-		'EXAMPLE:
-		'
-		'Call DeleteKey(HKEY_CURRENT_USER, "Soft
-		'     ware\VBW")
-		'
-		Dim r As Integer
-		r = RegDeleteKey(hKey, strKey)
-		If r = 0 Then
+        End If
+
+    End Function
+
+    '===============================================================================
+    ' Name: Function DeleteKey
+    ' Input:
+    '   ByVal hKey As Long - HKEY
+    '   ByVal strKey As String - Key Name
+    ' Output:
+    '   Variant - Returns "Success" if successful
+    ' Purpose: Deletes a key in the registry
+    ' Remarks: EXAMPLE:<br>
+    '   Call DeleteKey(HKEY_CURRENT_USER, "Software\VBW")
+    '===============================================================================
+    Public Function DeleteKey(ByVal hKey As Integer, ByVal strKey As String) As Object
+        'EXAMPLE:
+        '
+        'Call DeleteKey(HKEY_CURRENT_USER, "Soft
+        '     ware\VBW")
+        '
+        Dim r As Integer
+        r = RegDeleteKey(hKey, strKey)
+        If r = 0 Then
             DeleteKey = "Success"
-		Else
+        Else
             DeleteKey = "No! Key to Delete Or Key Not Found"
-		End If
-		
-	End Function
-	
-	'===============================================================================
-	' Name: Function CheckRegistryKey
-	' Input:
-	'   ByVal hKey As Long - HKEY
-	'   ByVal KeyName As String - Key Name
-	' Output:
-	'   Boolean - True if the key exists
-	' Purpose: Checks a given key in the registry
-	' Remarks: None
-	'===============================================================================
-	Public Function CheckRegistryKey(ByVal hKey As Integer, ByVal KeyName As String) As Boolean
-		Dim handle As Integer
-		' Try to open the key
-		If RegOpenKeyEx(hKey, KeyName, 0, KEY_READ, handle) = 0 Then
-			' The key exists
-			CheckRegistryKey = True
-			' Close it before exiting
-			RegCloseKey(handle)
-		End If
-	End Function
-	
-	'===============================================================================
-	' Name: Function CreateRegistryKey
-	' Input:
-	'   ByVal hKey As Long - HKEY
-	'   ByVal KeyName As String - Key Name
-	' Output:
-	'   Boolean - True if the key already exists, error if unable to create the key
-	' Purpose: Creates a key in the registry
-	' Remarks: None
-	'===============================================================================
-	Function CreateRegistryKey(ByVal hKey As Integer, ByVal KeyName As String) As Boolean
-		Const REG_OPENED_EXISTING_KEY As Short = &H2s
-		Dim handle, disposition As Integer
-		Dim SEC As SECURITY_ATTRIBUTES
-		
-		If RegCreateKeyEx(hKey, KeyName, 0, CStr(0), 0, 0, SEC, handle, disposition) Then
-            'Set_locale(regionalSymbol)
+        End If
+
+    End Function
+
+    '===============================================================================
+    ' Name: Function CheckRegistryKey
+    ' Input:
+    '   ByVal hKey As Long - HKEY
+    '   ByVal KeyName As String - Key Name
+    ' Output:
+    '   Boolean - True if the key exists
+    ' Purpose: Checks a given key in the registry
+    ' Remarks: None
+    '===============================================================================
+    Public Function CheckRegistryKey(ByVal hKey As Integer, ByVal KeyName As String) As Boolean
+        Dim handle As Integer
+        ' Try to open the key
+        If RegOpenKeyEx(hKey, KeyName, 0, KEY_READ, handle) = 0 Then
+            ' The key exists
+            CheckRegistryKey = True
+            ' Close it before exiting
+            RegCloseKey(handle)
+        End If
+    End Function
+
+    '===============================================================================
+    ' Name: Function CreateRegistryKey
+    ' Input:
+    '   ByVal hKey As Long - HKEY
+    '   ByVal KeyName As String - Key Name
+    ' Output:
+    '   Boolean - True if the key already exists, error if unable to create the key
+    ' Purpose: Creates a key in the registry
+    ' Remarks: None
+    '===============================================================================
+    Function CreateRegistryKey(ByVal hKey As Integer, ByVal KeyName As String) As Boolean
+        Const REG_OPENED_EXISTING_KEY As Short = &H2S
+        Dim handle, disposition As Integer
+        Dim SEC As SECURITY_ATTRIBUTES
+
+        If RegCreateKeyEx(hKey, KeyName, 0, CStr(0), 0, 0, SEC, handle, disposition) Then
+            Set_Locale(regionalSymbol)
             Err.Raise(1001, ACTIVELOCKSTRING, "Unable to create the registry key")
-		Else
-			' Return True if the key already existed.
-			CreateRegistryKey = (disposition = REG_OPENED_EXISTING_KEY)
-			' Close the key.
-			RegCloseKey(handle)
-		End If
-	End Function
+        Else
+            ' Return True if the key already existed.
+            CreateRegistryKey = (disposition = REG_OPENED_EXISTING_KEY)
+            ' Close the key.
+            RegCloseKey(handle)
+        End If
+    End Function
 	
 	'===============================================================================
 	' Name: Function DeleteValue

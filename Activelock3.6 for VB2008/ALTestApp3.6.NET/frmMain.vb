@@ -1079,6 +1079,9 @@ Friend Class frmMain
     Const GWW_HWNDPARENT As Short = (-8)
     Private Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Integer)
 
+    Private Declare Function SHGetSpecialFolderPath Lib "SHELL32.DLL" Alias "SHGetSpecialFolderPathA" (ByVal hWnd As IntPtr, ByVal lpszPath As String, ByVal nFolder As Integer, ByVal fCreate As Boolean) As Boolean
+
+
     Public Function LooseSpace(ByRef invoer As String) As String
         'This routine terminates a string if it detects char 0.
 
@@ -1167,7 +1170,7 @@ Friend Class frmMain
         MyActiveLock.ResetTrial()
         MyActiveLock.ResetTrial() ' DO NOT REMOVE, NEED TO CALL TWICE
         System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default
-        MsgBox("Free Trial has been Reset." & vbCrLf & "You'll need to restart the application for a new Free Trial.", MsgBoxStyle.Information)
+        MsgBox("Free Trial has been Reset." & vbCrLf & "Please restart the application for a new Free Trial." & vbCrLf & vbCrLf & "Note: This feature is provided for the developers only to test their products;" & vbCrLf & "Do NOT provide this feature in your application.", MsgBoxStyle.Information)
         txtRegStatus.Text = "Free Trial has been Reset"
         txtUsedDays.Text = ""
         txtExpiration.Text = ""
@@ -1184,40 +1187,60 @@ Friend Class frmMain
         Dim autoRegisterKey As String = Nothing
         Dim boolAutoRegisterKeyPath As Boolean
         Dim Msg As String
-        Dim A() As String
         On Error GoTo NotRegistered
+
+        ' Form's caption
         Me.Text = "ALTestApp3NET - ActiveLock3NET Test Application - v3.6" '& Application.ProductVersion
 
         ' Check the existence of necessary files to run this application
+        ' This is not necessary if you're not using these controls in your app.
         Call CheckForResources("comctl32.ocx", "tabctl32.ocx")
 
         On Error GoTo NotRegistered
-        'uncomment the following when managed Activelock3NET.dll is used
+
+        'The second line is used when unmanaged Activelock3NET.dll is used
         Dim MyAL As New ActiveLock3_6NET.Globals
         'Dim MyAL As New ActiveLock3.Globals
 
+        ' Set a new instance of the Activelock object
         MyActiveLock = MyAL.NewInstance()
+
         With MyActiveLock
 
+            ' Set the software/application name
             .SoftwareName = LICENSE_ROOT
             txtName.Text = .SoftwareName
 
+            ' Set the software/application version number
             ' Note: Do not use (App.Major & "." & App.Minor & "." & App.Revision)
-            ' since the license will fail with version incremented exe builds
+            ' since the license will fail with version incremented via exe rebuilds
             .SoftwareVersion = "3.0" ' WARNING *** WARNING *** DO NOT USE App.Major & "." & App.Minor & "." & App.Revision
             txtVersion.Text = .SoftwareVersion
 
-            ' New in v3.3
+            ' Set the software/application password
             ' This should be set to protect yourself against ResetTrial abuse
             ' The password is also used by the short keys
+            ' Regular licensing does not use this password, but you should still use a password
+            ' WARNING: You can not ignore this property. You *must* set a password.
             .SoftwarePassword = Chr(99) & Chr(111) & Chr(111) & Chr(108)
 
-            ' New in v3.5
+            ' Set whether the software/application will use a short key or RSA method
+            ' alsRSA covers both ALCrypto and RSA native classes approach.
+            ' RSA classes in .NET allows you to pick from several cipher strengths
+            ' however ALCrypto uses 1024 bit strength key only.
             '.LicenseKeyType = ActiveLock3_6NET.IActiveLock.ALLicenseKeyTypes.alsShortKeyMD5
             .LicenseKeyType = ActiveLock3_6NET.IActiveLock.ALLicenseKeyTypes.alsRSA
 
-            ' New in v3.1 - Trial Feature
+            ' Set the Trial Feature properties
+            ' If you don't want to use the trial feature in your app, set the TrialType
+            ' property to trialNone.
+            ' New in v3.1
+
+            ' Set the trial property, this is either trialDays, or trialRuns or trialNone.
             .TrialType = ActiveLock3_6NET.IActiveLock.ALTrialTypes.trialDays
+
+            ' Set the Trial Length property.
+            ' This number represents the number of days or the number of runs (whichever is applicable).
             .TrialLength = 15
             If .TrialType <> ActiveLock3_6NET.IActiveLock.ALTrialTypes.trialNone And .TrialLength = 0 Then
                 ' Do Nothing
@@ -1225,60 +1248,122 @@ Friend Class frmMain
                 ' to indicate that you're using the trial feature but, trial length was not specified
             End If
 
-            ' Uncomment the following statement to use a certain trial data hiding technique
+            ' Comment the following statement to use a certain trial data hiding technique
             ' Use OR to combine one or more trial hiding techniques
             ' or don't use this property to use ALL techniques
-            .TrialHideType = ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialHiddenFolder Or ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialRegistry Or ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialSteganography
+            ' WARNING: trialRegistryPerUser is "Per User"; this means each user trial feature 
+            ' is controlled that user's own registry hive.
+            ' This means initiating a trial with one user does not initiate a trial for another user.
+            ' trialHiddenFolder and trialSteganography are for "All Users"
+            .TrialHideType = ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialHiddenFolder Or ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialRegistryPerUser Or ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialSteganography
 
+            ' Set the Software code
+            ' This is the same thing as VCode
+            ' Run Alugen first and create a VCode and GCode 
+            ' for the software name and version number you used above
+            ' Then copy and use the VCode as the PUB_KEY here.
+            ' It's up to you to encrypt it; just makes it more secure
+            ' Enc encodes, Dec decodes the public key (VCode)
+            ' Change Enc() and Dec(0 the way you want.
             .SoftwareCode = Dec(PUB_KEY)
 
-            ' uncomment the following when managed Activelock3NET.dll is used
-            '.LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockHDFirmware
+            ' uncomment the following when unmanaged Activelock3NET.dll is used
             '.LockType = ActiveLock3.ALLockTypes.lockNone
-            .LockType = _
-             ActiveLock3_6NET.IActiveLock.ALLockTypes.lockBIOS Or _
-             ActiveLock3_6NET.IActiveLock.ALLockTypes.lockComp Or _
-             ActiveLock3_6NET.IActiveLock.ALLockTypes.lockHD Or _
-             ActiveLock3_6NET.IActiveLock.ALLockTypes.lockHDFirmware Or _
-             ActiveLock3_6NET.IActiveLock.ALLockTypes.lockIP Or _
-             ActiveLock3_6NET.IActiveLock.ALLockTypes.lockMotherboard Or _
-             ActiveLock3_6NET.IActiveLock.ALLockTypes.lockWindows Or _
-             ActiveLock3_6NET.IActiveLock.ALLockTypes.lockMAC
+
+            ' Set the Hardware keys
+            ' In order to pick the keys that you want to lock to in Alugen, use lockNone only
+            .LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockNone
+
+            ' If you want to lock to any keys explicitly, combine them using OR
+            ' But you won't be able to uncheck/check any of them while in Alugen (too late at that point).
+            '.LockType = _
+            ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockBIOS Or _
+            ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockComp Or _
+            ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockHD Or _
+            ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockHDFirmware Or _
+            ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockIP Or _
+            ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockMotherboard Or _
+            ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockWindows Or _
+            ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockMAC
+
+            ' Set the ALL file path if you're using an ALL file.
+            ' ALL is an auto registration file.
+            ' You generate ALL files via Alugen and then send to the users
+            ' They put the ALL file you specify below
+            ' ALL simply contains the license key
+            ' WARNING: ALL files are deleted after they are used.
             strAutoRegisterKeyPath = AppPath() & "\" & LICENSE_ROOT & ".all"
-            .AutoRegister = ActiveLock3_6NET.IActiveLock.ALAutoRegisterTypes.alsEnableAutoRegistration
             .AutoRegisterKeyPath = strAutoRegisterKeyPath
             If File.Exists(strAutoRegisterKeyPath) Then boolAutoRegisterKeyPath = True
 
+            ' Set if auto registration will be used.
+            ' Auto registration uses the ALL file for license registration.
+            .AutoRegister = ActiveLock3_6NET.IActiveLock.ALAutoRegisterTypes.alsEnableAutoRegistration
+
+            ' Set the Time Server check for Clock Tampering
+            ' This is optional but highly recommended.
+            ' Although Activelock makes every effort to check if the system clock was tampered,
+            ' checking a time server is the guaranteed way of knowing the correct UTC time/day.
+            ' This feature might add some delay to your apps start-up time.
             .CheckTimeServerForClockTampering = ActiveLock3_6NET.IActiveLock.ALTimeServerTypes.alsDontCheckTimeServer       ' use alsCheckTimeServer to enforce time server checks for clock tampering check
+
+            ' Set the system files clock tampering check
+            ' This feature might add some delay to your apps start-up time.
             .CheckSystemFilesForClockTampering = ActiveLock3_6NET.IActiveLock.ALSystemFilesTypes.alsDontCheckSystemFiles    ' use alsCheckSystemFiles to enforce system files scanning for clock tampering check
+
+            ' Set the license file format; this could be encrypted or plain
+            ' Even in a plain file format, certain keys and dates are still encrypted.
             .LicenseFileType = ActiveLock3_6NET.IActiveLock.ALLicenseFileTypes.alsLicenseFilePlain
         End With
 
         ' Verify AL's authenticity
+        ' This checkes the CRC of the Activelock DLL and compares it with the embedded value
+        ' To change the embedded value; find the "CRC <> Value" check in this code,
+        ' and change the Value() function to make it the same as the CRC.
         txtChecksum.Text = modMain.VerifyActiveLockNETdll()
 
         ' Initialize the keystore. We use a File keystore in this case.
-        System.Diagnostics.Debug.WriteLine("License path is " & AppPath() & "\" & LICENSE_ROOT & ".lic")
-        ' uncomment the following when managed Activelock3NET.dll is used
+
         MyActiveLock.KeyStoreType = ActiveLock3_6NET.IActiveLock.LicStoreType.alsFile
+        ' uncomment the following when unmanaged Activelock3NET.dll is used
         'MyActiveLock.KeyStoreType = ActiveLock3.LicStoreType.alsFile
 
-        ' Path to the license file
-        strKeyStorePath = AppPath() & "\" & LICENSE_ROOT & ".lic"
+        ' Set the Path to the license file (LIC)
+        Dim Ret As Long
+        Dim LICfilePath As String
+        LICfilePath = Space$(260)
+        Ret = SHGetSpecialFolderPath(0, LICfilePath, 46, False) ' 46 is for ...\All Users\Documents folder.
+        If LICfilePath.Trim <> Chr(0) Then
+            LICfilePath = VB.Left(LICfilePath, InStr(LICfilePath, Chr(0)) - 1)
+        End If
+        ' The code above will put the LIC file inside the "...\All Users\Documents" folder
+        ' You can hard code this path and put the LIC file anywhere you want
+        ' But be careful with limited user accounts in Vista.
+        ' It's recommended that you put this file in shared and accessible folders in Vista
+        strKeyStorePath = LICfilePath & "\" & LICENSE_ROOT & ".lic"
+        ' AppPath could be an option for XP, but not so for Vista
+        'strKeyStorePath = AppPath() & "\" & LICENSE_ROOT & ".lic"
         MyActiveLock.KeyStorePath = strKeyStorePath
 
         ' Obtain the EventNotifier so that we can receive notifications from AL.
+        ' Do Not Change This  - unless you know what this is for.
         ActiveLockEventSink = MyActiveLock.EventNotifier
 
-        ' Initialize AL
+        ' Initialize Activelock 
+        ' This is for handling the ALCrypto DLL used by Activelock. 
+        ' Init(0 method below checkes the ALCrypto CRC, and registeres the 
+        ' application if an ALL file was used.
         ' Important: If you're not going to put Alcrypto3NET.dll under
         ' the system32 directory, you should pass the path of the exe
         ' to the Init() method otherwise this call will fail
-        ' Putting Alcrypto3NET.dll under the system32 is a problem with ASP.NET apps
-        ' since Activelock3NET is shared between ASP.NET and VB.NET apps.
-        'Use the following with ASP.NET applications
-        'MyActiveLock.Init(Application.StartupPath & "\bin")
-        'Use the following with VB.NET applications
+        ' Putting Alcrypto3NET.dll under the system32 is a problem with the ASP.NET apps
+        ' Since Activelock3NET can be used by ASP.NET apps, setting the first arguments below,
+        ' will help you put the ALcrypto DLL into a location you want; mostly the app folder.
+        ' This is particularly useful for hosted ASP.NET apps where 
+        ' you don't have the server control (no system32 access)
+        ' Use the following with ASP.NET applications
+        ' MyActiveLock.Init(Application.StartupPath & "\bin")
+        ' Use the following with VB.NET applications
         MyActiveLock.Init(Application.StartupPath, strKeyStorePath)
         If File.Exists(strKeyStorePath) And boolAutoRegisterKeyPath = True And autoRegisterKey <> "" Then
             ' This means, an ALL file existed and was used to create a LIC file
@@ -1291,17 +1376,23 @@ Friend Class frmMain
         cboSpeed.Text = VB6.GetItemString(cboSpeed, 2)
 
         ' Check registration status
+        ' Acquire() method does both trial and regular licensing
+        ' If it generates an error, that means there NO trial, NO license
+        ' If no error and returns a string, there's a trial but No license. Parse the string to display a trial message.
+        ' If no error and no string returned, you've got a valid license.
         Dim strMsg As String = Nothing
         MyActiveLock.Acquire(strMsg)
         If strMsg <> "" Then 'There's a trial
-            A = Split(strMsg, vbCrLf)
-            txtRegStatus.Text = A(0)
-            txtUsedDays.Text = A(1)
+            ' Parse the returned string to display it on a form
+            Dim A() As String = strMsg.Split(vbCrLf)
+            txtRegStatus.Text = A(0).Trim
+            txtUsedDays.Text = A(1).Trim
 
             ' You can also get the UsedTrialDays or UsedTrialRuns directly by:
             'txtUsedDays.Text = MyActiveLock.UsedTrialDays OR MyActiveLock.UsedTrialRuns
 
             FunctionalitiesEnabled = True
+            ' Splash form to display the trial period/run information.
             Dim frmsplash As New frmSplash
             frmsplash.lblInfo.Text = vbCrLf & strMsg
             frmsplash.Visible = True
@@ -1322,6 +1413,9 @@ Friend Class frmMain
         ' by accessing the UsedLockType property
         'MsgBox(MyActiveLock.UsedLockType(0))
 
+        ' So far so good... 
+        ' If you are here already, that means you have a valid license.
+        ' Set the textboxes in your app accordingly.
         txtRegStatus.Text = "Registered"
         txtUsedDays.Text = MyActiveLock.UsedDays.ToString
         txtExpiration.Text = MyActiveLock.ExpirationDate
@@ -1329,7 +1423,7 @@ Friend Class frmMain
         txtUser.Text = MyActiveLock.RegisteredUser
         txtRegisteredLevel.Text = MyActiveLock.RegisteredLevel
 
-        ' Networked Licenses
+        ' Set Networked Licenses if applicable
         If MyActiveLock.LicenseClass = "MultiUser" Then
             txtNetworkedLicense.Text = "Networked"
         Else
@@ -1337,6 +1431,7 @@ Friend Class frmMain
             txtMaxCount.Visible = False
             lblConcurrentUsers.Visible = False
         End If
+        ' This is for number of concurrent users count in a netwrok license
         txtMaxCount.Text = MyActiveLock.MaxCount
 
         'Read the license file into a string to determine the license type
@@ -1354,10 +1449,12 @@ Friend Class frmMain
             txtLicenseType.Text = "Permanent"
         End If
         FunctionalitiesEnabled = True
+        txtUser.BackColor = Color.FromKnownColor(KnownColor.InactiveCaptionText)
 
         Exit Sub
 
 NotRegistered:
+        ' There's no valid trial or license - let the user know.
         FunctionalitiesEnabled = False
         If Instring(Err.Description, "no valid license") = False And noTrialThisTime = False Then
             MsgBox(Err.Number & ": " & Err.Description)
@@ -1418,7 +1515,7 @@ DLLnotRegistered:
                 foundIt = True
             ElseIf File.Exists(pathName & "\" & s & ".OCX") Then
                 foundIt = True
-                s = s & ".OCX" 'this will make the softlocx check easier
+                s = s & ".OCX"
             End If
 
             If Not foundIt Then
@@ -1461,8 +1558,7 @@ checkForResourcesError:
         'so a call should be made to this function early on to "lock" the paths.
 
         'Add a call at the beginning of checkForResources
-
-        Static A As Object
+        Dim A() As Object = Nothing
         Dim s, d As String
         Dim EnvString As String
         Dim Indx As Short ' Declare variables.
@@ -1491,7 +1587,7 @@ checkForResourcesError:
                 End If
                 Indx = Indx + 1
             Loop Until EnvString = ""
-            A = Split(s, ";")
+            a = s.Split(";")
         End If
 
         T = Trim(T)
