@@ -560,6 +560,8 @@ GetHDSeriAlerror:
         Dim mU As MyUDT2 = Nothing
         Dim a As String
         On Error GoTo GetHDSerialFirmwareError
+        GetHDSerialFirmware = ""
+        a = ""
 
         '************** METHOD 1 **************
         ' ialkan 2-12-06
@@ -568,13 +570,13 @@ GetHDSeriAlerror:
         ' This eliminates the dependency of the HDD firmware serial number
         ' function from ALCrypto3.dll
         For jj = 0 To 15 ' Controller index
-            GetHDSerialFirmware = GetHDSerialFirmwareVBNET(jj, True) ' Check the Master drive
-            GetHDSerialFirmware = GetHDSerialFirmware.Trim
+            a = GetHDSerialFirmwareVBNET(jj, True) ' Check the Master drive
+            If a <> "" Then GetHDSerialFirmware = a.Trim
             If GetHDSerialFirmware <> "" Then
                 Exit Function
             End If
-            GetHDSerialFirmware = GetHDSerialFirmwareVBNET(jj, False) ' Now check the Slave Drive
-            GetHDSerialFirmware = GetHDSerialFirmware.Trim
+            a = GetHDSerialFirmwareVBNET(jj, False) ' Now check the Slave Drive
+            If a <> "" Then GetHDSerialFirmware = a.Trim
             If GetHDSerialFirmware <> "" Then
                 Exit Function
             End If
@@ -583,18 +585,25 @@ GetHDSeriAlerror:
         '************** METHOD 2 **************
         ' Still nothing... Use ALCrypto DLL
         Call getHardDriveFirmware(mU)
-        GetHDSerialFirmware = StripControlChars(mU.myStr, False).Trim
-        If GetHDSerialFirmware <> "" Then Exit Function
+        If mU.myStr <> "" Then a = StripControlChars(mU.myStr, False)
+        If a <> "" Then GetHDSerialFirmware = a.Trim
+        If GetHDSerialFirmware <> "" Then
+            Exit Function
+        End If
 
         '************** METHOD 3 **************
-        GetHDSerialFirmware = GetDriveInfo(IDE_DRIVE_NUMBER.PRIMARY_MASTER)
-        GetHDSerialFirmware = GetHDSerialFirmware.Trim
+        a = GetDriveInfo(IDE_DRIVE_NUMBER.PRIMARY_MASTER)
+        If a <> "" Then GetHDSerialFirmware = a.Trim
         If GetHDSerialFirmware <> "" Then
             Exit Function
         End If
 
         '************** METHOD 4 **************
-        GetHDSerialFirmware = GetHDSerialFirmwareWMI().Trim
+        a = GetHDSerialFirmwareWMI()
+        If a <> "" Then GetHDSerialFirmware = a.Trim
+        If GetHDSerialFirmware <> "" Then
+            Exit Function
+        End If
 
         Exit Function
 
@@ -602,6 +611,7 @@ GetHDSeriAlerror:
         ' a serial number in our hands...
         ' Cannot return an empty string...
 GetHDSerialFirmwareError:
+        MsgBox(Err.Description)
         If GetHDSerialFirmware = "" Then
             GetHDSerialFirmware = "Not Available"
         End If

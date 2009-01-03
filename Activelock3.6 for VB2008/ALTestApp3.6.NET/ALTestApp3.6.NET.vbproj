@@ -87,7 +87,7 @@
     <WarningsAsErrors>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</WarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ActiveLock3_6Net, Version=3.6.0.30507, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="ActiveLock3_6Net, Version=3.6.0.35243, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Activelock3.6.NET\ActiveLock3_6Net.dll</HintPath>
     </Reference>
