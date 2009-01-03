@@ -1198,6 +1198,15 @@ Friend Class frmMain
 
         On Error GoTo NotRegistered
 
+        ' Set the path to the license file (LIC) and ALL file (if it exists)
+        Dim Ret As Long
+        Dim AppfilePath As String
+        AppfilePath = Space$(260)
+        Ret = SHGetSpecialFolderPath(0, AppfilePath, 46, False) ' 46 is for ...\All Users\Documents folder.
+        If AppfilePath.Trim <> Chr(0) Then
+            AppfilePath = VB.Left(AppfilePath, InStr(AppfilePath, Chr(0)) - 1)
+        End If
+
         'The second line is used when unmanaged Activelock3NET.dll is used
         Dim MyAL As New ActiveLock3_6NET.Globals
         'Dim MyAL As New ActiveLock3.Globals
@@ -1286,13 +1295,19 @@ Friend Class frmMain
             ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockWindows Or _
             ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockMAC
 
-            ' Set the ALL file path if you're using an ALL file.
-            ' ALL is an auto registration file.
-            ' You generate ALL files via Alugen and then send to the users
-            ' They put the ALL file you specify below
-            ' ALL simply contains the license key
-            ' WARNING: ALL files are deleted after they are used.
-            strAutoRegisterKeyPath = AppPath() & "\" & LICENSE_ROOT & ".all"
+            ' Set the .ALL file path if you're using an ALL file.
+            ' .ALL is an auto registration file.
+            ' You generate .ALL files via Alugen and then send to the users
+            ' They put the .ALL file in the directory you specify below
+            ' .ALL simply contains the license key
+            ' WARNING: .ALL files are deleted after they are used.
+            ' It is recommended that you use both SoftwareName and Version in the .ALL filename
+            ' since multiple .ALL files might exist in the same directory
+            ' If you don't want to use the software name and version number explicitly, use an .ALL
+            ' filename that is specific to this application
+            strAutoRegisterKeyPath = AppfilePath & "\" & .SoftwareName & .SoftwareVersion & ".all"
+            ' AppPath could be an option for XP, but not so for Vista
+            strAutoRegisterKeyPath = AppPath() & "\" & .SoftwareName & .SoftwareVersion & ".all"
             .AutoRegisterKeyPath = strAutoRegisterKeyPath
             If File.Exists(strAutoRegisterKeyPath) Then boolAutoRegisterKeyPath = True
 
@@ -1314,64 +1329,61 @@ Friend Class frmMain
             ' Set the license file format; this could be encrypted or plain
             ' Even in a plain file format, certain keys and dates are still encrypted.
             .LicenseFileType = ActiveLock3_6NET.IActiveLock.ALLicenseFileTypes.alsLicenseFilePlain
+
+            ' Verify AL's authenticity
+            ' This checkes the CRC of the Activelock DLL and compares it with the embedded value
+            ' To change the embedded value; find the "CRC <> Value" check in this code,
+            ' and change the Value() function to make it the same as the CRC.
+            txtChecksum.Text = modMain.VerifyActiveLockNETdll()
+
+            ' Initialize the keystore. We use a File keystore in this case.
+            ' The other type alsRegistry is NOT supported.
+            .KeyStoreType = ActiveLock3_6NET.IActiveLock.LicStoreType.alsFile
+            ' uncomment the following when unmanaged Activelock3NET.dll is used
+            'MyActiveLock.KeyStoreType = ActiveLock3.LicStoreType.alsFile
+
+            ' The code above will put the LIC file inside the "...\All Users\Documents" folder
+            ' You can hard code this path and put the LIC file anywhere you want
+            ' But be careful with limited user accounts in Vista.
+            ' It's recommended that you put this file in shared and accessible folders in Vista
+            ' It is recommended that you use both SoftwareName and Version in the LIC filename
+            ' since multiple LIC files might exist in the same directory
+            ' If you don't want to use the software name and version number explicitly, use an LIC
+            ' filename that is specific to this application
+            strKeyStorePath = AppfilePath & "\" & .SoftwareName & .SoftwareVersion & ".lic"
+            ' AppPath could be an option for XP, but not so for Vista
+            'strKeyStorePath = AppPath() & "\" & .SoftwareName & .SoftwareVersion & ".lic"
+            .KeyStorePath = strKeyStorePath
+
+            ' Obtain the EventNotifier so that we can receive notifications from AL.
+            ' Do Not Change This  - unless you know what this is for.
+            ActiveLockEventSink = .EventNotifier
+
+            ' Initialize Activelock 
+            ' This is for handling the ALCrypto DLL used by Activelock. 
+            ' Init(0 method below checkes the ALCrypto CRC, and registeres the 
+            ' application if an ALL file was used.
+            ' Important: If you're not going to put Alcrypto3NET.dll under
+            ' the system32 directory, you should pass the path of the exe
+            ' to the Init() method otherwise this call will fail
+            ' Putting Alcrypto3NET.dll under the system32 is a problem with the ASP.NET apps
+            ' Since Activelock3NET can be used by ASP.NET apps, setting the first arguments below,
+            ' will help you put the ALcrypto DLL into a location you want; mostly the app folder.
+            ' This is particularly useful for hosted ASP.NET apps where 
+            ' you don't have the server control (no system32 access)
+            ' Use the following with ASP.NET applications
+            ' MyActiveLock.Init(Application.StartupPath & "\bin")
+            ' Use the following with VB.NET applications
+            .Init(Application.StartupPath, strKeyStorePath)
+            If File.Exists(strKeyStorePath) And boolAutoRegisterKeyPath = True And autoRegisterKey <> "" Then
+                ' This means, an ALL file existed and was used to create a LIC file
+                ' Init() method successfully registered the ALL file
+                ' and returned the license key
+                ' You can process that key here to see if there is any abuse, etc.
+                ' ie. whether the key was used before, etc.
+            End If
+
         End With
-
-        ' Verify AL's authenticity
-        ' This checkes the CRC of the Activelock DLL and compares it with the embedded value
-        ' To change the embedded value; find the "CRC <> Value" check in this code,
-        ' and change the Value() function to make it the same as the CRC.
-        txtChecksum.Text = modMain.VerifyActiveLockNETdll()
-
-        ' Initialize the keystore. We use a File keystore in this case.
-
-        MyActiveLock.KeyStoreType = ActiveLock3_6NET.IActiveLock.LicStoreType.alsFile
-        ' uncomment the following when unmanaged Activelock3NET.dll is used
-        'MyActiveLock.KeyStoreType = ActiveLock3.LicStoreType.alsFile
-
-        ' Set the Path to the license file (LIC)
-        Dim Ret As Long
-        Dim LICfilePath As String
-        LICfilePath = Space$(260)
-        Ret = SHGetSpecialFolderPath(0, LICfilePath, 46, False) ' 46 is for ...\All Users\Documents folder.
-        If LICfilePath.Trim <> Chr(0) Then
-            LICfilePath = VB.Left(LICfilePath, InStr(LICfilePath, Chr(0)) - 1)
-        End If
-        ' The code above will put the LIC file inside the "...\All Users\Documents" folder
-        ' You can hard code this path and put the LIC file anywhere you want
-        ' But be careful with limited user accounts in Vista.
-        ' It's recommended that you put this file in shared and accessible folders in Vista
-        strKeyStorePath = LICfilePath & "\" & LICENSE_ROOT & ".lic"
-        ' AppPath could be an option for XP, but not so for Vista
-        'strKeyStorePath = AppPath() & "\" & LICENSE_ROOT & ".lic"
-        MyActiveLock.KeyStorePath = strKeyStorePath
-
-        ' Obtain the EventNotifier so that we can receive notifications from AL.
-        ' Do Not Change This  - unless you know what this is for.
-        ActiveLockEventSink = MyActiveLock.EventNotifier
-
-        ' Initialize Activelock 
-        ' This is for handling the ALCrypto DLL used by Activelock. 
-        ' Init(0 method below checkes the ALCrypto CRC, and registeres the 
-        ' application if an ALL file was used.
-        ' Important: If you're not going to put Alcrypto3NET.dll under
-        ' the system32 directory, you should pass the path of the exe
-        ' to the Init() method otherwise this call will fail
-        ' Putting Alcrypto3NET.dll under the system32 is a problem with the ASP.NET apps
-        ' Since Activelock3NET can be used by ASP.NET apps, setting the first arguments below,
-        ' will help you put the ALcrypto DLL into a location you want; mostly the app folder.
-        ' This is particularly useful for hosted ASP.NET apps where 
-        ' you don't have the server control (no system32 access)
-        ' Use the following with ASP.NET applications
-        ' MyActiveLock.Init(Application.StartupPath & "\bin")
-        ' Use the following with VB.NET applications
-        MyActiveLock.Init(Application.StartupPath, strKeyStorePath)
-        If File.Exists(strKeyStorePath) And boolAutoRegisterKeyPath = True And autoRegisterKey <> "" Then
-            ' This means, an ALL file existed and was used to create a LIC file
-            ' Init() method successfully registered the ALL file
-            ' and returned the license key
-            ' You can process that key here to see if there is any abuse, etc.
-            ' ie. whether the key was used before, etc.
-        End If
 
         cboSpeed.Text = VB6.GetItemString(cboSpeed, 2)
 
@@ -1390,6 +1402,9 @@ Friend Class frmMain
 
             ' You can also get the UsedTrialDays or UsedTrialRuns directly by:
             'txtUsedDays.Text = MyActiveLock.UsedTrialDays OR MyActiveLock.UsedTrialRuns
+            ' At this point UsedTrialDays and UsedTrialRuns properties are directly accessible
+            ' Even if you don't want to show a trial form at this point, you still know the 
+            ' trial status with one of these two properties (whichever is applicable).
 
             FunctionalitiesEnabled = True
             ' Splash form to display the trial period/run information.
