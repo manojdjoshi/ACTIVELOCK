@@ -314,7 +314,7 @@ Friend Class frmMain
         'txtMaxCount
         '
         Me.txtMaxCount.AcceptsReturn = True
-        Me.txtMaxCount.BackColor = System.Drawing.SystemColors.InactiveCaptionText
+        Me.txtMaxCount.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.txtMaxCount.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtMaxCount.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtMaxCount.ForeColor = System.Drawing.SystemColors.WindowText
@@ -329,7 +329,7 @@ Friend Class frmMain
         'txtNetworkedLicense
         '
         Me.txtNetworkedLicense.AcceptsReturn = True
-        Me.txtNetworkedLicense.BackColor = System.Drawing.SystemColors.InactiveCaptionText
+        Me.txtNetworkedLicense.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.txtNetworkedLicense.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtNetworkedLicense.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtNetworkedLicense.ForeColor = System.Drawing.SystemColors.WindowText
@@ -357,7 +357,7 @@ Friend Class frmMain
         'txtLicenseType
         '
         Me.txtLicenseType.AcceptsReturn = True
-        Me.txtLicenseType.BackColor = System.Drawing.SystemColors.InactiveCaptionText
+        Me.txtLicenseType.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.txtLicenseType.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtLicenseType.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtLicenseType.ForeColor = System.Drawing.SystemColors.WindowText
@@ -387,7 +387,7 @@ Friend Class frmMain
         'txtRegisteredLevel
         '
         Me.txtRegisteredLevel.AcceptsReturn = True
-        Me.txtRegisteredLevel.BackColor = System.Drawing.SystemColors.InactiveCaptionText
+        Me.txtRegisteredLevel.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.txtRegisteredLevel.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtRegisteredLevel.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtRegisteredLevel.ForeColor = System.Drawing.SystemColors.WindowText
@@ -402,7 +402,7 @@ Friend Class frmMain
         'txtChecksum
         '
         Me.txtChecksum.AcceptsReturn = True
-        Me.txtChecksum.BackColor = System.Drawing.SystemColors.InactiveCaptionText
+        Me.txtChecksum.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.txtChecksum.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtChecksum.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtChecksum.ForeColor = System.Drawing.SystemColors.WindowText
@@ -417,7 +417,7 @@ Friend Class frmMain
         'txtVersion
         '
         Me.txtVersion.AcceptsReturn = True
-        Me.txtVersion.BackColor = System.Drawing.SystemColors.InactiveCaptionText
+        Me.txtVersion.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.txtVersion.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtVersion.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtVersion.ForeColor = System.Drawing.SystemColors.WindowText
@@ -433,7 +433,7 @@ Friend Class frmMain
         'txtName
         '
         Me.txtName.AcceptsReturn = True
-        Me.txtName.BackColor = System.Drawing.SystemColors.InactiveCaptionText
+        Me.txtName.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.txtName.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtName.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtName.ForeColor = System.Drawing.SystemColors.WindowText
@@ -449,7 +449,7 @@ Friend Class frmMain
         'txtExpiration
         '
         Me.txtExpiration.AcceptsReturn = True
-        Me.txtExpiration.BackColor = System.Drawing.SystemColors.InactiveCaptionText
+        Me.txtExpiration.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.txtExpiration.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtExpiration.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtExpiration.ForeColor = System.Drawing.SystemColors.WindowText
@@ -464,7 +464,7 @@ Friend Class frmMain
         'txtUsedDays
         '
         Me.txtUsedDays.AcceptsReturn = True
-        Me.txtUsedDays.BackColor = System.Drawing.SystemColors.InactiveCaptionText
+        Me.txtUsedDays.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.txtUsedDays.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtUsedDays.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtUsedDays.ForeColor = System.Drawing.SystemColors.WindowText
@@ -479,7 +479,7 @@ Friend Class frmMain
         'txtRegStatus
         '
         Me.txtRegStatus.AcceptsReturn = True
-        Me.txtRegStatus.BackColor = System.Drawing.SystemColors.InactiveCaptionText
+        Me.txtRegStatus.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.txtRegStatus.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtRegStatus.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtRegStatus.ForeColor = System.Drawing.SystemColors.WindowText
@@ -682,7 +682,7 @@ Friend Class frmMain
         'txtReqCodeGen
         '
         Me.txtReqCodeGen.AcceptsReturn = True
-        Me.txtReqCodeGen.BackColor = System.Drawing.SystemColors.InactiveCaptionText
+        Me.txtReqCodeGen.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.txtReqCodeGen.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtReqCodeGen.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtReqCodeGen.ForeColor = System.Drawing.SystemColors.WindowText
@@ -697,7 +697,7 @@ Friend Class frmMain
         'txtLibKeyIn
         '
         Me.txtLibKeyIn.AcceptsReturn = True
-        Me.txtLibKeyIn.BackColor = System.Drawing.SystemColors.InactiveCaptionText
+        Me.txtLibKeyIn.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.txtLibKeyIn.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtLibKeyIn.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtLibKeyIn.ForeColor = System.Drawing.SystemColors.WindowText
@@ -955,7 +955,7 @@ Friend Class frmMain
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(648, 522)
+        Me.ClientSize = New System.Drawing.Size(648, 524)
         Me.Controls.Add(Me.SSTab1)
         Me.Cursor = System.Windows.Forms.Cursors.Default
         Me.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -1449,7 +1449,7 @@ Friend Class frmMain
             txtLicenseType.Text = "Permanent"
         End If
         FunctionalitiesEnabled = True
-        txtUser.BackColor = Color.FromKnownColor(KnownColor.InactiveCaptionText)
+        txtUser.BackColor = Color.FromKnownColor(KnownColor.ButtonFace)
 
         Exit Sub
 
