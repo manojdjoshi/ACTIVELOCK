@@ -522,8 +522,9 @@ noRegistration:
 
 continueRegistration:
     ' Validate license
-    ValidateLic Lic
     Set_locale regionalSymbol
+    ValidateLic Lic
+    DoEvents
     
 End Sub
 '===============================================================================
@@ -770,6 +771,12 @@ End Sub
 ' Remarks: None
 '===============================================================================
 Private Sub ValidateLic(Lic As ProductLicense)
+    
+    ' Get the current date format and save it to regionalSymbol variable
+    Get_locale
+    ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
+    Set_locale ""
+    
     ' make sure we're initialized.
     If Not mfInit Then
         Set_locale regionalSymbol
@@ -806,6 +813,7 @@ Private Sub ValidateLic(Lic As ProductLicense)
     End If
     UpdateLastUsed Lic
     mKeyStore.Store Lic, mLicenseFileType
+    Set_locale regionalSymbol
 End Sub
 
 
@@ -820,6 +828,7 @@ End Sub
 Private Sub UpdateLastUsed(Lic As ProductLicense)
     ' Update license store with LastRunDate
     Dim strLastUsed As String
+    Set_locale ""
     strLastUsed = ActiveLockDate(UTC(Now))
     strLastUsed = ActiveLockDate(CDate(strLastUsed))
     Lic.LastUsed = strLastUsed
