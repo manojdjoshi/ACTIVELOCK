@@ -3,23 +3,23 @@ Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Begin VB.Form frmMain 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "ALTestApp - ActiveLock3 Test Application"
-   ClientHeight    =   10215
+   ClientHeight    =   10230
    ClientLeft      =   45
    ClientTop       =   330
    ClientWidth     =   9510
    Icon            =   "frmMain.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
-   ScaleHeight     =   10215
+   ScaleHeight     =   10230
    ScaleWidth      =   9510
    StartUpPosition =   2  'CenterScreen
    Begin VB.Frame fraRegStatus 
       Caption         =   "Status"
       ForeColor       =   &H00FF0000&
-      Height          =   2745
+      Height          =   2790
       Left            =   0
       TabIndex        =   25
-      Top             =   0
+      Top             =   45
       Width           =   9495
       Begin VB.TextBox txtMaxCount 
          BackColor       =   &H80000013&
@@ -244,7 +244,7 @@ Begin VB.Form frmMain
       Height          =   4380
       Left            =   0
       TabIndex        =   13
-      Top             =   2820
+      Top             =   2925
       Width           =   9495
       Begin VB.CommandButton cmdPaste 
          Height          =   345
@@ -443,13 +443,13 @@ Begin VB.Form frmMain
    End
    Begin ComctlLib.StatusBar sbStatus 
       Align           =   2  'Align Bottom
-      Height          =   255
+      Height          =   300
       Left            =   0
       TabIndex        =   0
-      Top             =   9960
+      Top             =   9930
       Width           =   9510
       _ExtentX        =   16775
-      _ExtentY        =   450
+      _ExtentY        =   529
       Style           =   1
       SimpleText      =   "Ready"
       _Version        =   327682
@@ -589,7 +589,7 @@ Dim strKeyStorePath As String
 Dim strAutoRegisterKeyPath As String
 
 'Application name used
-Const LICENSE_ROOT As String = "ALTestApp"
+Const LICENSE_ROOT As String = "ALVB6Sample"
 
 ' The following declarations are used by the IsDLLAvailable function
 ' provided by the Activelock user Pinheiro
@@ -608,6 +608,8 @@ Private Declare Function GetWindowsDirectory Lib "kernel32" Alias "GetWindowsDir
 Private Declare Function SetWindowWord Lib "user32" (ByVal hWnd As Long, ByVal nIndex As Long, ByVal wNewWord As Long) As Long
 Const GWW_HWNDPARENT = (-8)
 Private Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
+
+Private Declare Function SHGetSpecialFolderPath Lib "SHELL32.DLL" Alias "SHGetSpecialFolderPathA" (ByVal hWnd As Long, ByVal lpszPath As String, ByVal nFolder As Integer, ByVal fCreate As Boolean) As Boolean
 
 Public Function LooseSpace(invoer$) As String
 'This routine terminates a string if it detects char 0.
@@ -704,8 +706,7 @@ Screen.MousePointer = vbHourglass
 MyActiveLock.ResetTrial
 MyActiveLock.ResetTrial ' DO NOT REMOVE, NEED TO CALL TWICE
 Screen.MousePointer = vbDefault
-MsgBox "Free Trial has been Reset." & vbCrLf & _
-    "You'll need to restart the application for a new Free Trial.", vbInformation
+MsgBox "Free Trial has been Reset." & vbCrLf & "Please restart the application for a new Free Trial." & vbCrLf & vbCrLf & "Note: This feature is provided for the developers only to test their products;" & vbCrLf & "DO NOT provide this feature in your application.", vbInformation
 txtRegStatus.Text = "Free Trial has been Reset"
 txtUsedDays.Text = ""
 txtExpiration.Text = ""
@@ -726,23 +727,44 @@ Private Sub Form_Load()
     Dim A() As String
     
     On Error GoTo DLLnotRegistered
-    Me.Caption = "ALTestApp - ActiveLock" & App.Major & "." & App.Minor & " Test Application"
+    
+    ' Form's caption
+    Me.Caption = LICENSE_ROOT & " - ActiveLock" & App.Major & "." & App.Minor & " Test Application"
     
     ' Check the existence of necessary files to run this application
+    ' This is not necessary if you're not using these controls in your app.
     Call CheckForResources("Alcrypto3.dll", "comctl32.ocx")
 
-    ' Check if the Activelock3.x.y.dll is registered. If not no need to continue.
+    ' Check if the Activelock DLL is registered. If not no need to continue.
+    ' Since Actvelock DLL is a COM DLL, it must be registered via the
+    ' regsvr32 command. Otherwise it's useless.
+    ' The following code checks that the file exists and is loadable into memory
+    ' You do not have to have this check but is recommended to make sure
+    ' your DLL works
     If CheckIfDLLIsRegistered = False Then End
     
     On Error GoTo NotRegistered
+    
+    ' Set the path to the license file (LIC) and ALL file (if it exists)
+    Dim Ret As Long
+    Dim AppfilePath As String
+    AppfilePath = Space$(260)
+    Ret = SHGetSpecialFolderPath(0, AppfilePath, 46, False) ' 46 is for ...\All Users\Documents folder.
+    If Trim(AppfilePath) <> Chr(0) Then
+        AppfilePath = Left(AppfilePath, InStr(AppfilePath, Chr(0)) - 1)
+    End If
+    
     ' Obtain AL instance and initialize its properties
+    ' Set a new instance of the Activelock object
     Set MyActiveLock = ActiveLock3.NewInstance()
+    
     With MyActiveLock
         
-        
+        ' Set the software/application name
         .SoftwareName = LICENSE_ROOT
         txtName.Text = .SoftwareName
         
+            ' Set the software/application version number
         ' Note: Do not use (App.Major & "." & App.Minor & "." & App.Revision)
         ' since the license will fail with version incremented exe builds
         ' THE FOLLOWING IS A SAMPLE USAGE
@@ -750,25 +772,55 @@ Private Sub Form_Load()
         .SoftwareVersion = "3.6"
         txtVersion.Text = .SoftwareVersion
         
+        ' Set the software/application password
         ' This should be set to protect yourself against ResetTrial abuse
-        ' The password is also used by the Short License Key type below
+        ' The password is also used by the short keys
+        ' Regular licensing does not use this password, but you should still use a password
+        ' WARNING: You can not ignore this property. You *must* set a password.
         .SoftwarePassword = Chr(99) & Chr(111) & Chr(111) & Chr(108)
         
+        ' Set whether the software/application will use a short key or RSA method
+        ' alsRSA covers both ALCrypto and RSA native classes approach.
+        ' RSA classes in .NET allows you to pick from several cipher strengths
+        ' however ALCrypto uses 1024 bit strength key only.
+        ' alsShortKeyMD5 is for short key protection only
         '.LicenseKeyType = alsShortKeyMD5
         .LicenseKeyType = alsRSA
         
+        ' Set the Trial Feature properties
+        ' If you don't want to use the trial feature in your app, set the TrialType
+        ' property to trialNone.
+        
+        ' Set the trial type property
+        ' this is either trialDays, or trialRuns or trialNone.
         .TrialType = trialDays
+        
+        ' Set the Trial Length property.
+        ' This number represents the number of days or the number of runs (whichever is applicable).
         .TrialLength = 15
         If .TrialType <> trialNone And .TrialLength = 0 Then
             ' In such cases Activelock automatically generates errors -11001100 or -11001101
             ' to indicate that you're using the trial feature but, trial length was not specified
         End If
         
-        ' Change the following statement to use a certain trial data hiding technique
+        ' Comment the following statement to use a certain trial data hiding technique
         ' Use OR to combine one or more trial hiding techniques
         ' or don't use this property to use ALL techniques
-        .TrialHideType = trialHiddenFolder Or trialRegistry Or trialSteganography
+        ' WARNING: trialRegistryPerUser is "Per User"; this means each user trial feature
+        ' is controlled that user's own registry hive.
+        ' This means initiating a trial with one user does not initiate a trial for another user.
+        ' trialHiddenFolder and trialSteganography are for "All Users"
+        .TrialHideType = trialHiddenFolder Or trialRegistryPerUser Or trialSteganography
         
+        ' Set the Software code
+        ' This is the same thing as VCode
+        ' Run Alugen first and create a VCode and GCode
+        ' for the software name and version number you used above
+        ' Then copy and use the VCode as the PUB_KEY here.
+        ' It's up to you to encrypt it; just makes it more secure
+        ' Enc encodes, Dec decodes the public key (VCode)
+        ' Change Enc() and Dec(0 the way you want.
+        ' The following is an example of a very long encoded PUB_KEY
 '        PUB_KEY = "386.391.2CB.226.210.23C.268.2D6.46D.323.2CB.2CB.2CB.2CB.499.2CB.2CB.2D6.391.3A7.210.2F7.528.2CB.2CB.46D.2CB.2CB.2CB.2F7.2CB.2CB.37B.2D6"
 '        PUB_KEY = PUB_KEY & ".21B.507.46D.370.53E.365.2F7.4A4.533.483.499.268.478.37B.483.3DE.457.4BA.533.44C.4E6.4DB.3DE.39C.339.35A.3DE.32E.4DB.3D3.252.478"
 '        PUB_KEY = PUB_KEY & ".3C8.318.4D0.4DB.34F.205.2E1.4D0.39C.528.23C.1D9.457.4D0.205.210.2D6.457.3DE.4A4.3C8.4DB.499.441.21B.4E6.25D.51D.4DB.3DE.2F7.2D6.391"
@@ -782,69 +834,126 @@ Private Sub Form_Load()
 '        PUB_KEY = PUB_KEY & ".1D9.507.323.39C.39C.268.53E.4E6.4C5.268.2F7.4C5.528.4AF.53E.370.436.4D0.3C8.4C5.35A.51D.2CB.3D3.2CB.252.4C5.231.3D3.37B.35A.4BA"
 '        PUB_KEY = PUB_KEY & ".499.344.4C5.34F.231.25D.37B.247.39C.1D9.302.210.4E6.30D.4DB.4BA.512.35A.25D.441.339.3B2"
 '        .SoftwareCode = Dec(PUB_KEY)
-'        .SoftwareCode = "RSA2048BgIAAAAkAABSU0ExAAgAAAEAAQC7QRQAugyetDowjseqszSAkX3hLvOj69Cu8J7fs7T0sIlM2gVK6WIEN026KcnILfb/Gs+jDvyb2mpPOL1HfyEmIl2tgK5qQG3Di0uaEgiyDaHRl8IYsMLyBNjJYyB3bnKHk+5c7W1c6MAZft5Iyl5v6Xj6KtJ7s73ICMQ7UzaEcRslbkRaRkW1AAXjKEk/rhzDu4dNHX6XsCUlpgAxhopAuONJIZyh6dYzqSMTOS0A3gmC6f8vC9HYtLKls1Ap/jxwjLH6pwc1Su+7KtfGkGB/ZQdOZau/wNEkoLbodXypGAf5TiJ4NMb6ODTl1CfLVEKHApXsC9nQR8/N3Z5Yt36p"
-'        .SoftwareCode = "RSA1024BgIAAAAkAABSU0ExAAQAAAEAAQAVA49YKYWBobRVeKs6ro0aZA8j+CxZ3irhOs6QlaHWiYrGSWQrn1kGfxn3EKUZM9oyxbP8s8gGl6aNurU8fCAsAO6Hb20UIDSnA4qYCSJmKP7xunv071zdzRMmwUESm3bcwjj21vAn/wtnDN+TlXOOEWXjsJAb3DTuIF5d2Bjgmg=="
-        .SoftwareCode = "RSA1024BgIAAAAkAABSU0ExAAQAAAEAAQDtBBS0EHzJOzwm3Q01ZDyf72Hw/CUVJWW+tM/5tvuXBoDgZbZAJbNYo3NTGWgUOLIyt09R86Pqdbjt7R9pkRUB4IQO+nvnDhRu62//qYxRfZjS4PsCajnRQ/OqkDdEpnpe/8HHrnICxbzG6bmdKAxIHz0p7pskZ0IU3EtosVCAwA=="
+        ' The following practice is not recommended but is used to show how SoftwareCode is set
+        ' It is recommended that you encode/decode the PUB_KEY and then set it to SoftwareCode
+        .SoftwareCode = "RSA1024BgIAAAAkAABSU0ExAAQAAAEAAQCBcwKp9p1rkQhZyxTeREh9EM273wBqpODS+KLkeu/xn/Q0+w8uhBQfZq8f/sdRfL+S5LIBItOv0okG42mKcaNk0mRoSoJkUPMrRp43j8nAKVCmRrD7pZ1Do3uHM4SjydLY0omeK8vOCyZ2WldYy0IxwgQjNqMHLuG1rCg1DR4+5g=="
         
-        ' Use lockWindows Or lockComp
+        ' Set the Hardware keys
+        ' In order to pick the keys that you want to lock to in Alugen, use lockNone only
+        ' Example: lockWindows Or lockComp
         ' You can combine any lockType(s) using OR as above
+        ' If you want to lock to any keys explicitly, combine them using OR
+        ' But you won't be able to uncheck/check any of them while in Alugen (too late at that point).
         .LockType = lockNone
-        strAutoRegisterKeyPath = App.Path & "\" & LICENSE_ROOT & ".all"
-        .AutoRegister = alsEnableAutoRegistration
+        
+        ' Set the .ALL file path if you're using an ALL file.
+        ' .ALL is an auto registration file.
+        ' You generate .ALL files via Alugen and then send to the users
+        ' They put the .ALL file in the directory you specify below
+        ' .ALL simply contains the license key
+        ' WARNING: .ALL files are deleted after they are used.
+        ' It is recommended that you use both SoftwareName and Version in the .ALL filename
+        ' since multiple .ALL files might exist in the same directory
+        ' If you don't want to use the software name and version number explicitly, use an .ALL
+        ' filename that is specific to this application
+        strAutoRegisterKeyPath = AppfilePath & "\" & .SoftwareName & .SoftwareVersion & ".all"
+        ' App.Path could be an option for XP, but not so for Vista
+        strAutoRegisterKeyPath = App.Path & "\" & .SoftwareName & .SoftwareVersion & ".all"
         .AutoRegisterKeyPath = strAutoRegisterKeyPath
         If FileExist(strAutoRegisterKeyPath) Then boolAutoRegisterKeyPath = True
         
+        ' Set if auto registration will be used.
+        ' Auto registration uses the ALL file for license registration.
+        .AutoRegister = alsEnableAutoRegistration
+        
+        ' Set the Time Server check for Clock Tampering
+        ' This is optional but highly recommended.
+        ' Although Activelock makes every effort to check if the system clock was tampered,
+        ' checking a time server is the guaranteed way of knowing the correct UTC time/day.
+        ' This feature might add some delay to your apps start-up time.
         .CheckTimeServerForClockTampering = alsDontCheckTimeServer      ' use alsCheckTimeServer to enforce time server check for clock tampering detection
+        
+        ' Set the system files clock tampering check
+        ' This feature might add some delay to your apps start-up time.
         .CheckSystemFilesForClockTampering = alsDontCheckSystemFiles    ' use alsCheckSystemFiles to enforce system files scanning for clock tampering detection
+        
+        ' Set the license file format; this could be encrypted or plain
+        ' Even in a plain file format, certain keys and dates are still encrypted.
         '.LicenseFileType = alsLicenseFileEncrypted
+        .LicenseFileType = alsLicenseFilePlain
+    
+        ' Verify Activelock DLL's authenticity by checking its CRC
+        ' This checkes the CRC of the Activelock DLL and compares it with the embedded value
+        ' To change the embedded value; find the "CRC <> Value" check in this code,
+        ' and change the Value() function to make it the same as the CRC.
+        txtChecksum = modMain.VerifyActiveLockdll()
+    
+        ' Initialize the keystore. We use a File keystore in this case.
+        ' The other type alsRegistry is NOT supported.
+        .KeyStoreType = alsFile
+        
+        ' The code below will put the LIC file inside the "...\All Users\Documents" folder
+        ' You can hard code this path and put the LIC file anywhere you want
+        ' But be careful with limited user accounts in Vista.
+        ' It's recommended that you put this file in shared and accessible folders in Vista
+        ' It is recommended that you use both SoftwareName and Version in the LIC filename
+        ' since multiple LIC files might exist in the same directory
+        ' If you don't want to use the software name and version number explicitly, use an LIC
+        ' filename that is specific to this application
+        strKeyStorePath = AppfilePath & "\" & .SoftwareName & .SoftwareVersion & ".lic"
+        ' App.Path could be an option for XP, but not so for Vista
+        'strKeyStorePath = App.Path & "\" & .SoftwareName & .SoftwareVersion & ".lic"
+        .KeyStorePath = strKeyStorePath
+        
+        ' Obtain the EventNotifier so that we can receive notifications from AL.
+        ' Do Not Change This  - unless you know what this is for.
+        Set ActiveLockEventSink = .EventNotifier
+        
+        ' Initialize Activelock
+        ' This is for handling the ALCrypto DLL used by Activelock.
+        ' Init() method below checkes the ALCrypto CRC, and registeres the
+        ' application if an ALL file was used.
+        ' Note that ALCrypto DLL must be placed inside the system32 along with the Activelock DLL
+        .Init autoRegisterKey
+        If FileExist(strKeyStorePath) And boolAutoRegisterKeyPath = True And autoRegisterKey <> "" Then
+            ' This means, an ALL file existed and was used to create a LIC file
+            ' Init() method successfully registered the ALL file
+            ' and returned the license key
+            ' You can process that key here to see if there is any abuse, etc.
+            ' ie. whether the key was used before, etc.
+        End If
     
     End With
-
-    ' Verify AL's authenticity
-    txtChecksum = modMain.VerifyActiveLockdll()
-
-    ' Initialize the keystore. We use a File keystore in this case.
-    MyActiveLock.KeyStoreType = alsFile
-    
-    ' Path to the license file
-    strKeyStorePath = App.Path & "\" & LICENSE_ROOT & ".lic"
-    MyActiveLock.KeyStorePath = strKeyStorePath
-    
-    ' Obtain the EventNotifier so that we can receive notifications from AL.
-    Set ActiveLockEventSink = MyActiveLock.EventNotifier
-    
-    ' Initialize AL
-    MyActiveLock.Init autoRegisterKey
-    If FileExist(strKeyStorePath) And boolAutoRegisterKeyPath = True And autoRegisterKey <> "" Then
-        ' This means, an ALL file existed and was used to create a LIC file
-        ' Init() method successfully registered the ALL file
-        ' and returned the license key
-        ' You can process that key here to see if there is any abuse, etc.
-        ' ie. whether the key was used before, etc.
-    End If
 
     ' Initialize other application settings
     txtVersion.Text = MyActiveLock.SoftwareVersion
     cboSpeed = cboSpeed.List(2)
 
     ' Check registration status
+    ' Acquire() method does both trial and regular licensing
+    ' If it generates an error, that means there NO trial, NO license
+    ' If no error and returns a string, there's a trial but No license. Parse the string to display a trial message.
+    ' If no error and no string returned, you've got a valid license.
     Dim strMsg As String
     MyActiveLock.Acquire strMsg
     
     If strMsg <> "" Then 'There's a trial
+        ' Parse the returned string to display it on a form
         A = Split(strMsg, vbCrLf)
         txtRegStatus.Text = A(0)
         txtUsedDays.Text = A(1)
         
         ' You can also get the RemainingTrialDays or RemainingTrialRuns directly by:
-        'txtUsedDays.Text = MyActiveLock.RemainingTrialDays Or MyActiveLock.RemainingTrialRuns
+        'txtRemainingTrialDays.Text = MyActiveLock.RemainingTrialDays Or MyActiveLock.RemainingTrialRuns
+        ' At this point RemainingTrialDays and RemainingTrialRuns properties are directly accessible
+        ' Even if you don't want to show a trial form at this point, you still know the
+        ' trial status with one of these two properties (whichever is applicable).
 
         FunctionalitiesEnabled = True
+        ' Splash form to display the trial period/run information.
         frmSplash.lblInfo.Caption = vbCrLf & strMsg
         frmSplash.Show
         frmSplash.Refresh
-        'Dim rtn As Long 'declare the need variables
-        'rtn = SetWindowWord(frmSplash.hWnd, GWW_HWNDPARENT, Me.hWnd) 'let both forms load together
         Sleep 3000 'wait about 3 seconds
         Unload frmSplash
         cmdKillTrial.Visible = True
@@ -856,12 +965,17 @@ Private Sub Form_Load()
         cmdResetTrial.Visible = False
     End If
     
+    ' You can retrieve the LockTypes set inside Alugen
+    ' by accessing the UsedLockType property
     ' Uncomment the following to retrieve the usedlocktypes
 '    Dim aa() As ActiveLock3.ALLockTypes
 '    ReDim aa(UBound(MyActiveLock.UsedLockType))
 '    aa = MyActiveLock.UsedLockType
 '    MsgBox aa(0) 'For example, if only lockHDfirmware was used, this will return 256
     
+    ' So far so good...
+    ' If you are here already, that means you have a valid license.
+    ' Set the textboxes in your app accordingly.
     txtRegStatus.Text = "Registered"
     txtUsedDays.Text = MyActiveLock.UsedDays
     txtExpiration.Text = MyActiveLock.ExpirationDate
@@ -869,7 +983,7 @@ Private Sub Form_Load()
     txtUser.Text = MyActiveLock.RegisteredUser
     txtRegisteredLevel.Text = MyActiveLock.RegisteredLevel
     
-    ' Networked Licenses
+    ' Set Networked Licenses if applicable
     If MyActiveLock.LicenseClass = "MultiUser" Then
         txtNetworkedLicense.Text = "Networked"
     Else
@@ -877,6 +991,7 @@ Private Sub Form_Load()
         txtMaxCount.Visible = False
         lblConcurrentUsers.Visible = False
     End If
+    ' This is for number of concurrent users count in a netwrok license
     txtMaxCount.Text = MyActiveLock.MaxCount
 
     'Read the license file into a string to determine the license type
@@ -895,9 +1010,18 @@ Private Sub Form_Load()
     End If
     FunctionalitiesEnabled = True
     
+    ' If your code has reached this point successfully, then you're good.
+    ' If not, revisit your code, check and recheck,
+    ' watch the video tutorial and if still in doubt,
+    ' post a question in the forums
+    ' http://www.activelocksoftware.com
+    
     Exit Sub
 
 NotRegistered:
+    ' There's no valid trial or license - let the user know.
+    ' and cripple your application if necessary
+    ' or kill it if that's what you want.
     FunctionalitiesEnabled = False
     If Instring(Err.Description, "no valid license") = False And noTrialThisTime = False Then
         MsgBox Err.Number & ": " & Err.Description
