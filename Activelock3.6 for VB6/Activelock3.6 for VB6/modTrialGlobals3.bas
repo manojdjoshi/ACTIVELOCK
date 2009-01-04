@@ -644,7 +644,9 @@ Dim myDir As String
 myDir = "3BFE841EE459E0EC0DDBDCB91CA0A5879D751E21622A19741A6EEC92B19E1B5C"
 
 On Error GoTo DateGoodHiddenFolderError
-If Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD), vbDirectory) = "" Then MkDir ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD)
+If FolderExists(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD)) = False Then
+    MkDir ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD)
+End If
 strSource = HiddenFolderFunction()
 If Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory + vbHidden + vbReadOnly + vbSystem) <> "" Then
     MinusAttributes
@@ -652,7 +654,7 @@ If Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD), vbD
     If fileExist(strSource) Then
         SetAttr strSource, vbNormal
     End If
-ElseIf Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory) <> "" Then
+ElseIf FolderExists(ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD)) = True Then
     'Ok, the folder is there with no hidden, system attributes
     'Check to see if our file is there
     If fileExist(strSource) Then
@@ -773,7 +775,9 @@ Dim myDir As String
 myDir = "3BFE841EE459E0EC0DDBDCB91CA0A5879D751E21622A19741A6EEC92B19E1B5C"
 
 On Error GoTo RunsGoodHiddenFolderError
-If Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD), vbDirectory) = "" Then MkDir ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD)
+If FolderExists(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD)) = False Then
+    MkDir ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD)
+End If
 strSource = HiddenFolderFunction()
 If Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory + vbHidden + vbReadOnly + vbSystem) <> "" Then
     MinusAttributes
@@ -781,7 +785,7 @@ If Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD), vbD
     If fileExist(strSource) Then
         SetAttr strSource, vbNormal
     End If
-ElseIf Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory) <> "" Then
+ElseIf FolderExists(ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD)) = True Then
     'Ok, the folder is there with no hidden, system attributes
     'Check to see if our file is there
     If fileExist(strSource) Then
@@ -1206,7 +1210,7 @@ Open ActivelockGetSpecialFolder(46) & "\" & CHANNELS & Left(oMD5.CalculateMD5(LI
     Print #intFF, "23g5985hb587b27eb"
 Close #intFF
 intFF = FreeFile
-If Dir(ActivelockGetSpecialFolder(55) & "\Sample Videos") = "" Then
+If FolderExists(ActivelockGetSpecialFolder(55) & "\Sample Videos") = False Then
     MkDir (ActivelockGetSpecialFolder(55) & "\Sample Videos")
 End If
 Open ActivelockGetSpecialFolder(55) & "\Sample Videos" & VIDEO & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & OTHERFILE For Output As #intFF
@@ -1228,7 +1232,7 @@ End If
 
 ' Hidden folder stuff
 If TrialHideTypes And trialHiddenFolder Then
-    If Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD), vbDirectory) = "" Then
+    If FolderExists(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD)) = False Then
         MkDir ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD)
     End If
     strSource = HiddenFolderFunction()
@@ -1239,7 +1243,7 @@ If TrialHideTypes And trialHiddenFolder Then
             SetAttr strSource, vbNormal
             Kill strSource
         End If
-    ElseIf Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory) <> "" Then
+    ElseIf FolderExists(ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD)) = True Then
         'Ok, the folder is there with no system, hidden attributes
         'Check to see if our file is there
         If fileExist(strSource) Then
@@ -1372,7 +1376,7 @@ End If
 ' Hidden folder stuff
 On Error GoTo trialError
 If TrialHideTypes And trialHiddenFolder Then
-    If Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD), vbDirectory) <> "" Then
+    If FolderExists(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD)) = True Then
         MinusAttributes
         strSourceFile = HiddenFolderFunction()
         If fileExist(strSourceFile) Then
@@ -1708,7 +1712,7 @@ myDir = "3BFE841EE459E0EC0DDBDCB91CA0A5879D751E21622A19741A6EEC92B19E1B5C"
 
 On Error GoTo IsHiddenFolderExpiredError
 
-If Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD), vbDirectory) = "" Then Exit Function
+If FolderExists(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD)) = False Then Exit Function
 strSource = HiddenFolderFunction()
 If Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory + vbHidden + vbReadOnly + vbSystem) <> "" Then
     MinusAttributes
@@ -1731,7 +1735,7 @@ If Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD), vbD
         PlusAttributes
         Exit Function
     End If
-ElseIf Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD), vbDirectory) <> "" Then
+ElseIf FolderExists(ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD)) = True Then
     'Ok, the folder is there with no system, hidden attributes
     'Check to see if our file is there
     If fileExist(strSource) Then
@@ -1963,7 +1967,7 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
             Err.Raise ActiveLockErrCodeConstants.alerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS
          Else
             If fileExist(GetSteganographyFile()) = False And _
-                Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD), vbDirectory) = "" And _
+                FolderExists(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD)) = False And _
                 dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
                 If SystemClockTampered Then
                     Set_locale regionalSymbol
@@ -1992,7 +1996,7 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
             Err.Raise ActiveLockErrCodeConstants.alerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS
         Else
             If fileExist(GetSteganographyFile()) = False And _
-                Dir(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD), vbDirectory) = "" And _
+                FolderExists(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD)) = False And _
                 dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
                 If SystemClockTampered Then
                     Set_locale regionalSymbol
@@ -2096,7 +2100,7 @@ Dim strSource As String
 Dim oMD5 As clsMD5
 Set oMD5 = New clsMD5
 strSource = ActivelockGetSpecialFolder(54) & "\Sample Pictures" & DecryptMyString("E7E3221D952287CBAE2F5ED363E923CE547F8075C9E093A1138DC7D03A76D0A1", PSWD) & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(98) & Chr(109) & Chr(112)
-If Dir(ActivelockGetSpecialFolder(54) & "\Sample Pictures") = "" Then
+If FolderExists(ActivelockGetSpecialFolder(54) & "\Sample Pictures") = False Then
     MkDir (ActivelockGetSpecialFolder(54) & "\Sample Pictures")
 End If
 If fileExist(strSource) = False Then
