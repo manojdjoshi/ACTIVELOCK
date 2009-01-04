@@ -15,7 +15,7 @@ VB2008 v3.6 Updates:
 - Added a long description of each property to the Form_Load event. This should address some of the questions asked by the developers during the implementation stage.
 - Reviewed Activelock's short date handling feature, and decided that it's the best approach that could be used to address different locale short date formats.
 - FIX: Fixed the UpdateLastUsed method in Activelock. This was causing problems while switching between different regional settings. Checked both the trial and licensing features to make sure both work correctly while switching between different regional settings such as romanian to English and vice versa.
-
+- FIX: Fixed the UpdateLastUsed method in Activelock. This was causing problems while switching between different regional settings. Checked both the trial and licensing features to make sure both work correctly while switching between different regional settings such as romanian to English and vice versa. This fix involves adding Set_Locale "" at the beginning of this method. Additionally, the "Set_Locale regionalSymbol" statement at the bottom of the Acquire() method should be moved above the "Validate Lic" statement. Finally, ValidateLic method should start with the following two statements: Get_Locale and Set_Locale "".
 
 
 
