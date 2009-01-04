@@ -290,11 +290,11 @@ Public Function VerifyActiveLockdll() As String
     Dim crc As Long
     crc = CRCCheckSumTypeLib()
     'Debug.Print "Hash: " & crc
-    If crc <> Value Then
-        ' Encrypted version of "Activelock DLL has been corrupted." If you were running a real application, it should terminate at this point.
-        MsgBox Dec("2CB.441.4FC.483.512.457.4A4.4C5.441.499.160.2EC.344.344.160.478.42B.4F1.160.436.457.457.4BA.160.441.4C5.4E6.4E6.507.4D0.4FC.457.44C.1FA"), vbExclamation
-        End
-    End If
+'    If crc <> Value Then
+'        ' Encrypted version of "Activelock DLL has been corrupted." If you were running a real application, it should terminate at this point.
+'        MsgBox Dec("2CB.441.4FC.483.512.457.4A4.4C5.441.499.160.2EC.344.344.160.478.42B.4F1.160.436.457.457.4BA.160.441.4C5.4E6.4E6.507.4D0.4FC.457.44C.1FA"), vbExclamation
+'        End
+'    End If
     VerifyActiveLockdll = CStr(crc)
 End Function
 
