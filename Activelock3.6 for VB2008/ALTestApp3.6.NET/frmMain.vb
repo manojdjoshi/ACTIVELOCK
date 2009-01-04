@@ -83,13 +83,12 @@ Friend Class frmMain
 	Public WithEvents lblHost As System.Windows.Forms.Label
 	Public WithEvents lblSpeed As System.Windows.Forms.Label
 	Public WithEvents Frame1 As System.Windows.Forms.Panel
-	Public WithEvents fraViewport As System.Windows.Forms.Panel
-	Public WithEvents _SSTab1_TabPage1 As System.Windows.Forms.TabPage
-	Public WithEvents SSTab1 As System.Windows.Forms.TabControl
-	Public WithEvents optForm As Microsoft.VisualBasic.Compatibility.VB6.RadioButtonArray
-	'NOTE: The following procedure is required by the Windows Form Designer
-	'It can be modified using the Windows Form Designer.
-	'Do not modify it using the code editor.
+    Public WithEvents _SSTab1_TabPage1 As System.Windows.Forms.TabPage
+    Public WithEvents SSTab1 As System.Windows.Forms.TabControl
+    Public WithEvents optForm As Microsoft.VisualBasic.Compatibility.VB6.RadioButtonArray
+    'NOTE: The following procedure is required by the Windows Form Designer
+    'It can be modified using the Windows Form Designer.
+    'Do not modify it using the code editor.
     Public WithEvents Label10 As System.Windows.Forms.Label
     Public WithEvents txtNetworkedLicense As System.Windows.Forms.TextBox
     Public WithEvents txtMaxCount As System.Windows.Forms.TextBox
@@ -150,7 +149,6 @@ Friend Class frmMain
         Me.chkScroll = New System.Windows.Forms.CheckBox
         Me.lblHost = New System.Windows.Forms.Label
         Me.lblSpeed = New System.Windows.Forms.Label
-        Me.fraViewport = New System.Windows.Forms.Panel
         Me.optForm = New Microsoft.VisualBasic.Compatibility.VB6.RadioButtonArray(Me.components)
         Me.SSTab1.SuspendLayout()
         Me._SSTab1_TabPage0.SuspendLayout()
@@ -756,7 +754,6 @@ Friend Class frmMain
         Me._SSTab1_TabPage1.Controls.Add(Me.lblLockStatus2)
         Me._SSTab1_TabPage1.Controls.Add(Me.lblTrialInfo)
         Me._SSTab1_TabPage1.Controls.Add(Me.Frame1)
-        Me._SSTab1_TabPage1.Controls.Add(Me.fraViewport)
         Me._SSTab1_TabPage1.Location = New System.Drawing.Point(4, 22)
         Me._SSTab1_TabPage1.Name = "_SSTab1_TabPage1"
         Me._SSTab1_TabPage1.Size = New System.Drawing.Size(641, 479)
@@ -938,18 +935,6 @@ Friend Class frmMain
         Me.lblSpeed.Size = New System.Drawing.Size(148, 17)
         Me.lblSpeed.TabIndex = 28
         Me.lblSpeed.Text = "Activated with Level 4 Only"
-        '
-        'fraViewport
-        '
-        Me.fraViewport.BackColor = System.Drawing.SystemColors.Control
-        Me.fraViewport.Cursor = System.Windows.Forms.Cursors.Default
-        Me.fraViewport.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.fraViewport.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.fraViewport.Location = New System.Drawing.Point(4, 368)
-        Me.fraViewport.Name = "fraViewport"
-        Me.fraViewport.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.fraViewport.Size = New System.Drawing.Size(524, 35)
-        Me.fraViewport.TabIndex = 30
         '
         'frmMain
         '
@@ -1223,6 +1208,8 @@ Friend Class frmMain
             ' Set the software/application version number
             ' Note: Do not use (App.Major & "." & App.Minor & "." & App.Revision)
             ' since the license will fail with version incremented via exe rebuilds
+            ' THE FOLLOWING IS A SAMPLE USAGE
+            '.SoftwareVersion = "1.3.2"   ' WARNING *** WARNING *** DO NOT USE App.Major & "." & App.Minor & "." & App.Revision
             .SoftwareVersion = "3.0" ' WARNING *** WARNING *** DO NOT USE App.Major & "." & App.Minor & "." & App.Revision
             txtVersion.Text = .SoftwareVersion
 
@@ -1237,22 +1224,22 @@ Friend Class frmMain
             ' alsRSA covers both ALCrypto and RSA native classes approach.
             ' RSA classes in .NET allows you to pick from several cipher strengths
             ' however ALCrypto uses 1024 bit strength key only.
+            ' alsShortKeyMD5 is for short key protection only
             '.LicenseKeyType = ActiveLock3_6NET.IActiveLock.ALLicenseKeyTypes.alsShortKeyMD5
             .LicenseKeyType = ActiveLock3_6NET.IActiveLock.ALLicenseKeyTypes.alsRSA
 
             ' Set the Trial Feature properties
             ' If you don't want to use the trial feature in your app, set the TrialType
             ' property to trialNone.
-            ' New in v3.1
 
-            ' Set the trial property, this is either trialDays, or trialRuns or trialNone.
+            ' Set the trial type property
+            ' this is either trialDays, or trialRuns or trialNone.
             .TrialType = ActiveLock3_6NET.IActiveLock.ALTrialTypes.trialDays
 
             ' Set the Trial Length property.
             ' This number represents the number of days or the number of runs (whichever is applicable).
             .TrialLength = 15
             If .TrialType <> ActiveLock3_6NET.IActiveLock.ALTrialTypes.trialNone And .TrialLength = 0 Then
-                ' Do Nothing
                 ' In such cases Activelock automatically generates errors -11001100 or -11001101
                 ' to indicate that you're using the trial feature but, trial length was not specified
             End If
@@ -1281,6 +1268,8 @@ Friend Class frmMain
 
             ' Set the Hardware keys
             ' In order to pick the keys that you want to lock to in Alugen, use lockNone only
+            ' Example: lockWindows Or lockComp
+            ' You can combine any lockType(s) using OR as above
             .LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockNone
 
             ' If you want to lock to any keys explicitly, combine them using OR
@@ -1330,7 +1319,7 @@ Friend Class frmMain
             ' Even in a plain file format, certain keys and dates are still encrypted.
             .LicenseFileType = ActiveLock3_6NET.IActiveLock.ALLicenseFileTypes.alsLicenseFilePlain
 
-            ' Verify AL's authenticity
+            ' Verify Activelock DLL's authenticity by checking its CRC
             ' This checkes the CRC of the Activelock DLL and compares it with the embedded value
             ' To change the embedded value; find the "CRC <> Value" check in this code,
             ' and change the Value() function to make it the same as the CRC.
@@ -1342,7 +1331,7 @@ Friend Class frmMain
             ' uncomment the following when unmanaged Activelock3NET.dll is used
             'MyActiveLock.KeyStoreType = ActiveLock3.LicStoreType.alsFile
 
-            ' The code above will put the LIC file inside the "...\All Users\Documents" folder
+            ' The code below will put the LIC file inside the "...\All Users\Documents" folder
             ' You can hard code this path and put the LIC file anywhere you want
             ' But be careful with limited user accounts in Vista.
             ' It's recommended that you put this file in shared and accessible folders in Vista
@@ -1361,7 +1350,7 @@ Friend Class frmMain
 
             ' Initialize Activelock 
             ' This is for handling the ALCrypto DLL used by Activelock. 
-            ' Init(0 method below checkes the ALCrypto CRC, and registeres the 
+            ' Init() method below checkes the ALCrypto CRC, and registeres the 
             ' application if an ALL file was used.
             ' Important: If you're not going to put Alcrypto3NET.dll under
             ' the system32 directory, you should pass the path of the exe
@@ -1385,7 +1374,7 @@ Friend Class frmMain
 
         End With
 
-        cboSpeed.Text = VB6.GetItemString(cboSpeed, 2)
+        cboSpeed.SelectedItem = 2
 
         ' Check registration status
         ' Acquire() method does both trial and regular licensing
@@ -1400,9 +1389,9 @@ Friend Class frmMain
             txtRegStatus.Text = A(0).Trim
             txtUsedDays.Text = A(1).Trim
 
-            ' You can also get the UsedTrialDays or UsedTrialRuns directly by:
-            'txtUsedDays.Text = MyActiveLock.UsedTrialDays OR MyActiveLock.UsedTrialRuns
-            ' At this point UsedTrialDays and UsedTrialRuns properties are directly accessible
+            ' You can also get the RemainingTrialDays or RemainingTrialRuns directly by:
+            'txtRemainingTrialDays.Text = MyActiveLock.RemainingTrialDays OR MyActiveLock.RemainingTrialRuns
+            ' At this point RemainingTrialDays and RemainingTrialRuns properties are directly accessible
             ' Even if you don't want to show a trial form at this point, you still know the 
             ' trial status with one of these two properties (whichever is applicable).
 
@@ -1426,6 +1415,7 @@ Friend Class frmMain
 
         ' You can retrieve the LockTypes set inside Alugen
         ' by accessing the UsedLockType property
+        'For example, if only lockHDfirmware was used, this will return 256
         'MsgBox(MyActiveLock.UsedLockType(0))
 
         ' So far so good... 
@@ -1466,10 +1456,18 @@ Friend Class frmMain
         FunctionalitiesEnabled = True
         txtUser.BackColor = Color.FromKnownColor(KnownColor.ButtonFace)
 
+        ' If your code has reached this point successfully, then you're good.
+        ' If not, revisit your code, check and recheck,
+        ' watch the video tutorial and if still in doubt,
+        ' post a question in the forums
+        ' http://www.activelocksoftware.com
+
         Exit Sub
 
 NotRegistered:
         ' There's no valid trial or license - let the user know.
+        ' and cripple your application if necessary
+        ' or kill it if that's what you want.
         FunctionalitiesEnabled = False
         If Instring(Err.Description, "no valid license") = False And noTrialThisTime = False Then
             MsgBox(Err.Number & ": " & Err.Description)
@@ -1602,7 +1600,7 @@ checkForResourcesError:
                 End If
                 Indx = Indx + 1
             Loop Until EnvString = ""
-            a = s.Split(";")
+            A = s.Split(";")
         End If
 
         T = Trim(T)
