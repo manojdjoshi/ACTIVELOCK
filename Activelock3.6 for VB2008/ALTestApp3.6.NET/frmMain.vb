@@ -1155,7 +1155,7 @@ Friend Class frmMain
         MyActiveLock.ResetTrial()
         MyActiveLock.ResetTrial() ' DO NOT REMOVE, NEED TO CALL TWICE
         System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default
-        MsgBox("Free Trial has been Reset." & vbCrLf & "Please restart the application for a new Free Trial." & vbCrLf & vbCrLf & "Note: This feature is provided for the developers only to test their products;" & vbCrLf & "Do NOT provide this feature in your application.", MsgBoxStyle.Information)
+        MsgBox("Free Trial has been Reset." & vbCrLf & "Please restart the application for a new Free Trial." & vbCrLf & vbCrLf & "Note: This feature is provided for the developers only to test their products;" & vbCrLf & "DO NOT provide this feature in your application.", MsgBoxStyle.Information)
         txtRegStatus.Text = "Free Trial has been Reset"
         txtUsedDays.Text = ""
         txtExpiration.Text = ""
