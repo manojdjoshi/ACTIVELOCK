@@ -26,7 +26,8 @@ Module modVB6
         My.Computer.FileSystem.WriteAllText(FilePath & "\" & TheFileName, Data, True)
     End Sub
     Private Sub CreateRoutineInitActivelock()
-        WriteToFile("    Public Const PUB_KEY as string = " & Chr(34) & Enc(SoftwareCode) & Chr(34) & vbCrLf)
+        WriteToFile("Private Const CrcDataEnc As String = " & Chr(34) & CrcDataEnc & Chr(34) & vbCrLf) 'added
+        WriteToFile("Private Const PUB_KEY as string = " & Chr(34) & Enc(SoftwareCode) & Chr(34) & vbCrLf)
         WriteToFile(vbCrLf)
         WriteToFile("Public Function InitActivelock() As Boolean" & vbCrLf)
         WriteToFile("   Dim autoRegisterKey As String" & vbCrLf)
