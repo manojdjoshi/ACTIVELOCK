@@ -94,6 +94,13 @@ Partial Class frmMain
         Me.PicActiveLock = New System.Windows.Forms.PictureBox
         Me.FolderBrowserDialog = New System.Windows.Forms.FolderBrowserDialog
         Me.ImageApplicationHelp14 = New System.Windows.Forms.PictureBox
+        Me.GroupBox14 = New System.Windows.Forms.GroupBox
+        Me.RadioButton2 = New System.Windows.Forms.RadioButton
+        Me.RadioButton1 = New System.Windows.Forms.RadioButton
+        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel
+        Me.ImageApplicationHelp16 = New System.Windows.Forms.PictureBox
+        Me.txtActivelockPath = New System.Windows.Forms.TextBox
+        Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
         Me.GroupBox1.SuspendLayout()
         CType(Me.ImageApplicationHelp11, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox2.SuspendLayout()
@@ -124,6 +131,8 @@ Partial Class frmMain
         CType(Me.ImageApplicationHelp15, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.PicActiveLock, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.ImageApplicationHelp14, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupBox14.SuspendLayout()
+        CType(Me.ImageApplicationHelp16, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Label1
@@ -881,11 +890,79 @@ Partial Class frmMain
         Me.ImageApplicationHelp14.TabIndex = 3
         Me.ImageApplicationHelp14.TabStop = False
         '
+        'GroupBox14
+        '
+        Me.GroupBox14.Controls.Add(Me.RadioButton2)
+        Me.GroupBox14.Controls.Add(Me.RadioButton1)
+        Me.GroupBox14.Controls.Add(Me.LinkLabel1)
+        Me.GroupBox14.Controls.Add(Me.ImageApplicationHelp16)
+        Me.GroupBox14.Controls.Add(Me.txtActivelockPath)
+        Me.GroupBox14.Location = New System.Drawing.Point(4, 373)
+        Me.GroupBox14.Name = "GroupBox14"
+        Me.GroupBox14.Size = New System.Drawing.Size(721, 73)
+        Me.GroupBox14.TabIndex = 12
+        Me.GroupBox14.TabStop = False
+        Me.GroupBox14.Text = "ActiveLock CRC Encoder"
+        '
+        'RadioButton2
+        '
+        Me.RadioButton2.AutoSize = True
+        Me.RadioButton2.Location = New System.Drawing.Point(433, 50)
+        Me.RadioButton2.Name = "RadioButton2"
+        Me.RadioButton2.Size = New System.Drawing.Size(180, 17)
+        Me.RadioButton2.TabIndex = 7
+        Me.RadioButton2.Text = "Disable Individual CRC endoding"
+        Me.RadioButton2.UseVisualStyleBackColor = True
+        '
+        'RadioButton1
+        '
+        Me.RadioButton1.AutoSize = True
+        Me.RadioButton1.Checked = True
+        Me.RadioButton1.Location = New System.Drawing.Point(197, 50)
+        Me.RadioButton1.Name = "RadioButton1"
+        Me.RadioButton1.Size = New System.Drawing.Size(178, 17)
+        Me.RadioButton1.TabIndex = 6
+        Me.RadioButton1.TabStop = True
+        Me.RadioButton1.Text = "Enable Individual CRC encoding"
+        Me.RadioButton1.UseVisualStyleBackColor = True
+        '
+        'LinkLabel1
+        '
+        Me.LinkLabel1.AutoSize = True
+        Me.LinkLabel1.Location = New System.Drawing.Point(34, 54)
+        Me.LinkLabel1.Name = "LinkLabel1"
+        Me.LinkLabel1.Size = New System.Drawing.Size(107, 13)
+        Me.LinkLabel1.TabIndex = 5
+        Me.LinkLabel1.TabStop = True
+        Me.LinkLabel1.Text = "Path to Activelock.dll"
+        '
+        'ImageApplicationHelp16
+        '
+        Me.ImageApplicationHelp16.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.ImageApplicationHelp16.Image = Global.ActiveLockWizard.My.Resources.Resources.Help
+        Me.ImageApplicationHelp16.Location = New System.Drawing.Point(12, 19)
+        Me.ImageApplicationHelp16.Name = "ImageApplicationHelp16"
+        Me.ImageApplicationHelp16.Size = New System.Drawing.Size(19, 18)
+        Me.ImageApplicationHelp16.TabIndex = 4
+        Me.ImageApplicationHelp16.TabStop = False
+        '
+        'txtActivelockPath
+        '
+        Me.txtActivelockPath.Location = New System.Drawing.Point(37, 19)
+        Me.txtActivelockPath.Name = "txtActivelockPath"
+        Me.txtActivelockPath.Size = New System.Drawing.Size(663, 20)
+        Me.txtActivelockPath.TabIndex = 0
+        '
+        'OpenFileDialog1
+        '
+        Me.OpenFileDialog1.FileName = "OpenFileDialog1"
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(729, 381)
+        Me.ClientSize = New System.Drawing.Size(729, 453)
+        Me.Controls.Add(Me.GroupBox14)
         Me.Controls.Add(Me.ImageApplicationHelp14)
         Me.Controls.Add(Me.PicActiveLock)
         Me.Controls.Add(Me.GroupBox5)
@@ -902,7 +979,7 @@ Partial Class frmMain
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "frmMain"
-        Me.Text = "Activelock Protection Source Code Generation Wizard V1.0.2"
+        Me.Text = "Activelock Protection Source Code Generation Wizard V1.0.3"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         CType(Me.ImageApplicationHelp11, System.ComponentModel.ISupportInitialize).EndInit()
@@ -945,6 +1022,9 @@ Partial Class frmMain
         CType(Me.ImageApplicationHelp15, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.PicActiveLock, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.ImageApplicationHelp14, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupBox14.ResumeLayout(False)
+        Me.GroupBox14.PerformLayout()
+        CType(Me.ImageApplicationHelp16, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1020,5 +1100,12 @@ Partial Class frmMain
     Friend WithEvents ImageApplicationHelp14 As System.Windows.Forms.PictureBox
     Friend WithEvents ImageApplicationHelp3 As System.Windows.Forms.PictureBox
     Friend WithEvents ImageApplicationHelp2 As System.Windows.Forms.PictureBox
+    Friend WithEvents GroupBox14 As System.Windows.Forms.GroupBox
+    Friend WithEvents RadioButton2 As System.Windows.Forms.RadioButton
+    Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
+    Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
+    Friend WithEvents ImageApplicationHelp16 As System.Windows.Forms.PictureBox
+    Friend WithEvents txtActivelockPath As System.Windows.Forms.TextBox
+    Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
 
 End Class

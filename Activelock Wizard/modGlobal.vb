@@ -57,6 +57,8 @@ Module modGlobal
     Public TrialLength As Integer = 0
     Public KeyStoreType As KeyStoreType_t
     Public DevEnvironment As DevEnvironment_t
+    Public CrcDataEnc As String = Nothing 'added
+
 #End Region '"LocalVariables"
 
     Sub main(ByVal Args() As String)

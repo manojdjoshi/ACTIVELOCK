@@ -26,6 +26,7 @@ Module modVB2005
         My.Computer.FileSystem.WriteAllText(FilePath & "\" & TheFileName, Data, True)
     End Sub
     Private Sub CreateRoutineInitActivelock()
+        WriteToFile("Private Const CrcDataEnc As String = " & Chr(34) & CrcDataEnc & Chr(34) & vbCrLf) 'added
         WriteToFile("Private Const PUB_KEY as string = " & Chr(34) & Enc(SoftwareCode) & Chr(34) & vbCrLf)
         WriteToFile("#End Region '" & Chr(34) & "Local Declare" & Chr(34) & vbCrLf)
         WriteToFile(vbCrLf)
@@ -125,5 +126,5 @@ Module modVB2005
         WriteToFile("    End Function" & vbCrLf)
         WriteToFile(vbCrLf)
     End Sub
-  
+
 End Module
