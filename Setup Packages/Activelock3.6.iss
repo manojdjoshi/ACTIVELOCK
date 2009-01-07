@@ -215,6 +215,8 @@ Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\modMain.bas; DestDir: "{app}
 Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\modRegistryAPIs.bas; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\splash.frm; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\splash.frx; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
+Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\splash1.frm; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
+Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\splash1.frx; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
 
 [Tasks]
 Name: startmenu; Description: Add icons to Start Menu;
