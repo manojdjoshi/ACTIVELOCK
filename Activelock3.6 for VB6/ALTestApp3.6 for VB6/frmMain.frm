@@ -3,14 +3,14 @@ Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Begin VB.Form frmMain 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "ALTestApp - ActiveLock3 Test Application"
-   ClientHeight    =   10230
+   ClientHeight    =   10800
    ClientLeft      =   45
    ClientTop       =   330
    ClientWidth     =   9510
    Icon            =   "frmMain.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
-   ScaleHeight     =   10230
+   ScaleHeight     =   10800
    ScaleWidth      =   9510
    StartUpPosition =   2  'CenterScreen
    Begin VB.Frame fraRegStatus 
@@ -366,15 +366,15 @@ Begin VB.Form frmMain
    Begin VB.Frame Frame1 
       BorderStyle     =   0  'None
       Height          =   1650
-      Left            =   495
+      Left            =   585
       TabIndex        =   1
-      Top             =   8280
-      Width           =   6825
+      Top             =   8820
+      Width           =   8265
       Begin VB.OptionButton optForm 
          Caption         =   "Option 2"
          Height          =   225
          Index           =   1
-         Left            =   3030
+         Left            =   4380
          TabIndex        =   7
          Top             =   1245
          Width           =   1395
@@ -383,7 +383,7 @@ Begin VB.Form frmMain
          Caption         =   "Option 1"
          Height          =   225
          Index           =   0
-         Left            =   3030
+         Left            =   4380
          TabIndex        =   6
          Top             =   990
          Value           =   -1  'True
@@ -392,53 +392,53 @@ Begin VB.Form frmMain
       Begin VB.ComboBox cboSpeed 
          Height          =   315
          ItemData        =   "frmMain.frx":42A6
-         Left            =   5070
+         Left            =   6570
          List            =   "frmMain.frx":42B9
          Style           =   2  'Dropdown List
          TabIndex        =   5
-         Top             =   30
+         Top             =   45
          Width           =   1635
       End
       Begin VB.CheckBox chkPause 
-         Caption         =   "Checkbox for Level 3 only"
+         Caption         =   "Checkbox enabled for Level 3 only"
          Height          =   315
          Left            =   0
          TabIndex        =   4
          Top             =   390
-         Width           =   2565
+         Width           =   2835
       End
       Begin VB.CheckBox chkFlash 
-         Caption         =   "Checkbox for ALL Levels"
+         Caption         =   "Checkbox enabled for ALL Levels"
          Height          =   495
          Left            =   0
          TabIndex        =   3
          Top             =   690
-         Width           =   2610
+         Width           =   2745
       End
       Begin VB.CheckBox chkScroll 
-         Caption         =   "Checkbox for ALL Levels"
+         Caption         =   "Checkbox enabled for ALL Levels"
          Height          =   225
          Left            =   0
          TabIndex        =   2
          Top             =   90
          Value           =   1  'Checked
-         Width           =   2535
+         Width           =   2760
       End
       Begin VB.Label lblHost 
-         Caption         =   "Option Buttons for ALL Levels:"
+         Caption         =   "These Option Buttons will be enabled for ALL Levels:"
          Height          =   255
-         Left            =   3060
+         Left            =   4380
          TabIndex        =   9
          Top             =   690
-         Width           =   2280
+         Width           =   3765
       End
       Begin VB.Label lblSpeed 
-         Caption         =   "Activated with Level 4 Only"
+         Caption         =   "This combobox will be enabled for Level 4 only"
          Height          =   255
-         Left            =   3030
+         Left            =   3150
          TabIndex        =   8
          Top             =   90
-         Width           =   2025
+         Width           =   3420
       End
    End
    Begin ComctlLib.StatusBar sbStatus 
@@ -446,7 +446,7 @@ Begin VB.Form frmMain
       Height          =   300
       Left            =   0
       TabIndex        =   0
-      Top             =   9930
+      Top             =   10500
       Width           =   9510
       _ExtentX        =   16775
       _ExtentY        =   529
@@ -461,12 +461,23 @@ Begin VB.Form frmMain
          EndProperty
       EndProperty
    End
+   Begin VB.Label Label12 
+      Alignment       =   2  'Center
+      BorderStyle     =   1  'Fixed Single
+      Caption         =   $"frmMain.frx":42E3
+      ForeColor       =   &H00FF0000&
+      Height          =   465
+      Left            =   45
+      TabIndex        =   50
+      Top             =   7380
+      Width           =   9405
+   End
    Begin VB.Label lblLockStatus 
       Caption         =   "Application Functionalities Are Currently: "
       Height          =   375
-      Left            =   495
+      Left            =   945
       TabIndex        =   12
-      Top             =   7470
+      Top             =   7965
       Width           =   2895
    End
    Begin VB.Label lblLockStatus2 
@@ -481,17 +492,17 @@ Begin VB.Form frmMain
          Strikethrough   =   0   'False
       EndProperty
       Height          =   255
-      Left            =   3525
+      Left            =   3915
       TabIndex        =   11
-      Top             =   7470
+      Top             =   7965
       Width           =   4515
    End
    Begin VB.Label lblTrialInfo 
       Caption         =   "NOTE: All application functionalities are available in Trial Mode."
       Height          =   375
-      Left            =   495
+      Left            =   945
       TabIndex        =   10
-      Top             =   7860
+      Top             =   8355
       Width           =   4545
    End
 End
@@ -640,15 +651,21 @@ End Function
 Private Function IsDLLAvailable(ByVal DllFilename As String) As Boolean
 ' Code provided by Activelock user Pinheiro
 Dim hModule As Long
+On Error GoTo cannotRegister
 hModule = LoadLibrary(DllFilename) 'attempt to load DLL
 If hModule > 32 Then
     FreeLibrary hModule 'decrement the DLL usage counter
     IsDLLAvailable = True 'Return true
 Else
-    IsDLLAvailable = False 'Return False
+    Shell "regsvr32.exe /s " & DllFilename
 End If
-End Function
+Exit Function
 
+cannotRegister:
+    'Something is still wrong
+    IsDLLAvailable = False 'Return False
+
+End Function
 Private Sub cmdCopy_Click()
 Clipboard.Clear
 Clipboard.SetText txtReqCodeGen.Text
@@ -733,7 +750,7 @@ Private Sub Form_Load()
     
     ' Check the existence of necessary files to run this application
     ' This is not necessary if you're not using these controls in your app.
-    Call CheckForResources("Alcrypto3.dll", "comctl32.ocx")
+    Call CheckForResources("alcrypto3.dll", "activelock3.6.dll", "comctl32.ocx")
 
     ' Check if the Activelock DLL is registered. If not no need to continue.
     ' Since Actvelock DLL is a COM DLL, it must be registered via the
@@ -1060,7 +1077,6 @@ Dim s As String, systemDir As String, pathName As String
 
 WhereIsDLL ("") 'initialize
 
-systemDir = WindowsSystemDirectory 'Get the Windows system directory
 For Each y In MyArray
     foundIt = False
     s = CStr(y)
@@ -1073,7 +1089,7 @@ For Each y In MyArray
         pathName = Left$(s, j - 1)
         s = Mid$(s, j + 1)
     Else
-        pathName = systemDir
+        pathName = WinSysDir
     End If
     
     If Instring(s, ".") Then
@@ -1082,7 +1098,18 @@ For Each y In MyArray
         foundIt = True
     ElseIf FileExist(pathName & "\" & s & ".OCX") Then
         foundIt = True
-        s = s & ".OCX" 'this will make the softlocx check easier
+        s = s & ".OCX"
+    End If
+    
+    ' Check the Activelock DLL and copy the app.path version to system directory
+    ' if the app.path version is newer
+    If s = "activelock" & CStr(App.Major) & "." & CStr(App.Minor) & ".dll" Then
+        If FileExist(App.Path & "\" & s) = True Then
+            If Get_Latest_File(WinSysDir & "\" & s, App.Path & "\" & s) = App.Path & "\" & s Then
+                MsgBox "The DLL in the application folder: " & App.Path & "\" & s & vbCrLf & "is newer then the system32 version: " & WinSysDir & "\" & s & vbCrLf & vbCrLf & "Copy this newer DLL to your system32 folder.", vbInformation
+                End
+            End If
+        End If
     End If
     
     If Not foundIt Then
@@ -1099,19 +1126,19 @@ checkForResourcesError:
     MsgBox "CheckForResources error", vbCritical, "Error"
     End   'an error kills the program
 End Function
-Private Function WindowsSystemDirectory() As String
-
-Dim cnt As Long
-Dim s As String
-Dim dl As Long
-
-cnt = 254
-s = String$(254, 0)
-dl = GetSystemDirectory(s, cnt)
-WindowsSystemDirectory = LooseSpace(Left$(s, cnt))
-
+Function Get_Latest_File(ByVal sFile1 As String, ByVal sFile2 As String) As String
+Dim DateFile1 As Date
+Dim DateFile2 As Date
+DateFile1 = FileDateTime(sFile1)
+DateFile2 = FileDateTime(sFile2)
+If DateDiff("s", DateFile1, DateFile2) = 0 Then
+    Get_Latest_File = sFile1
+ElseIf DateDiff("s", DateFile1, DateFile2) < 0 Then
+    Get_Latest_File = sFile1
+Else
+    Get_Latest_File = sFile2
+End If
 End Function
-
 Function WhereIsDLL(ByVal T As String) As String
 'Places where programs look for DLLs
 '   1 directory containing the EXE
@@ -1137,7 +1164,7 @@ i = UBound(A)
 If i = 0 Then
     s = App.Path & ";" & CurDir & ";"
     
-    d = WindowsSystemDirectory
+    d = WinSysDir
     s = s & d & ";"
     
     If Right$(d, 2) = "32" Then   'I'm guessing at the name of the 16 bit windows directory (assuming it exists)
