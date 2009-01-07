@@ -283,6 +283,11 @@ Public Declare Function GetSystemDirectory Lib "kernel32.dll" Alias "GetSystemDi
 'TestApp, Version 2.0
 Public PUB_KEY As String
 
+' Trial information string
+Public strMsg As String
+Public remainingDays As Integer
+Public totalDays As Integer
+
 ' Verifies the checksum of the typelib containing the specified object.
 ' Returns the checksum.
 '

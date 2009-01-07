@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmMain 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "ALTestApp - ActiveLock3 Test Application"
@@ -13,12 +13,30 @@ Begin VB.Form frmMain
    ScaleHeight     =   10800
    ScaleWidth      =   9510
    StartUpPosition =   2  'CenterScreen
+   Begin MSComctlLib.StatusBar StatusBar1 
+      Align           =   2  'Align Bottom
+      Height          =   285
+      Left            =   0
+      TabIndex        =   50
+      Top             =   10515
+      Width           =   9510
+      _ExtentX        =   16775
+      _ExtentY        =   503
+      _Version        =   393216
+      BeginProperty Panels {8E3867A5-8586-11D1-B16A-00C0F0283628} 
+         NumPanels       =   1
+         BeginProperty Panel1 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
+            AutoSize        =   1
+            Object.Width           =   16722
+         EndProperty
+      EndProperty
+   End
    Begin VB.Frame fraRegStatus 
       Caption         =   "Status"
       ForeColor       =   &H00FF0000&
       Height          =   2790
       Left            =   0
-      TabIndex        =   25
+      TabIndex        =   24
       Top             =   45
       Width           =   9495
       Begin VB.TextBox txtMaxCount 
@@ -26,7 +44,7 @@ Begin VB.Form frmMain
          Height          =   285
          Left            =   5355
          Locked          =   -1  'True
-         TabIndex        =   38
+         TabIndex        =   37
          Top             =   2340
          Width           =   540
       End
@@ -35,7 +53,7 @@ Begin VB.Form frmMain
          Height          =   285
          Left            =   1560
          Locked          =   -1  'True
-         TabIndex        =   37
+         TabIndex        =   36
          Top             =   2340
          Width           =   1890
       End
@@ -44,7 +62,7 @@ Begin VB.Form frmMain
          Height          =   285
          Left            =   4140
          Locked          =   -1  'True
-         TabIndex        =   36
+         TabIndex        =   35
          Top             =   2040
          Width           =   1755
       End
@@ -52,7 +70,7 @@ Begin VB.Form frmMain
          Caption         =   "&Reset Trial"
          Height          =   315
          Left            =   8280
-         TabIndex        =   35
+         TabIndex        =   34
          ToolTipText     =   "Reset the Free Trial"
          Top             =   1320
          Width           =   1095
@@ -61,7 +79,7 @@ Begin VB.Form frmMain
          Caption         =   "&Kill Trial"
          Height          =   315
          Left            =   8280
-         TabIndex        =   34
+         TabIndex        =   33
          ToolTipText     =   "End the Free Trial"
          Top             =   1740
          Width           =   1095
@@ -77,7 +95,7 @@ Begin VB.Form frmMain
          Picture         =   "frmMain.frx":0CCA
          ScaleHeight     =   825
          ScaleWidth      =   825
-         TabIndex        =   33
+         TabIndex        =   32
          Top             =   210
          Width           =   825
       End
@@ -86,7 +104,7 @@ Begin VB.Form frmMain
          Height          =   285
          Left            =   1560
          Locked          =   -1  'True
-         TabIndex        =   32
+         TabIndex        =   31
          Top             =   1740
          Width           =   4335
       End
@@ -95,7 +113,7 @@ Begin VB.Form frmMain
          Height          =   285
          Left            =   1560
          Locked          =   -1  'True
-         TabIndex        =   31
+         TabIndex        =   30
          Top             =   2040
          Width           =   1215
       End
@@ -104,7 +122,7 @@ Begin VB.Form frmMain
          Height          =   285
          Left            =   1560
          Locked          =   -1  'True
-         TabIndex        =   30
+         TabIndex        =   29
          Text            =   "1.0"
          Top             =   540
          Width           =   4335
@@ -114,7 +132,7 @@ Begin VB.Form frmMain
          Height          =   285
          Left            =   1560
          Locked          =   -1  'True
-         TabIndex        =   29
+         TabIndex        =   28
          Text            =   "TestApp"
          Top             =   240
          Width           =   4335
@@ -124,7 +142,7 @@ Begin VB.Form frmMain
          Height          =   285
          Left            =   1560
          Locked          =   -1  'True
-         TabIndex        =   28
+         TabIndex        =   27
          Top             =   1440
          Width           =   4335
       End
@@ -133,7 +151,7 @@ Begin VB.Form frmMain
          Height          =   285
          Left            =   1560
          Locked          =   -1  'True
-         TabIndex        =   27
+         TabIndex        =   26
          Top             =   1140
          Width           =   4335
       End
@@ -142,7 +160,7 @@ Begin VB.Form frmMain
          Height          =   285
          Left            =   1560
          Locked          =   -1  'True
-         TabIndex        =   26
+         TabIndex        =   25
          Top             =   840
          Width           =   4335
       End
@@ -150,7 +168,7 @@ Begin VB.Form frmMain
          Caption         =   "No. of Concurrent Users:"
          Height          =   255
          Left            =   3555
-         TabIndex        =   49
+         TabIndex        =   48
          Top             =   2385
          Width           =   1785
       End
@@ -158,7 +176,7 @@ Begin VB.Form frmMain
          Caption         =   "License Class:"
          Height          =   255
          Left            =   135
-         TabIndex        =   48
+         TabIndex        =   47
          Top             =   2340
          Width           =   1335
       End
@@ -167,7 +185,7 @@ Begin VB.Form frmMain
          Caption         =   "License Type:"
          Height          =   255
          Left            =   2940
-         TabIndex        =   47
+         TabIndex        =   46
          Top             =   2070
          Width           =   1155
       End
@@ -177,7 +195,7 @@ Begin VB.Form frmMain
          ForeColor       =   &H00FF0000&
          Height          =   165
          Left            =   8250
-         TabIndex        =   46
+         TabIndex        =   45
          Top             =   1050
          Width           =   1065
       End
@@ -185,7 +203,7 @@ Begin VB.Form frmMain
          Caption         =   "Registered Level:"
          Height          =   255
          Left            =   120
-         TabIndex        =   45
+         TabIndex        =   44
          Top             =   1770
          Width           =   1335
       End
@@ -193,7 +211,7 @@ Begin VB.Form frmMain
          Caption         =   "DLL Checksum:"
          Height          =   255
          Left            =   120
-         TabIndex        =   44
+         TabIndex        =   43
          Top             =   2070
          Width           =   1335
       End
@@ -201,7 +219,7 @@ Begin VB.Form frmMain
          Caption         =   "App Version:"
          Height          =   255
          Left            =   120
-         TabIndex        =   43
+         TabIndex        =   42
          Top             =   570
          Width           =   975
       End
@@ -209,7 +227,7 @@ Begin VB.Form frmMain
          Caption         =   "App Name:"
          Height          =   255
          Left            =   120
-         TabIndex        =   42
+         TabIndex        =   41
          Top             =   270
          Width           =   975
       End
@@ -217,7 +235,7 @@ Begin VB.Form frmMain
          Caption         =   "Expiry Date:"
          Height          =   255
          Left            =   120
-         TabIndex        =   41
+         TabIndex        =   40
          Top             =   1470
          Width           =   975
       End
@@ -225,7 +243,7 @@ Begin VB.Form frmMain
          Caption         =   "Days Used:"
          Height          =   255
          Left            =   120
-         TabIndex        =   40
+         TabIndex        =   39
          Top             =   1170
          Width           =   975
       End
@@ -233,7 +251,7 @@ Begin VB.Form frmMain
          Caption         =   "License Status:"
          Height          =   255
          Left            =   120
-         TabIndex        =   39
+         TabIndex        =   38
          Top             =   870
          Width           =   1380
       End
@@ -243,7 +261,7 @@ Begin VB.Form frmMain
       ForeColor       =   &H00FF0000&
       Height          =   4380
       Left            =   0
-      TabIndex        =   13
+      TabIndex        =   12
       Top             =   2925
       Width           =   9495
       Begin VB.CommandButton cmdPaste 
@@ -251,7 +269,7 @@ Begin VB.Form frmMain
          Left            =   8220
          Picture         =   "frmMain.frx":3C52
          Style           =   1  'Graphical
-         TabIndex        =   21
+         TabIndex        =   20
          Top             =   2070
          Width           =   345
       End
@@ -261,7 +279,7 @@ Begin VB.Form frmMain
          MaskColor       =   &H8000000F&
          Picture         =   "frmMain.frx":3F94
          Style           =   1  'Graphical
-         TabIndex        =   20
+         TabIndex        =   19
          Top             =   900
          Width           =   345
       End
@@ -269,7 +287,7 @@ Begin VB.Form frmMain
          Caption         =   "&Kill License"
          Height          =   315
          Left            =   8220
-         TabIndex        =   19
+         TabIndex        =   18
          ToolTipText     =   "Kill the License"
          Top             =   2880
          Width           =   1095
@@ -277,7 +295,7 @@ Begin VB.Form frmMain
       Begin VB.TextBox txtUser 
          Height          =   285
          Left            =   1440
-         TabIndex        =   18
+         TabIndex        =   17
          Text            =   "Evaluation User"
          Top             =   300
          Width           =   6675
@@ -286,7 +304,7 @@ Begin VB.Form frmMain
          Caption         =   "&Generate"
          Height          =   315
          Left            =   8220
-         TabIndex        =   17
+         TabIndex        =   16
          ToolTipText     =   "Generate Installation Code"
          Top             =   540
          Width           =   1095
@@ -305,7 +323,7 @@ Begin VB.Form frmMain
          Height          =   1080
          Left            =   1440
          MultiLine       =   -1  'True
-         TabIndex        =   16
+         TabIndex        =   15
          Top             =   600
          Width           =   6675
       End
@@ -314,7 +332,7 @@ Begin VB.Form frmMain
          Enabled         =   0   'False
          Height          =   315
          Left            =   8220
-         TabIndex        =   15
+         TabIndex        =   14
          ToolTipText     =   "Register the License"
          Top             =   2475
          Width           =   1095
@@ -334,7 +352,7 @@ Begin VB.Form frmMain
          Left            =   1440
          MultiLine       =   -1  'True
          ScrollBars      =   3  'Both
-         TabIndex        =   14
+         TabIndex        =   13
          Top             =   1710
          Width           =   6675
       End
@@ -342,7 +360,7 @@ Begin VB.Form frmMain
          Caption         =   "User Name:"
          Height          =   255
          Left            =   120
-         TabIndex        =   24
+         TabIndex        =   23
          Top             =   300
          Width           =   1335
       End
@@ -350,7 +368,7 @@ Begin VB.Form frmMain
          Caption         =   "Installation Code:"
          Height          =   255
          Left            =   120
-         TabIndex        =   23
+         TabIndex        =   22
          Top             =   600
          Width           =   1335
       End
@@ -358,7 +376,7 @@ Begin VB.Form frmMain
          Caption         =   "Liberation Key:"
          Height          =   255
          Left            =   135
-         TabIndex        =   22
+         TabIndex        =   21
          Top             =   1710
          Width           =   1335
       End
@@ -367,7 +385,7 @@ Begin VB.Form frmMain
       BorderStyle     =   0  'None
       Height          =   1650
       Left            =   585
-      TabIndex        =   1
+      TabIndex        =   0
       Top             =   8820
       Width           =   8265
       Begin VB.OptionButton optForm 
@@ -375,7 +393,7 @@ Begin VB.Form frmMain
          Height          =   225
          Index           =   1
          Left            =   4380
-         TabIndex        =   7
+         TabIndex        =   6
          Top             =   1245
          Width           =   1395
       End
@@ -384,7 +402,7 @@ Begin VB.Form frmMain
          Height          =   225
          Index           =   0
          Left            =   4380
-         TabIndex        =   6
+         TabIndex        =   5
          Top             =   990
          Value           =   -1  'True
          Width           =   1395
@@ -395,7 +413,7 @@ Begin VB.Form frmMain
          Left            =   6570
          List            =   "frmMain.frx":42B9
          Style           =   2  'Dropdown List
-         TabIndex        =   5
+         TabIndex        =   4
          Top             =   45
          Width           =   1635
       End
@@ -403,7 +421,7 @@ Begin VB.Form frmMain
          Caption         =   "Checkbox enabled for Level 3 only"
          Height          =   315
          Left            =   0
-         TabIndex        =   4
+         TabIndex        =   3
          Top             =   390
          Width           =   2835
       End
@@ -411,7 +429,7 @@ Begin VB.Form frmMain
          Caption         =   "Checkbox enabled for ALL Levels"
          Height          =   495
          Left            =   0
-         TabIndex        =   3
+         TabIndex        =   2
          Top             =   690
          Width           =   2745
       End
@@ -419,7 +437,7 @@ Begin VB.Form frmMain
          Caption         =   "Checkbox enabled for ALL Levels"
          Height          =   225
          Left            =   0
-         TabIndex        =   2
+         TabIndex        =   1
          Top             =   90
          Value           =   1  'Checked
          Width           =   2760
@@ -428,7 +446,7 @@ Begin VB.Form frmMain
          Caption         =   "These Option Buttons will be enabled for ALL Levels:"
          Height          =   255
          Left            =   4380
-         TabIndex        =   9
+         TabIndex        =   8
          Top             =   690
          Width           =   3765
       End
@@ -436,30 +454,10 @@ Begin VB.Form frmMain
          Caption         =   "This combobox will be enabled for Level 4 only"
          Height          =   255
          Left            =   3150
-         TabIndex        =   8
+         TabIndex        =   7
          Top             =   90
          Width           =   3420
       End
-   End
-   Begin ComctlLib.StatusBar sbStatus 
-      Align           =   2  'Align Bottom
-      Height          =   300
-      Left            =   0
-      TabIndex        =   0
-      Top             =   10500
-      Width           =   9510
-      _ExtentX        =   16775
-      _ExtentY        =   529
-      Style           =   1
-      SimpleText      =   "Ready"
-      _Version        =   327682
-      BeginProperty Panels {0713E89E-850A-101B-AFC0-4210102A8DA7} 
-         NumPanels       =   1
-         BeginProperty Panel1 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
-            Key             =   ""
-            Object.Tag             =   ""
-         EndProperty
-      EndProperty
    End
    Begin VB.Label Label12 
       Alignment       =   2  'Center
@@ -468,7 +466,7 @@ Begin VB.Form frmMain
       ForeColor       =   &H00FF0000&
       Height          =   465
       Left            =   45
-      TabIndex        =   50
+      TabIndex        =   49
       Top             =   7380
       Width           =   9405
    End
@@ -476,7 +474,7 @@ Begin VB.Form frmMain
       Caption         =   "Application Functionalities Are Currently: "
       Height          =   375
       Left            =   945
-      TabIndex        =   12
+      TabIndex        =   11
       Top             =   7965
       Width           =   2895
    End
@@ -493,7 +491,7 @@ Begin VB.Form frmMain
       EndProperty
       Height          =   255
       Left            =   3915
-      TabIndex        =   11
+      TabIndex        =   10
       Top             =   7965
       Width           =   4515
    End
@@ -501,7 +499,7 @@ Begin VB.Form frmMain
       Caption         =   "NOTE: All application functionalities are available in Trial Mode."
       Height          =   375
       Left            =   945
-      TabIndex        =   10
+      TabIndex        =   9
       Top             =   8355
       Width           =   4545
    End
@@ -750,7 +748,7 @@ Private Sub Form_Load()
     
     ' Check the existence of necessary files to run this application
     ' This is not necessary if you're not using these controls in your app.
-    Call CheckForResources("alcrypto3.dll", "activelock3.6.dll", "comctl32.ocx")
+    Call CheckForResources("alcrypto3.dll", "activelock3.6.dll", "mscomctl.ocx")
 
     ' Check if the Activelock DLL is registered. If not no need to continue.
     ' Since Actvelock DLL is a COM DLL, it must be registered via the
@@ -951,7 +949,6 @@ Private Sub Form_Load()
     ' If it generates an error, that means there NO trial, NO license
     ' If no error and returns a string, there's a trial but No license. Parse the string to display a trial message.
     ' If no error and no string returned, you've got a valid license.
-    Dim strMsg As String
     MyActiveLock.Acquire strMsg
     
     If strMsg <> "" Then 'There's a trial
@@ -967,12 +964,24 @@ Private Sub Form_Load()
         ' trial status with one of these two properties (whichever is applicable).
 
         FunctionalitiesEnabled = True
+        
+        ' ALTERNATIVE 1
+        ' Show a splash form for 3 seconds
+        ' The form displays the trial days/run total allowed and remaining
         ' Splash form to display the trial period/run information.
         frmSplash.lblInfo.Caption = vbCrLf & strMsg
         frmSplash.Show
         frmSplash.Refresh
         Sleep 3000 'wait about 3 seconds
         Unload frmSplash
+        
+        ' ALTERNATIVE 2
+        ' Show a splash form that shows two choices, register or try
+        ' User must chosse one option for the form to close
+        remainingDays = MyActiveLock.RemainingTrialDays
+        totalDays = MyActiveLock.TrialLength
+        frmSplash1.Show vbModal
+        
         cmdKillTrial.Visible = True
         cmdResetTrial.Visible = True
         txtLicenseType.Text = "Free Trial"
@@ -1355,7 +1364,7 @@ Private Sub txtVersion_Change()
 End Sub
 
 Public Sub UpdateStatus(Txt As String)
-    sbStatus.SimpleText = Txt
+    StatusBar1.SimpleText = Txt
 End Sub
 
 Private Function CheckIfDLLIsRegistered() As Boolean
