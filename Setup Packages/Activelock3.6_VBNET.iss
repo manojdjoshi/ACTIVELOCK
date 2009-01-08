@@ -75,6 +75,9 @@ Source: C:\ActiveLockCommunity\ALTestApp3.5 NET\modMain.vb; DestDir: "{app}\ALTe
 Source: C:\ActiveLockCommunity\ALTestApp3.5 NET\modRegistryAPIs.vb; DestDir: "{app}\ALTestApp3.5 NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\ALTestApp3.5 NET\splash.resx; DestDir: "{app}\ALTestApp3.5 NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\ALTestApp3.5 NET\splash.vb; DestDir: "{app}\ALTestApp3.5 NET"; Flags: ignoreversion; Components: examples
+Source: C:\ActiveLockCommunity\ALTestApp3.5 NET\splash1.designer.vb; DestDir: "{app}\ALTestApp3.5 NET"; Flags: ignoreversion; Components: examples
+Source: C:\ActiveLockCommunity\ALTestApp3.5 NET\splash1.resx; DestDir: "{app}\ALTestApp3.5 NET"; Flags: ignoreversion; Components: examples
+Source: C:\ActiveLockCommunity\ALTestApp3.5 NET\splash1.vb; DestDir: "{app}\ALTestApp3.5 NET"; Flags: ignoreversion; Components: examples
 
 ;C:\ActiveLockCommunity\Alugen3.5.NET folder
 Source: C:\ActiveLockCommunity\Alugen3.5.NET\Activelock3_5NET.dll; DestDir: "{app}\Alugen3.5.NET"; Flags: ignoreversion; Components: examples
