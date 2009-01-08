@@ -1294,9 +1294,15 @@ Friend Class frmMain
             ' since multiple .ALL files might exist in the same directory
             ' If you don't want to use the software name and version number explicitly, use an .ALL
             ' filename that is specific to this application
-            strAutoRegisterKeyPath = AppfilePath & "\" & .SoftwareName & .SoftwareVersion & ".all"
+            If Directory.Exists(AppfilePath & "\" & .SoftwareName & .SoftwareVersion) = False Then
+                MkDir(AppfilePath & "\" & .SoftwareName & .SoftwareVersion)
+            End If
+            strAutoRegisterKeyPath = AppfilePath & "\" & .SoftwareName & .SoftwareVersion & "\" & .SoftwareName & .SoftwareVersion & ".all"
             ' AppPath could be an option for XP, but not so for Vista
-            strAutoRegisterKeyPath = AppPath() & "\" & .SoftwareName & .SoftwareVersion & ".all"
+            'If Directory.Exists(AppPath & "\" & .SoftwareName & .SoftwareVersion ) = False Then
+            '    MkDir(AppPath & "\" & .SoftwareName & .SoftwareVersion)
+            'End If
+            'strAutoRegisterKeyPath = AppPath() & "\" & .SoftwareName & .SoftwareVersion & "\" & .SoftwareName & .SoftwareVersion & ".all"
             .AutoRegisterKeyPath = strAutoRegisterKeyPath
             If File.Exists(strAutoRegisterKeyPath) Then boolAutoRegisterKeyPath = True
 
@@ -1339,9 +1345,15 @@ Friend Class frmMain
             ' since multiple LIC files might exist in the same directory
             ' If you don't want to use the software name and version number explicitly, use an LIC
             ' filename that is specific to this application
-            strKeyStorePath = AppfilePath & "\" & .SoftwareName & .SoftwareVersion & ".lic"
+            If Directory.Exists(AppfilePath & "\" & .SoftwareName & .SoftwareVersion) = False Then
+                MkDir(AppfilePath & "\" & .SoftwareName & .SoftwareVersion)
+            End If
+            strKeyStorePath = AppfilePath & "\" & .SoftwareName & .SoftwareVersion & "\" & .SoftwareName & .SoftwareVersion & ".lic"
             ' AppPath could be an option for XP, but not so for Vista
-            'strKeyStorePath = AppPath() & "\" & .SoftwareName & .SoftwareVersion & ".lic"
+            'If Directory.Exists(AppPath & "\" & .SoftwareName & .SoftwareVersion ) = False Then
+            '    MkDir(AppPath & "\" & .SoftwareName & .SoftwareVersion)
+            'End If
+            'strKeyStorePath = AppPath() & "\" & .SoftwareName & .SoftwareVersion & "\" & .SoftwareName & .SoftwareVersion & ".lic"
             .KeyStorePath = strKeyStorePath
 
             ' Obtain the EventNotifier so that we can receive notifications from AL.
@@ -1381,7 +1393,6 @@ Friend Class frmMain
         ' If it generates an error, that means there NO trial, NO license
         ' If no error and returns a string, there's a trial but No license. Parse the string to display a trial message.
         ' If no error and no string returned, you've got a valid license.
-        Dim strMsg As String = Nothing
         MyActiveLock.Acquire(strMsg)
         If strMsg <> "" Then 'There's a trial
             ' Parse the returned string to display it on a form
@@ -1396,6 +1407,10 @@ Friend Class frmMain
             ' trial status with one of these two properties (whichever is applicable).
 
             FunctionalitiesEnabled = True
+
+            ' ALTERNATIVE 1
+            ' Show a splash form for 3 seconds
+            ' The form displays the trial days/run total allowed and remaining
             ' Splash form to display the trial period/run information.
             Dim frmsplash As New frmSplash
             frmsplash.lblInfo.Text = vbCrLf & strMsg
@@ -1403,6 +1418,16 @@ Friend Class frmMain
             frmsplash.Refresh()
             Sleep(3000) 'wait about 3 seconds
             frmsplash.Close()
+
+            ' ALTERNATIVE 2
+            ' Show a splash form that shows two choices, register or try
+            ' User must chosse one option for the form to close
+            remainingDays = MyActiveLock.RemainingTrialDays
+            totalDays = MyActiveLock.TrialLength
+            Dim frmsplash1 As New frmSplash1
+            frmsplash1.Visible = False
+            frmsplash1.ShowDialog()
+
             cmdKillTrial.Visible = True
             cmdResetTrial.Visible = True
             txtLicenseType.Text = "Free Trial"

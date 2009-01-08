@@ -13,8 +13,8 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyTitle("ALTestApp3.6")> 
 <Assembly: AssemblyDescription("Activelock Sample Application for VB2008")> 
 <Assembly: AssemblyCompany("The ActiveLock Software Group")>
-<Assembly: AssemblyProduct("Activelock")> 
-<Assembly: AssemblyCopyright("")>
+<Assembly: AssemblyProduct("ALTestApp3.6")> 
+<Assembly: AssemblyCopyright("The ActiveLock Software Group")> 
 <Assembly: AssemblyTrademark("")>
 <Assembly: AssemblyCulture("")>
 
