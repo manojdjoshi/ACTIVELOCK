@@ -871,9 +871,15 @@ Private Sub Form_Load()
         ' since multiple .ALL files might exist in the same directory
         ' If you don't want to use the software name and version number explicitly, use an .ALL
         ' filename that is specific to this application
-        strAutoRegisterKeyPath = AppfilePath & "\" & .SoftwareName & .SoftwareVersion & ".all"
+        If FolderExists(AppfilePath & "\" & .SoftwareName & .SoftwareVersion) = False Then
+            MkDir (AppfilePath & "\" & .SoftwareName & .SoftwareVersion)
+        End If
+        strAutoRegisterKeyPath = AppfilePath & "\" & .SoftwareName & .SoftwareVersion & "\" & .SoftwareName & .SoftwareVersion & ".all"
         ' App.Path could be an option for XP, but not so for Vista
-        strAutoRegisterKeyPath = App.Path & "\" & .SoftwareName & .SoftwareVersion & ".all"
+        'If FolderExists(App.Path & "\" & .SoftwareName & .SoftwareVersion) = False Then
+        '    MkDir (App.Path & "\" & .SoftwareName & .SoftwareVersion)
+        'End If
+        'strAutoRegisterKeyPath = App.Path & "\" & .SoftwareName & .SoftwareVersion & "\" & .SoftwareName & .SoftwareVersion & ".all"
         .AutoRegisterKeyPath = strAutoRegisterKeyPath
         If FileExist(strAutoRegisterKeyPath) Then boolAutoRegisterKeyPath = True
         
@@ -915,9 +921,15 @@ Private Sub Form_Load()
         ' since multiple LIC files might exist in the same directory
         ' If you don't want to use the software name and version number explicitly, use an LIC
         ' filename that is specific to this application
-        strKeyStorePath = AppfilePath & "\" & .SoftwareName & .SoftwareVersion & ".lic"
+        If FolderExists(AppfilePath & "\" & .SoftwareName & .SoftwareVersion) = False Then
+            MkDir (AppfilePath & "\" & .SoftwareName & .SoftwareVersion)
+        End If
+        strKeyStorePath = AppfilePath & "\" & .SoftwareName & .SoftwareVersion & "\" & .SoftwareName & .SoftwareVersion & ".lic"
         ' App.Path could be an option for XP, but not so for Vista
-        'strKeyStorePath = App.Path & "\" & .SoftwareName & .SoftwareVersion & ".lic"
+        'If FolderExists(App.Path & "\" & .SoftwareName & .SoftwareVersion) = False Then
+        '    MkDir (App.Path & "\" & .SoftwareName & .SoftwareVersion)
+        'End If
+        'strKeyStorePath = App.Path & "\" & .SoftwareName & .SoftwareVersion & "\" & .SoftwareName & .SoftwareVersion & ".lic"
         .KeyStorePath = strKeyStorePath
         
         ' Obtain the EventNotifier so that we can receive notifications from AL.
@@ -1063,6 +1075,16 @@ DLLnotRegistered:
     End
 
 End Sub
+Public Function FolderExists(ByVal sFolder As String) As Boolean
+Dim sResult As String
+
+On Error Resume Next
+sResult = Dir(sFolder, vbDirectory)
+
+On Error GoTo 0
+FolderExists = sResult <> ""
+End Function
+
 Function CheckForResources(ParamArray MyArray()) As Boolean
 'MyArray is a list of things to check
 'These can be DLLs or OCXs
