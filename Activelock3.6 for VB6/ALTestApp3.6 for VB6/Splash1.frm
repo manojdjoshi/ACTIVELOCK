@@ -160,7 +160,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
 Option Explicit
 
 Private Sub cmdExit_Click()
@@ -181,7 +180,7 @@ lblVersion.Caption = "Version " & App.Major & "." & App.Minor & "." & App.Revisi
 lblProductName.Caption = App.Title
 If strMsg <> "" Then
     ProgressBar1.Value = (1 - remainingDays / totalDays) * 100
-    If remainingDays > 0 Then lblInfo.Caption = CStr(totalDays - remainingDays) & " days used out of " & CStr(totalDays) & " trial days"
+    If remainingDays > 0 Then lblInfo.Caption = CStr(totalDays - remainingDays) & " day(s) used out of " & CStr(totalDays) & " trial days"
 End If
  
 End Sub
