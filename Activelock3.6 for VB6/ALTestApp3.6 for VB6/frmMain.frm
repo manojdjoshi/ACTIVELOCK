@@ -604,8 +604,6 @@ Const LICENSE_ROOT As String = "ALVB6Sample"
 ' provided by the Activelock user Pinheiro
 Private Declare Function GetLastError Lib "kernel32" () As Long
 Private Declare Function FormatMessage Lib "kernel32" Alias "FormatMessageA" (ByVal dwFlags As Long, lpSource As Any, ByVal dwMessageId As Long, ByVal dwLanguageId As Long, ByVal lpBuffer As String, ByVal nSize As Long, Arguments As Long) As Long
-Private Declare Function LoadLibrary Lib "kernel32" Alias "LoadLibraryA" (ByVal lpLibFileName As String) As Long
-Private Declare Function FreeLibrary Lib "kernel32" (ByVal hLibModule As Long) As Long
 Private Const FORMAT_MESSAGE_FROM_SYSTEM = &H1000
 Private Const MAX_MESSAGE_LENGTH = 512
 
@@ -646,24 +644,6 @@ WindowsDirectory = Left(WinPath, InStr(WinPath, Chr(0)) - 1)
 
 End Function
 
-Private Function IsDLLAvailable(ByVal DllFilename As String) As Boolean
-' Code provided by Activelock user Pinheiro
-Dim hModule As Long
-On Error GoTo cannotRegister
-hModule = LoadLibrary(DllFilename) 'attempt to load DLL
-If hModule > 32 Then
-    FreeLibrary hModule 'decrement the DLL usage counter
-    IsDLLAvailable = True 'Return true
-Else
-    Shell "regsvr32.exe /s " & DllFilename
-End If
-Exit Function
-
-cannotRegister:
-    'Something is still wrong
-    IsDLLAvailable = False 'Return False
-
-End Function
 Private Sub cmdCopy_Click()
 Clipboard.Clear
 Clipboard.SetText txtReqCodeGen.Text
@@ -1391,18 +1371,20 @@ End Sub
 
 Private Function CheckIfDLLIsRegistered() As Boolean
 Dim strDllPath As String
-Dim Result As Boolean
+Dim Result As Double
+On Error GoTo cannotRegister
     
 CheckIfDLLIsRegistered = True
 
 strDllPath = GetTypeLibPathFromObject()
-Result = IsDLLAvailable(strDllPath)
-If Result Then
+Result = Shell("regsvr32.exe /s " & strDllPath)
+
+If Result > 0 Then
     ' MsgBox "Activelock3.dll is Registered !"
     ' Just quietly proceed
 Else
     MsgBox "Activelock" & CStr(App.Major) & "." & CStr(App.Minor) & ".dll is Not Registered!"
     CheckIfDLLIsRegistered = False
 End If
-
+cannotRegister:
 End Function
