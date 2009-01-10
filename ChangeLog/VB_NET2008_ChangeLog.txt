@@ -19,6 +19,10 @@ VB2008 v3.6 Updates:
 - FIX: Both the Trial and Licensing features work well under both XP and Vista now. Also, checked the program under limited access user account under Vista and everything seems to be Ok.
 - Added better explanation for the "Activelock DLL has been corrupted" message. Most users did not know what to do after seeing this message. Now, the message box gives specific instructions on why this happens and how it can be fixed.
 - Very detailed explanation has been added to the Form_Load event in the test application to fully explain how and when to use each DLL method and property. This should eliminate a lot of forum questions from the new comers.
+- NEW: The LIC and ALL files are now under a path which includes a folder with the software and version. The path is under the public documents folder all users so that it's accessible to all.
+- NEW: The Form_Load event of the sample application includes a new form for Try/Register functionality of the sample. It shows the number of trial days used while in trial mode.
+- The sample application will be run with the asInvoker mode so that admin account won't be needed under Vista. But, the Alugen uses requireAdministrator.
+
 
 
 VB.NET 2005 v3.5.5 Updates:
