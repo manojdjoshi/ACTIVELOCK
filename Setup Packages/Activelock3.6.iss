@@ -58,10 +58,10 @@ Source: C:\ActiveLockCommunity\Setup Packages\Activelock3.6.iss; DestDir: "{app}
 Source: C:\ActiveLockCommunity\Redistribution\activelock3.6.dll; DestDir: "{app}\Redistribution"; Flags: ignoreversion
 Source: C:\ActiveLockCommunity\Redistribution\alcrypto3.dll; DestDir: "{app}\Redistribution"; Flags: ignoreversion
 Source: C:\ActiveLockCommunity\Redistribution\msvbvm60.dll; DestDir: "{app}\Redistribution"; Flags: ignoreversion
-Source: C:\ActiveLockCommunity\Redistribution\oleaut32.dll; DestDir: "{app}\Redistribution"; Flags: ignoreversion
+Source: C:\ActiveLockCommunity\Redistribution\oleaut32.dll; DestDir: "{app}\Redistribution"; Flags: ignoreversion; OnlyBelowVersion: 0,6
 Source: C:\ActiveLockCommunity\Redistribution\olepro32.dll; DestDir: "{app}\Redistribution"; Flags: ignoreversion
 Source: C:\ActiveLockCommunity\Redistribution\asycfilt.dll; DestDir: "{app}\Redistribution"; Flags: ignoreversion
-Source: C:\ActiveLockCommunity\Redistribution\stdole2.tlb; DestDir: "{app}\Redistribution"; Flags: ignoreversion
+Source: C:\ActiveLockCommunity\Redistribution\stdole2.tlb; DestDir: "{app}\Redistribution"; Flags: ignoreversion; OnlyBelowVersion: 0,6
 Source: C:\ActiveLockCommunity\Redistribution\comcat.dll; DestDir: "{app}\Redistribution"; Flags: ignoreversion
 Source: C:\ActiveLockCommunity\Redistribution\Mscomctl.ocx; DestDir: "{app}\Redistribution"; Flags: ignoreversion
 Source: C:\ActiveLockCommunity\Redistribution\comdlg32.ocx; DestDir: "{app}\Redistribution"; Flags: ignoreversion
@@ -205,10 +205,10 @@ Source: C:\ActiveLockCommunity\help\ActiveLock3.chm; DestDir: "{app}\help"; Flag
 Source: C:\ActiveLockCommunity\help\VBTutorial3.chm; DestDir: "{app}\help"; Flags: ignoreversion; Components: help
 
 ;examples\VB folder
-Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\ALTestApp3_6.exe; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
-Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\ALTestApp3_6.exe.manifest; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
-Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\ALTestApp.vbp; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
-Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\ALTestApp.vbw; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
+Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\ALVB6Sample3_6.exe; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
+Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\ALVB6Sample3_6.exe.manifest; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
+Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\ALVB6Sample.vbp; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
+Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\ALVB6Sample.vbw; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\frmMain.frm; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\frmMain.frx; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\modMain.bas; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
