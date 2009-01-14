@@ -1005,7 +1005,7 @@ Friend Class frmMain
         Me.Label1.Location = New System.Drawing.Point(32, 78)
         Me.Label1.Name = "Label1"
         Me.Label1.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label1.Size = New System.Drawing.Size(54, 18)
+        Me.Label1.Size = New System.Drawing.Size(55, 18)
         Me.Label1.TabIndex = 68
         Me.Label1.Text = "Strength:"
         '
@@ -1020,7 +1020,7 @@ Friend Class frmMain
         'optStrength0
         '
         Me.optStrength0.Checked = True
-        Me.optStrength0.Location = New System.Drawing.Point(90, 76)
+        Me.optStrength0.Location = New System.Drawing.Point(88, 76)
         Me.optStrength0.Name = "optStrength0"
         Me.optStrength0.Size = New System.Drawing.Size(116, 20)
         Me.optStrength0.TabIndex = 66
@@ -1037,9 +1037,9 @@ Friend Class frmMain
         Me.grpCodes.Controls.Add(Me.lblVCode)
         Me.grpCodes.Controls.Add(Me.cmdCopyVCode)
         Me.grpCodes.Controls.Add(Me.cmdCopyGCode)
-        Me.grpCodes.Location = New System.Drawing.Point(4, 96)
+        Me.grpCodes.Location = New System.Drawing.Point(4, 102)
         Me.grpCodes.Name = "grpCodes"
-        Me.grpCodes.Size = New System.Drawing.Size(556, 129)
+        Me.grpCodes.Size = New System.Drawing.Size(556, 123)
         Me.grpCodes.TabIndex = 6
         Me.grpCodes.TabStop = False
         Me.grpCodes.Text = " Codes "
@@ -1121,9 +1121,9 @@ Friend Class frmMain
         'GroupBox1
         '
         Me.GroupBox1.Font = New System.Drawing.Font("Arial", 7.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox1.Location = New System.Drawing.Point(204, 63)
+        Me.GroupBox1.Location = New System.Drawing.Point(204, 65)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(332, 37)
+        Me.GroupBox1.Size = New System.Drawing.Size(328, 36)
         Me.GroupBox1.TabIndex = 74
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = ".NET CLR RSA"
@@ -1419,7 +1419,7 @@ Friend Class frmMain
         Me.txtDays.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.txtDays.Size = New System.Drawing.Size(117, 20)
         Me.txtDays.TabIndex = 9
-        Me.txtDays.Text = "30"
+        Me.txtDays.Text = "365"
         Me.txtDays.TextAlign = System.Windows.Forms.HorizontalAlignment.Right
         '
         'Label11
@@ -2498,16 +2498,15 @@ SaveFormSettings_Error:
         End If
         If cboLicType.Text = "Time Locked" Then
             lblExpiry.Text = "&Expires on Date:"
-            'walter'wrongdate'txtDays.Text = Now.UtcNow.AddDays(30).ToString("yyyy/MM/dd")
-            txtDays.Text = Date.UtcNow.AddDays(30).ToString("yyyy/MM/dd")
-            lblDays.Text = "YYYY/MM/DD"
+            txtDays.Text = Date.UtcNow.AddDays(365).ToString("yyyy/MM/dd")
+            lblDays.Text = "yyyy/MM/dd"
             txtDays.Visible = False
             dtpExpireDate.Visible = True
             'walter'wrongdate'dtpExpireDate.Value = Now.UtcNow.AddDays(30)
             dtpExpireDate.Value = Date.UtcNow.AddDays(30)
         Else
             lblExpiry.Text = "&Expires after:"
-            txtDays.Text = "30"
+            txtDays.Text = "365"
             lblDays.Text = "Day(s)"
             txtDays.Visible = True
             dtpExpireDate.Visible = False

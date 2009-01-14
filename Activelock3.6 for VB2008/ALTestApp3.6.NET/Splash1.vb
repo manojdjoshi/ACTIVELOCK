@@ -4,7 +4,7 @@
         lblVersion.Text = "Version " & Application.ProductVersion
         lblProductName.Text = Application.ProductName
         If strMsg <> "" Then
-            ProgressBar1.Value = CInt((1 - remainingDays / totalDays) * 100)
+            ProgressBar1.Value = CInt(Math.Abs(1 - remainingDays / totalDays) * 100)
             If remainingDays > 0 Then lblInfo.Text = CStr(totalDays - remainingDays) & " day(s) used out of " & CStr(totalDays) & " trial days"
         End If
 

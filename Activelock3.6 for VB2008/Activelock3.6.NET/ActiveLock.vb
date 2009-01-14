@@ -3,9 +3,11 @@ Option Explicit On
 Imports System.IO
 Imports ActiveLock3_6NET
 Imports System.Security.Cryptography
-Imports System.text
 Imports System.Management
 Imports System.TimeSpan
+Imports System.Text ' For StringBuilder
+Imports System.Runtime.InteropServices ' For DLL Call
+
 
 Friend Class ActiveLock
     Implements _IActiveLock
@@ -86,11 +88,12 @@ Friend Class ActiveLock
 
     ' Transients
     Private mfInit As Boolean ' flag to indicate that ActiveLock has been initialized
-    Public Declare Auto Function GetVolumeInformation Lib "kernel32" (ByVal lpRootPathName As String, _
-        ByVal lpVolumeNameBuffer As StringBuilder, ByVal nVolumeNameSize As Integer, _
-        ByRef lpVolumeSerialNumber As Integer, ByRef lpMaximumComponentLength As Integer, _
-        ByRef lpFileSystemFlags As Integer, ByVal lpFileSystemNameBuffer As StringBuilder, _
-        ByRef nFileSystemNameSize As Integer) As Boolean
+
+    Public Declare Function GetVolumeInformation Lib "kernel32" Alias "GetVolumeInformationA" _
+       (ByVal lpRootPathName As String, ByVal lpVolumeNameBuffer As StringBuilder, _
+       ByVal nVolumeNameSize As Integer, ByVal lpVolumeSerialNumber As Integer, _
+       ByVal lpMaximumComponentLength As Integer, ByVal lpFileSystemFlags As Integer, _
+       ByVal lpFileSystemNameBuffer As StringBuilder, ByVal nFileSystemNameSize As Integer) As Integer
 
     '===============================================================================
     ' Name: Property Let IActiveLock_LicenseKeyType
@@ -887,7 +890,7 @@ continueRegistration:
     Public Function CheckStreamCapability() As Boolean
         ' The following WMI call also works but it seems to be a bit slower than the GetVolumeInformation
         ' especially when it checks the A: drive
-
+        ' METHOD 1 - WMI
         'Dim mc As New ManagementClass("Win32_LogicalDisk")
         'Dim moc As ManagementObjectCollection = mc.GetInstances()
         'Dim strFileSystem As String = String.Empty
@@ -901,15 +904,22 @@ continueRegistration:
         '    End If
         '    mo.Dispose()
         'Next mo
+        'If strFileSystem = "NTFS" Then
+        '    CheckStreamCapability = True
+        'End If
 
-        Const StringBufferLength As Integer = 255
+        ' METHOD 2 - GetVolumeInformation API
         Dim lsRootPathName As String = IO.Directory.GetDirectoryRoot(Application.StartupPath)
-        Dim lsFileSystemNameBuffer As New StringBuilder(StringBufferLength)
-        GetVolumeInformation(lsRootPathName, Nothing, Nothing, Nothing, Nothing, Nothing, lsFileSystemNameBuffer, Nothing)
-        If lsFileSystemNameBuffer.ToString = "NTFS" Then
+        Const MAX_PATH As Integer = 260
+        Dim iSerial As Integer
+        Dim iLength As Integer
+        Dim iFlags As Integer
+        Dim sbVol As New StringBuilder(MAX_PATH)
+        Dim sbFil As New StringBuilder(MAX_PATH)
+        GetVolumeInformation("c:\", sbVol, MAX_PATH, iSerial, iLength, iFlags, sbFil, MAX_PATH)
+        If sbFil.ToString = "NTFS" Then
             CheckStreamCapability = True
         End If
-
 
     End Function
     '===============================================================================
@@ -1155,10 +1165,8 @@ continueRegistration:
 
         ' try to detect the user setting their system clock back
         ' Need to account for Daylight Savings Time
-        Dim strNow As String
         ' Normalize to the format of the saved date-time, before we compare
-        strNow = ActiveLockDate(Date.UtcNow)
-        If DateValue(strNow) < DateValue(ActiveLockDate(CDate(Lic.LastUsed))) And Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
+        If DateValue(ActiveLockDate(Date.UtcNow)) < DateValue(ActiveLockDate(CDate(Lic.LastUsed))) And Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
             'System.Diagnostics.Debug.WriteLine("UTC Now: " & strNow)
             'System.Diagnostics.Debug.WriteLine("LastUsed: " & CDate(Lic.LastUsed))
             Set_locale(regionalSymbol)
