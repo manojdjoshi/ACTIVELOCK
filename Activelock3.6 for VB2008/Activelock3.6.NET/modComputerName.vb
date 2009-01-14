@@ -854,6 +854,10 @@ GetHDSerialFirmwareError:
     '===============================================================================
     Public Function GetMACAddress() As String
         GetMACAddress = String.Empty
+
+        ' ******* METHOD 1 *******
+        ' This was causing problems and therefore was commented out
+
         'On Error Resume Next
         'Dim tmp As String
         'Dim pASTAT As Integer
@@ -906,12 +910,14 @@ GetHDSerialFirmwareError:
         ''GetMACAddress = Replace(tmp, " ", "")
         'GetMACAddress = tmp
 
+        ' ******* METHOD 2 *******
         Dim netInfo As New clsNetworkStats
         Dim netStruct As clsNetworkStats.IFROW_HELPER
         netStruct = netInfo.GetAdapter
         GetMACAddress = netStruct.PhysAddr.ToString().Replace("-", " ")
         If GetMACAddress <> "00 00 00 00 00 00" Then Exit Function
 
+        ' ******* METHOD 3 *******
         ' Here we are assuming that the user is NOT running .NET in a Win98/Me machine...
         Dim mc As ManagementClass
         Dim mo As ManagementObject
@@ -919,10 +925,36 @@ GetHDSerialFirmwareError:
         Dim moc As ManagementObjectCollection = mc.GetInstances()
         For Each mo In moc
             If mo.Item("IPEnabled").ToString() = "True" Then
-                Return mo.Item("MacAddress").ToString().Replace(":", " ")
+                GetMACAddress = mo.Item("MacAddress").ToString().Replace(":", " ")
+                If GetMACAddress <> "00 00 00 00 00 00" Then Exit Function
             End If
         Next
 
+        ' ******* METHOD 4 *******
+        Dim objMOS As ManagementObjectSearcher
+        Dim objMOC As Management.ManagementObjectCollection
+        Dim objMO As Management.ManagementObject
+        objMOS = New ManagementObjectSearcher("Select * From Win32_NetworkAdapter")
+        objMOC = objMOS.Get
+        For Each objMO In objMOC
+            GetMACAddress = objMO("MACAddress").ToString.Replace("-", " ")
+            If GetMACAddress <> "00 00 00 00 00 00" Then Exit Function
+        Next
+        objMOS.Dispose()
+        objMOS = Nothing
+        objMO = Nothing
+
+        ' ******* METHOD 5 *******
+        Dim nic As System.Net.NetworkInformation.NetworkInterface = Nothing
+        For Each nic In System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces
+            GetMACAddress = nic.GetPhysicalAddress().ToString.Replace("-", " ")
+            If GetMACAddress <> "" And GetMACAddress <> "00 00 00 00 00 00" Then
+                nic = Nothing
+                Exit Function
+            End If
+        Next
+
+        ' ******* METHOD 6 *******
         'another user provided the code below that seems to work well
         'if the adapter card is "Ethernet 802.3", then the code below will work
         Dim objset, obj As Object

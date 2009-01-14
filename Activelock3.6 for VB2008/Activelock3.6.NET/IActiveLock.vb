@@ -339,7 +339,7 @@ End Interface
         trialSteganography = 1
         trialHiddenFolder = 2
         trialRegistryPerUser = 4
-        trialRegistryIsolatedStorage = 8
+        trialIsolatedStorage = 8
     End Enum
     '###############################################################
 

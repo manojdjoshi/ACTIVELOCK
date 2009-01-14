@@ -1705,6 +1705,10 @@ checkForResourcesError:
             MyActiveLock.Register(LibKey)
         End If
         MsgBox(modMain.Dec("386.457.46D.483.4F1.4FC.4E6.42B.4FC.483.4C5.4BA.160.4F1.507.441.441.457.4F1.4F1.462.507.4A4.16B"), MsgBoxStyle.Information) ' "Registration successful!"
+        MyActiveLock = Nothing
+        strMsg = String.Empty
+        remainingDays = 0
+        totalDays = 0
         frmMain_Load(Me, New System.EventArgs)
         Me.Visible = True
         Exit Sub

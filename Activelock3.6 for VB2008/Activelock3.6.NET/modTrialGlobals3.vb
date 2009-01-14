@@ -352,7 +352,7 @@ Module modTrial
             DateGoodRegistry = False
         End If
         If DateGoodRegistry Then
-            daysLeft = ActiveLockDate(Date.UtcNow).Subtract(ActiveLockDate(TmpFRD)).Days + numDays
+            daysLeft = numDays - ActiveLockDate(Date.UtcNow).Subtract(ActiveLockDate(TmpFRD)).Days
         Else
             daysLeft = 0
         End If
@@ -437,27 +437,27 @@ RunsGoodRegistryError:
         TEXTMSG_DAYS = DecryptString128Bit("sQvYYRLPon5IyH6BQRAUBuCLTq/5VkH3kl7HUwJLZ2M=", PSWD)
         DateGood = False
 
-        If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialSteganography) Then
+        If TrialSteganographyExists(TrialHideTypes) Then
             If DateGoodSteganography(numDays, daysLeft2) = False Then
-                Set_Locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
                 'MsgBox "DateGoodSteganography " & daysLeft2
                 Exit Function
             End If
             use2 = True
         End If
-        If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialHiddenFolder) Then
+        If TrialHiddenFolderExists(TrialHideTypes) Then
             If DateGoodHiddenFolder(numDays, daysLeft3) = False Then
-                Set_Locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
                 'MsgBox "DateGoodHiddenFolder " & daysLeft3
                 Exit Function
             End If
             use3 = True
         End If
-        If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialRegistryPerUser) Then
+        If TrialRegistryPerUserExists(TrialHideTypes) Then
             If DateGoodRegistry(numDays, daysLeft4) = False Then
-                Set_Locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
                 'MsgBox "DateGoodRegistry " & daysLeft4
                 Exit Function
@@ -497,9 +497,9 @@ RunsGoodRegistryError:
 
         RunsGood = False
 
-        If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialSteganography) Then
+        If TrialSteganographyExists(TrialHideTypes) Then
             If RunsGoodSteganography(numRuns, runsLeft2) = False Then
-                Set_Locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
                 'MsgBox "RunsGoodSteganography " & runsLeft2
                 Exit Function
@@ -507,9 +507,9 @@ RunsGoodRegistryError:
             use2 = True
         End If
 
-        If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialHiddenFolder) Then
+        If TrialHiddenFolderExists(TrialHideTypes) Then
             If RunsGoodHiddenFolder(numRuns, runsLeft3) = False Then
-                Set_Locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
                 'MsgBox "RunsGoodHiddenFolder " & runsLeft3
                 Exit Function
@@ -517,9 +517,9 @@ RunsGoodRegistryError:
             use3 = True
         End If
 
-        If (TrialHideTypes And IActiveLock.ALTrialHideTypes.trialRegistryPerUser) Then
+        If TrialRegistryPerUserExists(TrialHideTypes) Then
             If RunsGoodRegistry(numRuns, runsLeft4) = False Then
-                Set_Locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
                 'MsgBox "RunsGoodRegistry " & runsLeft4
                 Exit Function
@@ -713,7 +713,7 @@ RunsGoodRegistryError:
         PlusAttributes()
 
         If DateGoodHiddenFolder Then
-            daysLeft = ActiveLockDate(Date.UtcNow).Subtract(ActiveLockDate(TmpFRD)).Days + numDays
+            daysLeft = numDays - ActiveLockDate(Date.UtcNow).Subtract(ActiveLockDate(TmpFRD)).Days
         Else
             daysLeft = 0
         End If
@@ -900,7 +900,6 @@ RunsGoodHiddenFolderError:
 
     End Function
 
-
     Public Function DateGoodSteganography(ByRef numDays As Short, ByRef daysLeft As Short) As Boolean
         'Steganography Parameters:
         ' CRD: Current Run Date
@@ -977,7 +976,7 @@ RunsGoodHiddenFolderError:
             DateGoodSteganography = False
         End If
         If DateGoodSteganography Then
-            daysLeft = ActiveLockDate(Date.UtcNow).Subtract(ActiveLockDate(TmpFRD)).Days + numDays
+            daysLeft = numDays - ActiveLockDate(Date.UtcNow).Subtract(ActiveLockDate(TmpFRD)).Days
         Else
             daysLeft = 0
         End If
@@ -1211,12 +1210,12 @@ FileExistErrors:  'error handling routine, including File Not Found
         FileClose(intFF)
 
         ' Registry stuff
-        If TrialHideTypes And IActiveLock.ALTrialHideTypes.trialRegistryPerUser Then
+        If TrialRegistryPerUserExists(TrialHideTypes) Then
             SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & EXPIRED_DAYS & "_" & EXPIRED_DAYS & "_" & EXPIRED_RUNS))
         End If
 
         ' Steganography stuff
-        If TrialHideTypes And IActiveLock.ALTrialHideTypes.trialSteganography Then
+        If TrialSteganographyExists(TrialHideTypes) Then
             strSource = GetSteganographyFile()
             If strSource <> "" Then
                 SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & EXPIRED_DAYS & "_" & EXPIRED_DAYS & "_" & EXPIRED_RUNS)
@@ -1224,7 +1223,7 @@ FileExistErrors:  'error handling routine, including File Not Found
         End If
 
         ' Hidden folder stuff
-        If TrialHideTypes And IActiveLock.ALTrialHideTypes.trialHiddenFolder Then
+        If TrialHiddenFolderExists(TrialHideTypes) Then
             If Directory.Exists(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD)) = False Then
                 MkDir(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD))
             End If
@@ -1340,12 +1339,12 @@ triAlerror:
 
         ' Registry stuff
         On Error Resume Next
-        If TrialHideTypes And IActiveLock.ALTrialHideTypes.trialRegistryPerUser Then
+        If TrialRegistryPerUserExists(TrialHideTypes) Then
             DeleteSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD))
         End If
 
         ' Steganography stuff
-        If TrialHideTypes And IActiveLock.ALTrialHideTypes.trialSteganography Then
+        If TrialSteganographyExists(TrialHideTypes) Then
             strSourceFile = GetSteganographyFile()
             If File.Exists(strSourceFile) Then Kill(strSourceFile)
             'If strSourceFile <> "" Then
@@ -1372,7 +1371,7 @@ triAlerror:
 
         ' Hidden folder stuff
         On Error GoTo triAlerror
-        If TrialHideTypes And IActiveLock.ALTrialHideTypes.trialHiddenFolder Then
+        If TrialHiddenFolderExists(TrialHideTypes) Then
             If Directory.Exists(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD)) = True Then
                 MinusAttributes()
                 strSourceFile = HiddenFolderFunction()
@@ -1791,42 +1790,6 @@ IsHiddenFolderExpiredError:
         ''    0  --- executed successfully
         ''    1  --- file not found
         ''    2  --- Data too long for file -- excess truncated
-        'Dim Alpha As Short
-        'Dim Beta As Byte
-        'Dim Gamma As Integer
-        'Dim Byte2Hide, Bits2Hide As Byte
-        'Dim Working As Byte
-        'Dim Limit As Integer
-        'Dim fNum As Short
-
-        'SteganographyEmbed = 0
-        'embedMe = embedMe & Chr(255)
-        'Gamma = 255
-
-        'If Directory.Exists(FileName) = False Then SteganographyEmbed = 1 : Exit Function
-        'Limit = FileLen(FileName)
-        'fNum = FreeFile()
-        'FileOpen(fNum, FileName, OpenMode.Binary)
-        'For Alpha = 1 To Len(embedMe)
-        '    Byte2Hide = Asc(Mid(embedMe, Alpha, 1))
-        '    For Beta = 0 To 7 Step 2
-        '        Bits2Hide = 0
-        '        If (Byte2Hide And (2 ^ Beta)) Then Bits2Hide = Bits2Hide Or 1
-        '        If (Byte2Hide And (2 ^ (Beta + 1))) Then Bits2Hide = Bits2Hide Or 2
-        '        FileGet(fNum, Working, Gamma)
-        '        Working = Working And 252
-        '        Working = Working Or Bits2Hide
-        '        FilePut(fNum, Working, Gamma)
-        '        Gamma = Gamma + 2
-        '        If Gamma >= Limit Then
-        '            SteganographyEmbed = 2
-        '            FileClose(fNum)
-        '            Exit Function
-        '        End If
-        '    Next
-        'Next
-        'FileClose(fNum)
-
         If File.Exists(FileName) = False Then SteganographyEmbed = 1 : Exit Function
         Dim objCoder As CCoder = Nothing
         Dim keyFileName As String
@@ -1975,7 +1938,6 @@ IsHiddenFolderExpiredError:
         System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor
 
         ' Check to see if any of the hidden signatures say the trial is expired
-
         ' The following two keys are not compatible with Vista
         ' A regular user account cannot have write access to these two registry hives
         ' I am removing these from v3.6 - ialkan 12-27-2008
@@ -1988,7 +1950,7 @@ IsHiddenFolderExpiredError:
         '    Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
         'End If
         If IsEncryptedFileExpired() = True Then
-            Set_Locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
         End If
         ' *** We are disabling folder date stamp in v3.2 since it's not application specific ***
@@ -1999,22 +1961,26 @@ IsHiddenFolderExpiredError:
         '    Err.Raise -10100, , TEXTMSG
         'End If
 
-        ' Main trial hiding locations
-        If TrialHideTypes = 4 Or TrialHideTypes = 5 Or TrialHideTypes = 6 Or TrialHideTypes = 7 Then
+        ' Must check Registry for Trial
+        If TrialRegistryPerUserExists(TrialHideTypes) Then
             If IsRegistryExpired() = True Then
-                Set_Locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
             End If
         End If
-        If TrialHideTypes = 1 Or TrialHideTypes = 3 Or TrialHideTypes = 5 Or TrialHideTypes = 7 Then
+
+        ' Must check picture for Trial
+        If TrialSteganographyExists(TrialHideTypes) Then
             If IsSteganographyExpired() = True Then
-                Set_Locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
             End If
         End If
-        If TrialHideTypes = 2 Or TrialHideTypes = 3 Or TrialHideTypes = 6 Or TrialHideTypes = 7 Then
+
+        ' Must check folder for Trial
+        If TrialHiddenFolderExists(TrialHideTypes) Then
             If IsHiddenFolderExpired() = True Then
-                Set_Locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
             End If
         End If
@@ -2024,52 +1990,58 @@ IsHiddenFolderExpiredError:
             If Not DateGood(alockDays, daysLeft, TrialHideTypes) Then
                 ExpireTrial(SoftwareName, SoftwareVer, TrialType, TrialLength, TrialHideTypes, SoftwarePassword)
                 ' Trial Period has expired
-                Set_Locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
             Else
                 If fileExist(GetSteganographyFile()) = False And Directory.Exists(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD)) = False And dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
-                    If SystemClockTampered() Then
-                        Set_Locale(regionalSymbol)
-                        Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
+                    If mCheckTimeServerForClockTampering = IActiveLock.ALTimeServerTypes.alsCheckTimeServer Then
+                        If SystemClockTampered() Then
+                            Set_locale(regionalSymbol)
+                            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
+                        End If
                     End If
-                    If ClockTampering() Then
-                        Set_Locale(regionalSymbol)
-                        Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
+                    If mChecksystemfilesForClockTampering = IActiveLock.ALSystemFilesTypes.alsCheckSystemFiles Then
+                        If ClockTampering() Then
+                            Set_locale(regionalSymbol)
+                            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
+                        End If
                     End If
                 End If
                 ' So far so good; trial mode seems to be fine
                 HAD2HAMMER = False
-                strMsg = "You are running this program in its Trial Period Mode." & vbCrLf & CStr(daysLeft) & " days left out of " & CStr(alockDays) & " day trial."
+                strMsg = "You are running this program in its Trial Period Mode." & vbCrLf & CStr(daysLeft) & " day(s) left out of " & CStr(alockDays) & " day trial."
                 mRemainingTrialDays = daysLeft
                 ActivateTrial = True
                 System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default
                 GoTo exitGracefully
-            End If
-        Else
-            If Not RunsGood(alockRuns, runsLeft, TrialHideTypes) Then
-                ExpireTrial(SoftwareName, SoftwareVer, TrialType, TrialLength, TrialHideTypes, SoftwarePassword)
-                ' Trial Runs have expired
-                Set_Locale(regionalSymbol)
-                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
-            Else
-                If fileExist(GetSteganographyFile()) = False And Directory.Exists(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD)) = False And dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
-                    If SystemClockTampered() Then
-                        Set_Locale(regionalSymbol)
-                        Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
-                    End If
-                    If ClockTampering() Then
-                        Set_Locale(regionalSymbol)
-                        Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
-                    End If
                 End If
-                ' So far so good; trial mode seems to be fine
-                HAD2HAMMER = False
-                strMsg = "You are running this program in its Trial Runs Mode." & vbCrLf & CStr(runsLeft) & " runs left out of " & CStr(alockRuns) & " run trial."
-                mRemainingTrialRuns = runsLeft
-                ActivateTrial = True
-                System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default
-                GoTo exitGracefully
-            End If
+        Else
+                If Not RunsGood(alockRuns, runsLeft, TrialHideTypes) Then
+                    ExpireTrial(SoftwareName, SoftwareVer, TrialType, TrialLength, TrialHideTypes, SoftwarePassword)
+                    ' Trial Runs have expired
+                    Set_locale(regionalSymbol)
+                    Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
+                Else
+                    If fileExist(GetSteganographyFile()) = False And Directory.Exists(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD)) = False And dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
+                        If mCheckTimeServerForClockTampering = IActiveLock.ALTimeServerTypes.alsCheckTimeServer Then
+                            If SystemClockTampered() Then
+                                Set_locale(regionalSymbol)
+                                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
+                            End If
+                        End If
+                        If ClockTampering() Then
+                            Set_locale(regionalSymbol)
+                            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
+                        End If
+                    End If
+                    ' So far so good; trial mode seems to be fine
+                    HAD2HAMMER = False
+                    strMsg = "You are running this program in its Trial Runs Mode." & vbCrLf & CStr(runsLeft) & " run(s) left out of " & CStr(alockRuns) & " run trial."
+                    mRemainingTrialRuns = runsLeft
+                    ActivateTrial = True
+                    System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default
+                    GoTo exitGracefully
+                End If
         End If
 
 keepChecking:
@@ -2131,7 +2103,7 @@ exitGracefully:
                 If Left(s, 1) <> "$" And Left(s, 1) <> "?" Then
                     fileDate = FileDateTime(t & "\" & s)
                     Dim difHours As Long
-                    difHours = CDate(fileDate.Date.ToString("yyyy/MM/dd")).Subtract(CDate(Date.UtcNow.ToString("yyyy/MM/dd"))).Hours
+                    difHours = Math.Abs(CDate(fileDate.Date.ToString("yyyy/MM/dd")).Subtract(CDate(Date.UtcNow.ToString("yyyy/MM/dd"))).Hours)
                     If difHours > 24 Then
                         If Count > 1 Then
                             ClockTampering = True
@@ -3080,25 +3052,106 @@ minusAttributesError:
     Public Function StripNullCharacters(ByVal vstrStringWithNulls As String) As String
 
         Dim intPosition As Integer
-        Dim strStringWithOutNulls As String
+        Dim strStringWithOutNulls As String = ""
 
-        intPosition = 1
-        strStringWithOutNulls = vstrStringWithNulls
+        If Not (vstrStringWithNulls Is Nothing) Then
+            intPosition = 1
+            strStringWithOutNulls = vstrStringWithNulls
 
-        Do While intPosition > 0
-            intPosition = InStr(intPosition, vstrStringWithNulls, vbNullChar)
+            Do While intPosition > 0
+                intPosition = InStr(intPosition, vstrStringWithNulls, vbNullChar)
 
-            If intPosition > 0 Then
-                strStringWithOutNulls = Microsoft.VisualBasic.Strings.Left(strStringWithOutNulls, intPosition - 1) & Microsoft.VisualBasic.Strings.Right(strStringWithOutNulls, Len(strStringWithOutNulls) - intPosition)
-            End If
+                If intPosition > 0 Then
+                    strStringWithOutNulls = Strings.Left(strStringWithOutNulls, intPosition - 1) & Strings.Right(strStringWithOutNulls, strStringWithOutNulls.Length - intPosition)
+                End If
 
-            If intPosition > strStringWithOutNulls.Length Then
-                Exit Do
-            End If
-        Loop
-
+                If intPosition > strStringWithOutNulls.Length Then
+                    Exit Do
+                End If
+            Loop
+        End If
         Return strStringWithOutNulls
 
+    End Function
+    Public Function TrialRegistryPerUserExists(ByRef TrialHideTypes As IActiveLock.ALTrialHideTypes) As Boolean
+        TrialRegistryPerUserExists = False
+        If TrialHideTypes = IActiveLock.ALTrialHideTypes.trialRegistryPerUser Then
+            TrialRegistryPerUserExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialRegistryPerUser Or IActiveLock.ALTrialHideTypes.trialHiddenFolder) Then
+            TrialRegistryPerUserExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialRegistryPerUser Or IActiveLock.ALTrialHideTypes.trialSteganography) Then
+            TrialRegistryPerUserExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialRegistryPerUser Or IActiveLock.ALTrialHideTypes.trialIsolatedStorage) Then
+            TrialRegistryPerUserExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialRegistryPerUser Or IActiveLock.ALTrialHideTypes.trialHiddenFolder Or IActiveLock.ALTrialHideTypes.trialIsolatedStorage) Then
+            TrialRegistryPerUserExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialRegistryPerUser Or IActiveLock.ALTrialHideTypes.trialHiddenFolder Or IActiveLock.ALTrialHideTypes.trialSteganography) Then
+            TrialRegistryPerUserExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialRegistryPerUser Or IActiveLock.ALTrialHideTypes.trialSteganography Or IActiveLock.ALTrialHideTypes.trialIsolatedStorage) Then
+            TrialRegistryPerUserExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialRegistryPerUser Or IActiveLock.ALTrialHideTypes.trialSteganography Or IActiveLock.ALTrialHideTypes.trialIsolatedStorage Or IActiveLock.ALTrialHideTypes.trialHiddenFolder) Then
+            TrialRegistryPerUserExists = True
+        End If
+    End Function
+    Public Function TrialHiddenFolderExists(ByRef TrialHideTypes As IActiveLock.ALTrialHideTypes) As Boolean
+        TrialHiddenFolderExists = False
+        If TrialHideTypes = IActiveLock.ALTrialHideTypes.trialHiddenFolder Then
+            TrialHiddenFolderExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialHiddenFolder Or IActiveLock.ALTrialHideTypes.trialRegistryPerUser) Then
+            TrialHiddenFolderExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialHiddenFolder Or IActiveLock.ALTrialHideTypes.trialSteganography) Then
+            TrialHiddenFolderExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialHiddenFolder Or IActiveLock.ALTrialHideTypes.trialIsolatedStorage) Then
+            TrialHiddenFolderExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialHiddenFolder Or IActiveLock.ALTrialHideTypes.trialRegistryPerUser Or IActiveLock.ALTrialHideTypes.trialIsolatedStorage) Then
+            TrialHiddenFolderExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialHiddenFolder Or IActiveLock.ALTrialHideTypes.trialRegistryPerUser Or IActiveLock.ALTrialHideTypes.trialSteganography) Then
+            TrialHiddenFolderExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialHiddenFolder Or IActiveLock.ALTrialHideTypes.trialSteganography Or IActiveLock.ALTrialHideTypes.trialIsolatedStorage) Then
+            TrialHiddenFolderExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialHiddenFolder Or IActiveLock.ALTrialHideTypes.trialSteganography Or IActiveLock.ALTrialHideTypes.trialIsolatedStorage Or IActiveLock.ALTrialHideTypes.trialRegistryPerUser) Then
+            TrialHiddenFolderExists = True
+        End If
+    End Function
+    Public Function TrialSteganographyExists(ByRef TrialHideTypes As IActiveLock.ALTrialHideTypes) As Boolean
+        TrialSteganographyExists = False
+        If TrialHideTypes = IActiveLock.ALTrialHideTypes.trialSteganography Then
+            TrialSteganographyExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialSteganography Or IActiveLock.ALTrialHideTypes.trialRegistryPerUser) Then
+            TrialSteganographyExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialSteganography Or IActiveLock.ALTrialHideTypes.trialHiddenFolder) Then
+            TrialSteganographyExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialSteganography Or IActiveLock.ALTrialHideTypes.trialIsolatedStorage) Then
+            TrialSteganographyExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialSteganography Or IActiveLock.ALTrialHideTypes.trialRegistryPerUser Or IActiveLock.ALTrialHideTypes.trialIsolatedStorage) Then
+            TrialSteganographyExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialSteganography Or IActiveLock.ALTrialHideTypes.trialRegistryPerUser Or IActiveLock.ALTrialHideTypes.trialHiddenFolder) Then
+            TrialSteganographyExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialSteganography Or IActiveLock.ALTrialHideTypes.trialHiddenFolder Or IActiveLock.ALTrialHideTypes.trialIsolatedStorage) Then
+            TrialSteganographyExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialSteganography Or IActiveLock.ALTrialHideTypes.trialHiddenFolder Or IActiveLock.ALTrialHideTypes.trialIsolatedStorage Or IActiveLock.ALTrialHideTypes.trialRegistryPerUser) Then
+            TrialSteganographyExists = True
+        End If
+    End Function
+    Public Function TrialIsolatedStorageExists(ByRef TrialHideTypes As IActiveLock.ALTrialHideTypes) As Boolean
+        TrialIsolatedStorageExists = False
+        If TrialHideTypes = IActiveLock.ALTrialHideTypes.trialIsolatedStorage Then
+            TrialIsolatedStorageExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialIsolatedStorage Or IActiveLock.ALTrialHideTypes.trialRegistryPerUser) Then
+            TrialIsolatedStorageExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialIsolatedStorage Or IActiveLock.ALTrialHideTypes.trialHiddenFolder) Then
+            TrialIsolatedStorageExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialIsolatedStorage Or IActiveLock.ALTrialHideTypes.trialSteganography) Then
+            TrialIsolatedStorageExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialIsolatedStorage Or IActiveLock.ALTrialHideTypes.trialRegistryPerUser Or IActiveLock.ALTrialHideTypes.trialSteganography) Then
+            TrialIsolatedStorageExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialIsolatedStorage Or IActiveLock.ALTrialHideTypes.trialRegistryPerUser Or IActiveLock.ALTrialHideTypes.trialHiddenFolder) Then
+            TrialIsolatedStorageExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialIsolatedStorage Or IActiveLock.ALTrialHideTypes.trialHiddenFolder Or IActiveLock.ALTrialHideTypes.trialSteganography) Then
+            TrialIsolatedStorageExists = True
+        ElseIf TrialHideTypes = (IActiveLock.ALTrialHideTypes.trialIsolatedStorage Or IActiveLock.ALTrialHideTypes.trialHiddenFolder Or IActiveLock.ALTrialHideTypes.trialSteganography Or IActiveLock.ALTrialHideTypes.trialRegistryPerUser) Then
+            TrialIsolatedStorageExists = True
+        End If
     End Function
 
 End Module
