@@ -1186,6 +1186,7 @@ End Function
 '===============================================================================
 Public Function GetMACAddress() As String
 
+' ******* METHOD 1 *******
 ' v3.5 introduces the use of the GetIfTable method which
 ' works very fast
 If IsWinNT4Plus = True Then
@@ -1193,6 +1194,8 @@ If IsWinNT4Plus = True Then
     If GetMACAddress <> "" Then Exit Function
 End If
 
+' ******* METHOD 2 *******
+' This was causing problems and therefore was commented out
 'On Error Resume Next
 'Dim tmp As String
 'Dim pASTAT As Long
@@ -1249,6 +1252,7 @@ End If
 'HeapFree GetProcessHeap(), 0, pASTAT
 'GetMACAddress = tmp
 
+' ******* METHOD 3 *******
 'another user provided the code below that seems to work well
 'if the adapter card is "Ethernet 802.3", then the code below will work
 Dim objset, obj

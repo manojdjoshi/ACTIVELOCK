@@ -513,7 +513,7 @@ Dim daysLeft3 As Integer, daysLeft4 As Integer
 TEXTMSG_DAYS = DecryptMyString("0DEAD685B3E70293A72D7BF2A5947CBED433B490DE5286509B9A4953B71190634432E5E20DCEFACC22E237072924B18B2DD7D1355E284B65DF70BD6D536B1D8E", PSWD)
 DateGood = False
 
-If (TrialHideTypes And ALTrialHideTypes.trialSteganography) Then
+If TrialSteganographyExists(TrialHideTypes) Then
     If DateGoodSteganography(numDays, daysLeft2) = False Then
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS
@@ -522,7 +522,7 @@ If (TrialHideTypes And ALTrialHideTypes.trialSteganography) Then
     End If
     use2 = True
 End If
-If (TrialHideTypes And ALTrialHideTypes.trialHiddenFolder) Then
+If TrialHiddenFolderExists(TrialHideTypes) Then
     If DateGoodHiddenFolder(numDays, daysLeft3) = False Then
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS
@@ -531,7 +531,7 @@ If (TrialHideTypes And ALTrialHideTypes.trialHiddenFolder) Then
     End If
     use3 = True
 End If
-If (TrialHideTypes And ALTrialHideTypes.trialRegistryPerUser) Then
+If TrialRegistryPerUserExists(TrialHideTypes) Then
     If DateGoodRegistry(numDays, daysLeft4) = False Then
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS
@@ -573,7 +573,7 @@ TEXTMSG_RUNS = DecryptMyString("2FD15B7C7C504433519133B9D336D12627384959E9D4D415
 
 RunsGood = False
 
-If (TrialHideTypes And ALTrialHideTypes.trialSteganography) Then
+If TrialSteganographyExists(TrialHideTypes) Then
     If RunsGoodSteganography(numRuns, runsLeft2) = False Then
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS
@@ -583,7 +583,7 @@ If (TrialHideTypes And ALTrialHideTypes.trialSteganography) Then
     use2 = True
 End If
 
-If (TrialHideTypes And ALTrialHideTypes.trialHiddenFolder) Then
+If TrialHiddenFolderExists(TrialHideTypes) Then
     If RunsGoodHiddenFolder(numRuns, runsLeft3) = False Then
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS
@@ -593,7 +593,7 @@ If (TrialHideTypes And ALTrialHideTypes.trialHiddenFolder) Then
     use3 = True
 End If
 
-If (TrialHideTypes And ALTrialHideTypes.trialRegistryPerUser) Then
+If TrialRegistryPerUserExists(TrialHideTypes) Then
     If RunsGoodRegistry(numRuns, runsLeft4) = False Then
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS
@@ -986,6 +986,42 @@ DateGoodSteganographyError:
     DateGoodSteganography = False
     Exit Function
 End Function
+Public Function TrialRegistryPerUserExists(ByVal TrialHideTypes As ALTrialHideTypes) As Boolean
+    TrialRegistryPerUserExists = False
+    If TrialHideTypes = trialRegistryPerUser Then
+        TrialRegistryPerUserExists = True
+    ElseIf TrialHideTypes = (trialRegistryPerUser Or trialHiddenFolder) Then
+        TrialRegistryPerUserExists = True
+    ElseIf TrialHideTypes = (trialRegistryPerUser Or trialSteganography) Then
+        TrialRegistryPerUserExists = True
+    ElseIf TrialHideTypes = (trialRegistryPerUser Or trialHiddenFolder Or trialSteganography) Then
+        TrialRegistryPerUserExists = True
+    End If
+End Function
+Public Function TrialHiddenFolderExists(ByVal TrialHideTypes As ALTrialHideTypes) As Boolean
+    TrialHiddenFolderExists = False
+    If TrialHideTypes = trialHiddenFolder Then
+        TrialHiddenFolderExists = True
+    ElseIf TrialHideTypes = (trialHiddenFolder Or trialRegistryPerUser) Then
+        TrialHiddenFolderExists = True
+    ElseIf TrialHideTypes = (trialHiddenFolder Or trialSteganography) Then
+        TrialHiddenFolderExists = True
+    ElseIf TrialHideTypes = (trialHiddenFolder Or trialRegistryPerUser Or trialSteganography) Then
+        TrialHiddenFolderExists = True
+    End If
+End Function
+Public Function TrialSteganographyExists(ByVal TrialHideTypes As ALTrialHideTypes) As Boolean
+    TrialSteganographyExists = False
+    If TrialHideTypes = trialSteganography Then
+        TrialSteganographyExists = True
+    ElseIf TrialHideTypes = (trialSteganography Or trialRegistryPerUser) Then
+        TrialSteganographyExists = True
+    ElseIf TrialHideTypes = (trialSteganography Or trialHiddenFolder) Then
+        TrialSteganographyExists = True
+    ElseIf TrialHideTypes = (trialSteganography Or trialRegistryPerUser Or trialHiddenFolder) Then
+        TrialSteganographyExists = True
+    End If
+End Function
 
 Public Function ActiveLockDate(ByVal dt As Date) As Date
 ' CDate(Format(dt, "m/d/yy h:m:ss"))
@@ -1218,12 +1254,12 @@ Open ActivelockGetSpecialFolder(55) & "\Sample Videos" & VIDEO & Left(oMD5.Calcu
 Close #intFF
 
 ' Registry stuff
-If TrialHideTypes And trialRegistryPerUser Then
+If TrialRegistryPerUserExists(TrialHideTypes) Then
     SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & EXPIRED_DAYS & "_" & EXPIRED_DAYS & "_" & EXPIRED_RUNS)
 End If
 
 ' Steganography stuff
-If TrialHideTypes And trialSteganography Then
+If TrialSteganographyExists(TrialHideTypes) Then
     strSource = GetSteganographyFile()
     If strSource <> "" Then
         SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & EXPIRED_DAYS & "_" & EXPIRED_DAYS & "_" & EXPIRED_RUNS
@@ -1231,7 +1267,7 @@ If TrialHideTypes And trialSteganography Then
 End If
 
 ' Hidden folder stuff
-If TrialHideTypes And trialHiddenFolder Then
+If TrialHiddenFolderExists(TrialHideTypes) Then
     If FolderExists(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD)) = False Then
         MkDir ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD)
     End If
@@ -1343,12 +1379,12 @@ End If
 
 ' Registry stuff
 On Error Resume Next
-If TrialHideTypes And trialRegistryPerUser Then
+If TrialRegistryPerUserExists(TrialHideTypes) Then
     DeleteSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD)
 End If
 
 ' Steganography stuff
-If TrialHideTypes And trialSteganography Then
+If TrialSteganographyExists(TrialHideTypes) Then
     strSourceFile = GetSteganographyFile()
     If fileExist(strSourceFile) Then Kill strSourceFile
 '    If strSourceFile <> "" Then
@@ -1375,7 +1411,7 @@ End If
 
 ' Hidden folder stuff
 On Error GoTo trialError
-If TrialHideTypes And trialHiddenFolder Then
+If TrialHiddenFolderExists(TrialHideTypes) Then
     If FolderExists(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD)) = True Then
         MinusAttributes
         strSourceFile = HiddenFolderFunction()
@@ -1944,19 +1980,26 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
     '    Set_locale regionalSymbol
     '    Err.Raise -10100, , TEXTMSG
     'End If
-    
-    ' Main trial hiding locations
-    If IsRegistryExpired() = True Then
-        Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG
+        
+    ' Must check Registry for Trial
+    If TrialRegistryPerUserExists(TrialHideTypes) Then
+        ' Main trial hiding locations
+        If IsRegistryExpired() = True Then
+            Set_locale regionalSymbol
+            Err.Raise ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG
+        End If
     End If
-    If IsSteganographyExpired() = True Then
-        Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG
+    If TrialSteganographyExists(TrialHideTypes) Then
+        If IsSteganographyExpired() = True Then
+            Set_locale regionalSymbol
+            Err.Raise ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG
+        End If
     End If
-    If IsHiddenFolderExpired() = True Then
-        Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG
+    If TrialHiddenFolderExists(TrialHideTypes) Then
+        If IsHiddenFolderExpired() = True Then
+            Set_locale regionalSymbol
+            Err.Raise ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG
+        End If
     End If
     ' Nothing bad so far...
     If trialPeriod Then
@@ -1969,19 +2012,23 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
             If fileExist(GetSteganographyFile()) = False And _
                 FolderExists(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD)) = False And _
                 dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
-                If SystemClockTampered Then
-                    Set_locale regionalSymbol
-                    Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                If mCheckTimeServerForClockTampering = alsCheckTimeServer Then
+                    If SystemClockTampered Then
+                        Set_locale regionalSymbol
+                        Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                    End If
                 End If
-                If ClockTampering Then
-                    Set_locale regionalSymbol
-                    Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                If mCheckSystemFilesForClockTampering = alsCheckSystemFiles Then
+                    If ClockTampering Then
+                        Set_locale regionalSymbol
+                        Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                    End If
                 End If
             End If
             ' So far so good; trial mode seems to be fine
             HAD2HAMMER = False
             strMsg = "You are running this program in its Trial Period Mode." & vbCrLf & _
-               CStr(daysLeft) & " days left out of " & _
+               CStr(daysLeft) & " day(s) left out of " & _
                CStr(alockDays) & " day trial."
             mRemainingTrialDays = daysLeft
             ActivateTrial = True
@@ -1998,19 +2045,23 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
             If fileExist(GetSteganographyFile()) = False And _
                 FolderExists(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD)) = False And _
                 dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
-                If SystemClockTampered Then
-                    Set_locale regionalSymbol
-                    Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                If mCheckTimeServerForClockTampering = alsCheckTimeServer Then
+                    If SystemClockTampered Then
+                        Set_locale regionalSymbol
+                        Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                    End If
                 End If
-                If ClockTampering Then
-                    Set_locale regionalSymbol
-                    Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                If mCheckSystemFilesForClockTampering = alsCheckSystemFiles Then
+                    If ClockTampering Then
+                        Set_locale regionalSymbol
+                        Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                    End If
                 End If
             End If
             ' So far so good; trial mode seems to be fine
             HAD2HAMMER = False
             strMsg = "You are running this program in its Trial Runs Mode." & vbCrLf & _
-                CStr(runsLeft) & " runs left out of " & _
+                CStr(runsLeft) & " run(s) left out of " & _
                 CStr(alockRuns) & " run trial."
             mRemainingTrialRuns = runsLeft
             ActivateTrial = True
@@ -2076,7 +2127,7 @@ For i = 0 To 2
     Do While S <> ""
         If Not inString(Left$(S, 1), "$", "?") Then
             fileDate = FileDateTime(t & "\" & S)
-            If DateDiff("h", ActiveLockDate(UTC(Now)), ActiveLockDate(fileDate)) > 1 Then
+            If Abs(DateDiff("h", ActiveLockDate(UTC(Now)), ActiveLockDate(fileDate))) > 24 Then
                 If Count > 1 Then
                     ClockTampering = True
                     Exit Function

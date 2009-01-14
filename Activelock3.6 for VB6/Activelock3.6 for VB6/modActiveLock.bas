@@ -1110,6 +1110,10 @@ Dim hFile As Long, Size As Long, myBuffer As String, BytesRead As Long
 On Error Resume Next
 'Reads a stream into a buffer
 hFile = CreateFileW(StrPtr(StreamName), AccessRead, ShareRead, 0&, OpenExisting, 0&, 0&)
+If hFile = -1 Then
+    Set_locale regionalSymbol
+    Err.Raise ActiveLockErrCodeConstants.alerrLicenseTampered, ACTIVELOCKSTRING, STRLICENSETAMPERED
+End If
 Size = GetFileSize(hFile, 0&)
 myBuffer = String$(Size, 0)
 ReadFileX hFile, ByVal myBuffer, Size, BytesRead, 0
