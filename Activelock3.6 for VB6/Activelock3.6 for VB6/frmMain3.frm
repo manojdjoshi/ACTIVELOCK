@@ -1135,11 +1135,11 @@ Private Sub cmbLicType_Click()
     End If
     If cmbLicType = "Time Locked" Then
         lblExpiry = "&Expires on Date:"
-        txtDays = ActiveLockDateFormat(Now() + 30)
+        txtDays = ActiveLockDateFormat(Now() + 365)
         lblDays = "yyyy/MM/dd"
     Else
         lblExpiry = "&Expires after:"
-        txtDays = "30"
+        txtDays = "365"
         lblDays = "Day(s)"
     End If
 End Sub
