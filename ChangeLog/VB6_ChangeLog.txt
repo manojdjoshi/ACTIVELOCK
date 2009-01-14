@@ -40,7 +40,17 @@ v3.6 Updates:
 - NEW: The LIC and ALL files are now under a path which includes a folder with the software and version. The path is under the public documents folder all users so that it's accessible to all.
 - NEW: The Form_Load event of the sample application includes a new form for Try/Register functionality of the sample. It shows the number of trial days used while in trial mode.
 - FIX CheckIsDLLRegistered function has been revamped. If the Activelock DLL is not registered, the sample app just traps the 429 error and tells the user about it.
- 
+- FIX: InnoSetup installer installs the oleaut32.dll and stdole2.tlb files only for OS versions below 6. Used flag OnlyBelowVersion: 0,6
+- FIX: Admin to admin switch should not break the trial mode anymore because the entire trial folder/hiding technique has been revamped. The problem reported at (http://www.ismailalkan.com/phpBB2/viewtopic.php?p=3715) should be fixed.
+- Alugen was criticized of storing important serial numbers such as Windows Serial Nuber in its database. Since the database is stored only in the developer's or the program owner's machine, there's no problem with that. This is much less sensitive issue than storing credit numbers; however if the developers see it necessary, they can implement their own encryption technique to store such serial numbers that belong to their customers. This is really an extension to the tool.
+- Default number of days for licensing has been changed from 30 days to 365 days in Alugen. 
+- FIX: Added "If hFile = -1 Then" check to the ViewStream function since the CreateFileW function might rarely fail.
+- The trialHideTypes detection in the DLL has been improved such that unneeded trial types won't be called anymore wasting the trial execution speed. Future addition of more trial hiding types will be easier to code and manage.
+- FIX: Time Server date checks and system file date checks are performed in Acquire, Register and ActivateTrial methods. Some of these were not checking the existence of these properties and were executing these code by default. Fixed.
+
+
+
+
 v3.5.5 Updates:
 - FIX: Program was not functioning for multiple users in the same machine. It was working Ok for the first user, however switching users and running the same that's already registered causes an error 5 and the application won't run. The fix was accomplished by adding several  "cryptSession.DestroyContainer containerName " statements to the Globals3 class, CryptoAPIaction function. The problem is with the creation of an RSA container with one user account and the inability to access it with a different user account. By deleting the container after it's used, the problem has been eliminated. As long as the license is Ok (valid and not tampered with), switching between user accounts does no harm to the license, but once the license is tampered with, even after it's restored to its original condition, switching between users seemed to still cause problems; however, since we're dealing with a tampered license here, this is acceptable. While writing this note I was still trying to add more DestroyContainer statements within the validation routines right before errors are raised.
 - FIX: CryptoAPI class SignString and ValidateString functions were not configured correctly. Because of this, it was possible to tamper with the LIC file. For example, the Expiration date could be changed with no problems. Fixed. Rewrote parts of these routines. Tested. Works as it should. This problem is only for the CryptoAPI keys. No problem with ALCrypto-1024 bit key.
