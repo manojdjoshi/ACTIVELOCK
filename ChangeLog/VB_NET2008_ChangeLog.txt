@@ -22,6 +22,18 @@ VB2008 v3.6 Updates:
 - NEW: The LIC and ALL files are now under a path which includes a folder with the software and version. The path is under the public documents folder all users so that it's accessible to all.
 - NEW: The Form_Load event of the sample application includes a new form for Try/Register functionality of the sample. It shows the number of trial days used while in trial mode.
 - The sample application will be run with the asInvoker mode so that admin account won't be needed under Vista. But, the Alugen uses requireAdministrator.
+- FIX: Permanent License registration error with short keys reported by vsdlh (http://www.ismailalkan.com/phpBB2/viewtopic.php?t=686) has been fixed.
+- FIX: Admin to admin switch should not break the trial mode anymore because the entire trial folder/hiding technique has been revamped. The problem reported at (http://www.ismailalkan.com/phpBB2/viewtopic.php?p=3715) should be fixed.
+- Alugen was criticized of storing important serial numbers such as Windows Serial Nuber in its database. Since the database is stored only in the developer's or the program owner's machine, there's no problem with that. This is much less sensitive issue than storing credit numbers; however if the developers see it necessary, they can implement their own encryption technique to store such serial numbers that belong to their customers. This is really an extension to the tool.
+- Investigated the need to store the .NET based VCode and GCode with "RSANET" in order to differentiate the keys from the VB6 "RSA" keys. However, these two types are keys already different even at the same cipher strength. Therefore decided not to alter the current mechanism.
+- Default number of days for licensing has been changed from 30 days to 365 days in Alugen.
+- The SQL string error reported here (http://www.ismailalkan.com/phpBB2/viewtopic.php?t=631) can not be reproduced any more. It seems like it was fixed earlier, or we're unable to regenerate it.
+- FIX: The following change was made for Vista:
+ifhelp.Speed = Convert.ToInt64(pri.dwSpeed) ' Change from ToInt32 to ToInt64 for VISTA
+- FIX: The following change was made for Vista:
+Public Speed As Long ' Change from int to long for VISTA
+- The trialHideTypes detection in the DLL has been improved such that unneeded trial types won't be called anymore wasting the trial execution speed. Future addition of more trial hiding types will be easier to code and manage.
+- FIX: CheckStreamCapability was broken with the latest update. It's been fixed.
 
 
 
