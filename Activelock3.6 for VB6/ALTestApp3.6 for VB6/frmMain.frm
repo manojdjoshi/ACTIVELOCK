@@ -1306,6 +1306,10 @@ Private Sub cmdRegister_Click()
     End If
     MsgBox modMain.Dec("386.457.46D.483.4F1.4FC.4E6.42B.4FC.483.4C5.4BA.160.4F1.507.441.441.457.4F1.4F1.462.507.4A4.16B"), vbInformation ' "Registration successful!"
     Unload Me
+    Set MyActiveLock = Nothing
+    strMsg = ""
+    remainingDays = 0
+    totalDays = 0
     Form_Load
     Me.Visible = True
     Exit Sub
