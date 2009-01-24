@@ -52,19 +52,12 @@ Begin VB.Form frmMain
       TabPicture(0)   =   "frmMain3.frx":0CCA
       Tab(0).ControlEnabled=   0   'False
       Tab(0).Control(0)=   "cmdValidate"
-      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).Control(1)=   "Picture1"
-      Tab(0).Control(1).Enabled=   0   'False
       Tab(0).Control(2)=   "cmdRemove"
-      Tab(0).Control(2).Enabled=   0   'False
       Tab(0).Control(3)=   "fraProdNew"
-      Tab(0).Control(3).Enabled=   0   'False
       Tab(0).Control(4)=   "gridProds"
-      Tab(0).Control(4).Enabled=   0   'False
       Tab(0).Control(5)=   "Label17"
-      Tab(0).Control(5).Enabled=   0   'False
       Tab(0).Control(6)=   "Label1"
-      Tab(0).Control(6).Enabled=   0   'False
       Tab(0).ControlCount=   7
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
@@ -176,6 +169,15 @@ Begin VB.Form frmMain
          End
          Begin VB.CheckBox chkLockIP 
             Caption         =   "Lock to IP Address"
+            BeginProperty Font 
+               Name            =   "Courier New"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
             Height          =   195
             Left            =   1305
             TabIndex        =   51
@@ -184,6 +186,15 @@ Begin VB.Form frmMain
          End
          Begin VB.CheckBox chkLockMotherboard 
             Caption         =   "Lock to Motherboard Serial"
+            BeginProperty Font 
+               Name            =   "Courier New"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
             Height          =   195
             Left            =   1305
             TabIndex        =   50
@@ -192,6 +203,15 @@ Begin VB.Form frmMain
          End
          Begin VB.CheckBox chkLockBIOS 
             Caption         =   "Lock to BIOS Version"
+            BeginProperty Font 
+               Name            =   "Courier New"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
             Height          =   195
             Left            =   1305
             TabIndex        =   49
@@ -200,6 +220,15 @@ Begin VB.Form frmMain
          End
          Begin VB.CheckBox chkLockWindows 
             Caption         =   "Lock to Windows Serial"
+            BeginProperty Font 
+               Name            =   "Courier New"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
             Height          =   195
             Left            =   1305
             TabIndex        =   48
@@ -208,6 +237,15 @@ Begin VB.Form frmMain
          End
          Begin VB.CheckBox chkLockHDfirmware 
             Caption         =   "Lock to HDD Firmware Serial"
+            BeginProperty Font 
+               Name            =   "Courier New"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
             Height          =   195
             Left            =   1305
             TabIndex        =   47
@@ -216,6 +254,15 @@ Begin VB.Form frmMain
          End
          Begin VB.CheckBox chkLockHD 
             Caption         =   "Lock to HDD Volume Serial"
+            BeginProperty Font 
+               Name            =   "Courier New"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
             Height          =   195
             Left            =   1305
             TabIndex        =   46
@@ -224,6 +271,15 @@ Begin VB.Form frmMain
          End
          Begin VB.CheckBox chkLockComputer 
             Caption         =   "Lock to Computer Name"
+            BeginProperty Font 
+               Name            =   "Courier New"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
             Height          =   195
             Left            =   1305
             TabIndex        =   45
@@ -232,6 +288,15 @@ Begin VB.Form frmMain
          End
          Begin VB.CheckBox chkLockMACaddress 
             Caption         =   "Lock to MAC Address"
+            BeginProperty Font 
+               Name            =   "Courier New"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
             Height          =   195
             Left            =   1305
             TabIndex        =   44
@@ -2267,6 +2332,7 @@ End Sub
 
 
 Private Sub txtReqCodeIn_Change()
+
 If Len(txtReqCodeIn.Text) = 8 Then 'Short key authorization is much simpler
     UpdateKeyGenButtonStatus
     If fDisableNotifications Then Exit Sub
@@ -2536,15 +2602,6 @@ chkLockBIOS.Enabled = True
 chkLockMotherboard.Enabled = True
 chkLockIP.Enabled = True
 
-'chkLockMACaddress.Value = vbUnchecked
-'chkLockComputer.Value = vbUnchecked
-'chkLockHD.Value = vbUnchecked
-'chkLockHDfirmware.Value = vbUnchecked
-'chkLockWindows.Value = vbUnchecked
-'chkLockBIOS.Value = vbUnchecked
-'chkLockMotherboard.Value = vbUnchecked
-'chkLockIP.Value = vbUnchecked
-
 a = Split(strInstCode, vbLf)
 If usedLockNone = True Then
     For i = LBound(a) To UBound(a) - 1
@@ -2584,6 +2641,15 @@ Else '"+" was not used, therefore one or more lockTypes were specified in the ap
     chkLockBIOS.Enabled = False
     chkLockMotherboard.Enabled = False
     chkLockIP.Enabled = False
+
+    chkLockMACaddress.Value = vbUnchecked
+    chkLockComputer.Value = vbUnchecked
+    chkLockHD.Value = vbUnchecked
+    chkLockHDfirmware.Value = vbUnchecked
+    chkLockWindows.Value = vbUnchecked
+    chkLockBIOS.Value = vbUnchecked
+    chkLockMotherboard.Value = vbUnchecked
+    chkLockIP.Value = vbUnchecked
 
     For i = LBound(a) To UBound(a) - 1
         aString = a(i)  'aString & A(i) & vbCrLf
