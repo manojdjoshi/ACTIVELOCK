@@ -707,7 +707,6 @@ Friend Class frmMain
         Me.txtLibKeyIn.ScrollBars = System.Windows.Forms.ScrollBars.Both
         Me.txtLibKeyIn.Size = New System.Drawing.Size(445, 171)
         Me.txtLibKeyIn.TabIndex = 10
-        Me.txtLibKeyIn.WordWrap = False
         '
         'Label13
         '
@@ -1271,6 +1270,8 @@ Friend Class frmMain
             ' Example: lockWindows Or lockComp
             ' You can combine any lockType(s) using OR as above
             .LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockNone
+            .LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockBIOS Or _
+            ActiveLock3_6NET.IActiveLock.ALLockTypes.lockComp
 
             ' If you want to lock to any keys explicitly, combine them using OR
             ' But you won't be able to uncheck/check any of them while in Alugen (too late at that point).
@@ -1315,11 +1316,13 @@ Friend Class frmMain
             ' Although Activelock makes every effort to check if the system clock was tampered,
             ' checking a time server is the guaranteed way of knowing the correct UTC time/day.
             ' This feature might add some delay to your apps start-up time.
-            .CheckTimeServerForClockTampering = ActiveLock3_6NET.IActiveLock.ALTimeServerTypes.alsDontCheckTimeServer       ' use alsCheckTimeServer to enforce time server checks for clock tampering check
+            '.CheckTimeServerForClockTampering = ActiveLock3_6NET.IActiveLock.ALTimeServerTypes.alsDontCheckTimeServer       ' use alsCheckTimeServer to enforce time server checks for clock tampering check
+            .CheckTimeServerForClockTampering = ActiveLock3_6NET.IActiveLock.ALTimeServerTypes.alsCheckTimeServer
 
             ' Set the system files clock tampering check
             ' This feature might add some delay to your apps start-up time.
-            .CheckSystemFilesForClockTampering = ActiveLock3_6NET.IActiveLock.ALSystemFilesTypes.alsDontCheckSystemFiles    ' use alsCheckSystemFiles to enforce system files scanning for clock tampering check
+            '.CheckSystemFilesForClockTampering = ActiveLock3_6NET.IActiveLock.ALSystemFilesTypes.alsDontCheckSystemFiles    ' use alsCheckSystemFiles to enforce system files scanning for clock tampering check
+            .CheckSystemFilesForClockTampering = ActiveLock3_6NET.IActiveLock.ALSystemFilesTypes.alsCheckSystemFiles
 
             ' Set the license file format; this could be encrypted or plain
             ' Even in a plain file format, certain keys and dates are still encrypted.
@@ -1464,20 +1467,27 @@ Friend Class frmMain
         ' This is for number of concurrent users count in a netwrok license
         txtMaxCount.Text = MyActiveLock.MaxCount
 
-        'Read the license file into a string to determine the license type
-        Dim strBuff As String
-        Dim fNum As Short
-        fNum = FreeFile()
-        FileOpen(fNum, strKeyStorePath, OpenMode.Input)
-        strBuff = InputString(1, LOF(1))
-        FileClose(fNum)
-        If Instring(strBuff, "LicenseType=3") Then
-            txtLicenseType.Text = "Time Limited"
-        ElseIf Instring(strBuff, "LicenseType=1") Then
-            txtLicenseType.Text = "Periodic"
-        ElseIf Instring(strBuff, "LicenseType=2") Then
-            txtLicenseType.Text = "Permanent"
+        ' Read the license file into a string to determine the license type
+        ' You can read the LicenseType from the LIC file directly
+        ' However, the LIC file should be in Plain format for this to work.
+        If MyActiveLock.LicenseFileType = ActiveLock3_6NET.IActiveLock.ALLicenseFileTypes.alsLicenseFilePlain Then
+            Dim strBuff As String
+            Dim fNum As Short
+            fNum = FreeFile()
+            FileOpen(fNum, strKeyStorePath, OpenMode.Input)
+            strBuff = InputString(1, LOF(1))
+            FileClose(fNum)
+            If Instring(strBuff, "LicenseType=3") Then
+                txtLicenseType.Text = "Time Limited"
+            ElseIf Instring(strBuff, "LicenseType=1") Then
+                txtLicenseType.Text = "Periodic"
+            ElseIf Instring(strBuff, "LicenseType=2") Then
+                txtLicenseType.Text = "Permanent"
+            End If
+        Else
+            txtLicenseType.Text = "Encrypted in LIC File"
         End If
+
         FunctionalitiesEnabled = True
         txtUser.BackColor = Color.FromKnownColor(KnownColor.ButtonFace)
 

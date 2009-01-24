@@ -16,7 +16,7 @@ Public Interface _IActiveLock
     Property SoftwarePassword() As String
     WriteOnly Property CheckTimeServerForClockTampering() As IActiveLock.ALTimeServerTypes
     WriteOnly Property CheckSystemFilesForClockTampering() As IActiveLock.ALSystemFilesTypes
-    WriteOnly Property LicenseFileType() As IActiveLock.ALLicenseFileTypes
+    Property LicenseFileType() As IActiveLock.ALLicenseFileTypes
     WriteOnly Property AutoRegister() As IActiveLock.ALAutoRegisterTypes
     WriteOnly Property TrialWarning() As IActiveLock.ALTrialWarningTypes
     WriteOnly Property SoftwareCode() As String
@@ -276,7 +276,7 @@ End Interface
 		lockHDFirmware = 256
 	End Enum
 	'    lockCustom = 128
-	'    lockSID = 512
+    '    lockFingerprint = 512
 	'
     '###############################################################
 
@@ -621,10 +621,13 @@ End Interface
     ' Purpose: Specifies whether the system files should be checked for Clock Tampering
     ' Remarks: None
     '===============================================================================
-    Public WriteOnly Property LicenseFileType() As ALLicenseFileTypes Implements _IActiveLock.LicenseFileType
+    Public Property LicenseFileType() As ALLicenseFileTypes Implements _IActiveLock.LicenseFileType
         Set(ByVal Value As ALLicenseFileTypes)
 
         End Set
+        Get
+            LicenseFileType = String.Empty
+        End Get
     End Property
     '===============================================================================
     ' Name: Property Let AutoRegister

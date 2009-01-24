@@ -613,7 +613,9 @@ GetHDSeriAlerror:
 GetHDSerialFirmwareError:
         MsgBox(Err.Description)
         If GetHDSerialFirmware = "" Then
-            GetHDSerialFirmware = "Not Available"
+            'GetHDSerialFirmware = "Not Available"
+            ' Per suggestion by Jeroen, we must have something decent returned from this
+            GetHDSerialFirmware = "NA" & GetHDSerial() & GetMotherboardSerial()   '"Not Available"
         End If
 
     End Function

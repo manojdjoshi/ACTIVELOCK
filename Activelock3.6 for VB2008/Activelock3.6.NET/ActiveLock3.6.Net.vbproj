@@ -134,6 +134,7 @@
     <Compile Include="Crypto2005.vb">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Daytime.vb" />
     <Compile Include="EncryptionRoutines.vb">
       <SubType>Code</SubType>
     </Compile>
