@@ -146,6 +146,7 @@ Source: C:\ActiveLockCommunity\Activelock3.5.NET\clsShortLicenseKey.vb; DestDir:
 Source: C:\ActiveLockCommunity\Activelock3.5.NET\clsShortSerial.vb; DestDir: "{app}\Activelock3.5.NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.5.NET\CRC32.vb; DestDir: "{app}\Activelock3.5.NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.5.NET\Crypto2005.vb; DestDir: "{app}\Activelock3.5.NET"; Flags: ignoreversion; Components: examples
+Source: C:\ActiveLockCommunity\Activelock3.5.NET\Daytime.vb; DestDir: "{app}\Activelock3.5.NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.5.NET\EncryptionRoutines.vb; DestDir: "{app}\Activelock3.5.NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.5.NET\FileKeyStore.vb; DestDir: "{app}\Activelock3.5.NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.5.NET\frmTrialC_modified.resX; DestDir: "{app}\Activelock3.5.NET"; Flags: ignoreversion; Components: examples
