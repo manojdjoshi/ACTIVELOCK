@@ -506,6 +506,9 @@ Public Const INTERNET_OPEN_TYPE_PROXY = 3
 Public Const scUserAgent = "VB OpenUrl"
 Public Const INTERNET_FLAG_RELOAD = &H80000000
 
+
+
+
 Function GetExternalIP(URL As String) As String
   
 Dim hOpen As Long
@@ -708,7 +711,9 @@ If GetHDSerialFirmware <> "" Then Exit Function
 ' Cannot return an empty string...
 GetHDSerialFirmwareError:
 If GetHDSerialFirmware = "" Then
-    GetHDSerialFirmware = "Not Available"
+    'GetHDSerialFirmware = "Not Available"
+    ' Per suggestion by Jeroen, we must have something decent returned from this
+    GetHDSerialFirmware = "NA" & GetHDSerial() & GetMotherboardSerial()   '"Not Available"
 End If
 
 End Function
@@ -1360,25 +1365,25 @@ GetWindowsSerial = strKey
 End Function
 
 '===============================================================================
-' Name: Function GeetBiosVersion
+' Name: Function GetBiosVersion
 ' Input: None
 ' Output:
 '   String - BIOS serial number
 ' Purpose: Gets the BIOS Serial Number
 ' Remarks: Uses the WMI
 '===============================================================================
-Public Function GeetBiosVersion() As String
+Public Function GetBiosVersion() As String
 Dim BiosSet As Object
 Dim obj As Object
-On Error GoTo GeetBiosVersionError
+On Error GoTo GetBiosVersionError
 Set BiosSet = GetObject("WinMgmts:{impersonationLevel=impersonate}").InstancesOf("Win32_BIOS")
 For Each obj In BiosSet
-    GeetBiosVersion = obj.Version
-    If GeetBiosVersion <> "" Then Exit Function
+    GetBiosVersion = obj.Version
+    If GetBiosVersion <> "" Then Exit Function
 Next
-GeetBiosVersionError:
-If GeetBiosVersion = "" Then
-    GeetBiosVersion = "Not Available"
+GetBiosVersionError:
+If GetBiosVersion = "" Then
+    GetBiosVersion = "Not Available"
 End If
 End Function
 

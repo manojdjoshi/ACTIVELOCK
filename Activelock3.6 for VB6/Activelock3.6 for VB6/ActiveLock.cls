@@ -230,6 +230,18 @@ Private Property Let IActiveLock_LicenseFileType(ByVal RHS As ALLicenseFileTypes
 End Property
 
 '===============================================================================
+' Name: Property Let IActiveLock_LicenseFileType
+' Input:
+'   ByVal RHS As ALLicenseFileTypes - ALLicenseFileTypes type
+' Output: None
+' Purpose: Specifies the ALLicenseFileTypes type
+' Remarks: None
+'===============================================================================
+Private Property Get IActiveLock_LicenseFileType() As Long
+    IActiveLock_LicenseFileType = mLicenseFileType
+End Property
+
+'===============================================================================
 ' Name: Property Let IActiveLock_LockType
 ' Input:
 '   ByVal RHS As ALLockTypes - ALLockTypes type
@@ -450,6 +462,19 @@ Private Sub IActiveLock_Acquire(Optional strMsg As String)
         ' There's no valid license, so let's see if we can grant this user a "Trial License"
         If mTrialType = ALTrialTypes.trialNone Then 'No Trial
             GoTo noRegistration
+        End If
+            
+        If mCheckTimeServerForClockTampering = alsCheckTimeServer Then
+            If SystemClockTampered Then
+                Set_locale regionalSymbol
+                Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+            End If
+        End If
+        If mCheckSystemFilesForClockTampering = alsCheckSystemFiles Then
+            If ClockTampering Then
+                Set_locale regionalSymbol
+                Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+            End If
         End If
             
         On Error GoTo noRegistration
@@ -799,17 +824,25 @@ Private Sub ValidateLic(Lic As ProductLicense)
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrLicenseTampered, ACTIVELOCKSTRING, STRLICENSETAMPERED
     End If
-    ' try to detect the user setting their system clock back
-    ' Need to account for Daylight Savings Time
-    Dim strNow As String
-    ' Normalize to the format of the saved date-time, before we compare
-    strNow = ActiveLockDate(UTC(Now))
-    'If strNow < Lic.LastUsed And Lic.LicenseType <> allicPermanent Then
-    If strNow < ActiveLockDate(CDate(Lic.LastUsed)) And Lic.LicenseType <> allicPermanent Then
-        'MsgBox "UTC Now: " & strNow
-        'MsgBox "LastUsed: " & CDate(Lic.LastUsed)
-        Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+    
+    ' We will compare several important dates with each other
+    ' to see if anything is wrong in the license
+    If Lic.LicenseType <> allicPermanent Then
+        ' Must have NOW>LASTUSED
+        If ActiveLockDate(UTC(Now)) < ActiveLockDate(CDate(Lic.LastUsed)) Then
+            Set_locale regionalSymbol
+            Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+        End If
+        ' Must have NOW<EXPIRATION
+        If ActiveLockDate(UTC(Now)) > ActiveLockDate(CDate(Lic.Expiration)) Then
+            Set_locale regionalSymbol
+            Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+        End If
+        ' Must have LASTUSED>=REGISTERED
+        If ActiveLockDate(CDate(Lic.LastUsed)) < ActiveLockDate(CDate(Lic.RegisteredDate)) Then
+            Set_locale regionalSymbol
+            Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+        End If
     End If
     UpdateLastUsed Lic
     mKeyStore.Store Lic, mLicenseFileType
@@ -1395,47 +1428,47 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
         AppendLockString strLock, modHardware.GetHDSerial()
         AppendLockString strLock, modHardware.GetHDSerialFirmware()
         AppendLockString strLock, modHardware.GetWindowsSerial()
-        AppendLockString strLock, modHardware.GeetBiosVersion()
+        AppendLockString strLock, modHardware.GetBiosVersion()
         AppendLockString strLock, modHardware.GetMotherboardSerial()
         AppendLockString strLock, modHardware.GetIPaddress()
     Else
-        If mLockTypes And lockMAC Then
-            AppendLockString strLock, modHardware.GetMACAddress()
+        If IsNumberIncluded(mLockTypes, lockMAC) Then     'mLockTypes And IActiveLock.ALLockTypes.lockMAC Then
+            AppendLockString strLock, modHardware.GetMACAddress
         Else
             AppendLockString strLock, noKey
         End If
-        If mLockTypes And lockComp Then
-            AppendLockString strLock, modHardware.GetComputerName()
+        If IsNumberIncluded(mLockTypes, lockComp) Then     'mLockTypes And IActiveLock.ALLockTypes.lockComp Then
+            AppendLockString strLock, modHardware.GetComputerName
         Else
             AppendLockString strLock, noKey
         End If
-        If mLockTypes And lockHD Then
-            AppendLockString strLock, modHardware.GetHDSerial()
+        If IsNumberIncluded(mLockTypes, lockHD) Then     'mLockTypes And IActiveLock.ALLockTypes.lockHD Then
+            AppendLockString strLock, modHardware.GetHDSerial
         Else
             AppendLockString strLock, noKey
         End If
-        If mLockTypes And lockHDFirmware Then
-            AppendLockString strLock, modHardware.GetHDSerialFirmware()
+        If IsNumberIncluded(mLockTypes, lockHDFirmware) Then     'mLockTypes And IActiveLock.ALLockTypes.lockHDFirmware Then
+            AppendLockString strLock, modHardware.GetHDSerialFirmware
         Else
             AppendLockString strLock, noKey
         End If
-        If mLockTypes And lockWindows Then
-            AppendLockString strLock, modHardware.GetWindowsSerial()
+        If IsNumberIncluded(mLockTypes, lockWindows) Then     'mLockTypes And IActiveLock.ALLockTypes.lockWindows Then
+            AppendLockString strLock, modHardware.GetWindowsSerial
         Else
             AppendLockString strLock, noKey
         End If
-        If mLockTypes And lockBIOS Then
-            AppendLockString strLock, modHardware.GeetBiosVersion()
+        If IsNumberIncluded(mLockTypes, lockBIOS) Then     'mLockTypes And IActiveLock.ALLockTypes.lockBIOS Then
+            AppendLockString strLock, modHardware.GetBiosVersion
         Else
             AppendLockString strLock, noKey
         End If
-        If mLockTypes And lockMotherboard Then
-            AppendLockString strLock, modHardware.GetMotherboardSerial()
+        If IsNumberIncluded(mLockTypes, lockMotherboard) Then    'mLockTypes And IActiveLock.ALLockTypes.lockMotherboard Then
+            AppendLockString strLock, modHardware.GetMotherboardSerial
         Else
             AppendLockString strLock, noKey
         End If
-        If mLockTypes And lockIP Then
-            AppendLockString strLock, modHardware.GetIPaddress()
+        If IsNumberIncluded(mLockTypes, lockIP) Then     'mLockTypes And IActiveLock.ALLockTypes.lockIP Then
+            AppendLockString strLock, modHardware.GetIPaddress
         Else
             AppendLockString strLock, noKey
         End If
@@ -1517,7 +1550,7 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                 ElseIf j = LBound(a) + 5 Then
                     If aString <> noKey Then
                         IActiveLock_AddLockCode lockBIOS, SizeLockType  'dw1 build up lockTypes
-                        If aString <> modHardware.GeetBiosVersion() Then
+                        If aString <> modHardware.GetBiosVersion() Then
                             Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If

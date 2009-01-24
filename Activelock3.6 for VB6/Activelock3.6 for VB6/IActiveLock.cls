@@ -438,6 +438,10 @@ Public Property Let LicenseFileType(ByVal LicenseFileType As ALLicenseFileTypes)
 
 End Property
 
+Public Property Get LicenseFileType() As Long
+
+End Property
+
 '===============================================================================
 ' Name: Property Let TrialHideType
 ' Input:
