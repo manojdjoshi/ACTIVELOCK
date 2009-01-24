@@ -1269,7 +1269,7 @@ Friend Class frmMain
             ' In order to pick the keys that you want to lock to in Alugen, use lockNone only
             ' Example: lockWindows Or lockComp
             ' You can combine any lockType(s) using OR as above
-            .LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockNone
+            '.LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockNone
             .LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockBIOS Or _
             ActiveLock3_6NET.IActiveLock.ALLockTypes.lockComp
 
@@ -1316,13 +1316,13 @@ Friend Class frmMain
             ' Although Activelock makes every effort to check if the system clock was tampered,
             ' checking a time server is the guaranteed way of knowing the correct UTC time/day.
             ' This feature might add some delay to your apps start-up time.
-            '.CheckTimeServerForClockTampering = ActiveLock3_6NET.IActiveLock.ALTimeServerTypes.alsDontCheckTimeServer       ' use alsCheckTimeServer to enforce time server checks for clock tampering check
-            .CheckTimeServerForClockTampering = ActiveLock3_6NET.IActiveLock.ALTimeServerTypes.alsCheckTimeServer
+            .CheckTimeServerForClockTampering = ActiveLock3_6NET.IActiveLock.ALTimeServerTypes.alsDontCheckTimeServer       ' use alsCheckTimeServer to enforce time server checks for clock tampering check
+            '.CheckTimeServerForClockTampering = ActiveLock3_6NET.IActiveLock.ALTimeServerTypes.alsCheckTimeServer
 
             ' Set the system files clock tampering check
             ' This feature might add some delay to your apps start-up time.
-            '.CheckSystemFilesForClockTampering = ActiveLock3_6NET.IActiveLock.ALSystemFilesTypes.alsDontCheckSystemFiles    ' use alsCheckSystemFiles to enforce system files scanning for clock tampering check
-            .CheckSystemFilesForClockTampering = ActiveLock3_6NET.IActiveLock.ALSystemFilesTypes.alsCheckSystemFiles
+            .CheckSystemFilesForClockTampering = ActiveLock3_6NET.IActiveLock.ALSystemFilesTypes.alsDontCheckSystemFiles    ' use alsCheckSystemFiles to enforce system files scanning for clock tampering check
+            '.CheckSystemFilesForClockTampering = ActiveLock3_6NET.IActiveLock.ALSystemFilesTypes.alsCheckSystemFiles
 
             ' Set the license file format; this could be encrypted or plain
             ' Even in a plain file format, certain keys and dates are still encrypted.
