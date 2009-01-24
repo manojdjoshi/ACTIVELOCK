@@ -351,7 +351,7 @@ Begin VB.Form frmMain
          Height          =   2565
          Left            =   1440
          MultiLine       =   -1  'True
-         ScrollBars      =   3  'Both
+         ScrollBars      =   2  'Vertical
          TabIndex        =   13
          Top             =   1710
          Width           =   6675
@@ -461,9 +461,19 @@ Begin VB.Form frmMain
    End
    Begin VB.Label Label12 
       Alignment       =   2  'Center
+      BackColor       =   &H00FF8080&
       BorderStyle     =   1  'Fixed Single
       Caption         =   $"frmMain.frx":42E3
-      ForeColor       =   &H00FF0000&
+      BeginProperty Font 
+         Name            =   "MS Sans Serif"
+         Size            =   8.25
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H00FFFFFF&
       Height          =   465
       Left            =   45
       TabIndex        =   49
@@ -872,7 +882,7 @@ Private Sub Form_Load()
         ' Although Activelock makes every effort to check if the system clock was tampered,
         ' checking a time server is the guaranteed way of knowing the correct UTC time/day.
         ' This feature might add some delay to your apps start-up time.
-        .CheckTimeServerForClockTampering = alsDontCheckTimeServer      ' use alsCheckTimeServer to enforce time server check for clock tampering detection
+        .CheckTimeServerForClockTampering = alsCheckTimeServer      ' use alsCheckTimeServer to enforce time server check for clock tampering detection
         
         ' Set the system files clock tampering check
         ' This feature might add some delay to your apps start-up time.
@@ -1012,20 +1022,27 @@ Private Sub Form_Load()
     ' This is for number of concurrent users count in a netwrok license
     txtMaxCount.Text = MyActiveLock.MaxCount
 
-    'Read the license file into a string to determine the license type
-    Dim strBuff As String
-    Dim fNum As Integer
-    fNum = FreeFile
-    Open strKeyStorePath For Input As #fNum
-    strBuff = Input(LOF(1), 1)
-    Close #fNum
-    If Instring(strBuff, "LicenseType=3") Then
-        txtLicenseType.Text = "Time Limited"
-    ElseIf Instring(strBuff, "LicenseType=1") Then
-        txtLicenseType.Text = "Periodic"
-    ElseIf Instring(strBuff, "LicenseType=2") Then
-        txtLicenseType.Text = "Permanent"
+    ' Read the license file into a string to determine the license type
+    ' You can read the LicenseType from the LIC file directly
+    ' However, the LIC file should be in Plain format for this to work.
+    If MyActiveLock.LicenseFileType = alsLicenseFilePlain Then
+        Dim strBuff As String
+        Dim fNum As Integer
+        fNum = FreeFile
+        Open strKeyStorePath For Input As #fNum
+        strBuff = Input(LOF(1), 1)
+        Close #fNum
+        If Instring(strBuff, "LicenseType=3") Then
+            txtLicenseType.Text = "Time Limited"
+        ElseIf Instring(strBuff, "LicenseType=1") Then
+            txtLicenseType.Text = "Periodic"
+        ElseIf Instring(strBuff, "LicenseType=2") Then
+            txtLicenseType.Text = "Permanent"
+        End If
+    Else
+        txtLicenseType.Text = "Encrypted in LIC File"
     End If
+    
     FunctionalitiesEnabled = True
     
     ' If your code has reached this point successfully, then you're good.
