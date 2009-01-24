@@ -5,6 +5,8 @@ Imports System.Security.Cryptography
 Imports System.Text
 Imports System.String
 Imports System.DateTime
+Imports System.Runtime.InteropServices
+Imports Microsoft.VisualBasic.ControlChars
 Module modTrial
     '*   ActiveLock
     '*   Copyright 1998-2002 Nelson Ferraz
@@ -256,42 +258,90 @@ Module modTrial
     Private Declare Function LocalFileTimeToFileTime Lib "kernel32" (ByRef lpLocalFileTime As FILETIME, ByRef lpFileTime As FILETIME) As Integer
     Private Declare Function SetFileTime Lib "kernel32" (ByVal hFile As Integer, ByRef lpCreationTime As FILETIME, ByRef lpLastAccessTime As FILETIME, ByRef lpLastWriteTime As FILETIME) As Integer
 
-    Private Declare Function InternetOpen Lib "wininet.dll" Alias "InternetOpenA" (ByVal sAgent As String, ByVal lAccessType As Integer, ByVal sProxyName As String, ByVal sProxyBypass As String, ByVal lFlags As Integer) As Integer
-    Private Declare Function InternetOpenUrl Lib "wininet.dll" Alias "InternetOpenUrlA" (ByVal hInternetSession As Integer, ByVal sUrl As String, ByVal sHeaders As String, ByVal lHeadersLength As Integer, ByVal lFlags As Integer, ByVal lContext As Integer) As Integer
-    Private Declare Function InternetReadFile Lib "wininet.dll" (ByVal hFile As Integer, ByVal sBuffer As String, ByVal lNumberOfBytesToRead As Integer, ByRef lNumberOfBytesRead As Integer) As Short
-    Private Declare Function InternetCloseHandle Lib "wininet.dll" (ByVal hInet As Integer) As Short
+    'Private Declare Function InternetOpen Lib "wininet.dll" Alias "InternetOpenA" (ByVal sAgent As String, ByVal lAccessType As Integer, ByVal sProxyName As String, ByVal sProxyBypass As String, ByVal lFlags As Integer) As Integer
+    'Private Declare Function InternetOpenUrl Lib "wininet.dll" Alias "InternetOpenUrlA" (ByVal hInternetSession As Integer, ByVal sUrl As String, ByVal sHeaders As String, ByVal lHeadersLength As Integer, ByVal lFlags As Integer, ByVal lContext As Integer) As Integer
+    'Private Declare Function InternetReadFile Lib "wininet.dll" (ByVal hFile As Integer, ByVal sBuffer As String, ByVal lNumberOfBytesToRead As Integer, ByRef lNumberOfBytesRead As Integer) As Integer
+    'Private Declare Function InternetCloseHandle Lib "wininet.dll" (ByVal hInet As Integer) As Integer
+
+    <DllImport("WinInet.dll", _
+EntryPoint:="InternetOpenA", _
+CharSet:=CharSet.Ansi, ExactSpelling:=True, SetLastError:=True)> _
+Public Function InternetOpen( _
+ByVal agent As String, _
+ByVal accessType As Int32, _
+ByVal proxyName As String, _
+ByVal proxyBypass As String, _
+ByVal flags As Int32) As IntPtr
+    End Function
+
+
+    <DllImport("WinInet.dll", _
+    EntryPoint:="InternetOpenUrlA", _
+    CharSet:=CharSet.Ansi, ExactSpelling:=True, SetLastError:=True)> _
+    Public Function InternetOpenUrl( _
+    ByVal session As IntPtr, _
+    ByVal url As String, _
+    ByVal header As String, _
+    ByVal headerLength As Int32, _
+    ByVal flags As Int32, _
+    ByVal context As Int32) As Int32
+    End Function
+
+
+    'InternetReadFile
+    <DllImport("WinInet.dll", _
+    EntryPoint:="InternetReadFile", _
+    CharSet:=CharSet.Auto, SetLastError:=True)> _
+    Public Function InternetReadFile( _
+    ByVal handle As Int32, _
+    <MarshalAs(UnmanagedType.LPArray)> _
+    ByVal newBuffer() As Byte, _
+    ByVal bufferLength As Int32, _
+    ByRef bytesRead As Int32) As Int32
+    End Function
+
+    <DllImport("WinInet.dll", _
+    EntryPoint:="InternetCloseHandle", _
+    CharSet:=CharSet.Ansi, ExactSpelling:=True, SetLastError:=True)> _
+    Public Function InternetCloseHandle( _
+    ByVal hInternet As Int32) As Int32
+    End Function
+
 
     Public Function OpenURL(ByVal sUrl As String) As String
-        ' Const INTERNET_OPEN_TYPE_PRECONFIG As Short = 0
+        Const INTERNET_ACCESS_TYPE_DIRECT As Integer = 1
         Const INTERNET_FLAG_RELOAD As Integer = &H80000000
-        Dim hSession As Integer
-        Dim hFile As Integer
-        Dim Result As String
-        Dim lRead As Integer
-        Dim Buffer As String
-        Buffer = New String(Chr(0), 1024)
-        OpenURL = String.Empty
+        Const USER_AGENT As String = "IE"
 
-        'This is where the website is grabbed
-        Buffer = ""
-        Result = ""
-        'Structure your internet request like below if you have a proxy
-        'hSession = InternetOpen("VBandWinInet/1.0", 3, "http://proxyIP:port", "", 0)
-        hSession = InternetOpen("VBandWinInet/1.0", 3, "", "", 0)
-        If hSession Then
-            hFile = InternetOpenUrl(hSession, sUrl, "", 0, INTERNET_FLAG_RELOAD, 0)
-            If hFile Then
-                lRead = 1
-                While lRead
-                    If InternetReadFile(hFile, Buffer, Buffer.Length, lRead) Then
-                        Result = Result & Buffer
-                    End If
-                End While
-                OpenURL = Result
-                InternetCloseHandle(hFile)
+        Dim length As Int32 = 2048
+        Dim handle As IntPtr
+        Dim session As Int32
+        Dim header As String = "Accept: */*" & Cr & Cr
+        Dim newBuffer() As Byte
+        Dim bytesRead As Int32
+        Dim response As Int32
+        Dim context As Integer = 0
+        Dim flags As Integer = 0
+        Dim result As String
+        handle = InternetOpen(USER_AGENT, INTERNET_ACCESS_TYPE_DIRECT, vbNullString, vbNullString, flags)
+        session = InternetOpenUrl(handle, sUrl, header, header.Length, INTERNET_FLAG_RELOAD, context)
+        If session = 0 Then
+            result = "Error: " & Marshal.GetLastWin32Error()
+        Else
+            ReDim newBuffer(Length - 1)
+            response = InternetReadFile(session, newBuffer, Length, bytesRead)
+            If response = 0 Then
+                result = ""   '"Error Reading File: " & Marshal.GetLastWin32Error()
+            Else
+                ' Use appropriate Encoding here to get string from byte array
+                result = System.Text.UTF8Encoding.UTF8.GetString(newBuffer)
             End If
-            InternetCloseHandle(hSession)
         End If
+        OpenURL = result
+        InternetCloseHandle(session)
+        InternetCloseHandle(handle.ToInt32)
+        Return result
+
     End Function
     '===============================================================================
     ' Name: Function DateGoodRegistry
@@ -563,11 +613,9 @@ RunsGoodRegistryError:
         Dim strMyString, strSource As String
         Dim intFF As Short
         Dim ok As Double
-        Dim myDir As String
-        myDir = "mPY+Que6efQvkZsstJlvvw=="
 
         On Error GoTo DateGoodHiddenFolderError
-        If Directory.Exists(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD)) = False Then MkDir(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD))
+        If Directory.Exists(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir(), PSWD)) = False Then MkDir(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD))
         strSource = HiddenFolderFunction()
 
         Dim checkFile As System.IO.DirectoryInfo
@@ -729,8 +777,6 @@ DateGoodHiddenFolderError:
         Dim strMyString, strSource As String
         Dim intFF As Short
         Dim ok As Double
-        Dim myDir As String
-        myDir = "mPY+Que6efQvkZsstJlvvw=="
 
         On Error GoTo RunsGoodHiddenFolderError
         If Directory.Exists(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD)) = False Then MkDir(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD))
@@ -1172,8 +1218,6 @@ FileExistErrors:  'error handling routine, including File Not Found
         'Dim secondRegistryKey As Boolean
         Dim ok As Double
         Dim strSource As String
-        Dim myDir As String
-        myDir = "mPY+Que6efQvkZsstJlvvw=="
 
         On Error GoTo triAlerror
 
@@ -1302,12 +1346,9 @@ triAlerror:
     ' Remarks: None
     '===============================================================================
     Public Function ResetTrial(ByVal SoftwareName As String, ByVal SoftwareVer As String, ByVal TrialType As Integer, ByVal TrialLength As Integer, ByVal TrialHideTypes As IActiveLock.ALTrialHideTypes, ByVal SoftwarePassword As String) As Boolean
-        'Dim secondRegistryKey As Boolean
         Dim ok As Integer
         Dim strSourceFile As String
         Dim rtn As Byte
-        Dim myDir As String
-        myDir = "mPY+Que6efQvkZsstJlvvw=="
 
         On Error Resume Next
 
@@ -1701,8 +1742,6 @@ IsSteganographyExpiredError:
         Dim strMyString, strSource As String
         Dim intFF As Short
         Dim ok As Double
-        Dim myDir As String
-        myDir = "mPY+Que6efQvkZsstJlvvw=="
         On Error GoTo IsHiddenFolderExpiredError
 
         Dim checkFile As System.IO.DirectoryInfo
@@ -1892,9 +1931,7 @@ IsHiddenFolderExpiredError:
         Dim strVal As String
         Dim daysLeft, runsLeft As Short
         Dim intEXPIREDWARNING As Short
-        Dim myDir As String
 
-        myDir = "mPY+Que6efQvkZsstJlvvw=="
         EXPIRED_RUNS = Chr(101) & Chr(120) & Chr(112) & Chr(105) & Chr(114) & Chr(101) & Chr(100) & Chr(114) & Chr(117) & Chr(110) & Chr(115)
         EXPIRED_DAYS = Chr(101) & Chr(120) & Chr(112) & Chr(105) & Chr(114) & Chr(101) & Chr(100) & Chr(100) & Chr(97) & Chr(121) & Chr(115)
         TEXTMSG_DAYS = DecryptString128Bit("sQvYYRLPon5IyH6BQRAUBuCLTq/5VkH3kl7HUwJLZ2M=", PSWD)
@@ -2083,18 +2120,18 @@ exitGracefully:
         Dim i, Count As Short
         On Error Resume Next
 
-        For i = 0 To 4
+        For i = 0 To 1
             Select Case i
                 Case 0
-                    t = "c:"
+                    t = WinDir() & "\Prefetch"
                 Case 1
-                    t = WinDir()
-                Case 2
                     t = WinDir() & "\Temp"
-                Case 3
-                    t = WinDir() & "\Applog"
-                Case 4
-                    t = WinDir() & "\Recent"
+                    'Case 2
+                    '    t = WinDir() & "\Temp"
+                    'Case 3
+                    '    t = WinDir() & "\Applog"
+                    'Case 4
+                    '    t = WinDir() & "\Recent"
             End Select
 
             Count = 0
@@ -2860,20 +2897,31 @@ minusAttributesError:
         ok = Shell("ATTRIB +h +s +r " & ActivelockGetSpecialFolder(46) & DecryptString128Bit(HIDDENFOLDER, PSWD), AppWinStyle.Hide)
     End Sub
     Public Function SystemClockTampered() As Boolean
+
         ' Section added by Ismail Alkan
         ' Access a good time server to see which day it is :)
         ' Get the date only... compare with the system clock
-        ' Die if more than 1 day difference
+        ' Die if more than 1 day difference'
+        ' UTC Time and Date of course...
         Dim ss, aa As String
         Dim blabla As String
         Dim diff As Short
         Dim i As Short
         Dim month1() As String
         Dim month2() As String
+        SystemClockTampered = False
         month1 = "January;February;March;April;May;June;July;August;September;October;November;December".Split(";")
         month2 = "01;02;03;04;05;06;07;08;09;10;11;12".Split(";")
-        ss = OpenURL(DecryptString128Bit("xcZfCWJLnPOl2V5kTJpBOi4ysgfzBj1H3nUzyhxODIQTLfqFDbHBbHmfcP4yzX7e", "myloveactivelock")) 'http://www.time.gov/timezone.cgi?UTC
-        If ss = "" Then Exit Function
+        ss = OpenURL(DecryptString128Bit("xcZfCWJLnPOl2V5kTJpBOi4ysgfzBj1H3nUzyhxODITU7s9QX0xe23TQ9ue3ypmT", PSWD)) 'http://www.time.gov/timezone.cgi?UTC/s/0
+        If ss = "" Then
+            ' The fast method above did not do its job
+            ' Call an existing Daytime class from "The Code Project"
+            ' to check if the system clock was adjusted
+            Dim systemClock As New Daytime
+            If Daytime.WindowsClockIncorrect = True Then
+                Return True
+            End If
+        End If
         blabla = "</b></font><font size=" & """" & "5" & """" & " color=" & """" & "white" & """" & ">"
         i = InStr(ss, blabla)
         ss = Mid(ss, i + Len(blabla))
@@ -2889,10 +2937,11 @@ minusAttributesError:
                 Exit For
             End If
         Next
-        ss = Format(CDate(ss), "short date")    ' VB6.Format(CDate(ss), "short date")
-        aa = Format(Date.UtcNow, "short date")  ' VB6.Format(Date.UtcNow, "short date")
+        ss = Format(CDate(ss), "yyyy/MM/dd")   '"short date")
+        aa = Date.UtcNow.Year.ToString("0000") & "/" & Date.UtcNow.Month.ToString("00") & "/" & Date.UtcNow.Day.ToString("00")
         diff = CDate(ss).Subtract(CDate(aa)).Days
         If diff > 1 Then SystemClockTampered = True
+
     End Function
     Public Function VarPtr(ByVal o As Object) As Integer
         ' Undocumented VarPtr in VB.NET !!!
@@ -3153,5 +3202,7 @@ minusAttributesError:
             TrialIsolatedStorageExists = True
         End If
     End Function
-
+    Public Function myDir() As String
+        myDir = "mPY+Que6efQvkZsstJlvvw=="
+    End Function
 End Module

@@ -40,12 +40,12 @@ Class clsNetworkStats
         Public Index As Integer
         Public Type As Integer
         Public Mtu As Integer
-        Public Speed As Long ' Change from int to long for VISTA
+        Public Speed As Long ' Change from Integer to Long for VISTA
         Public PhysAddrLen As Integer
         Public PhysAddr As String
         Public AdminStatus As Integer
         Public OperStatus As Integer
-        Public LastChange As Integer
+        Public LastChange As Long ' Changed from Integer to Long to make it work
         Public InOctets As Integer
         Public InUcastPkts As Integer
         Public InNUcastPkts As Integer
@@ -161,12 +161,12 @@ Class clsNetworkStats
         ifhelp.Index = Convert.ToInt32(pri.dwIndex)
         ifhelp.Type = Convert.ToInt32(pri.dwType)
         ifhelp.Mtu = Convert.ToInt32(pri.dwMtu)
-        ifhelp.Speed = Convert.ToInt64(pri.dwSpeed) ' Change from ToInt32 to ToInt64 for VISTA
+        ifhelp.Speed = Convert.ToInt64(pri.dwSpeed) ' Changed from ToInt32 to ToInt64 for VISTA
         ifhelp.PhysAddrLen = Convert.ToInt32(pri.dwPhysAddrLen)
         ifhelp.PhysAddr = MAC2String(pri.bPhysAddr)
         ifhelp.AdminStatus = Convert.ToInt32(pri.dwAdminStatus)
         ifhelp.OperStatus = Convert.ToInt32(pri.dwOperStatus)
-        'ifhelp.LastChange = Convert.ToInt32(pri.dwLastChange)
+        ifhelp.LastChange = Convert.ToInt64(pri.dwLastChange) ' Changed from ToInt32 to ToInt64 to make it work and to uncomment
         ifhelp.InOctets = Convert.ToInt32(pri.dwInOctets)
         ifhelp.InUcastPkts = Convert.ToInt32(pri.dwInUcastPkts)
         ifhelp.InNUcastPkts = Convert.ToInt32(pri.dwInNUcastPkts)

@@ -1116,5 +1116,44 @@ Hell:
         ' Do not modify this unless you change all encrypted strings in the entire project
         PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
     End Function
+    Function IsNumberIncluded(ByVal n1 As Long, ByVal n2 As Long) As Boolean
+        ' n1 = the larger number which may include n2
+        ' n2 = the number we're checking as "is this a component?"
+        Dim binary1 As String = String.Empty
+        Dim binary2 As String = String.Empty
+        IsNumberIncluded = False
+
+        If n1 < n2 Then
+            Exit Function
+        ElseIf n1 <= 0 Or n2 <= 0 Then
+            Exit Function
+        ElseIf n1 = n2 Then
+            IsNumberIncluded = True
+        Else
+
+            Do Until n1 = 0
+                If (n1 Mod 2) Then
+                    binary1 = binary1 & "1"   'write binary number BACKWARDS
+                Else
+                    binary1 = binary1 & "0"
+                End If
+                n1 = n1 \ 2
+            Loop
+
+            Do Until n2 = 0
+                If (n2 Mod 2) Then
+                    binary2 = binary2 & "1"   'write binary number BACKWARDS
+                Else
+                    binary2 = binary2 & "0"
+                End If
+                n2 = n2 \ 2
+            Loop
+            IsNumberIncluded = CBool(Mid$(binary1, Len(binary2), 1) = "1")
+            If binary1.Substring(binary2.Length - 1, 1) = "1" Then IsNumberIncluded = True
+
+        End If
+
+
+    End Function
 
 End Module

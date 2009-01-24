@@ -1773,7 +1773,8 @@ Friend Class frmMain
                 strNew64Chunk = strdata.Substring(i, 64)
             End If
             If sResult.Length > 0 Then
-                sResult = sResult & vbCrLf & strNew64Chunk
+                sResult = sResult & strNew64Chunk
+                'sResult = sResult & vbCrLf & strNew64Chunk
             Else
                 sResult = sResult & strNew64Chunk
             End If
@@ -2498,12 +2499,12 @@ SaveFormSettings_Error:
         End If
         If cboLicType.Text = "Time Locked" Then
             lblExpiry.Text = "&Expires on Date:"
-            txtDays.Text = Date.UtcNow.AddDays(365).ToString("yyyy/MM/dd")
+            txtDays.Text = Date.Now.AddDays(365).ToString("yyyy/MM/dd")
             lblDays.Text = "yyyy/MM/dd"
             txtDays.Visible = False
             dtpExpireDate.Visible = True
             'walter'wrongdate'dtpExpireDate.Value = Now.UtcNow.AddDays(30)
-            dtpExpireDate.Value = Date.UtcNow.AddDays(30)
+            dtpExpireDate.Value = Date.Now.AddDays(30)
         Else
             lblExpiry.Text = "&Expires after:"
             txtDays.Text = "365"
@@ -2726,6 +2727,19 @@ SaveFormSettings_Error:
         Dim licFlag As ActiveLock3_6NET.ProductLicense.LicFlags, maximumUsers As Short
 
         If SSTab1.SelectedIndex <> 1 Then Exit Sub ' our tab not active - do nothing
+        ' Get the current date format and save it to regionalSymbol variable
+        Get_locale()
+        ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
+        Set_locale("")
+
+        If cboLicType.Text = "Time Locked" Then
+            ' Check to see if there's a valid expiration date
+            If CDate(CType(dtpExpireDate.Value, DateTime).ToString("yyyy/MM/dd")) < CDate(Format(Date.Now, "yyyy/MM/dd")) Then
+                Set_locale(regionalSymbol)
+                MsgBox("Entered date occurs in the past.", vbExclamation)
+                Exit Sub
+            End If
+        End If
 
         If Len(txtInstallCode.Text) <> 8 Then  'Short Key License
             If chkLockMACaddress.CheckState = CheckState.Unchecked _
@@ -2743,10 +2757,6 @@ SaveFormSettings_Error:
         ' get product and version
         Cursor = Cursors.WaitCursor
         UpdateStatus("Generating license key...")
-        ' Get the current date format and save it to regionalSymbol variable
-        Get_locale()
-        ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
-        Set_locale("")
 
         Try
             Dim itemProductInfo As ProductInfoItem = CType(cboProducts.SelectedItem, ProductInfoItem)
@@ -2774,7 +2784,7 @@ SaveFormSettings_Error:
             strExpire = GetExpirationDate()
             Dim strRegDate As String
             'walter'wrongdate'strRegDate = Now.UtcNow.ToString("yyyy/MM/dd")
-            strRegDate = Date.UtcNow.ToString("yyyy/MM/dd")
+            strRegDate = Date.Now.ToString("yyyy/MM/dd")
             Dim Lic As ProductLicense
 
             'generate license object
