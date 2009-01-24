@@ -47,8 +47,17 @@ v3.6 Updates:
 - FIX: Added "If hFile = -1 Then" check to the ViewStream function since the CreateFileW function might rarely fail.
 - The trialHideTypes detection in the DLL has been improved such that unneeded trial types won't be called anymore wasting the trial execution speed. Future addition of more trial hiding types will be easier to code and manage.
 - FIX: Time Server date checks and system file date checks are performed in Acquire, Register and ActivateTrial methods. Some of these were not checking the existence of these properties and were executing these code by default. Fixed.
-
-
+- FIX: Alugen now catches the dates that occur in the past before it generates the license key. This is valid for "Time Limited" licenses only.
+- Alugen date handling has been reviewed and synched with Activelock.
+- FIX: The Time Server access via wininet.dll was having problems. There were bugs in the OpenURL code accessing the time server for UTC time check. Fixed those bugs and made the feature work.
+- Improved the speed of the "system files date/time check" code. Concentrating on more available folders across the OSs.
+- FIX: GetHDDfirmwareSerial works great for the most part, but for there are those rare cases when "not available" is returned. This is not acceptable for some cases such as the short keys which really depend on this hardware key. Therefore, if this key returns "not available" it is now replaced by "NA" & GetHDSerial & GetMotherboardSerial.
+- The sample application now checks whether the LIC file is in plain or encrypted format since the contents can not be parsed to extract the license type from the LIC file if the file is in encrypted format.
+- The system clock checking routine (via the web time server) now includes an additional class to check the system clock. First, it uses the reliable and fast approach, but it fails, it switches to the more involved, slower but accurate method in the Daytime.vb class.
+- The test application now clearly states that the "Reset Trial" button feature is provided for the developers only and should definitely be omitted from the final user application.
+- The LicenseFileType property in Activelock is not WriteOnly property any more, allowing the retrieval of this property in user's application.
+- FIX: Alugen was inserting an extra vbCrlf constant in the license key in every line to make 64-byte chunks. Although Activelock would honor these, the email systems transmitted them erroneously causing registration problems in the form of "Index outside bounds of array" problems. This extra vbCrlf character has been removed from the license key. See "http://activelocksoftware.com/forums/t/211.aspx" for more information.
+- FIX: A new function, IsNumberIncluded checks the hardware key combinations to determine accurately whether the right combination was used for licensing. This function works out the binary representation of the hardware key's representation that's a multiplier of 2, decides whether a given key combination includes a particular key. This should eliminate the IP binding problems experienced in the past.
 
 
 v3.5.5 Updates:
