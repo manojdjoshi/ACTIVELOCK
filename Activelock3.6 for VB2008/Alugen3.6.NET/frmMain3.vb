@@ -69,6 +69,14 @@ Friend Class frmMain
     Public Shared resxList As New Collections.Specialized.ListDictionary
     Friend WithEvents cmdStartWizard As System.Windows.Forms.Button
     Friend WithEvents optStrength4 As System.Windows.Forms.RadioButton
+    Friend WithEvents lblLockMacAddress As System.Windows.Forms.Label
+    Friend WithEvents lblLockMotherboard As System.Windows.Forms.Label
+    Friend WithEvents lblLockBIOS As System.Windows.Forms.Label
+    Friend WithEvents lblLockWindows As System.Windows.Forms.Label
+    Friend WithEvents lblLockHDfirmware As System.Windows.Forms.Label
+    Friend WithEvents lblLockHD As System.Windows.Forms.Label
+    Friend WithEvents lblLockComputer As System.Windows.Forms.Label
+    Friend WithEvents lblLockIP As System.Windows.Forms.Label
 
     Private printPreviewDialog1 As New PrintPreviewDialog
 
@@ -263,6 +271,14 @@ Friend Class frmMain
         Me.GroupBox1 = New System.Windows.Forms.GroupBox
         Me._SSTab1_TabPage1 = New System.Windows.Forms.TabPage
         Me.frmKeyGen = New System.Windows.Forms.Panel
+        Me.lblLockIP = New System.Windows.Forms.Label
+        Me.lblLockMotherboard = New System.Windows.Forms.Label
+        Me.lblLockBIOS = New System.Windows.Forms.Label
+        Me.lblLockWindows = New System.Windows.Forms.Label
+        Me.lblLockHDfirmware = New System.Windows.Forms.Label
+        Me.lblLockHD = New System.Windows.Forms.Label
+        Me.lblLockComputer = New System.Windows.Forms.Label
+        Me.lblLockMacAddress = New System.Windows.Forms.Label
         Me.cmdUncheckAll = New System.Windows.Forms.Button
         Me.cmdCheckAll = New System.Windows.Forms.Button
         Me.lblConcurrentUsers = New System.Windows.Forms.Label
@@ -1143,6 +1159,14 @@ Friend Class frmMain
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.frmKeyGen.BackColor = System.Drawing.SystemColors.Control
+        Me.frmKeyGen.Controls.Add(Me.lblLockIP)
+        Me.frmKeyGen.Controls.Add(Me.lblLockMotherboard)
+        Me.frmKeyGen.Controls.Add(Me.lblLockBIOS)
+        Me.frmKeyGen.Controls.Add(Me.lblLockWindows)
+        Me.frmKeyGen.Controls.Add(Me.lblLockHDfirmware)
+        Me.frmKeyGen.Controls.Add(Me.lblLockHD)
+        Me.frmKeyGen.Controls.Add(Me.lblLockComputer)
+        Me.frmKeyGen.Controls.Add(Me.lblLockMacAddress)
         Me.frmKeyGen.Controls.Add(Me.cmdUncheckAll)
         Me.frmKeyGen.Controls.Add(Me.cmdCheckAll)
         Me.frmKeyGen.Controls.Add(Me.lblConcurrentUsers)
@@ -1194,6 +1218,62 @@ Friend Class frmMain
         Me.frmKeyGen.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.frmKeyGen.Size = New System.Drawing.Size(567, 519)
         Me.frmKeyGen.TabIndex = 0
+        '
+        'lblLockIP
+        '
+        Me.lblLockIP.Location = New System.Drawing.Point(256, 249)
+        Me.lblLockIP.Name = "lblLockIP"
+        Me.lblLockIP.Size = New System.Drawing.Size(300, 16)
+        Me.lblLockIP.TabIndex = 79
+        '
+        'lblLockMotherboard
+        '
+        Me.lblLockMotherboard.Location = New System.Drawing.Point(256, 232)
+        Me.lblLockMotherboard.Name = "lblLockMotherboard"
+        Me.lblLockMotherboard.Size = New System.Drawing.Size(300, 16)
+        Me.lblLockMotherboard.TabIndex = 78
+        '
+        'lblLockBIOS
+        '
+        Me.lblLockBIOS.Location = New System.Drawing.Point(256, 215)
+        Me.lblLockBIOS.Name = "lblLockBIOS"
+        Me.lblLockBIOS.Size = New System.Drawing.Size(300, 16)
+        Me.lblLockBIOS.TabIndex = 77
+        '
+        'lblLockWindows
+        '
+        Me.lblLockWindows.Location = New System.Drawing.Point(256, 198)
+        Me.lblLockWindows.Name = "lblLockWindows"
+        Me.lblLockWindows.Size = New System.Drawing.Size(300, 16)
+        Me.lblLockWindows.TabIndex = 76
+        '
+        'lblLockHDfirmware
+        '
+        Me.lblLockHDfirmware.Location = New System.Drawing.Point(256, 181)
+        Me.lblLockHDfirmware.Name = "lblLockHDfirmware"
+        Me.lblLockHDfirmware.Size = New System.Drawing.Size(300, 16)
+        Me.lblLockHDfirmware.TabIndex = 75
+        '
+        'lblLockHD
+        '
+        Me.lblLockHD.Location = New System.Drawing.Point(256, 164)
+        Me.lblLockHD.Name = "lblLockHD"
+        Me.lblLockHD.Size = New System.Drawing.Size(300, 16)
+        Me.lblLockHD.TabIndex = 74
+        '
+        'lblLockComputer
+        '
+        Me.lblLockComputer.Location = New System.Drawing.Point(256, 147)
+        Me.lblLockComputer.Name = "lblLockComputer"
+        Me.lblLockComputer.Size = New System.Drawing.Size(300, 16)
+        Me.lblLockComputer.TabIndex = 73
+        '
+        'lblLockMacAddress
+        '
+        Me.lblLockMacAddress.Location = New System.Drawing.Point(256, 130)
+        Me.lblLockMacAddress.Name = "lblLockMacAddress"
+        Me.lblLockMacAddress.Size = New System.Drawing.Size(300, 16)
+        Me.lblLockMacAddress.TabIndex = 72
         '
         'cmdUncheckAll
         '
@@ -1269,12 +1349,12 @@ Friend Class frmMain
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.chkLockIP.BackColor = System.Drawing.SystemColors.Control
         Me.chkLockIP.Cursor = System.Windows.Forms.Cursors.Default
-        Me.chkLockIP.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkLockIP.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockIP.ForeColor = System.Drawing.SystemColors.ControlText
         Me.chkLockIP.Location = New System.Drawing.Point(87, 254)
         Me.chkLockIP.Name = "chkLockIP"
         Me.chkLockIP.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkLockIP.Size = New System.Drawing.Size(476, 13)
+        Me.chkLockIP.Size = New System.Drawing.Size(180, 13)
         Me.chkLockIP.TabIndex = 24
         Me.chkLockIP.Text = "Lock to IP Address"
         Me.chkLockIP.UseVisualStyleBackColor = False
@@ -1285,12 +1365,12 @@ Friend Class frmMain
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.chkLockMotherboard.BackColor = System.Drawing.SystemColors.Control
         Me.chkLockMotherboard.Cursor = System.Windows.Forms.Cursors.Default
-        Me.chkLockMotherboard.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkLockMotherboard.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockMotherboard.ForeColor = System.Drawing.SystemColors.ControlText
         Me.chkLockMotherboard.Location = New System.Drawing.Point(87, 236)
         Me.chkLockMotherboard.Name = "chkLockMotherboard"
         Me.chkLockMotherboard.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkLockMotherboard.Size = New System.Drawing.Size(476, 13)
+        Me.chkLockMotherboard.Size = New System.Drawing.Size(180, 13)
         Me.chkLockMotherboard.TabIndex = 23
         Me.chkLockMotherboard.Text = "Lock to Motherboard Serial"
         Me.chkLockMotherboard.UseVisualStyleBackColor = False
@@ -1301,12 +1381,12 @@ Friend Class frmMain
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.chkLockBIOS.BackColor = System.Drawing.SystemColors.Control
         Me.chkLockBIOS.Cursor = System.Windows.Forms.Cursors.Default
-        Me.chkLockBIOS.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkLockBIOS.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockBIOS.ForeColor = System.Drawing.SystemColors.ControlText
         Me.chkLockBIOS.Location = New System.Drawing.Point(87, 218)
         Me.chkLockBIOS.Name = "chkLockBIOS"
         Me.chkLockBIOS.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkLockBIOS.Size = New System.Drawing.Size(476, 13)
+        Me.chkLockBIOS.Size = New System.Drawing.Size(180, 13)
         Me.chkLockBIOS.TabIndex = 22
         Me.chkLockBIOS.Text = "Lock to BIOS Version"
         Me.chkLockBIOS.UseVisualStyleBackColor = False
@@ -1317,12 +1397,12 @@ Friend Class frmMain
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.chkLockWindows.BackColor = System.Drawing.SystemColors.Control
         Me.chkLockWindows.Cursor = System.Windows.Forms.Cursors.Default
-        Me.chkLockWindows.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkLockWindows.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockWindows.ForeColor = System.Drawing.SystemColors.ControlText
         Me.chkLockWindows.Location = New System.Drawing.Point(87, 200)
         Me.chkLockWindows.Name = "chkLockWindows"
         Me.chkLockWindows.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkLockWindows.Size = New System.Drawing.Size(476, 13)
+        Me.chkLockWindows.Size = New System.Drawing.Size(180, 13)
         Me.chkLockWindows.TabIndex = 21
         Me.chkLockWindows.Text = "Lock to Windows Serial"
         Me.chkLockWindows.UseVisualStyleBackColor = False
@@ -1333,12 +1413,12 @@ Friend Class frmMain
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.chkLockHDfirmware.BackColor = System.Drawing.SystemColors.Control
         Me.chkLockHDfirmware.Cursor = System.Windows.Forms.Cursors.Default
-        Me.chkLockHDfirmware.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkLockHDfirmware.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockHDfirmware.ForeColor = System.Drawing.SystemColors.ControlText
         Me.chkLockHDfirmware.Location = New System.Drawing.Point(87, 182)
         Me.chkLockHDfirmware.Name = "chkLockHDfirmware"
         Me.chkLockHDfirmware.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkLockHDfirmware.Size = New System.Drawing.Size(476, 13)
+        Me.chkLockHDfirmware.Size = New System.Drawing.Size(180, 13)
         Me.chkLockHDfirmware.TabIndex = 20
         Me.chkLockHDfirmware.Text = "Lock to HDD Firmware Serial"
         Me.chkLockHDfirmware.UseVisualStyleBackColor = False
@@ -1349,12 +1429,12 @@ Friend Class frmMain
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.chkLockHD.BackColor = System.Drawing.SystemColors.Control
         Me.chkLockHD.Cursor = System.Windows.Forms.Cursors.Default
-        Me.chkLockHD.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkLockHD.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockHD.ForeColor = System.Drawing.SystemColors.ControlText
         Me.chkLockHD.Location = New System.Drawing.Point(87, 164)
         Me.chkLockHD.Name = "chkLockHD"
         Me.chkLockHD.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkLockHD.Size = New System.Drawing.Size(476, 13)
+        Me.chkLockHD.Size = New System.Drawing.Size(180, 13)
         Me.chkLockHD.TabIndex = 19
         Me.chkLockHD.Text = "Lock to HDD Volume Serial"
         Me.chkLockHD.UseVisualStyleBackColor = False
@@ -1365,12 +1445,12 @@ Friend Class frmMain
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.chkLockComputer.BackColor = System.Drawing.SystemColors.Control
         Me.chkLockComputer.Cursor = System.Windows.Forms.Cursors.Default
-        Me.chkLockComputer.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkLockComputer.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockComputer.ForeColor = System.Drawing.SystemColors.ControlText
         Me.chkLockComputer.Location = New System.Drawing.Point(87, 146)
         Me.chkLockComputer.Name = "chkLockComputer"
         Me.chkLockComputer.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkLockComputer.Size = New System.Drawing.Size(476, 13)
+        Me.chkLockComputer.Size = New System.Drawing.Size(180, 13)
         Me.chkLockComputer.TabIndex = 18
         Me.chkLockComputer.Text = "Lock to Computer Name"
         Me.chkLockComputer.UseVisualStyleBackColor = False
@@ -1381,12 +1461,12 @@ Friend Class frmMain
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.chkLockMACaddress.BackColor = System.Drawing.SystemColors.Control
         Me.chkLockMACaddress.Cursor = System.Windows.Forms.Cursors.Default
-        Me.chkLockMACaddress.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkLockMACaddress.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockMACaddress.ForeColor = System.Drawing.SystemColors.ControlText
         Me.chkLockMACaddress.Location = New System.Drawing.Point(87, 128)
         Me.chkLockMACaddress.Name = "chkLockMACaddress"
         Me.chkLockMACaddress.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkLockMACaddress.Size = New System.Drawing.Size(476, 13)
+        Me.chkLockMACaddress.Size = New System.Drawing.Size(180, 13)
         Me.chkLockMACaddress.TabIndex = 17
         Me.chkLockMACaddress.Text = "Lock to MAC Address"
         Me.chkLockMACaddress.UseVisualStyleBackColor = False
@@ -2080,28 +2160,28 @@ Friend Class frmMain
                 aString = a(i)
                 If i = LBound(a) Then
                     MACaddress = aString
-                    chkLockMACaddress.Text = "Lock to MAC Address:                           " & MACaddress
+                    lblLockMacAddress.Text = MACaddress
                 ElseIf i = LBound(a) + 1 Then
                     ComputerName = aString
-                    chkLockComputer.Text = "Lock to Computer Name:                       " & ComputerName
+                    lblLockComputer.Text = ComputerName
                 ElseIf i = LBound(a) + 2 Then
                     VolumeSerial = aString
-                    chkLockHD.Text = "Lock to HDD Volume Serial Number:     " & VolumeSerial
+                    lblLockHD.Text = VolumeSerial
                 ElseIf i = LBound(a) + 3 Then
                     FirmwareSerial = aString
-                    chkLockHDfirmware.Text = "Lock to HDD Firmware Serial Number:  " & FirmwareSerial
+                    lblLockHDfirmware.Text = FirmwareSerial
                 ElseIf i = LBound(a) + 4 Then
                     WindowsSerial = aString
-                    chkLockWindows.Text = "Lock to Windows Serial Number:           " & WindowsSerial
+                    lblLockWindows.Text = WindowsSerial
                 ElseIf i = LBound(a) + 5 Then
                     BIOSserial = aString
-                    chkLockBIOS.Text = "Lock to BIOS Serial Number:                 " & BIOSserial
+                    lblLockBIOS.Text = BIOSserial
                 ElseIf i = LBound(a) + 6 Then
                     MotherboardSerial = aString
-                    chkLockMotherboard.Text = "Lock to Motherboard Serial Number:     " & MotherboardSerial
+                    lblLockMotherboard.Text = MotherboardSerial
                 ElseIf i = LBound(a) + 7 Then
                     IPaddress = aString
-                    chkLockIP.Text = "Lock to IP Address:                               " & IPaddress
+                    lblLockIP.Text = IPaddress
                 End If
             Next i
         Else '"+" was not used, therefore one or more lockTypes were specified in the application
@@ -2114,39 +2194,48 @@ Friend Class frmMain
             chkLockMotherboard.Enabled = False
             chkLockIP.Enabled = False
 
+            chkLockMACaddress.CheckState = CheckState.Unchecked
+            chkLockHD.CheckState = CheckState.Unchecked
+            chkLockHDfirmware.CheckState = CheckState.Unchecked
+            chkLockWindows.CheckState = CheckState.Unchecked
+            chkLockComputer.CheckState = CheckState.Unchecked
+            chkLockBIOS.CheckState = CheckState.Unchecked
+            chkLockMotherboard.CheckState = CheckState.Unchecked
+            chkLockIP.CheckState = CheckState.Unchecked
+
             For i = LBound(a) To UBound(a) - 1
                 aString = a(i)
                 If i = LBound(a) And aString <> noKey Then
                     MACaddress = aString
-                    chkLockMACaddress.Text = "Lock to MAC Address:                           " & MACaddress
+                    lblLockMacAddress.Text = MACaddress
                     chkLockMACaddress.CheckState = CheckState.Checked
                 ElseIf i = (LBound(a) + 1) And aString <> noKey Then
                     ComputerName = aString
-                    chkLockComputer.Text = "Lock to Computer Name:                       " & ComputerName
+                    lblLockComputer.Text = ComputerName
                     chkLockComputer.CheckState = CheckState.Checked
                 ElseIf i = (LBound(a) + 2) And aString <> noKey Then
                     VolumeSerial = aString
-                    chkLockHD.Text = "Lock to HDD Volume Serial Number:     " & VolumeSerial
+                    lblLockHD.Text = VolumeSerial
                     chkLockHD.CheckState = CheckState.Checked
                 ElseIf i = (LBound(a) + 3) And aString <> noKey Then
                     FirmwareSerial = aString
-                    chkLockHDfirmware.Text = "Lock to HDD Firmware Serial Number:  " & FirmwareSerial
+                    lblLockHDfirmware.Text = FirmwareSerial
                     chkLockHDfirmware.CheckState = CheckState.Checked
                 ElseIf i = (LBound(a) + 4) And aString <> noKey Then
                     WindowsSerial = aString
-                    chkLockWindows.Text = "Lock to Windows Serial Number:           " & WindowsSerial
+                    lblLockWindows.Text = WindowsSerial
                     chkLockWindows.CheckState = CheckState.Checked
                 ElseIf i = (LBound(a) + 5) And aString <> noKey Then
                     BIOSserial = aString
-                    chkLockBIOS.Text = "Lock to BIOS Serial Number:                 " & BIOSserial
+                    lblLockBIOS.Text = BIOSserial
                     chkLockBIOS.CheckState = CheckState.Checked
                 ElseIf i = (LBound(a) + 6) And aString <> noKey Then
                     MotherboardSerial = aString
-                    chkLockMotherboard.Text = "Lock to Motherboard Serial Number:     " & MotherboardSerial
+                    lblLockMotherboard.Text = MotherboardSerial
                     chkLockMotherboard.CheckState = CheckState.Checked
                 ElseIf i = (LBound(a) + 7) And aString <> noKey Then
                     IPaddress = aString
-                    chkLockIP.Text = "Lock to IP Address:                               " & IPaddress
+                    lblLockIP.Text = IPaddress
                     chkLockIP.CheckState = CheckState.Checked
                 End If
 
@@ -3356,6 +3445,7 @@ exitValidate:
     End Sub
 
     Private Sub txtInstallCode_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtInstallCode.TextChanged
+
         If Len(txtInstallCode.Text) = 8 Then 'Short key authorization is much simpler
             UpdateKeyGenButtonStatus()
             If fDisableNotifications Then Exit Sub
@@ -3737,4 +3827,7 @@ exitValidate:
 
     End Sub
 
+    Private Sub frmKeyGen_Paint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles frmKeyGen.Paint
+
+    End Sub
 End Class
