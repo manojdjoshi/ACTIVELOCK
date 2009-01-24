@@ -52,12 +52,19 @@ Begin VB.Form frmMain
       TabPicture(0)   =   "frmMain3.frx":0CCA
       Tab(0).ControlEnabled=   0   'False
       Tab(0).Control(0)=   "cmdValidate"
+      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).Control(1)=   "Picture1"
+      Tab(0).Control(1).Enabled=   0   'False
       Tab(0).Control(2)=   "cmdRemove"
+      Tab(0).Control(2).Enabled=   0   'False
       Tab(0).Control(3)=   "fraProdNew"
+      Tab(0).Control(3).Enabled=   0   'False
       Tab(0).Control(4)=   "gridProds"
+      Tab(0).Control(4).Enabled=   0   'False
       Tab(0).Control(5)=   "Label17"
+      Tab(0).Control(5).Enabled=   0   'False
       Tab(0).Control(6)=   "Label1"
+      Tab(0).Control(6).Enabled=   0   'False
       Tab(0).ControlCount=   7
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
@@ -282,15 +289,6 @@ Begin VB.Form frmMain
          End
          Begin VB.CommandButton cmdBrowse 
             Caption         =   "..."
-            BeginProperty Font 
-               Name            =   "MS Sans Serif"
-               Size            =   13.5
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
             Height          =   360
             Left            =   8040
             TabIndex        =   27
@@ -485,8 +483,8 @@ Begin VB.Form frmMain
          Begin VB.Label lblDays 
             Caption         =   "days"
             BeginProperty Font 
-               Name            =   "Small Fonts"
-               Size            =   6.75
+               Name            =   "Arial"
+               Size            =   8.25
                Charset         =   0
                Weight          =   400
                Underline       =   0   'False
@@ -496,13 +494,13 @@ Begin VB.Form frmMain
             Height          =   255
             Left            =   3120
             TabIndex        =   29
-            Top             =   430
+            Top             =   855
             Width           =   1935
          End
       End
       Begin VB.Frame fraProdNew 
          Height          =   2835
-         Left            =   -74910
+         Left            =   -74865
          TabIndex        =   12
          Top             =   360
          Width           =   9495
@@ -600,7 +598,7 @@ Begin VB.Form frmMain
             BackColor       =   &H8000000F&
             BeginProperty Font 
                Name            =   "Small Fonts"
-               Size            =   6.75
+               Size            =   7.5
                Charset         =   0
                Weight          =   400
                Underline       =   0   'False
@@ -619,7 +617,7 @@ Begin VB.Form frmMain
             BackColor       =   &H8000000F&
             BeginProperty Font 
                Name            =   "Small Fonts"
-               Size            =   6.75
+               Size            =   7.5
                Charset         =   0
                Weight          =   400
                Underline       =   0   'False
@@ -662,8 +660,8 @@ Begin VB.Form frmMain
             Appearance      =   0  'Flat
             Caption         =   "Crypto API"
             BeginProperty Font 
-               Name            =   "Small Fonts"
-               Size            =   6.75
+               Name            =   "Arial"
+               Size            =   8.25
                Charset         =   0
                Weight          =   400
                Underline       =   0   'False
@@ -671,11 +669,11 @@ Begin VB.Form frmMain
                Strikethrough   =   0   'False
             EndProperty
             ForeColor       =   &H00FF0000&
-            Height          =   420
-            Left            =   3060
+            Height          =   600
+            Left            =   2970
             TabIndex        =   68
             Top             =   945
-            Width           =   4650
+            Width           =   4920
          End
          Begin VB.Label Label19 
             Caption         =   "&Strength"
@@ -1123,29 +1121,37 @@ End If
 End Sub
 
 Private Sub cmbLicType_Click()
-    ' enable the days edit box
-    If cmbLicType = "Periodic" Or cmbLicType = "Time Locked" Then
-        txtDays.Locked = False
-        txtDays.BackColor = &H80000005
-        txtDays.ForeColor = vbBlack
-    Else
-        txtDays.Locked = True
-        txtDays.BackColor = &H8000000F
-        txtDays.ForeColor = &H8000000F
-    End If
-    If cmbLicType = "Time Locked" Then
-        lblExpiry = "&Expires on Date:"
-        txtDays = ActiveLockDateFormat(Now() + 365)
-        lblDays = "yyyy/MM/dd"
-    Else
-        lblExpiry = "&Expires after:"
-        txtDays = "365"
-        lblDays = "Day(s)"
-    End If
+' Get the current date format and save it to regionalSymbol variable
+Get_locale
+' Use this trick to temporarily set the date format to "yyyy/MM/dd"
+Set_locale ("")
+    
+' enable the days edit box
+If cmbLicType = "Periodic" Or cmbLicType = "Time Locked" Then
+    txtDays.Locked = False
+    txtDays.BackColor = &H80000005
+    txtDays.ForeColor = vbBlack
+Else
+    txtDays.Locked = True
+    txtDays.BackColor = &H8000000F
+    txtDays.ForeColor = &H8000000F
+End If
+If cmbLicType = "Time Locked" Then
+    lblExpiry = "&Expires on Date:"
+    txtDays = Format(Now, "yyyy/MM/dd")
+    lblDays = "yyyy/MM/dd"
+Else
+    lblExpiry = "&Expires after:"
+    txtDays = "365"
+    lblDays = "Day(s)"
+End If
+
+Set_locale regionalSymbol
+
 End Sub
 
 ''
-' Normalizes date format to yyyy/mm/dd
+' Normalizes date format to yyyy/MM/dd
 '
 Private Function ActiveLockDateFormat(dt As Date) As String
     'ActiveLockDateFormat = Year(dt) & "/" & Month(dt) & "/" & Day(dt)
@@ -1370,6 +1376,20 @@ Dim strLibKey As String, i As Integer
 
 If SSTab1.Tab <> 1 Then Exit Sub ' our tab not active - do nothing
 
+' Get the current date format and save it to regionalSymbol variable
+Get_locale
+' Use this trick to temporarily set the date format to "yyyy/MM/dd"
+Set_locale ("")
+
+If cmbLicType = "Time Locked" Then
+    ' Check to see if there's a valid expiration date
+    If CDate(ActiveLockDateFormat(txtDays.Text)) < CDate(Format(Now, "yyyy/MM/dd")) Then
+        Set_locale regionalSymbol
+        MsgBox "Entered date occurs in the past.", vbExclamation
+        Exit Sub
+    End If
+End If
+
 If Len(txtReqCodeIn.Text) <> 8 Then  'Short Key License
     If chkLockMACaddress.Value = vbUnchecked And chkLockComputer.Value = vbUnchecked And _
         chkLockHD.Value = vbUnchecked And chkLockHDfirmware.Value = vbUnchecked And _
@@ -1402,13 +1422,8 @@ Else
     varLicType = allicNone
 End If
 
-' Get the current date format and save it to regionalSymbol variable
-Get_locale
-' Use this trick to temporarily set the date format to "yyyy/MM/dd"
-Set_locale ("")
-
 strExpire = GetExpirationDate()
-strRegDate = Format(UTC(Now()), "yyyy/MM/dd")
+strRegDate = Format(Now, "yyyy/MM/dd")
 
 'Take care of the networked licenses
 If chkNetworkedLicense.Value = vbChecked Then
@@ -1503,7 +1518,8 @@ Private Function Make64ByteChunks(strdata As String) As String
     sResult = Left$(strdata, 64)
     i = 65
     While i <= Count
-        sResult = sResult & vbCrLf & Mid$(strdata, i, 64)
+        'sResult = sResult & vbCrLf & Mid$(strdata, i, 64)
+        sResult = sResult & Mid$(strdata, i, 64)
         i = i + 64
     Wend
     Make64ByteChunks = sResult

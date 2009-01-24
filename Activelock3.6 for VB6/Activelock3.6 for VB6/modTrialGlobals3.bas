@@ -338,13 +338,17 @@ Private Declare Function InternetCloseHandle Lib "wininet.dll" _
       (ByVal hInet As Long) As Integer
 
 
+Public Function myDir() As String
+myDir = "3BFE841EE459E0EC0DDBDCB91CA0A5879D751E21622A19741A6EEC92B19E1B5C"
+End Function
+
 Public Function OpenURL(ByVal sUrl As String) As String
 Const INTERNET_OPEN_TYPE_PRECONFIG = 0
 Const INTERNET_FLAG_RELOAD = &H80000000
 Dim hSession As Long
 Dim hFile As Long
 Dim Result As String
-Dim Buffer As String * 1024
+Dim Buffer As String * 2048
 Dim bResult As Boolean
 Dim lRead As Long
 'This is where the website is grabbed
@@ -352,9 +356,10 @@ Buffer = ""
 Result = ""
 'Structure your internet request like below if you have a proxy
 'hSession = InternetOpen("VBandWinInet/1.0", 3, "http://proxyIP:port", "", 0)
-hSession = InternetOpen("VBandWinInet/1.0", 3, "", "", 0)
+'hSession = InternetOpen("VBandWinInet/1.0", 3, "", "", 0)
+hSession = InternetOpen("VB OpenUrl", INTERNET_OPEN_TYPE_PRECONFIG, vbNullString, vbNullString, 0)
 If hSession Then
-hFile = InternetOpenUrl(hSession, sUrl, "", 0, INTERNET_FLAG_RELOAD, 0)
+hFile = InternetOpenUrl(hSession, sUrl, vbNullString, 0, INTERNET_FLAG_RELOAD, 0)
 If hFile Then
         lRead = 1
         While lRead
@@ -639,9 +644,6 @@ Dim TmpLRD As Date
 Dim TmpFRD As Date
 Dim strMyString As String, strSource As String
 Dim intFF As Integer
-Dim myDir As String
-
-myDir = "3BFE841EE459E0EC0DDBDCB91CA0A5879D751E21622A19741A6EEC92B19E1B5C"
 
 On Error GoTo DateGoodHiddenFolderError
 If FolderExists(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD)) = False Then
@@ -764,15 +766,13 @@ Exit Function
 DateGoodHiddenFolderError:
 
 End Function
+
 Public Function RunsGoodHiddenFolder(numRuns As Integer, runsLeft As Integer) As Boolean
 Dim TmpCRD As Date
 Dim TmpLRD As Date
 Dim TmpFRD As Date
 Dim strMyString As String, strSource As String
 Dim intFF As Integer
-Dim myDir As String
-
-myDir = "3BFE841EE459E0EC0DDBDCB91CA0A5879D751E21622A19741A6EEC92B19E1B5C"
 
 On Error GoTo RunsGoodHiddenFolderError
 If FolderExists(ActivelockGetSpecialFolder(46) & DecryptMyString(myDir, PSWD)) = False Then
@@ -1214,11 +1214,8 @@ End Function
 Public Function ExpireTrial(ByVal SoftwareName As String, ByVal SoftwareVer As String, ByVal TrialType As Long, ByVal TrialLength As Long, ByVal TrialHideTypes As ALTrialHideTypes, ByVal SoftwarePassword As String) As Boolean
 'Dim secondRegistryKey As Boolean
 Dim strSource As String
-Dim myDir As String
 Dim oMD5 As clsMD5
 Set oMD5 = New clsMD5
-
-myDir = "3BFE841EE459E0EC0DDBDCB91CA0A5879D751E21622A19741A6EEC92B19E1B5C"
 
 On Error GoTo trialError
 
@@ -1343,11 +1340,8 @@ Public Function ResetTrial(ByVal SoftwareName As String, ByVal SoftwareVer As St
 'Dim secondRegistryKey
 Dim strSourceFile As String
 Dim rtn As Byte
-Dim myDir As String
 Dim oMD5 As clsMD5
 Set oMD5 = New clsMD5
-
-myDir = "3BFE841EE459E0EC0DDBDCB91CA0A5879D751E21622A19741A6EEC92B19E1B5C"
 
 On Error Resume Next
 
@@ -1742,9 +1736,6 @@ End Function
 Public Function IsHiddenFolderExpired() As Boolean
 Dim strMyString As String, strSource As String
 Dim intFF As Integer
-Dim myDir As String
-
-myDir = "3BFE841EE459E0EC0DDBDCB91CA0A5879D751E21622A19741A6EEC92B19E1B5C"
 
 On Error GoTo IsHiddenFolderExpiredError
 
@@ -1911,9 +1902,7 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
     On Error GoTo NotRegistered
     Dim daysLeft As Integer, runsLeft As Integer
     Dim intEXPIREDWARNING As Integer
-    Dim myDir As String
     
-    myDir = "3BFE841EE459E0EC0DDBDCB91CA0A5879D751E21622A19741A6EEC92B19E1B5C"
     EXPIRED_RUNS = Chr(101) & Chr(120) & Chr(112) & Chr(105) & Chr(114) & Chr(101) & Chr(100) & Chr(114) & Chr(117) & Chr(110) & Chr(115)
     EXPIRED_DAYS = Chr(101) & Chr(120) & Chr(112) & Chr(105) & Chr(114) & Chr(101) & Chr(100) & Chr(100) & Chr(97) & Chr(121) & Chr(115)
     TEXTMSG_DAYS = DecryptMyString("0DEAD685B3E70293A72D7BF2A5947CBED433B490DE5286509B9A4953B71190634432E5E20DCEFACC22E237072924B18B2DD7D1355E284B65DF70BD6D536B1D8E", PSWD)
@@ -2108,18 +2097,18 @@ Dim fileDate As Date
 Dim i As Integer, Count As Integer
 On Error Resume Next
     
-For i = 0 To 2
+For i = 0 To 1
     Select Case i
         Case 0
-            t = "c:"
+            t = WinDir() & "\Prefetch"
         Case 1
-            t = WinDir()
-        Case 2
             t = WinDir() & "\Temp"
-        Case 3
-            t = WinDir() & "\Applog"
-        Case 4
-            t = WinDir() & "\Recent"
+'        Case 2
+'            t = WinDir() & "\Temp"
+'        Case 3
+'            t = WinDir() & "\Applog"
+'        Case 4
+'            t = WinDir() & "\Recent"
     End Select
     
     Count = 0
@@ -2989,7 +2978,7 @@ Dim i As Integer
 Dim month1() As String, month2() As String
 month1() = Split("January;February;March;April;May;June;July;August;September;October;November;December", ";")
 month2() = Split("01;02;03;04;05;06;07;08;09;10;11;12", ";")
-ss = OpenURL(DecryptMyString("090A5B14BB8EC2FB9976DD17C34B0B668EE6C9EC9FAAED8AD54FEF8D83BDA0D9C8B246C08718C2EAA96DC8DBE5AA970B6B101B69471157C43731F1ACEE775FC5B7EA0292F399B561AC1C62344639CB9F9BC706752CE6D2A190BF065DDF95D56F", "myserver"))    'http://www.time.gov/timezone.cgi?UTC
+ss = OpenURL(DecryptMyString("6A63FE36308E42DADB2F5BA739581CD40F0AFA9D07EA8B3C333B8E6044709ED3BF93D27EF4019018AC5275E088BF5B0D5A351029369A5F5738175F1FE486B1332D0BBFFC04238760C97910070F91CB9BE3357832BA441A7F4C6A8CCE431481A4", PSWD))    'http://www.time.gov/timezone.cgi?UTC/s/0
 If ss = "" Then Exit Function
 blabla = "</b></font><font size=" & """" & "5" & """" & " color=" & """" & "white" & """" & ">"
 i = InStr(ss, blabla)
@@ -3006,8 +2995,8 @@ If InStr(ss, month1(i)) Then
     Exit For
 End If
 Next
-ss = Format(CDate(ss), "short date")
-aa = Format(UTC(Now), "short date")
+ss = Format(CDate(ss), "yyyy/MM/dd")   '"short date")
+aa = Format(UTC(Now), "yyyy/MM/dd")   '"short date")"short date")
 diff = Abs(DateDiff("d", ss, aa))
 If diff > 1 Then SystemClockTampered = True
 End Function
