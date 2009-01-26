@@ -1,16 +1,16 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form frmMain 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "ALTestApp - ActiveLock3 Test Application"
-   ClientHeight    =   10800
+   ClientHeight    =   10095
    ClientLeft      =   45
    ClientTop       =   330
    ClientWidth     =   9510
    Icon            =   "frmMain.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
-   ScaleHeight     =   10800
+   ScaleHeight     =   10095
    ScaleWidth      =   9510
    StartUpPosition =   2  'CenterScreen
    Begin MSComctlLib.StatusBar StatusBar1 
@@ -18,7 +18,7 @@ Begin VB.Form frmMain
       Height          =   285
       Left            =   0
       TabIndex        =   50
-      Top             =   10515
+      Top             =   9810
       Width           =   9510
       _ExtentX        =   16775
       _ExtentY        =   503
@@ -262,7 +262,7 @@ Begin VB.Form frmMain
       Height          =   4380
       Left            =   0
       TabIndex        =   12
-      Top             =   2925
+      Top             =   2880
       Width           =   9495
       Begin VB.CommandButton cmdPaste 
          Height          =   345
@@ -383,10 +383,10 @@ Begin VB.Form frmMain
    End
    Begin VB.Frame Frame1 
       BorderStyle     =   0  'None
-      Height          =   1650
+      Height          =   1395
       Left            =   585
       TabIndex        =   0
-      Top             =   8820
+      Top             =   8400
       Width           =   8265
       Begin VB.OptionButton optForm 
          Caption         =   "Option 2"
@@ -394,7 +394,7 @@ Begin VB.Form frmMain
          Index           =   1
          Left            =   4380
          TabIndex        =   6
-         Top             =   1245
+         Top             =   1125
          Width           =   1395
       End
       Begin VB.OptionButton optForm 
@@ -403,7 +403,7 @@ Begin VB.Form frmMain
          Index           =   0
          Left            =   4380
          TabIndex        =   5
-         Top             =   990
+         Top             =   870
          Value           =   -1  'True
          Width           =   1395
       End
@@ -447,7 +447,7 @@ Begin VB.Form frmMain
          Height          =   255
          Left            =   4380
          TabIndex        =   8
-         Top             =   690
+         Top             =   570
          Width           =   3765
       End
       Begin VB.Label lblSpeed 
@@ -477,15 +477,15 @@ Begin VB.Form frmMain
       Height          =   465
       Left            =   45
       TabIndex        =   49
-      Top             =   7380
+      Top             =   7320
       Width           =   9405
    End
    Begin VB.Label lblLockStatus 
       Caption         =   "Application Functionalities Are Currently: "
-      Height          =   375
+      Height          =   255
       Left            =   945
       TabIndex        =   11
-      Top             =   7965
+      Top             =   7845
       Width           =   2895
    End
    Begin VB.Label lblLockStatus2 
@@ -499,18 +499,18 @@ Begin VB.Form frmMain
          Italic          =   0   'False
          Strikethrough   =   0   'False
       EndProperty
-      Height          =   255
+      Height          =   180
       Left            =   3915
       TabIndex        =   10
-      Top             =   7965
+      Top             =   7845
       Width           =   4515
    End
    Begin VB.Label lblTrialInfo 
       Caption         =   "NOTE: All application functionalities are available in Trial Mode."
-      Height          =   375
+      Height          =   255
       Left            =   945
       TabIndex        =   9
-      Top             =   8355
+      Top             =   8160
       Width           =   4545
    End
 End
@@ -661,7 +661,7 @@ End Sub
 
 Private Sub cmdKillLicense_Click()
     Dim licFile As String
-    licFile = App.Path & "\" & LICENSE_ROOT & ".lic"
+    licFile = strKeyStorePath
     If FileExist(licFile) Then
         If FileLen(licFile) <> 0 Then
             Kill licFile
