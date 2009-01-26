@@ -375,8 +375,8 @@ End Type
 Public Declare Function Netbios Lib "netapi32.dll" (pncb As NET_CONTROL_BLOCK) As Byte
 Public Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (Destination As Any, Source As Any, ByVal Length As Long)
 Public Declare Function GetProcessHeap Lib "kernel32" () As Long
-Public Declare Function HeapAlloc Lib "kernel32" (ByVal hHeap As Long, ByVal dwFlags As Long, ByVal dwBytes As Long) As Long
-Public Declare Function HeapFree Lib "kernel32" (ByVal hHeap As Long, ByVal dwFlags As Long, ByVal lpMem As Long) As Long
+Public Declare Function HeapAlloc Lib "kernel32" (ByVal hHeap As Long, ByVal dwflags As Long, ByVal dwBytes As Long) As Long
+Public Declare Function HeapFree Lib "kernel32" (ByVal hHeap As Long, ByVal dwflags As Long, ByVal lpMem As Long) As Long
 Public Declare Sub ZeroMemory Lib "kernel32" Alias "RtlZeroMemory" (dest As Any, ByVal numBytes As Long)
 
 ' Following used to get the IP address
@@ -506,7 +506,8 @@ Public Const INTERNET_OPEN_TYPE_PROXY = 3
 Public Const scUserAgent = "VB OpenUrl"
 Public Const INTERNET_FLAG_RELOAD = &H80000000
 
-
+' Getting Local IP Address - another method
+Private Declare Function GetIpAddrTable_API Lib "IpHlpApi" Alias "GetIpAddrTable" (pIPAddrTable As Any, pdwSize As Long, ByVal bOrder As Long) As Long
 
 
 Function GetExternalIP(URL As String) As String
@@ -1429,40 +1430,67 @@ End Function
 Public Function GetIPaddress() As String
 On Error GoTo GetIPaddressError
 
-Dim sHostName As String * 256
-Dim lpHost As Long
-Dim HOST As HOSTENT
-Dim dwIPAddr As Long
-Dim tmpIPAddr() As Byte
+If IsWebConnected() = False Then
+    Set_locale (regionalSymbol)
+    Err.Raise ActiveLockErrCodeConstants.alerrNotInitialized, ACTIVELOCKSTRING, STRINTERNETNOTCONNECTED
+End If
+
+' This is the old method used prior to version 3.6
+'Dim sHostName As String * 256
+'Dim lpHost As Long
+'Dim HOST As HOSTENT
+'Dim dwIPAddr As Long
+'Dim tmpIPAddr() As Byte
+'Dim i As Integer
+'Dim sIPAddr As String
+'If Not SocketsInitialize() Then
+'    GetIPaddress = ""
+'    GoTo GetIPaddressError
+'End If
+'If gethostname(sHostName, 256) = SOCKET_ERROR Then
+'    GetIPaddress = ""
+'    'MsgBox "Windows Sockets error " & str$(WSAGetLastError()) & " has occurred. Unable to successfully get Host Name."
+'    SocketsCleanup
+'    GoTo GetIPaddressError
+'End If
+'sHostName = Trim$(sHostName)
+'lpHost = gethostbyname(sHostName)
+'If lpHost = 0 Then
+'    GetIPaddress = ""
+'    'MsgBox "Windows Sockets are not responding. " & "Unable to successfully get Host Name."
+'    SocketsCleanup
+'    GoTo GetIPaddressError
+'End If
+'CopyMemoryIP HOST, lpHost, Len(HOST)
+'CopyMemoryIP dwIPAddr, HOST.hAddrList, 4
+'ReDim tmpIPAddr(1 To HOST.hLen)
+'CopyMemoryIP tmpIPAddr(1), dwIPAddr, HOST.hLen
+'For i = 1 To HOST.hLen
+'    sIPAddr = sIPAddr & tmpIPAddr(i) & "."
+'Next
+'GetIPaddress = Mid$(sIPAddr, 1, Len(sIPAddr) - 1)
+'SocketsCleanup
+
+Dim Buf(0 To 511) As Byte
+Dim BufSize As Long
+BufSize = UBound(Buf) + 1
+Dim rc As Long
+rc = GetIpAddrTable_API(Buf(0), BufSize, 1)
+If rc <> 0 Then GoTo GetIPaddressError   'Err.Raise vbObjectError, , "GetIpAddrTable failed with return value " & rc
+Dim NrOfEntries As Integer
+NrOfEntries = Buf(1) * 256 + Buf(0)
+If NrOfEntries = 0 Then Exit Function
+ReDim IpAddrs(0 To NrOfEntries - 1) As String
 Dim i As Integer
-Dim sIPAddr As String
-If Not SocketsInitialize() Then
-    GetIPaddress = ""
-    GoTo GetIPaddressError
-End If
-If gethostname(sHostName, 256) = SOCKET_ERROR Then
-    GetIPaddress = ""
-    'MsgBox "Windows Sockets error " & str$(WSAGetLastError()) & " has occurred. Unable to successfully get Host Name."
-    SocketsCleanup
-    GoTo GetIPaddressError
-End If
-sHostName = Trim$(sHostName)
-lpHost = gethostbyname(sHostName)
-If lpHost = 0 Then
-    GetIPaddress = ""
-    'MsgBox "Windows Sockets are not responding. " & "Unable to successfully get Host Name."
-    SocketsCleanup
-    GoTo GetIPaddressError
-End If
-CopyMemoryIP HOST, lpHost, Len(HOST)
-CopyMemoryIP dwIPAddr, HOST.hAddrList, 4
-ReDim tmpIPAddr(1 To HOST.hLen)
-CopyMemoryIP tmpIPAddr(1), dwIPAddr, HOST.hLen
-For i = 1 To HOST.hLen
-    sIPAddr = sIPAddr & tmpIPAddr(i) & "."
+For i = 0 To NrOfEntries - 1
+    Dim j As Integer, s As String: s = ""
+    For j = 0 To 3
+        s = s & IIf(j > 0, ".", "") & Buf(4 + i * 24 + j)
+    Next
+    IpAddrs(i) = s
+    GetIPaddress = IpAddrs(i)
+    If GetIPaddress <> "0.0.0.0" And GetIPaddress <> "127.0.0.1" And inString(GetIPaddress, ":") = False Then Exit Function
 Next
-GetIPaddress = Mid$(sIPAddr, 1, Len(sIPAddr) - 1)
-SocketsCleanup
 
 ' for external IP address, use the following
 'GetIPaddress = GetExternalIP("http://checkip.dyndns.org/")
