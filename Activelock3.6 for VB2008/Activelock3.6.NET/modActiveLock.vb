@@ -87,6 +87,7 @@ Module modActiveLock
     Public Const STRWRONGIPADDRESS As String = "Wrong IP Address."
     Public Const STRUNDEFINEDSPECIALFOLDER As String = "Undefined Special Folder."
     Public Const STRDATEERROR As String = "Date Error."
+    Public Const STRINTERNETNOTCONNECTED As String = "Internet Connection is Required. Please Connect and Try Again."
 
 	' RSA encrypts the data.
 	' @param CryptType CryptType = 0 for public&#59; 1 for private
@@ -191,6 +192,23 @@ Module modActiveLock
     Private Declare Function GetUserDefaultLCID Lib "kernel32" () As Short
     Const LOCALE_SSHORTDATE As Short = &H1FS
     Public regionalSymbol As String
+
+    ' Internet connection constants
+    Dim ConnectionQualityString As String = "Off"
+
+    Private Declare Function InternetGetConnectedState _
+            Lib "wininet.dll" (ByRef lpSFlags As Int32, _
+            ByVal dwReserved As Int32) As Boolean
+
+    Public Enum InetConnState
+        modem = &H1
+        lan = &H2
+        proxy = &H4
+        ras = &H10
+        offline = &H20
+        configured = &H40
+    End Enum
+
 
     '===============================================================================
     ' Name: Function TrimNulls
@@ -1153,6 +1171,129 @@ Hell:
 
         End If
 
+    End Function
+
+    Public Function IsWebConnected() As Boolean
+        ' Returns True if connection is available
+
+        Dim lngFlags As Long
+
+        If InternetGetConnectedState(lngFlags, 0) Then
+            Return True ' True
+            If lngFlags And InetConnState.lan Then
+                Select Case ConnectionQualityString
+                    Case "Good"
+                        'lblConnectStatus.ForeColor = Color.Green
+                        'lblConnectStatus.Text = "Connection Quality:  Good"
+                        ConnectionQualityString = "Good"
+                    Case "Intermittent"
+                        'lblConnectStatus.ForeColor = Color.Green
+                        'lblConnectStatus.Text = "Connection Quality:  Good"
+                        ConnectionQualityString = "Good"
+                    Case "Off"
+                        'lblConnectStatus.ForeColor = Color.DarkOrange
+                        'lblConnectStatus.Text = _
+                        '     "Connection Quality:  Intermittent"
+                        ConnectionQualityString = "Intermittent"
+                End Select
+            ElseIf lngFlags And InetConnState.modem Then
+                Select Case ConnectionQualityString
+                    Case "Good"
+                        'lblConnectStatus.ForeColor = Color.Green
+                        'lblConnectStatus.Text = "Connection Quality:  Good"
+                        ConnectionQualityString = "Good"
+                    Case "Intermittent"
+                        'lblConnectStatus.ForeColor = Color.Green
+                        'lblConnectStatus.Text = "Connection Quality:  Good"
+                        ConnectionQualityString = "Good"
+                    Case "Off"
+                        'lblConnectStatus.ForeColor = Color.DarkOrange
+                        'lblConnectStatus.Text = _
+                        '     "Connection Quality:  Intermittent"
+                        ConnectionQualityString = "Intermittent"
+                End Select
+            ElseIf lngFlags And InetConnState.configured Then
+                Select Case ConnectionQualityString
+                    Case "Good"
+                        'lblConnectStatus.ForeColor = Color.Green
+                        'lblConnectStatus.Text = "Connection Quality:  Good"
+                        ConnectionQualityString = "Good"
+                    Case "Intermittent"
+                        'lblConnectStatus.ForeColor = Color.Green
+                        'lblConnectStatus.Text = "Connection Quality:  Good"
+                        ConnectionQualityString = "Good"
+                    Case "Off"
+                        'lblConnectStatus.ForeColor = Color.DarkOrange
+                        'lblConnectStatus.Text = _
+                        '     "Connection Quality:  Intermittent"
+                        ConnectionQualityString = "Intermittent"
+                End Select
+            ElseIf lngFlags And InetConnState.proxy Then
+                Select Case ConnectionQualityString
+                    Case "Good"
+                        'lblConnectStatus.ForeColor = Color.Green
+                        'lblConnectStatus.Text = "Connection Quality:  Good"
+                        ConnectionQualityString = "Good"
+                    Case "Intermittent"
+                        'lblConnectStatus.ForeColor = Color.Green
+                        'lblConnectStatus.Text = "Connection Quality:  Good"
+                        ConnectionQualityString = "Good"
+                    Case "Off"
+                        'lblConnectStatus.ForeColor = Color.DarkOrange
+                        'lblConnectStatus.Text = _
+                        '     "Connection Quality:  Intermittent"
+                        ConnectionQualityString = "Intermittent"
+                End Select
+            ElseIf lngFlags And InetConnState.ras Then
+                Select Case ConnectionQualityString
+                    Case "Good"
+                        'lblConnectStatus.ForeColor = Color.Green
+                        'lblConnectStatus.Text = "Connection Quality:  Good"
+                        ConnectionQualityString = "Good"
+                    Case "Intermittent"
+                        'lblConnectStatus.ForeColor = Color.Green
+                        'lblConnectStatus.Text = "Connection Quality:  Good"
+                        ConnectionQualityString = "Good"
+                    Case "Off"
+                        'lblConnectStatus.ForeColor = Color.DarkOrange
+                        'lblConnectStatus.Text = _
+                        '     "Connection Quality:  Intermittent"
+                        ConnectionQualityString = "Intermittent"
+                End Select
+            ElseIf lngFlags And InetConnState.offline Then
+                Select Case ConnectionQualityString
+                    Case "Good"
+                        'lblConnectStatus.ForeColor = Color.Green
+                        'lblConnectStatus.Text = "Connection Quality:  Good"
+                        ConnectionQualityString = "Good"
+                    Case "Intermittent"
+                        'lblConnectStatus.ForeColor = Color.Green
+                        'lblConnectStatus.Text = "Connection Quality:  Good"
+                        ConnectionQualityString = "Good"
+                    Case "Off"
+                        'lblConnectStatus.ForeColor = Color.DarkOrange
+                        'lblConnectStatus.Text = _
+                        '     "Connection Quality:  Intermittent"
+                        ConnectionQualityString = "Intermittent"
+                End Select
+            End If
+        Else
+            ' False
+            Select Case ConnectionQualityString
+                Case "Good"
+                    'lblConnectStatus.ForeColor = Color.DarkOrange
+                    'lblConnectStatus.Text = "Connection Quality:  Intermittent"
+                    ConnectionQualityString = "Intermittent"
+                Case "Intermittent"
+                    'lblConnectStatus.ForeColor = Color.Red
+                    'lblConnectStatus.Text = "Connection Quality:  Off"
+                    ConnectionQualityString = "Off"
+                Case "Off"
+                    'lblConnectStatus.ForeColor = Color.Red
+                    'lblConnectStatus.Text = "Connection Quality:  Off"
+                    ConnectionQualityString = "Off"
+            End Select
+        End If
 
     End Function
 

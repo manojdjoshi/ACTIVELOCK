@@ -1063,10 +1063,26 @@ GetMotherboardSeriAlerror:
     '===============================================================================
     Public Function GetIPaddress() As String
         On Error GoTo GetIPaddressError
-        Dim ipEntry As IPHostEntry = Dns.GetHostEntry(Environment.MachineName)
-        Dim IpAddr As IPAddress() = ipEntry.AddressList
+        GetIPaddress = String.Empty
+
+        If IsWebConnected() = False Then
+            GetIPaddress = "-1"
+            Exit Function
+        End If
+
+        ' This is the old method 
+        ' It worked but not necessarily all the time
+        ' There could be many IP addresses and one has to check if they are empty
+        'Dim ipEntry As IPHostEntry = Dns.GetHostEntry(Environment.MachineName)
+        'Dim IpAddr As IPAddress() = ipEntry.AddressList
+        'GetIPaddress = IpAddr(0).ToString()
+
         'A hostmachine can have more than one IP assigned 
-        GetIPaddress = IpAddr(0).ToString()
+        Dim NIC_IPs() As IPAddress = Dns.GetHostEntry(Dns.GetHostName()).AddressList
+        For Each IPAdr As IPAddress In NIC_IPs
+            GetIPaddress = IPAdr.ToString
+            If GetIPaddress <> "0.0.0.0" And GetIPaddress <> "127.0.0.1" And GetIPaddress.Contains(":") = False Then Exit Function
+        Next
 
 GetIPaddressError:
         If GetIPaddress = "" Then

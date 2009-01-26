@@ -109,7 +109,8 @@ Imports System.io
         AlerrCryptoAPIError = &H80040029
         AlerrNoSoftwarePassword = &H80040030
         AlerrUndefinedSpecialFolder = &H80040031
-        alerrDateError = &H80040032
+        AlerrDateError = &H80040032
+        AlerrInternetConnectionError = &H80040033
 
     End Enum
     Private strCypherText As String
