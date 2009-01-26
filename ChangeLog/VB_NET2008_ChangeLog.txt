@@ -46,6 +46,8 @@ Public Speed As Long ' Change from int to long for VISTA
 - The LicenseFileType property in Activelock is not WriteOnly property any more, allowing the retrieval of this property in user's application.
 - FIX: Alugen was inserting an extra vbCrlf constant in the license key in every line to make 64-byte chunks. Although Activelock would honor these, the email systems transmitted them erroneously causing registration problems in the form of "Index outside bounds of array" problems. This extra vbCrlf character has been removed from the license key. See "http://activelocksoftware.com/forums/t/211.aspx" for more information.
 - FIX: A new function, IsNumberIncluded checks the hardware key combinations to determine accurately whether the right combination was used for licensing. This function works out the binary representation of the hardware key's representation that's a multiplier of 2, decides whether a given key combination includes a particular key. This should eliminate the IP binding problems experienced in the past.
+- NEW: IsWebConnected function has been added. This function will be used with the Time Server based system clock tampering check and inside the GetIPaddress function (iand insdie the GetExternalIP in the future). GetIPaddress seems to fail when there's no internet connection available, therefore if you locked the machine to local IP, then you must check the internet connection before proceeding. Some users complained that they were getting "Wrong IP address" when the license was registered with IP address and the internet connection was removed before the application was executed (and vice versa).
+- IsWebConnected has been added to the SystemClockTampered (web based time server checking function) and GetIPaddress functions.
 
 
 
