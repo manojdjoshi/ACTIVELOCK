@@ -2903,6 +2903,13 @@ minusAttributesError:
         ' Get the date only... compare with the system clock
         ' Die if more than 1 day difference'
         ' UTC Time and Date of course...
+
+        ' Obviously, for this function to work, there must be a connection to Internet
+        If IsWebConnected() = False Then
+            Set_locale(regionalSymbol)
+            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrInternetConnectionError, ACTIVELOCKSTRING, STRINTERNETNOTCONNECTED)
+        End If
+
         Dim ss, aa As String
         Dim blabla As String
         Dim diff As Short

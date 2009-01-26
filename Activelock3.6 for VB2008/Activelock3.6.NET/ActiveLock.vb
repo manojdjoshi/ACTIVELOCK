@@ -1545,7 +1545,12 @@ ErrHandler:
                     ElseIf j = LBound(a) + 7 Then
                         If aString <> noKey Then
                             IActiveLock_AddLockCode(IActiveLock.ALLockTypes.lockIP, SizeLockType)
-                            If aString <> modHardware.GetIPaddress() Then
+                            Dim returnedIP As String = modHardware.GetIPaddress()
+                            If returnedIP = "-1" Then
+                                Set_locale(regionalSymbol)
+                                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrInternetConnectionError, ACTIVELOCKSTRING, STRINTERNETNOTCONNECTED)
+                            End If
+                            If aString <> returnedIP Then
                                 Set_locale(regionalSymbol)
                                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrWrongIPaddress, ACTIVELOCKSTRING, STRWRONGIPADDRESS)
                             End If

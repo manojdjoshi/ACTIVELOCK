@@ -1221,58 +1221,58 @@ Friend Class frmMain
         '
         'lblLockIP
         '
-        Me.lblLockIP.Location = New System.Drawing.Point(256, 249)
+        Me.lblLockIP.Location = New System.Drawing.Point(265, 252)
         Me.lblLockIP.Name = "lblLockIP"
-        Me.lblLockIP.Size = New System.Drawing.Size(300, 16)
+        Me.lblLockIP.Size = New System.Drawing.Size(291, 16)
         Me.lblLockIP.TabIndex = 79
         '
         'lblLockMotherboard
         '
-        Me.lblLockMotherboard.Location = New System.Drawing.Point(256, 232)
+        Me.lblLockMotherboard.Location = New System.Drawing.Point(265, 234)
         Me.lblLockMotherboard.Name = "lblLockMotherboard"
-        Me.lblLockMotherboard.Size = New System.Drawing.Size(300, 16)
+        Me.lblLockMotherboard.Size = New System.Drawing.Size(291, 16)
         Me.lblLockMotherboard.TabIndex = 78
         '
         'lblLockBIOS
         '
-        Me.lblLockBIOS.Location = New System.Drawing.Point(256, 215)
+        Me.lblLockBIOS.Location = New System.Drawing.Point(265, 216)
         Me.lblLockBIOS.Name = "lblLockBIOS"
-        Me.lblLockBIOS.Size = New System.Drawing.Size(300, 16)
+        Me.lblLockBIOS.Size = New System.Drawing.Size(291, 16)
         Me.lblLockBIOS.TabIndex = 77
         '
         'lblLockWindows
         '
-        Me.lblLockWindows.Location = New System.Drawing.Point(256, 198)
+        Me.lblLockWindows.Location = New System.Drawing.Point(265, 198)
         Me.lblLockWindows.Name = "lblLockWindows"
-        Me.lblLockWindows.Size = New System.Drawing.Size(300, 16)
+        Me.lblLockWindows.Size = New System.Drawing.Size(291, 16)
         Me.lblLockWindows.TabIndex = 76
         '
         'lblLockHDfirmware
         '
-        Me.lblLockHDfirmware.Location = New System.Drawing.Point(256, 181)
+        Me.lblLockHDfirmware.Location = New System.Drawing.Point(265, 180)
         Me.lblLockHDfirmware.Name = "lblLockHDfirmware"
-        Me.lblLockHDfirmware.Size = New System.Drawing.Size(300, 16)
+        Me.lblLockHDfirmware.Size = New System.Drawing.Size(291, 16)
         Me.lblLockHDfirmware.TabIndex = 75
         '
         'lblLockHD
         '
-        Me.lblLockHD.Location = New System.Drawing.Point(256, 164)
+        Me.lblLockHD.Location = New System.Drawing.Point(265, 162)
         Me.lblLockHD.Name = "lblLockHD"
-        Me.lblLockHD.Size = New System.Drawing.Size(300, 16)
+        Me.lblLockHD.Size = New System.Drawing.Size(291, 16)
         Me.lblLockHD.TabIndex = 74
         '
         'lblLockComputer
         '
-        Me.lblLockComputer.Location = New System.Drawing.Point(256, 147)
+        Me.lblLockComputer.Location = New System.Drawing.Point(265, 144)
         Me.lblLockComputer.Name = "lblLockComputer"
-        Me.lblLockComputer.Size = New System.Drawing.Size(300, 16)
+        Me.lblLockComputer.Size = New System.Drawing.Size(291, 16)
         Me.lblLockComputer.TabIndex = 73
         '
         'lblLockMacAddress
         '
-        Me.lblLockMacAddress.Location = New System.Drawing.Point(256, 130)
+        Me.lblLockMacAddress.Location = New System.Drawing.Point(265, 126)
         Me.lblLockMacAddress.Name = "lblLockMacAddress"
-        Me.lblLockMacAddress.Size = New System.Drawing.Size(300, 16)
+        Me.lblLockMacAddress.Size = New System.Drawing.Size(291, 16)
         Me.lblLockMacAddress.TabIndex = 72
         '
         'cmdUncheckAll
@@ -1636,7 +1636,7 @@ Friend Class frmMain
         Me.mainStatusBarPanel.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring
         Me.mainStatusBarPanel.Name = "mainStatusBarPanel"
         Me.mainStatusBarPanel.Text = "Ready ..."
-        Me.mainStatusBarPanel.Width = 563
+        Me.mainStatusBarPanel.Width = 564
         '
         'lnkActivelockSoftwareGroup
         '

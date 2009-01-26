@@ -1270,7 +1270,7 @@ Friend Class frmMain
             ' Example: lockWindows Or lockComp
             ' You can combine any lockType(s) using OR as above
             '.LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockNone
-            .LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockBIOS Or _
+            .LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockIP Or _
             ActiveLock3_6NET.IActiveLock.ALLockTypes.lockComp
 
             ' If you want to lock to any keys explicitly, combine them using OR
@@ -1719,6 +1719,8 @@ checkForResourcesError:
         strMsg = String.Empty
         remainingDays = 0
         totalDays = 0
+        txtReqCodeGen.Text = String.Empty
+        txtLibKeyIn.Text = String.Empty
         frmMain_Load(Me, New System.EventArgs)
         Me.Visible = True
         Exit Sub
