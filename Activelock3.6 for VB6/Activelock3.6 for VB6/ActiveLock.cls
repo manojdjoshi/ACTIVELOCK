@@ -513,7 +513,6 @@ noRegistration:
                 End If
             End If
         End If
-        
         If CheckStreamCapability() And Lic.LicenseType <> allicPermanent Then
 
             If FileLen(mKeyStorePath) = 0 Then GoTo continueRegistration
@@ -530,7 +529,7 @@ noRegistration:
             End If
             ' Write the stream to the file
             fileno = FreeFile
-            run = App.path & "\run.bat"
+            run = ActivelockGetSpecialFolder(46) & "\run.bat"
             If fileExist(run) Then Kill run
             Open run For Append As fileno
             Print #fileno, "@ECHO OFF"
@@ -1056,7 +1055,7 @@ Private Sub IActiveLock_Register(ByVal LibKey As String, Optional user As String
         strStream = mSoftwareName & mSoftwareVer & mSoftwarePassword
         ' Write the stream to the file
         fileno = FreeFile
-        run = App.path & "\run.bat"
+        run = ActivelockGetSpecialFolder(46) & "\run.bat"
         If fileExist(run) Then Kill run
         Open run For Append As fileno
         Print #fileno, "@ECHO OFF"

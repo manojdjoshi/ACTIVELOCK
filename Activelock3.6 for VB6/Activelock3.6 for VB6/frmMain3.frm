@@ -1,8 +1,8 @@
 VERSION 5.00
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form frmMain 
    Appearance      =   0  'Flat
    BorderStyle     =   1  'Fixed Single
@@ -51,13 +51,13 @@ Begin VB.Form frmMain
       TabCaption(0)   =   "Pro&duct Code Generator"
       TabPicture(0)   =   "frmMain3.frx":0CCA
       Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "cmdValidate"
-      Tab(0).Control(1)=   "Picture1"
-      Tab(0).Control(2)=   "cmdRemove"
+      Tab(0).Control(0)=   "Label1"
+      Tab(0).Control(1)=   "Label17"
+      Tab(0).Control(2)=   "gridProds"
       Tab(0).Control(3)=   "fraProdNew"
-      Tab(0).Control(4)=   "gridProds"
-      Tab(0).Control(5)=   "Label17"
-      Tab(0).Control(6)=   "Label1"
+      Tab(0).Control(4)=   "cmdRemove"
+      Tab(0).Control(5)=   "Picture1"
+      Tab(0).Control(6)=   "cmdValidate"
       Tab(0).ControlCount=   7
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
@@ -170,7 +170,7 @@ Begin VB.Form frmMain
          Begin VB.CheckBox chkLockIP 
             Caption         =   "Lock to IP Address"
             BeginProperty Font 
-               Name            =   "Courier New"
+               Name            =   "Microsoft Sans Serif"
                Size            =   8.25
                Charset         =   0
                Weight          =   400
@@ -187,7 +187,7 @@ Begin VB.Form frmMain
          Begin VB.CheckBox chkLockMotherboard 
             Caption         =   "Lock to Motherboard Serial"
             BeginProperty Font 
-               Name            =   "Courier New"
+               Name            =   "Microsoft Sans Serif"
                Size            =   8.25
                Charset         =   0
                Weight          =   400
@@ -204,7 +204,7 @@ Begin VB.Form frmMain
          Begin VB.CheckBox chkLockBIOS 
             Caption         =   "Lock to BIOS Version"
             BeginProperty Font 
-               Name            =   "Courier New"
+               Name            =   "Microsoft Sans Serif"
                Size            =   8.25
                Charset         =   0
                Weight          =   400
@@ -221,7 +221,7 @@ Begin VB.Form frmMain
          Begin VB.CheckBox chkLockWindows 
             Caption         =   "Lock to Windows Serial"
             BeginProperty Font 
-               Name            =   "Courier New"
+               Name            =   "Microsoft Sans Serif"
                Size            =   8.25
                Charset         =   0
                Weight          =   400
@@ -238,7 +238,7 @@ Begin VB.Form frmMain
          Begin VB.CheckBox chkLockHDfirmware 
             Caption         =   "Lock to HDD Firmware Serial"
             BeginProperty Font 
-               Name            =   "Courier New"
+               Name            =   "Microsoft Sans Serif"
                Size            =   8.25
                Charset         =   0
                Weight          =   400
@@ -255,7 +255,7 @@ Begin VB.Form frmMain
          Begin VB.CheckBox chkLockHD 
             Caption         =   "Lock to HDD Volume Serial"
             BeginProperty Font 
-               Name            =   "Courier New"
+               Name            =   "Microsoft Sans Serif"
                Size            =   8.25
                Charset         =   0
                Weight          =   400
@@ -272,7 +272,7 @@ Begin VB.Form frmMain
          Begin VB.CheckBox chkLockComputer 
             Caption         =   "Lock to Computer Name"
             BeginProperty Font 
-               Name            =   "Courier New"
+               Name            =   "Microsoft Sans Serif"
                Size            =   8.25
                Charset         =   0
                Weight          =   400
@@ -289,7 +289,7 @@ Begin VB.Form frmMain
          Begin VB.CheckBox chkLockMACaddress 
             Caption         =   "Lock to MAC Address"
             BeginProperty Font 
-               Name            =   "Courier New"
+               Name            =   "Microsoft Sans Serif"
                Size            =   8.25
                Charset         =   0
                Weight          =   400

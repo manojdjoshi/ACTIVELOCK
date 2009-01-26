@@ -1,8 +1,8 @@
 Type=OleDll
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\WINDOWS\system32\STDOLE2.TLB#OLE Automation
-Reference=*\G{F5078F18-C551-11D3-89B9-0000F81FE221}#4.0#0#..\..\WINDOWS\system32\msxml6.dll#Microsoft XML, v4.0
-Reference=*\G{2A75196C-D9EB-4129-B803-931327F72D5C}#2.8#0#..\..\Program Files\Common Files\System\ado\msado15.dll#Microsoft ActiveX Data Objects 2.8 Library
-Reference=*\G{565783C6-CB41-11D1-8B02-00600806D9B6}#1.2#0#..\..\WINDOWS\system32\wbem\wbemdisp.TLB#Microsoft WMI Scripting V1.2 Library
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\Windows\system32\stdole2.tlb#OLE Automation
+Reference=*\G{F5078F18-C551-11D3-89B9-0000F81FE221}#4.0#0#..\..\Windows\system32\msxml4.dll#Microsoft XML, v4.0
+Reference=*\G{2A75196C-D9EB-4129-B803-931327F72D5C}#2.8#0#..\..\Program Files\Common Files\System\ado\msado28.tlb#Microsoft ActiveX Data Objects 2.8 Library
+Reference=*\G{565783C6-CB41-11D1-8B02-00600806D9B6}#1.2#0#..\..\Windows\system32\wbem\wbemdisp.TLB#Microsoft WMI Scripting V1.2 Library
 Class=ActiveLock; ActiveLock.cls
 Class=IActiveLock; IActiveLock.cls
 Class=AlugenGlobals; AlugenGlobals.cls

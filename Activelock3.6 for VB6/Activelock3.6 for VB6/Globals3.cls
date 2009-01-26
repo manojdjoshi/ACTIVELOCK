@@ -125,7 +125,7 @@ Public Enum ActiveLockErrCodeConstants
     alerrLicenseInvalid = &H80040002
     alerrLicenseExpired = &H80040003
     alerrLicenseTampered = &H80040004
-    AlerrClockChanged = &H80040005
+    alerrClockChanged = &H80040005
     alerrWrongIPaddress = &H80040006
     
     alerrKeyStoreInvalid = &H80040010
@@ -149,6 +149,7 @@ Public Enum ActiveLockErrCodeConstants
     
     alerrUndefinedSpecialFolder = &H80040031
     alerrDateError = &H80040032
+    alerrInternetConnectionError = &H80040032
     
 End Enum
 

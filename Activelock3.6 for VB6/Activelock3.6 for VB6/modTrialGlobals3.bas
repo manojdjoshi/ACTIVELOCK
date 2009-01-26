@@ -227,7 +227,7 @@ Public Declare Function GetWindowThreadProcessId Lib "user32" (ByVal hwnd As Lon
 Public Declare Function OpenProcess Lib "kernel32" (ByVal dwDesiredAccess As Long, ByVal bInheritHandle As Long, ByVal dwProcessID As Long) As Long
 Public Declare Function WriteProcessMemory Lib "kernel32" (ByVal hProcess As Long, ByVal lpBaseAddress As Any, ByVal lpBuffer As Any, ByVal nSize As Long, lpNumberOfBytesWritten As Long) As Long
 Public Declare Function ReadProcessMemory Lib "kernel32" (ByVal hProcess As Long, ByVal lpBaseAddress As Any, ByVal lpBuffer As Any, ByVal nSize As Long, lpNumberOfBytesWritten As Long) As Long
-Public Declare Function FormatMessage Lib "kernel32" Alias "FormatMessageA" (ByVal dwFlags As Long, lpSource As Any, ByVal dwMessageId As Long, ByVal dwLanguageId As Long, ByVal lpBuffer As String, ByVal nSize As Long, Arguments As Long) As Long
+Public Declare Function FormatMessage Lib "kernel32" Alias "FormatMessageA" (ByVal dwflags As Long, lpSource As Any, ByVal dwMessageId As Long, ByVal dwLanguageId As Long, ByVal lpBuffer As String, ByVal nSize As Long, Arguments As Long) As Long
 Public Declare Function GetLastError Lib "kernel32" () As Long
 
 Public Const FORMAT_MESSAGE_ALLOCATE_BUFFER = &H100
@@ -248,7 +248,7 @@ Type PROCESSENTRY32
     cntThreads As Long
     th32ParentProcessID As Long
     pcPriClassBase As Long
-    dwFlags As Long
+    dwflags As Long
     szexeFile As String * 260
 End Type
     
@@ -2004,13 +2004,13 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
                 If mCheckTimeServerForClockTampering = alsCheckTimeServer Then
                     If SystemClockTampered Then
                         Set_locale regionalSymbol
-                        Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                        Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
                     End If
                 End If
                 If mCheckSystemFilesForClockTampering = alsCheckSystemFiles Then
                     If ClockTampering Then
                         Set_locale regionalSymbol
-                        Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                        Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
                     End If
                 End If
             End If
@@ -2037,13 +2037,13 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
                 If mCheckTimeServerForClockTampering = alsCheckTimeServer Then
                     If SystemClockTampered Then
                         Set_locale regionalSymbol
-                        Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                        Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
                     End If
                 End If
                 If mCheckSystemFilesForClockTampering = alsCheckSystemFiles Then
                     If ClockTampering Then
                         Set_locale regionalSymbol
-                        Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                        Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
                     End If
                 End If
             End If
@@ -2972,6 +2972,13 @@ Public Function SystemClockTampered() As Boolean
 ' Access a good time server to see which day it is :)
 ' Get the date only... compare with the system clock
 ' Die if more than 1 day difference
+
+' Obviously, for this function to work, there must be a connection to Internet
+If IsWebConnected() = False Then
+    Set_locale (regionalSymbol)
+    Err.Raise ActiveLockErrCodeConstants.alerrNotInitialized, ACTIVELOCKSTRING, STRINTERNETNOTCONNECTED
+End If
+
 Dim ss As String, aa As String
 Dim blabla As String, diff As Integer
 Dim i As Integer
