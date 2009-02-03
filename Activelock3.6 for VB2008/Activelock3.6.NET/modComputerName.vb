@@ -6,6 +6,8 @@ Imports System.Text
 Imports System.Management
 Imports Microsoft.win32
 Imports System.Runtime.InteropServices
+Imports System.Security
+Imports System.DirectoryServices
 
 Module modHardware
 	'*   ActiveLock
@@ -438,6 +440,8 @@ Module modHardware
     Public Declare Function GetProcessHeap Lib "kernel32" () As Integer
     Public Declare Function HeapAlloc Lib "kernel32" (ByVal hHeap As Integer, ByVal dwFlags As Integer, ByVal dwBytes As Integer) As Integer
     Public Declare Function HeapFree Lib "kernel32" (ByVal hHeap As Integer, ByVal dwFlags As Integer, ByVal lpMem As Integer) As Integer
+
+    Private WithEvents fp As FingerPrint = New FingerPrint
     '===============================================================================
     ' Name: Function GetComputerName
     ' Input: None
@@ -1013,6 +1017,7 @@ GetMACAddressError:
         BiosSet = GetObject("WinMgmts:{impersonationLevel=impersonate}").InstancesOf("Win32_BIOS")
         For Each obj In BiosSet
             GetBiosVersion = obj.Version
+            GetBiosVersion = GetBiosVersion.Replace(" ", "")
             If GetBiosVersion <> "" Then Exit Function
         Next obj
 GetBiosVersionerror:
@@ -1225,4 +1230,157 @@ GetIPaddressError:
             Return New Byte() {}
         End Try
     End Function
+
+    Public Function GetCPUID() As String
+        GetCPUID = String.Empty
+
+        Dim managementScope As New ManagementScope("\root\cimv2")
+        managementScope.Options.Impersonation = System.Management.ImpersonationLevel.Impersonate
+
+        Dim searcher As New ManagementObjectSearcher(managementScope, New ObjectQuery("SELECT * FROM Win32_Processor"))
+        For Each disk As ManagementObject In searcher.[Get]()
+            If disk("ProcessorID") IsNot Nothing Then
+                GetCPUID = disk("ProcessorID").ToString()
+            Else
+                GetCPUID = "Not Available"
+            End If
+        Next
+    End Function
+    Public Function GetBaseBoardID() As String
+        GetBaseBoardID = String.Empty
+
+        Dim managementScope As New ManagementScope("\root\cimv2")
+        managementScope.Options.Impersonation = System.Management.ImpersonationLevel.Impersonate
+
+        Dim searcher As New ManagementObjectSearcher(managementScope, New ObjectQuery("SELECT * FROM Win32_Baseboard"))
+        For Each disk As ManagementObject In searcher.[Get]()
+            If disk("SerialNumber") IsNot Nothing Then
+                GetBaseBoardID = disk("SerialNumber").ToString()
+                GetBaseBoardID = GetBaseBoardID.Replace(".", "")
+            Else
+                GetBaseBoardID = "Not Available"
+            End If
+        Next
+    End Function
+
+    Public Function GetVideoID() As String
+        GetVideoID = String.Empty
+
+        Dim managementScope As New ManagementScope("\root\cimv2")
+        managementScope.Options.Impersonation = System.Management.ImpersonationLevel.Impersonate
+
+        Dim searcher As New ManagementObjectSearcher(managementScope, New ObjectQuery("SELECT * FROM Win32_VideoController"))
+        For Each disk As ManagementObject In searcher.[Get]()
+            If disk("DriverVersion") IsNot Nothing Then
+                GetVideoID = disk("DriverVersion").ToString()
+            Else
+                GetVideoID = "Not Available"
+            End If
+        Next
+    End Function
+
+    Public Function GetMemoryID() As String
+        GetMemoryID = String.Empty
+
+        Dim managementScope As New ManagementScope("\root\cimv2")
+        managementScope.Options.Impersonation = System.Management.ImpersonationLevel.Impersonate
+
+        Dim searcher As New ManagementObjectSearcher(managementScope, New ObjectQuery("SELECT * FROM Win32_MemoryDevice"))
+        For Each disk As ManagementObject In searcher.[Get]()
+            If disk("SystemName") IsNot Nothing Then
+                Dim MemoryID As String = disk("EndingAddress").ToString() & "-" & My.Computer.Info.TotalPhysicalMemory.ToString
+                Return MemoryID
+            Else
+                GetMemoryID = "Not Available"
+            End If
+        Next
+    End Function
+
+    Private deDomainRoot As DirectoryEntry
+    Private strDomainPath As String
+    Private Declare Auto Function ConvertSidToStringSid Lib "advapi32.dll" (ByVal bSID As IntPtr, <System.Runtime.InteropServices.In(), System.Runtime.InteropServices.Out(), System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.LPTStr)> ByRef SIDString As String) As Integer
+
+    Private Function ConnectToAD() As Boolean
+        Try
+            deDomainRoot = New DirectoryEntry("LDAP://rootDSE")
+            strDomainPath = "LDAP://" + deDomainRoot.Properties("DefaultNamingContext")(0).ToString()
+            deDomainRoot = New DirectoryEntry(strDomainPath)
+            Return True
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
+    Private query As ManagementObjectSearcher
+    Private queryCollection As ManagementObjectCollection
+
+    Public Function GetSID() As String
+        GetSID = String.Empty
+
+        Dim co As New ConnectionOptions()
+        co.Username = System.Environment.UserDomainName
+        Dim msc As New ManagementScope("\root\cimv2", co)
+        Dim queryString As String = "SELECT * FROM Win32_UserAccount where name='" & co.Username & "'"
+        Dim q As New SelectQuery(queryString)
+        query = New ManagementObjectSearcher(msc, q)
+        queryCollection = query.[Get]()
+        Dim res As String = [String].Empty
+        For Each mo As ManagementObject In queryCollection
+            ' there should be only one here! 
+            res += mo("SID").ToString()
+        Next
+        GetSID = res
+
+        'If (ConnectToAD()) Then
+        '    Dim dirSearcher As New DirectorySearcher
+        '    Dim singleQueryResult As SearchResult
+        '    Dim strSID As String = ""
+        '    Dim intSuccess As Integer
+        '    Dim userName As String = "administrator"
+        '    Try
+        '        dirSearcher.SearchScope = SearchScope.Subtree
+        '        dirSearcher.SearchRoot = deDomainRoot
+        '        dirSearcher.Filter = "(&(sAMAccountName=" & userName & "))"
+        '        singleQueryResult = dirSearcher.FindOne()
+        '        Dim sidBytes As Byte() = CType(singleQueryResult.Properties("objectSid")(0), Byte())
+        '        Dim sidPtr As IntPtr = System.Runtime.InteropServices.Marshal.AllocHGlobal(sidBytes.Length)
+        '        System.Runtime.InteropServices.Marshal.Copy(sidBytes, 0, sidPtr, sidBytes.Length)
+        '        intSuccess = ConvertSidToStringSid(sidPtr, strSID)
+        '        GetSID = strSID.Trim()
+        '    Catch ex As Exception
+        '        Return "Not Available"
+        '    End Try
+        'End If
+        If GetSID() = "" Then
+            GetSID = "Not Available"
+        End If
+
+    End Function
+    Public Function GetExternalIP() As String
+        Dim IP_URL As String = "http://checkip.dyndns.org"
+        Dim strHTML, strIP As String
+        Try
+            Dim objWebReq As System.Net.WebRequest = System.Net.WebRequest.Create(IP_URL)
+            Dim objWebResp As System.Net.WebResponse = objWebReq.GetResponse()
+            Dim strmResp As System.IO.Stream = objWebResp.GetResponseStream()
+            Dim srResp As System.IO.StreamReader = New System.IO.StreamReader(strmResp, System.Text.Encoding.UTF8)
+            strHTML = srResp.ReadToEnd()
+            Dim regexIP As System.Text.RegularExpressions.Regex
+            regexIP = New System.Text.RegularExpressions.Regex("\b\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}\b")
+            strIP = regexIP.Match(strHTML).Value
+            Return strIP
+        Catch ex As Exception
+            GetExternalIP = "Not Available"
+        End Try
+    End Function
+    Public Function GetFingerprint() As String
+        fp.UseCpuID = True
+        fp.UseBiosID = True
+        fp.UseBaseID = True
+        fp.UseDiskID = True
+        fp.UseVideoID = True
+        fp.UseMacID = True
+        fp.ReturnLength = 8
+        GetFingerprint = fp.Value
+    End Function
+
 End Module

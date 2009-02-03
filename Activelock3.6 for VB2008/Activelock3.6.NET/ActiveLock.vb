@@ -570,7 +570,9 @@ Friend Class ActiveLock
             Dim strReq, strLock As String
             Dim strReq2 As String
             If mLicenseKeyTypes = IActiveLock.ALLicenseKeyTypes.alsShortKeyMD5 Then
-                Return IActivelock_GenerateShortSerial(modHardware.GetHDSerialFirmware())
+                ' Shortkeys are no longer using the HDD firmware serial number
+                ' they are using the Computer Fingerprint after v3.6
+                Return IActivelock_GenerateShortSerial(modHardware.GetFingerprint())
 
             ElseIf mLicenseKeyTypes = IActiveLock.ALLicenseKeyTypes.alsRSA Then
 
@@ -598,6 +600,9 @@ Friend Class ActiveLock
 
                 ' combine with user name
                 strReq = strLock & vbLf & User
+
+                ' combine with app name and version
+                strReq = strReq & "&&&" & IActiveLock_SoftwareName & " (" & IActiveLock_SoftwareVersion & ")"
 
                 ' base-64 encode the request
                 strReq2 = modBase64.Base64_Encode(strReq)
@@ -702,6 +707,12 @@ Friend Class ActiveLock
 #If CBool(AL_DEBUG) <> False Then
 		GoTo Done
 #End If
+        ' ALL file generatiand software usage on PCs with different cultures 
+        ' does not work due to the usage of Chr() function in Base64_Decode in
+        ' modBase64.vb
+        ' The following is necessary to fix the problem
+        My.Application.ChangeCulture("en-US")
+
         ' Checksum ALCrypto3NET.dll
         'Const ALCRYPTO_MD5 As String = "54BED793A0E24D3E71706EEC4FA1B0FC"
         'Const ALCRYPTO_MD5$ = "be299ad0f52858fdd9ea3626468dc05c"
@@ -720,7 +731,7 @@ Friend Class ActiveLock
         End If
         If File.Exists(usedFile) = False Then
             Set_locale(regionalSymbol)
-            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrFileTampered, "ActiveLock3", "Alcrypto3Net.dll could not be found.")
+            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrFileTampered, ACTIVELOCKSTRING, "Alcrypto3Net.dll could not be found in system32 directory.")
         End If
         Call modActiveLock.ReadFile(usedFile, strdata)
         ' use the .NET's native MD5 functions instead of our own MD5 hashing routine
@@ -1083,7 +1094,9 @@ continueRegistration:
         sKey = oReg.GenerateKey("", Left(mSoftwareCode, Len(mSoftwareCode) - 2)) 'Do not include the last 2 possible == paddings
         m_ProdCode = CInt(Left(sKey, 4))
 
-        SerialNumber = oReg.GenerateKey(mSoftwareName & mSoftwareVer & mSoftwarePassword, modHardware.GetHDSerialFirmware())
+        ' Shortkeys are no longer using the HDD firmware serial number
+        ' they are using the Computer Fingerprint after v3.6
+        SerialNumber = oReg.GenerateKey(mSoftwareName & mSoftwareVer & mSoftwarePassword, modHardware.GetFingerprint())
 
         ' verify the key is valid
         If m_Key.ValidateShortKey(Lic.LicenseKey, SerialNumber, user, m_ProdCode, ExpireDate, UserData, RegisteredLevel) = True Then
@@ -1108,8 +1121,11 @@ continueRegistration:
                 Lic.Expiration = ActiveLockDate(ExpireDate).ToString
             End If
             Lic.MaxCount = CInt(CStr(modActiveLock.LoByte(UserData)))
+
             ' Finally check if the serial number is Ok
-            If Not oReg.IsKeyOK(SerialNumber, mSoftwareName & mSoftwareVer & mSoftwarePassword, modHardware.GetHDSerialFirmware()) Then
+            ' Shortkeys are no longer using the HDD firmware serial number
+            ' they are using the Computer Fingerprint after v3.6
+            If Not oReg.IsKeyOK(SerialNumber, mSoftwareName & mSoftwareVer & mSoftwarePassword, modHardware.GetFingerprint()) Then
                 ' Something wrong with the serial number used
                 Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
@@ -1407,6 +1423,13 @@ ErrHandler:
                 AppendLockString(strLock, modHardware.GetBiosVersion())
                 AppendLockString(strLock, modHardware.GetMotherboardSerial())
                 AppendLockString(strLock, modHardware.GetIPaddress())
+
+                AppendLockString(strLock, modHardware.GetExternalIP())
+                AppendLockString(strLock, modHardware.GetFingerprint())
+                AppendLockString(strLock, modHardware.GetMemoryID())
+                AppendLockString(strLock, modHardware.GetCPUID())
+                AppendLockString(strLock, modHardware.GetBaseBoardID())
+                AppendLockString(strLock, modHardware.GetVideoID())
             Else
                 If IsNumberIncluded(mLockTypes, IActiveLock.ALLockTypes.lockMAC) Then    'mLockTypes And IActiveLock.ALLockTypes.lockMAC Then
                     AppendLockString(strLock, modHardware.GetMACAddress())
@@ -1448,6 +1471,38 @@ ErrHandler:
                 Else
                     AppendLockString(strLock, noKey)
                 End If
+                ' new in v3.6
+                If IsNumberIncluded(mLockTypes, IActiveLock.ALLockTypes.lockExternalIP) Then
+                    AppendLockString(strLock, modHardware.GetExternalIP())
+                Else
+                    AppendLockString(strLock, noKey)
+                End If
+                If IsNumberIncluded(mLockTypes, IActiveLock.ALLockTypes.lockFingerprint) Then
+                    AppendLockString(strLock, modHardware.GetFingerprint())
+                Else
+                    AppendLockString(strLock, noKey)
+                End If
+                If IsNumberIncluded(mLockTypes, IActiveLock.ALLockTypes.lockMemory) Then
+                    AppendLockString(strLock, modHardware.GetMemoryID())
+                Else
+                    AppendLockString(strLock, noKey)
+                End If
+                If IsNumberIncluded(mLockTypes, IActiveLock.ALLockTypes.lockCPUID) Then
+                    AppendLockString(strLock, modHardware.GetCPUID())
+                Else
+                    AppendLockString(strLock, noKey)
+                End If
+                If IsNumberIncluded(mLockTypes, IActiveLock.ALLockTypes.lockBaseboardID) Then
+                    AppendLockString(strLock, modHardware.GetBaseBoardID())
+                Else
+                    AppendLockString(strLock, noKey)
+                End If
+                If IsNumberIncluded(mLockTypes, IActiveLock.ALLockTypes.lockVideoID) Then
+                    AppendLockString(strLock, modHardware.GetVideoID())
+                Else
+                    AppendLockString(strLock, noKey)
+                End If
+
             End If
 
             If Left(strLock, 1) = vbLf Then strLock = Mid(strLock, 2)
@@ -1555,7 +1610,57 @@ ErrHandler:
                                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrWrongIPaddress, ACTIVELOCKSTRING, STRWRONGIPADDRESS)
                             End If
                         End If
+                        'added v3.6
+                    ElseIf j = LBound(a) + 8 Then
+                        If aString <> noKey Then
+                            IActiveLock_AddLockCode(IActiveLock.ALLockTypes.lockExternalIP, SizeLockType)
+                            If aString <> modHardware.GetExternalIP() Then
+                                Set_locale(regionalSymbol)
+                                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
+                            End If
+                        End If
+                    ElseIf j = LBound(a) + 9 Then
+                        If aString <> noKey Then
+                            IActiveLock_AddLockCode(IActiveLock.ALLockTypes.lockFingerprint, SizeLockType)
+                            If aString <> modHardware.GetFingerprint() Then
+                                Set_locale(regionalSymbol)
+                                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
+                            End If
+                        End If
+                    ElseIf j = LBound(a) + 10 Then
+                        If aString <> noKey Then
+                            IActiveLock_AddLockCode(IActiveLock.ALLockTypes.lockMemory, SizeLockType)
+                            If aString <> modHardware.GetMemoryID() Then
+                                Set_locale(regionalSymbol)
+                                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
+                            End If
+                        End If
+                    ElseIf j = LBound(a) + 11 Then
+                        If aString <> noKey Then
+                            IActiveLock_AddLockCode(IActiveLock.ALLockTypes.lockCPUID, SizeLockType)
+                            If aString <> modHardware.GetCPUID() Then
+                                Set_locale(regionalSymbol)
+                                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
+                            End If
+                        End If
+                    ElseIf j = LBound(a) + 12 Then
+                        If aString <> noKey Then
+                            IActiveLock_AddLockCode(IActiveLock.ALLockTypes.lockBaseboardID, SizeLockType)
+                            If aString <> modHardware.GetBaseBoardID() Then
+                                Set_locale(regionalSymbol)
+                                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
+                            End If
+                        End If
+                    ElseIf j = LBound(a) + 13 Then
+                        If aString <> noKey Then
+                            IActiveLock_AddLockCode(IActiveLock.ALLockTypes.lockVideoID, SizeLockType)
+                            If aString <> modHardware.GetVideoID() Then
+                                Set_locale(regionalSymbol)
+                                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
+                            End If
+                        End If
                     End If
+
                 Next j
 
                 Index = 0

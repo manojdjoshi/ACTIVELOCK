@@ -62,6 +62,9 @@ Friend Class frmMain
     Private VolumeSerial, FirmwareSerial As String
     Private WindowsSerial, BIOSserial As String
     Private MotherboardSerial, IPaddress As String
+    Private ExternalIP, Fingerprint As String
+    Private Memory, CPUID As String
+    Private BaseboardID, VideoID As String
     Private systemEvent As Boolean
 
     Private PROJECT_INI_FILENAME As String
@@ -77,6 +80,18 @@ Friend Class frmMain
     Friend WithEvents lblLockHD As System.Windows.Forms.Label
     Friend WithEvents lblLockComputer As System.Windows.Forms.Label
     Friend WithEvents lblLockIP As System.Windows.Forms.Label
+    Friend WithEvents lblLockCPUID As System.Windows.Forms.Label
+    Friend WithEvents chkLockCPUID As System.Windows.Forms.CheckBox
+    Friend WithEvents lblLockMemory As System.Windows.Forms.Label
+    Friend WithEvents chkLockMemory As System.Windows.Forms.CheckBox
+    Friend WithEvents lblLockFingerprint As System.Windows.Forms.Label
+    Friend WithEvents chkLockFingerprint As System.Windows.Forms.CheckBox
+    Friend WithEvents lblLockExternalIP As System.Windows.Forms.Label
+    Friend WithEvents chkLockExternalIP As System.Windows.Forms.CheckBox
+    Friend WithEvents lblLockVideoID As System.Windows.Forms.Label
+    Friend WithEvents chkLockVideoID As System.Windows.Forms.CheckBox
+    Friend WithEvents lblLockBaseboardID As System.Windows.Forms.Label
+    Friend WithEvents chkLockBaseboardID As System.Windows.Forms.CheckBox
 
     Private printPreviewDialog1 As New PrintPreviewDialog
 
@@ -197,7 +212,6 @@ Friend Class frmMain
     Friend WithEvents cboLicType As System.Windows.Forms.ComboBox
     Friend WithEvents cmdEmailLicenseKey As System.Windows.Forms.Button
     Friend WithEvents cmdProductsStorage As System.Windows.Forms.Button
-    Friend WithEvents Label18 As System.Windows.Forms.Label
     Friend WithEvents chkNetworkedLicense As System.Windows.Forms.CheckBox
     Friend WithEvents txtMaxCount As System.Windows.Forms.TextBox
     Friend WithEvents lblConcurrentUsers As System.Windows.Forms.Label
@@ -271,6 +285,18 @@ Friend Class frmMain
         Me.GroupBox1 = New System.Windows.Forms.GroupBox
         Me._SSTab1_TabPage1 = New System.Windows.Forms.TabPage
         Me.frmKeyGen = New System.Windows.Forms.Panel
+        Me.lblLockVideoID = New System.Windows.Forms.Label
+        Me.chkLockVideoID = New System.Windows.Forms.CheckBox
+        Me.lblLockBaseboardID = New System.Windows.Forms.Label
+        Me.chkLockBaseboardID = New System.Windows.Forms.CheckBox
+        Me.lblLockCPUID = New System.Windows.Forms.Label
+        Me.chkLockCPUID = New System.Windows.Forms.CheckBox
+        Me.lblLockMemory = New System.Windows.Forms.Label
+        Me.chkLockMemory = New System.Windows.Forms.CheckBox
+        Me.lblLockFingerprint = New System.Windows.Forms.Label
+        Me.chkLockFingerprint = New System.Windows.Forms.CheckBox
+        Me.lblLockExternalIP = New System.Windows.Forms.Label
+        Me.chkLockExternalIP = New System.Windows.Forms.CheckBox
         Me.lblLockIP = New System.Windows.Forms.Label
         Me.lblLockMotherboard = New System.Windows.Forms.Label
         Me.lblLockBIOS = New System.Windows.Forms.Label
@@ -283,7 +309,6 @@ Friend Class frmMain
         Me.cmdCheckAll = New System.Windows.Forms.Button
         Me.lblConcurrentUsers = New System.Windows.Forms.Label
         Me.chkNetworkedLicense = New System.Windows.Forms.CheckBox
-        Me.Label18 = New System.Windows.Forms.Label
         Me.dtpExpireDate = New System.Windows.Forms.DateTimePicker
         Me.chkLockIP = New System.Windows.Forms.CheckBox
         Me.chkLockMotherboard = New System.Windows.Forms.CheckBox
@@ -335,7 +360,7 @@ Friend Class frmMain
         Me.txtVCode.ReadOnly = True
         Me.txtVCode.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.txtVCode.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtVCode.Size = New System.Drawing.Size(466, 52)
+        Me.txtVCode.Size = New System.Drawing.Size(565, 52)
         Me.txtVCode.TabIndex = 2
         Me.ToolTip1.SetToolTip(Me.txtVCode, "Use this code to set ActiveLock's SoftwareCode property within your application.")
         '
@@ -347,7 +372,7 @@ Friend Class frmMain
         Me.cmdBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.cmdBrowse.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdBrowse.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdBrowse.Location = New System.Drawing.Point(477, 495)
+        Me.cmdBrowse.Location = New System.Drawing.Point(576, 633)
         Me.cmdBrowse.Name = "cmdBrowse"
         Me.cmdBrowse.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdBrowse.Size = New System.Drawing.Size(21, 22)
@@ -365,7 +390,7 @@ Friend Class frmMain
         Me.cmdSave.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdSave.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdSave.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdSave.Location = New System.Drawing.Point(499, 495)
+        Me.cmdSave.Location = New System.Drawing.Point(598, 633)
         Me.cmdSave.Name = "cmdSave"
         Me.cmdSave.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdSave.Size = New System.Drawing.Size(65, 22)
@@ -385,7 +410,7 @@ Friend Class frmMain
         Me.cmdKeyGen.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdKeyGen.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdKeyGen.ImageAlign = System.Drawing.ContentAlignment.BottomLeft
-        Me.cmdKeyGen.Location = New System.Drawing.Point(2, 322)
+        Me.cmdKeyGen.Location = New System.Drawing.Point(2, 408)
         Me.cmdKeyGen.Name = "cmdKeyGen"
         Me.cmdKeyGen.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdKeyGen.Size = New System.Drawing.Size(80, 24)
@@ -404,12 +429,12 @@ Friend Class frmMain
         Me.cmdViewArchive.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdViewArchive.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdViewArchive.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdViewArchive.Location = New System.Drawing.Point(3, 447)
+        Me.cmdViewArchive.Location = New System.Drawing.Point(3, 571)
         Me.cmdViewArchive.Name = "cmdViewArchive"
         Me.cmdViewArchive.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdViewArchive.Size = New System.Drawing.Size(79, 44)
         Me.cmdViewArchive.TabIndex = 29
-        Me.cmdViewArchive.Text = "&View License Database"
+        Me.cmdViewArchive.Text = "&View Lic Database"
         Me.cmdViewArchive.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.ToolTip1.SetToolTip(Me.cmdViewArchive, "View License Archive")
         Me.cmdViewArchive.UseVisualStyleBackColor = False
@@ -425,7 +450,7 @@ Friend Class frmMain
         Me.lstvwProducts.Location = New System.Drawing.Point(3, 16)
         Me.lstvwProducts.MultiSelect = False
         Me.lstvwProducts.Name = "lstvwProducts"
-        Me.lstvwProducts.Size = New System.Drawing.Size(558, 237)
+        Me.lstvwProducts.Size = New System.Drawing.Size(657, 379)
         Me.lstvwProducts.Sorting = System.Windows.Forms.SortOrder.Ascending
         Me.lstvwProducts.TabIndex = 10
         Me.ToolTip1.SetToolTip(Me.lstvwProducts, "Products list")
@@ -458,7 +483,7 @@ Friend Class frmMain
         Me.picALBanner2.BackColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.picALBanner2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.picALBanner2.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.picALBanner2.Location = New System.Drawing.Point(486, 24)
+        Me.picALBanner2.Location = New System.Drawing.Point(585, 24)
         Me.picALBanner2.Name = "picALBanner2"
         Me.picALBanner2.Size = New System.Drawing.Size(74, 38)
         Me.picALBanner2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
@@ -508,7 +533,7 @@ Friend Class frmMain
         Me.cmdCodeGen.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdCodeGen.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdCodeGen.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdCodeGen.Location = New System.Drawing.Point(190, 36)
+        Me.cmdCodeGen.Location = New System.Drawing.Point(289, 36)
         Me.cmdCodeGen.Name = "cmdCodeGen"
         Me.cmdCodeGen.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdCodeGen.Size = New System.Drawing.Size(78, 23)
@@ -531,7 +556,7 @@ Friend Class frmMain
         Me.txtName.MaxLength = 0
         Me.txtName.Name = "txtName"
         Me.txtName.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtName.Size = New System.Drawing.Size(181, 20)
+        Me.txtName.Size = New System.Drawing.Size(280, 20)
         Me.txtName.TabIndex = 1
         Me.ToolTip1.SetToolTip(Me.txtName, "Product Name")
         '
@@ -548,7 +573,7 @@ Friend Class frmMain
         Me.txtVer.MaxLength = 0
         Me.txtVer.Name = "txtVer"
         Me.txtVer.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtVer.Size = New System.Drawing.Size(100, 20)
+        Me.txtVer.Size = New System.Drawing.Size(199, 20)
         Me.txtVer.TabIndex = 3
         Me.ToolTip1.SetToolTip(Me.txtVer, "Product Version")
         '
@@ -581,7 +606,7 @@ Friend Class frmMain
         Me.cmdValidate.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdValidate.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdValidate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdValidate.Location = New System.Drawing.Point(270, 36)
+        Me.cmdValidate.Location = New System.Drawing.Point(369, 36)
         Me.cmdValidate.Name = "cmdValidate"
         Me.cmdValidate.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdValidate.Size = New System.Drawing.Size(78, 23)
@@ -631,7 +656,7 @@ Friend Class frmMain
         Me.cmdCopy.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdCopy.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdCopy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdCopy.Location = New System.Drawing.Point(2, 348)
+        Me.cmdCopy.Location = New System.Drawing.Point(2, 434)
         Me.cmdCopy.Name = "cmdCopy"
         Me.cmdCopy.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdCopy.Size = New System.Drawing.Size(80, 24)
@@ -650,7 +675,7 @@ Friend Class frmMain
         Me.cmdPaste.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdPaste.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdPaste.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdPaste.Location = New System.Drawing.Point(479, 74)
+        Me.cmdPaste.Location = New System.Drawing.Point(577, 72)
         Me.cmdPaste.Name = "cmdPaste"
         Me.cmdPaste.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdPaste.Size = New System.Drawing.Size(86, 24)
@@ -669,11 +694,11 @@ Friend Class frmMain
         Me.txtUser.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtUser.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtUser.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtUser.Location = New System.Drawing.Point(88, 100)
+        Me.txtUser.Location = New System.Drawing.Point(87, 96)
         Me.txtUser.MaxLength = 0
         Me.txtUser.Name = "txtUser"
         Me.txtUser.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtUser.Size = New System.Drawing.Size(475, 20)
+        Me.txtUser.Size = New System.Drawing.Size(574, 20)
         Me.txtUser.TabIndex = 16
         Me.ToolTip1.SetToolTip(Me.txtUser, "Here will apear user name based on the instalation code")
         '
@@ -686,11 +711,11 @@ Friend Class frmMain
         Me.txtLicenseFile.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtLicenseFile.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtLicenseFile.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtLicenseFile.Location = New System.Drawing.Point(86, 496)
+        Me.txtLicenseFile.Location = New System.Drawing.Point(86, 634)
         Me.txtLicenseFile.MaxLength = 0
         Me.txtLicenseFile.Name = "txtLicenseFile"
         Me.txtLicenseFile.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtLicenseFile.Size = New System.Drawing.Size(388, 20)
+        Me.txtLicenseFile.Size = New System.Drawing.Size(487, 20)
         Me.txtLicenseFile.TabIndex = 31
         Me.ToolTip1.SetToolTip(Me.txtLicenseFile, "Enter or select license file")
         '
@@ -718,11 +743,11 @@ Friend Class frmMain
         Me.txtInstallCode.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtInstallCode.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtInstallCode.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtInstallCode.Location = New System.Drawing.Point(88, 76)
+        Me.txtInstallCode.Location = New System.Drawing.Point(88, 74)
         Me.txtInstallCode.MaxLength = 0
         Me.txtInstallCode.Name = "txtInstallCode"
         Me.txtInstallCode.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtInstallCode.Size = New System.Drawing.Size(389, 20)
+        Me.txtInstallCode.Size = New System.Drawing.Size(488, 20)
         Me.txtInstallCode.TabIndex = 13
         Me.ToolTip1.SetToolTip(Me.txtInstallCode, "Enter here installation code")
         '
@@ -736,14 +761,14 @@ Friend Class frmMain
         Me.txtLicenseKey.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtLicenseKey.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtLicenseKey.ForeColor = System.Drawing.Color.Blue
-        Me.txtLicenseKey.Location = New System.Drawing.Point(86, 272)
+        Me.txtLicenseKey.Location = New System.Drawing.Point(87, 385)
         Me.txtLicenseKey.MaxLength = 0
         Me.txtLicenseKey.Multiline = True
         Me.txtLicenseKey.Name = "txtLicenseKey"
         Me.txtLicenseKey.ReadOnly = True
         Me.txtLicenseKey.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.txtLicenseKey.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtLicenseKey.Size = New System.Drawing.Size(476, 221)
+        Me.txtLicenseKey.Size = New System.Drawing.Size(575, 242)
         Me.txtLicenseKey.TabIndex = 27
         Me.txtLicenseKey.Text = "1234567890123456789012345678901234567890123456789012345678901234" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         Me.ToolTip1.SetToolTip(Me.txtLicenseKey, "License Key")
@@ -760,7 +785,7 @@ Friend Class frmMain
         Me.cboRegisteredLevel.Location = New System.Drawing.Point(418, 4)
         Me.cboRegisteredLevel.Name = "cboRegisteredLevel"
         Me.cboRegisteredLevel.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cboRegisteredLevel.Size = New System.Drawing.Size(124, 22)
+        Me.cboRegisteredLevel.Size = New System.Drawing.Size(223, 22)
         Me.cboRegisteredLevel.TabIndex = 3
         Me.ToolTip1.SetToolTip(Me.cboRegisteredLevel, "Select desired registration level")
         '
@@ -786,7 +811,7 @@ Friend Class frmMain
         Me.cmdViewLevel.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.cmdViewLevel.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdViewLevel.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdViewLevel.Location = New System.Drawing.Point(544, 4)
+        Me.cmdViewLevel.Location = New System.Drawing.Point(643, 4)
         Me.cmdViewLevel.Name = "cmdViewLevel"
         Me.cmdViewLevel.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdViewLevel.Size = New System.Drawing.Size(22, 22)
@@ -803,7 +828,7 @@ Friend Class frmMain
         Me.cmdPrintLicenseKey.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdPrintLicenseKey.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdPrintLicenseKey.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdPrintLicenseKey.Location = New System.Drawing.Point(2, 374)
+        Me.cmdPrintLicenseKey.Location = New System.Drawing.Point(2, 460)
         Me.cmdPrintLicenseKey.Name = "cmdPrintLicenseKey"
         Me.cmdPrintLicenseKey.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdPrintLicenseKey.Size = New System.Drawing.Size(80, 24)
@@ -821,7 +846,7 @@ Friend Class frmMain
         Me.cmdEmailLicenseKey.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdEmailLicenseKey.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdEmailLicenseKey.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdEmailLicenseKey.Location = New System.Drawing.Point(2, 400)
+        Me.cmdEmailLicenseKey.Location = New System.Drawing.Point(2, 486)
         Me.cmdEmailLicenseKey.Name = "cmdEmailLicenseKey"
         Me.cmdEmailLicenseKey.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdEmailLicenseKey.Size = New System.Drawing.Size(80, 24)
@@ -839,7 +864,7 @@ Friend Class frmMain
         Me.cmdProductsStorage.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdProductsStorage.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdProductsStorage.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdProductsStorage.Location = New System.Drawing.Point(420, 228)
+        Me.cmdProductsStorage.Location = New System.Drawing.Point(519, 228)
         Me.cmdProductsStorage.Name = "cmdProductsStorage"
         Me.cmdProductsStorage.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdProductsStorage.Size = New System.Drawing.Size(140, 23)
@@ -858,11 +883,11 @@ Friend Class frmMain
         Me.txtMaxCount.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtMaxCount.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtMaxCount.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtMaxCount.Location = New System.Drawing.Point(442, 53)
+        Me.txtMaxCount.Location = New System.Drawing.Point(442, 177)
         Me.txtMaxCount.MaxLength = 2
         Me.txtMaxCount.Name = "txtMaxCount"
         Me.txtMaxCount.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtMaxCount.Size = New System.Drawing.Size(22, 20)
+        Me.txtMaxCount.Size = New System.Drawing.Size(121, 20)
         Me.txtMaxCount.TabIndex = 68
         Me.txtMaxCount.Text = "5"
         Me.ToolTip1.SetToolTip(Me.txtMaxCount, "Enter or select license file")
@@ -877,7 +902,7 @@ Friend Class frmMain
         Me.cmdValidate2.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdValidate2.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdValidate2.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdValidate2.Location = New System.Drawing.Point(350, 36)
+        Me.cmdValidate2.Location = New System.Drawing.Point(449, 36)
         Me.cmdValidate2.Name = "cmdValidate2"
         Me.cmdValidate2.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdValidate2.Size = New System.Drawing.Size(78, 23)
@@ -900,7 +925,7 @@ Friend Class frmMain
         Me.SSTab1.Location = New System.Drawing.Point(0, 0)
         Me.SSTab1.Name = "SSTab1"
         Me.SSTab1.SelectedIndex = 1
-        Me.SSTab1.Size = New System.Drawing.Size(580, 547)
+        Me.SSTab1.Size = New System.Drawing.Size(679, 689)
         Me.SSTab1.TabIndex = 0
         '
         '_SSTab1_TabPage0
@@ -909,7 +934,7 @@ Friend Class frmMain
         Me._SSTab1_TabPage0.Controls.Add(Me.fraProdNew)
         Me._SSTab1_TabPage0.Location = New System.Drawing.Point(4, 22)
         Me._SSTab1_TabPage0.Name = "_SSTab1_TabPage0"
-        Me._SSTab1_TabPage0.Size = New System.Drawing.Size(572, 521)
+        Me._SSTab1_TabPage0.Size = New System.Drawing.Size(671, 663)
         Me._SSTab1_TabPage0.TabIndex = 0
         Me._SSTab1_TabPage0.Text = "Product Code Generator"
         '
@@ -921,7 +946,7 @@ Friend Class frmMain
         Me.grpProductsList.Controls.Add(Me.lstvwProducts)
         Me.grpProductsList.Location = New System.Drawing.Point(4, 262)
         Me.grpProductsList.Name = "grpProductsList"
-        Me.grpProductsList.Size = New System.Drawing.Size(564, 256)
+        Me.grpProductsList.Size = New System.Drawing.Size(663, 398)
         Me.grpProductsList.TabIndex = 1
         Me.grpProductsList.TabStop = False
         Me.grpProductsList.Text = " Products list "
@@ -957,7 +982,7 @@ Friend Class frmMain
         Me.fraProdNew.Location = New System.Drawing.Point(0, 4)
         Me.fraProdNew.Name = "fraProdNew"
         Me.fraProdNew.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.fraProdNew.Size = New System.Drawing.Size(567, 256)
+        Me.fraProdNew.Size = New System.Drawing.Size(666, 256)
         Me.fraProdNew.TabIndex = 0
         Me.fraProdNew.TabStop = False
         Me.fraProdNew.Text = " Product details "
@@ -979,7 +1004,7 @@ Friend Class frmMain
         Me.cmdStartWizard.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdStartWizard.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdStartWizard.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdStartWizard.Location = New System.Drawing.Point(270, 12)
+        Me.cmdStartWizard.Location = New System.Drawing.Point(369, 12)
         Me.cmdStartWizard.Name = "cmdStartWizard"
         Me.cmdStartWizard.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdStartWizard.Size = New System.Drawing.Size(78, 23)
@@ -1055,7 +1080,7 @@ Friend Class frmMain
         Me.grpCodes.Controls.Add(Me.cmdCopyGCode)
         Me.grpCodes.Location = New System.Drawing.Point(4, 102)
         Me.grpCodes.Name = "grpCodes"
-        Me.grpCodes.Size = New System.Drawing.Size(556, 123)
+        Me.grpCodes.Size = New System.Drawing.Size(655, 123)
         Me.grpCodes.TabIndex = 6
         Me.grpCodes.TabStop = False
         Me.grpCodes.Text = " Codes "
@@ -1075,7 +1100,7 @@ Friend Class frmMain
         Me.txtGCode.ReadOnly = True
         Me.txtGCode.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.txtGCode.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtGCode.Size = New System.Drawing.Size(466, 50)
+        Me.txtGCode.Size = New System.Drawing.Size(565, 50)
         Me.txtGCode.TabIndex = 5
         '
         'lblGCode
@@ -1149,7 +1174,7 @@ Friend Class frmMain
         Me._SSTab1_TabPage1.Controls.Add(Me.frmKeyGen)
         Me._SSTab1_TabPage1.Location = New System.Drawing.Point(4, 22)
         Me._SSTab1_TabPage1.Name = "_SSTab1_TabPage1"
-        Me._SSTab1_TabPage1.Size = New System.Drawing.Size(572, 521)
+        Me._SSTab1_TabPage1.Size = New System.Drawing.Size(671, 663)
         Me._SSTab1_TabPage1.TabIndex = 1
         Me._SSTab1_TabPage1.Text = "License Key Generator"
         '
@@ -1159,6 +1184,18 @@ Friend Class frmMain
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.frmKeyGen.BackColor = System.Drawing.SystemColors.Control
+        Me.frmKeyGen.Controls.Add(Me.lblLockVideoID)
+        Me.frmKeyGen.Controls.Add(Me.chkLockVideoID)
+        Me.frmKeyGen.Controls.Add(Me.lblLockBaseboardID)
+        Me.frmKeyGen.Controls.Add(Me.chkLockBaseboardID)
+        Me.frmKeyGen.Controls.Add(Me.lblLockCPUID)
+        Me.frmKeyGen.Controls.Add(Me.chkLockCPUID)
+        Me.frmKeyGen.Controls.Add(Me.lblLockMemory)
+        Me.frmKeyGen.Controls.Add(Me.chkLockMemory)
+        Me.frmKeyGen.Controls.Add(Me.lblLockFingerprint)
+        Me.frmKeyGen.Controls.Add(Me.chkLockFingerprint)
+        Me.frmKeyGen.Controls.Add(Me.lblLockExternalIP)
+        Me.frmKeyGen.Controls.Add(Me.chkLockExternalIP)
         Me.frmKeyGen.Controls.Add(Me.lblLockIP)
         Me.frmKeyGen.Controls.Add(Me.lblLockMotherboard)
         Me.frmKeyGen.Controls.Add(Me.lblLockBIOS)
@@ -1172,7 +1209,6 @@ Friend Class frmMain
         Me.frmKeyGen.Controls.Add(Me.lblConcurrentUsers)
         Me.frmKeyGen.Controls.Add(Me.txtMaxCount)
         Me.frmKeyGen.Controls.Add(Me.chkNetworkedLicense)
-        Me.frmKeyGen.Controls.Add(Me.Label18)
         Me.frmKeyGen.Controls.Add(Me.cmdEmailLicenseKey)
         Me.frmKeyGen.Controls.Add(Me.cmdPrintLicenseKey)
         Me.frmKeyGen.Controls.Add(Me.dtpExpireDate)
@@ -1216,63 +1252,201 @@ Friend Class frmMain
         Me.frmKeyGen.Location = New System.Drawing.Point(2, 0)
         Me.frmKeyGen.Name = "frmKeyGen"
         Me.frmKeyGen.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.frmKeyGen.Size = New System.Drawing.Size(567, 519)
+        Me.frmKeyGen.Size = New System.Drawing.Size(666, 660)
         Me.frmKeyGen.TabIndex = 0
+        '
+        'lblLockVideoID
+        '
+        Me.lblLockVideoID.Location = New System.Drawing.Point(293, 290)
+        Me.lblLockVideoID.Name = "lblLockVideoID"
+        Me.lblLockVideoID.Size = New System.Drawing.Size(368, 18)
+        Me.lblLockVideoID.TabIndex = 91
+        '
+        'chkLockVideoID
+        '
+        Me.chkLockVideoID.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.chkLockVideoID.BackColor = System.Drawing.SystemColors.Control
+        Me.chkLockVideoID.Cursor = System.Windows.Forms.Cursors.Default
+        Me.chkLockVideoID.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkLockVideoID.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.chkLockVideoID.Location = New System.Drawing.Point(87, 290)
+        Me.chkLockVideoID.Name = "chkLockVideoID"
+        Me.chkLockVideoID.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.chkLockVideoID.Size = New System.Drawing.Size(279, 18)
+        Me.chkLockVideoID.TabIndex = 90
+        Me.chkLockVideoID.Text = "Lock to Video ID"
+        Me.chkLockVideoID.UseVisualStyleBackColor = False
+        '
+        'lblLockBaseboardID
+        '
+        Me.lblLockBaseboardID.Location = New System.Drawing.Point(293, 344)
+        Me.lblLockBaseboardID.Name = "lblLockBaseboardID"
+        Me.lblLockBaseboardID.Size = New System.Drawing.Size(368, 18)
+        Me.lblLockBaseboardID.TabIndex = 89
+        '
+        'chkLockBaseboardID
+        '
+        Me.chkLockBaseboardID.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.chkLockBaseboardID.BackColor = System.Drawing.SystemColors.Control
+        Me.chkLockBaseboardID.Cursor = System.Windows.Forms.Cursors.Default
+        Me.chkLockBaseboardID.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkLockBaseboardID.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.chkLockBaseboardID.Location = New System.Drawing.Point(87, 344)
+        Me.chkLockBaseboardID.Name = "chkLockBaseboardID"
+        Me.chkLockBaseboardID.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.chkLockBaseboardID.Size = New System.Drawing.Size(279, 18)
+        Me.chkLockBaseboardID.TabIndex = 88
+        Me.chkLockBaseboardID.Text = "Lock to Baseboard ID"
+        Me.chkLockBaseboardID.UseVisualStyleBackColor = False
+        '
+        'lblLockCPUID
+        '
+        Me.lblLockCPUID.Location = New System.Drawing.Point(293, 326)
+        Me.lblLockCPUID.Name = "lblLockCPUID"
+        Me.lblLockCPUID.Size = New System.Drawing.Size(368, 18)
+        Me.lblLockCPUID.TabIndex = 87
+        '
+        'chkLockCPUID
+        '
+        Me.chkLockCPUID.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.chkLockCPUID.BackColor = System.Drawing.SystemColors.Control
+        Me.chkLockCPUID.Cursor = System.Windows.Forms.Cursors.Default
+        Me.chkLockCPUID.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkLockCPUID.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.chkLockCPUID.Location = New System.Drawing.Point(87, 326)
+        Me.chkLockCPUID.Name = "chkLockCPUID"
+        Me.chkLockCPUID.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.chkLockCPUID.Size = New System.Drawing.Size(279, 18)
+        Me.chkLockCPUID.TabIndex = 86
+        Me.chkLockCPUID.Text = "Lock to CPU ID"
+        Me.chkLockCPUID.UseVisualStyleBackColor = False
+        '
+        'lblLockMemory
+        '
+        Me.lblLockMemory.Location = New System.Drawing.Point(293, 308)
+        Me.lblLockMemory.Name = "lblLockMemory"
+        Me.lblLockMemory.Size = New System.Drawing.Size(368, 18)
+        Me.lblLockMemory.TabIndex = 85
+        '
+        'chkLockMemory
+        '
+        Me.chkLockMemory.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.chkLockMemory.BackColor = System.Drawing.SystemColors.Control
+        Me.chkLockMemory.Cursor = System.Windows.Forms.Cursors.Default
+        Me.chkLockMemory.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkLockMemory.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.chkLockMemory.Location = New System.Drawing.Point(87, 308)
+        Me.chkLockMemory.Name = "chkLockMemory"
+        Me.chkLockMemory.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.chkLockMemory.Size = New System.Drawing.Size(279, 18)
+        Me.chkLockMemory.TabIndex = 84
+        Me.chkLockMemory.Text = "Lock to Memory ID"
+        Me.chkLockMemory.UseVisualStyleBackColor = False
+        '
+        'lblLockFingerprint
+        '
+        Me.lblLockFingerprint.Location = New System.Drawing.Point(293, 363)
+        Me.lblLockFingerprint.Name = "lblLockFingerprint"
+        Me.lblLockFingerprint.Size = New System.Drawing.Size(368, 18)
+        Me.lblLockFingerprint.TabIndex = 83
+        '
+        'chkLockFingerprint
+        '
+        Me.chkLockFingerprint.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.chkLockFingerprint.BackColor = System.Drawing.SystemColors.Control
+        Me.chkLockFingerprint.Cursor = System.Windows.Forms.Cursors.Default
+        Me.chkLockFingerprint.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkLockFingerprint.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.chkLockFingerprint.Location = New System.Drawing.Point(87, 363)
+        Me.chkLockFingerprint.Name = "chkLockFingerprint"
+        Me.chkLockFingerprint.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.chkLockFingerprint.Size = New System.Drawing.Size(279, 18)
+        Me.chkLockFingerprint.TabIndex = 82
+        Me.chkLockFingerprint.Text = "Lock to Computer Fingerprint [slow]"
+        Me.chkLockFingerprint.UseVisualStyleBackColor = False
+        '
+        'lblLockExternalIP
+        '
+        Me.lblLockExternalIP.Location = New System.Drawing.Point(293, 272)
+        Me.lblLockExternalIP.Name = "lblLockExternalIP"
+        Me.lblLockExternalIP.Size = New System.Drawing.Size(368, 18)
+        Me.lblLockExternalIP.TabIndex = 81
+        '
+        'chkLockExternalIP
+        '
+        Me.chkLockExternalIP.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.chkLockExternalIP.BackColor = System.Drawing.SystemColors.Control
+        Me.chkLockExternalIP.Cursor = System.Windows.Forms.Cursors.Default
+        Me.chkLockExternalIP.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.chkLockExternalIP.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.chkLockExternalIP.Location = New System.Drawing.Point(87, 272)
+        Me.chkLockExternalIP.Name = "chkLockExternalIP"
+        Me.chkLockExternalIP.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.chkLockExternalIP.Size = New System.Drawing.Size(279, 18)
+        Me.chkLockExternalIP.TabIndex = 80
+        Me.chkLockExternalIP.Text = "Lock to External IP Address"
+        Me.chkLockExternalIP.UseVisualStyleBackColor = False
         '
         'lblLockIP
         '
-        Me.lblLockIP.Location = New System.Drawing.Point(265, 252)
+        Me.lblLockIP.Location = New System.Drawing.Point(293, 254)
         Me.lblLockIP.Name = "lblLockIP"
-        Me.lblLockIP.Size = New System.Drawing.Size(291, 16)
+        Me.lblLockIP.Size = New System.Drawing.Size(368, 18)
         Me.lblLockIP.TabIndex = 79
         '
         'lblLockMotherboard
         '
-        Me.lblLockMotherboard.Location = New System.Drawing.Point(265, 234)
+        Me.lblLockMotherboard.Location = New System.Drawing.Point(293, 236)
         Me.lblLockMotherboard.Name = "lblLockMotherboard"
-        Me.lblLockMotherboard.Size = New System.Drawing.Size(291, 16)
+        Me.lblLockMotherboard.Size = New System.Drawing.Size(368, 18)
         Me.lblLockMotherboard.TabIndex = 78
         '
         'lblLockBIOS
         '
-        Me.lblLockBIOS.Location = New System.Drawing.Point(265, 216)
+        Me.lblLockBIOS.Location = New System.Drawing.Point(293, 218)
         Me.lblLockBIOS.Name = "lblLockBIOS"
-        Me.lblLockBIOS.Size = New System.Drawing.Size(291, 16)
+        Me.lblLockBIOS.Size = New System.Drawing.Size(368, 18)
         Me.lblLockBIOS.TabIndex = 77
         '
         'lblLockWindows
         '
-        Me.lblLockWindows.Location = New System.Drawing.Point(265, 198)
+        Me.lblLockWindows.Location = New System.Drawing.Point(293, 200)
         Me.lblLockWindows.Name = "lblLockWindows"
-        Me.lblLockWindows.Size = New System.Drawing.Size(291, 16)
+        Me.lblLockWindows.Size = New System.Drawing.Size(368, 18)
         Me.lblLockWindows.TabIndex = 76
         '
         'lblLockHDfirmware
         '
-        Me.lblLockHDfirmware.Location = New System.Drawing.Point(265, 180)
+        Me.lblLockHDfirmware.Location = New System.Drawing.Point(293, 182)
         Me.lblLockHDfirmware.Name = "lblLockHDfirmware"
-        Me.lblLockHDfirmware.Size = New System.Drawing.Size(291, 16)
+        Me.lblLockHDfirmware.Size = New System.Drawing.Size(368, 18)
         Me.lblLockHDfirmware.TabIndex = 75
         '
         'lblLockHD
         '
-        Me.lblLockHD.Location = New System.Drawing.Point(265, 162)
+        Me.lblLockHD.Location = New System.Drawing.Point(293, 164)
         Me.lblLockHD.Name = "lblLockHD"
-        Me.lblLockHD.Size = New System.Drawing.Size(291, 16)
+        Me.lblLockHD.Size = New System.Drawing.Size(368, 18)
         Me.lblLockHD.TabIndex = 74
         '
         'lblLockComputer
         '
-        Me.lblLockComputer.Location = New System.Drawing.Point(265, 144)
+        Me.lblLockComputer.Location = New System.Drawing.Point(293, 146)
         Me.lblLockComputer.Name = "lblLockComputer"
-        Me.lblLockComputer.Size = New System.Drawing.Size(291, 16)
+        Me.lblLockComputer.Size = New System.Drawing.Size(368, 18)
         Me.lblLockComputer.TabIndex = 73
         '
         'lblLockMacAddress
         '
-        Me.lblLockMacAddress.Location = New System.Drawing.Point(265, 126)
+        Me.lblLockMacAddress.Location = New System.Drawing.Point(293, 127)
         Me.lblLockMacAddress.Name = "lblLockMacAddress"
-        Me.lblLockMacAddress.Size = New System.Drawing.Size(291, 16)
+        Me.lblLockMacAddress.Size = New System.Drawing.Size(368, 18)
         Me.lblLockMacAddress.TabIndex = 72
         '
         'cmdUncheckAll
@@ -1319,19 +1493,6 @@ Friend Class frmMain
         Me.chkNetworkedLicense.Text = "Networked License"
         Me.chkNetworkedLicense.UseVisualStyleBackColor = False
         '
-        'Label18
-        '
-        Me.Label18.BackColor = System.Drawing.SystemColors.Control
-        Me.Label18.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label18.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label18.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label18.Location = New System.Drawing.Point(0, 246)
-        Me.Label18.Name = "Label18"
-        Me.Label18.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label18.Size = New System.Drawing.Size(86, 26)
-        Me.Label18.TabIndex = 66
-        Me.Label18.Text = "Note: IP address may be dynamic!"
-        '
         'dtpExpireDate
         '
         Me.dtpExpireDate.CustomFormat = "yyyy/MM/dd"
@@ -1354,9 +1515,9 @@ Friend Class frmMain
         Me.chkLockIP.Location = New System.Drawing.Point(87, 254)
         Me.chkLockIP.Name = "chkLockIP"
         Me.chkLockIP.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkLockIP.Size = New System.Drawing.Size(180, 13)
+        Me.chkLockIP.Size = New System.Drawing.Size(279, 18)
         Me.chkLockIP.TabIndex = 24
-        Me.chkLockIP.Text = "Lock to IP Address"
+        Me.chkLockIP.Text = "Lock to Local IP Address"
         Me.chkLockIP.UseVisualStyleBackColor = False
         '
         'chkLockMotherboard
@@ -1370,7 +1531,7 @@ Friend Class frmMain
         Me.chkLockMotherboard.Location = New System.Drawing.Point(87, 236)
         Me.chkLockMotherboard.Name = "chkLockMotherboard"
         Me.chkLockMotherboard.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkLockMotherboard.Size = New System.Drawing.Size(180, 13)
+        Me.chkLockMotherboard.Size = New System.Drawing.Size(279, 18)
         Me.chkLockMotherboard.TabIndex = 23
         Me.chkLockMotherboard.Text = "Lock to Motherboard Serial"
         Me.chkLockMotherboard.UseVisualStyleBackColor = False
@@ -1386,7 +1547,7 @@ Friend Class frmMain
         Me.chkLockBIOS.Location = New System.Drawing.Point(87, 218)
         Me.chkLockBIOS.Name = "chkLockBIOS"
         Me.chkLockBIOS.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkLockBIOS.Size = New System.Drawing.Size(180, 13)
+        Me.chkLockBIOS.Size = New System.Drawing.Size(279, 18)
         Me.chkLockBIOS.TabIndex = 22
         Me.chkLockBIOS.Text = "Lock to BIOS Version"
         Me.chkLockBIOS.UseVisualStyleBackColor = False
@@ -1402,7 +1563,7 @@ Friend Class frmMain
         Me.chkLockWindows.Location = New System.Drawing.Point(87, 200)
         Me.chkLockWindows.Name = "chkLockWindows"
         Me.chkLockWindows.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkLockWindows.Size = New System.Drawing.Size(180, 13)
+        Me.chkLockWindows.Size = New System.Drawing.Size(279, 18)
         Me.chkLockWindows.TabIndex = 21
         Me.chkLockWindows.Text = "Lock to Windows Serial"
         Me.chkLockWindows.UseVisualStyleBackColor = False
@@ -1418,7 +1579,7 @@ Friend Class frmMain
         Me.chkLockHDfirmware.Location = New System.Drawing.Point(87, 182)
         Me.chkLockHDfirmware.Name = "chkLockHDfirmware"
         Me.chkLockHDfirmware.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkLockHDfirmware.Size = New System.Drawing.Size(180, 13)
+        Me.chkLockHDfirmware.Size = New System.Drawing.Size(279, 18)
         Me.chkLockHDfirmware.TabIndex = 20
         Me.chkLockHDfirmware.Text = "Lock to HDD Firmware Serial"
         Me.chkLockHDfirmware.UseVisualStyleBackColor = False
@@ -1434,7 +1595,7 @@ Friend Class frmMain
         Me.chkLockHD.Location = New System.Drawing.Point(87, 164)
         Me.chkLockHD.Name = "chkLockHD"
         Me.chkLockHD.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkLockHD.Size = New System.Drawing.Size(180, 13)
+        Me.chkLockHD.Size = New System.Drawing.Size(279, 18)
         Me.chkLockHD.TabIndex = 19
         Me.chkLockHD.Text = "Lock to HDD Volume Serial"
         Me.chkLockHD.UseVisualStyleBackColor = False
@@ -1450,7 +1611,7 @@ Friend Class frmMain
         Me.chkLockComputer.Location = New System.Drawing.Point(87, 146)
         Me.chkLockComputer.Name = "chkLockComputer"
         Me.chkLockComputer.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkLockComputer.Size = New System.Drawing.Size(180, 13)
+        Me.chkLockComputer.Size = New System.Drawing.Size(279, 18)
         Me.chkLockComputer.TabIndex = 18
         Me.chkLockComputer.Text = "Lock to Computer Name"
         Me.chkLockComputer.UseVisualStyleBackColor = False
@@ -1463,10 +1624,10 @@ Friend Class frmMain
         Me.chkLockMACaddress.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkLockMACaddress.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockMACaddress.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkLockMACaddress.Location = New System.Drawing.Point(87, 128)
+        Me.chkLockMACaddress.Location = New System.Drawing.Point(87, 127)
         Me.chkLockMACaddress.Name = "chkLockMACaddress"
         Me.chkLockMACaddress.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkLockMACaddress.Size = New System.Drawing.Size(180, 13)
+        Me.chkLockMACaddress.Size = New System.Drawing.Size(279, 18)
         Me.chkLockMACaddress.TabIndex = 17
         Me.chkLockMACaddress.Text = "Lock to MAC Address"
         Me.chkLockMACaddress.UseVisualStyleBackColor = False
@@ -1508,7 +1669,7 @@ Friend Class frmMain
         Me.Label11.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label11.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label11.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label11.Location = New System.Drawing.Point(2, 102)
+        Me.Label11.Location = New System.Drawing.Point(1, 98)
         Me.Label11.Name = "Label11"
         Me.Label11.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Label11.Size = New System.Drawing.Size(89, 17)
@@ -1522,7 +1683,7 @@ Friend Class frmMain
         Me.Label5.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label5.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label5.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label5.Location = New System.Drawing.Point(2, 498)
+        Me.Label5.Location = New System.Drawing.Point(2, 636)
         Me.Label5.Name = "Label5"
         Me.Label5.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Label5.Size = New System.Drawing.Size(78, 17)
@@ -1561,7 +1722,7 @@ Friend Class frmMain
         Me.Label7.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label7.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label7.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label7.Location = New System.Drawing.Point(2, 78)
+        Me.Label7.Location = New System.Drawing.Point(1, 76)
         Me.Label7.Name = "Label7"
         Me.Label7.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Label7.Size = New System.Drawing.Size(89, 17)
@@ -1574,13 +1735,14 @@ Friend Class frmMain
         Me.lblLicenseKey.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblLicenseKey.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblLicenseKey.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblLicenseKey.ImageAlign = System.Drawing.ContentAlignment.BottomRight
-        Me.lblLicenseKey.Location = New System.Drawing.Point(2, 274)
+        Me.lblLicenseKey.ImageAlign = System.Drawing.ContentAlignment.TopCenter
+        Me.lblLicenseKey.Location = New System.Drawing.Point(2, 344)
         Me.lblLicenseKey.Name = "lblLicenseKey"
         Me.lblLicenseKey.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblLicenseKey.Size = New System.Drawing.Size(82, 44)
+        Me.lblLicenseKey.Size = New System.Drawing.Size(82, 59)
         Me.lblLicenseKey.TabIndex = 25
         Me.lblLicenseKey.Text = "License &Key:"
+        Me.lblLicenseKey.TextAlign = System.Drawing.ContentAlignment.BottomLeft
         '
         'lblDays
         '
@@ -1623,11 +1785,11 @@ Friend Class frmMain
         'sbStatus
         '
         Me.sbStatus.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.sbStatus.Location = New System.Drawing.Point(0, 548)
+        Me.sbStatus.Location = New System.Drawing.Point(0, 690)
         Me.sbStatus.Name = "sbStatus"
         Me.sbStatus.Panels.AddRange(New System.Windows.Forms.StatusBarPanel() {Me.mainStatusBarPanel})
         Me.sbStatus.ShowPanels = True
-        Me.sbStatus.Size = New System.Drawing.Size(580, 22)
+        Me.sbStatus.Size = New System.Drawing.Size(679, 22)
         Me.sbStatus.TabIndex = 1
         Me.sbStatus.Text = "Ready ..."
         '
@@ -1636,13 +1798,13 @@ Friend Class frmMain
         Me.mainStatusBarPanel.AutoSize = System.Windows.Forms.StatusBarPanelAutoSize.Spring
         Me.mainStatusBarPanel.Name = "mainStatusBarPanel"
         Me.mainStatusBarPanel.Text = "Ready ..."
-        Me.mainStatusBarPanel.Width = 564
+        Me.mainStatusBarPanel.Width = 662
         '
         'lnkActivelockSoftwareGroup
         '
         Me.lnkActivelockSoftwareGroup.ActiveLinkColor = System.Drawing.Color.Green
         Me.lnkActivelockSoftwareGroup.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.lnkActivelockSoftwareGroup.Location = New System.Drawing.Point(416, 4)
+        Me.lnkActivelockSoftwareGroup.Location = New System.Drawing.Point(515, 4)
         Me.lnkActivelockSoftwareGroup.Name = "lnkActivelockSoftwareGroup"
         Me.lnkActivelockSoftwareGroup.Size = New System.Drawing.Size(156, 12)
         Me.lnkActivelockSoftwareGroup.TabIndex = 66
@@ -1655,7 +1817,7 @@ Friend Class frmMain
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(580, 570)
+        Me.ClientSize = New System.Drawing.Size(679, 712)
         Me.Controls.Add(Me.lnkActivelockSoftwareGroup)
         Me.Controls.Add(Me.sbStatus)
         Me.Controls.Add(Me.SSTab1)
@@ -1790,6 +1952,36 @@ Friend Class frmMain
         Else
             AppendLockString(strLock, noKey)
         End If
+        If Me.chkLockExternalIP.CheckState = CheckState.Checked Then
+            AppendLockString(strLock, ExternalIP)
+        Else
+            AppendLockString(strLock, noKey)
+        End If
+        If Me.chkLockFingerprint.CheckState = CheckState.Checked Then
+            AppendLockString(strLock, Fingerprint)
+        Else
+            AppendLockString(strLock, noKey)
+        End If
+        If Me.chkLockMemory.CheckState = CheckState.Checked Then
+            AppendLockString(strLock, Memory)
+        Else
+            AppendLockString(strLock, noKey)
+        End If
+        If Me.chkLockCPUID.CheckState = CheckState.Checked Then
+            AppendLockString(strLock, CPUID)
+        Else
+            AppendLockString(strLock, noKey)
+        End If
+        If Me.chkLockBaseboardID.CheckState = CheckState.Checked Then
+            AppendLockString(strLock, BaseboardID)
+        Else
+            AppendLockString(strLock, noKey)
+        End If
+        If Me.chkLockVideoID.CheckState = CheckState.Checked Then
+            AppendLockString(strLock, VideoID)
+        Else
+            AppendLockString(strLock, noKey)
+        End If
 
         If Not strLock Is Nothing _
           AndAlso strLock.Substring(0, 1) = vbLf Then
@@ -1806,6 +1998,9 @@ Friend Class frmMain
           AndAlso strInstCode.Substring(0, 1) = "+" Then
             strInstCode = strInstCode.Substring(2)
         End If
+        Dim arrProdVer() As String
+        arrProdVer = Split(strInstCode, "&&&") ' Extract the software name and version
+        strInstCode = arrProdVer(0)
         Index = 0
         i = 1
         ' Get to the last vbLf, which denotes the ending of the lock code and beginning of user name.
@@ -1820,11 +2015,24 @@ Friend Class frmMain
         ' combine with user name
         strReq = strLock & vbLf & user
 
+        ' combine with app name and version
+        strReq = strReq & "&&&" & cboProducts.Text
+
         ' base-64 encode the request
         Dim strReq2 As String
         strReq2 = ActiveLock3Globals_definst.Base64Encode("+" & strReq)
         ReconstructedInstallationCode = strReq2
 
+    End Function
+
+    Private Function GetUserSoftwareNameandVersionfromInstallCode(ByVal strInstCode As String) As String
+        On Error GoTo noInfo
+        If strInstCode = "" Then Return String.Empty
+        strInstCode = ActiveLock3Globals_definst.Base64Decode(txtInstallCode.Text)
+        Dim arrProdVer() As String
+        arrProdVer = Split(strInstCode, "&&&")
+        GetUserSoftwareNameandVersionfromInstallCode = Trim$(arrProdVer(1))
+noInfo:
     End Function
 
     Private Sub UpdateKeyGenButtonStatus()
@@ -2142,6 +2350,9 @@ Friend Class frmMain
                 usedLockNone = True
             End If
         End If
+        Dim arrProdVer() As String
+        arrProdVer = Split(strInstCode, "&&&") ' Extract the software name and version
+        strInstCode = arrProdVer(0)
 
         systemEvent = True
         'clean checkboxes
@@ -2153,6 +2364,12 @@ Friend Class frmMain
         chkLockBIOS.Enabled = True
         chkLockMotherboard.Enabled = True
         chkLockIP.Enabled = True
+        chkLockExternalIP.Enabled = True
+        chkLockFingerprint.Enabled = True
+        chkLockMemory.Enabled = True
+        chkLockCPUID.Enabled = True
+        chkLockBaseboardID.Enabled = True
+        chkLockVideoID.Enabled = True
 
         a = Split(strInstCode, vbLf)
         If usedLockNone = True Then
@@ -2182,6 +2399,24 @@ Friend Class frmMain
                 ElseIf i = LBound(a) + 7 Then
                     IPaddress = aString
                     lblLockIP.Text = IPaddress
+                ElseIf i = LBound(a) + 8 Then
+                    ExternalIP = aString
+                    lblLockExternalIP.Text = ExternalIP
+                ElseIf i = LBound(a) + 9 Then
+                    Fingerprint = aString
+                    lblLockFingerprint.Text = Fingerprint
+                ElseIf i = LBound(a) + 10 Then
+                    Memory = aString
+                    lblLockMemory.Text = Memory
+                ElseIf i = LBound(a) + 11 Then
+                    CPUID = aString
+                    lblLockCPUID.Text = CPUID
+                ElseIf i = LBound(a) + 12 Then
+                    BaseboardID = aString
+                    lblLockBaseboardID.Text = BaseboardID
+                ElseIf i = LBound(a) + 13 Then
+                    VideoID = aString
+                    lblLockVideoID.Text = VideoID
                 End If
             Next i
         Else '"+" was not used, therefore one or more lockTypes were specified in the application
@@ -2193,6 +2428,12 @@ Friend Class frmMain
             chkLockBIOS.Enabled = False
             chkLockMotherboard.Enabled = False
             chkLockIP.Enabled = False
+            chkLockExternalIP.Enabled = False
+            chkLockFingerprint.Enabled = False
+            chkLockMemory.Enabled = False
+            chkLockCPUID.Enabled = False
+            chkLockBaseboardID.Enabled = False
+            chkLockVideoID.Enabled = False
 
             chkLockMACaddress.CheckState = CheckState.Unchecked
             chkLockHD.CheckState = CheckState.Unchecked
@@ -2202,6 +2443,12 @@ Friend Class frmMain
             chkLockBIOS.CheckState = CheckState.Unchecked
             chkLockMotherboard.CheckState = CheckState.Unchecked
             chkLockIP.CheckState = CheckState.Unchecked
+            chkLockExternalIP.CheckState = CheckState.Unchecked
+            chkLockFingerprint.CheckState = CheckState.Unchecked
+            chkLockMemory.CheckState = CheckState.Unchecked
+            chkLockCPUID.CheckState = CheckState.Unchecked
+            chkLockBaseboardID.CheckState = CheckState.Unchecked
+            chkLockVideoID.CheckState = CheckState.Unchecked
 
             For i = LBound(a) To UBound(a) - 1
                 aString = a(i)
@@ -2237,6 +2484,30 @@ Friend Class frmMain
                     IPaddress = aString
                     lblLockIP.Text = IPaddress
                     chkLockIP.CheckState = CheckState.Checked
+                ElseIf i = (LBound(a) + 8) And aString <> noKey Then
+                    ExternalIP = aString
+                    lblLockExternalIP.Text = ExternalIP
+                    chkLockExternalIP.CheckState = CheckState.Checked
+                ElseIf i = (LBound(a) + 9) And aString <> noKey Then
+                    Fingerprint = aString
+                    lblLockFingerprint.Text = Fingerprint
+                    chkLockFingerprint.CheckState = CheckState.Checked
+                ElseIf i = (LBound(a) + 10) And aString <> noKey Then
+                    Memory = aString
+                    lblLockMemory.Text = Memory
+                    chkLockMemory.CheckState = CheckState.Checked
+                ElseIf i = (LBound(a) + 11) And aString <> noKey Then
+                    CPUID = aString
+                    lblLockCPUID.Text = CPUID
+                    chkLockCPUID.CheckState = CheckState.Checked
+                ElseIf i = (LBound(a) + 12) And aString <> noKey Then
+                    BaseboardID = aString
+                    lblLockBaseboardID.Text = BaseboardID
+                    chkLockBaseboardID.CheckState = CheckState.Checked
+                ElseIf i = (LBound(a) + 13) And aString <> noKey Then
+                    VideoID = aString
+                    lblLockVideoID.Text = VideoID
+                    chkLockVideoID.CheckState = CheckState.Checked
                 End If
 
             Next i
@@ -2265,6 +2536,30 @@ Friend Class frmMain
         If IPaddress = "Not Available" Then
             chkLockIP.Enabled = False
             chkLockIP.CheckState = CheckState.Unchecked
+        End If
+        If ExternalIP = "Not Available" Then
+            chkLockExternalIP.Enabled = False
+            chkLockExternalIP.CheckState = CheckState.Unchecked
+        End If
+        If Fingerprint = "Not Available" Then
+            chkLockFingerprint.Enabled = False
+            chkLockFingerprint.CheckState = CheckState.Unchecked
+        End If
+        If Memory = "Not Available" Then
+            chkLockMemory.Enabled = False
+            chkLockMemory.CheckState = CheckState.Unchecked
+        End If
+        If CPUID = "Not Available" Then
+            chkLockCPUID.Enabled = False
+            chkLockCPUID.CheckState = CheckState.Unchecked
+        End If
+        If BaseboardID = "Not Available" Then
+            chkLockBaseboardID.Enabled = False
+            chkLockBaseboardID.CheckState = CheckState.Unchecked
+        End If
+        If VideoID = "Not Available" Then
+            chkLockVideoID.Enabled = False
+            chkLockVideoID.CheckState = CheckState.Unchecked
         End If
 
         GetUserFromInstallCode = a(a.Length - 1)
@@ -2416,6 +2711,37 @@ Friend Class frmMain
         Else
             chkLockWindows.CheckState = CheckState.Checked
         End If
+        If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockExternalIP", CStr(0)) = "Unchecked" Then
+            chkLockExternalIP.CheckState = CheckState.Unchecked
+        Else
+            chkLockExternalIP.CheckState = CheckState.Checked
+        End If
+        If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockFingerprint", CStr(0)) = "Unchecked" Then
+            chkLockFingerprint.CheckState = CheckState.Unchecked
+        Else
+            chkLockFingerprint.CheckState = CheckState.Checked
+        End If
+        If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMemory", CStr(0)) = "Unchecked" Then
+            chkLockMemory.CheckState = CheckState.Unchecked
+        Else
+            chkLockMemory.CheckState = CheckState.Checked
+        End If
+        If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockCPUID", CStr(0)) = "Unchecked" Then
+            chkLockCPUID.CheckState = CheckState.Unchecked
+        Else
+            chkLockCPUID.CheckState = CheckState.Checked
+        End If
+        If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockBaseboardID", CStr(0)) = "Unchecked" Then
+            chkLockBaseboardID.CheckState = CheckState.Unchecked
+        Else
+            chkLockBaseboardID.CheckState = CheckState.Checked
+        End If
+        If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockVideoID", CStr(0)) = "Unchecked" Then
+            chkLockVideoID.CheckState = CheckState.Unchecked
+        Else
+            chkLockVideoID.CheckState = CheckState.Checked
+        End If
+
         If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkNetworkedLicense", CStr(0)) = "Unchecked" Then
             chkNetworkedLicense.CheckState = CheckState.Unchecked
         Else
@@ -2502,6 +2828,12 @@ InitForm_Error:
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMACaddress", chkLockMACaddress.CheckState.ToString)
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMotherboard", chkLockMotherboard.CheckState.ToString)
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockWindows", chkLockWindows.CheckState.ToString)
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockExternalIP", chkLockExternalIP.CheckState.ToString)
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockFingerpoint", chkLockFingerprint.CheckState.ToString)
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMemory", chkLockMemory.CheckState.ToString)
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockCPUID", chkLockCPUID.CheckState.ToString)
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockBaseboardID", chkLockBaseboardID.CheckState.ToString)
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockVideoID", chkLockVideoID.CheckState.ToString)
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtMaxCount", txtMaxCount.Text)
 
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optstrength0", CStr(optStrength0.Checked))
@@ -2569,6 +2901,42 @@ SaveFormSettings_Error:
     End Sub
 
     Private Sub chkLockWindows_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockWindows.CheckStateChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
+    Private Sub chkLockExternalIP_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockExternalIP.CheckStateChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
+    Private Sub chkLockFingerpoint_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockFingerprint.CheckStateChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
+    Private Sub chkLockMemory_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockMemory.CheckStateChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
+    Private Sub chkLockCPUID_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockCPUID.CheckStateChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
+    Private Sub chkLockBaseboardID_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockBaseboardID.CheckStateChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
+    Private Sub chkLockVideoID_CheckStateChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles chkLockVideoID.CheckStateChanged
         If systemEvent Then Exit Sub
         systemEvent = True
         txtInstallCode.Text = ReconstructedInstallationCode()
@@ -2830,7 +3198,7 @@ SaveFormSettings_Error:
             End If
         End If
 
-        If Len(txtInstallCode.Text) <> 8 Then  'Short Key License
+        If Len(txtInstallCode.Text) <> 8 Then  'Not a Short Key License
             If chkLockMACaddress.CheckState = CheckState.Unchecked _
               And chkLockComputer.CheckState = CheckState.Unchecked _
               And chkLockHD.CheckState = CheckState.Unchecked _
@@ -2838,10 +3206,20 @@ SaveFormSettings_Error:
               And chkLockWindows.CheckState = CheckState.Unchecked _
               And chkLockBIOS.CheckState = CheckState.Unchecked _
               And chkLockMotherboard.CheckState = CheckState.Unchecked _
+              And chkLockExternalIP.CheckState = CheckState.Unchecked _
+              And chkLockFingerprint.CheckState = CheckState.Unchecked _
+              And chkLockMemory.CheckState = CheckState.Unchecked _
+              And chkLockCPUID.CheckState = CheckState.Unchecked _
+              And chkLockBaseboardID.CheckState = CheckState.Unchecked _
+              And chkLockVideoID.CheckState = CheckState.Unchecked _
               And chkLockIP.CheckState = CheckState.Unchecked Then
-                MsgBox("Warning: You did not select any hardware keys to lock the license.", MsgBoxStyle.Exclamation)
+                MsgBox("Warning: You did not select any hardware keys to lock the license." & vbCrLf & "This license will be machine independent. License will be locked to the username only !!!", MsgBoxStyle.Exclamation)
             End If
         End If
+
+        systemEvent = True
+        If Len(txtInstallCode.Text) <> 8 Then txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
 
         ' get product and version
         Cursor = Cursors.WaitCursor
@@ -2954,7 +3332,7 @@ SaveFormSettings_Error:
                 End If
                 If chkLockBIOS.CheckState = CheckState.Checked Then
                     If lockTypesString <> "" Then lockTypesString = lockTypesString & "+"
-                    lockTypesString = lockTypesString & "BIOS Serial"
+                    lockTypesString = lockTypesString & "BIOS Version"
                 End If
                 If chkLockMotherboard.CheckState = CheckState.Checked Then
                     If lockTypesString <> "" Then lockTypesString = lockTypesString & "+"
@@ -2962,11 +3340,35 @@ SaveFormSettings_Error:
                 End If
                 If chkLockIP.CheckState = CheckState.Checked Then
                     If lockTypesString <> "" Then lockTypesString = lockTypesString & "+"
-                    lockTypesString = lockTypesString & "IP Address"
+                    lockTypesString = lockTypesString & "Local IP Address"
+                End If
+                If chkLockExternalIP.CheckState = CheckState.Checked Then
+                    If lockTypesString <> "" Then lockTypesString = lockTypesString & "+"
+                    lockTypesString = lockTypesString & "External IP Address"
+                End If
+                If chkLockFingerprint.CheckState = CheckState.Checked Then
+                    If lockTypesString <> "" Then lockTypesString = lockTypesString & "+"
+                    lockTypesString = lockTypesString & "Computer Fingerprint"
+                End If
+                If chkLockMemory.CheckState = CheckState.Checked Then
+                    If lockTypesString <> "" Then lockTypesString = lockTypesString & "+"
+                    lockTypesString = lockTypesString & "Memory ID"
+                End If
+                If chkLockCPUID.CheckState = CheckState.Checked Then
+                    If lockTypesString <> "" Then lockTypesString = lockTypesString & "+"
+                    lockTypesString = lockTypesString & "CPU ID"
+                End If
+                If chkLockBaseboardID.CheckState = CheckState.Checked Then
+                    If lockTypesString <> "" Then lockTypesString = lockTypesString & "+"
+                    lockTypesString = lockTypesString & "Baseboard ID"
+                End If
+                If chkLockVideoID.CheckState = CheckState.Checked Then
+                    If lockTypesString <> "" Then lockTypesString = lockTypesString & "+"
+                    lockTypesString = lockTypesString & "Video ID"
                 End If
 
                 'add license to database
-                Call frmAlugenDatabase.ArchiveLicense(strName, strVer, Trim(txtUser.Text), strRegDate, strExpire, cboLicType.Text, lockTypesString, cboRegisteredLevel.Text, txtInstallCode.Text, txtLicenseKey.Text)
+                Call frmAlugenDatabase.ArchiveLicense(strName, strVer, txtUser.Text.Trim, strRegDate, strExpire, cboLicType.Text, lockTypesString, cboRegisteredLevel.Text, txtInstallCode.Text, txtLicenseKey.Text)
 
             End If
             Set_locale(regionalSymbol)
@@ -2983,6 +3385,7 @@ SaveFormSettings_Error:
         If Clipboard.GetDataObject.GetDataPresent(DataFormats.Text) Then
             txtInstallCode.Text = CType(Clipboard.GetDataObject.GetData(DataFormats.Text), String)
             UpdateKeyGenButtonStatus()
+            HandleInstallationCode()
         End If
     End Sub
 
@@ -3445,82 +3848,7 @@ exitValidate:
     End Sub
 
     Private Sub txtInstallCode_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtInstallCode.TextChanged
-
-        If Len(txtInstallCode.Text) = 8 Then 'Short key authorization is much simpler
-            UpdateKeyGenButtonStatus()
-            If fDisableNotifications Then Exit Sub
-
-            chkLockMACaddress.Visible = False
-            chkLockComputer.Visible = False
-            chkLockHD.Visible = False
-            chkLockHDfirmware.Visible = False
-            chkLockWindows.Visible = False
-            chkLockBIOS.Visible = False
-            chkLockMotherboard.Visible = False
-            chkLockIP.Visible = False
-            Label18.Visible = False
-            txtUser.Text = ""
-            txtUser.Enabled = True
-            txtUser.ReadOnly = False
-            txtUser.BackColor = Color.White
-
-            Label5.Visible = False
-            txtLicenseFile.Visible = False
-            cmdBrowse.Visible = False
-            cmdSave.Visible = False
-            Exit Sub
-
-        Else 'ALCrypto
-
-            chkLockMACaddress.Visible = True
-            chkLockComputer.Visible = True
-            chkLockHD.Visible = True
-            chkLockHDfirmware.Visible = True
-            chkLockWindows.Visible = True
-            chkLockBIOS.Visible = True
-            chkLockMotherboard.Visible = True
-            chkLockIP.Visible = True
-            Label18.Visible = True
-            txtUser.Enabled = False
-            txtUser.ReadOnly = True
-            txtUser.BackColor = System.Drawing.SystemColors.Control
-
-            Label5.Visible = True
-            txtLicenseFile.Visible = True
-            cmdBrowse.Visible = True
-            cmdSave.Visible = True
-
-            If Len(txtInstallCode.Text) > 0 Then
-                If systemEvent Then Exit Sub
-                UpdateKeyGenButtonStatus()
-                If fDisableNotifications Then Exit Sub
-
-                fDisableNotifications = True
-                txtUser.Text = GetUserFromInstallCode(txtInstallCode.Text)
-                fDisableNotifications = False
-
-            Else
-                fDisableNotifications = True
-                chkLockComputer.Enabled = True
-                chkLockComputer.Text = "Lock to Computer Name"
-                chkLockHD.Enabled = True
-                chkLockHD.Text = "Lock to HDD Volume Serial"
-                chkLockHDfirmware.Enabled = True
-                chkLockHDfirmware.Text = "Lock to HDD Firmware Serial"
-                chkLockMACaddress.Enabled = True
-                chkLockMACaddress.Text = "Lock to MAC Address"
-                chkLockWindows.Enabled = True
-                chkLockWindows.Text = "Lock to Windows Serial"
-                chkLockBIOS.Enabled = True
-                chkLockBIOS.Text = "Lock to BIOS Serial"
-                chkLockMotherboard.Enabled = True
-                chkLockMotherboard.Text = "Lock to Motherboard Serial"
-                chkLockIP.Enabled = True
-                chkLockIP.Text = "Lock to IP Address"
-                txtUser.Text = ""
-                fDisableNotifications = False
-            End If
-        End If
+        HandleInstallationCode()
     End Sub
 
     Private Sub txtDays_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtDays.Enter
@@ -3737,7 +4065,16 @@ exitValidate:
         txtInstallCode.Text = ReconstructedInstallationCode()
         systemEvent = False
         If chkLockIP.Checked Then
-            MsgBox("Warning: Use IP addresses cautiously since they may not be static.", MsgBoxStyle.Exclamation, "Static IP Address Warning")
+            MsgBox("Warning: Use Local IP addresses cautiously since they may not be static.", MsgBoxStyle.Exclamation, "Static IP Address Warning")
+        End If
+    End Sub
+    Private Sub chkLockexternalIP_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockExternalIP.CheckedChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+        If chkLockExternalIP.Checked Then
+            MsgBox("Warning: Use External IP addresses cautiously since they may not be static.", MsgBoxStyle.Exclamation, "Static IP Address Warning")
         End If
     End Sub
 
@@ -3750,6 +4087,12 @@ exitValidate:
         chkLockBIOS.CheckState = CheckState.Checked
         chkLockMotherboard.CheckState = CheckState.Checked
         chkLockIP.CheckState = CheckState.Checked
+        chkLockExternalIP.CheckState = CheckState.Checked
+        chkLockFingerprint.CheckState = CheckState.Checked
+        chkLockMemory.CheckState = CheckState.Checked
+        chkLockCPUID.CheckState = CheckState.Checked
+        chkLockBaseboardID.CheckState = CheckState.Checked
+        chkLockVideoID.CheckState = CheckState.Checked
     End Sub
 
     Private Sub cmdUncheckAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdUncheckAll.Click
@@ -3761,6 +4104,12 @@ exitValidate:
         chkLockBIOS.CheckState = CheckState.Unchecked
         chkLockMotherboard.CheckState = CheckState.Unchecked
         chkLockIP.CheckState = CheckState.Unchecked
+        chkLockExternalIP.CheckState = CheckState.Unchecked
+        chkLockFingerprint.CheckState = CheckState.Unchecked
+        chkLockMemory.CheckState = CheckState.Unchecked
+        chkLockCPUID.CheckState = CheckState.Unchecked
+        chkLockBaseboardID.CheckState = CheckState.Unchecked
+        chkLockVideoID.CheckState = CheckState.Unchecked
     End Sub
 
     Private Sub chkLockMACaddress_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockMACaddress.CheckedChanged
@@ -3827,7 +4176,151 @@ exitValidate:
 
     End Sub
 
-    Private Sub frmKeyGen_Paint(ByVal sender As System.Object, ByVal e As System.Windows.Forms.PaintEventArgs) Handles frmKeyGen.Paint
+    Private Sub chkLockVideoID_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockVideoID.CheckedChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
+
+    Private Sub chkLockMemory_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockMemory.CheckedChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
+
+    Private Sub chkLockCPUID_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockCPUID.CheckedChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
+
+    Private Sub chkLockBaseboardID_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockBaseboardID.CheckedChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
+
+    Private Sub chkLockFingerprint_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockFingerprint.CheckedChanged
+        If systemEvent Then Exit Sub
+        systemEvent = True
+        txtInstallCode.Text = ReconstructedInstallationCode()
+        systemEvent = False
+    End Sub
+    Public Sub HandleInstallationCode()
+        If Len(txtInstallCode.Text) = 8 Then 'Short key authorization is much simpler
+            UpdateKeyGenButtonStatus()
+            If fDisableNotifications Then Exit Sub
+
+            chkLockMACaddress.Visible = False
+            chkLockComputer.Visible = False
+            chkLockHD.Visible = False
+            chkLockHDfirmware.Visible = False
+            chkLockWindows.Visible = False
+            chkLockBIOS.Visible = False
+            chkLockMotherboard.Visible = False
+            chkLockIP.Visible = False
+            chkLockExternalIP.Visible = False
+            chkLockFingerprint.Visible = False
+            chkLockMemory.Visible = False
+            chkLockCPUID.Visible = False
+            chkLockBaseboardID.Visible = False
+            chkLockVideoID.Visible = False
+            txtUser.Text = ""
+            txtUser.Enabled = True
+            txtUser.ReadOnly = False
+            txtUser.BackColor = Color.White
+
+            Label5.Visible = False
+            txtLicenseFile.Visible = False
+            cmdBrowse.Visible = False
+            cmdSave.Visible = False
+            Exit Sub
+
+        Else 'ALCrypto
+
+            chkLockMACaddress.Visible = True
+            chkLockComputer.Visible = True
+            chkLockHD.Visible = True
+            chkLockHDfirmware.Visible = True
+            chkLockWindows.Visible = True
+            chkLockBIOS.Visible = True
+            chkLockMotherboard.Visible = True
+            chkLockIP.Visible = True
+            chkLockExternalIP.Visible = True
+            chkLockFingerprint.Visible = True
+            chkLockMemory.Visible = True
+            chkLockCPUID.Visible = True
+            chkLockBaseboardID.Visible = True
+            chkLockVideoID.Visible = True
+            txtUser.Enabled = False
+            txtUser.ReadOnly = True
+            txtUser.BackColor = System.Drawing.SystemColors.Control
+
+            Label5.Visible = True
+            txtLicenseFile.Visible = True
+            cmdBrowse.Visible = True
+            cmdSave.Visible = True
+
+            If Len(txtInstallCode.Text) > 0 Then
+                If systemEvent Then Exit Sub
+                UpdateKeyGenButtonStatus()
+                If fDisableNotifications Then Exit Sub
+
+                fDisableNotifications = True
+                txtUser.Text = GetUserFromInstallCode(txtInstallCode.Text)
+                fDisableNotifications = False
+
+                Dim installNameandVersion As String
+                Dim i As Integer, success As Boolean
+                installNameandVersion = GetUserSoftwareNameandVersionfromInstallCode(txtInstallCode.Text)
+                For i = 0 To cboProducts.Items.Count - 1
+                    cboProducts.SelectedIndex = i
+                    If installNameandVersion = cboProducts.Text Then
+                        Exit For
+                        success = True
+                    End If
+                Next i
+                If Not success Then
+                    MsgBox("There's no matching Software Name and Version Number for this Installation Code.", MsgBoxStyle.Exclamation)
+                End If
+            Else
+                fDisableNotifications = True
+                chkLockComputer.Enabled = True
+                chkLockComputer.Text = "Lock to Computer Name"
+                chkLockHD.Enabled = True
+                chkLockHD.Text = "Lock to HDD Volume Serial"
+                chkLockHDfirmware.Enabled = True
+                chkLockHDfirmware.Text = "Lock to HDD Firmware Serial"
+                chkLockMACaddress.Enabled = True
+                chkLockMACaddress.Text = "Lock to MAC Address"
+                chkLockWindows.Enabled = True
+                chkLockWindows.Text = "Lock to Windows Serial"
+                chkLockBIOS.Enabled = True
+                chkLockBIOS.Text = "Lock to BIOS Version"
+                chkLockMotherboard.Enabled = True
+                chkLockMotherboard.Text = "Lock to Motherboard Serial"
+                chkLockIP.Enabled = True
+                chkLockIP.Text = "Lock to Local IP Address"
+                chkLockExternalIP.Enabled = True
+                chkLockExternalIP.Text = "Lock to External IP Address"
+                chkLockFingerprint.Enabled = True
+                chkLockFingerprint.Text = "Lock to Computer Fingerprint [VB.NET]"
+                chkLockMemory.Enabled = True
+                chkLockMemory.Text = "Lock to Memory"
+                chkLockCPUID.Enabled = True
+                chkLockCPUID.Text = "Lock to CPU ID"
+                chkLockBaseboardID.Enabled = True
+                chkLockBaseboardID.Text = "Lock to Baseboard ID"
+                chkLockVideoID.Enabled = True
+                chkLockVideoID.Text = "Lock to Video Controller ID"
+                txtUser.Text = ""
+                fDisableNotifications = False
+            End If
+            End If
 
     End Sub
 End Class

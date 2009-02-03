@@ -15,8 +15,8 @@ Public Class FingerPrint
     Private m_UseVideoID As Boolean = True
     Private m_UseMacID As Boolean = True
 
-    Private m_ReturnLength As Long = 16
-    Private m_TotalLength As Long = 16
+    Private m_ReturnLength As Long = 8
+    Private m_TotalLength As Long = 8
 
     Public Event StartingWith(ByVal Text As String)
     Public Event DoneWith(ByVal Text As String)
@@ -167,8 +167,10 @@ Public Class FingerPrint
 
         'Uses first CPU identifier available in order of preference
         'Don't get all identifiers as very time consuming
-        Dim RetVal As String = Identifier("Win32_Processor", "UniqueId")
+        ' Do not get the following because it's mostly unavailable
+        'Dim RetVal As String = Identifier("Win32_Processor", "UniqueId")
 
+        Dim RetVal As String = String.Empty
         If RetVal = "" Then   'If no UniqueId, use ProcessorID
             RetVal = Identifier("Win32_Processor", "ProcessorId")
 
@@ -196,10 +198,10 @@ Public Class FingerPrint
 
         Return Identifier("Win32_BIOS", "Manufacturer") _
           & Identifier("Win32_BIOS", "SMBIOSBIOSVersion") _
-          & Identifier("Win32_BIOS", "IdentificationCode") _
           & Identifier("Win32_BIOS", "SerialNumber") _
           & Identifier("Win32_BIOS", "ReleaseDate") _
           & Identifier("Win32_BIOS", "Version")
+        '          & Identifier("Win32_BIOS", "IdentificationCode") _
 
         RaiseEvent DoneWith("BiosID")
     End Function
@@ -209,10 +211,10 @@ Public Class FingerPrint
 
         'Main physical hard drive ID
 
-        Return Identifier("Win32_DiskDrive", "Model") _
-          & Identifier("Win32_DiskDrive", "Manufacturer") _
+        Return Identifier("Win32_DiskDrive", "Manufacturer") _
           & Identifier("Win32_DiskDrive", "Signature") _
           & Identifier("Win32_DiskDrive", "TotalHeads")
+        'Identifier("Win32_DiskDrive", "Model") _
 
         RaiseEvent DoneWith("CpuID")
     End Function

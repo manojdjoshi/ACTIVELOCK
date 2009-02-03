@@ -77,6 +77,7 @@
     <Reference Include="System.Data">
       <Name>System.Data</Name>
     </Reference>
+    <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
@@ -141,6 +142,7 @@
     <Compile Include="FileKeyStore.vb">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FingerPrint.vb" />
     <Compile Include="Globals3.vb">
       <SubType>Code</SubType>
     </Compile>
