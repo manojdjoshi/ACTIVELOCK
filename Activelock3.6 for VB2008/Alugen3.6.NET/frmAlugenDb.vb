@@ -741,14 +741,14 @@ Public Class frmAlugenDb
   End Sub
 
 
-  Public Sub ArchiveLicense(ByVal productName As String, ByVal productversion As String, ByVal userName As String, _
+    Public Sub ArchiveLicense(ByVal productName As String, ByVal productversion As String, ByVal userName As String, _
 ByVal registrationDate As String, ByVal expiresAfter As String, ByVal licenseType As String, ByVal lockType As String, _
 ByVal registeredLevel As String, ByVal installationCode As String, ByVal licenseCode As String)
-    Dim cm As New OleDbCommand
+        Dim cm As New OleDbCommand
 
-    cm.CommandText = "INSERT INTO license ( Progname, progver, RegDate, ExpDate, LicType, LockType, RegLevel, InstCode, UserName, LibCode )" & _
-                    " VALUES(@productName,@productversion,@registrationDate,@expiresAfter,@licenseType,@lockType,@registeredLevel,@installationCode,@userName,@licenseCode)"
-    cm.Parameters.Clear()
+        cm.CommandText = "INSERT INTO license ( Progname, progver, RegDate, ExpDate, LicType, LockType, RegLevel, InstCode, UserName, LibCode )" & _
+                        " VALUES(@productName,@productversion,@registrationDate,@expiresAfter,@licenseType,@lockType,@registeredLevel,@installationCode,@userName,@licenseCode)"
+        cm.Parameters.Clear()
         'walter'obsolete'cm.Parameters.Add("@productName", productName)
         'walter'obsolete'cm.Parameters.Add("@productversion", productversion)
         'walter'obsolete'cm.Parameters.Add("@registrationDate", registrationDate)
@@ -759,6 +759,12 @@ ByVal registeredLevel As String, ByVal installationCode As String, ByVal license
         'walter'obsolete'cm.Parameters.Add("@installationCode", installationCode)
         'walter'obsolete'cm.Parameters.Add("@userName", userName)
         'walter'obsolete'cm.Parameters.Add("@licenseCode", licenseCode)
+        Dim flag As Boolean = False
+        If installationCode.Length > 255 Or licenseCode.Length > 255 Then flag = True
+        If flag Then
+            If MessageBox.Show("Installation code and/or license key are longer than 255 characters, therefore they will be truncated to 255 characters and then saved." & vbCrLf & "Would you like to continue?", ACTIVELOCKSTRING, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.No Then Exit Sub
+        End If
+
         cm.Parameters.AddWithValue("@productName", productName)
         cm.Parameters.AddWithValue("@productversion", productversion)
         cm.Parameters.AddWithValue("@registrationDate", registrationDate)
@@ -766,22 +772,22 @@ ByVal registeredLevel As String, ByVal installationCode As String, ByVal license
         cm.Parameters.AddWithValue("@licenseType", licenseType)
         cm.Parameters.AddWithValue("@lockType", lockType)
         cm.Parameters.AddWithValue("@registeredLevel", registeredLevel)
-        cm.Parameters.AddWithValue("@installationCode", installationCode)
+        cm.Parameters.AddWithValue("@installationCode", installationCode.Substring(0, 255))
         cm.Parameters.AddWithValue("@userName", userName)
-        cm.Parameters.AddWithValue("@licenseCode", licenseCode)
-    Try
-      If conn Is Nothing Then InitConnection()
-      conn.Open()
-      cm.Connection = conn
-      cm.ExecuteNonQuery()
-    Catch ex As Exception
-      MessageBox.Show(ex.Message, ACTIVELOCKSTRING, MessageBoxButtons.OK, MessageBoxIcon.Error)
-    Finally
-      conn.Close()
-    End Try
+        cm.Parameters.AddWithValue("@licenseCode", licenseCode.Substring(0, 255))
+        Try
+            If conn Is Nothing Then InitConnection()
+            conn.Open()
+            cm.Connection = conn
+            cm.ExecuteNonQuery()
+        Catch ex As Exception
+            MessageBox.Show(ex.Message, ACTIVELOCKSTRING, MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Finally
+            conn.Close()
+        End Try
 
         Cursor = Cursors.Default
-  End Sub
+    End Sub
 
   Public Sub PopulateCboProductName()
     Dim oRow As DataRow

@@ -92,6 +92,7 @@ Friend Class frmMain
     Public WithEvents Label10 As System.Windows.Forms.Label
     Public WithEvents txtNetworkedLicense As System.Windows.Forms.TextBox
     Public WithEvents txtMaxCount As System.Windows.Forms.TextBox
+    Friend WithEvents Timer1 As System.Windows.Forms.Timer
     Public WithEvents lblConcurrentUsers As System.Windows.Forms.Label
     <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container
@@ -150,6 +151,7 @@ Friend Class frmMain
         Me.lblHost = New System.Windows.Forms.Label
         Me.lblSpeed = New System.Windows.Forms.Label
         Me.optForm = New Microsoft.VisualBasic.Compatibility.VB6.RadioButtonArray(Me.components)
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.SSTab1.SuspendLayout()
         Me._SSTab1_TabPage0.SuspendLayout()
         Me.fraRegStatus.SuspendLayout()
@@ -196,7 +198,7 @@ Friend Class frmMain
         Me.cmdKillLicense.Cursor = System.Windows.Forms.Cursors.Default
         Me.cmdKillLicense.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdKillLicense.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdKillLicense.Location = New System.Drawing.Point(548, 168)
+        Me.cmdKillLicense.Location = New System.Drawing.Point(548, 226)
         Me.cmdKillLicense.Name = "cmdKillLicense"
         Me.cmdKillLicense.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdKillLicense.Size = New System.Drawing.Size(73, 21)
@@ -227,7 +229,7 @@ Friend Class frmMain
         Me.cmdRegister.Enabled = False
         Me.cmdRegister.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdRegister.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdRegister.Location = New System.Drawing.Point(548, 140)
+        Me.cmdRegister.Location = New System.Drawing.Point(548, 198)
         Me.cmdRegister.Name = "cmdRegister"
         Me.cmdRegister.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdRegister.Size = New System.Drawing.Size(73, 21)
@@ -246,7 +248,7 @@ Friend Class frmMain
         Me.SSTab1.Location = New System.Drawing.Point(0, 0)
         Me.SSTab1.Name = "SSTab1"
         Me.SSTab1.SelectedIndex = 0
-        Me.SSTab1.Size = New System.Drawing.Size(649, 505)
+        Me.SSTab1.Size = New System.Drawing.Size(649, 641)
         Me.SSTab1.TabIndex = 12
         '
         '_SSTab1_TabPage0
@@ -255,7 +257,7 @@ Friend Class frmMain
         Me._SSTab1_TabPage0.Controls.Add(Me.fraReg)
         Me._SSTab1_TabPage0.Location = New System.Drawing.Point(4, 22)
         Me._SSTab1_TabPage0.Name = "_SSTab1_TabPage0"
-        Me._SSTab1_TabPage0.Size = New System.Drawing.Size(641, 479)
+        Me._SSTab1_TabPage0.Size = New System.Drawing.Size(641, 615)
         Me._SSTab1_TabPage0.TabIndex = 0
         Me._SSTab1_TabPage0.Text = "Registration"
         '
@@ -627,7 +629,7 @@ Friend Class frmMain
         Me.fraReg.Location = New System.Drawing.Point(8, 216)
         Me.fraReg.Name = "fraReg"
         Me.fraReg.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.fraReg.Size = New System.Drawing.Size(633, 277)
+        Me.fraReg.Size = New System.Drawing.Size(633, 396)
         Me.fraReg.TabIndex = 17
         Me.fraReg.TabStop = False
         Me.fraReg.Text = "Register"
@@ -639,7 +641,7 @@ Friend Class frmMain
         Me.cmdPaste.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdPaste.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdPaste.Image = CType(resources.GetObject("cmdPaste.Image"), System.Drawing.Image)
-        Me.cmdPaste.Location = New System.Drawing.Point(548, 112)
+        Me.cmdPaste.Location = New System.Drawing.Point(548, 170)
         Me.cmdPaste.Name = "cmdPaste"
         Me.cmdPaste.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdPaste.Size = New System.Drawing.Size(23, 23)
@@ -683,13 +685,14 @@ Friend Class frmMain
         Me.txtReqCodeGen.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.txtReqCodeGen.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtReqCodeGen.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtReqCodeGen.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtReqCodeGen.ForeColor = System.Drawing.Color.Green
         Me.txtReqCodeGen.Location = New System.Drawing.Point(96, 40)
         Me.txtReqCodeGen.MaxLength = 0
         Me.txtReqCodeGen.Multiline = True
         Me.txtReqCodeGen.Name = "txtReqCodeGen"
         Me.txtReqCodeGen.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtReqCodeGen.Size = New System.Drawing.Size(445, 51)
+        Me.txtReqCodeGen.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
+        Me.txtReqCodeGen.Size = New System.Drawing.Size(445, 107)
         Me.txtReqCodeGen.TabIndex = 8
         '
         'txtLibKeyIn
@@ -698,14 +701,14 @@ Friend Class frmMain
         Me.txtLibKeyIn.BackColor = System.Drawing.SystemColors.ButtonFace
         Me.txtLibKeyIn.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtLibKeyIn.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.txtLibKeyIn.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtLibKeyIn.Location = New System.Drawing.Point(96, 92)
+        Me.txtLibKeyIn.ForeColor = System.Drawing.Color.Green
+        Me.txtLibKeyIn.Location = New System.Drawing.Point(96, 150)
         Me.txtLibKeyIn.MaxLength = 0
         Me.txtLibKeyIn.Multiline = True
         Me.txtLibKeyIn.Name = "txtLibKeyIn"
         Me.txtLibKeyIn.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.txtLibKeyIn.ScrollBars = System.Windows.Forms.ScrollBars.Both
-        Me.txtLibKeyIn.Size = New System.Drawing.Size(445, 171)
+        Me.txtLibKeyIn.Size = New System.Drawing.Size(445, 240)
         Me.txtLibKeyIn.TabIndex = 10
         '
         'Label13
@@ -730,9 +733,9 @@ Friend Class frmMain
         Me.Label11.Location = New System.Drawing.Point(8, 40)
         Me.Label11.Name = "Label11"
         Me.Label11.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label11.Size = New System.Drawing.Size(89, 17)
+        Me.Label11.Size = New System.Drawing.Size(89, 32)
         Me.Label11.TabIndex = 19
-        Me.Label11.Text = "Installation Code:"
+        Me.Label11.Text = "Installation Code (Site Code):"
         '
         'Label4
         '
@@ -740,12 +743,12 @@ Friend Class frmMain
         Me.Label4.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label4.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label4.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label4.Location = New System.Drawing.Point(8, 92)
+        Me.Label4.Location = New System.Drawing.Point(8, 150)
         Me.Label4.Name = "Label4"
         Me.Label4.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label4.Size = New System.Drawing.Size(89, 17)
+        Me.Label4.Size = New System.Drawing.Size(89, 50)
         Me.Label4.TabIndex = 18
-        Me.Label4.Text = "Liberation Key:"
+        Me.Label4.Text = "License Key (Liberation Key):"
         '
         '_SSTab1_TabPage1
         '
@@ -755,7 +758,7 @@ Friend Class frmMain
         Me._SSTab1_TabPage1.Controls.Add(Me.Frame1)
         Me._SSTab1_TabPage1.Location = New System.Drawing.Point(4, 22)
         Me._SSTab1_TabPage1.Name = "_SSTab1_TabPage1"
-        Me._SSTab1_TabPage1.Size = New System.Drawing.Size(641, 479)
+        Me._SSTab1_TabPage1.Size = New System.Drawing.Size(641, 615)
         Me._SSTab1_TabPage1.TabIndex = 1
         Me._SSTab1_TabPage1.Text = "Sample App"
         '
@@ -939,7 +942,7 @@ Friend Class frmMain
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(648, 524)
+        Me.ClientSize = New System.Drawing.Size(648, 653)
         Me.Controls.Add(Me.SSTab1)
         Me.Cursor = System.Windows.Forms.Cursors.Default
         Me.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -1044,6 +1047,9 @@ Friend Class frmMain
 
     'Application name used
     Const LICENSE_ROOT As String = "TestApp"
+
+    ' Timer count to check the license
+    Dim timerCount As Long
 
     ' The following declarations are used by the IsDLLAvailable function
     ' provided by the Activelock user Pinheiro
@@ -1174,11 +1180,11 @@ Friend Class frmMain
         On Error GoTo NotRegistered
 
         ' Form's caption
-        Me.Text = "ALTestApp3NET - ActiveLock3NET Test Application - v3.6" '& Application.ProductVersion
+        Me.Text = "ALTestApp3NET - ActiveLock Test Application for VB2008 - v3.6" '& Application.ProductVersion
 
         ' Check the existence of necessary files to run this application
         ' This is not necessary if you're not using these controls in your app.
-        Call CheckForResources("comctl32.ocx", "tabctl32.ocx")
+        Call CheckForResources("#Alcrypto3NET.dll", "#ActiveLock3_6Net.dll", "comctl32.ocx", "tabctl32.ocx")
 
         On Error GoTo NotRegistered
 
@@ -1208,8 +1214,9 @@ Friend Class frmMain
             ' Note: Do not use (App.Major & "." & App.Minor & "." & App.Revision)
             ' since the license will fail with version incremented via exe rebuilds
             ' THE FOLLOWING IS A SAMPLE USAGE
-            '.SoftwareVersion = "1.3.2"   ' WARNING *** WARNING *** DO NOT USE App.Major & "." & App.Minor & "." & App.Revision
-            .SoftwareVersion = "3.0" ' WARNING *** WARNING *** DO NOT USE App.Major & "." & App.Minor & "." & App.Revision
+            ' WARNING *** WARNING *** DO NOT USE App.Major & "." & App.Minor & "." & App.Revision
+            '.SoftwareVersion = "1.3.2"   
+            .SoftwareVersion = "3" ' WARNING *** WARNING *** DO NOT USE App.Major & "." & App.Minor & "." & App.Revision
             txtVersion.Text = .SoftwareVersion
 
             ' Set the software/application password
@@ -1224,8 +1231,8 @@ Friend Class frmMain
             ' RSA classes in .NET allows you to pick from several cipher strengths
             ' however ALCrypto uses 1024 bit strength key only.
             ' alsShortKeyMD5 is for short key protection only
-            '.LicenseKeyType = ActiveLock3_6NET.IActiveLock.ALLicenseKeyTypes.alsShortKeyMD5
-            .LicenseKeyType = ActiveLock3_6NET.IActiveLock.ALLicenseKeyTypes.alsRSA
+            .LicenseKeyType = ActiveLock3_6NET.IActiveLock.ALLicenseKeyTypes.alsShortKeyMD5
+            '.LicenseKeyType = ActiveLock3_6NET.IActiveLock.ALLicenseKeyTypes.alsRSA
 
             ' Set the Trial Feature properties
             ' If you don't want to use the trial feature in your app, set the TrialType
@@ -1269,9 +1276,9 @@ Friend Class frmMain
             ' In order to pick the keys that you want to lock to in Alugen, use lockNone only
             ' Example: lockWindows Or lockComp
             ' You can combine any lockType(s) using OR as above
-            '.LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockNone
-            .LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockIP Or _
-            ActiveLock3_6NET.IActiveLock.ALLockTypes.lockComp
+            .LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockNone
+            '.LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockIP Or _
+            'ActiveLock3_6NET.IActiveLock.ALLockTypes.lockComp()
 
             ' If you want to lock to any keys explicitly, combine them using OR
             ' But you won't be able to uncheck/check any of them while in Alugen (too late at that point).
@@ -1283,7 +1290,13 @@ Friend Class frmMain
             ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockIP Or _
             ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockMotherboard Or _
             ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockWindows Or _
-            ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockMAC
+            ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockMAC Or _
+            ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockExternalIP Or _
+            ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockFingerprint Or _
+            ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockSID Or _
+            ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockCPUID Or _
+            ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockBaseboardID Or _
+            ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockVideoID
 
             ' Set the .ALL file path if you're using an ALL file.
             ' .ALL is an auto registration file.
@@ -1453,7 +1466,11 @@ Friend Class frmMain
         txtUsedDays.Text = MyActiveLock.UsedDays.ToString
         txtExpiration.Text = MyActiveLock.ExpirationDate
         If txtExpiration.Text = "" Then txtExpiration.Text = "Permanent" 'App has a permanent license
-        txtUser.Text = MyActiveLock.RegisteredUser
+
+        Dim arrProdVer() As String
+        arrProdVer = Split(MyActiveLock.RegisteredUser, "&&&") ' Extract the software name and version
+        txtUser.Text = arrProdVer(0)
+
         txtRegisteredLevel.Text = MyActiveLock.RegisteredLevel
 
         ' Set Networked Licenses if applicable
@@ -1497,6 +1514,13 @@ Friend Class frmMain
         ' post a question in the forums
         ' http://www.activelocksoftware.com
 
+        ' The following used with a timer control to
+        ' check the license periodically
+        ' Check the Timer1_Tick event for further details
+        timerCount = 5000
+        Timer1.Interval = 1
+        Timer1.Enabled = True
+
         Exit Sub
 
 NotRegistered:
@@ -1509,6 +1533,7 @@ NotRegistered:
         End If
         txtRegStatus.Text = Err.Description
         txtLicenseType.Text = "None"
+        txtUser.Text = System.Environment.UserName
         If strMsg <> "" Then
             MsgBox(strMsg, MsgBoxStyle.Information)
         End If
@@ -1567,7 +1592,7 @@ DLLnotRegistered:
             End If
 
             If Not foundIt Then
-                MsgBox(s & " could not be found in " & pathName & vbCrLf & System.Reflection.Assembly.GetExecutingAssembly.GetName.Name & " cannot run without this library file!" & vbCrLf & vbCrLf & "Exiting!", MsgBoxStyle.Critical, "Missing Resource")
+                MsgBox(s & " could not be found in " & pathName & "." & vbCrLf & System.Reflection.Assembly.GetExecutingAssembly.GetName.Name & " cannot run without this library file!" & vbCrLf & vbCrLf & "Exiting!", MsgBoxStyle.Critical, "Missing Resource")
                 End
             End If
         Next y
@@ -1694,6 +1719,7 @@ checkForResourcesError:
         End If
         If txtRegStatus.Text <> "Registered" Then txtRegStatus.Text = ""
         If Not IsNumeric(txtUsedDays.Text) Then txtUsedDays.Text = ""
+        System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor
         instCode = MyActiveLock.InstallationCode(txtUser.Text)
         If Len(instCode) = 8 Then
             instCode = "You must send all of the following for authorization:" & vbCrLf & _
@@ -1702,6 +1728,7 @@ checkForResourcesError:
                 "User Name: " & txtUser.Text
         End If
         txtReqCodeGen.Text = instCode
+        System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default
     End Sub
 
     Private Sub cmdRegister_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdRegister.Click
@@ -1709,6 +1736,7 @@ checkForResourcesError:
         On Error GoTo errHandler
         ' Register this key
         LibKey = txtLibKeyIn.Text
+        System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor
         If Mid(LibKey, 5, 1) = "-" And Mid(LibKey, 10, 1) = "-" And Mid(LibKey, 15, 1) = "-" And Mid(LibKey, 20, 1) = "-" Then
             MyActiveLock.Register(LibKey, txtUser.Text) 'YOU MUST SPECIFY THE USER NAME WITH SHORT KEYS !!!
         Else    ' ALCRYPTO RSA
@@ -1723,6 +1751,7 @@ checkForResourcesError:
         txtLibKeyIn.Text = String.Empty
         frmMain_Load(Me, New System.EventArgs)
         Me.Visible = True
+        System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default
         Exit Sub
 
 errHandler:
@@ -1779,5 +1808,32 @@ errHandler:
     Public Function AppPath() As String
         Return System.Windows.Forms.Application.StartupPath
     End Function
+
+    Private Sub Timer1_Tick(ByVal sender As Object, ByVal e As System.EventArgs) Handles Timer1.Tick
+        ' You can use this timer control and this event in your
+        ' own application to check the Activelock license periodically
+        ' If there's anything wrong, this event will end your application
+        ' In addition to the code below, make sure to declare timerCount
+        ' and add the following in your Form_Load:
+        '    timerCount = 5000
+        '    Timer1.Interval = 1
+        '    Timer1.Enabled = True
+
+        On Error GoTo errorTrap
+        timerCount = timerCount - 1
+        If timerCount = 0 Then
+            ' Check the license if there was a license at form_load
+            ' and it was not a trial license
+            If txtRegStatus.Text = Chr(82) & Chr(101) & Chr(103) & Chr(105) & Chr(115) & Chr(116) & Chr(101) & Chr(114) & Chr(101) & Chr(100) And strMsg = "" Then ' "Registered" and no trial message
+                MyActiveLock.Acquire(strMsg)
+                timerCount = 5000
+            End If
+        End If
+        Exit Sub
+
+errorTrap:
+        MsgBox("License error. Quitting.", vbCritical)
+        End
+    End Sub
 
 End Class

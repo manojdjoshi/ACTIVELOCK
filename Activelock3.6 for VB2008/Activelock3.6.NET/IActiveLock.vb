@@ -246,7 +246,7 @@ End Interface
     ' @version 3.3.0
     ' @date 3-23-2006
 	'
-    ' License Lock Types.  Values can be combined (OR&#39;ed) together.
+    ' License Lock Types.  Values can be combined (OR ed) together.
 	'
 	' @param lockNone       No locking - not recommended
 	' @param lockWindows    Lock to Windows Serial Number
@@ -254,30 +254,36 @@ End Interface
 	' @param lockHD         Lock to Hard Drive Serial Number (Volume Serial Number)
 	' @param lockMAC        Lock to Network Interface Card Address
 	' @param lockBIOS       Lock to BIOS Serial Number
-	' @param lockIP         Lock to Computer IP Address
+    ' @param lockIP         Lock to Computer Local IP Address
 	' @param lockMotherboard   Lock to Motherboard Serial Number
-	' @param lockCustom     Lock to Custom String (Not Implemented)
-	' @param lockHDFirmware Lock to Hard Disk Firmware Serial (HDD Manufacturer&#39;s Serial Number)
-	' @param lockSID        Lock to Computer Security ID (SID)(Not Implemented)
-	
-	'###############################################################
-    'ADDED lockHDFirmware = 256
-	'Date: 4/21/05
-	'By: Scott Nelson (Sentax)
-	Public Enum ALLockTypes
-		lockNone = 0
-		lockWindows = 1
-		lockComp = 2
-		lockHD = 4
-		lockMAC = 8
-		lockBIOS = 16
-		lockIP = 32
-		lockMotherboard = 64
-		lockHDFirmware = 256
-	End Enum
-	'    lockCustom = 128
-    '    lockFingerprint = 512
-	'
+    ' @param lockExternalIP Lock to External IP Address
+    ' @param lockHDFirmware Lock to Hard Disk Firmware Serial (HDD Manufacturer's Serial Number)
+    ' @param lockFingerprint   Lock to Fingerprint (Activelock Combination)
+    ' @param lockMemory     Lock to Memory ID
+    ' @param lockCPUID      Lock to CPU ID
+    ' @param lockBaseboardID   Lock to Baseboard Name and Serial Number
+    ' @param lockVideoID    Lock to Video Controller Name and Drive Version Number
+
+    '###############################################################
+    Public Enum ALLockTypes
+        lockNone = 0
+        lockWindows = 1
+        lockComp = 2
+        lockHD = 4
+        lockMAC = 8
+        lockBIOS = 16
+        lockIP = 32
+        lockMotherboard = 64
+        lockExternalIP = 128
+        lockHDFirmware = 256
+        lockFingerprint = 512
+        lockMemory = 1024
+        lockCPUID = 2048
+        lockBaseboardID = 4096
+        lockVideoID = 8192
+    End Enum
+
+    '
     '###############################################################
 
     ' License Key Type specifies the length/type

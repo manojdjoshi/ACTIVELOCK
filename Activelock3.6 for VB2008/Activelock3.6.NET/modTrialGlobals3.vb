@@ -2158,17 +2158,24 @@ exitGracefully:
     End Function
     Private Function GetSteganographyFile() As Object
         Dim strSource As String
-        strSource = ActivelockGetSpecialFolder(54) & "\Sample Pictures" & DecryptString128Bit("Qspq9Tu3sG/IE+ugm+o1RQ==", PSWD) & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(98) & Chr(109) & Chr(112)
-        Dim b As System.Drawing.Bitmap
-        Dim r As New System.Resources.ResourceManager("ActiveLock3_6Net.ProjectResources", System.Reflection.Assembly.GetExecutingAssembly)
-        b = r.GetObject("bmp101")
-        If Directory.Exists(ActivelockGetSpecialFolder(54) & "\Sample Pictures") = False Then
-            My.Computer.FileSystem.CreateDirectory(ActivelockGetSpecialFolder(54) & "\Sample Pictures")
-        End If
-        If fileExist(strSource) = False Then b.Save(strSource)
-
-        'If fileExist(strSource) = False Then VB6.LoadResPicture(101, VB6.LoadResConstants.ResBitmap).Save(strSource)
-        GetSteganographyFile = strSource
+        GetSteganographyFile = Nothing
+        Try
+            strSource = ActivelockGetSpecialFolder(54) & "\Sample Pictures" & DecryptString128Bit("Qspq9Tu3sG/IE+ugm+o1RQ==", PSWD) & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(98) & Chr(109) & Chr(112)
+            Dim b As System.Drawing.Bitmap
+            Dim r As New System.Resources.ResourceManager("ActiveLock3_6Net.ProjectResources", System.Reflection.Assembly.GetExecutingAssembly)
+            b = r.GetObject("bmp101")
+            If Directory.Exists(ActivelockGetSpecialFolder(54) & "\Sample Pictures") = False Then
+                My.Computer.FileSystem.CreateDirectory(ActivelockGetSpecialFolder(54) & "\Sample Pictures")
+            End If
+            If fileExist(strSource) = False Then
+                b.Save(strSource)
+            End If
+            'If fileExist(strSource) = False Then VB6.LoadResPicture(101, VB6.LoadResConstants.ResBitmap).Save(strSource)
+            GetSteganographyFile = strSource
+        Catch ex As Exception
+            Set_locale(regionalSymbol)
+            Err.Raise(Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext)
+        End Try
     End Function
     '===============================================================================
     ' Name: Function ReadUntil
