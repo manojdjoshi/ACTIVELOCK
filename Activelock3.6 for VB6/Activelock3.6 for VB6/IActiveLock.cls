@@ -223,9 +223,13 @@ Option Explicit
 ' @param lockBIOS       Lock to BIOS Serial Number
 ' @param lockIP         Lock to Computer IP Address
 ' @param lockMotherboard   Lock to Motherboard Serial Number
-' @param lockCustom     Lock to Custom String (Not Implemented)
-' @param lockHDFirmware Lock to Hard Disk Firmware Serial (HDD Manufacturer&#39;s Serial Number)
-' @param lockSID        Lock to Computer Security ID (SID)(Not Implemented)
+' @param lockExternalIP Lock to External IP Address
+' @param lockHDFirmware Lock to Hard Disk Firmware Serial (HDD Manufacturer's Serial Number)
+' @param lockFingerprint   Lock to Fingerprint (Activelock Combination)
+' @param lockMemory     Lock to Memory ID
+' @param lockCPUID      Lock to CPU ID
+' @param lockBaseboardID   Lock to Baseboard Name and Serial Number
+' @param lockVideoID    Lock to Video Controller Name and Drive Version Number
 
 '###############################################################
 '
@@ -241,10 +245,14 @@ Public Enum ALLockTypes
     lockBIOS = 16
     lockIP = 32
     lockMotherboard = 64
+    lockExternalIP = 128
     lockHDFirmware = 256
+    lockFingerprint = 512
+    lockMemory = 1024
+    lockCPUID = 2048
+    lockBaseboardID = 4096
+    lockvideoID = 8192
 End Enum
-'    lockCustom = 128
-'    lockSID = 512
 
 '###############################################################
     

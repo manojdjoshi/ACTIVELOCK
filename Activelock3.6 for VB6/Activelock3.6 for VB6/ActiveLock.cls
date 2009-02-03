@@ -340,17 +340,21 @@ End Property
 Private Sub IActiveLock_Init(Optional autoLicString As String)
 ' If running in Debug mode, don't bother with dll authentication
 #If AL_DEBUG = 1 Then
-    GoTo Done
+    GoTo done
 #End If
+    
+    If FileExists(WinSysDir() & "\alcrypto3.dll") = False Then
+        Set_locale regionalSymbol
+        Err.Raise ActiveLockErrCodeConstants.alerrFileTampered, ACTIVELOCKSTRING, "Alcrypto3.dll could not be found in system32 directory."
+    End If
+    
     ' Checksum ALCrypto3.dll
     'Const ALCRYPTO_MD5$ = "a86c30" & "57d" & "c51ca0cb8204b0ce493c5b4"
     Const ALCRYPTO_MD5$ = "D052CE549A594CC7F2AEC1AE50CDD947"
     Dim strdata As String, strMD5 As String
     Call modActiveLock.ReadFile(WinSysDir() & "\alcrypto3.dll", strdata)
     strMD5 = UCase(modMD5.Hash(strdata)) ' use our own MD5 hashing routine instead of ALCrypto's md5_hash() function.
-'Debug.Print "ALCrypto Hash: " & strMD5
-'Debug.Print "strdata: " & strdata
-'MsgBox strMD5
+    
     If strMD5 <> ALCRYPTO_MD5 Then
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrFileTampered, ACTIVELOCKSTRING, STRFILETAMPERED
@@ -360,7 +364,7 @@ Private Sub IActiveLock_Init(Optional autoLicString As String)
         DoAutoRegistration autoLicString
         If Err.Number <> 0 Then autoLicString = ""
     End If
-Done:
+done:
     mfInit = True
 End Sub
 
@@ -467,13 +471,13 @@ Private Sub IActiveLock_Acquire(Optional strMsg As String)
         If mCheckTimeServerForClockTampering = alsCheckTimeServer Then
             If SystemClockTampered Then
                 Set_locale regionalSymbol
-                Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
             End If
         End If
         If mCheckSystemFilesForClockTampering = alsCheckSystemFiles Then
             If ClockTampering Then
                 Set_locale regionalSymbol
-                Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
             End If
         End If
             
@@ -503,13 +507,13 @@ noRegistration:
             If mCheckTimeServerForClockTampering = alsCheckTimeServer Then
                 If SystemClockTampered Then
                     Set_locale regionalSymbol
-                    Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                    Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
                 End If
             End If
             If mCheckSystemFilesForClockTampering = alsCheckSystemFiles Then
                 If ClockTampering Then
                     Set_locale regionalSymbol
-                    Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                    Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
                 End If
             End If
         End If
@@ -525,7 +529,7 @@ noRegistration:
             dt2 = ActiveLockDate(UTC(Now))
             If dt2 < dt1 Then
                 Set_locale regionalSymbol
-                Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
             End If
             ' Write the stream to the file
             fileno = FreeFile
@@ -728,7 +732,9 @@ Private Sub ValidateShortKey(Lic As ProductLicense, ByVal user As String)
     sKey = oReg.GenerateKey("", Left(mSoftwareCode, Len(mSoftwareCode) - 2)) 'Do not include the last 2 possible == paddings
     m_ProdCode = CLng(Left(sKey, 4))
     
-    SerialNumber = oReg.GenerateKey(mSoftwareName & mSoftwareVer & mSoftwarePassword, modHardware.GetHDSerialFirmware())
+    ' Shortkeys are no longer using the HDD firmware serial number
+    ' they are using the Computer Fingerprint after v3.6
+    SerialNumber = oReg.GenerateKey(mSoftwareName & mSoftwareVer & mSoftwarePassword, modHardware.GetFingerprint())
 
     ' verify the key is valid
     If m_Key.ValidateShortKey(Lic.LicenseKey, SerialNumber, _
@@ -755,8 +761,12 @@ Private Sub ValidateShortKey(Lic As ProductLicense, ByVal user As String)
                 Lic.Expiration = CStr(ActiveLockDate(ExpireDate))
             End If
             Lic.MaxCount = CLng(CStr(modActiveLock.LoByte(UserData)))
+            
             ' Finally check if the serial number is Ok
-            If Not oReg.IsKeyOK(SerialNumber, mSoftwareName & mSoftwareVer & mSoftwarePassword, modHardware.GetHDSerialFirmware()) Then
+            
+            ' Shortkeys are no longer using the HDD firmware serial number
+            ' they are using the Computer Fingerprint after v3.6
+            If Not oReg.IsKeyOK(SerialNumber, mSoftwareName & mSoftwareVer & mSoftwarePassword, modHardware.GetFingerprint()) Then
                 ' Something wrong with the serial number used
                 Set_locale regionalSymbol
                 Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
@@ -830,17 +840,17 @@ Private Sub ValidateLic(Lic As ProductLicense)
         ' Must have NOW>LASTUSED
         If ActiveLockDate(UTC(Now)) < ActiveLockDate(CDate(Lic.LastUsed)) Then
             Set_locale regionalSymbol
-            Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+            Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
         End If
         ' Must have NOW<EXPIRATION
         If ActiveLockDate(UTC(Now)) > ActiveLockDate(CDate(Lic.Expiration)) Then
             Set_locale regionalSymbol
-            Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+            Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
         End If
         ' Must have LASTUSED>=REGISTERED
         If ActiveLockDate(CDate(Lic.LastUsed)) < ActiveLockDate(CDate(Lic.RegisteredDate)) Then
             Set_locale regionalSymbol
-            Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+            Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
         End If
     End If
     UpdateLastUsed Lic
@@ -1028,13 +1038,13 @@ Private Sub IActiveLock_Register(ByVal LibKey As String, Optional user As String
         If mCheckTimeServerForClockTampering = alsCheckTimeServer Then
             If SystemClockTampered Then
                 Set_locale regionalSymbol
-                Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
             End If
         End If
         If mCheckSystemFilesForClockTampering = alsCheckSystemFiles Then
             If ClockTampering Then
                 Set_locale regionalSymbol
-                Err.Raise ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
+                Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
             End If
         End If
     End If
@@ -1339,7 +1349,9 @@ Private Property Get IActiveLock_InstallationCode(Optional ByVal user As String 
     
     'Before we generate the installation code, let's check if this app is using a short key
     If mLicenseKeyTypes = alsShortKeyMD5 Then
-        IActiveLock_InstallationCode = IActivelock_GenerateShortSerial(modHardware.GetHDSerialFirmware())
+        ' Shortkeys are no longer using the HDD firmware serial number
+        ' they are using the Computer Fingerprint after v3.6
+        IActiveLock_InstallationCode = IActivelock_GenerateShortSerial(modHardware.GetFingerprint())
     
     ElseIf mLicenseKeyTypes = alsRSA Then
 
@@ -1368,6 +1380,9 @@ Private Property Get IActiveLock_InstallationCode(Optional ByVal user As String 
         
         ' combine with user name
         strReq = strLock & vbLf & user
+        
+        ' combine with app name and version
+        strReq = strReq & "&&&" & IActiveLock_SoftwareName & " - " & IActiveLock_SoftwareVersion
         
         ' base-64 encode the request
         Dim strReq2 As String
@@ -1430,6 +1445,13 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
         AppendLockString strLock, modHardware.GetBiosVersion()
         AppendLockString strLock, modHardware.GetMotherboardSerial()
         AppendLockString strLock, modHardware.GetIPaddress()
+    
+        AppendLockString strLock, modHardware.GetExternalIP()
+        AppendLockString strLock, modHardware.GetFingerprint()
+        AppendLockString strLock, modHardware.GetMemoryID()
+        AppendLockString strLock, modHardware.GetCPUID()
+        AppendLockString strLock, modHardware.GetBaseboardID()
+        AppendLockString strLock, modHardware.GetVideoID()
     Else
         If IsNumberIncluded(mLockTypes, lockMAC) Then     'mLockTypes And IActiveLock.ALLockTypes.lockMAC Then
             AppendLockString strLock, modHardware.GetMACAddress
@@ -1468,6 +1490,37 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
         End If
         If IsNumberIncluded(mLockTypes, lockIP) Then     'mLockTypes And IActiveLock.ALLockTypes.lockIP Then
             AppendLockString strLock, modHardware.GetIPaddress
+        Else
+            AppendLockString strLock, noKey
+        End If
+    
+        If IsNumberIncluded(mLockTypes, lockExternalIP) Then
+            AppendLockString strLock, modHardware.GetExternalIP
+        Else
+            AppendLockString strLock, noKey
+        End If
+        If IsNumberIncluded(mLockTypes, lockFingerprint) Then
+            AppendLockString strLock, modHardware.GetFingerprint
+        Else
+            AppendLockString strLock, noKey
+        End If
+        If IsNumberIncluded(mLockTypes, lockMemory) Then
+            AppendLockString strLock, modHardware.GetMemoryID
+        Else
+            AppendLockString strLock, noKey
+        End If
+        If IsNumberIncluded(mLockTypes, lockCPUID) Then
+            AppendLockString strLock, modHardware.GetCPUID
+        Else
+            AppendLockString strLock, noKey
+        End If
+        If IsNumberIncluded(mLockTypes, lockBaseboardID) Then
+            AppendLockString strLock, modHardware.GetBaseboardID
+        Else
+            AppendLockString strLock, noKey
+        End If
+        If IsNumberIncluded(mLockTypes, lockvideoID) Then
+            AppendLockString strLock, modHardware.GetVideoID
         Else
             AppendLockString strLock, noKey
         End If
@@ -1566,6 +1619,55 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                     If aString <> noKey Then
                         IActiveLock_AddLockCode lockIP, SizeLockType  'dw1 build up lockTypes
                         If aString <> modHardware.GetIPaddress() Then
+                            Set_locale regionalSymbol
+                            Err.Raise ActiveLockErrCodeConstants.alerrWrongIPaddress, ACTIVELOCKSTRING, STRWRONGIPADDRESS
+                        End If
+                    End If
+                
+                ElseIf j = LBound(a) + 8 Then
+                    If aString <> noKey Then
+                        IActiveLock_AddLockCode lockExternalIP, SizeLockType  'dw1 build up lockTypes
+                        If aString <> modHardware.GetExternalIP() Then
+                            Set_locale regionalSymbol
+                            Err.Raise ActiveLockErrCodeConstants.alerrWrongIPaddress, ACTIVELOCKSTRING, STRWRONGIPADDRESS
+                        End If
+                    End If
+                ElseIf j = LBound(a) + 9 Then
+                    If aString <> noKey Then
+                        IActiveLock_AddLockCode lockFingerprint, SizeLockType  'dw1 build up lockTypes
+                        If aString <> modHardware.GetIPaddress() Then
+                            Set_locale regionalSymbol
+                            Err.Raise ActiveLockErrCodeConstants.alerrWrongIPaddress, ACTIVELOCKSTRING, STRWRONGIPADDRESS
+                        End If
+                    End If
+                ElseIf j = LBound(a) + 10 Then
+                    If aString <> noKey Then
+                        IActiveLock_AddLockCode lockMemory, SizeLockType  'dw1 build up lockTypes
+                        If aString <> modHardware.GetMemoryID() Then
+                            Set_locale regionalSymbol
+                            Err.Raise ActiveLockErrCodeConstants.alerrWrongIPaddress, ACTIVELOCKSTRING, STRWRONGIPADDRESS
+                        End If
+                    End If
+                ElseIf j = LBound(a) + 11 Then
+                    If aString <> noKey Then
+                        IActiveLock_AddLockCode lockCPUID, SizeLockType  'dw1 build up lockTypes
+                        If aString <> modHardware.GetCPUID() Then
+                            Set_locale regionalSymbol
+                            Err.Raise ActiveLockErrCodeConstants.alerrWrongIPaddress, ACTIVELOCKSTRING, STRWRONGIPADDRESS
+                        End If
+                    End If
+                ElseIf j = LBound(a) + 12 Then
+                    If aString <> noKey Then
+                        IActiveLock_AddLockCode lockBaseboardID, SizeLockType  'dw1 build up lockTypes
+                        If aString <> modHardware.GetBaseboardID() Then
+                            Set_locale regionalSymbol
+                            Err.Raise ActiveLockErrCodeConstants.alerrWrongIPaddress, ACTIVELOCKSTRING, STRWRONGIPADDRESS
+                        End If
+                    End If
+                ElseIf j = LBound(a) + 13 Then
+                    If aString <> noKey Then
+                        IActiveLock_AddLockCode lockvideoID, SizeLockType  'dw1 build up lockTypes
+                        If aString <> modHardware.GetVideoID() Then
                             Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrWrongIPaddress, ACTIVELOCKSTRING, STRWRONGIPADDRESS
                         End If

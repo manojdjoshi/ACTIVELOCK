@@ -79,7 +79,7 @@ Function BigAA1Add(ByVal value1 As String, ByVal value2 As String) As String
         valueans = Hex$(tempnum) + valueans
     End If
 
-    BigAA1Add = valueans
+    BigAA1Add = Right(valueans, 8)
 
 End Function
 
@@ -458,7 +458,7 @@ End Function
 ' Remarks: None
 '===============================================================================
 Function SHA1AA1Hash(ByVal hashthis As String) As String
-    ReDim buf(0 To 4) As String
+    ReDim Buf(0 To 4) As String
     ReDim in_(0 To 79) As String
     Dim tempnum As Integer, tempnum2 As Integer, loopit As Integer, loopouter As Integer, loopinner As Integer
     Dim a As String, b As String, C As String, d As String, e As String
@@ -480,19 +480,19 @@ Function SHA1AA1Hash(ByVal hashthis As String) As String
     hashthis = hashthis + tempstr
     
     ' Set magic numbers
-    buf(0) = "67452301"
-    buf(1) = "efcdab89"
-    buf(2) = "98badcfe"
-    buf(3) = "10325476"
-    buf(4) = "c3d2e1f0"
+    Buf(0) = "67452301"
+    Buf(1) = "efcdab89"
+    Buf(2) = "98badcfe"
+    Buf(3) = "10325476"
+    Buf(4) = "c3d2e1f0"
     
     ' For each 512 bit section
     For loopouter = 0 To Len(hashthis) / 64 - 1
-        a = buf(0)
-        b = buf(1)
-        C = buf(2)
-        d = buf(3)
-        e = buf(4)
+        a = Buf(0)
+        b = Buf(1)
+        C = Buf(2)
+        d = Buf(3)
+        e = Buf(4)
 
         ' Get the 512 bits
         For loopit = 0 To 15
@@ -547,11 +547,11 @@ Function SHA1AA1Hash(ByVal hashthis As String) As String
             a = tempstr
         Next loopit
         
-        buf(0) = BigAA1Mod32Add(buf(0), a)
-        buf(1) = BigAA1Mod32Add(buf(1), b)
-        buf(2) = BigAA1Mod32Add(buf(2), C)
-        buf(3) = BigAA1Mod32Add(buf(3), d)
-        buf(4) = BigAA1Mod32Add(buf(4), e)
+        Buf(0) = BigAA1Mod32Add(Buf(0), a)
+        Buf(1) = BigAA1Mod32Add(Buf(1), b)
+        Buf(2) = BigAA1Mod32Add(Buf(2), C)
+        Buf(3) = BigAA1Mod32Add(Buf(3), d)
+        Buf(4) = BigAA1Mod32Add(Buf(4), e)
     
     Next loopouter
     
@@ -559,7 +559,7 @@ Function SHA1AA1Hash(ByVal hashthis As String) As String
     hashthis = ""
     For loopit = 0 To 4
         For loopinner = 0 To 3
-            hashthis = hashthis + Mid$(buf(loopit), 1 + 2 * loopinner, 2)
+            hashthis = hashthis + Mid$(Buf(loopit), 1 + 2 * loopinner, 2)
         Next loopinner
     Next loopit
     
@@ -577,7 +577,7 @@ End Function
 ' Remarks: None
 '===============================================================================
 Function SHA1AA2Hash(ByVal hashthis As String) As String
-    ReDim buf(0 To 4) As String
+    ReDim Buf(0 To 4) As String
     ReDim in_(0 To 79) As String
     Dim tempnum As Integer, tempnum2 As Integer, loopit As Integer, loopouter As Integer, loopinner As Integer
     Dim a As String, b As String, C As String, d As String, e As String
@@ -599,19 +599,19 @@ Function SHA1AA2Hash(ByVal hashthis As String) As String
     hashthis = hashthis + tempstr
     
     ' Set magic numbers
-    buf(0) = "67452301"
-    buf(1) = "efcdab89"
-    buf(2) = "98badcfe"
-    buf(3) = "10325476"
-    buf(4) = "c3d2e1f0"
+    Buf(0) = "67452301"
+    Buf(1) = "efcdab89"
+    Buf(2) = "98badcfe"
+    Buf(3) = "10325476"
+    Buf(4) = "c3d2e1f0"
     
     ' For each 512 bit section
     For loopouter = 0 To Len(hashthis) / 64 - 1
-        a = buf(0)
-        b = buf(1)
-        C = buf(2)
-        d = buf(3)
-        e = buf(4)
+        a = Buf(0)
+        b = Buf(1)
+        C = Buf(2)
+        d = Buf(3)
+        e = Buf(4)
 
         ' Get the 512 bits
         For loopit = 0 To 15
@@ -666,11 +666,11 @@ Function SHA1AA2Hash(ByVal hashthis As String) As String
             a = tempstr
         Next loopit
         
-        buf(0) = BigAA2Mod32Add(buf(0), a)
-        buf(1) = BigAA2Mod32Add(buf(1), b)
-        buf(2) = BigAA2Mod32Add(buf(2), C)
-        buf(3) = BigAA2Mod32Add(buf(3), d)
-        buf(4) = BigAA2Mod32Add(buf(4), e)
+        Buf(0) = BigAA2Mod32Add(Buf(0), a)
+        Buf(1) = BigAA2Mod32Add(Buf(1), b)
+        Buf(2) = BigAA2Mod32Add(Buf(2), C)
+        Buf(3) = BigAA2Mod32Add(Buf(3), d)
+        Buf(4) = BigAA2Mod32Add(Buf(4), e)
     
     Next loopouter
     
@@ -678,7 +678,7 @@ Function SHA1AA2Hash(ByVal hashthis As String) As String
     hashthis = ""
     For loopit = 0 To 4
         For loopinner = 0 To 3
-            hashthis = hashthis + Mid$(buf(loopit), 1 + 2 * loopinner, 2)
+            hashthis = hashthis + Mid$(Buf(loopit), 1 + 2 * loopinner, 2)
         Next loopinner
     Next loopit
     

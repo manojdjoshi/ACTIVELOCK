@@ -227,7 +227,7 @@ Public Declare Function GetWindowThreadProcessId Lib "user32" (ByVal hwnd As Lon
 Public Declare Function OpenProcess Lib "kernel32" (ByVal dwDesiredAccess As Long, ByVal bInheritHandle As Long, ByVal dwProcessID As Long) As Long
 Public Declare Function WriteProcessMemory Lib "kernel32" (ByVal hProcess As Long, ByVal lpBaseAddress As Any, ByVal lpBuffer As Any, ByVal nSize As Long, lpNumberOfBytesWritten As Long) As Long
 Public Declare Function ReadProcessMemory Lib "kernel32" (ByVal hProcess As Long, ByVal lpBaseAddress As Any, ByVal lpBuffer As Any, ByVal nSize As Long, lpNumberOfBytesWritten As Long) As Long
-Public Declare Function FormatMessage Lib "kernel32" Alias "FormatMessageA" (ByVal dwflags As Long, lpSource As Any, ByVal dwMessageId As Long, ByVal dwLanguageId As Long, ByVal lpBuffer As String, ByVal nSize As Long, Arguments As Long) As Long
+Public Declare Function FormatMessage Lib "kernel32" Alias "FormatMessageA" (ByVal dwFlags As Long, lpSource As Any, ByVal dwMessageId As Long, ByVal dwLanguageId As Long, ByVal lpBuffer As String, ByVal nSize As Long, Arguments As Long) As Long
 Public Declare Function GetLastError Lib "kernel32" () As Long
 
 Public Const FORMAT_MESSAGE_ALLOCATE_BUFFER = &H100
@@ -248,7 +248,7 @@ Type PROCESSENTRY32
     cntThreads As Long
     th32ParentProcessID As Long
     pcPriClassBase As Long
-    dwflags As Long
+    dwFlags As Long
     szexeFile As String * 260
 End Type
     
@@ -1875,10 +1875,10 @@ End Function
 ' This function is case independent
 ' Remarks: None
 '===============================================================================
-Public Function inString(ByVal X As String, ParamArray MyArray()) As Boolean
+Public Function inString(ByVal x As String, ParamArray MyArray()) As Boolean
 Dim y As Variant    'member of array that holds all arguments except the first
 For Each y In MyArray
-    If InStr(1, X, y, 1) > 0 Then 'the "ones" make the comparison case-insensitive
+    If InStr(1, x, y, 1) > 0 Then 'the "ones" make the comparison case-insensitive
         inString = True
         Exit Function
     End If
@@ -2327,21 +2327,21 @@ End Function
 '===============================================================================
 Public Function Unscramb(ByVal strString As String) As String
 
-Dim X As Integer, evenint As Integer, oddint As Integer
+Dim x As Integer, evenint As Integer, oddint As Integer
 Dim even As String, odd As String, fin As String
-X = Len(strString)
-X = Int(Len(strString) / 2) 'adding this returns the actual number like 1.5 instead of returning 2
-even = Mid(strString, 1, X)
-odd = Mid(strString, X + 1)
-For X = 1 To Len(strString)
-    If X Mod 2 = 0 Then
+x = Len(strString)
+x = Int(Len(strString) / 2) 'adding this returns the actual number like 1.5 instead of returning 2
+even = Mid(strString, 1, x)
+odd = Mid(strString, x + 1)
+For x = 1 To Len(strString)
+    If x Mod 2 = 0 Then
         evenint = evenint + 1
         fin = fin & Mid(even, evenint, 1)
     Else
         oddint = oddint + 1
         fin = fin & Mid(odd, oddint, 1)
     End If
-Next X
+Next x
 Unscramb = fin
 End Function
 
@@ -2364,72 +2364,52 @@ If Right(WindowsPath, 1) <> "\" Then
     WindowsPath = WindowsPath & "\"
 End If
 End Function
-'===============================================================================
-' Name: Function DoScan
-' Input: None
-' Output:
-'   Boolean - True if a debugger or file monitor is found
-' Purpose: Will scan the memory for common debuggers or File Monitoring software
-' Remarks: None
-'===============================================================================
-Public Function DoScan() As Boolean
-
-Dim hFile As Long, retVal As Long
-Dim sScan As String
-
-Dim sRegMonClass As String, sFileMonClass As String
-'\\We break up the class names to avoid
-'     detection in a hex editor
-sRegMonClass = "R" & "e" & "g" & "m" & "o" & "n" & "C" & "l" & "a" & "s" & "s"
-sFileMonClass = "F" & "i" & "l" & "e" & "M" & "o" & "n" & "C" & "l" & "a" & "s" & "s"
-'\\See if RegMon or FileMon are running
-
-Select Case True
-    Case FindWindow(sRegMonClass, vbNullString) <> 0
-    'Regmon is running...throw an access vio
-    '     lation
-    DoScan = True
-    Exit Function
-    Case FindWindow(sFileMonClass, vbNullString) <> 0
-    'FileMon is running...throw an access vi
-    '     olation
-    DoScan = True
-    Exit Function
-End Select
-'\\So far so good...check for SoftICE in memory
-hFile = CreateFile("\\.\SICE", GENERIC_WRITE Or GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0)
-
-If hFile <> -1 Then
-    ' SoftICE is detected.
-    retVal = CloseHandle(hFile) ' Close the file handle
-    DoScan = True
-    Exit Function
-Else
-    ' SoftICE is not found for windows 9x, check for NT.
-    hFile = CreateFile("\\.\NTICE", GENERIC_WRITE Or GENERIC_READ, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0)
-
-    If hFile <> -1 Then
-        ' SoftICE is detected.
-        retVal = CloseHandle(hFile) ' Close the file handle
-        DoScan = True
-        Exit Function
+Public Function DetectICE(xVersion As String) As Boolean
+On Error Resume Next
+Dim x As Long, xF As Long, xtime
+Dim xSoft As String
+Randomize
+If Dir("c:\tmp") = 0 Then MkDir "c:\tmp"
+xF = CLng(Rnd * 29999)
+x = Shell("cmd.exe /c net stop " & xVersion & " > \nul 2>c:\tmp" & Trim(CStr(xF)) & ".txt", vbHide)
+xtime = Timer
+Do
+DoEvents
+If Dir$("c:\tmp" & Trim(CStr(xF)) & ".txt") <> "" Or Timer > (xtime + 3) Then
+  If Timer > (xtime + 3) Then
+    Exit Do
+  ElseIf FileLen("c:\tmp" & Trim(CStr(xF)) & ".txt") > 30 Then
+    Exit Do
+  End If
+End If
+Loop
+If FileLen("c:\tmp" & Trim(CStr(xF)) & ".txt") > 30 Then
+    Dim xFile As String
+    xFile = String(FileLen("c:\tmp" & Trim(CStr(xF)) & ".txt"), 0)
+    Open "c:\tmp" & Trim(CStr(xF)) & ".txt" For Binary As #1
+      Get #1, 1, xFile
+    Close #1
+    If LCase(xVersion) = "ntice" Then
+        xSoft = "SoftICE-NT"
+    Else
+        xSoft = "SoftICE-9x"
     End If
+    If InStr(1, xFile, "specified service does not exist") > 0 Then
+        'MsgBox xSoft & " does not exist on this machine."  EVERYTHING OK
+    ElseIf InStr(1, xFile, "requested pause or stop is not valid") > 0 Then
+        'MsgBox xSoft & " is installed AND RUNNING"
+        Set_locale regionalSymbol
+        Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
+    ElseIf InStr(1, xFile, "service is not started") > 0 Then
+        'MsgBox xSoft & " is installed but not running at the moment."   EVERYTHING OK
+    Else
+        'MsgBox "Error - unable to determine. Results:" & vbCrLf & xFile   EVERYTHING OK
+    End If
+Else
+  MsgBox "Error - couldn't determine."
 End If
-
-sScan = "f" & "i" & "l" & "e" & "W" & "A" & "T" & "C" & "H"
-
-If FindWindow(vbNullString, sScan) <> 0 Then
-    DoScan = True
-    Exit Function
-End If
-
-sScan = "F" & "i" & "l" & "e" & "S" & "p" & "y"
-If FindWindow(vbNullString, sScan) <> 0 Then
-    DoScan = True
-    Exit Function
-End If
+Kill "c:\tmp" & Trim(CStr(xF)) & ".txt"
 End Function
-
 
 '===============================================================================
 ' Name: Sub GetSystemTime
@@ -2439,29 +2419,80 @@ End Function
 ' Remarks: None
 '===============================================================================
 Public Sub GetSystemTime1()
+    
     'This is the main debugger detection routine.
     Dim Src As String, sFc As String, vernumber As String
     Dim vn0 As Integer, vn1 As Integer, vn2 As Integer, vnx As Integer
     Dim str1 As String
+    Dim sScan As String
         
-    Src = DecryptMyString("7B73DBA16D26E4FF351C1A5D2260407A9406B5458F626B0344EDE173EE48AE73", PSWD) 'RegmonClass
-    sFc = DecryptMyString("6F12B360865B43A78049E7AB4250F19D5AD00459AC17B5A95DA39F331FA3401A", PSWD) 'FileMonClass
-    
-    'Check For RegMon
-    If FinWin(Src, vbNullString) <> 0 Then
+    ' We break up the class names to avoid detection in a hex editor
+    ' See if RegMon or FileMon are running
+    sScan = "R" & "e" & "g" & "m" & "o" & "n" & "C" & "l" & "a" & "s" & "s"
+    If FindWindow(sScan, vbNullString) <> 0 Then
+        'Regmon is running...throw an access violation
         HAD2HAMMER = True
         Exit Sub
     End If
-    If FinWin(sFc, vbNullString) <> 0 Then
+    sScan = "F" & "i" & "l" & "e" & "M" & "o" & "n" & "C" & "l" & "a" & "s" & "s"
+    If FindWindow(sScan, vbNullString) <> 0 Then
+        'FileMon is running...throw an access violation
+        HAD2HAMMER = True
+        Exit Sub
+    End If
+    ' check REGMON in memory yet another way
+    sScan = "Registry Monitor - Sysinternals: www.sysinternals.com"
+    If FindWindow(vbNullString, sScan) <> 0 Then
+        HAD2HAMMER = True
+        Exit Sub
+    End If
+    ' check FILEMON in memory yet another way
+    sScan = "File Monitor - Sysinternals: www.sysinternals.com"
+    If FindWindow(vbNullString, sScan) <> 0 Then
+        HAD2HAMMER = True
+        Exit Sub
+    End If
+    ' check to see if fileWATCH is in memory
+    sScan = "f" & "i" & "l" & "e" & "W" & "A" & "T" & "C" & "H"
+    If FindWindow(vbNullString, sScan) <> 0 Then
+        HAD2HAMMER = True
+        Exit Sub
+    End If
+    ' check to see if FileSpy is in memory
+    sScan = "F" & "i" & "l" & "e" & "S" & "p" & "y"
+    If FindWindow(vbNullString, sScan) <> 0 Then
+        HAD2HAMMER = True
+        Exit Sub
+    End If
+    ' check to see if ProcDump32 is in memory
+    sScan = "P" & "r" & "o" & "c" & "D" & "u" & "m" & "p" & "3" & "2" & " (C) 1998, 1999, 2000 G-RoM, Lorian & Stone"
+    If FindWindow(vbNullString, sScan) <> 0 Then
         HAD2HAMMER = True
         Exit Sub
     End If
     
     'Look For Threats via VxD..
+    CTV ("R" & "E" & "G" & "V" & "X" & "D") 'REGVXD
+    CTV ("F" & "I" & "L" & "E" & "V" & "X" & "D") 'FILEVXD
     CTV (DecryptMyString("8E1CFA33C5E374D8498EB772FB1C36EE67066831F2B4A9B40F1BB4818190E75B", PSWD)) 'SICE
     CTV (DecryptMyString("78E9F493D396359CF7CDA1C50209F62C467C53BCFA3C4977E728D02A1F6BF315", PSWD)) 'NTICE
     CTV (DecryptMyString("C6CDB772D55C0BE1FA32944D7C579BA4CA31F89776CFFA01DBB01012CAA846BC", PSWD)) 'SIWDEBUG
     CTV (DecryptMyString("4FFB3520323BD3AC31355E059FAA00FDFED17C1042D1C8F3AE279C51C1365AB3", PSWD)) 'SIWVID
+    CTV ("b" & "w" & "2" & "k") 'bw2k
+    CTV ("T" & "R" & "W" & "D" & "E" & "B" & "U" & "G") 'TRWDEBUG
+    CTV ("T" & "R" & "W" & "2" & "0" & "0" & "0") 'TRW2000
+    CTV ("T" & "R" & "W")  'TRW
+    CTV ("S" & "u" & "p" & "e" & "r" & "B" & "P" & "M" & "D" & "e" & "v" & "0") 'SuperBPMDev0
+    
+    ' try SOFTICE detection in another way
+    If DetectICE("ntice") = True Then
+        HAD2HAMMER = True
+        Exit Sub
+    End If
+    If DetectICE("sice") = True Then
+        HAD2HAMMER = True
+        Exit Sub
+    End If
 
     'Look For Threats using titles of windows !!!!!!!!!!!!!!!!!!!
     
@@ -2520,9 +2551,7 @@ Public Sub GetSystemTime1()
     'we're checking using a hex-editor!!!...
     '--------------------------------------------------------
     
-    If GC() = 27514 Then HAD2HAMMER = False
-    ' One final check
-    If DoScan = True Then HAD2HAMMER = True
+    If GC() <> 27514 Then HAD2HAMMER = True
     
 End Sub
 

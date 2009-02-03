@@ -1,27 +1,28 @@
 VERSION 5.00
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmMain 
    Appearance      =   0  'Flat
    BorderStyle     =   1  'Fixed Single
    Caption         =   "ALUGEN - ActiveLock3 Universal GENerator"
-   ClientHeight    =   8550
+   ClientHeight    =   10635
    ClientLeft      =   45
    ClientTop       =   330
    ClientWidth     =   9750
    Icon            =   "frmMain3.frx":0000
    LinkTopic       =   "Form1"
-   ScaleHeight     =   8550
+   LockControls    =   -1  'True
+   ScaleHeight     =   10635
    ScaleWidth      =   9750
    StartUpPosition =   3  'Windows Default
    Begin MSComctlLib.StatusBar sbStatus 
       Align           =   2  'Align Bottom
       Height          =   375
       Left            =   0
-      TabIndex        =   71
-      Top             =   8175
+      TabIndex        =   70
+      Top             =   10260
       Width           =   9750
       _ExtentX        =   17198
       _ExtentY        =   661
@@ -37,13 +38,13 @@ Begin VB.Form frmMain
       EndProperty
    End
    Begin TabDlg.SSTab SSTab1 
-      Height          =   8190
+      Height          =   10260
       Left            =   0
       TabIndex        =   0
       Top             =   0
       Width           =   9735
       _ExtentX        =   17171
-      _ExtentY        =   14446
+      _ExtentY        =   18098
       _Version        =   393216
       Tabs            =   2
       Tab             =   1
@@ -51,13 +52,13 @@ Begin VB.Form frmMain
       TabCaption(0)   =   "Pro&duct Code Generator"
       TabPicture(0)   =   "frmMain3.frx":0CCA
       Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "Label1"
-      Tab(0).Control(1)=   "Label17"
-      Tab(0).Control(2)=   "gridProds"
+      Tab(0).Control(0)=   "cmdValidate"
+      Tab(0).Control(1)=   "Picture1"
+      Tab(0).Control(2)=   "cmdRemove"
       Tab(0).Control(3)=   "fraProdNew"
-      Tab(0).Control(4)=   "cmdRemove"
-      Tab(0).Control(5)=   "Picture1"
-      Tab(0).Control(6)=   "cmdValidate"
+      Tab(0).Control(4)=   "gridProds"
+      Tab(0).Control(5)=   "Label17"
+      Tab(0).Control(6)=   "Label1"
       Tab(0).ControlCount=   7
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
@@ -93,10 +94,10 @@ Begin VB.Form frmMain
       Begin VB.CommandButton cmdViewArchive 
          Caption         =   "&View License Database"
          Height          =   315
-         Left            =   1470
+         Left            =   1485
          TabIndex        =   36
          ToolTipText     =   "View License Archive"
-         Top             =   7785
+         Top             =   9855
          Width           =   2115
       End
       Begin VB.CommandButton cmdRemove 
@@ -110,16 +111,118 @@ Begin VB.Form frmMain
       End
       Begin VB.Frame frmKeyGen 
          BorderStyle     =   0  'None
-         Height          =   7305
+         Height          =   9735
          Left            =   135
          TabIndex        =   13
          Top             =   450
          Width           =   9495
+         Begin VB.CheckBox chkLockFingerprint 
+            Caption         =   "Lock to Computer Fingerprint:"
+            BeginProperty Font 
+               Name            =   "Microsoft Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   195
+            Left            =   1305
+            TabIndex        =   76
+            Top             =   5805
+            Width           =   7095
+         End
+         Begin VB.CheckBox chkLockBaseboardID 
+            Caption         =   "Lock to Baseboard ID:"
+            BeginProperty Font 
+               Name            =   "Microsoft Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   195
+            Left            =   1305
+            TabIndex        =   75
+            Top             =   5535
+            Width           =   7095
+         End
+         Begin VB.CheckBox chkLockCPUID 
+            Caption         =   "Lock to CPU ID:"
+            BeginProperty Font 
+               Name            =   "Microsoft Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   195
+            Left            =   1305
+            TabIndex        =   74
+            Top             =   5265
+            Width           =   7095
+         End
+         Begin VB.CheckBox chkLockMemory 
+            Caption         =   "Lock to Memory ID:"
+            BeginProperty Font 
+               Name            =   "Microsoft Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   195
+            Left            =   1305
+            TabIndex        =   73
+            Top             =   4995
+            Width           =   7095
+         End
+         Begin VB.CheckBox chkLockVideoID 
+            Caption         =   "Lock to Video ID:"
+            BeginProperty Font 
+               Name            =   "Microsoft Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   195
+            Left            =   1305
+            TabIndex        =   72
+            Top             =   4725
+            Width           =   7095
+         End
+         Begin VB.CheckBox chkLockExternalIP 
+            Caption         =   "Lock to External IP Address:"
+            BeginProperty Font 
+               Name            =   "Microsoft Sans Serif"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   195
+            Left            =   1305
+            TabIndex        =   71
+            Top             =   4455
+            Width           =   7095
+         End
          Begin VB.CommandButton cmdUncheckAll 
             Caption         =   "Uncheck All"
             Height          =   315
             Left            =   0
-            TabIndex        =   70
+            TabIndex        =   69
             ToolTipText     =   "Generate liberation key for the above request code (which should not be blank)."
             Top             =   2655
             Width           =   1110
@@ -128,7 +231,7 @@ Begin VB.Form frmMain
             Caption         =   "Check All"
             Height          =   315
             Left            =   0
-            TabIndex        =   69
+            TabIndex        =   68
             ToolTipText     =   "Generate liberation key for the above request code (which should not be blank)."
             Top             =   2250
             Width           =   1110
@@ -137,7 +240,7 @@ Begin VB.Form frmMain
             Height          =   315
             Left            =   1305
             Style           =   2  'Dropdown List
-            TabIndex        =   60
+            TabIndex        =   59
             Top             =   90
             Width           =   3615
          End
@@ -145,7 +248,7 @@ Begin VB.Form frmMain
             Height          =   315
             Left            =   6480
             Style           =   2  'Dropdown List
-            TabIndex        =   59
+            TabIndex        =   58
             Top             =   90
             Width           =   2625
          End
@@ -153,7 +256,7 @@ Begin VB.Form frmMain
             Height          =   315
             Left            =   3105
             MaxLength       =   2
-            TabIndex        =   55
+            TabIndex        =   54
             Text            =   "5"
             Top             =   1185
             Visible         =   0   'False
@@ -163,12 +266,12 @@ Begin VB.Form frmMain
             Caption         =   "Networked Licence"
             Height          =   330
             Left            =   1305
-            TabIndex        =   54
+            TabIndex        =   53
             Top             =   1170
             Width           =   1770
          End
          Begin VB.CheckBox chkLockIP 
-            Caption         =   "Lock to IP Address"
+            Caption         =   "Lock to Local IP Address:"
             BeginProperty Font 
                Name            =   "Microsoft Sans Serif"
                Size            =   8.25
@@ -185,7 +288,7 @@ Begin VB.Form frmMain
             Width           =   7095
          End
          Begin VB.CheckBox chkLockMotherboard 
-            Caption         =   "Lock to Motherboard Serial"
+            Caption         =   "Lock to Motherboard Serial Number:"
             BeginProperty Font 
                Name            =   "Microsoft Sans Serif"
                Size            =   8.25
@@ -202,7 +305,7 @@ Begin VB.Form frmMain
             Width           =   7095
          End
          Begin VB.CheckBox chkLockBIOS 
-            Caption         =   "Lock to BIOS Version"
+            Caption         =   "Lock to BIOS Version:"
             BeginProperty Font 
                Name            =   "Microsoft Sans Serif"
                Size            =   8.25
@@ -219,7 +322,7 @@ Begin VB.Form frmMain
             Width           =   7095
          End
          Begin VB.CheckBox chkLockWindows 
-            Caption         =   "Lock to Windows Serial"
+            Caption         =   "Lock to Windows Serial Number:"
             BeginProperty Font 
                Name            =   "Microsoft Sans Serif"
                Size            =   8.25
@@ -236,7 +339,7 @@ Begin VB.Form frmMain
             Width           =   7095
          End
          Begin VB.CheckBox chkLockHDfirmware 
-            Caption         =   "Lock to HDD Firmware Serial"
+            Caption         =   "Lock to HDD Firmware Serial Number:"
             BeginProperty Font 
                Name            =   "Microsoft Sans Serif"
                Size            =   8.25
@@ -253,7 +356,7 @@ Begin VB.Form frmMain
             Width           =   7095
          End
          Begin VB.CheckBox chkLockHD 
-            Caption         =   "Lock to HDD Volume Serial"
+            Caption         =   "Lock to HDD Volume Serial Number:"
             BeginProperty Font 
                Name            =   "Microsoft Sans Serif"
                Size            =   8.25
@@ -270,7 +373,7 @@ Begin VB.Form frmMain
             Width           =   7095
          End
          Begin VB.CheckBox chkLockComputer 
-            Caption         =   "Lock to Computer Name"
+            Caption         =   "Lock to Computer Name:"
             BeginProperty Font 
                Name            =   "Microsoft Sans Serif"
                Size            =   8.25
@@ -287,7 +390,7 @@ Begin VB.Form frmMain
             Width           =   7095
          End
          Begin VB.CheckBox chkLockMACaddress 
-            Caption         =   "Lock to MAC Address"
+            Caption         =   "Lock to MAC Address:"
             BeginProperty Font 
                Name            =   "Microsoft Sans Serif"
                Size            =   8.25
@@ -315,7 +418,7 @@ Begin VB.Form frmMain
             ScaleHeight     =   825
             ScaleWidth      =   825
             TabIndex        =   42
-            Top             =   5385
+            Top             =   6915
             Width           =   825
          End
          Begin VB.CheckBox chkItemData 
@@ -333,7 +436,7 @@ Begin VB.Form frmMain
             Picture         =   "frmMain3.frx":6C12
             Style           =   1  'Graphical
             TabIndex        =   35
-            Top             =   4905
+            Top             =   6435
             Width           =   345
          End
          Begin VB.CommandButton cmdPaste 
@@ -358,14 +461,14 @@ Begin VB.Form frmMain
             Left            =   8040
             TabIndex        =   27
             ToolTipText     =   "Generate liberation key for the above request code (which should not be blank)."
-            Top             =   6945
+            Top             =   9015
             Width           =   375
          End
          Begin VB.TextBox txtLibFile 
             Height          =   315
             Left            =   1320
             TabIndex        =   26
-            Top             =   6945
+            Top             =   9015
             Width           =   6735
          End
          Begin VB.CommandButton cmdSave 
@@ -375,7 +478,7 @@ Begin VB.Form frmMain
             Left            =   8520
             TabIndex        =   28
             ToolTipText     =   "Generate liberation key for the above request code (which should not be blank)."
-            Top             =   6945
+            Top             =   9015
             Width           =   975
          End
          Begin VB.ComboBox cmbLicType 
@@ -418,14 +521,14 @@ Begin VB.Form frmMain
                Strikethrough   =   0   'False
             EndProperty
             ForeColor       =   &H00FF0000&
-            Height          =   2355
+            Height          =   2895
             Left            =   1320
             Locked          =   -1  'True
             MultiLine       =   -1  'True
             ScrollBars      =   2  'Vertical
             TabIndex        =   23
             Text            =   "frmMain3.frx":70D1
-            Top             =   4545
+            Top             =   6075
             Width           =   7095
          End
          Begin VB.CommandButton cmdKeyGen 
@@ -435,7 +538,7 @@ Begin VB.Form frmMain
             Left            =   8520
             TabIndex        =   24
             ToolTipText     =   "Generate liberation key for the above request code (which should not be blank)."
-            Top             =   4545
+            Top             =   6075
             Width           =   975
          End
          Begin MSComDlg.CommonDialog CommonDlg 
@@ -449,7 +552,7 @@ Begin VB.Form frmMain
             Caption         =   "&Product:"
             Height          =   255
             Left            =   0
-            TabIndex        =   58
+            TabIndex        =   57
             Top             =   150
             Width           =   975
          End
@@ -457,7 +560,7 @@ Begin VB.Form frmMain
             Caption         =   "Registered Level:"
             Height          =   255
             Left            =   5175
-            TabIndex        =   57
+            TabIndex        =   56
             Top             =   135
             Width           =   1275
          End
@@ -474,17 +577,9 @@ Begin VB.Form frmMain
             Caption         =   "Concurrent Users"
             Height          =   255
             Left            =   3465
-            TabIndex        =   56
+            TabIndex        =   55
             Top             =   1260
             Visible         =   0   'False
-            Width           =   1335
-         End
-         Begin VB.Label Label18 
-            Caption         =   "Note: IP address may be Dynamic!"
-            Height          =   390
-            Left            =   0
-            TabIndex        =   52
-            Top             =   4140
             Width           =   1335
          End
          Begin VB.Label Label16 
@@ -494,7 +589,7 @@ Begin VB.Form frmMain
             Height          =   165
             Left            =   0
             TabIndex        =   43
-            Top             =   6225
+            Top             =   7755
             Width           =   1065
          End
          Begin VB.Label Label11 
@@ -510,7 +605,7 @@ Begin VB.Form frmMain
             Height          =   255
             Left            =   0
             TabIndex        =   25
-            Top             =   6975
+            Top             =   9045
             Width           =   1335
          End
          Begin VB.Label lblExpiry 
@@ -542,7 +637,7 @@ Begin VB.Form frmMain
             Height          =   255
             Left            =   0
             TabIndex        =   22
-            Top             =   4605
+            Top             =   6135
             Width           =   1335
          End
          Begin VB.Label lblDays 
@@ -574,7 +669,7 @@ Begin VB.Form frmMain
             Height          =   240
             Index           =   0
             Left            =   1305
-            TabIndex        =   67
+            TabIndex        =   66
             Top             =   1215
             Width           =   1590
          End
@@ -583,7 +678,7 @@ Begin VB.Form frmMain
             Height          =   240
             Index           =   1
             Left            =   3060
-            TabIndex        =   65
+            TabIndex        =   64
             Top             =   1215
             Value           =   -1  'True
             Width           =   960
@@ -593,7 +688,7 @@ Begin VB.Form frmMain
             Height          =   240
             Index           =   2
             Left            =   4005
-            TabIndex        =   64
+            TabIndex        =   63
             Top             =   1215
             Width           =   1005
          End
@@ -602,7 +697,7 @@ Begin VB.Form frmMain
             Height          =   240
             Index           =   3
             Left            =   4995
-            TabIndex        =   63
+            TabIndex        =   62
             Top             =   1215
             Width           =   1005
          End
@@ -611,7 +706,7 @@ Begin VB.Form frmMain
             Height          =   240
             Index           =   4
             Left            =   5985
-            TabIndex        =   62
+            TabIndex        =   61
             Top             =   1215
             Width           =   960
          End
@@ -620,7 +715,7 @@ Begin VB.Form frmMain
             Height          =   240
             Index           =   5
             Left            =   6930
-            TabIndex        =   61
+            TabIndex        =   60
             Top             =   1215
             Width           =   875
          End
@@ -628,7 +723,7 @@ Begin VB.Form frmMain
             Caption         =   "Products st&orage ..."
             Height          =   345
             Left            =   7770
-            TabIndex        =   53
+            TabIndex        =   52
             Top             =   360
             Width           =   1575
          End
@@ -663,7 +758,7 @@ Begin VB.Form frmMain
             BackColor       =   &H8000000F&
             BeginProperty Font 
                Name            =   "Small Fonts"
-               Size            =   7.5
+               Size            =   6.75
                Charset         =   0
                Weight          =   400
                Underline       =   0   'False
@@ -682,7 +777,7 @@ Begin VB.Form frmMain
             BackColor       =   &H8000000F&
             BeginProperty Font 
                Name            =   "Small Fonts"
-               Size            =   7.5
+               Size            =   6.75
                Charset         =   0
                Weight          =   400
                Underline       =   0   'False
@@ -736,7 +831,7 @@ Begin VB.Form frmMain
             ForeColor       =   &H00FF0000&
             Height          =   600
             Left            =   2970
-            TabIndex        =   68
+            TabIndex        =   67
             Top             =   945
             Width           =   4920
          End
@@ -744,7 +839,7 @@ Begin VB.Form frmMain
             Caption         =   "&Strength"
             Height          =   375
             Left            =   135
-            TabIndex        =   66
+            TabIndex        =   65
             Top             =   1215
             Width           =   1095
          End
@@ -790,13 +885,13 @@ Begin VB.Form frmMain
          End
       End
       Begin MSFlexGridLib.MSFlexGrid gridProds 
-         Height          =   4425
+         Height          =   6540
          Left            =   -74880
          TabIndex        =   10
          Top             =   3585
          Width           =   8265
          _ExtentX        =   14579
-         _ExtentY        =   7805
+         _ExtentY        =   11536
          _Version        =   393216
          Cols            =   4
          FixedCols       =   0
@@ -945,6 +1040,10 @@ Dim MACaddress As String, ComputerName As String
 Dim VolumeSerial As String, FirmwareSerial As String
 Dim WindowsSerial As String, BIOSserial As String
 Dim MotherboardSerial As String, IPaddress As String
+Dim ExternalIP As String, Fingerprint As String
+Dim Memory As String, CPUID As String
+Dim BaseboardID As String, VideoID As String
+
 Dim systemEvent As Boolean
 
 'Windows and System directory API
@@ -1081,6 +1180,36 @@ Private Function ReconstructedInstallationCode() As String
     Else
         AppendLockString strLock, noKey
     End If
+    If Me.chkLockExternalIP.Value = vbChecked Then
+        AppendLockString strLock, ExternalIP
+    Else
+        AppendLockString strLock, noKey
+    End If
+    If Me.chkLockFingerprint.Value = vbChecked Then
+        AppendLockString strLock, Fingerprint
+    Else
+        AppendLockString strLock, noKey
+    End If
+    If Me.chkLockMemory.Value = vbChecked Then
+        AppendLockString strLock, Memory
+    Else
+        AppendLockString strLock, noKey
+    End If
+    If Me.chkLockCPUID.Value = vbChecked Then
+        AppendLockString strLock, CPUID
+    Else
+        AppendLockString strLock, noKey
+    End If
+    If Me.chkLockBaseboardID.Value = vbChecked Then
+        AppendLockString strLock, BaseboardID
+    Else
+        AppendLockString strLock, noKey
+    End If
+    If Me.chkLockVideoID.Value = vbChecked Then
+        AppendLockString strLock, VideoID
+    Else
+        AppendLockString strLock, noKey
+    End If
 
     'If strLock = Nothing Then Exit Function
     If Left(strLock, 1) = vbLf Then strLock = Mid(strLock, 2)
@@ -1092,6 +1221,9 @@ Private Function ReconstructedInstallationCode() As String
     If Left(strInstCode, 1) = "+" Then
         strInstCode = Mid(strInstCode, 2)
     End If
+    Dim arrProdVer() As String
+    arrProdVer = Split(strInstCode, "&&&") ' Extract the software name and version
+    strInstCode = arrProdVer(0)
     Index = 0
     i = 1
     ' Get to the last vbLf, which denotes the ending of the lock code and beginning of user name.
@@ -1105,6 +1237,9 @@ Private Function ReconstructedInstallationCode() As String
     
     ' combine with user name
     strReq = strLock & vbLf & user
+    
+    ' combine with app name and version
+    strReq = strReq & "&&&" & cmbProds.Text
     
     ' base-64 encode the request
     Dim strReq2 As String
@@ -1161,6 +1296,48 @@ systemEvent = False
 End Sub
 
 Private Sub chkLockMotherboard_Click()
+If systemEvent Then Exit Sub
+systemEvent = True
+txtReqCodeIn.Text = ReconstructedInstallationCode
+systemEvent = False
+End Sub
+
+Private Sub chkLockexternalip_Click()
+If systemEvent Then Exit Sub
+systemEvent = True
+txtReqCodeIn.Text = ReconstructedInstallationCode
+systemEvent = False
+End Sub
+
+Private Sub chkLockfingerprint_Click()
+If systemEvent Then Exit Sub
+systemEvent = True
+txtReqCodeIn.Text = ReconstructedInstallationCode
+systemEvent = False
+End Sub
+
+Private Sub chkLockmemory_Click()
+If systemEvent Then Exit Sub
+systemEvent = True
+txtReqCodeIn.Text = ReconstructedInstallationCode
+systemEvent = False
+End Sub
+
+Private Sub chkLockcpuid_Click()
+If systemEvent Then Exit Sub
+systemEvent = True
+txtReqCodeIn.Text = ReconstructedInstallationCode
+systemEvent = False
+End Sub
+
+Private Sub chkLockbaseboardid_Click()
+If systemEvent Then Exit Sub
+systemEvent = True
+txtReqCodeIn.Text = ReconstructedInstallationCode
+systemEvent = False
+End Sub
+
+Private Sub chkLockvideoid_Click()
 If systemEvent Then Exit Sub
 systemEvent = True
 txtReqCodeIn.Text = ReconstructedInstallationCode
@@ -1271,6 +1448,12 @@ Private Sub cmdCheckAll_Click()
     chkLockBIOS.Value = vbChecked
     chkLockMotherboard.Value = vbChecked
     chkLockIP.Value = vbChecked
+    chkLockExternalIP.Value = vbChecked
+    chkLockFingerprint.Value = vbChecked
+    chkLockMemory.Value = vbChecked
+    chkLockCPUID.Value = vbChecked
+    chkLockBaseboardID.Value = vbChecked
+    chkLockVideoID.Value = vbChecked
 End Sub
 
 Private Sub cmdCodeGen_Click()
@@ -1393,40 +1576,6 @@ Clipboard.Clear
 Clipboard.SetText txtCode1.Text
 End Sub
 
-Private Sub cmdDecryptInstCode_Click()
-Dim strInstCode As String
-Dim userName As String
-Dim Index As Integer, i As Integer
-Dim a() As String
-
-If txtReqCodeIn.Text = "" Then Exit Sub
-strInstCode = ActiveLock3.Base64Decode(txtReqCodeIn.Text)
-Index = 0
-i = 1
-' Get to the last vbLf, which denotes the ending of the lock code and beginning of user name.
-Do While i > 0
-    i = InStr(Index + 1, strInstCode, vbLf)
-    If i > 0 Then Index = i
-Loop
-' user name starts from Index+1 to the end
-userName = Mid$(strInstCode, Index + 1)
-a = Split(strInstCode, vbLf)
-Dim aString As String
-For i = LBound(a) To UBound(a) - 1
-    aString = aString & a(i) & vbCrLf
-Next i
-
-MsgBox "User Name: " & userName & vbCrLf & vbCrLf & _
-    "Since the lockType is not known at this point," & vbCrLf & _
-    "the decrypted code below might include:" & vbCrLf & _
-    "    the HD Volume Serial Number," & vbCrLf & _
-    "    and/or the HD Firmware (Manufacturer) Serial Number," & vbCrLf & _
-    "    and/or the Windows Serial Number," & vbCrLf & _
-    "    and/or the Computer Name," & vbCrLf & _
-    "    and/or the MAC Address:" & vbCrLf & vbCrLf & aString, vbInformation, "Decrypted Installation Code"
-
-End Sub
-
 ' Generate liberation key
 Private Sub cmdKeyGen_Click()
 Dim usedVCode As String
@@ -1455,14 +1604,22 @@ If cmbLicType = "Time Locked" Then
     End If
 End If
 
-If Len(txtReqCodeIn.Text) <> 8 Then  'Short Key License
+If Len(txtReqCodeIn.Text) <> 8 Then  'Not a Short Key License
     If chkLockMACaddress.Value = vbUnchecked And chkLockComputer.Value = vbUnchecked And _
         chkLockHD.Value = vbUnchecked And chkLockHDfirmware.Value = vbUnchecked And _
         chkLockWindows.Value = vbUnchecked And chkLockBIOS.Value = vbUnchecked And _
+        chkLockExternalIP.Value = vbUnchecked And chkLockFingerprint.Value = vbUnchecked And _
+        chkLockMemory.Value = vbUnchecked And chkLockCPUID.Value = vbUnchecked And _
+        chkLockBaseboardID.Value = vbUnchecked And chkLockVideoID.Value = vbUnchecked And _
         chkLockMotherboard.Value = vbUnchecked And chkLockIP.Value = vbUnchecked Then
-        MsgBox "Warning: You did not select any hardware keys to lock the license.", vbExclamation
+        MsgBox "Warning: You did not select any hardware keys to lock the license." & vbCrLf _
+            & "This license will be machine independent. License will be locked to the username only !!!", vbExclamation
     End If
 End If
+
+systemEvent = True
+If Len(txtReqCodeIn.Text) <> 8 Then txtReqCodeIn.Text = ReconstructedInstallationCode()
+systemEvent = False
 
 ' get product and version
 Screen.MousePointer = vbHourglass
@@ -1545,7 +1702,7 @@ If MsgBox("Would you like to save the new license in the License Database?", vbY
     End If
     If chkLockBIOS.Value = vbChecked Then
         If lockTypesString <> "" Then lockTypesString = lockTypesString & "+"
-        lockTypesString = lockTypesString & "BIOS Serial"
+        lockTypesString = lockTypesString & "BIOS Version"
     End If
     If chkLockMotherboard.Value = vbChecked Then
         If lockTypesString <> "" Then lockTypesString = lockTypesString & "+"
@@ -1553,7 +1710,31 @@ If MsgBox("Would you like to save the new license in the License Database?", vbY
     End If
     If chkLockIP.Value = vbChecked Then
         If lockTypesString <> "" Then lockTypesString = lockTypesString & "+"
-        lockTypesString = lockTypesString & "IP Address"
+        lockTypesString = lockTypesString & "Local IP Address"
+    End If
+    If chkLockExternalIP.Value = vbChecked Then
+        If lockTypesString <> "" Then lockTypesString = lockTypesString & "+"
+        lockTypesString = lockTypesString & "External IP Address"
+    End If
+    If chkLockFingerprint.Value = vbChecked Then
+        If lockTypesString <> "" Then lockTypesString = lockTypesString & "+"
+        lockTypesString = lockTypesString & "Computer Fingerprint"
+    End If
+    If chkLockMemory.Value = vbChecked Then
+        If lockTypesString <> "" Then lockTypesString = lockTypesString & "+"
+        lockTypesString = lockTypesString & "Memory ID"
+    End If
+    If chkLockCPUID.Value = vbChecked Then
+        If lockTypesString <> "" Then lockTypesString = lockTypesString & "+"
+        lockTypesString = lockTypesString & "CPU ID"
+    End If
+    If chkLockBaseboardID.Value = vbChecked Then
+        If lockTypesString <> "" Then lockTypesString = lockTypesString & "+"
+        lockTypesString = lockTypesString & "Baseboard ID"
+    End If
+    If chkLockVideoID.Value = vbChecked Then
+        If lockTypesString <> "" Then lockTypesString = lockTypesString & "+"
+        lockTypesString = lockTypesString & "Video ID"
     End If
     Call frmAlugenDatabase.ArchiveLicense(cmbProds.Text, _
         Trim(txtUser.Text), _
@@ -1600,6 +1781,7 @@ End Function
 
 Private Sub cmdPaste_Click()
 txtReqCodeIn.Text = Clipboard.GetText
+txtReqCodeIn_Change
 End Sub
 
 Private Sub cmdProductsStorage_Click()
@@ -1686,6 +1868,12 @@ Private Sub cmdUncheckAll_Click()
     chkLockBIOS.Value = vbUnchecked
     chkLockMotherboard.Value = vbUnchecked
     chkLockIP.Value = vbUnchecked
+    chkLockExternalIP.Value = vbUnchecked
+    chkLockFingerprint.Value = vbUnchecked
+    chkLockMemory.Value = vbUnchecked
+    chkLockCPUID.Value = vbUnchecked
+    chkLockBaseboardID.Value = vbUnchecked
+    chkLockVideoID.Value = vbUnchecked
 End Sub
 
 Private Sub cmdValidate_Click()
@@ -1906,6 +2094,13 @@ chkLockIP.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "
 chkLockMACaddress.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMACaddress", False))
 chkLockMotherboard.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMotherboard", False))
 chkLockWindows.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockWindows", False))
+chkLockExternalIP.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkExternalIP", False))
+chkLockFingerprint.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockFingerprint", False))
+chkLockMemory.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMemory", False))
+chkLockCPUID.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockCPUID", False))
+chkLockBaseboardID.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockBaseboardID", False))
+chkLockVideoID.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockVideoID", False))
+
 txtMaxCount.Text = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtMaxCount", CStr(5))
 
 optStrength(0).Value = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength0", True))
@@ -2148,6 +2343,12 @@ mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chk
 mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMACaddress", CStr(chkLockMACaddress.Value))
 mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMotherboard", CStr(chkLockMotherboard.Value))
 mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockWindows", CStr(chkLockWindows.Value))
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockExternalIP", CStr(chkLockExternalIP.Value))
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockFingerprint", CStr(chkLockFingerprint.Value))
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMemory", CStr(chkLockMemory.Value))
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockCPUID", CStr(chkLockCPUID.Value))
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockBaseboardID", CStr(chkLockBaseboardID.Value))
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockVideoID", CStr(chkLockVideoID.Value))
 mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtMaxCount", txtMaxCount.Text)
 
 mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength0", CStr(optStrength(0).Value))
@@ -2345,7 +2546,14 @@ If Len(txtReqCodeIn.Text) = 8 Then 'Short key authorization is much simpler
     chkLockBIOS.Visible = False
     chkLockMotherboard.Visible = False
     chkLockIP.Visible = False
-    Label18.Visible = False
+    chkLockExternalIP.Visible = False
+    chkLockFingerprint.Visible = False
+    chkLockMemory.Visible = False
+    chkLockCPUID.Visible = False
+    chkLockBaseboardID.Visible = False
+    chkLockVideoID.Visible = False
+    
+    'Label18.Visible = False
     txtUser.Text = ""
     txtUser.Enabled = True
     txtUser.Locked = False
@@ -2367,7 +2575,14 @@ Else 'ALCrypto
     chkLockBIOS.Visible = True
     chkLockMotherboard.Visible = True
     chkLockIP.Visible = True
-    Label18.Visible = True
+    chkLockExternalIP.Visible = True
+    chkLockFingerprint.Visible = True
+    chkLockMemory.Visible = True
+    chkLockCPUID.Visible = True
+    chkLockBaseboardID.Visible = True
+    chkLockVideoID.Visible = True
+    
+    'Label18.Visible = True
     txtUser.Enabled = False
     txtUser.Locked = True
     txtUser.BackColor = vbButtonFace
@@ -2386,34 +2601,51 @@ Else 'ALCrypto
         txtUser.Text = GetUserFromInstallCode(txtReqCodeIn.Text)
         fDisableNotifications = False
         
-'        systemEvent = True
-'        If chkLockMACaddress.Enabled = True Then chkLockMACaddress.Value = vbChecked
-'        If chkLockComputer.Enabled = True Then chkLockComputer.Value = vbChecked
-'        If chkLockHD.Enabled = True Then chkLockHD.Value = vbChecked
-'        If chkLockHDfirmware.Enabled = True Then chkLockHDfirmware.Value = vbChecked
-'        If chkLockWindows.Enabled = True Then chkLockWindows.Value = vbChecked
-'        If chkLockBIOS.Enabled = True Then chkLockBIOS.Value = vbChecked
-'        If chkLockMotherboard.Enabled = True Then chkLockMotherboard.Value = vbChecked
-'        If chkLockIP.Enabled = True Then chkLockIP.Value = vbChecked
-'        systemEvent = False
+        Dim installNameandVersion As String
+        Dim i As Integer, success As Boolean
+        installNameandVersion = GetUserSoftwareNameandVersionfromInstallCode(txtReqCodeIn.Text)
+        For i = 0 To cmbProds.ListCount - 1
+            If installNameandVersion = cmbProds.List(i) Then
+                cmbProds.ListIndex = i
+                Exit For
+                success = True
+            End If
+        Next i
+        If Not success Then
+            MsgBox "There's no matching Software Name and Version Number for this Installation Code.", vbExclamation
+        End If
+        
     Else
         fDisableNotifications = True
         chkLockComputer.Enabled = True
-        chkLockComputer.Caption = "Lock to Computer Name"
+        chkLockComputer.Caption = "Lock to Computer Name:"
         chkLockHD.Enabled = True
-        chkLockHD.Caption = "Lock to HDD Volume Serial"
+        chkLockHD.Caption = "Lock to HDD Volume Serial Numer:"
         chkLockHDfirmware.Enabled = True
-        chkLockHDfirmware.Caption = "Lock to HDD Firmware Serial"
+        chkLockHDfirmware.Caption = "Lock to HDD Firmware Serial Number:"
         chkLockMACaddress.Enabled = True
-        chkLockMACaddress.Caption = "Lock to MAC Address"
+        chkLockMACaddress.Caption = "Lock to MAC Address:"
         chkLockWindows.Enabled = True
-        chkLockWindows.Caption = "Lock to Windows Serial"
+        chkLockWindows.Caption = "Lock to Windows Serial Number:"
         chkLockBIOS.Enabled = True
-        chkLockBIOS.Caption = "Lock to BIOS Serial"
+        chkLockBIOS.Caption = "Lock to BIOS Version:"
         chkLockMotherboard.Enabled = True
-        chkLockMotherboard.Caption = "Lock to Motherboard Serial"
+        chkLockMotherboard.Caption = "Lock to Motherboard Serial Number:"
         chkLockIP.Enabled = True
-        chkLockIP.Caption = "Lock to IP Address"
+        chkLockIP.Caption = "Lock to Local IP Address:"
+        chkLockExternalIP.Enabled = True
+        chkLockExternalIP.Caption = "Lock to External IP Address:"
+        chkLockFingerprint.Enabled = True
+        chkLockFingerprint.Caption = "Lock to Computer Fingerprint:"
+        chkLockMemory.Enabled = True
+        chkLockMemory.Caption = "Lock to Memory ID:"
+        chkLockCPUID.Enabled = True
+        chkLockCPUID.Caption = "Lock to CPU ID:"
+        chkLockBaseboardID.Enabled = True
+        chkLockBaseboardID.Caption = "Lock to Baseboard ID:"
+        chkLockVideoID.Enabled = True
+        chkLockVideoID.Caption = "Lock to Video ID:"
+        
         txtUser.Text = ""
         fDisableNotifications = False
     End If
@@ -2582,6 +2814,9 @@ If Left(strInstCode, 1) = "+" Then
     strInstCode = Mid(strInstCode, 2)
     usedLockNone = True
 End If
+Dim arrProdVer() As String
+arrProdVer = Split(strInstCode, "&&&") ' Extract the software name and version
+strInstCode = arrProdVer(0)
 Index = 0
 i = 1
 ' Get to the last vbLf, which denotes the ending of the lock code and beginning of user name.
@@ -2601,6 +2836,12 @@ chkLockWindows.Enabled = True
 chkLockBIOS.Enabled = True
 chkLockMotherboard.Enabled = True
 chkLockIP.Enabled = True
+chkLockExternalIP.Enabled = True
+chkLockFingerprint.Enabled = True
+chkLockMemory.Enabled = True
+chkLockCPUID.Enabled = True
+chkLockBaseboardID.Enabled = True
+chkLockVideoID.Enabled = True
 
 a = Split(strInstCode, vbLf)
 If usedLockNone = True Then
@@ -2623,13 +2864,31 @@ If usedLockNone = True Then
             chkLockWindows.Caption = "Lock to Windows Serial Number:           " & WindowsSerial
         ElseIf i = LBound(a) + 5 Then
             BIOSserial = aString
-            chkLockBIOS.Caption = "Lock to BIOS Serial Number:                 " & BIOSserial
+            chkLockBIOS.Caption = "Lock to BIOS Version:                           " & BIOSserial
         ElseIf i = LBound(a) + 6 Then
             MotherboardSerial = aString
             chkLockMotherboard.Caption = "Lock to Motherboard Serial Number:     " & MotherboardSerial
         ElseIf i = LBound(a) + 7 Then
             IPaddress = aString
-            chkLockIP.Caption = "Lock to IP Address:                               " & IPaddress
+            chkLockIP.Caption = "Lock to Local IP Address:                     " & IPaddress
+        ElseIf i = LBound(a) + 8 Then
+            ExternalIP = aString
+            chkLockExternalIP.Caption = "Lock to External IP:                               " & ExternalIP
+        ElseIf i = LBound(a) + 9 Then
+            Fingerprint = aString
+            chkLockFingerprint.Caption = "Lock to Computer Fingerprint:               " & Fingerprint
+        ElseIf i = LBound(a) + 10 Then
+            Memory = aString
+            chkLockMemory.Caption = "Lock to Memory ID:                               " & Memory
+        ElseIf i = LBound(a) + 11 Then
+            CPUID = aString
+            chkLockCPUID.Caption = "Lock to CPU ID:                                    " & CPUID
+        ElseIf i = LBound(a) + 12 Then
+            BaseboardID = aString
+            chkLockBaseboardID.Caption = "Lock to Baseboard ID:                          " & BaseboardID
+        ElseIf i = LBound(a) + 13 Then
+            VideoID = aString
+            chkLockVideoID.Caption = "Lock to Video ID:                                  " & VideoID
         End If
     Next i
 Else '"+" was not used, therefore one or more lockTypes were specified in the application
@@ -2641,7 +2900,13 @@ Else '"+" was not used, therefore one or more lockTypes were specified in the ap
     chkLockBIOS.Enabled = False
     chkLockMotherboard.Enabled = False
     chkLockIP.Enabled = False
-
+    chkLockExternalIP.Enabled = False
+    chkLockFingerprint.Enabled = False
+    chkLockMemory.Enabled = False
+    chkLockCPUID.Enabled = False
+    chkLockBaseboardID.Enabled = False
+    chkLockVideoID.Enabled = False
+    
     chkLockMACaddress.Value = vbUnchecked
     chkLockComputer.Value = vbUnchecked
     chkLockHD.Value = vbUnchecked
@@ -2650,6 +2915,12 @@ Else '"+" was not used, therefore one or more lockTypes were specified in the ap
     chkLockBIOS.Value = vbUnchecked
     chkLockMotherboard.Value = vbUnchecked
     chkLockIP.Value = vbUnchecked
+    chkLockExternalIP.Value = vbUnchecked
+    chkLockFingerprint.Value = vbUnchecked
+    chkLockMemory.Value = vbUnchecked
+    chkLockCPUID.Value = vbUnchecked
+    chkLockBaseboardID.Value = vbUnchecked
+    chkLockVideoID.Value = vbUnchecked
 
     For i = LBound(a) To UBound(a) - 1
         aString = a(i)  'aString & A(i) & vbCrLf
@@ -2676,7 +2947,7 @@ Else '"+" was not used, therefore one or more lockTypes were specified in the ap
             chkLockWindows.Value = vbChecked
         ElseIf i = (LBound(a) + 5) And aString <> noKey Then
             BIOSserial = aString
-            chkLockBIOS.Caption = "Lock to BIOS Serial Number:                 " & BIOSserial
+            chkLockBIOS.Caption = "Lock to BIOS Version:                           " & BIOSserial
             chkLockBIOS.Value = vbChecked
         ElseIf i = (LBound(a) + 6) And aString <> noKey Then
             MotherboardSerial = aString
@@ -2684,8 +2955,32 @@ Else '"+" was not used, therefore one or more lockTypes were specified in the ap
             chkLockMotherboard.Value = vbChecked
         ElseIf i = (LBound(a) + 7) And aString <> noKey Then
             IPaddress = aString
-            chkLockIP.Caption = "Lock to IP Address:                               " & IPaddress
+            chkLockIP.Caption = "Lock to Local IP Address:                     " & IPaddress
             chkLockIP.Value = vbChecked
+        ElseIf i = (LBound(a) + 8) And aString <> noKey Then
+            ExternalIP = aString
+            chkLockExternalIP.Caption = "Lock to External IP:                               " & ExternalIP
+            chkLockExternalIP.Value = vbChecked
+        ElseIf i = (LBound(a) + 9) And aString <> noKey Then
+            Fingerprint = aString
+            chkLockFingerprint.Caption = "Lock to Computer Fingerprint:               " & Fingerprint
+            chkLockFingerprint.Value = vbChecked
+        ElseIf i = (LBound(a) + 10) And aString <> noKey Then
+            Memory = aString
+            chkLockMemory.Caption = "Lock to Memory ID:                               " & Memory
+            chkLockMemory.Value = vbChecked
+        ElseIf i = (LBound(a) + 11) And aString <> noKey Then
+            CPUID = aString
+            chkLockCPUID.Caption = "Lock to CPU ID:                                    " & CPUID
+            chkLockCPUID.Value = vbChecked
+        ElseIf i = (LBound(a) + 12) And aString <> noKey Then
+            BaseboardID = aString
+            chkLockBaseboardID.Caption = "Lock to Baseboard ID:                          " & BaseboardID
+            chkLockBaseboardID.Value = vbChecked
+        ElseIf i = (LBound(a) + 13) And aString <> noKey Then
+            VideoID = aString
+            chkLockVideoID.Caption = "Lock to Video ID:                                  " & VideoID
+            chkLockVideoID.Value = vbChecked
         End If
         
     Next i
@@ -2715,10 +3010,48 @@ If IPaddress = "Not Available" Then
     chkLockIP.Enabled = False
     chkLockIP.Value = vbUnchecked
 End If
+If ExternalIP = "Not Available" Then
+    chkLockExternalIP.Enabled = False
+    chkLockExternalIP.Value = vbUnchecked
+End If
+If Fingerprint = "Not Available" Then
+    chkLockFingerprint.Enabled = False
+    chkLockFingerprint.Value = vbUnchecked
+End If
+If Memory = "Not Available" Then
+    chkLockMemory.Enabled = False
+    chkLockMemory.Value = vbUnchecked
+End If
+If CPUID = "Not Available" Then
+    chkLockCPUID.Enabled = False
+    chkLockCPUID.Value = vbUnchecked
+End If
+If BaseboardID = "Not Available" Then
+    chkLockBaseboardID.Enabled = False
+    chkLockBaseboardID.Value = vbUnchecked
+End If
+If VideoID = "Not Available" Then
+    chkLockVideoID.Enabled = False
+    chkLockVideoID.Value = vbUnchecked
+End If
 
 systemEvent = False
 
 End Function
+
+''
+' Retrieves software name and version info from the request string
+'
+Private Function GetUserSoftwareNameandVersionfromInstallCode(ByVal strInstCode As String) As String
+On Error GoTo noInfo
+If strInstCode = "" Then Exit Function
+strInstCode = ActiveLock3.Base64Decode(strInstCode)
+Dim arrProdVer() As String
+arrProdVer = Split(strInstCode, "&&&")
+GetUserSoftwareNameandVersionfromInstallCode = Trim$(arrProdVer(1))
+noInfo:
+End Function
+
 
 Private Sub txtVer_KeyPress(KeyAscii As Integer)
   Select Case KeyAscii
