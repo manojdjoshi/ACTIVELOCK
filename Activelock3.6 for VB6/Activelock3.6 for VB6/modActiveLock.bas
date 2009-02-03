@@ -195,20 +195,13 @@ Private Const FORMAT_MESSAGE_FROM_SYSTEM = &H1000
 Private Const FORMAT_MESSAGE_IGNORE_INSERTS = &H200
 Private Const FORMAT_MESSAGE_MAX_WIDTH_MASK = &HFF
 
-Public Declare Function FormatMessage Lib "kernel32" Alias "FormatMessageA" (ByVal dwflags As Long, lpSource As Any, ByVal dwMessageId As Long, ByVal dwLanguageId As Long, ByVal lpBuffer As String, ByVal nSize As Long, Arguments As Long) As Long
+Public Declare Function FormatMessage Lib "kernel32" Alias "FormatMessageA" (ByVal dwFlags As Long, lpSource As Any, ByVal dwMessageId As Long, ByVal dwLanguageId As Long, ByVal lpBuffer As String, ByVal nSize As Long, Arguments As Long) As Long
 Public Declare Function GeneralWinDirApi Lib "kernel32" _
         Alias "GetWindowsDirectoryA" (ByVal lpBuffer As String, _
         ByVal nSize As Long) As Long
 
 Public Declare Function GetSystemDirectory Lib "kernel32.dll" Alias "GetSystemDirectoryA" _
     (ByVal lpBuffer As String, ByVal nSize As Long) As Long
-
-' APIs used for stream handling in NTFS
-Public Declare Function GetVolumeInformation Lib "kernel32.dll" Alias "GetVolumeInformationA" (ByVal lpRootPathName As String, ByVal lpVolumeNameBuffer As String, ByVal nVolumeNameSize As Long, lpVolumeSerialNumber As Long, lpMaximumComponentLength As Long, lpFileSystemFlags As Long, ByVal lpFileSystemNameBuffer As String, ByVal nFileSystemNameSize As Long) As Long
-Public Declare Function CreateFileW Lib "kernel32" (ByVal lpFileName As Long, ByVal dwDesiredAccess As Long, ByVal dwShareMode As Long, ByVal lpSecurityAttributes As Long, ByVal dwCreationDisposition As Long, ByVal dwFlagsAndAttributes As Long, ByVal hTemplateFile As Long) As Long
-Public Declare Function DeleteFile Lib "kernel32.dll" Alias "DeleteFileA" (ByVal lpFileName As String) As Long
-Public Declare Function GetFileSize Lib "kernel32.dll" (ByVal hFile As Long, lpFileSizeHigh As Long) As Long
-Public Declare Function ReadFileX Lib "kernel32.dll" Alias "ReadFile" (ByVal hFile As Long, lpBuffer As Any, ByVal nNumberOfBytesToRead As Long, lpNumberOfBytesRead As Long, ByVal lpOverlapped As Long) As Long
 
 ' Constants for Create and Open File APIs, neatly organized into Enumerations
 'Public Enum OpenFileFlags
@@ -283,25 +276,71 @@ Private Type GUID
    Data3 As Integer
    Data4(7) As Byte
 End Type
-Private Declare Function SHGetKnownFolderPath Lib "shell32" (rfid As Any, ByVal dwflags As Long, ByVal hToken As Long, ppszPath As Long) As Long
+Private Declare Function SHGetKnownFolderPath Lib "shell32" (rfid As Any, ByVal dwFlags As Long, ByVal hToken As Long, ppszPath As Long) As Long
 Private Declare Function CLSIDFromString Lib "ole32" (ByVal lpszGuid As Long, pGuid As Any) As Long
 Private Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (pDest As Any, pSrc As Any, ByVal ByteLen As Long)
 Private Declare Sub CoTaskMemFree Lib "ole32" (ByVal hMem As Long)
 Private Declare Function lstrlenW Lib "kernel32" (ByVal ptr As Long) As Long
 
 ' Declaration for Internet Connection Detection
-Private Declare Function InternetGetConnectedState Lib "wininet" (ByRef dwflags As Long, ByVal dwReserved As Long) As Long
+Private Declare Function InternetGetConnectedState Lib "wininet" (ByRef dwFlags As Long, ByVal dwReserved As Long) As Long
 Private Const CONNECT_LAN As Long = &H2
 Private Const CONNECT_MODEM As Long = &H1
 Private Const CONNECT_PROXY As Long = &H4
 Private Const CONNECT_OFFLINE As Long = &H20
 Private Const CONNECT_CONFIGURED As Long = &H40
 
+' ADS related declares
+Private Const OF_EXIST = &H4000
+Private Const OFS_MAXPATHNAME = 128
+Private Type OFSTRUCT
+    cBytes As Byte
+    fFixedDisk As Byte
+    nErrCode As Integer
+    Reserved1 As Integer
+    Reserved2 As Integer
+    szPathName(OFS_MAXPATHNAME) As Byte
+End Type
+' APIs used for stream handling in NTFS
+Public Declare Function GetVolumeInformation Lib "kernel32.dll" Alias "GetVolumeInformationA" (ByVal lpRootPathName As String, ByVal lpVolumeNameBuffer As String, ByVal nVolumeNameSize As Long, lpVolumeSerialNumber As Long, lpMaximumComponentLength As Long, lpFileSystemFlags As Long, ByVal lpFileSystemNameBuffer As String, ByVal nFileSystemNameSize As Long) As Long
+Public Declare Function CreateFileW Lib "kernel32" (ByVal lpFileName As Long, ByVal dwDesiredAccess As Long, ByVal dwShareMode As Long, ByVal lpSecurityAttributes As Long, ByVal dwCreationDisposition As Long, ByVal dwFlagsAndAttributes As Long, ByVal hTemplateFile As Long) As Long
+Public Declare Function DeleteFile Lib "kernel32.dll" Alias "DeleteFileA" (ByVal lpFileName As String) As Long
+Public Declare Function GetFileSize Lib "kernel32.dll" (ByVal hFile As Long, lpFileSizeHigh As Long) As Long
+Public Declare Function ReadFileX Lib "kernel32.dll" Alias "ReadFile" (ByVal hFile As Long, lpBuffer As Any, ByVal nNumberOfBytesToRead As Long, lpNumberOfBytesRead As Long, ByVal lpOverlapped As Long) As Long
+Private Declare Function OpenFile Lib "kernel32" (ByVal lpFileName As String, lpReOpenBuff As OFSTRUCT, ByVal wStyle As Long) As Long
+
+Public Sub Delete_ADS_File(ADSFileName As String)
+' Example: ADSFileName = "C:\:mydata.dat"
+    If Does_ADS_FileExist(ADSFileName) Then
+        DeleteFile ADSFileName
+    End If
+End Sub
+Public Function Does_ADS_FileExist(ADSFileName As String) As Boolean
+' Example: ADSFileName = "C:\:mydata.dat"
+    Dim OF As OFSTRUCT
+    Does_ADS_FileExist = OpenFile(ADSFileName, OF, OF_EXIST) = 1
+End Function
+Public Function Read_ADS_Info(ADSFileName As String) As Variant
+' Example: ADSFileName = "C:\:mydata.dat"
+    Dim FileData As Variant
+    Open ADSFileName For Binary Access Read As #1
+        Get #1, , FileData
+    Close #1
+    Read_ADS_Info = FileData
+End Function
+
+Public Sub Write_ADS_Info(ADSFileName As String, FileData As Variant)
+' Example: ADSFileName = "C:\:mydata.dat"
+    Open ADSFileName For Binary Access Write As #1
+        Put #1, , FileData
+    Close #1
+End Sub
+
 Public Function IsWebConnected(Optional ByRef ConnType As String) As Boolean
-Dim dwflags As Long
+Dim dwFlags As Long
 Dim WebTest As Boolean
 ConnType = ""
-WebTest = InternetGetConnectedState(dwflags, 0&)
+WebTest = InternetGetConnectedState(dwFlags, 0&)
 'Select Case WebTest
 '    Case dwflags And CONNECT_LAN: ConnType = "LAN"
 '    Case dwflags And CONNECT_MODEM: ConnType = "Modem"
@@ -1367,13 +1406,13 @@ End Function
 ' Remarks: None
 '===============================================================================
 Public Function IsRunningInIDE() As Boolean
-    Dim strFilename As String
+    Dim strFileName As String
     Dim lngCount As Long
     
-    strFilename = String(255, 0)
-    lngCount = GetModuleFileName(App.hInstance, strFilename, 255)
-    strFilename = Left(strFilename, lngCount)
-    IsRunningInIDE = UCase(Right(strFilename, 7)) = "VB6.EXE"
+    strFileName = String(255, 0)
+    lngCount = GetModuleFileName(App.hInstance, strFileName, 255)
+    strFileName = Left(strFileName, lngCount)
+    IsRunningInIDE = UCase(Right(strFileName, 7)) = "VB6.EXE"
 End Function
 
 

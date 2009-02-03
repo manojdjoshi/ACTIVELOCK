@@ -375,8 +375,8 @@ End Type
 Public Declare Function Netbios Lib "netapi32.dll" (pncb As NET_CONTROL_BLOCK) As Byte
 Public Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (Destination As Any, Source As Any, ByVal Length As Long)
 Public Declare Function GetProcessHeap Lib "kernel32" () As Long
-Public Declare Function HeapAlloc Lib "kernel32" (ByVal hHeap As Long, ByVal dwflags As Long, ByVal dwBytes As Long) As Long
-Public Declare Function HeapFree Lib "kernel32" (ByVal hHeap As Long, ByVal dwflags As Long, ByVal lpMem As Long) As Long
+Public Declare Function HeapAlloc Lib "kernel32" (ByVal hHeap As Long, ByVal dwFlags As Long, ByVal dwBytes As Long) As Long
+Public Declare Function HeapFree Lib "kernel32" (ByVal hHeap As Long, ByVal dwFlags As Long, ByVal lpMem As Long) As Long
 Public Declare Sub ZeroMemory Lib "kernel32" Alias "RtlZeroMemory" (dest As Any, ByVal numBytes As Long)
 
 ' Following used to get the IP address
@@ -509,8 +509,249 @@ Public Const INTERNET_FLAG_RELOAD = &H80000000
 ' Getting Local IP Address - another method
 Private Declare Function GetIpAddrTable_API Lib "IpHlpApi" Alias "GetIpAddrTable" (pIPAddrTable As Any, pdwSize As Long, ByVal bOrder As Long) As Long
 
+' For getting the computer SID
+Declare Function LookupAccountName _
+   Lib "advapi32.dll" Alias "LookupAccountNameA" _
+   (ByVal lpSystemName As String, _
+    ByVal lpAccountName As String, _
+    sid As Any, _
+    cbSid As Long, _
+    ReferencedDomainName As Any, _
+    cbReferencedDomainName As Long, _
+    peUse As Integer) As Long
 
-Function GetExternalIP(URL As String) As String
+' WMI declares
+Private m_mainWmi As Object
+Private m_deviceLists As Collection
+
+' Memory related
+Private Type MEMORYSTATUS
+    dwLength As Long
+    dwMemoryLoad As Long
+    dwTotalPhys As Long
+    dwAvailPhys As Long
+    dwTotalPageFile As Long
+    dwAvailPageFile As Long
+    dwTotalVirtual As Long
+    dwAvailVirtual As Long
+End Type
+Private pUdtMemStatus As MEMORYSTATUS
+Private Declare Sub GlobalMemoryStatus Lib _
+"kernel32" (lpBuffer As MEMORYSTATUS)
+
+Public Function GetFingerprint() As String
+
+Dim i As Integer
+Dim z As Double
+Dim S As String, test As String
+test = GetCPUID
+If test <> "Not Available" Then S = S & test
+test = GetBiosVersion
+If test <> "Not Available" Then S = S & test
+test = GetHDSerial
+If test <> "Not Available" Then S = S & test
+test = GetBaseboardID
+If test <> "Not Available" Then S = S & test
+test = GetVideoID
+If test <> "Not Available" Then S = S & test
+test = GetMACAddress
+If test <> "Not Available" Then S = S & test
+' Now pack them
+' This is different then what I've done in VB.NET
+' ismail - 2009
+z = 15400.4545
+For i = 1 To Len(S)
+    z = z + i * Asc(Mid$(S, i, 1)) ^ 0.2545
+    If z > 99999999 Then z = z * 0.256
+Next i
+GetFingerprint = CStr(z)
+GetFingerprint = Replace(GetFingerprint, ".", "")
+GetFingerprint = Left(GetFingerprint, 8)
+End Function
+
+Public Function GetSID() As String
+Dim p_intUse                        As Integer
+Dim p_strAcctName                   As String
+Dim p_strSID_Account                As String
+Dim p_strSID_Domain                 As String
+Dim p_strDomainName                 As String
+Dim p_lngAcctLength                 As Long
+Dim p_lngDomainLength               As Long
+Dim p_lngSID_Length                 As Long
+Dim p_lngNumRIDs                    As Long
+Dim p_lngRtn                        As Long
+Dim p_abytSID()                     As Byte
+Dim p_abytDomain()                  As Byte
+Dim p_strDomain                     As String
+Dim xi_strUserName                  As String
+xi_strUserName = "administrator"
+
+' Preinitialize p_abytSID array with one
+'    element. It will be redimmed lated
+ReDim p_abytSID(1) As Byte
+
+p_strAcctName = xi_strUserName
+p_lngRtn = LookupAccountName(vbNullString, _
+                        p_strAcctName, _
+                        p_abytSID(0), _
+                        p_lngSID_Length, _
+                        p_strDomainName, _
+                        p_lngDomainLength, _
+                        p_intUse)
+
+' Call fails but puts in required buffers size
+'     in p_lngSID_Length and
+'     p_lngDomainLength variables
+ReDim p_abytSID(p_lngSID_Length) As Byte
+ReDim p_abytDomain(p_lngDomainLength) As Byte
+
+p_lngRtn = LookupAccountName(vbNullString, _
+                        p_strAcctName, _
+                        p_abytSID(0), _
+                        p_lngSID_Length, _
+                        p_abytDomain(0), _
+                        p_lngDomainLength, _
+                        p_intUse)
+
+p_strDomain = Mid$(StrConv(p_abytDomain, _
+           vbUnicode), 1, p_lngDomainLength)
+'Debug.Print "Domain Name: " & p_strDomain
+
+' Reset the lengths
+p_lngAcctLength = 0
+p_lngDomainLength = 0
+
+Dim p_lngLoop
+For p_lngLoop = 0 To 28
+    'Debug.Print p_lngLoop & ": " & _
+    '   Hex$(p_abytSID(p_lngLoop))
+    GetSID = GetSID & Hex$(p_abytSID(p_lngLoop))
+Next p_lngLoop
+
+If GetSID = "" Then
+    GetSID = "Not Available"
+End If
+   
+End Function
+Public Function GetCPUID() As String
+GetCPUID = GetWmiDeviceSingleValue("Win32_Processor", "ProcessorID")
+GetCPUIDerror:
+If GetCPUID = "" Then
+    GetCPUID = "Not Available"
+End If
+End Function
+
+Public Function GetVideoID() As String
+GetVideoID = GetWmiDeviceSingleValue("Win32_VideoController", "DriverVersion")
+GetVideoIDerror:
+If GetVideoID = "" Then
+    GetVideoID = "Not Available"
+End If
+End Function
+
+Public Function GetMemoryID() As String
+GetMemoryID = GetWmiDeviceSingleValue("Win32_MemoryDevice", "EndingAddress")
+GetMemoryID = GetMemoryID & "-" & CStr(TotalPhysicalMemory)
+GetMemoryIDerror:
+If GetMemoryID = "" Then
+    GetMemoryID = "Not Available"
+End If
+End Function
+
+Public Function TotalPhysicalMemory() As Double
+'Return Value in Megabytes
+    Dim dblAns As Double
+    GlobalMemoryStatus pUdtMemStatus
+    dblAns = pUdtMemStatus.dwTotalPhys
+    TotalPhysicalMemory = dblAns        'BytesToMegabytes(dblAns)
+End Function
+
+Private Function BytesToMegabytes(Bytes As Double) As Double
+ 
+  Dim dblAns As Double
+  dblAns = (Bytes / 1024) / 1024
+  BytesToMegabytes = Format(dblAns, "###,###,##0.00")
+  
+End Function
+
+Public Function GetBaseboardID() As String
+GetBaseboardID = GetWmiDeviceSingleValue("Win32_BaseBoard", "SerialNumber")
+GetBaseboardID = Replace(GetBaseboardID, ".", "")
+'Dim CPUID, strComputer As String
+'Dim objWMIService, colDevices, objDevice
+'On Error GoTo GetBaseboardIDerror
+'strComputer = "."
+'On Error Resume Next
+'Set objWMIService = GetObject("winmgmts:\\" & strComputer)
+'Set colDevices = objWMIService.ExecQuery("Select * From Win32_BaseBoard")
+'For Each objDevice In colDevices
+'    GetBaseboardID = objDevice.SerialNumber
+'Next
+GetBaseboardIDerror:
+If GetBaseboardID = "" Then
+    GetBaseboardID = "Not Available"
+End If
+End Function
+
+Private Function GetMainWMIObject() As Object
+  On Error GoTo eh
+  If m_mainWmi Is Nothing Then
+    Set m_mainWmi = GetObject("WinMgmts:")
+  End If
+  Set GetMainWMIObject = m_mainWmi
+  Exit Function
+eh:
+  Set GetMainWMIObject = Nothing
+End Function
+
+Public Function WmiIsAvailable() As Boolean
+  WmiIsAvailable = CBool(Not GetMainWMIObject Is Nothing)
+End Function
+
+Public Function GetWmiDeviceSingleValue(ByVal WmiClass As String, ByVal WmiProperty As String) As String
+  On Error GoTo done
+  Dim Result As String
+  
+  Dim wmiclassObjList As Object
+  Set wmiclassObjList = GetWmiDeviceList(WmiClass)
+  Dim wmiclassObj As Object
+  For Each wmiclassObj In wmiclassObjList
+    Result = CallByName(wmiclassObj, WmiProperty, VbGet)
+    Exit For
+  Next
+
+done:
+  GetWmiDeviceSingleValue = Trim(Result)
+End Function
+
+Public Function GetWmiDeviceList(ByVal WmiClass As String) As Object
+  If m_deviceLists Is Nothing Then
+    Set m_deviceLists = New Collection
+  End If
+  
+  On Error GoTo fetchNew
+  
+  Set GetWmiDeviceList = m_deviceLists.Item(WmiClass)
+  Exit Function
+  
+fetchNew:
+  Dim devList As Object
+  Set devList = GetWmiDeviceListInternal(WmiClass)
+  If Not devList Is Nothing Then
+    Call m_deviceLists.Add(devList, WmiClass)
+  End If
+  Set GetWmiDeviceList = devList
+End Function
+
+Private Function GetWmiDeviceListInternal(ByVal WmiClass As String) As Object
+  On Error GoTo eh
+  Set GetWmiDeviceListInternal = GetMainWMIObject.InstancesOf(WmiClass)
+  Exit Function
+eh:
+  Set GetWmiDeviceListInternal = Nothing
+End Function
+
+Function GetExternalIP() As String
   
 Dim hOpen As Long
 Dim hOpenUrl As Long
@@ -520,6 +761,9 @@ Dim sReadBuffer As String * 2048
 Dim lNumberOfBytesRead As Long
 Dim sBuffer As String
 
+On Error GoTo GetIPaddressError
+Dim URL As String
+URL = "http://www.whatismyip.org"
 hOpen = InternetOpen(scUserAgent, INTERNET_OPEN_TYPE_PRECONFIG, vbNullString, vbNullString, 0)
 hOpenUrl = InternetOpenUrl(hOpen, URL, vbNullString, 0, INTERNET_FLAG_RELOAD, 0)
 
@@ -531,20 +775,23 @@ While bDoLoop
     If Not CBool(lNumberOfBytesRead) Then bDoLoop = False
 Wend
  
-VbString = sBuffer
- 
-VbString = Mid(VbString, InStr(VbString, "IP Address:") + 12, 20)
-StrEnd = InStr(VbString, "<br>") - 2
+GetExternalIP = sBuffer
 
-For a = 1 To StrEnd
-    IP = IP + Mid(VbString, a, 1)
-Next
- 
-GetExternalIP = IP
- 
+'VbString = sBuffer
+'VbString = Mid(VbString, InStr(VbString, "IP Address:") + 12, 20)
+'StrEnd = InStr(VbString, "<br>") - 2
+'For a = 1 To StrEnd
+'    IP = IP + Mid(VbString, a, 1)
+'Next
+
 If hOpenUrl <> 0 Then InternetCloseHandle (hOpenUrl)
 If hOpen <> 0 Then InternetCloseHandle (hOpen)
-  
+
+GetIPaddressError:
+If GetExternalIP = "" Then
+    GetExternalIP = "Not Available"
+End If
+
 End Function
 
 '===============================================================================
@@ -1374,14 +1621,16 @@ End Function
 ' Remarks: Uses the WMI
 '===============================================================================
 Public Function GetBiosVersion() As String
-Dim BiosSet As Object
-Dim obj As Object
-On Error GoTo GetBiosVersionError
-Set BiosSet = GetObject("WinMgmts:{impersonationLevel=impersonate}").InstancesOf("Win32_BIOS")
-For Each obj In BiosSet
-    GetBiosVersion = obj.Version
-    If GetBiosVersion <> "" Then Exit Function
-Next
+GetBiosVersion = GetWmiDeviceSingleValue("Win32_BIOS", "Version")
+GetBiosVersion = Replace(GetBiosVersion, " ", "")
+'Dim BiosSet As Object
+'Dim obj As Object
+'On Error GoTo GetBiosVersionError
+'Set BiosSet = GetObject("WinMgmts:{impersonationLevel=impersonate}").InstancesOf("Win32_BIOS")
+'For Each obj In BiosSet
+'    GetBiosVersion = obj.Version
+'    If GetBiosVersion <> "" Then Exit Function
+'Next
 GetBiosVersionError:
 If GetBiosVersion = "" Then
     GetBiosVersion = "Not Available"
@@ -1483,11 +1732,11 @@ If NrOfEntries = 0 Then Exit Function
 ReDim IpAddrs(0 To NrOfEntries - 1) As String
 Dim i As Integer
 For i = 0 To NrOfEntries - 1
-    Dim j As Integer, s As String: s = ""
+    Dim j As Integer, S As String: S = ""
     For j = 0 To 3
-        s = s & IIf(j > 0, ".", "") & Buf(4 + i * 24 + j)
+        S = S & IIf(j > 0, ".", "") & Buf(4 + i * 24 + j)
     Next
-    IpAddrs(i) = s
+    IpAddrs(i) = S
     GetIPaddress = IpAddrs(i)
     If GetIPaddress <> "0.0.0.0" And GetIPaddress <> "127.0.0.1" And inString(GetIPaddress, ":") = False Then Exit Function
 Next
