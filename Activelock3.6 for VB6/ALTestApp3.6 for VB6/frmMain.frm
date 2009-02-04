@@ -746,7 +746,7 @@ Private Sub Form_Load()
     On Error GoTo DLLnotRegistered
     
     ' Form's caption
-    Me.Caption = LICENSE_ROOT & " - ActiveLock" & App.Major & "." & App.Minor & " Test Application"
+    Me.Caption = LICENSE_ROOT & " - ActiveLock Test Application v" & App.Major & "." & App.Minor & " for VB6"
     
     ' Check the existence of necessary files to run this application
     ' This is not necessary if you're not using these controls in your app.
