@@ -77,6 +77,9 @@ This is essentially a computer fingerprint computed as the combination of many d
 - NEW: Activelock v3.6 and above will support this feature. In order to lock your license to a user name alone, and no hardware keys (such as MAC address, HDD serial number, etc.), you must use "LockNone"  as the lock type in your application. Then in Alugen (the key generator), uncheck all Lock Types and then generate the key. You'll be warned that no keys were selected, but the license key will still be created. This type of license might be handy for those cases when you want to limit the execution of your program for a certain number of days (or limit to a certain deadline), but still make it machine independent. Then users can borrow the LIC file from one machine to another and use it freely for the period they are allowed to use your program. This is really a cross between a trial license and a regular license.
 - FIX: Alugen no longer restricts the use of period (".") in software version numbers.
 - UPDATE" Activelock setup packages will never uninstall the Alugen databases such as the INI, MDB or XML files since these might contain some custom data.
+- FIX: When Activelock registered a license, it was using the current date using the Now function. The rest of the dates in Activelock were UTC(Now). This caused some licenses being 1 day old upon registration. Fixed. Reported by Zoenie :)
+- NEW: Alugen now detects the software name and version number in the installation code and then picks the correct item from the listbox by itself. To implement this in Alugen, the software name and version had to be appended to the installation code which caused some significant rewriting in the DLL. Thanks to Alenxandre's comment, Alugen will tell you whether there's the software name and version available in the Alugen products database; if not, either the product was not stored or the name and version was used incorrectly in user's application.
+
 
 
 
