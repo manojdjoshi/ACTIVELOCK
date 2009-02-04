@@ -90,7 +90,9 @@ This is essentially a computer fingerprint computed as the combination of many d
 - FIX: Activelock now checks the existence of ALCrypto3.DLL in the system32 directory and will give an error if it can not be found.
 - FIX: BigAA1Add function in modSHA1 has been fixed as follows:
 	BigAA1Add = Right(valueans, 8)
-
+- FIX: When Activelock registered a license, it was using the current date using the Now function. The rest of the dates in Activelock were UTC(Now). This caused some licenses being 1 day old upon registration. Fixed. Reported by Zoenie :)
+- NEW: Alugen now detects the software name and version number in the installation code and then picks the correct item from the listbox by itself. To implement this in Alugen, the software name and version had to be appended to the installation code which caused some significant rewriting in the DLL. Thanks to Alenxandre's comment, Alugen will tell you whether there's the software name and version available in the Alugen products database; if not, either the product was not stored or the name and version was used incorrectly in user's application.
+ 
 
 
 
