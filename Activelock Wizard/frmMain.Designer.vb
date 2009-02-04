@@ -716,7 +716,7 @@ Partial Class frmMain
         '
         Me.btnSubmitDetails.AutoEllipsis = True
         Me.btnSubmitDetails.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnSubmitDetails.Location = New System.Drawing.Point(548, 338)
+        Me.btnSubmitDetails.Location = New System.Drawing.Point(546, 426)
         Me.btnSubmitDetails.Name = "btnSubmitDetails"
         Me.btnSubmitDetails.Size = New System.Drawing.Size(177, 29)
         Me.btnSubmitDetails.TabIndex = 7
@@ -758,7 +758,7 @@ Partial Class frmMain
         Me.GroupBox5.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.GroupBox5.Location = New System.Drawing.Point(546, 12)
         Me.GroupBox5.Name = "GroupBox5"
-        Me.GroupBox5.Size = New System.Drawing.Size(179, 231)
+        Me.GroupBox5.Size = New System.Drawing.Size(179, 322)
         Me.GroupBox5.TabIndex = 9
         Me.GroupBox5.TabStop = False
         Me.GroupBox5.Text = "License Locking Type"
@@ -869,7 +869,7 @@ Partial Class frmMain
         '
         Me.PicActiveLock.Cursor = System.Windows.Forms.Cursors.Hand
         Me.PicActiveLock.Image = Global.ActiveLockWizard.My.Resources.Resources.small_logo
-        Me.PicActiveLock.Location = New System.Drawing.Point(594, 252)
+        Me.PicActiveLock.Location = New System.Drawing.Point(594, 340)
         Me.PicActiveLock.Name = "PicActiveLock"
         Me.PicActiveLock.Size = New System.Drawing.Size(80, 80)
         Me.PicActiveLock.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
@@ -897,9 +897,9 @@ Partial Class frmMain
         Me.GroupBox14.Controls.Add(Me.LinkLabel1)
         Me.GroupBox14.Controls.Add(Me.ImageApplicationHelp16)
         Me.GroupBox14.Controls.Add(Me.txtActivelockPath)
-        Me.GroupBox14.Location = New System.Drawing.Point(4, 373)
+        Me.GroupBox14.Location = New System.Drawing.Point(4, 452)
         Me.GroupBox14.Name = "GroupBox14"
-        Me.GroupBox14.Size = New System.Drawing.Size(721, 73)
+        Me.GroupBox14.Size = New System.Drawing.Size(721, 77)
         Me.GroupBox14.TabIndex = 12
         Me.GroupBox14.TabStop = False
         Me.GroupBox14.Text = "ActiveLock CRC Encoder"
@@ -961,7 +961,7 @@ Partial Class frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(729, 453)
+        Me.ClientSize = New System.Drawing.Size(729, 532)
         Me.Controls.Add(Me.GroupBox14)
         Me.Controls.Add(Me.ImageApplicationHelp14)
         Me.Controls.Add(Me.PicActiveLock)
