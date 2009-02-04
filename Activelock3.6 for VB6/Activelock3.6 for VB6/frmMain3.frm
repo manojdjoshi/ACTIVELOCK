@@ -1645,7 +1645,7 @@ Else
 End If
 
 strExpire = GetExpirationDate()
-strRegDate = Format(Now, "yyyy/MM/dd")
+strRegDate = Format(UTC(Now), "yyyy/MM/dd")
 
 'Take care of the networked licenses
 If chkNetworkedLicense.Value = vbChecked Then
@@ -1780,8 +1780,18 @@ Private Function GetExpirationDate() As String
 End Function
 
 Private Sub cmdPaste_Click()
-txtReqCodeIn.Text = Clipboard.GetText
-txtReqCodeIn_Change
+If LCase(Left(Clipboard.GetText, 13)) = "you must send" Then 'short key license
+    Dim arrProdVer() As String
+    arrProdVer = Split(Clipboard.GetText, vbLf) ' Extract the software name and version
+    systemEvent = True
+    txtReqCodeIn.Text = Trim(Mid(arrProdVer(1), 16, 8))
+    txtUser.Text = Trim(Mid(arrProdVer(3), 12, Len(arrProdVer(3)) - 1))
+    systemEvent = False
+    txtReqCodeIn_Change
+Else
+    txtReqCodeIn.Text = Clipboard.GetText
+    'txtReqCodeIn_Change
+End If
 End Sub
 
 Private Sub cmdProductsStorage_Click()
@@ -2062,7 +2072,7 @@ Public Sub Form_Load()
     txtUser.Locked = True
     txtUser.BackColor = vbButtonFace
 
-    Me.Caption = "ALUGEN - ActiveLock Key Generator - v" & App.Major & "." & App.Minor & "." & App.Revision
+    Me.Caption = "ALUGEN - ActiveLock Key Generator for VB6 - v" & App.Major & "." & App.Minor & "." & App.Revision
     Move (Screen.Width - Me.Width) / 2, (Screen.Height - Me.Height) / 2
 
 End Sub
@@ -2533,6 +2543,16 @@ End Sub
 
 
 Private Sub txtReqCodeIn_Change()
+If systemEvent Then Exit Sub
+
+If LCase(Left(txtReqCodeIn.Text, 13)) = "you must send" Then 'short key license
+    Dim arrProdVer() As String
+    arrProdVer = Split(txtReqCodeIn.Text, vbLf)
+    systemEvent = True
+    txtReqCodeIn.Text = Trim(Mid(arrProdVer(1), 16, 8))
+    txtUser.Text = Trim(Mid(arrProdVer(3), 12, Len(arrProdVer(3)) - 1))
+    systemEvent = False
+End If
 
 If Len(txtReqCodeIn.Text) = 8 Then 'Short key authorization is much simpler
     UpdateKeyGenButtonStatus
@@ -2553,8 +2573,7 @@ If Len(txtReqCodeIn.Text) = 8 Then 'Short key authorization is much simpler
     chkLockBaseboardID.Visible = False
     chkLockVideoID.Visible = False
     
-    'Label18.Visible = False
-    txtUser.Text = ""
+    'txtUser.Text = ""
     txtUser.Enabled = True
     txtUser.Locked = False
     txtUser.BackColor = vbWhite
@@ -2565,7 +2584,7 @@ If Len(txtReqCodeIn.Text) = 8 Then 'Short key authorization is much simpler
 '    cmdSave.Enabled = False
     Exit Sub
 
-Else 'ALCrypto
+Else 'ALCrypto or RSA
     
     chkLockMACaddress.Visible = True
     chkLockComputer.Visible = True
@@ -2582,7 +2601,6 @@ Else 'ALCrypto
     chkLockBaseboardID.Visible = True
     chkLockVideoID.Visible = True
     
-    'Label18.Visible = True
     txtUser.Enabled = False
     txtUser.Locked = True
     txtUser.BackColor = vbButtonFace
@@ -2607,8 +2625,8 @@ Else 'ALCrypto
         For i = 0 To cmbProds.ListCount - 1
             If installNameandVersion = cmbProds.List(i) Then
                 cmbProds.ListIndex = i
-                Exit For
                 success = True
+                Exit For
             End If
         Next i
         If Not success Then
@@ -2654,6 +2672,7 @@ End If
 End Sub
 
 Private Sub txtUser_Change()
+    If systemEvent Then Exit Sub
     If fDisableNotifications Then Exit Sub
     fDisableNotifications = True
     If Len(txtReqCodeIn.Text) <> 8 Then txtReqCodeIn.Text = ActiveLock.installationCode(Trim(txtUser.Text))
