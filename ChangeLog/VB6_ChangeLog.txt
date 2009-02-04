@@ -29,12 +29,12 @@ v3.6 Updates:
 - FIX: Removed the registry key usages for HKEY_CLASSES_ROOT and HKEY_LOCAL_MACHINE since these are not supported for write access in a limited rights Vista user account. Even an admin account cannot write to these keys without an elevated access.
 - FIX: Changed the trialRegistry property name to trialRegistryPerUser to indicate that this trial hiding technique will be valid per user.
 - FIX: Due to problems with Vista's handling of the registry keys and files hidden in the admin accessible parts of the file system and registry, the Trial routines have been overhauled to move everything into common shared folders and user accessible registry locations. Obviously system and Windows folders are no longer used; likewise HKLM and HKCR for the registry. Several users reported Trial feature malfunctioning under Vista due to these reasons. Vista is now presenting a big challenge for the trial feature.
-- Added a long description of each property to the Form_Load event. This should address some of the questions asked by the developers during the implementation stage.
-- Reviewed Activelock's short date handling feature, and decided that it's the best approach that could be used to address different locale short date formats.
+- UPDATE: Added a long description of each property to the Form_Load event. This should address some of the questions asked by the developers during the implementation stage.
+- UPDATE: Reviewed Activelock's short date handling feature, and decided that it's the best approach that could be used to address different locale short date formats.
 - FIX: Fixed the UpdateLastUsed method in Activelock. This was causing problems while switching between different regional settings. Checked both the trial and licensing features to make sure both work correctly while switching between different regional settings such as romanian to English and vice versa. This fix involves adding Set_Locale "" at the beginning of this method. Additionally, the "Set_Locale regionalSymbol" statement at the bottom of the Acquire() method should be moved above the "Validate Lic" statement. Finally, ValidateLic method should start with the following two statements: Get_Locale and Set_Locale "".
 - FIX: Both the Trial and Licensing features work well under both XP and Vista now. Also, checked the program under limited access user account under Vista and everything seems to be Ok.
 - Added better explanation for the "Activelock DLL has been corrupted" message. Most users did not know what to do after seeing this message. Now, the message box gives specific instructions on why this happens and how it can be fixed.
-- Very detailed explanation has been added to the Form_Load event in the test application to fully explain how and when to use each DLL method and property. This should eliminate a lot of forum questions from the new comers.
+- UPDATE: Very detailed explanation has been added to the Form_Load event in the test application to fully explain how and when to use each DLL method and property. This should eliminate a lot of forum questions from the new comers.
 - NEW: Activelock VB6 sample application has been renamed as ALVB6Sample. 
 - NEW: Added code into the VB6 sample to check the DLL resources; if a newer version of Activelock DLL is available in the app directory, then it's suggested that it be copied over to the system32 directory. If the DLL was not registered, the sample app registers the DLL automatically.
 - NEW: The LIC and ALL files are now under a path which includes a folder with the software and version. The path is under the public documents folder all users so that it's accessible to all.
@@ -42,24 +42,56 @@ v3.6 Updates:
 - FIX CheckIsDLLRegistered function has been revamped. If the Activelock DLL is not registered, the sample app just traps the 429 error and tells the user about it.
 - FIX: InnoSetup installer installs the oleaut32.dll and stdole2.tlb files only for OS versions below 6. Used flag OnlyBelowVersion: 0,6
 - FIX: Admin to admin switch should not break the trial mode anymore because the entire trial folder/hiding technique has been revamped. The problem reported at (http://www.ismailalkan.com/phpBB2/viewtopic.php?p=3715) should be fixed.
-- Alugen was criticized of storing important serial numbers such as Windows Serial Nuber in its database. Since the database is stored only in the developer's or the program owner's machine, there's no problem with that. This is much less sensitive issue than storing credit numbers; however if the developers see it necessary, they can implement their own encryption technique to store such serial numbers that belong to their customers. This is really an extension to the tool.
-- Default number of days for licensing has been changed from 30 days to 365 days in Alugen. 
+- UPDATE: Alugen was criticized of storing important serial numbers such as Windows Serial Nuber in its database. Since the database is stored only in the developer's or the program owner's machine, there's no problem with that. This is much less sensitive issue than storing credit numbers; however if the developers see it necessary, they can implement their own encryption technique to store such serial numbers that belong to their customers. This is really an extension to the tool.
+- UPDATE: Default number of days for licensing has been changed from 30 days to 365 days in Alugen. 
 - FIX: Added "If hFile = -1 Then" check to the ViewStream function since the CreateFileW function might rarely fail.
-- The trialHideTypes detection in the DLL has been improved such that unneeded trial types won't be called anymore wasting the trial execution speed. Future addition of more trial hiding types will be easier to code and manage.
+- FIX: The trialHideTypes detection in the DLL has been improved such that unneeded trial types won't be called anymore wasting the trial execution speed. Future addition of more trial hiding types will be easier to code and manage.
 - FIX: Time Server date checks and system file date checks are performed in Acquire, Register and ActivateTrial methods. Some of these were not checking the existence of these properties and were executing these code by default. Fixed.
 - FIX: Alugen now catches the dates that occur in the past before it generates the license key. This is valid for "Time Limited" licenses only.
-- Alugen date handling has been reviewed and synched with Activelock.
+- UPDATE: Alugen date handling has been reviewed and synched with Activelock.
 - FIX: The Time Server access via wininet.dll was having problems. There were bugs in the OpenURL code accessing the time server for UTC time check. Fixed those bugs and made the feature work.
 - Improved the speed of the "system files date/time check" code. Concentrating on more available folders across the OSs.
 - FIX: GetHDDfirmwareSerial works great for the most part, but for there are those rare cases when "not available" is returned. This is not acceptable for some cases such as the short keys which really depend on this hardware key. Therefore, if this key returns "not available" it is now replaced by "NA" & GetHDSerial & GetMotherboardSerial.
-- The sample application now checks whether the LIC file is in plain or encrypted format since the contents can not be parsed to extract the license type from the LIC file if the file is in encrypted format.
-- The system clock checking routine (via the web time server) now includes an additional class to check the system clock. First, it uses the reliable and fast approach, but it fails, it switches to the more involved, slower but accurate method in the Daytime.vb class.
-- The test application now clearly states that the "Reset Trial" button feature is provided for the developers only and should definitely be omitted from the final user application.
-- The LicenseFileType property in Activelock is not WriteOnly property any more, allowing the retrieval of this property in user's application.
+- UPDATE: The sample application now checks whether the LIC file is in plain or encrypted format since the contents can not be parsed to extract the license type from the LIC file if the file is in encrypted format.
+- FIX: The system clock checking routine (via the web time server) now includes an additional class to check the system clock. First, it uses the reliable and fast approach, but it fails, it switches to the more involved, slower but accurate method in the Daytime.vb class.
+- UPDATE: The test application now clearly states that the "Reset Trial" button feature is provided for the developers only and should definitely be omitted from the final user application.
+- NEW: The LicenseFileType property in Activelock is not WriteOnly property any more, allowing the retrieval of this property in user's application.
 - FIX: Alugen was inserting an extra vbCrlf constant in the license key in every line to make 64-byte chunks. Although Activelock would honor these, the email systems transmitted them erroneously causing registration problems in the form of "Index outside bounds of array" problems. This extra vbCrlf character has been removed from the license key. See "http://activelocksoftware.com/forums/t/211.aspx" for more information.
 - FIX: A new function, IsNumberIncluded checks the hardware key combinations to determine accurately whether the right combination was used for licensing. This function works out the binary representation of the hardware key's representation that's a multiplier of 2, decides whether a given key combination includes a particular key. This should eliminate the IP binding problems experienced in the past.
 - NEW: IsWebConnected function has been added. This function will be used with the Time Server based system clock tampering check and inside the GetIPaddress function (iand insdie the GetExternalIP in the future). GetIPaddress seems to fail when there's no internet connection available, therefore if you locked the machine to local IP, then you must check the internet connection before proceeding. Some users complained that they were getting "Wrong IP address" when the license was registered with IP address and the internet connection was removed before the application was executed (and vice versa).
-- IsWebConnected has been added to the SystemClockTampered (web based time server checking function) and GetIPaddress functions.
+- NEW: IsWebConnected has been added to the SystemClockTampered (web based time server checking function) and GetIPaddress functions.
+- UPDATE: When there's no registered license, the test application fills the user name box with the current user name.
+- UPDATE: Machine SID was one of the lock types that was planned to be added as a new Activelock feature. It turns out that this will be available only for the users who access the Active Directory. For local accounts, this is not available. It is probably going to be a nightmare to extract this info under Vista due to all security restraints. This issue will be postponed to a later release.
+- NEW: As of v3.6, the following is the complete list of all hardware signatures used in Activelock:
+Public Enum ALLockTypes
+    lockNone = 0
+    lockWindows = 1
+    lockComp = 2
+    lockHD = 4
+    lockMAC = 8
+    lockBIOS = 16
+    lockIP = 32
+    lockMotherboard = 64
+    lockExternalIP = 128          '[v3.6]
+    lockHDFirmware = 256
+    lockFingerprint = 512         '[v3.6]
+    lockMemory = 1024             '[v3.6]
+    lockCPUID = 2048              '[v3.6]
+    lockBaseboardID = 4096        '[v3.6]
+    lockvideoID = 8192            '[v3.6]
+End Enum
+LockFingerprint is a new lock type introduced in v3.6 It is computed differently for VB6 and VB.NET.
+This is essentially a computer fingerprint computed as the combination of many different computer components, such the hard disk, BIOS, memory, video controller, baseboard, MAC card, etc.
+- NEW: Short Key Licenses now use the new computer fingerprint instead of the HDD firmware serial number. HDD firmware serial could be problematic under limited user accounts in Vista with some SATA HDDs. In that case the machine fingerprint will still return a pretty reliable machine ID number.
+- FIX: If there's no binding to user's hardware necessary, then ReconstructedInstallationCode() was never invoked in Alugen. This is fixed.
+- NEW: Activelock v3.6 and above will support this feature. In order to lock your license to a user name alone, and no hardware keys (such as MAC address, HDD serial number, etc.), you must use "LockNone"  as the lock type in your application. Then in Alugen (the key generator), uncheck all Lock Types and then generate the key. You'll be warned that no keys were selected, but the license key will still be created. This type of license might be handy for those cases when you want to limit the execution of your program for a certain number of days (or limit to a certain deadline), but still make it machine independent. Then users can borrow the LIC file from one machine to another and use it freely for the period they are allowed to use your program. This is really a cross between a trial license and a regular license.
+- FIX: Alugen no longer restricts the use of period (".") in software version numbers.
+- UPDATE" Activelock setup packages will never uninstall the Alugen databases such as the INI, MDB or XML files since these might contain some custom data.
+- FIX: Activelock now checks the existence of ALCrypto3.DLL in the system32 directory and will give an error if it can not be found.
+- FIX: BigAA1Add function in modSHA1 has been fixed as follows:
+	BigAA1Add = Right(valueans, 8)
+
+
 
 
 v3.5.5 Updates:
