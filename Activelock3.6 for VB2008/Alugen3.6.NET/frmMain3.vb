@@ -3250,8 +3250,7 @@ SaveFormSettings_Error:
             Dim strExpire As String
             strExpire = GetExpirationDate()
             Dim strRegDate As String
-            'walter'wrongdate'strRegDate = Now.UtcNow.ToString("yyyy/MM/dd")
-            strRegDate = Date.Now.ToString("yyyy/MM/dd")
+            strRegDate = Date.UtcNow.ToString("yyyy/MM/dd")
             Dim Lic As ProductLicense
 
             'generate license object
@@ -3382,10 +3381,21 @@ SaveFormSettings_Error:
     End Sub
 
     Private Sub cmdPaste_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdPaste.Click
-        If Clipboard.GetDataObject.GetDataPresent(DataFormats.Text) Then
-            txtInstallCode.Text = CType(Clipboard.GetDataObject.GetData(DataFormats.Text), String)
-            UpdateKeyGenButtonStatus()
+
+        If txtInstallCode.Text.Substring(0, 12).ToLower = "you must send" Then 'short key license
+            Dim arrProdVer() As String
+            arrProdVer = Split(txtInstallCode.Text, vbLf)
+            systemEvent = True
+            txtInstallCode.Text = (arrProdVer(1).Substring(15, 8)).Trim
+            txtUser.Text = (arrProdVer(3).Substring(12, arrProdVer(3).Length - 1)).Trim
+            systemEvent = False
             HandleInstallationCode()
+        Else
+            If Clipboard.GetDataObject.GetDataPresent(DataFormats.Text) Then
+                txtInstallCode.Text = CType(Clipboard.GetDataObject.GetData(DataFormats.Text), String)
+                UpdateKeyGenButtonStatus()
+                HandleInstallationCode()
+            End If
         End If
     End Sub
 
@@ -3841,6 +3851,7 @@ exitValidate:
     End Sub
 
     Private Sub txtUser_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtUser.TextChanged
+        If systemEvent Then Exit Sub
         If fDisableNotifications Then Exit Sub
         fDisableNotifications = True
         If Len(txtInstallCode.Text) <> 8 Then txtInstallCode.Text = ActiveLock.InstallationCode(Trim(txtUser.Text))
@@ -4211,6 +4222,18 @@ exitValidate:
         systemEvent = False
     End Sub
     Public Sub HandleInstallationCode()
+
+        If systemEvent Then Exit Sub
+
+        If txtInstallCode.Text.Substring(0, 12).ToLower = "you must send" Then 'short key license
+            Dim arrProdVer() As String
+            arrProdVer = Split(txtInstallCode.Text, vbLf)
+            systemEvent = True
+            txtInstallCode.Text = (arrProdVer(1).Substring(15, 8)).Trim
+            txtUser.Text = (arrProdVer(3).Substring(12, arrProdVer(3).Length - 1)).Trim
+            systemEvent = False
+        End If
+
         If Len(txtInstallCode.Text) = 8 Then 'Short key authorization is much simpler
             UpdateKeyGenButtonStatus()
             If fDisableNotifications Then Exit Sub
@@ -4229,7 +4252,8 @@ exitValidate:
             chkLockCPUID.Visible = False
             chkLockBaseboardID.Visible = False
             chkLockVideoID.Visible = False
-            txtUser.Text = ""
+
+            'txtUser.Text = ""
             txtUser.Enabled = True
             txtUser.ReadOnly = False
             txtUser.BackColor = Color.White
@@ -4280,8 +4304,8 @@ exitValidate:
                 For i = 0 To cboProducts.Items.Count - 1
                     cboProducts.SelectedIndex = i
                     If installNameandVersion = cboProducts.Text Then
-                        Exit For
                         success = True
+                        Exit For
                     End If
                 Next i
                 If Not success Then
@@ -4320,7 +4344,7 @@ exitValidate:
                 txtUser.Text = ""
                 fDisableNotifications = False
             End If
-            End If
+        End If
 
     End Sub
 End Class
