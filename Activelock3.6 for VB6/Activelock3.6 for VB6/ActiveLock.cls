@@ -1445,7 +1445,6 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
         AppendLockString strLock, modHardware.GetBiosVersion()
         AppendLockString strLock, modHardware.GetMotherboardSerial()
         AppendLockString strLock, modHardware.GetIPaddress()
-    
         AppendLockString strLock, modHardware.GetExternalIP()
         AppendLockString strLock, modHardware.GetFingerprint()
         AppendLockString strLock, modHardware.GetMemoryID()
@@ -1620,7 +1619,7 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                         IActiveLock_AddLockCode lockIP, SizeLockType  'dw1 build up lockTypes
                         If aString <> modHardware.GetIPaddress() Then
                             Set_locale regionalSymbol
-                            Err.Raise ActiveLockErrCodeConstants.alerrWrongIPaddress, ACTIVELOCKSTRING, STRWRONGIPADDRESS
+                            Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 
@@ -1629,15 +1628,15 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                         IActiveLock_AddLockCode lockExternalIP, SizeLockType  'dw1 build up lockTypes
                         If aString <> modHardware.GetExternalIP() Then
                             Set_locale regionalSymbol
-                            Err.Raise ActiveLockErrCodeConstants.alerrWrongIPaddress, ACTIVELOCKSTRING, STRWRONGIPADDRESS
+                            Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 9 Then
                     If aString <> noKey Then
                         IActiveLock_AddLockCode lockFingerprint, SizeLockType  'dw1 build up lockTypes
-                        If aString <> modHardware.GetIPaddress() Then
+                        If aString <> modHardware.GetFingerprint() Then
                             Set_locale regionalSymbol
-                            Err.Raise ActiveLockErrCodeConstants.alerrWrongIPaddress, ACTIVELOCKSTRING, STRWRONGIPADDRESS
+                            Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 10 Then
@@ -1645,7 +1644,7 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                         IActiveLock_AddLockCode lockMemory, SizeLockType  'dw1 build up lockTypes
                         If aString <> modHardware.GetMemoryID() Then
                             Set_locale regionalSymbol
-                            Err.Raise ActiveLockErrCodeConstants.alerrWrongIPaddress, ACTIVELOCKSTRING, STRWRONGIPADDRESS
+                            Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 11 Then
@@ -1653,7 +1652,7 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                         IActiveLock_AddLockCode lockCPUID, SizeLockType  'dw1 build up lockTypes
                         If aString <> modHardware.GetCPUID() Then
                             Set_locale regionalSymbol
-                            Err.Raise ActiveLockErrCodeConstants.alerrWrongIPaddress, ACTIVELOCKSTRING, STRWRONGIPADDRESS
+                            Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 12 Then
@@ -1661,7 +1660,7 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                         IActiveLock_AddLockCode lockBaseboardID, SizeLockType  'dw1 build up lockTypes
                         If aString <> modHardware.GetBaseboardID() Then
                             Set_locale regionalSymbol
-                            Err.Raise ActiveLockErrCodeConstants.alerrWrongIPaddress, ACTIVELOCKSTRING, STRWRONGIPADDRESS
+                            Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 13 Then
@@ -1669,7 +1668,7 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                         IActiveLock_AddLockCode lockvideoID, SizeLockType  'dw1 build up lockTypes
                         If aString <> modHardware.GetVideoID() Then
                             Set_locale regionalSymbol
-                            Err.Raise ActiveLockErrCodeConstants.alerrWrongIPaddress, ACTIVELOCKSTRING, STRWRONGIPADDRESS
+                            Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 End If
