@@ -146,6 +146,10 @@ End Sub
 ' Remarks: TODO: Perhaps we need to lock the file first.?
 '===============================================================================
 Private Sub IKeyStoreProvider_Store(Lic As ProductLicense, mLicenseFileType As ALLicenseFileTypes)
+    Dim arrProdVer() As String
+    Dim actualLicensee As String
+    arrProdVer = Split(Lic.Licensee, "&&&")
+    actualLicensee = arrProdVer(0)
     ' Write license properties to INI file section
     mINIFile.Section = Lic.ProductName
     
@@ -154,7 +158,7 @@ Private Sub IKeyStoreProvider_Store(Lic As ProductLicense, mLicenseFileType As A
             mINIFile.Values(KEY_PRODVER) = EncryptMyString(.ProductVer, PSWD)
             mINIFile.Values(KEY_LICTYPE) = EncryptMyString(.LicenseType, PSWD)
             mINIFile.Values(KEY_LICCLASS) = EncryptMyString(.LicenseClass, PSWD)
-            mINIFile.Values(KEY_LICENSEE) = EncryptMyString(.Licensee, PSWD)
+            mINIFile.Values(KEY_LICENSEE) = EncryptMyString(actualLicensee, PSWD)
             mINIFile.Values(KEY_REGISTERED_LEVEL) = EncryptMyString(.RegisteredLevel, PSWD)
             mINIFile.Values(KEY_MAXCOUNT) = EncryptMyString(CStr(.MaxCount), PSWD)
             mINIFile.Values(KEY_LICKEY) = EncryptMyString(.LicenseKey, PSWD)
@@ -169,7 +173,7 @@ Private Sub IKeyStoreProvider_Store(Lic As ProductLicense, mLicenseFileType As A
             mINIFile.Values(KEY_PRODVER) = .ProductVer
             mINIFile.Values(KEY_LICTYPE) = .LicenseType
             mINIFile.Values(KEY_LICCLASS) = .LicenseClass
-            mINIFile.Values(KEY_LICENSEE) = .Licensee
+            mINIFile.Values(KEY_LICENSEE) = actualLicensee
             mINIFile.Values(KEY_REGISTERED_LEVEL) = .RegisteredLevel
             mINIFile.Values(KEY_MAXCOUNT) = CStr(.MaxCount)
             mINIFile.Values(KEY_LICKEY) = .LicenseKey
@@ -211,7 +215,7 @@ Private Function IKeyStoreProvider_Retrieve(ProductName As String, mLicenseFileT
         With Lic
             .ProductName = ProductName
             .ProductVer = DecryptMyString(mINIFile.GetValue(KEY_PRODVER), PSWD)
-            .Licensee = DecryptMyString(mINIFile.GetValue(KEY_LICENSEE), PSWD)
+            .Licensee = DecryptMyString(mINIFile.GetValue(KEY_LICENSEE), PSWD) & "&&&" & .ProductName & " - " & .ProductVer
             .RegisteredLevel = DecryptMyString(mINIFile.GetValue(KEY_REGISTERED_LEVEL), PSWD)
             .MaxCount = CInt(DecryptMyString(mINIFile.Values(KEY_MAXCOUNT), PSWD))
             .LicenseType = DecryptMyString(mINIFile.GetValue(KEY_LICTYPE), PSWD)
@@ -229,7 +233,7 @@ Private Function IKeyStoreProvider_Retrieve(ProductName As String, mLicenseFileT
         With Lic
             .ProductName = ProductName
             .ProductVer = mINIFile.GetValue(KEY_PRODVER)
-            .Licensee = mINIFile.GetValue(KEY_LICENSEE)
+            .Licensee = mINIFile.GetValue(KEY_LICENSEE) & "&&&" & .ProductName & " - " & .ProductVer
             .RegisteredLevel = mINIFile.GetValue(KEY_REGISTERED_LEVEL)
             .MaxCount = CInt(mINIFile.Values(KEY_MAXCOUNT))
             .LicenseType = mINIFile.GetValue(KEY_LICTYPE)

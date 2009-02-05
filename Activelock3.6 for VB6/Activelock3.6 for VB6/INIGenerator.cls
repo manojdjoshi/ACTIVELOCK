@@ -362,4 +362,5 @@ Private Sub GetLockAndUserFromInstallCode(ByVal strReq As String, ByRef strLock 
     ' user name starts from Index+1 to the end
     strUser = Mid$(strReq, Index + 1)
     strUser = TrimNulls(strUser)
+
 End Sub
