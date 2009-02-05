@@ -1231,8 +1231,8 @@ Friend Class frmMain
             ' RSA classes in .NET allows you to pick from several cipher strengths
             ' however ALCrypto uses 1024 bit strength key only.
             ' alsShortKeyMD5 is for short key protection only
-            .LicenseKeyType = ActiveLock3_6NET.IActiveLock.ALLicenseKeyTypes.alsShortKeyMD5
-            '.LicenseKeyType = ActiveLock3_6NET.IActiveLock.ALLicenseKeyTypes.alsRSA
+            '.LicenseKeyType = ActiveLock3_6NET.IActiveLock.ALLicenseKeyTypes.alsShortKeyMD5
+            .LicenseKeyType = ActiveLock3_6NET.IActiveLock.ALLicenseKeyTypes.alsRSA
 
             ' Set the Trial Feature properties
             ' If you don't want to use the trial feature in your app, set the TrialType

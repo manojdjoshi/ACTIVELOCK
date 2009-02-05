@@ -113,6 +113,11 @@ Friend Class FileKeyStoreProvider
     ' Remarks: TODO: Perhaps we need to lock the file first.?
     '===============================================================================
     Private Sub IKeyStoreProvider_Store(ByRef Lic As ProductLicense, ByVal mLicenseFileType As IActiveLock.ALLicenseFileTypes) Implements _IKeyStoreProvider.Store
+        Dim arrProdVer() As String
+        Dim actualLicensee As String
+        arrProdVer = Split(Lic.Licensee, "&&&")
+        actualLicensee = arrProdVer(0)
+
         ' Write license properties to INI file section
         mINIFile.Section = Lic.ProductName
 
@@ -121,7 +126,7 @@ Friend Class FileKeyStoreProvider
                 mINIFile.Values(KEY_PRODVER) = EncryptString128Bit(.ProductVer, PSWD)
                 mINIFile.Values(KEY_LICTYPE) = EncryptString128Bit(.LicenseType, PSWD)
                 mINIFile.Values(KEY_LICCLASS) = EncryptString128Bit(.LicenseClass, PSWD)
-                mINIFile.Values(KEY_LICENSEE) = EncryptString128Bit(.Licensee, PSWD)
+                mINIFile.Values(KEY_LICENSEE) = EncryptString128Bit(actualLicensee, PSWD)
                 mINIFile.Values(KEY_REGISTERED_LEVEL) = EncryptString128Bit(.RegisteredLevel, PSWD)
                 mINIFile.Values(KEY_MAXCOUNT) = EncryptString128Bit(CStr(.MaxCount), PSWD)
                 mINIFile.Values(KEY_LICKEY) = EncryptString128Bit(.LicenseKey, PSWD)
@@ -136,7 +141,7 @@ Friend Class FileKeyStoreProvider
                 mINIFile.Values(KEY_PRODVER) = .ProductVer
                 mINIFile.Values(KEY_LICTYPE) = .LicenseType
                 mINIFile.Values(KEY_LICCLASS) = .LicenseClass
-                mINIFile.Values(KEY_LICENSEE) = .Licensee
+                mINIFile.Values(KEY_LICENSEE) = actualLicensee
                 mINIFile.Values(KEY_REGISTERED_LEVEL) = .RegisteredLevel
                 mINIFile.Values(KEY_MAXCOUNT) = CStr(.MaxCount)
                 mINIFile.Values(KEY_LICKEY) = .LicenseKey
@@ -207,7 +212,7 @@ Friend Class FileKeyStoreProvider
             With Lic
                 .ProductName = ProductName
                 .ProductVer = DecryptString128Bit(mINIFile.GetValue(KEY_PRODVER), PSWD)
-                .Licensee = DecryptString128Bit(mINIFile.GetValue(KEY_LICENSEE), PSWD)
+                .Licensee = DecryptString128Bit(mINIFile.GetValue(KEY_LICENSEE), PSWD) & "&&&" & .ProductName & " (" & .ProductVer & ")"
                 .RegisteredLevel = DecryptString128Bit(mINIFile.GetValue(KEY_REGISTERED_LEVEL), PSWD)
                 .MaxCount = CType(DecryptString128Bit(mINIFile.Values(KEY_MAXCOUNT), PSWD), Integer)
                 .LicenseType = DecryptString128Bit(mINIFile.GetValue(KEY_LICTYPE), PSWD)
@@ -225,7 +230,7 @@ Friend Class FileKeyStoreProvider
             With Lic
                 .ProductName = ProductName
                 .ProductVer = mINIFile.GetValue(KEY_PRODVER)
-                .Licensee = mINIFile.GetValue(KEY_LICENSEE)
+                .Licensee = mINIFile.GetValue(KEY_LICENSEE) & "&&&" & .ProductName & " (" & .ProductVer & ")"
                 .RegisteredLevel = mINIFile.GetValue(KEY_REGISTERED_LEVEL)
                 .MaxCount = CInt(mINIFile.Values(KEY_MAXCOUNT))
                 .LicenseType = mINIFile.GetValue(KEY_LICTYPE)
