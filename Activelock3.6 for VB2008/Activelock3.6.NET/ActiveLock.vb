@@ -1423,7 +1423,6 @@ ErrHandler:
                 AppendLockString(strLock, modHardware.GetBiosVersion())
                 AppendLockString(strLock, modHardware.GetMotherboardSerial())
                 AppendLockString(strLock, modHardware.GetIPaddress())
-
                 AppendLockString(strLock, modHardware.GetExternalIP())
                 AppendLockString(strLock, modHardware.GetFingerprint())
                 AppendLockString(strLock, modHardware.GetMemoryID())

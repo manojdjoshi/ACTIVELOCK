@@ -3382,6 +3382,7 @@ SaveFormSettings_Error:
 
     Private Sub cmdPaste_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdPaste.Click
 
+        If txtInstallCode.Text = "" Then GoTo continueHere
         If txtInstallCode.Text.Substring(0, 12).ToLower = "you must send" Then 'short key license
             Dim arrProdVer() As String
             arrProdVer = Split(txtInstallCode.Text, vbLf)
@@ -3391,6 +3392,7 @@ SaveFormSettings_Error:
             systemEvent = False
             HandleInstallationCode()
         Else
+continueHere:
             If Clipboard.GetDataObject.GetDataPresent(DataFormats.Text) Then
                 txtInstallCode.Text = CType(Clipboard.GetDataObject.GetData(DataFormats.Text), String)
                 UpdateKeyGenButtonStatus()
