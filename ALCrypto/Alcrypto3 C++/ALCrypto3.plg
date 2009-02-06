@@ -1,0 +1,78 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: ALCrypto3 - Win32 Release--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x413 /fo"Version.res" /d "NDEBUG" "C:\SRC\Activelock3.4\Src_v3\Alcrypto3 C++\Version.rc"" 
+Creating temporary file "C:\DOCUME~1\ISMAIL~1\LOCALS~1\Temp\RSP2A8.tmp" with contents
+[
+/nologo /MT /W3 /GX /Ot /Oa /Ow /Oi /Op /Oy /I "Include" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "ALCRYPTO_EXPORTS" /Fp"ALCrypto3.pch" /YX /FD /c 
+"C:\SRC\Activelock3.4\Src_v3\Alcrypto3 C++\alcrypto3.cpp"
+"C:\SRC\Activelock3.4\Src_v3\Alcrypto3 C++\bignum.cpp"
+"C:\SRC\Activelock3.4\Src_v3\Alcrypto3 C++\diskid32.cpp"
+"C:\SRC\Activelock3.4\Src_v3\Alcrypto3 C++\md5.cpp"
+"C:\SRC\Activelock3.4\Src_v3\Alcrypto3 C++\memory.cpp"
+"C:\SRC\Activelock3.4\Src_v3\Alcrypto3 C++\misc.cpp"
+"C:\SRC\Activelock3.4\Src_v3\Alcrypto3 C++\noise.cpp"
+"C:\SRC\Activelock3.4\Src_v3\Alcrypto3 C++\port32.cpp"
+"C:\SRC\Activelock3.4\Src_v3\Alcrypto3 C++\prime.cpp"
+"C:\SRC\Activelock3.4\Src_v3\Alcrypto3 C++\rand.cpp"
+"C:\SRC\Activelock3.4\Src_v3\Alcrypto3 C++\rsa.cpp"
+"C:\SRC\Activelock3.4\Src_v3\Alcrypto3 C++\rsag.cpp"
+"C:\SRC\Activelock3.4\Src_v3\Alcrypto3 C++\sha.cpp"
+"C:\SRC\Activelock3.4\Src_v3\Alcrypto3 C++\WindowsVersion.cpp"
+"C:\SRC\Activelock3.4\Src_v3\Alcrypto3 C++\winio.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\ISMAIL~1\LOCALS~1\Temp\RSP2A8.tmp" 
+Creating temporary file "C:\DOCUME~1\ISMAIL~1\LOCALS~1\Temp\RSP2A9.tmp" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /dll /incremental:yes /pdb:"ALCrypto3.pdb" /machine:I386 /def:".\alcrypto3.def" /out:"ALCrypto3.dll" /implib:"ALCrypto3.lib" 
+".\alcrypto3.obj"
+".\bignum.obj"
+".\diskid32.obj"
+".\md5.obj"
+".\memory.obj"
+".\misc.obj"
+".\noise.obj"
+".\port32.obj"
+".\prime.obj"
+".\rand.obj"
+".\rsa.obj"
+".\rsag.obj"
+".\sha.obj"
+".\WindowsVersion.obj"
+".\winio.obj"
+".\Version.res"
+]
+Creating command line "link.exe @C:\DOCUME~1\ISMAIL~1\LOCALS~1\Temp\RSP2A9.tmp"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+alcrypto3.cpp
+bignum.cpp
+diskid32.cpp
+md5.cpp
+memory.cpp
+misc.cpp
+noise.cpp
+port32.cpp
+prime.cpp
+rand.cpp
+rsa.cpp
+rsag.cpp
+sha.cpp
+WindowsVersion.cpp
+winio.cpp
+Linking...
+   Creating library ALCrypto3.lib and object ALCrypto3.exp
+
+
+
+<h3>Results</h3>
+ALCrypto3.dll - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>
