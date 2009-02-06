@@ -115,7 +115,7 @@ Friend Class FileKeyStoreProvider
     Private Sub IKeyStoreProvider_Store(ByRef Lic As ProductLicense, ByVal mLicenseFileType As IActiveLock.ALLicenseFileTypes) Implements _IKeyStoreProvider.Store
         Dim arrProdVer() As String
         Dim actualLicensee As String
-        arrProdVer = Split(Lic.Licensee, "&&&")
+        arrProdVer = Lic.Licensee.Split("&&&")
         actualLicensee = arrProdVer(0)
 
         ' Write license properties to INI file section
@@ -190,6 +190,20 @@ Friend Class FileKeyStoreProvider
         ' No license found
         If mINIFile.GetValue(KEY_LICKEY) = "" Then Exit Function
 
+        ' Read the LIC file quickly and decide whether this is a valid LIC file
+        Dim fileText As String = My.Computer.FileSystem.ReadAllText(mINIFile.File)
+        Dim astring As String = String.Empty
+        If fileText = "" Then Exit Function
+        If mLicenseFileType = IActiveLock.ALLicenseFileTypes.alsLicenseFileEncrypted Then
+            astring = DecryptString128Bit(fileText, PSWD)
+        Else
+            astring = fileText
+        End If
+        If astring.ToLower.Contains("productversion") = False Then
+            Set_locale(regionalSymbol)
+            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREINVALID)
+        End If
+
         Dim Lic As New ProductLicense
         If mLicenseFileType = IActiveLock.ALLicenseFileTypes.alsLicenseFileEncrypted And mINIFile.GetValue(KEY_LICCLASS) <> "Single" And mINIFile.GetValue(KEY_LICCLASS) <> "MultiUser" Then
 
@@ -247,7 +261,7 @@ Friend Class FileKeyStoreProvider
 
         Exit Function
 InvalidValue:
-        Set_Locale(regionalSymbol)
+        Set_locale(regionalSymbol)
         Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREINVALID)
     End Function
 End Class
