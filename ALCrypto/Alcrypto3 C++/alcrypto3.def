@@ -1,0 +1,21 @@
+; Sample Export definition file to create Microsoft Visual C++ (Win32)
+; compatible LIB file for ALCRYPTO3.DLL.
+;
+LIBRARY      "ALCrypto3"
+;DESCRIPTION  "ActiveLock Cryptographic Library"
+EXPORTS
+InitALCrypto         @1
+rsa_generate         @2
+rsa_decrypt          @3
+rsa_encrypt          @4
+rsa_public_key_blob  @5
+rsa_private_key_blob @6
+rsa_createkey        @7
+rsa_sign             @8
+rsa_verifysig        @9
+rsa_freekey          @10
+md5_hash             @11
+rsa_generate2        @12
+getHardDriveFirmware @13
+GetWindowsVersion    @14
+rsa_get_public_blob  @15
