@@ -92,7 +92,8 @@ This is essentially a computer fingerprint computed as the combination of many d
 	BigAA1Add = Right(valueans, 8)
 - FIX: When Activelock registered a license, it was using the current date using the Now function. The rest of the dates in Activelock were UTC(Now). This caused some licenses being 1 day old upon registration. Fixed. Reported by Zoenie :)
 - NEW: Alugen now detects the software name and version number in the installation code and then picks the correct item from the listbox by itself. To implement this in Alugen, the software name and version had to be appended to the installation code which caused some significant rewriting in the DLL. Thanks to Alenxandre's comment, Alugen will tell you whether there's the software name and version available in the Alugen products database; if not, either the product was not stored or the name and version was used incorrectly in user's application.
- 
+- UPDATE: In order prevent regsvr32 from being blocked, added the following [Registry] line in InnoSetup file:
+Root: HKLM; ValueType: string; Subkey: Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers; ValueName: {sys}\regsvr32.exe; ValueData: DisableNXShowUI
 
 
 
