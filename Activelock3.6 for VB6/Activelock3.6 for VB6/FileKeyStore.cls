@@ -208,6 +208,21 @@ Private Function IKeyStoreProvider_Retrieve(ProductName As String, mLicenseFileT
     ' No license found
     If mINIFile.GetValue(KEY_LICKEY) = "" Then Exit Function
 
+    ' Read the LIC file quickly and decide whether this is a valid LIC file
+    Dim fileText As String
+    fileText = FileLoad(mINIFile.File)
+    Dim astring As String
+    If fileText = "" Then Exit Function
+    If mLicenseFileType = ALLicenseFileTypes.alsLicenseFileEncrypted Then
+        astring = DecryptMyString(fileText, PSWD)
+    Else
+        astring = fileText
+    End If
+    If inString(LCase(astring), "productversion") = False Then
+        Set_locale regionalSymbol
+        Err.Raise ActiveLockErrCodeConstants.AlerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREINVALID
+    End If
+
     Dim Lic As New ProductLicense
     If mLicenseFileType = ALLicenseFileTypes.alsLicenseFileEncrypted And _
         mINIFile.GetValue(KEY_LICCLASS) <> "Single" And mINIFile.GetValue(KEY_LICCLASS) <> "MultiUser" Then
@@ -252,5 +267,5 @@ Private Function IKeyStoreProvider_Retrieve(ProductName As String, mLicenseFileT
 
 InvalidValue:
     Set_locale regionalSymbol
-    Err.Raise ActiveLockErrCodeConstants.alerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREINVALID
+    Err.Raise ActiveLockErrCodeConstants.AlerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREINVALID
 End Function

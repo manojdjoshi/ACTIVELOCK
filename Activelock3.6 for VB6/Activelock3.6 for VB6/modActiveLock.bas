@@ -309,6 +309,25 @@ Public Declare Function GetFileSize Lib "kernel32.dll" (ByVal hFile As Long, lpF
 Public Declare Function ReadFileX Lib "kernel32.dll" Alias "ReadFile" (ByVal hFile As Long, lpBuffer As Any, ByVal nNumberOfBytesToRead As Long, lpNumberOfBytesRead As Long, ByVal lpOverlapped As Long) As Long
 Private Declare Function OpenFile Lib "kernel32" (ByVal lpFileName As String, lpReOpenBuff As OFSTRUCT, ByVal wStyle As Long) As Long
 
+Public Function FileLoad(ByVal sFileName As String) As String
+    Dim iFileNum As Integer, lFileLen As Long
+
+    On Error GoTo ErrFinish
+    'Open File
+    iFileNum = FreeFile
+    'Read file
+    Open sFileName For Binary Access Read As #iFileNum
+    lFileLen = LOF(iFileNum)
+    'Create output buffer
+    FileLoad = String(lFileLen, " ")
+    'Read contents of file
+    Get iFileNum, 1, FileLoad
+
+ErrFinish:
+    Close #iFileNum
+    On Error GoTo 0
+End Function
+
 Public Sub Delete_ADS_File(ADSFileName As String)
 ' Example: ADSFileName = "C:\:mydata.dat"
     If Does_ADS_FileExist(ADSFileName) Then
@@ -1406,13 +1425,13 @@ End Function
 ' Remarks: None
 '===============================================================================
 Public Function IsRunningInIDE() As Boolean
-    Dim strFileName As String
+    Dim strFilename As String
     Dim lngCount As Long
     
-    strFileName = String(255, 0)
-    lngCount = GetModuleFileName(App.hInstance, strFileName, 255)
-    strFileName = Left(strFileName, lngCount)
-    IsRunningInIDE = UCase(Right(strFileName, 7)) = "VB6.EXE"
+    strFilename = String(255, 0)
+    lngCount = GetModuleFileName(App.hInstance, strFilename, 255)
+    strFilename = Left(strFilename, lngCount)
+    IsRunningInIDE = UCase(Right(strFilename, 7)) = "VB6.EXE"
 End Function
 
 
