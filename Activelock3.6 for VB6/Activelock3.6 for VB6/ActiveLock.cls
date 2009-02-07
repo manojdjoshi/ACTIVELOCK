@@ -517,10 +517,13 @@ noRegistration:
                 End If
             End If
         End If
+        
         If CheckStreamCapability() And Lic.LicenseType <> allicPermanent Then
-
             If FileLen(mKeyStorePath) = 0 Then GoTo continueRegistration
-            adsText = ViewStream(mKeyStorePath & ":" & strStream) ' View the stream
+            
+            'adsText = ViewStream(mKeyStorePath & ":" & strStream) ' View the stream
+            adsText = ADS_Read_Info(mKeyStorePath & ":" & strStream)
+            
             If adsText = "" Then
                 Set_locale regionalSymbol
                 Err.Raise ActiveLockErrCodeConstants.alerrLicenseTampered, ACTIVELOCKSTRING, STRLICENSETAMPERED
@@ -531,17 +534,20 @@ noRegistration:
                 Set_locale regionalSymbol
                 Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
             End If
+            
             ' Write the stream to the file
-            fileno = FreeFile
-            run = ActivelockGetSpecialFolder(46) & "\run.bat"
-            If fileExist(run) Then Kill run
-            Open run For Append As fileno
-            Print #fileno, "@ECHO OFF"
-            Print #fileno, "echo " & ActiveLockDate(UTC(Now)) & " > " & """" & mKeyStorePath & ":" & strStream & """"
-            Close fileno
-            Dim rc As Double
-            rc = Shell(run, vbMinimizedFocus)
-            DoEvents
+'            fileno = FreeFile
+'            run = ActivelockGetSpecialFolder(46) & "\run.bat"
+'            If fileExist(run) Then Kill run
+'            Open run For Append As fileno
+'            Print #fileno, "@ECHO OFF"
+'            Print #fileno, "echo " & ActiveLockDate(UTC(Now)) & " > " & """" & mKeyStorePath & ":" & strStream & """"
+'            Close fileno
+'            Dim rc As Double
+'            rc = Shell(run, vbMinimizedFocus)
+'            DoEvents
+            
+            Call ADS_Write_Info(mKeyStorePath & ":" & strStream, ActiveLockDate(UTC(Now)))
             
             GoTo continueRegistration
         End If
@@ -1063,17 +1069,20 @@ Private Sub IActiveLock_Register(ByVal LibKey As String, Optional user As String
     If CheckStreamCapability() And Lic.LicenseType <> allicPermanent Then
         ' Write the current date and time into the ads
         strStream = mSoftwareName & mSoftwareVer & mSoftwarePassword
+        
         ' Write the stream to the file
-        fileno = FreeFile
-        run = ActivelockGetSpecialFolder(46) & "\run.bat"
-        If fileExist(run) Then Kill run
-        Open run For Append As fileno
-        Print #fileno, "@ECHO OFF"
-        Print #fileno, "echo " & CStr(ActiveLockDate(UTC(Now))) & " > " & """" & mKeyStorePath & ":" & strStream & """"
-        Close fileno
-        rc = Shell(run, vbMinimizedFocus)
-        DoEvents
-    
+'        fileno = FreeFile
+'        run = ActivelockGetSpecialFolder(46) & "\run.bat"
+'        If fileExist(run) Then Kill run
+'        Open run For Append As fileno
+'        Print #fileno, "@ECHO OFF"
+'        Print #fileno, "echo " & CStr(ActiveLockDate(UTC(Now))) & " > " & """" & mKeyStorePath & ":" & strStream & """"
+'        Close fileno
+'        rc = Shell(run, vbMinimizedFocus)
+'        DoEvents
+        
+        Call ADS_Write_Info(mKeyStorePath & ":" & strStream, ActiveLockDate(UTC(Now)))
+
     End If
    
     ' Expire all trial licenses
@@ -1423,7 +1432,7 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
     Dim strLock As String
     Dim noKey As String
     Dim userFromInstallCode As String, usedcode As String
-    Dim a() As String, aString As String
+    Dim a() As String, astring As String
     Dim j As Integer
     
     noKey = Chr(110) & Chr(111) & Chr(107) & Chr(101) & Chr(121)
@@ -1556,117 +1565,117 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
             
             a = Split(usedcode, vbLf)
             For j = LBound(a) To UBound(a) - 1
-                aString = a(j)
-                If Left(aString, 1) = "+" Then aString = Mid(aString, 2)
+                astring = a(j)
+                If Left(astring, 1) = "+" Then astring = Mid(astring, 2)
                 If j = LBound(a) Then
-                    If aString <> noKey Then
+                    If astring <> noKey Then
                         IActiveLock_AddLockCode lockMAC, SizeLockType
-                        If aString <> modHardware.GetMACAddress() Then
+                        If astring <> modHardware.GetMACAddress() Then
                             Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 1 Then
-                    If aString <> noKey Then
+                    If astring <> noKey Then
                         IActiveLock_AddLockCode lockComp, SizeLockType 'dw1 build up lockTypes
-                        If aString <> modHardware.GetComputerName() Then
+                        If astring <> modHardware.GetComputerName() Then
                             Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 2 Then
-                    If aString <> noKey Then
+                    If astring <> noKey Then
                         IActiveLock_AddLockCode lockHD, SizeLockType  'dw1 build up lockTypes
-                        If aString <> modHardware.GetHDSerial() Then
+                        If astring <> modHardware.GetHDSerial() Then
                             Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 3 Then
-                    If aString <> noKey Then
+                    If astring <> noKey Then
                         IActiveLock_AddLockCode lockHDFirmware, SizeLockType  'dw1 build up lockTypes
-                        If aString <> modHardware.GetHDSerialFirmware() Then
+                        If astring <> modHardware.GetHDSerialFirmware() Then
                             Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 4 Then
-                    If aString <> noKey Then
+                    If astring <> noKey Then
                         IActiveLock_AddLockCode lockWindows, SizeLockType  'dw1 build up lockTypes
-                        If aString <> modHardware.GetWindowsSerial() Then
+                        If astring <> modHardware.GetWindowsSerial() Then
                             Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 5 Then
-                    If aString <> noKey Then
+                    If astring <> noKey Then
                         IActiveLock_AddLockCode lockBIOS, SizeLockType  'dw1 build up lockTypes
-                        If aString <> modHardware.GetBiosVersion() Then
+                        If astring <> modHardware.GetBiosVersion() Then
                             Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 6 Then
-                    If aString <> noKey Then
+                    If astring <> noKey Then
                         IActiveLock_AddLockCode lockMotherboard, SizeLockType  'dw1 build up lockTypes
-                        If aString <> modHardware.GetMotherboardSerial() Then
+                        If astring <> modHardware.GetMotherboardSerial() Then
                             Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 7 Then
-                    If aString <> noKey Then
+                    If astring <> noKey Then
                         IActiveLock_AddLockCode lockIP, SizeLockType  'dw1 build up lockTypes
-                        If aString <> modHardware.GetIPaddress() Then
+                        If astring <> modHardware.GetIPaddress() Then
                             Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 
                 ElseIf j = LBound(a) + 8 Then
-                    If aString <> noKey Then
+                    If astring <> noKey Then
                         IActiveLock_AddLockCode lockExternalIP, SizeLockType  'dw1 build up lockTypes
-                        If aString <> modHardware.GetExternalIP() Then
+                        If astring <> modHardware.GetExternalIP() Then
                             Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 9 Then
-                    If aString <> noKey Then
+                    If astring <> noKey Then
                         IActiveLock_AddLockCode lockFingerprint, SizeLockType  'dw1 build up lockTypes
-                        If aString <> modHardware.GetFingerprint() Then
+                        If astring <> modHardware.GetFingerprint() Then
                             Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 10 Then
-                    If aString <> noKey Then
+                    If astring <> noKey Then
                         IActiveLock_AddLockCode lockMemory, SizeLockType  'dw1 build up lockTypes
-                        If aString <> modHardware.GetMemoryID() Then
+                        If astring <> modHardware.GetMemoryID() Then
                             Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 11 Then
-                    If aString <> noKey Then
+                    If astring <> noKey Then
                         IActiveLock_AddLockCode lockCPUID, SizeLockType  'dw1 build up lockTypes
-                        If aString <> modHardware.GetCPUID() Then
+                        If astring <> modHardware.GetCPUID() Then
                             Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 12 Then
-                    If aString <> noKey Then
+                    If astring <> noKey Then
                         IActiveLock_AddLockCode lockBaseboardID, SizeLockType  'dw1 build up lockTypes
-                        If aString <> modHardware.GetBaseboardID() Then
+                        If astring <> modHardware.GetBaseboardID() Then
                             Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If
                     End If
                 ElseIf j = LBound(a) + 13 Then
-                    If aString <> noKey Then
+                    If astring <> noKey Then
                         IActiveLock_AddLockCode lockvideoID, SizeLockType  'dw1 build up lockTypes
-                        If aString <> modHardware.GetVideoID() Then
+                        If astring <> modHardware.GetVideoID() Then
                             Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                         End If

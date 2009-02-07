@@ -328,27 +328,27 @@ ErrFinish:
     On Error GoTo 0
 End Function
 
-Public Sub Delete_ADS_File(ADSFileName As String)
+Public Sub ADS_Delete_File(ADSFileName As String)
 ' Example: ADSFileName = "C:\:mydata.dat"
-    If Does_ADS_FileExist(ADSFileName) Then
+    If ADS_Does_FileExist(ADSFileName) Then
         DeleteFile ADSFileName
     End If
 End Sub
-Public Function Does_ADS_FileExist(ADSFileName As String) As Boolean
+Public Function ADS_Does_FileExist(ADSFileName As String) As Boolean
 ' Example: ADSFileName = "C:\:mydata.dat"
     Dim OF As OFSTRUCT
-    Does_ADS_FileExist = OpenFile(ADSFileName, OF, OF_EXIST) = 1
+    ADS_Does_FileExist = OpenFile(ADSFileName, OF, OF_EXIST) = 1
 End Function
-Public Function Read_ADS_Info(ADSFileName As String) As Variant
+Public Function ADS_Read_Info(ADSFileName As String) As Variant
 ' Example: ADSFileName = "C:\:mydata.dat"
     Dim FileData As Variant
     Open ADSFileName For Binary Access Read As #1
         Get #1, , FileData
     Close #1
-    Read_ADS_Info = FileData
+    ADS_Read_Info = FileData
 End Function
 
-Public Sub Write_ADS_Info(ADSFileName As String, FileData As Variant)
+Public Sub ADS_Write_Info(ADSFileName As String, FileData As Variant)
 ' Example: ADSFileName = "C:\:mydata.dat"
     Open ADSFileName For Binary Access Write As #1
         Put #1, , FileData
