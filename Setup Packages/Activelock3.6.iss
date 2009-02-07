@@ -29,12 +29,15 @@ Name: "examples"; Description: "Examples"; Types: full custom
 Name: "sourcecode"; Description: "Source Code"; Types: full custom
 
 [Files]
-;Source: C:\ActiveLockCommunity\Redistribution\msvbvm60.dll; DestDir: {sys}; Flags:  regserver restartreplace uninsneveruninstall sharedfile
-;Source: C:\ActiveLockCommunity\Redistribution\oleaut32.dll; DestDir: {sys}; Flags:  regserver restartreplace uninsneveruninstall sharedfile
-;Source: C:\ActiveLockCommunity\Redistribution\olepro32.dll; DestDir: {sys}; Flags:  regserver restartreplace uninsneveruninstall sharedfile
-;Source: C:\ActiveLockCommunity\Redistribution\asycfilt.dll; DestDir: {sys}; Flags:  sharedfile
-;Source: C:\ActiveLockCommunity\Redistribution\stdole2.tlb; DestDir: {sys}; Flags:  uninsneveruninstall sharedfile regtypelib
-;Source: C:\ActiveLockCommunity\Redistribution\comcat.dll; DestDir: {sys}; Flags:  regserver restartreplace uninsneveruninstall sharedfile
+;begin VB system files
+; (Note: Scroll to the right to see the full lines!)
+Source: C:\ActiveLockCommunity\Redistribution\msvbvm60.dll; DestDir: {sys}; OnlyBelowVersion: 0,6; Flags:  regserver restartreplace uninsneveruninstall sharedfile
+Source: C:\ActiveLockCommunity\Redistribution\oleaut32.dll; DestDir: {sys}; OnlyBelowVersion: 0,6; Flags:  regserver restartreplace uninsneveruninstall sharedfile
+Source: C:\ActiveLockCommunity\Redistribution\olepro32.dll; DestDir: {sys}; OnlyBelowVersion: 0,6; Flags:  regserver restartreplace uninsneveruninstall sharedfile
+Source: C:\ActiveLockCommunity\Redistribution\asycfilt.dll; DestDir: {sys}; OnlyBelowVersion: 0,6; Flags:  restartreplace uninsneveruninstall sharedfile
+Source: C:\ActiveLockCommunity\Redistribution\stdole2.tlb; DestDir: {sys}; OnlyBelowVersion: 0,6; Flags:  restartreplace uninsneveruninstall sharedfile regtypelib
+Source: C:\ActiveLockCommunity\Redistribution\comcat.dll; DestDir: {sys}; OnlyBelowVersion: 0,6; Flags:   restartreplace uninsneveruninstall sharedfile regserver
+; end VB system files
 
 Source: C:\ActiveLockCommunity\Redistribution\Mscomctl.ocx; DestDir: "{sys}"; Flags: restartreplace uninsneveruninstall sharedfile regserver
 Source: C:\ActiveLockCommunity\Redistribution\comdlg32.ocx; DestDir: "{sys}"; Flags: restartreplace uninsneveruninstall sharedfile regserver
