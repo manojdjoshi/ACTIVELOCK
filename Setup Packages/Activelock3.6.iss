@@ -4,7 +4,8 @@ AppVersion=3.6
 AppVerName=Activelock VB6 3.6
 AppPublisher=Activelock Software Group
 Uninstallable=true
-DefaultDirName={pf}\Activelock VB6 3.6
+; set installation folder based on target Windows version
+DefaultDirName={code:SetInstallDir}\Activelock_VB6_3.6
 OutputBaseFilename=Activelock_VB6_Setup_3.6
 OutputDir=.
 DefaultGroupName=Activelock Software Group
@@ -16,6 +17,8 @@ LicenseFile=C:\ActiveLockCommunity\License Agreement\Activelock3_License.txt
 PrivilegesRequired=admin
 Compression=lzma
 SolidCompression=true
+; the following must be set to allow installation into the system directory
+AllowRootDirectory=true
 
 [Types]
 Name: "full"; Description: "Full installation"
@@ -75,68 +78,68 @@ Source: C:\ActiveLockCommunity\Redistribution\mswinsck.ocx; DestDir: "{app}\Redi
 
 ;Alcrypto3 C++ folder
 Source: C:\ActiveLockCommunity\Redistribution\alcrypto3.dll; DestDir: "{sys}"; Flags: sharedfile; Components: bin sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\alcrypto3.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\alcrypto3.def; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\alcrypto3.dll; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\alcrypto3.dsp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\alcrypto3.dsw; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\alcrypto3.exp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\alcrypto3.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\alcrypto3.ilk; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\alcrypto3.lib; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\alcrypto3.ncb; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\alcrypto3.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\alcrypto3.opt; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\alcrypto3.pch; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\alcrypto3.pdb; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\alcrypto3.plg; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\bignum.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\bignum.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\bignum.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\diskid32.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\diskid32.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\diskid32.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\md5.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\md5.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\md5.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\memory.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\memory.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\memory.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\misc.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\misc.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\misc.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\noise.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\noise.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\noise.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\port32.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\port32.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\port32.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\prime.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\prime.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\prime.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\rand.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\rand.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\rand.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\resource.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\rsa.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\rsa.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\rsa.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\rsag.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\rsag.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\rsag.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\sha.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\sha.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\sha.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\vc60.idb; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\vc60.pdb; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\version.rc; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\version.res; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\windowsversion.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\windowsversion.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\windowsversion.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\winio.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\winio.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3 C++\winio.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\alcrypto3.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\alcrypto3.def; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\alcrypto3.dll; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\alcrypto3.dsp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\alcrypto3.dsw; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\alcrypto3.exp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\alcrypto3.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\alcrypto3.ilk; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\alcrypto3.lib; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\alcrypto3.ncb; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\alcrypto3.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\alcrypto3.opt; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\alcrypto3.pch; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\alcrypto3.pdb; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\alcrypto3.plg; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\bignum.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\bignum.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\bignum.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\diskid32.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\diskid32.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\diskid32.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\md5.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\md5.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\md5.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\memory.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\memory.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\memory.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\misc.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\misc.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\misc.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\noise.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\noise.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\noise.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\port32.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\port32.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\port32.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\prime.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\prime.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\prime.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\rand.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\rand.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\rand.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\resource.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\rsa.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\rsa.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\rsa.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\rsag.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\rsag.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\rsag.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\sha.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\sha.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\sha.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\vc60.idb; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\vc60.pdb; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\version.rc; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\version.res; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\windowsversion.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\windowsversion.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\windowsversion.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\winio.cpp; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\winio.h; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\winio.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
 
 ;Src_v3 folder for Activelock source files - including Alugen - for Classic VB6 only
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\Activelock3.6.dll; DestDir: "{sys}"; Flags: restartreplace sharedfile regserver allowunsafefiles; Components: bin sourcecode
@@ -208,17 +211,17 @@ Source: C:\ActiveLockCommunity\help\VBTutorial3.chm; DestDir: "{app}\help"; Flag
 Source: C:\ActiveLockCommunity\ChangeLog\VB6_ChangeLog.txt; DestDir: "{app}\ChangeLog"; Flags: ignoreversion; Components: help
 
 ;examples\VB folder
-Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\ALTestApp3.6 for VB6\ALVB6Sample3_6.exe; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
-Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\ALTestApp3.6 for VB6\ALVB6Sample3_6.exe.manifest; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
-Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\ALTestApp3.6 for VB6\ALVB6Sample.vbp; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
-Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\ALTestApp3.6 for VB6\frmMain.frm; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
-Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\ALTestApp3.6 for VB6\frmMain.frx; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
-Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\ALTestApp3.6 for VB6\modMain.bas; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
-Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\ALTestApp3.6 for VB6\modRegistryAPIs.bas; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
-Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\ALTestApp3.6 for VB6\splash.frm; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
-Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\ALTestApp3.6 for VB6\splash.frx; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
-Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\ALTestApp3.6 for VB6\splash1.frm; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
-Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\ALTestApp3.6 for VB6\splash1.frx; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
+Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\ALVB6Sample3_6.exe; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
+Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\ALVB6Sample3_6.exe.manifest; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
+Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\ALVB6Sample.vbp; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
+Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\frmMain.frm; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
+Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\frmMain.frx; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
+Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\modMain.bas; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
+Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\modRegistryAPIs.bas; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
+Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\splash.frm; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
+Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\splash.frx; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
+Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\splash1.frm; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
+Source: C:\ActiveLockCommunity\ALTestApp3.6 for VB6\splash1.frx; DestDir: "{app}\ALTestApp3.6 for VB6"; Flags: ignoreversion; Components: examples
 
 [Tasks]
 Name: startmenu; Description: Add icons to Start Menu;
@@ -246,6 +249,16 @@ begin
     UnregisterServer(False, Filename, True);
   end;
 end;
+Function SetInstallDir(Param: String): String;
+Var
+	Version: TWindowsVersion;
+Begin
+	GetWindowsVersionEx(Version);
+	If Version.Major > 5 Then
+		Result := ExpandConstant('{commonappdata}')
+	Else
+		Result := ExpandConstant('{pf}')
+End;
 
 [Registry]
 Root: HKLM; ValueType: string; Subkey: Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers; ValueName: {sys}\regsvr32.exe; ValueData: DisableNXShowUI
