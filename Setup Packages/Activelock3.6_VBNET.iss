@@ -4,7 +4,8 @@ AppVersion=3.6
 AppVerName=Activelock VB2008 3.6
 AppPublisher=Activelock Software Group
 Uninstallable=true
-DefaultDirName={pf}\Activelock VB2008 3.6
+; set installation folder based on target Windows version
+DefaultDirName={code:SetInstallDir}\Activelock_VB2008_3.6
 OutputBaseFilename=Activelock_VB2008_Setup_3.6
 OutputDir=.
 DefaultGroupName=Activelock Software Group
@@ -16,6 +17,7 @@ LicenseFile=C:\ActiveLockCommunity\License Agreement\Activelock3_License.txt
 PrivilegesRequired=admin
 Compression=lzma
 SolidCompression=true
+AllowRootDirectory=true
 
 [Types]
 Name: "full"; Description: "Full installation"
@@ -171,65 +173,65 @@ Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6.NET\Regist
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6.NET\XMLGenerator.vb; DestDir: "{app}\Activelock3.6.NET"; Flags: ignoreversion; Components: examples
 
 ;Alcrypto3.NET C++ folder
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\alcrypto3.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\alcrypto3.exp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\alcrypto3.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\alcrypto3.lib; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\alcrypto3.map; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\alcrypto3.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\alcrypto3.vcproj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\alcrypto3NET.def; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\alcrypto3NET.dll; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\alcrypto3NET.exp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\alcrypto3NET.lib; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\alcrypto3NET.sln; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\bignum.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\bignum.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\bignum.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\diskid32.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\diskid32.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\diskid32.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\md5.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\md5.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\md5.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\memory.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\memory.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\memory.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\misc.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\misc.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\misc.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\noise.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\noise.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\noise.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\port32.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\port32.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\port32.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\prime.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\prime.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\prime.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\rand.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\rand.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\rand.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\resource.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\rsa.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\rsa.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\rsa.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\rsag.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\rsag.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\rsag.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\sha.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\sha.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\sha.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\vc80.idb; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\vc90.idb; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\version.rc; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\version.res; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\windowsversion.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\windowsversion.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\windowsversion.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\winio.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\winio.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Alcrypto3.NET VS2008\winio.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\alcrypto3.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\alcrypto3.exp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\alcrypto3.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\alcrypto3.lib; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\alcrypto3.map; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\alcrypto3.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\alcrypto3.vcproj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\alcrypto3NET.def; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\alcrypto3NET.dll; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\alcrypto3NET.exp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\alcrypto3NET.lib; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\alcrypto3NET.sln; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\bignum.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\bignum.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\bignum.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\diskid32.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\diskid32.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\diskid32.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\md5.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\md5.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\md5.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\memory.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\memory.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\memory.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\misc.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\misc.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\misc.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\noise.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\noise.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\noise.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\port32.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\port32.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\port32.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\prime.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\prime.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\prime.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\rand.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\rand.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\rand.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\resource.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\rsa.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\rsa.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\rsa.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\rsag.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\rsag.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\rsag.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\sha.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\sha.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\sha.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\vc80.idb; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\vc90.idb; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\version.rc; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\version.res; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\windowsversion.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\windowsversion.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\windowsversion.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\winio.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\winio.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\winio.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
 
 [Code]
 function InitializeSetup(): Boolean;
@@ -256,7 +258,6 @@ if NetFrameWorkInstalled = true then
       begin
       Result:=false;
       end
-
     else
       begin
       Result:=false;
@@ -265,6 +266,16 @@ if NetFrameWorkInstalled = true then
     end;
   end;
 end;
+Function SetInstallDir(Param: String): String;
+Var
+	Version: TWindowsVersion;
+Begin
+	GetWindowsVersionEx(Version);
+	If Version.Major > 5 Then
+		Result := ExpandConstant('{commonappdata}')
+	Else
+		Result := ExpandConstant('{pf}')
+End;
 
 [Registry]
 Root: HKLM; ValueType: string; Subkey: Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers; ValueName: {sys}\regsvr32.exe; ValueData: DisableNXShowUI
