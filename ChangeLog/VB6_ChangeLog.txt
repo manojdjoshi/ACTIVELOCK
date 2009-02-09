@@ -95,6 +95,7 @@ This is essentially a computer fingerprint computed as the combination of many d
 - UPDATE: In order prevent regsvr32 from being blocked, added the following [Registry] line in InnoSetup file:
 Root: HKLM; ValueType: string; Subkey: Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers; ValueName: {sys}\regsvr32.exe; ValueData: DisableNXShowUI
 - UPDATE: This is a real story: A customers takes the ALL file and renames it as a LIC file, and of course Activelock did not work. It took the developer many hours to diagnose the problem. Activelock will now detect this error and will warn the user.
+- UPDATE: Improved the ADS functions in VB6 version with new formulas that do not rely on running bat files.
 
 
 
