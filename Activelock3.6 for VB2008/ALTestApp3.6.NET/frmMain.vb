@@ -1231,6 +1231,7 @@ Friend Class frmMain
             ' RSA classes in .NET allows you to pick from several cipher strengths
             ' however ALCrypto uses 1024 bit strength key only.
             ' alsShortKeyMD5 is for short key protection only
+            ' WARNING: Short key licenses use the lockFingerprint by default
             '.LicenseKeyType = ActiveLock3_6NET.IActiveLock.ALLicenseKeyTypes.alsShortKeyMD5
             .LicenseKeyType = ActiveLock3_6NET.IActiveLock.ALLicenseKeyTypes.alsRSA
 
@@ -1276,6 +1277,8 @@ Friend Class frmMain
             ' In order to pick the keys that you want to lock to in Alugen, use lockNone only
             ' Example: lockWindows Or lockComp
             ' You can combine any lockType(s) using OR as above
+            ' WARNING: Short key licenses use the lockFingerprint by default
+            ' WARNING: This has no effect for short key licenses
             .LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockNone
             '.LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockIP Or _
             'ActiveLock3_6NET.IActiveLock.ALLockTypes.lockComp()
@@ -1343,8 +1346,8 @@ Friend Class frmMain
 
             ' Verify Activelock DLL's authenticity by checking its CRC
             ' This checkes the CRC of the Activelock DLL and compares it with the embedded value
-            ' To change the embedded value; find the "CRC <> Value" check in this code,
-            ' and change the Value() function to make it the same as the CRC.
+            ' To change the embedded value; find the "VerifyActiveLockNETdll" check in this project,
+            ' and change the VerifyActiveLockNETdll() function to make it the same as the current CRC.
             txtChecksum.Text = modMain.VerifyActiveLockNETdll()
 
             ' Initialize the keystore. We use a File keystore in this case.
@@ -1409,7 +1412,13 @@ Friend Class frmMain
         ' If it generates an error, that means there NO trial, NO license
         ' If no error and returns a string, there's a trial but No license. Parse the string to display a trial message.
         ' If no error and no string returned, you've got a valid license.
-        MyActiveLock.Acquire(strMsg)
+        MyActiveLock.Acquire(strMsg, strRemainingTrialDays, strRemainingTrialRuns, strTrialLength, strUsedDays, strExpirationDate, strRegisteredUser, strRegisteredLevel, strLicenseClass, strMaxCount, strLicenseFileType, strLicenseType, strUsedLockType)
+        ' strMsg is to get the trial status
+        ' All other parameters are Optional and you can actually get all of them
+        ' using MyActivelock.Property usage, but keep in mind that 
+        ' doing so will check the license every time making this a time consuming 
+        ' way of reading those properties
+        ' The fastest approach is to use the arguments from Acquire() method.
         If strMsg <> "" Then 'There's a trial
             ' Parse the returned string to display it on a form
             Dim A() As String = strMsg.Split(vbCrLf)
@@ -1438,8 +1447,10 @@ Friend Class frmMain
             ' ALTERNATIVE 2
             ' Show a splash form that shows two choices, register or try
             ' User must chosse one option for the form to close
-            remainingDays = MyActiveLock.RemainingTrialDays
-            totalDays = MyActiveLock.TrialLength
+            'MyActiveLock.RemainingTrialDays
+            remainingDays = CInt(strRemainingTrialDays)
+            'MyActiveLock.TrialLength
+            totalDays = CInt(strTrialLength)
             Dim frmsplash1 As New frmSplash1
             frmsplash1.Visible = False
             frmsplash1.ShowDialog()
@@ -1457,24 +1468,29 @@ Friend Class frmMain
         ' You can retrieve the LockTypes set inside Alugen
         ' by accessing the UsedLockType property
         'For example, if only lockHDfirmware was used, this will return 256
-        'MsgBox(MyActiveLock.UsedLockType(0))
+        'MsgBox(MyActiveLock.UsedLockType)
 
         ' So far so good... 
         ' If you are here already, that means you have a valid license.
         ' Set the textboxes in your app accordingly.
         txtRegStatus.Text = "Registered"
-        txtUsedDays.Text = MyActiveLock.UsedDays.ToString
-        txtExpiration.Text = MyActiveLock.ExpirationDate
+        'MyActiveLock.UsedDays
+        txtUsedDays.Text = strUsedDays
+        'MyActiveLock.ExpirationDate
+        txtExpiration.Text = strExpirationDate
         If txtExpiration.Text = "" Then txtExpiration.Text = "Permanent" 'App has a permanent license
 
         Dim arrProdVer() As String
-        arrProdVer = Split(MyActiveLock.RegisteredUser, "&&&") ' Extract the software name and version
+        'MyActiveLock.RegisteredUser
+        arrProdVer = Split(strRegisteredUser, "&&&") ' Extract the software name and version
         txtUser.Text = arrProdVer(0)
 
-        txtRegisteredLevel.Text = MyActiveLock.RegisteredLevel
+        'MyActiveLock.RegisteredLevel
+        txtRegisteredLevel.Text = strRegisteredLevel
 
         ' Set Networked Licenses if applicable
-        If MyActiveLock.LicenseClass = "MultiUser" Then
+        'MyActiveLock.LicenseClass
+        If strLicenseClass = "MultiUser" Then
             txtNetworkedLicense.Text = "Networked"
         Else
             txtNetworkedLicense.Text = "Single User"
@@ -1482,12 +1498,14 @@ Friend Class frmMain
             lblConcurrentUsers.Visible = False
         End If
         ' This is for number of concurrent users count in a netwrok license
-        txtMaxCount.Text = MyActiveLock.MaxCount
+        'MyActiveLock.MaxCount
+        txtMaxCount.Text = strMaxCount
 
         ' Read the license file into a string to determine the license type
         ' You can read the LicenseType from the LIC file directly
         ' However, the LIC file should be in Plain format for this to work.
-        If MyActiveLock.LicenseFileType = ActiveLock3_6NET.IActiveLock.ALLicenseFileTypes.alsLicenseFilePlain Then
+        ' MyActiveLock.LicenseFileType
+        If strLicenseFileType = ActiveLock3_6NET.IActiveLock.ALLicenseFileTypes.alsLicenseFilePlain Then
             Dim strBuff As String
             Dim fNum As Short
             fNum = FreeFile()
@@ -1502,7 +1520,13 @@ Friend Class frmMain
                 txtLicenseType.Text = "Permanent"
             End If
         Else
-            txtLicenseType.Text = "Encrypted in LIC File"
+            If strLicenseType = "3" Then
+                txtLicenseType.Text = "Time Limited"
+            ElseIf strLicenseType = "1" Then
+                txtLicenseType.Text = "Periodic"
+            ElseIf strLicenseType = "2" Then
+                txtLicenseType.Text = "Permanent"
+            End If
         End If
 
         FunctionalitiesEnabled = True

@@ -1257,7 +1257,7 @@ Friend Class frmMain
         '
         'lblLockVideoID
         '
-        Me.lblLockVideoID.Location = New System.Drawing.Point(293, 290)
+        Me.lblLockVideoID.Location = New System.Drawing.Point(293, 362)
         Me.lblLockVideoID.Name = "lblLockVideoID"
         Me.lblLockVideoID.Size = New System.Drawing.Size(368, 18)
         Me.lblLockVideoID.TabIndex = 91
@@ -1270,7 +1270,7 @@ Friend Class frmMain
         Me.chkLockVideoID.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkLockVideoID.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockVideoID.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkLockVideoID.Location = New System.Drawing.Point(87, 290)
+        Me.chkLockVideoID.Location = New System.Drawing.Point(87, 362)
         Me.chkLockVideoID.Name = "chkLockVideoID"
         Me.chkLockVideoID.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkLockVideoID.Size = New System.Drawing.Size(279, 18)
@@ -1349,7 +1349,7 @@ Friend Class frmMain
         '
         'lblLockFingerprint
         '
-        Me.lblLockFingerprint.Location = New System.Drawing.Point(293, 363)
+        Me.lblLockFingerprint.Location = New System.Drawing.Point(293, 290)
         Me.lblLockFingerprint.Name = "lblLockFingerprint"
         Me.lblLockFingerprint.Size = New System.Drawing.Size(368, 18)
         Me.lblLockFingerprint.TabIndex = 83
@@ -1362,12 +1362,12 @@ Friend Class frmMain
         Me.chkLockFingerprint.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkLockFingerprint.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockFingerprint.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkLockFingerprint.Location = New System.Drawing.Point(87, 363)
+        Me.chkLockFingerprint.Location = New System.Drawing.Point(87, 290)
         Me.chkLockFingerprint.Name = "chkLockFingerprint"
         Me.chkLockFingerprint.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkLockFingerprint.Size = New System.Drawing.Size(279, 18)
         Me.chkLockFingerprint.TabIndex = 82
-        Me.chkLockFingerprint.Text = "Lock to Computer Fingerprint [slow]"
+        Me.chkLockFingerprint.Text = "Lock to Computer Fingerprint"
         Me.chkLockFingerprint.UseVisualStyleBackColor = False
         '
         'lblLockExternalIP
@@ -3183,6 +3183,8 @@ SaveFormSettings_Error:
         Dim usedVCode As String = Nothing
         Dim licFlag As ActiveLock3_6NET.ProductLicense.LicFlags, maximumUsers As Short
 
+        If txtInstallCode.Text.Length < 8 Then Exit Sub
+
         If SSTab1.SelectedIndex <> 1 Then Exit Sub ' our tab not active - do nothing
         ' Get the current date format and save it to regionalSymbol variable
         Get_locale()
@@ -3382,13 +3384,14 @@ SaveFormSettings_Error:
 
     Private Sub cmdPaste_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdPaste.Click
 
-        If txtInstallCode.Text = "" Then GoTo continueHere
-        If txtInstallCode.Text.Substring(0, 12).ToLower = "you must send" Then 'short key license
+        If txtInstallCode.Text.Length < 8 Then GoTo continueHere
+
+        If txtInstallCode.Text.Substring(0, 8).ToLower = "you must" Then 'short key license
             Dim arrProdVer() As String
             arrProdVer = Split(txtInstallCode.Text, vbLf)
             systemEvent = True
             txtInstallCode.Text = (arrProdVer(1).Substring(15, 8)).Trim
-            txtUser.Text = (arrProdVer(3).Substring(12, arrProdVer(3).Length - 1)).Trim
+            txtUser.Text = (arrProdVer(3).Substring(11, arrProdVer(3).Length - 11)).Trim
             systemEvent = False
             HandleInstallationCode()
         Else
@@ -3399,6 +3402,7 @@ continueHere:
                 HandleInstallationCode()
             End If
         End If
+        txtLicenseKey.Text = String.Empty
     End Sub
 
     Private Sub cmdRemove_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdRemove.Click
@@ -4226,17 +4230,18 @@ exitValidate:
     Public Sub HandleInstallationCode()
 
         If systemEvent Then Exit Sub
+        If txtInstallCode.Text.Length < 8 Then Exit Sub
 
-        If txtInstallCode.Text.Substring(0, 12).ToLower = "you must send" Then 'short key license
+        If txtInstallCode.Text.Substring(0, 8).ToLower = "you must" Then 'short key license
             Dim arrProdVer() As String
             arrProdVer = Split(txtInstallCode.Text, vbLf)
             systemEvent = True
             txtInstallCode.Text = (arrProdVer(1).Substring(15, 8)).Trim
-            txtUser.Text = (arrProdVer(3).Substring(12, arrProdVer(3).Length - 1)).Trim
+            txtUser.Text = (arrProdVer(3).Substring(11, arrProdVer(3).Length - 11)).Trim
             systemEvent = False
         End If
 
-        If Len(txtInstallCode.Text) = 8 Then 'Short key authorization is much simpler
+        If txtInstallCode.Text.Length = 8 Then 'Short key authorization is much simpler
             UpdateKeyGenButtonStatus()
             If fDisableNotifications Then Exit Sub
 

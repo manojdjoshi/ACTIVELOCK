@@ -137,7 +137,7 @@ Friend Class clsShortLicenseKey
 		
 		' convert each segment value to a hex string
 		KeySegs(Segments.iProdCode) = HexWORD(ProductCode)
-        KeySegs(Segments.iExpire) = HexWORD(DateValue(CStr(CDate(ExpireDate.ToString("yyyy/MM/dd")))).Subtract(DateValue(CStr(#1/1/1970#))).Minutes)
+        KeySegs(Segments.iExpire) = HexWORD(DateValue(CStr(CDate(ExpireDate.ToString("yyyy/MM/dd")))).Subtract(DateValue(CStr(#1/1/1970#))).Days)
         KeySegs(Segments.iUserData) = HexWORD(UserData)
 		
 		' Compute CRC against pertinent info.
@@ -191,65 +191,65 @@ ExitLabel:
 	'#End If
 	
 	'#If IncludeValidate = 1 Then
-	Friend Function ValidateShortKey(ByVal LicenseKey As String, ByVal SerialNumber As String, ByVal Licensee As String, ByVal ProductCode As Integer, Optional ByRef ExpireDate As Date = #12:00:00 AM#, Optional ByRef UserData As Short = 0, Optional ByRef RegisteredLevel As Integer = 0) As Boolean
-		
-		'===============================================================================
-		'   ValidateShortKey - Evaluates the supplied license key and tests that it is
-		'   valid. We do this by recomputing the checksum and comparing it to the one
-		'   embedded in the serial number.
-		'
-		'   LicenseKey      The license number to validate. Liberation Key.
-		'   SerialNumber    A magic string that is application specific. This should
-		'                   be the same as was originally created by the application.
-		'   Licensee        Name of party to whom this license is issued. This should
-		'                   be the same as was used to create the serial number.
-		'   ProductCode     A unique 4 digit number assigned to this product. This should
-		'                   be the same as was used to create the license key.
-		'   ExpireDate      Use this field for time-based serial numbers. This should
-		'                   be the same as was used to create the license key.
-		'   UserData        This field is caller defined. This should be the same as
-		'                   was used to create the license key.
-		'
-		'   RETURNS         True if the license key checks out, False otherwise.
-		'
-		'===============================================================================
-		
-		'*******************************************************************************
-		'   IMPORTANT       This function is where the most care must be given.
-		'                   You should assume that a cracker has seen this code and can
-		'                   recognize it from ASM listings, and should be changed.
-		'                   - Avoid string compares whenever possible.
-		'                   - Pepper lots of JUNK code.
-		'                   - Do things in different order (except CRC checks).
-		'                   - Do not do things in this routine that are being monitored
-		'                     (registry calls, file-system access, phone home w/TCP).
-		'                   - Remove the UCase$ statements (just pass serial in ucase).
-		'*******************************************************************************
-		
+    Friend Function ValidateShortKey(ByVal LicenseKey As String, ByVal SerialNumber As String, ByVal Licensee As String, ByVal ProductCode As Integer, Optional ByRef ExpireDate As Date = #1/1/1970#, Optional ByRef UserData As Short = 0, Optional ByRef RegisteredLevel As Integer = 0) As Boolean
+
+        '===============================================================================
+        '   ValidateShortKey - Evaluates the supplied license key and tests that it is
+        '   valid. We do this by recomputing the checksum and comparing it to the one
+        '   embedded in the serial number.
+        '
+        '   LicenseKey      The license number to validate. Liberation Key.
+        '   SerialNumber    A magic string that is application specific. This should
+        '                   be the same as was originally created by the application.
+        '   Licensee        Name of party to whom this license is issued. This should
+        '                   be the same as was used to create the serial number.
+        '   ProductCode     A unique 4 digit number assigned to this product. This should
+        '                   be the same as was used to create the license key.
+        '   ExpireDate      Use this field for time-based serial numbers. This should
+        '                   be the same as was used to create the license key.
+        '   UserData        This field is caller defined. This should be the same as
+        '                   was used to create the license key.
+        '
+        '   RETURNS         True if the license key checks out, False otherwise.
+        '
+        '===============================================================================
+
+        '*******************************************************************************
+        '   IMPORTANT       This function is where the most care must be given.
+        '                   You should assume that a cracker has seen this code and can
+        '                   recognize it from ASM listings, and should be changed.
+        '                   - Avoid string compares whenever possible.
+        '                   - Pepper lots of JUNK code.
+        '                   - Do things in different order (except CRC checks).
+        '                   - Do not do things in this routine that are being monitored
+        '                     (registry calls, file-system access, phone home w/TCP).
+        '                   - Remove the UCase$ statements (just pass serial in ucase).
+        '*******************************************************************************
+
         Dim KeySegs As Object = Nothing
-		Dim nCrc1 As Integer
-		Dim nCrc2 As Integer
-		Dim nCrc3 As Integer
-		Dim nCrc4 As Integer
-		Dim i As Integer
-		
+        Dim nCrc1 As Integer
+        Dim nCrc2 As Integer
+        Dim nCrc3 As Integer
+        Dim nCrc4 As Integer
+        Dim i As Integer
+
         On Error GoTo ExitLabel
-		
-		' TODO: don't even call this function if SoftIce was detected!
-		' ----------------------------------------------------------
-		' This section of code could raise red flags
-		' ----------------------------------------------------------
-		RegisteredLevel = SegmentValue(StrReverse(Mid(LicenseKey, 26, 4))) - 200
-		LicenseKey = Mid(LicenseKey, 1, 24)
-		If Not SplitKey(LicenseKey, KeySegs) Then GoTo ExitLabel
-		
-		' ----------------------------------------------------------
-		' TODO: UCase string before it get's here
-		
-		' Get CRC used for input validation
+
+        ' TODO: don't even call this function if SoftIce was detected!
+        ' ----------------------------------------------------------
+        ' This section of code could raise red flags
+        ' ----------------------------------------------------------
+        RegisteredLevel = SegmentValue(StrReverse(Mid(LicenseKey, 26, 4))) - 200
+        LicenseKey = Mid(LicenseKey, 1, 24)
+        If Not SplitKey(LicenseKey, KeySegs) Then GoTo ExitLabel
+
+        ' ----------------------------------------------------------
+        ' TODO: UCase string before it get's here
+
+        ' Get CRC used for input validation
         nCrc1 = CRC(System.Text.UnicodeEncoding.Unicode.GetBytes(UCase(Licensee) & KeySegs(Segments.iProdCode) & KeySegs(Segments.iExpire) & KeySegs(Segments.iUserData) & KeySegs(Segments.iCRC)))
-		
-		' Compare check digits
+
+        ' Compare check digits
         If (nCrc1 <> SegmentValue(KeySegs(Segments.iCRC2))) Then
             GoTo ExitLabel
         End If
@@ -288,7 +288,7 @@ ExitLabel:
 
             ' Fill the outputs with expire date and user data.
             ExpireDate = #1/1/1970#
-            ExpireDate.AddDays(SegmentValue(KeySegs(Segments.iExpire)))
+            ExpireDate = ExpireDate.AddDays(SegmentValue(KeySegs(Segments.iExpire)))
             UserData = SegmentValue(KeySegs(Segments.iUserData))
 
             ' IMPORTANT: This is an easy patch point
@@ -298,8 +298,8 @@ ExitLabel:
         End If
 
 ExitLabel:
-		
-	End Function
+
+    End Function
 	'#End If
 	
 	'#If IncludeValidate = 1 Or IncludeCreate = 1 Then

@@ -39,7 +39,9 @@ Module modMain
     Private Declare Function MapFileAndCheckSum Lib "imagehlp" Alias "MapFileAndCheckSumA" (ByVal FileName As String, ByRef HeaderSum As Integer, ByRef CheckSum As Integer) As Integer
 	Public Declare Function GetSystemDirectory Lib "kernel32.dll"  Alias "GetSystemDirectoryA"(ByVal lpBuffer As String, ByVal nSize As Integer) As Integer
     ' Trial information string
-    Public strMsg As String
+    Public strMsg, strRemainingTrialDays, strRemainingTrialRuns, strTrialLength As String
+    Public strUsedDays, strExpirationDate, strRegisteredUser, strRegisteredLevel As String
+    Public strLicenseClass, strMaxCount, strLicenseFileType, strLicenseType, strUsedLockType As String
     Public remainingDays As Integer
     Public totalDays As Integer
 
@@ -79,8 +81,8 @@ Module modMain
             f.Close()
             System.Diagnostics.Debug.WriteLine("Hash: " & crc)
             'Use Following Line only to get the CRC in Encoded format
-            'Dim GetCRC As String = Enc(VerifyActiveLockNETdll)
-            'If VerifyActiveLockNETdll <> Dec("231.2F7.2CB.2F7.268.226.2F7.2CB") Then
+            Dim GetCRC As String = Enc(VerifyActiveLockNETdll)
+            'If VerifyActiveLockNETdll <> Dec("268.226.268.231.231.23C.302.231") Then
             '    ' Encrypted version of "activelock3NET.dll has been corrupted. If you were running a real application, it should terminate at this point."
             '    MsgBox(Dec("42B.441.4FC.483.512.457.4A4.4C5.441.499.231.35A.2F7.39C.1FA.44C.4A4.4A4.160.478.42B.4F1.160.436.457.457.4BA.160.441.4C5.4E6.4E6.507.4D0.4FC.457.44C.1FA") & vbCrLf & vbCrLf & "If you are getting this error message, it might mean that the Activelock DLL might be corrupted," & vbCrLf & "tampered with or the CRC of the Activelock DLL in your application directory does not match" & vbCrLf & "the CRC value embedded in your application." & vbCrLf & vbCrLf & "Just change the VerifyActiveLockNETdll() routine to make the embedded CRC the same as the" & vbCrLf & "actual CRC.", MsgBoxStyle.Information)
             '    End

@@ -8,7 +8,7 @@ Public Interface _IActiveLock
     ReadOnly Property LicenseClass() As String
     Property LockType() As IActiveLock.ALLockTypes
     WriteOnly Property LicenseKeyType() As IActiveLock.ALLicenseKeyTypes
-    Property UsedLockType() As IActiveLock.ALLockTypes()
+    ReadOnly Property UsedLockType() As Integer
     Property TrialHideType() As IActiveLock.ALTrialHideTypes
     Property TrialType() As IActiveLock.ALTrialTypes
     Property TrialLength() As Integer
@@ -29,7 +29,7 @@ Public Interface _IActiveLock
     Sub Register(ByVal LibKey As String, Optional ByRef user As String = "")
     Function Transfer(ByVal InstallCode As String) As String
     Sub Init(Optional ByVal strPath As String = "", Optional ByRef autoLicString As String = "")
-    Sub Acquire(Optional ByRef strMsg As String = "")
+    Sub Acquire(Optional ByRef strMsg As String = "", Optional ByRef strRemainingTrialDays As String = "", Optional ByRef strRemainingTrialRuns As String = "", Optional ByRef strTrialLength As String = "", Optional ByRef strUsedDays As String = "", Optional ByRef strExpirationDate As String = "", Optional ByRef strRegisteredUser As String = "", Optional ByRef strRegisteredLevel As String = "", Optional ByRef strLicenseClass As String = "", Optional ByRef strMaxCount As String = "", Optional ByRef strLicenseFileType As String = "", Optional ByRef strLicenseType As String = "", Optional ByRef strUsedLockType As String = "")
     Sub ResetTrial()
     Sub KillTrial()
     Function GenerateShortSerial(ByVal HDDfirmwareSerial As String) As String
@@ -267,20 +267,20 @@ End Interface
     '###############################################################
     Public Enum ALLockTypes
         lockNone = 0
-        lockWindows = 1
+        lockMAC = 1             '8
         lockComp = 2
         lockHD = 4
-        lockMAC = 8
-        lockBIOS = 16
-        lockIP = 32
+        lockHDFirmware = 8      '256
+        lockWindows = 16        '1
+        lockBIOS = 32           '16
         lockMotherboard = 64
-        lockExternalIP = 128
-        lockHDFirmware = 256
+        lockIP = 128            '32
+        lockExternalIP = 256    '128
         lockFingerprint = 512
         lockMemory = 1024
         lockCPUID = 2048
         lockBaseboardID = 4096
-        lockVideoID = 8192
+        lockvideoID = 8192
     End Enum
 
     '
@@ -501,13 +501,10 @@ End Interface
     ' Purpose: Returns the Current Lock Type being used in this instance.
     ' Remarks: None
     '===============================================================================
-    Public Property UsedLockType() As ALLockTypes() Implements _IActiveLock.UsedLockType
+    Public ReadOnly Property UsedLockType() As Integer Implements _IActiveLock.UsedLockType
         Get
-            Return Nothing
-        End Get
-        Set(ByVal Value As ALLockTypes())
 
-        End Set
+        End Get
     End Property
 
     '===============================================================================
@@ -632,7 +629,7 @@ End Interface
 
         End Set
         Get
-            LicenseFileType = String.Empty
+            'LicenseFileType = String.Empty
         End Get
     End Property
     '===============================================================================
@@ -776,7 +773,7 @@ End Interface
     '===============================================================================
     Public ReadOnly Property UsedDays() As Integer Implements _IActiveLock.UsedDays
         Get
-
+            UsedDays = 0
         End Get
     End Property
     '===============================================================================
@@ -875,7 +872,7 @@ End Interface
     ' <p>If no valid license can be found, an appropriate error will be raised, specifying the cause.
     ' Remarks: None
     '===============================================================================
-    Public Sub Acquire(Optional ByRef strMsg As String = "") Implements _IActiveLock.Acquire
+    Public Sub Acquire(Optional ByRef strMsg As String = "", Optional ByRef strRemainingTrialDays As String = "", Optional ByRef strRemainingTrialRuns As String = "", Optional ByRef strTrialLength As String = "", Optional ByRef strUsedDays As String = "", Optional ByRef strExpirationDate As String = "", Optional ByRef strRegisteredUser As String = "", Optional ByRef strRegisteredLevel As String = "", Optional ByRef strLicenseClass As String = "", Optional ByRef strMaxCount As String = "", Optional ByRef strLicenseFileType As String = "", Optional ByRef strLicenseType As String = "", Optional ByRef strUsedLockType As String = "") Implements _IActiveLock.Acquire
 
     End Sub
     '===============================================================================

@@ -62,8 +62,7 @@ Module modActiveLock
 	'      You only need to go through this keyset generation step once.
 	'      Once you have a valid keyset, you should store it inside your app for later use.
 	'
-
-	Public Const STRKEYSTOREINVALID As String = "A license property contains an invalid value."
+    Public Const STRKEYSTOREINVALID As String = "A license property contains an invalid value."
 	Public Const STRLICENSEEXPIRED As String = "License expired."
 	Public Const STRLICENSEINVALID As String = "License invalid."
 	Public Const STRNOLICENSE As String = "No valid license."
@@ -88,6 +87,7 @@ Module modActiveLock
     Public Const STRUNDEFINEDSPECIALFOLDER As String = "Undefined Special Folder."
     Public Const STRDATEERROR As String = "Date Error."
     Public Const STRINTERNETNOTCONNECTED As String = "Internet Connection is Required. Please Connect and Try Again."
+    Public Const STRSOFTWAREPASSWORDINVALID As String = "Password length>255 or invalid characters."
 
 	' RSA encrypts the data.
 	' @param CryptType CryptType = 0 for public&#59; 1 for private

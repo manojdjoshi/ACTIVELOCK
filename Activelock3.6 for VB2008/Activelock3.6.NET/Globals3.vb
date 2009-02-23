@@ -111,6 +111,7 @@ Imports System.io
         AlerrUndefinedSpecialFolder = &H80040031
         AlerrDateError = &H80040032
         AlerrInternetConnectionError = &H80040033
+        AlerrSoftwarePasswordInvalid = &H80040034
 
     End Enum
     Private strCypherText As String
