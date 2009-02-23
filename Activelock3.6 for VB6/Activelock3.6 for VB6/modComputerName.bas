@@ -763,7 +763,7 @@ Dim sBuffer As String
 
 On Error GoTo GetIPaddressError
 Dim URL As String
-URL = "http://www.whatismyip.org"
+URL = "http://www.whatismyip.com/automation/n09230945.asp"  '"http://www.whatismyip.org"
 hOpen = InternetOpen(scUserAgent, INTERNET_OPEN_TYPE_PRECONFIG, vbNullString, vbNullString, 0)
 hOpenUrl = InternetOpenUrl(hOpen, URL, vbNullString, 0, INTERNET_FLAG_RELOAD, 0)
 

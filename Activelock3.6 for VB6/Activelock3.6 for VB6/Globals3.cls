@@ -127,14 +127,12 @@ Public Enum ActiveLockErrCodeConstants
     alerrLicenseTampered = &H80040004
     alerrClockChanged = &H80040005
     alerrWrongIPaddress = &H80040006
-    
     alerrKeyStoreInvalid = &H80040010
     alerrFileTampered = &H80040011
     alerrNotInitialized = &H80040012
     alerrNotImplemented = &H80040013
     alerrUserNameTooLong = &H80040014
     alerrUserNameInvalid = &H80040015
-    
     alerrInvalidTrialDays = &H80040020
     alerrInvalidTrialRuns = &H80040021
     alerrTrialInvalid = &H80040022
@@ -146,10 +144,10 @@ Public Enum ActiveLockErrCodeConstants
     alerrKeyStorePathInvalid = &H80040028
     alerrCryptoAPIError = &H80040029
     alerrNoSoftwarePassword = &H80040030
-    
     alerrUndefinedSpecialFolder = &H80040031
     alerrDateError = &H80040032
-    alerrInternetConnectionError = &H80040032
+    alerrInternetConnectionError = &H80040033
+    alerrSoftwarePasswordInvalid = &H80040034
     
 End Enum
 
