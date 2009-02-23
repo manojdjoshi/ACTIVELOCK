@@ -794,6 +794,8 @@ Private Sub Form_Load()
         ' The password is also used by the short keys
         ' Regular licensing does not use this password, but you should still use a password
         ' WARNING: You can not ignore this property. You *must* set a password.
+        ' WARNING: Do not use characters outside the range of 32-126 or else you'll get an error
+        ' WARNING: Do not use a password that's longer than 255 characters or else you'll get an error
         .SoftwarePassword = Chr(99) & Chr(111) & Chr(111) & Chr(108)
         
         ' Set whether the software/application will use a short key or RSA method
@@ -801,6 +803,7 @@ Private Sub Form_Load()
         ' RSA classes in .NET allows you to pick from several cipher strengths
         ' however ALCrypto uses 1024 bit strength key only.
         ' alsShortKeyMD5 is for short key protection only
+        ' WARNING: Short key licenses use the lockFingerprint by default
         '.LicenseKeyType = alsShortKeyMD5
         .LicenseKeyType = alsRSA
         
@@ -861,6 +864,8 @@ Private Sub Form_Load()
         ' You can combine any lockType(s) using OR as above
         ' If you want to lock to any keys explicitly, combine them using OR
         ' But you won't be able to uncheck/check any of them while in Alugen (too late at that point).
+        ' WARNING: Short key licenses use the lockFingerprint by default
+        ' WARNING: This has no effect for short key licenses
         .LockType = lockNone
         
         ' Set the .ALL file path if you're using an ALL file.
@@ -963,8 +968,13 @@ Private Sub Form_Load()
     ' If it generates an error, that means there NO trial, NO license
     ' If no error and returns a string, there's a trial but No license. Parse the string to display a trial message.
     ' If no error and no string returned, you've got a valid license.
-    MyActiveLock.Acquire strMsg
-    
+    MyActiveLock.Acquire strMsg, strRemainingTrialDays, strRemainingTrialRuns, strTrialLength, strUsedDays, strExpirationDate, strRegisteredUser, strRegisteredLevel, strLicenseClass, strMaxCount, strLicenseFileType, strLicenseType, strUsedLockType
+    ' strMsg is to get the trial status
+    ' All other parameters are Optional and you can actually get all of them
+    ' using MyActivelock.Property usage, but keep in mind that
+    ' doing so will check the license every time making this a time consuming
+    ' way of reading those properties
+    ' The fastest approach is to use the arguments from Acquire() method.
     If strMsg <> "" Then 'There's a trial
         ' Parse the returned string to display it on a form
         A = Split(strMsg, vbCrLf)
@@ -992,8 +1002,8 @@ Private Sub Form_Load()
         ' ALTERNATIVE 2
         ' Show a splash form that shows two choices, register or try
         ' User must chosse one option for the form to close
-        remainingDays = MyActiveLock.RemainingTrialDays
-        totalDays = MyActiveLock.TrialLength
+        remainingDays = strRemainingTrialDays       'MyActiveLock.RemainingTrialDays
+        totalDays = strTrialLength                  'MyActiveLock.TrialLength
         frmSplash1.Show vbModal
         
         cmdKillTrial.Visible = True
@@ -1017,16 +1027,18 @@ Private Sub Form_Load()
     ' If you are here already, that means you have a valid license.
     ' Set the textboxes in your app accordingly.
     txtRegStatus.Text = "Registered"
-    txtUsedDays.Text = MyActiveLock.UsedDays
-    txtExpiration.Text = MyActiveLock.ExpirationDate
+    txtUsedDays.Text = strUsedDays                          'MyActiveLock.UsedDays
+    txtExpiration.Text = strExpirationDate                  'MyActiveLock.ExpirationDate
     If txtExpiration.Text = "" Then txtExpiration.Text = "Permanent" 'App has a permanent license
     Dim arrProdVer() As String
-    arrProdVer = Split(MyActiveLock.RegisteredUser, "&&&") ' Extract the software name and version
+    arrProdVer = Split(strRegisteredUser, "&&&") ' Extract the software name and version
+    'arrProdVer = Split(MyActiveLock.RegisteredUser, "&&&") ' Extract the software name and version
     txtUser.Text = arrProdVer(0)
-    txtRegisteredLevel.Text = MyActiveLock.RegisteredLevel
+    txtRegisteredLevel.Text = strRegisteredLevel            'MyActiveLock.RegisteredLevel
     
     ' Set Networked Licenses if applicable
-    If MyActiveLock.LicenseClass = "MultiUser" Then
+    'If MyActiveLock.LicenseClass = "MultiUser" Then
+    If strLicenseClass = "MultiUser" Then
         txtNetworkedLicense.Text = "Networked"
     Else
         txtNetworkedLicense.Text = "Single User"
@@ -1034,12 +1046,13 @@ Private Sub Form_Load()
         lblConcurrentUsers.Visible = False
     End If
     ' This is for number of concurrent users count in a netwrok license
-    txtMaxCount.Text = MyActiveLock.MaxCount
+    txtMaxCount.Text = strMaxCount                          'MyActiveLock.MaxCount
 
     ' Read the license file into a string to determine the license type
     ' You can read the LicenseType from the LIC file directly
     ' However, the LIC file should be in Plain format for this to work.
-    If MyActiveLock.LicenseFileType = alsLicenseFilePlain Then
+    'If MyActiveLock.LicenseFileType = alsLicenseFilePlain Then
+    If strLicenseFileType = alsLicenseFilePlain Then
         Dim strBuff As String
         Dim fNum As Integer
         fNum = FreeFile
@@ -1054,7 +1067,13 @@ Private Sub Form_Load()
             txtLicenseType.Text = "Permanent"
         End If
     Else
-        txtLicenseType.Text = "Encrypted in LIC File"
+        If strLicenseType = "3" Then
+            txtLicenseType.Text = "Time Limited"
+        ElseIf strLicenseType = "1" Then
+            txtLicenseType.Text = "Periodic"
+        ElseIf strLicenseType = "2" Then
+            txtLicenseType.Text = "Permanent"
+        End If
     End If
     
     FunctionalitiesEnabled = True
@@ -1359,6 +1378,7 @@ Private Sub cmdRegister_Click()
         MyActiveLock.Register LibKey
     End If
     MsgBox modMain.Dec("386.457.46D.483.4F1.4FC.4E6.42B.4FC.483.4C5.4BA.160.4F1.507.441.441.457.4F1.4F1.462.507.4A4.16B"), vbInformation ' "Registration successful!"
+    Screen.MousePointer = vbHourglass
     Unload Me
     Set MyActiveLock = Nothing
     strMsg = ""
@@ -1366,6 +1386,7 @@ Private Sub cmdRegister_Click()
     totalDays = 0
     Form_Load
     Me.Visible = True
+    Screen.MousePointer = vbDefault
     Exit Sub
 
 errHandler:
