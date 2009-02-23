@@ -61,10 +61,14 @@ Option Explicit On
 	Private mstrLastUsed As String
 	Private mstrHash1 As String ' hash of mstrRegisteredDate
 	Private mnMaxCount As Integer ' max number of concurrent users
+    Private mnUsedDays As Integer ' number of days the license was used
+    Private mnLicenseFileType As Integer ' type of License file; 0 for Plain, 1 for encrypted
+    '    Private mnUsedLockType As Integer
+
     ' License Flags.  Values can be combined (OR&#39;ed) together.
-	'
-	' @param alfSingle        Single-user license
-	' @param alfMulti         Multi-user license
+    '
+    ' @param alfSingle        Single-user license
+    ' @param alfMulti         Multi-user license
 	Public Enum LicFlags
 		alfSingle = 0
 		alfMulti = 1
@@ -299,7 +303,30 @@ Option Explicit On
 		Set(ByVal Value As String)
 			mstrLicenseCode = Value
 		End Set
-	End Property
+    End Property
+    '===============================================================================
+    ' Name: Property Let LicenseFileType
+    ' Input:
+    '   ByVal Code As String - License file type: 0 for Plain, 1 for encrypted
+    ' Output: None
+    ' Purpose: Updates the License Code.
+    '===============================================================================
+    '===============================================================================
+    ' Name: Property Get LicenseFileType
+    ' Input: None
+    ' Output:
+    '   Integer - License file type: 0 for Plain, 1 for encrypted
+    ' Purpose: Returns the license file type.
+    ' Remarks: None
+    '===============================================================================
+    Public Property LicenseFileType() As Integer
+        Get
+            LicenseFileType = mnLicenseFileType
+        End Get
+        Set(ByVal Value As Integer)
+            mnLicenseFileType = Value
+        End Set
+    End Property
     '===============================================================================
 	' Name: Property Let Expiration
 	' Input:
@@ -372,7 +399,49 @@ Option Explicit On
 		Set(ByVal Value As Integer)
 			mnMaxCount = Value
 		End Set
-	End Property
+    End Property
+    '===============================================================================
+    ' Name: Property Get UsedDays
+    ' Input: None
+    ' Output:
+    '   Integer - Number of Days the License was used
+    ' Purpose: Returns Number of Days the License was used
+    ' Remarks: None
+    '===============================================================================
+
+    '===============================================================================
+    ' Name: Property Let UsedDays
+    ' Input:
+    '   nCount As Integer - Number of Days the License was used
+    ' Output: None
+    ' Purpose: Specifies Number of Days the License was used
+    ' Remarks: None
+    '===============================================================================
+    Public Property UsedDays() As Integer
+        Get
+            Return mnUsedDays
+        End Get
+        Set(ByVal Value As Integer)
+            mnUsedDays = Value
+        End Set
+    End Property
+    '===============================================================================
+    ' Name: Property Get UsedLockType
+    ' Input: None
+    ' Output:
+    '   Integer - Used Lock type in Alugen
+    ' Purpose: Returns Used Lock type in Alugen
+    ' Remarks: None
+    '===============================================================================
+    'Public Property UsedLockType() As Integer
+    '    Get
+    '        Return mnUsedLockType
+    '    End Get
+    '    Set(ByVal Value As Integer)
+    '        mnUsedLockType = Value
+    '    End Set
+    'End Property
+
 	'===============================================================================
 	' Name: Property Get LastUsed
 	' Input: None
