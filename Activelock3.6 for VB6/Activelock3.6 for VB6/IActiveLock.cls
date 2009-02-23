@@ -59,149 +59,7 @@ Attribute VB_Exposed = True
 ' ActiveLock DLL prior to accessing and interacting with ActiveLock. Using the checksum, you can tell if
 ' the DLL has been tampered. Please refer to sample code below on how the checksumming can be done.
 ' <p>
-' The sample code fragments below illustrate the typical usage flow between your application and ActiveLock.
-' Please note that the code shown is only for illustration purposes and is not meant to be a complete
-' compilable program. You may have to add variable declarations and function definitions around the code
-' fragments before you can compile it.
-' <p>
-' <pre>
-'   Form1.frm:
-'   ...
-'   Private MyActiveLock As ActiveLock3.IActiveLock
-'   Private WithEvents ActiveLockEventSink As ActiveLockEventNotifier
-'   Private Const AL_CRC& = 123+ &#39; ActiveLock3.dll&#39;s CRC checksum to be used for validation
-'
-'   &#39; This key will be used to set <a href="IActiveLock.Let.SoftwareCode.html">IActiveLock.SoftwareCode</a> property.
-'   &#39; NOTE: This is NOT a complete key (complete key is to long to put in documentation).
-'   &#39; You will generate your own product code using ALUGEN.  This is the <code>VCode</code> generated
-'   by ALUGEN.
-'   Private Const PROD_CODE$ = "AAAAB3NzaC1yc2EAAAABJQAAAIBZnXD4IKfrBH25ekwLWQMs5mJ..."
-'
-'   ....
-'
-'   Private Sub Form_Load()
-'       On Error GoTo ErrHandler
-'       &#39; Obtain an instance of AL. NewInstance() also calls IActiveLock.Init()
-'       Set MyActiveLock = ActiveLock3.NewInstance()
-'       &#39; At this point, either AL has been initialized or an error would have already been raised
-'       &#39; if there were problems (such as ActiveLock3.dll having been tampered).
-'
-'       &#39; Verify AL&#39;s authenticity
-'       &#39; modActiveLock.CRCCheckSumTypeLib() requires a public-creatable object to be passed in
-'       &#39; so that it can determine the Type Library DLL on which to perform the checksum.
-'       &#39; So can&#39;t use MyActiveLock object to authenticate since it is not a public creatable object.
-'       &#39; So we&#39;ll use ActiveLock3.Globals, which is just as good because they are in the same DLL.
-'       Dim crc As Long
-'       crc = CRCCheckSumTypeLib(New ActiveLock3.Globals)
-'       Debug.Print "Hash: " & crc
-'       If crc &lt;&gt; AL_CRC Then
-'           MsgBox "ActiveLock3.dll has been corrupted."
-'           End ' terminate
-'       End If
-'
-'      &#39; Initialize the keystore. We use a File keystore in this case.
-'      MyActiveLock.KeyStoreType = alsFile
-'      MyActiveLock.KeyStorePath = App.path & "\myapp.lic"
-'
-'      &#39; Obtain the EventNotifier so that we can receive notifications from AL.
-'      Set ActiveLockEventSink = MyActiveLock.EventNotifier
-'
-'      &#39; Specify the name of the product that will be locked through AL.
-'      MyActiveLock.SoftwareName = "MyApp"
-'
-'      &#39; Specify our product code.  This code will be used later by ActiveLock to validate license keys.
-'      MyActiveLock.SoftwareCode = PROD_CODE
-'
-'      &#39; Specify product version
-'       MyActiveLock.SoftwareVersion = txtVersion
-'
-'      &#39; Specify Lock Type
-'      MyActiveLock.LockType = lockHD
-'
-'      &#39; Sets path to liberation key file for automatic registration
-'      MyActiveLock.AutoRegisterKeyPath = App.path & "\myapp.alb"
-'
-'      &#39; Initialize the instance
-'      MyActiveLock.Init
-'
-'      &#39; Check registration status by calling Acquire()
-'      &#39; Note: Calling Acquire() may trigger ActiveLockEventNotifier_ValidateValue() event.
-'      &#39; So we should be prepared to handle that.
-'      MyActiveLock.Acquire
-'
-'      &#39; By now, if the product is not registered, then an error would have been raised,
-'      &#39; which means if we get to here, then we're registered.
-'
-'      &#39; Just for fun, print out some registration status info
-'      Debug.Print "Registered User: " & MyActiveLock.RegisteredUser
-'      Debug.Print "Used Days: " & MyActiveLock.UsedDays
-'      Debug.Print "Expiration Date: " & MyActiveLock.ExpirationDate
-'      Exit Sub
-'   ErrHandler:
-'       MsgBox Err.Number & ": " & Err.Description
-'       &#39; End program
-'       End
-'   End Sub
-'   ...
-'   <p>
-'   (Optional) ActiveLock raises this event typically when it needs a value to be encrypted.
-'   We can use any kind of encryption we&#39;d like here, as long as it&#39;s deterministic.
-'   i.e. there&#39;s a one-to-one correspondence between unencrypted value and encrypted value.
-'   NOTE: BlowFish is NOT an example of deterministic encryption so you can&#39;t use it here.
-'   You are allowed to use asymmetric algorithm since you will never be asked to decrypt a value,
-'   only to encrypt.
-'   You don&#39;t have to handle this event if you don&#39;t want to; it just means that the value WILL NOT
-'   be encrypted when it is saved to the keystore.
-'
-'   Private Sub ActiveLockEventSink_ValidateValue(ByVal Value As String, Result As String)
-'       Result = Encrypt(Value)
-'   End Sub
-'<br>
-'   &#39; Roll our own simple-yet-weird encryption routine.
-'   &#39; Must keep in mind that our encryption algorithm must be deterministic.
-'   &#39; In other words, given the same uncrypted string, it must always yield the same encrypted string.
-'   Private Function Encrypt(strData As String) As String
-'       Dim i&, n&
-'       dim sResult$
-'       n = Len(strData)
-'       For i = 1 to n
-'           sResult = sResult & Asc(Mid$(strData, i, 1)) * 7
-'       Next i
-'       Encrypt = sResult
-'   End Function
-'   ...
-'   &#39; Returns the CRC checksum of the ActiveLock3.dll.
-'   Private Property Get ALCRC() As Long
-'       &#39; Don&#39;t just return a single value, but rather compute it using some simple arithmetic
-'       &#39; so that hackers can&#39;t easily find it with a hex editor.
-'       &#39; Of course, the values below will not make up the real checksum. For the most up-to-date
-'       &#39; checksum, please refer to the ActiveLock Release Notes.
-'       ALCRC = 123 + 456
-'   End Property
-' </pre>
-'
-' <p>Generating registration code from the user application to be sent to the vendor in exchange for
-' a liberation key.
-' <pre>
-'    &#39; Generate Installation code
-'    Dim strInstCode As String
-'    strInstCode = MyActiveLock.InstallCode(txtUser)
-'    &#39; strInstCode now contains the request code to be sent to the vendor for activation.
-' </pre>
-'
-' <p>Key Registration functionality - register using a liberation key.
-' <pre>
-'    On Error GoTo ErrHandler
-'    &#39; Register this key
-'    &#39; txtLibKey contains the liberation key entered by the user.
-'    &#39; This key could have be sent via an email to the user or a program that automatically
-'    &#39; requests the key from a registration website.
-'    MyActiveLock.Register txtLibKey
-'    MsgBox "Registration successful!"
-'    Exit Sub
-'ErrHandler:
-'    MsgBox Err.Number & ": " & Err.Description
-' </pre>
+
 ' Remarks:
 ' Functions:
 ' Properties:
@@ -238,15 +96,15 @@ Option Explicit
 'By: Scott Nelson (Sentax)
 Public Enum ALLockTypes
     lockNone = 0
-    lockWindows = 1
+    lockMAC = 1             '8
     lockComp = 2
     lockHD = 4
-    lockMAC = 8
-    lockBIOS = 16
-    lockIP = 32
+    lockHDFirmware = 8      '256
+    lockWindows = 16        '1
+    lockBIOS = 32           '16
     lockMotherboard = 64
-    lockExternalIP = 128
-    lockHDFirmware = 256
+    lockIP = 128            '32
+    lockExternalIP = 256    '128
     lockFingerprint = 512
     lockMemory = 1024
     lockCPUID = 2048
@@ -506,7 +364,7 @@ End Property
 ' Purpose: Returns the Used Lock Type in this instance.
 ' Remarks: None
 '===============================================================================
-Public Property Get UsedLockType() As ALLockTypes()
+Public Property Get UsedLockType() As Long
 
 End Property
 
@@ -806,7 +664,7 @@ End Sub
 ' <p>If no valid license can be found, an appropriate error will be raised, specifying the cause.
 ' Remarks: None
 '===============================================================================
-Public Sub Acquire(Optional strMsg As String)
+Public Sub Acquire(Optional ByRef strMsg As String = "", Optional ByRef strRemainingTrialDays As String = "", Optional ByRef strRemainingTrialRuns As String = "", Optional ByRef strTrialLength As String = "", Optional ByRef strUsedDays As String = "", Optional ByRef strExpirationDate As String = "", Optional ByRef strRegisteredUser As String = "", Optional ByRef strRegisteredLevel As String = "", Optional ByRef strLicenseClass As String = "", Optional ByRef strMaxCount As String = "", Optional ByRef strLicenseFileType As String = "", Optional ByRef strLicenseType As String = "", Optional ByRef strUsedLockType As String = "")
 Attribute Acquire.VB_Description = "Attempts to acquire a valid license token."
 
 End Sub

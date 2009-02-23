@@ -141,12 +141,66 @@ Private mCheckSystemFilesForClockTampering As ALSystemFilesTypes
 Private mLicenseFileType As ALLicenseFileTypes
 Private mAutoRegister As ALAutoRegisterTypes
 Private mTrialWarning As ALTrialWarningTypes
+Private mUsedLockType As Long
+Private dontValidateLicense As Boolean
 
 ' Registry hive used to store Activelock settings.
 Private Const AL_REGISTRY_HIVE$ = "Software\ActiveLock Software Group\ActiveLock3"
 
 ' Transients
 Private mfInit As Boolean   ' flag to indicate that ActiveLock has been initialized
+Private Function GetUsedLockType() As Long
+Dim Lic As ProductLicense
+
+MsgBox "i am here in IActiveLock_UsedLockType 1"
+Lic = mKeyStore.Retrieve(mSoftwareName, mLicenseFileType)
+MsgBox "i am here in IActiveLock_UsedLockType 2"
+
+If Lic Is Nothing Then
+    Set_locale regionalSymbol
+    Err.Raise ActiveLockErrCodeConstants.alerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE
+End If
+
+' validate the license
+If dontValidateLicense = False Then Call ValidateLic(Lic)
+
+If Lic.LicenseCode = "Short Key" Then
+    GetUsedLockType = 0
+Else
+    
+    Dim usedcode As String
+    If Left(Lic.LicenseCode, 1) = "+" Then
+        usedcode = modBase64.Base64_Decode(Mid(Lic.LicenseCode, 2))
+    Else
+        usedcode = modBase64.Base64_Decode((Lic.LicenseCode))
+    End If
+    Dim Index, i As Integer
+    Index = 0: i = 1
+    ' Get to the last vbLf, which denotes the ending of the lock code and beginning of user name.
+    Do While i > 0
+        i = InStr(Index + 1, usedcode, vbLf)
+        If i > 0 Then Index = i
+    Loop
+
+    If Index <= 0 Then Exit Function
+    ' lockcode is from beginning to Index-1
+    usedcode = Left(usedcode, Index - 1)
+    If Left(usedcode, 1) = "+" Then
+        usedcode = Right(usedcode, Len(usedcode) - 1)
+    End If
+    Dim MyArray() As String
+    Dim counter As Integer
+    MyArray = Split(usedcode, vbLf)
+    For i = 0 To UBound(MyArray)
+        If MyArray(i) <> "nokey" Then
+            counter = counter + 2 ^ i
+        End If
+    Next
+    GetUsedLockType = counter
+End If
+
+End Function
+
 '===============================================================================
 ' Name: Function AppendLockString
 ' Input:
@@ -237,7 +291,7 @@ End Property
 ' Purpose: Specifies the ALLicenseFileTypes type
 ' Remarks: None
 '===============================================================================
-Private Property Get IActiveLock_LicenseFileType() As Long
+Private Property Get IActiveLock_LicenseFileType() As ALLicenseFileTypes
     IActiveLock_LicenseFileType = mLicenseFileType
 End Property
 
@@ -418,7 +472,7 @@ End Sub
 '<p>This is the main method that retrieves an Activelock license, validates it, and ends the trial license if it exists.
 ' Remarks: None
 '===============================================================================
-Private Sub IActiveLock_Acquire(Optional strMsg As String)
+Private Sub IActiveLock_Acquire(Optional ByRef strMsg As String = "", Optional ByRef strRemainingTrialDays As String = "", Optional ByRef strRemainingTrialRuns As String = "", Optional ByRef strTrialLength As String = "", Optional ByRef strUsedDays As String = "", Optional ByRef strExpirationDate As String = "", Optional ByRef strRegisteredUser As String = "", Optional ByRef strRegisteredLevel As String = "", Optional ByRef strLicenseClass As String = "", Optional ByRef strMaxCount As String = "", Optional ByRef strLicenseFileType As String = "", Optional ByRef strLicenseType As String = "", Optional ByRef strUsedLockType As String = "")
     Dim adsText As String
     Dim strStream As String
     Dim Lic As ProductLicense
@@ -458,6 +512,9 @@ Private Sub IActiveLock_Acquire(Optional strMsg As String)
     ElseIf mSoftwarePassword = "" Then
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrNoSoftwarePassword, ACTIVELOCKSTRING, STRNOSOFTWAREPASSWORD
+    ElseIf specialChar(mSoftwarePassword) Or Len(mSoftwarePassword) > 255 Then
+        Set_locale regionalSymbol
+        Err.Raise ActiveLockErrCodeConstants.alerrSoftwarePasswordInvalid, ACTIVELOCKSTRING, STRSOFTWAREPASSWORDINVALID
     End If
     
     Set Lic = mKeyStore.Retrieve(mSoftwareName, mLicenseFileType)
@@ -560,7 +617,42 @@ continueRegistration:
     ValidateLic Lic
     DoEvents
     
+    ' Return all needed properties for faster form loading
+    dontValidateLicense = True
+    strRemainingTrialDays = CStr(mRemainingTrialDays)
+    strRemainingTrialRuns = CStr(mRemainingTrialRuns)
+    strTrialLength = CStr(mTrialLength)
+    strUsedDays = CStr(IActiveLock_UsedDays)
+    strExpirationDate = Lic.Expiration
+    strRegisteredUser = Lic.Licensee
+    strRegisteredLevel = Lic.RegisteredLevel
+    strLicenseClass = Lic.LicenseClass
+    strMaxCount = Lic.MaxCount
+    strLicenseFileType = Lic.LicenseFileType
+    strLicenseType = Lic.LicenseType
+    If mLicenseKeyTypes = alsShortKeyMD5 Then
+        strUsedLockType = "Short Key"
+    Else
+        strUsedLockType = CStr(IActiveLock_UsedLockType)
+    End If
+    
+        
+    dontValidateLicense = False
+    
 End Sub
+Private Function specialChar(ByVal S As String) As Boolean
+Dim k As Integer
+S = S & Space(1) 'check against null-strings
+For k = 1 To Len(S)
+    Select Case Asc(Mid$(S, k))
+    Case 32 To 126
+        'continue
+    Case Else
+        specialChar = True
+        Exit Function
+    End Select
+Next k
+End Function
 '===============================================================================
 ' Name: Sub IActiveLock_AddLockCode
 ' Input:
@@ -780,7 +872,6 @@ Private Sub ValidateShortKey(Lic As ProductLicense, ByVal user As String)
             Lic.LicenseCode = "Short Key"
             '"Key is valid."
     Else
-         'MsgBox "Invalid license key."
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
     End If
@@ -825,7 +916,12 @@ Private Sub ValidateLic(Lic As ProductLicense)
 
     ' validate license key first
     If Mid(Lic.LicenseKey, 5, 1) = "-" And Mid(Lic.LicenseKey, 10, 1) = "-" And Mid(Lic.LicenseKey, 15, 1) = "-" And Mid(Lic.LicenseKey, 20, 1) = "-" Then
-        ValidateShortKey Lic, Lic.Licensee
+        Dim arrProdVer() As String
+        Dim actualLicensee As String
+        arrProdVer = Split(Lic.Licensee, "&&&")
+        actualLicensee = arrProdVer(0)
+        ValidateShortKey Lic, actualLicensee
+        'ValidateShortKey Lic, Lic.Licensee
     Else 'ALCrypto RSA key
         ValidateKey Lic
     End If
@@ -984,12 +1080,14 @@ End Property
 ' Name: Property Get IActiveLock_UsedLockType
 ' Input: None
 ' Output:
-'   ALLockTypes - Used Lock types type
-' Purpose: Gets the ALLockTypes type
+'   Integer - Used Lock types type
+' Purpose: Gets the Integer type
 ' Remarks: None
 '===============================================================================
-Private Property Get IActiveLock_UsedLockType() As ALLockTypes()
-    IActiveLock_UsedLockType = mUsedLockTypes
+Private Property Get IActiveLock_UsedLockType() As Long
+    Dim dummy As Long
+    dummy = IActiveLock_UsedDays
+    IActiveLock_UsedLockType = mUsedLockType
 End Property
 
 '===============================================================================
@@ -1699,10 +1797,8 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                 Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
             End If
             ' above is last possible failure point
-            'mUsedLockTypes = tmpLockType ' per David Weatherall
                         
             usedcode = Mid(usedcode, 1, Len(usedcode) - Len(userFromInstallCode) - 1)
-            
             IActiveLock_LockCode = Lic.ToString() & vbLf & usedcode
         Else
             Set_locale regionalSymbol
@@ -1775,8 +1871,6 @@ End Property
 Private Property Let IActiveLock_SoftwareCode(ByVal RHS As String)
     mSoftwareCode = RHS
 End Property
-
-
 '===============================================================================
 ' Name: Function IActiveLock_Transfer
 ' Input:
@@ -1790,10 +1884,6 @@ Private Function IActiveLock_Transfer(ByVal OtherSoftwareCode As String) As Stri
     Set_locale regionalSymbol
     Err.Raise ActiveLockErrCodeConstants.alerrNotImplemented, ACTIVELOCKSTRING, STRNOTIMPLEMENTED
 End Function
-
-
-
-
 '===============================================================================
 ' Name: Property Get IActiveLock_UsedDays
 ' Input: None
@@ -1804,11 +1894,15 @@ End Function
 Private Property Get IActiveLock_UsedDays() As Long
     Dim Lic As ProductLicense
     Set Lic = mKeyStore.Retrieve(mSoftwareName, mLicenseFileType)
-    
-    If Lic Is Nothing Then Exit Property
+
+    If Lic Is Nothing Then
+        Set_locale regionalSymbol
+        Err.Raise ActiveLockErrCodeConstants.alerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE
+    End If
     
     ' validate the license
-    ValidateLic Lic
+    If dontValidateLicense = False Then Call ValidateLic(Lic)
+    
     'IActiveLock_UsedDays = CLng(DateDiff("d", Lic.RegisteredDate, modActiveLock.UTC(Now)))
     'IActiveLock_UsedDays = CLng(DateDiff("d", CDate(Replace(Lic.RegisteredDate, ".", "-")), modActiveLock.UTC(Now())))
     IActiveLock_UsedDays = CLng(DateDiff("d", ActiveLockDate(CDate(Lic.RegisteredDate)), ActiveLockDate(UTC(Now))))
@@ -1816,6 +1910,47 @@ Private Property Get IActiveLock_UsedDays() As Long
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
     End If
+
+    If Lic.LicenseCode = "Short Key" Then
+        mUsedLockType = "Short Key"
+    Else
+
+        Dim usedcode As String
+        If Left(Lic.LicenseCode, 1) = "+" Then
+            usedcode = modBase64.Base64_Decode(Mid(Lic.LicenseCode, 2))
+        Else
+            usedcode = modBase64.Base64_Decode((Lic.LicenseCode))
+        End If
+        Dim Index, i As Integer
+        Index = 0: i = 1
+        ' Get to the last vbLf, which denotes the ending of the lock code and beginning of user name.
+        Do While i > 0
+            i = InStr(Index + 1, usedcode, vbLf)
+            If i > 0 Then Index = i
+        Loop
+
+        If Index <= 0 Then
+            mUsedLockType = 0
+            GoTo continue
+        End If
+        ' lockcode is from beginning to Index-1
+        usedcode = Left(usedcode, Index - 1)
+        If Left(usedcode, 1) = "+" Then
+            usedcode = Right(usedcode, Len(usedcode) - 1)
+        End If
+        Dim MyArray() As String
+        Dim counter As Integer
+        MyArray = Split(usedcode, vbLf)
+        For i = 0 To UBound(MyArray)
+        MsgBox "i=" & i & " " & MyArray(i)
+            If MyArray(i) <> "nokey" Then
+                counter = counter + 2 ^ i
+            End If
+        Next
+        mUsedLockType = CStr(counter)
+    End If
+continue:
+
 End Property
 
 '===============================================================================

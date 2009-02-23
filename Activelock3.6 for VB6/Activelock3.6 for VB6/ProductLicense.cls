@@ -99,6 +99,7 @@ Private mstrRegisteredDate As String
 Private mstrLastUsed As String
 Private mstrHash1 As String ' hash of mstrRegisteredDate
 Private mnMaxCount As Long ' max number of concurrent users
+Private mnLicenseFileType As Long
 
 ' License Flags.  Values can be combined (OR&#39;ed) together.
 '
@@ -158,6 +159,17 @@ Public Property Let LicenseType(LicType As ALLicType)
 Attribute LicenseType.VB_Description = "License Type"
     mLicType = LicType
 End Property
+'===============================================================================
+' Name: Property Let LicenseFileType
+' Input:
+'   LicFileType As ALLicenseFileTypes - License file type
+' Output: None
+' Purpose: Specifies the license file type for this instance of ActiveLock.
+' Remarks: None
+'===============================================================================
+Public Property Let LicenseFileType(LicFileType As Long)
+    mnLicenseFileType = LicFileType
+End Property
 
 
 '===============================================================================
@@ -173,6 +185,17 @@ Attribute LicenseType.VB_Description = "License Type"
     LicenseType = mLicType
 End Property
 
+'===============================================================================
+' Name: Property Get LicenseFileType
+' Input: None
+' Output:
+'   ALLicenseFileTypes - License file type object
+' Purpose: Returns the License File Type being used in this instance.
+' Remarks: None
+'===============================================================================
+Public Property Get LicenseFileType() As Long
+    LicenseFileType = mnLicenseFileType
+End Property
 
 '===============================================================================
 ' Name: Property Let ProductName

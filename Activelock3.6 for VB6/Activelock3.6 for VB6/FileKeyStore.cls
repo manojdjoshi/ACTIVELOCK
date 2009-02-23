@@ -201,7 +201,7 @@ End Sub
 Private Function IKeyStoreProvider_Retrieve(ProductName As String, mLicenseFileType As ALLicenseFileTypes) As ProductLicense
 
     Set IKeyStoreProvider_Retrieve = Nothing
-
+    
     mINIFile.Section = ProductName
 
     On Error GoTo InvalidValue
@@ -220,7 +220,7 @@ Private Function IKeyStoreProvider_Retrieve(ProductName As String, mLicenseFileT
     End If
     If inString(LCase(astring), "productversion") = False Then
         Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.AlerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREINVALID
+        Err.Raise ActiveLockErrCodeConstants.alerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREINVALID
     End If
 
     Dim Lic As New ProductLicense
@@ -267,5 +267,5 @@ Private Function IKeyStoreProvider_Retrieve(ProductName As String, mLicenseFileT
 
 InvalidValue:
     Set_locale regionalSymbol
-    Err.Raise ActiveLockErrCodeConstants.AlerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREINVALID
+    Err.Raise ActiveLockErrCodeConstants.alerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREINVALID
 End Function

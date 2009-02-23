@@ -176,4 +176,5 @@ Public Function IsKeyOK(sKey As String, _
     
     ' Check for equality
     IsKeyOK = (sTestKey = sKey)
+
 End Function

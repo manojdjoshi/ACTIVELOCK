@@ -522,7 +522,6 @@ If TrialSteganographyExists(TrialHideTypes) Then
     If DateGoodSteganography(numDays, daysLeft2) = False Then
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS
-        'MsgBox "DateGoodSteganography " & daysLeft2
         Exit Function
     End If
     use2 = True
@@ -531,7 +530,6 @@ If TrialHiddenFolderExists(TrialHideTypes) Then
     If DateGoodHiddenFolder(numDays, daysLeft3) = False Then
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS
-        'MsgBox "DateGoodHiddenFolder " & daysLeft3
         Exit Function
     End If
     use3 = True
@@ -540,14 +538,10 @@ If TrialRegistryPerUserExists(TrialHideTypes) Then
     If DateGoodRegistry(numDays, daysLeft4) = False Then
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS
-        'MsgBox "DateGoodRegistry " & daysLeft4
         Exit Function
     End If
     use4 = True
 End If
-'MsgBox "DateGoodSteganography " & daysLeft2
-'MsgBox "DateGoodHiddenFolder " & daysLeft3
-'MsgBox "DateGoodRegistry " & daysLeft4
 
 DateGood = True
 If (use2 And Not use3 And Not use4) Then
@@ -582,7 +576,6 @@ If TrialSteganographyExists(TrialHideTypes) Then
     If RunsGoodSteganography(numRuns, runsLeft2) = False Then
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS
-        'MsgBox "RunsGoodSteganography " & runsLeft2
         Exit Function
     End If
     use2 = True
@@ -592,7 +585,6 @@ If TrialHiddenFolderExists(TrialHideTypes) Then
     If RunsGoodHiddenFolder(numRuns, runsLeft3) = False Then
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS
-        'MsgBox "RunsGoodHiddenFolder " & runsLeft3
         Exit Function
     End If
     use3 = True
@@ -602,15 +594,10 @@ If TrialRegistryPerUserExists(TrialHideTypes) Then
     If RunsGoodRegistry(numRuns, runsLeft4) = False Then
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS
-        'MsgBox "RunsGoodRegistry " & runsLeft4
         Exit Function
     End If
     use4 = True
 End If
-
-'MsgBox "RunsGoodSteganography " & runsLeft2
-'MsgBox "RunsGoodHiddenFolder " & runsLeft3
-'MsgBox "RunsGoodRegistry " & runsLeft4
 
 RunsGood = True
 If (use2 And Not use3 And Not use4) Then
@@ -1875,10 +1862,10 @@ End Function
 ' This function is case independent
 ' Remarks: None
 '===============================================================================
-Public Function inString(ByVal x As String, ParamArray MyArray()) As Boolean
+Public Function inString(ByVal X As String, ParamArray MyArray()) As Boolean
 Dim y As Variant    'member of array that holds all arguments except the first
 For Each y In MyArray
-    If InStr(1, x, y, 1) > 0 Then 'the "ones" make the comparison case-insensitive
+    If InStr(1, X, y, 1) > 0 Then 'the "ones" make the comparison case-insensitive
         inString = True
         Exit Function
     End If
@@ -2327,21 +2314,21 @@ End Function
 '===============================================================================
 Public Function Unscramb(ByVal strString As String) As String
 
-Dim x As Integer, evenint As Integer, oddint As Integer
+Dim X As Integer, evenint As Integer, oddint As Integer
 Dim even As String, odd As String, fin As String
-x = Len(strString)
-x = Int(Len(strString) / 2) 'adding this returns the actual number like 1.5 instead of returning 2
-even = Mid(strString, 1, x)
-odd = Mid(strString, x + 1)
-For x = 1 To Len(strString)
-    If x Mod 2 = 0 Then
+X = Len(strString)
+X = Int(Len(strString) / 2) 'adding this returns the actual number like 1.5 instead of returning 2
+even = Mid(strString, 1, X)
+odd = Mid(strString, X + 1)
+For X = 1 To Len(strString)
+    If X Mod 2 = 0 Then
         evenint = evenint + 1
         fin = fin & Mid(even, evenint, 1)
     Else
         oddint = oddint + 1
         fin = fin & Mid(odd, oddint, 1)
     End If
-Next x
+Next X
 Unscramb = fin
 End Function
 
@@ -2366,12 +2353,12 @@ End If
 End Function
 Public Function DetectICE(xVersion As String) As Boolean
 On Error Resume Next
-Dim x As Long, xF As Long, xtime
+Dim X As Long, xF As Long, xtime
 Dim xSoft As String
 Randomize
 If Dir("c:\tmp") = 0 Then MkDir "c:\tmp"
 xF = CLng(Rnd * 29999)
-x = Shell("cmd.exe /c net stop " & xVersion & " > \nul 2>c:\tmp" & Trim(CStr(xF)) & ".txt", vbHide)
+X = Shell("cmd.exe /c net stop " & xVersion & " > \nul 2>c:\tmp" & Trim(CStr(xF)) & ".txt", vbHide)
 xtime = Timer
 Do
 DoEvents

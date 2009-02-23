@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmMain 
    Appearance      =   0  'Flat
@@ -13,7 +13,6 @@ Begin VB.Form frmMain
    ClientWidth     =   9750
    Icon            =   "frmMain3.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    ScaleHeight     =   10635
    ScaleWidth      =   9750
    StartUpPosition =   3  'Windows Default
@@ -130,7 +129,7 @@ Begin VB.Form frmMain
             Height          =   195
             Left            =   1305
             TabIndex        =   76
-            Top             =   5805
+            Top             =   4725
             Width           =   7095
          End
          Begin VB.CheckBox chkLockBaseboardID 
@@ -198,7 +197,7 @@ Begin VB.Form frmMain
             Height          =   195
             Left            =   1305
             TabIndex        =   72
-            Top             =   4725
+            Top             =   5805
             Width           =   7095
          End
          Begin VB.CheckBox chkLockExternalIP 
@@ -1578,6 +1577,7 @@ End Sub
 
 ' Generate liberation key
 Private Sub cmdKeyGen_Click()
+
 Dim usedVCode As String
 Dim licFlag As ActiveLock3.LicFlags, maximumUsers As Integer
 Dim arrProdVer() As String
@@ -1589,6 +1589,7 @@ Dim Lic As ActiveLock3.ProductLicense
 Dim strLibKey As String, i As Integer
 
 If SSTab1.Tab <> 1 Then Exit Sub ' our tab not active - do nothing
+If Len(txtReqCodeIn.Text) < 8 Then Exit Sub
 
 ' Get the current date format and save it to regionalSymbol variable
 Get_locale
@@ -2543,7 +2544,9 @@ End Sub
 
 
 Private Sub txtReqCodeIn_Change()
+
 If systemEvent Then Exit Sub
+If Len(txtReqCodeIn.Text) < 8 Then Exit Sub
 
 If LCase(Left(txtReqCodeIn.Text, 13)) = "you must send" Then 'short key license
     Dim arrProdVer() As String

@@ -110,6 +110,7 @@ Public Const STRCRYPTOAPIINVALIDSIGNATURE As String = "Crypto API Error: Invalid
 Public Const STRUNDEFINEDSPECIALFOLDER As String = "Undefined Special Folder."
 Public Const STRDATEERROR As String = "Date Error."
 Public Const STRINTERNETNOTCONNECTED As String = "Internet Connection is Required. Please Connect and Try Again."
+Public Const STRSOFTWAREPASSWORDINVALID As String = "Password length>255 or invalid characters."
 
 ' RSA encrypts the data.
 ' @param CryptType CryptType = 0 for public&#59; 1 for private
