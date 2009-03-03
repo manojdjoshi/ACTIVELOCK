@@ -19,14 +19,14 @@ Public Function AddBackSlash(ByVal sPath As String) As String
 
 End Function
 
-Public Function FileExists(sFileName As String) As Boolean
-
-    Dim fs As Object
-    Set fs = CreateObject("Scripting.FileSystemObject")
-    FileExists = fs.FileExists(sFileName)
-    Set fs = Nothing
-
-End Function
+'Public Function FileExists(sFileName As String) As Boolean
+'
+'    Dim fs As Object
+'    Set fs = CreateObject("Scripting.FileSystemObject")
+'    FileExists = fs.FileExists(sFileName)
+'    Set fs = Nothing
+'
+'End Function
 
 Public Sub SaveComboBox(FileName As String, _
                         Control As Object, _

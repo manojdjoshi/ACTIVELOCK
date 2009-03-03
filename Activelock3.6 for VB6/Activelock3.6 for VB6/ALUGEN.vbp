@@ -1,5 +1,5 @@
 Type=Exe
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\WINDOWS\system32\STDOLE2.TLB#OLE Automation
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\WINDOWS\system32\stdole2.tlb#OLE Automation
 Reference=*\G{642AC760-AAB4-11D0-8494-00A0C90DC8A9}#1.0#0#..\..\WINDOWS\system32\MSDBRPTR.DLL#Microsoft Data Report Designer 6.0 (SP4)
 Reference=*\G{6B263850-900B-11D0-9484-00A0C91110ED}#1.0#0#..\..\WINDOWS\system32\MSSTDFMT.DLL#Microsoft Data Formatting Object Library 6.0 (SP6)
 Reference=*\G{24AC23D4-F432-42C8-A6F0-70D5D58FCD2F}#1.0#0#..\..\WINDOWS\system32\activelock3.6.dll#ActiveLock Object Library 3.5

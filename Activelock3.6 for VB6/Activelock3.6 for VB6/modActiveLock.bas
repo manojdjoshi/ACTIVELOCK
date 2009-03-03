@@ -134,6 +134,7 @@ Public Declare Function rsa_decrypt Lib "ALCrypto3" (ByVal CryptType As Long, By
 ' @param outData    [out] 32-byte Computed hash code
 Public Declare Function md5_hash Lib "ALCrypto3" (ByVal inData As String, ByVal nDataLen As Long, ByVal outData As String) As Long
 
+' System time structure
 Type SYSTEMTIME
      wYear As Integer
      wMonth As Integer
@@ -145,12 +146,13 @@ Type SYSTEMTIME
      wMilliseconds As Integer
 End Type
 
+' Time zone information. Note that this one is defined wrong in API viewer.
 Private Type TIME_ZONE_INFORMATION
     bias As Long ' current offset to GMT
-    StandardName(1 To 64) As Byte ' unicode string
+    StandardName(0 To 63) As Byte 'unicode (0-based)
     StandardDate As SYSTEMTIME
     StandardBias As Long
-    DaylightName(1 To 64) As Byte
+    DaylightName(0 To 63) As Byte 'unicode (0-based)
     DaylightDate As SYSTEMTIME
     DaylightBias As Long
 End Type
@@ -165,16 +167,22 @@ Public Enum TimeZoneReturn
 End Enum
 
 ' ----------------- For Time Zone Retrieval ------------------
-Private Const TIME_ZONE_ID_UNKNOWN = 0
-Private Const TIME_ZONE_ID_STANDARD = 1
-Private Const TIME_ZONE_ID_INVALID = &HFFFFFFFF
-Private Const TIME_ZONE_ID_DAYLIGHT = 2
+Private Const TIME_ZONE_ID_UNKNOWN As Long = 1 ' was 0
+Private Const TIME_ZONE_ID_STANDARD  As Long = 1
+Private Const TIME_ZONE_ID_DAYLIGHT As Long = 2
+Private Const TIME_ZONE_ID_INVALID  As Long = &HFFFFFFFF
 
 Private Declare Sub GetSystemTime Lib "kernel32" _
     (lpSystemTime As SYSTEMTIME)
 
 Private Declare Function GetTimeZoneInformation Lib "kernel32" _
     (lpTimeZoneInformation As TIME_ZONE_INFORMATION) As Long
+
+Private Declare Sub GetLocalTime Lib "kernel32" _
+    (lpSystemTime As SYSTEMTIME)
+
+Private Declare Function SystemTimeToTzSpecificLocalTime Lib "kernel32" _
+    (lpTimeZoneInformation As TIME_ZONE_INFORMATION, lpUniversalTime As SYSTEMTIME, lpLocalTime As SYSTEMTIME) As Long
 
 Public Const MAGICNUMBER_YES& = &HEFCDAB89
 Public Const MAGICNUMBER_NO& = &H98BADCFE
@@ -310,6 +318,20 @@ Public Declare Function GetFileSize Lib "kernel32.dll" (ByVal hFile As Long, lpF
 Public Declare Function ReadFileX Lib "kernel32.dll" Alias "ReadFile" (ByVal hFile As Long, lpBuffer As Any, ByVal nNumberOfBytesToRead As Long, lpNumberOfBytesRead As Long, ByVal lpOverlapped As Long) As Long
 Private Declare Function OpenFile Lib "kernel32" (ByVal lpFileName As String, lpReOpenBuff As OFSTRUCT, ByVal wStyle As Long) As Long
 
+Private Function GetCurrentTimeZone() As String
+
+   Dim tzi As TIME_ZONE_INFORMATION
+   Dim tmp As String
+
+   Select Case GetTimeZoneInformation(tzi)
+      Case 0:  tmp = "Cannot determine current time zone"
+      Case 1:  tmp = tzi.StandardName
+      Case 2:  tmp = tzi.DaylightName
+   End Select
+   
+   GetCurrentTimeZone = TrimNull(tmp)
+   
+End Function
 Public Function FileLoad(ByVal sFileName As String) As String
     Dim iFileNum As Integer, lFileLen As Long
 
@@ -376,15 +398,15 @@ Public Sub Get_locale() ' Retrieve the regional setting
     Dim iRet1 As Long
     Dim iRet2 As Long
     Dim lpLCDataVar As String
-    Dim Pos As Integer
+    Dim pos As Integer
     Dim Locale As Long
     Locale = GetUserDefaultLCID()
     iRet1 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, lpLCDataVar, 0)
     Symbol = String$(iRet1, 0)
     iRet2 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol, iRet1)
-    Pos = InStr(Symbol, Chr$(0))
-    If Pos > 0 Then
-         Symbol = Left$(Symbol, Pos - 1)
+    pos = InStr(Symbol, Chr$(0))
+    If pos > 0 Then
+         Symbol = Left$(Symbol, pos - 1)
          If Symbol <> "yyyy/MM/dd" Then regionalSymbol = Symbol
     End If
 End Sub
@@ -1271,10 +1293,10 @@ End Function
 ' Remarks: None
 '===============================================================================
 Public Function TrimNulls(startstr As String) As String
-    Dim Pos As Integer
-    Pos = InStr(startstr, Chr$(0))
-    If Pos Then
-        TrimNulls = Trim(Left$(startstr, Pos - 1))
+    Dim pos As Integer
+    pos = InStr(startstr, Chr$(0))
+    If pos Then
+        TrimNulls = Trim(Left$(startstr, pos - 1))
     Else
         TrimNulls = Trim(startstr)
     End If
@@ -1536,10 +1558,55 @@ End Function
 ' Remarks: None
 '===============================================================================
 Public Function UTC(dt As Date) As Date
-    '  Returns current UTC date-time.
-    UTC = DateAdd("n", LocalTimeZone(UTC_Offset), dt)
+
+' Returns current UTC date-time.
+'UTC = DateAdd("n", LocalTimeZone(UTC_Offset), dt)
+    
+Dim tzi As TIME_ZONE_INFORMATION
+Dim gmt As Date
+Dim dwBias As Long
+Dim tmp As String
+
+Select Case GetTimeZoneInformation(tzi)
+Case TIME_ZONE_ID_DAYLIGHT
+   dwBias = tzi.bias + tzi.DaylightBias
+Case Else
+   dwBias = tzi.bias + tzi.StandardBias
+End Select
+
+UTC = DateAdd("n", dwBias, dt)
+'tmp = Format$(gmt, "dddd mmm dd, yyyy hh:mm:ss am/pm")
+
 End Function
 
+Private Function TrimNull(item As String)
+
+    Dim pos As Integer
+   
+   'double check that there is a chr$(0) in the string
+    pos = InStr(item, Chr$(0))
+    If pos Then
+       TrimNull = Left$(item, pos - 1)
+    Else
+       TrimNull = item
+    End If
+  
+End Function
+' Return current time as UTC
+Public Function UTCTime() As Date
+    Dim t As SYSTEMTIME
+    
+    GetSystemTime t
+    UTCTime = DateSerial(t.wYear, t.wMonth, t.wDay) + TimeSerial(t.wHour, t.wMinute, t.wSecond) + t.wMilliseconds / 86400000#
+End Function
+
+' Return current time as local time
+Public Function LocalTime() As Date
+    Dim t As SYSTEMTIME
+    
+    GetLocalTime t
+    LocalTime = DateSerial(t.wYear, t.wMonth, t.wDay) + TimeSerial(t.wHour, t.wMinute, t.wSecond) + t.wMilliseconds / 86400000
+End Function
 '===============================================================================
 ' Name: Function RSASign
 ' Input:

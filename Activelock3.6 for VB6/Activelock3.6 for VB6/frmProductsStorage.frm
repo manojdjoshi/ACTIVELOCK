@@ -1,18 +1,18 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
 Begin VB.Form frmProductsStorage 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Products Storage"
-   ClientHeight    =   2220
+   ClientHeight    =   2310
    ClientLeft      =   45
    ClientTop       =   330
-   ClientWidth     =   6825
+   ClientWidth     =   6855
    Icon            =   "frmProductsStorage.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
    MinButton       =   0   'False
-   ScaleHeight     =   2220
-   ScaleWidth      =   6825
+   ScaleHeight     =   2310
+   ScaleWidth      =   6855
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
    Begin MSComDlg.CommonDialog CommonDialog1 
@@ -200,7 +200,12 @@ On Error GoTo LoadSettings_Error
 
 LoadSettings_Error:
 
-  MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure LoadSettings of Form frmProductsStorage"
+  If FileExists(txtStorageFile.Text) = False Then
+    MsgBox "The Storage file: " & txtStorageFile.Text & " does not exist.", vbExclamation
+  Else
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure LoadSettings of Form frmProductsStorage"
+  End If
+  
 End Sub
 
 Private Sub SaveSettings()
@@ -217,6 +222,10 @@ Private Sub SaveSettings()
 SaveSettings_Error:
 
   MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure SaveSettings of Form frmProductsStorage"
+End Sub
+
+Private Sub Form_Unload(Cancel As Integer)
+    SaveSettings
 End Sub
 
 Private Sub optStorageIniFile_Click()

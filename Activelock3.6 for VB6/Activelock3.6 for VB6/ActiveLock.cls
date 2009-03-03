@@ -152,9 +152,7 @@ Private mfInit As Boolean   ' flag to indicate that ActiveLock has been initiali
 Private Function GetUsedLockType() As Long
 Dim Lic As ProductLicense
 
-MsgBox "i am here in IActiveLock_UsedLockType 1"
 Lic = mKeyStore.Retrieve(mSoftwareName, mLicenseFileType)
-MsgBox "i am here in IActiveLock_UsedLockType 2"
 
 If Lic Is Nothing Then
     Set_locale regionalSymbol
@@ -545,6 +543,9 @@ Private Sub IActiveLock_Acquire(Optional ByRef strMsg As String = "", Optional B
         End If
         
         trialStatus = ActivateTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, strMsg, mSoftwarePassword, mCheckTimeServerForClockTampering, mCheckSystemFilesForClockTampering, mTrialWarning, mRemainingTrialDays, mRemainingTrialRuns)
+        strRemainingTrialDays = CStr(mRemainingTrialDays)
+        strRemainingTrialRuns = CStr(mRemainingTrialRuns)
+        strTrialLength = CStr(mTrialLength)
         
         ' Set the locale date format to what we had before; can't leave changed
         Set_locale regionalSymbol
@@ -619,10 +620,7 @@ continueRegistration:
     
     ' Return all needed properties for faster form loading
     dontValidateLicense = True
-    strRemainingTrialDays = CStr(mRemainingTrialDays)
-    strRemainingTrialRuns = CStr(mRemainingTrialRuns)
-    strTrialLength = CStr(mTrialLength)
-    strUsedDays = CStr(IActiveLock_UsedDays)
+    strUsedDays = CStr(CLng(DateDiff("d", ActiveLockDate(CDate(Lic.RegisteredDate)), ActiveLockDate(UTC(Now)))))
     strExpirationDate = Lic.Expiration
     strRegisteredUser = Lic.Licensee
     strRegisteredLevel = Lic.RegisteredLevel
@@ -636,7 +634,6 @@ continueRegistration:
         strUsedLockType = CStr(IActiveLock_UsedLockType)
     End If
     
-        
     dontValidateLicense = False
     
 End Sub
@@ -926,9 +923,9 @@ Private Sub ValidateLic(Lic As ProductLicense)
         ValidateKey Lic
     End If
     
-    Dim strEncrypted As String, strHash As String
+    Dim strEncrypted As String, strHash As String  ' *100 needed for C/C++ compatibility
     ' Validate last run date
-    strEncrypted = Lic.LastUsed
+    strEncrypted = Lic.LastUsed    ' + Chr(0) needed for C/C++ compatibility
     MyNotifier.Notify "ValidateValue", strEncrypted
     strHash = modMD5.Hash(strEncrypted)
     If strHash <> Lic.Hash1 Then
@@ -971,10 +968,10 @@ End Sub
 '===============================================================================
 Private Sub UpdateLastUsed(Lic As ProductLicense)
     ' Update license store with LastRunDate
-    Dim strLastUsed As String
+    Dim strLastUsed As String              ' *100 needed for C/C++ compatibility
     Set_locale ""
     strLastUsed = ActiveLockDate(UTC(Now))
-    strLastUsed = ActiveLockDate(CDate(strLastUsed))
+    strLastUsed = ActiveLockDate(CDate(strLastUsed))         ' Chr(0) needed for C/C++ compatibility
     Lic.LastUsed = strLastUsed
     MyNotifier.Notify "ValidateValue", strLastUsed
     Lic.Hash1 = modMD5.Hash(strLastUsed)
@@ -1669,8 +1666,14 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                     If astring <> noKey Then
                         IActiveLock_AddLockCode lockMAC, SizeLockType
                         If astring <> modHardware.GetMACAddress() Then
-                            Set_locale regionalSymbol
-                            Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
+                            ' Ok MAC address did not match
+                            ' Maybe the laptop owner turned on the wireless connection
+                            ' and it wasn't on when the license was registered
+                            If CheckMACaddress(astring) = False Then
+                                ' we truly failed
+                                Set_locale regionalSymbol
+                                Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
+                            End If
                         End If
                     End If
                 ElseIf j = LBound(a) + 1 Then
@@ -1910,7 +1913,6 @@ Private Property Get IActiveLock_UsedDays() As Long
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
     End If
-
     If Lic.LicenseCode = "Short Key" Then
         mUsedLockType = "Short Key"
     Else
@@ -1942,7 +1944,6 @@ Private Property Get IActiveLock_UsedDays() As Long
         Dim counter As Integer
         MyArray = Split(usedcode, vbLf)
         For i = 0 To UBound(MyArray)
-        MsgBox "i=" & i & " " & MyArray(i)
             If MyArray(i) <> "nokey" Then
                 counter = counter + 2 ^ i
             End If
