@@ -51,7 +51,8 @@ Source: C:\ActiveLockCommunity\Redistribution\mswinsck.ocx; DestDir: "{sys}"; Fl
 
 ;license file and release notes
 Source: C:\ActiveLockCommunity\License Agreement\Activelock3_License.txt; DestDir: "{app}\License Agreement"; Flags: ignoreversion
-Source: C:\ActiveLockCommunity\Help\ReleaseNotes3.htm; DestDir: "{app}\Help"; Flags: ignoreversion isreadme
+Source: C:\ActiveLockCommunity\Help\ReleaseNotes3.htm; DestDir: "{app}\Help"; Flags: ignoreversion
+
 Source: C:\ActiveLockCommunity\Help\ReleaseNotes3_files\image001.jpg; DestDir: "{app}\Help"; Flags: ignoreversion
 Source: C:\ActiveLockCommunity\Help\ReleaseNotes3_files\image002.jpg; DestDir: "{app}\Help"; Flags: ignoreversion
 Source: C:\ActiveLockCommunity\Help\ReleaseNotes3_files\image003.jpg; DestDir: "{app}\Help"; Flags: ignoreversion
@@ -149,8 +150,8 @@ Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\ActiveLock.cls; DestDir: "{
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\ActiveLockEventNotifier.cls; DestDir: "{app}\Activelock3.6 for VB6"; Flags: ignoreversion; Components: sourcecode
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\al3.vbg; DestDir: "{app}\Activelock3.6 for VB6"; Flags: ignoreversion; Components: sourcecode
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\ALtestApp.ico; DestDir: "{app}\Activelock3.6 for VB6"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\alugen3_6.exe; DestDir: "{app}\Activelock3.6 VB6"; Flags: ignoreversion; Components: sourcecode
-Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\alugen3_6.exe.manifest; DestDir: "{app}\Activelock3.6 VB6"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\alugen3_6.exe; DestDir: "{app}\Activelock3.6 for VB6"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\alugen3_6.exe.manifest; DestDir: "{app}\Activelock3.6 for VB6"; Flags: ignoreversion; Components: sourcecode
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\Alugen.vbp; DestDir: "{app}\Activelock3.6 for VB6"; Flags: ignoreversion; Components: sourcecode
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\AlugenGlobals.cls; DestDir: "{app}\Activelock3.6 for VB6"; Flags: ignoreversion; Components: sourcecode
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\Authorizations.txt; DestDir: "{app}\Activelock3.6 for VB6"; Flags: ignoreversion uninsneveruninstall; Components: sourcecode
@@ -233,7 +234,7 @@ Name: {group}\Activelock Home Page; Filename: "http://www.activelocksoftware.com
 Name: {group}\Activelock Bulletin Board; Filename: "http://forum.activelocksoftware.com"; Tasks: startmenu
 Name: {group}\Activelock Download Engine; Filename: "http://download.activelocksoftware.com"; Tasks: startmenu
 Name: "{group}\Activelock3 Key Generator [Alugen]"; Filename: "{app}\Activelock3.6 for VB6\alugen3_6.exe"; WorkingDir: {app}\Activelock3.6 for VB6; Components: bin sourcecode; Tasks: startmenu
-Name: {group}\Activelock3 Test Application; Filename: "{app}\ALTestApp3.6 for VB6\ALTestApp3_6.exe"; WorkingDir: {app}\ALTestApp3.6 for VB6; Components: bin examples sourcecode; Tasks: startmenu
+Name: {group}\Activelock3 Test Application; Filename: "{app}\ALTestApp3.6 for VB6\ALVB6Sample3_6.exe"; WorkingDir: {app}\ALTestApp3.6 for VB6; Components: bin examples sourcecode; Tasks: startmenu
 Name: {group}\Activelock3 Release Notes; Filename: "{app}\Help\ReleaseNotes3.htm"; WorkingDir: {app}\Help; Components: bin sourcecode; Tasks: startmenu
 Name: {group}\VB6 Tutorial; Filename: "{app}\Help\VBTutorial3.chm"; WorkingDir: {app}\Help; Components: bin sourcecode; Tasks: startmenu
 Name: {group}\Uninstall Activelock3; Filename: {uninstallexe}; Tasks: startmenu
@@ -265,6 +266,9 @@ Root: HKLM; ValueType: string; Subkey: Software\Microsoft\Windows NT\CurrentVers
 ; Uncomment the following if necessary
 ;Root: HKCU; ValueType: string; Subkey: Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers; ValueName: "{app}\Activelock3.6 for VB6\alugen3_6.exe"; ValueData: RunAsAdmin
 ;Root: HKCU; ValueType: string; Subkey: Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers; ValueName: "{app}\ALTestApp3.6 for VB6\ALVB6Sample3_6.exe"; ValueData: RunAsAdmin
+
+[Run]
+Filename: "{app}\ChangeLog\VB6_ChangeLog.txt"; Description: "View v3.6 Change Log"; Flags: unchecked shellexec postinstall skipifsilent
 
 
 
