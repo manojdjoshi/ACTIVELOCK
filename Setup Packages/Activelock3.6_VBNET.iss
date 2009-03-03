@@ -42,7 +42,8 @@ Source: C:\ActiveLockCommunity\Redistribution\mswinsck.ocx; DestDir: "{sys}"; Fl
 
 ;license file and release notes
 Source: C:\ActiveLockCommunity\License Agreement\Activelock3_License.txt; DestDir: "{app}\License Agreement"; Flags: ignoreversion
-Source: C:\ActiveLockCommunity\Help\ReleaseNotes3.htm; DestDir: "{app}\Help"; Flags: ignoreversion isreadme
+Source: C:\ActiveLockCommunity\Help\ReleaseNotes3.htm; DestDir: "{app}\Help"; Flags: ignoreversion
+
 Source: C:\ActiveLockCommunity\Help\ReleaseNotes3_files\image001.jpg; DestDir: "{app}\Help"; Flags: ignoreversion
 Source: C:\ActiveLockCommunity\Help\ReleaseNotes3_files\image002.jpg; DestDir: "{app}\Help"; Flags: ignoreversion
 Source: C:\ActiveLockCommunity\Help\ReleaseNotes3_files\image003.jpg; DestDir: "{app}\Help"; Flags: ignoreversion
@@ -295,3 +296,7 @@ Name: {group}\Activelock Download Page; Filename: "http://download.activelocksof
 Name: "{group}\Activelock3.6 VB2008 Key Generator [Alugen3NET]"; Filename: "{app}\Alugen3.6.NET\Alugen3_6NET.exe"; WorkingDir: {app}\Alugen3.6.NET; Components: bin sourcecode; Tasks: startmenu
 Name: "{group}\Activelock3.6 VB2008 Test Application"; Filename: "{app}\ALTestApp3.6 NET\ALTestApp3.6.NET.exe"; WorkingDir: {app}\ALTestApp3.6 NET; Components: bin examples sourcecode; Tasks: startmenu
 Name: {group}\Uninstall Activelock3.6 for VB2008; Filename: {uninstallexe}; Tasks: startmenu
+
+[Run]
+Filename: "{app}\ChangeLog\VB_NET2008_ChangeLog.txt"; Description: "View v3.6 Change Log"; Flags: unchecked shellexec postinstall skipifsilent
+
