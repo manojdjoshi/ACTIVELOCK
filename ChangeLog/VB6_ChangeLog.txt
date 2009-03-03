@@ -65,15 +65,15 @@ v3.6 Updates:
 - NEW: As of v3.6, the following is the complete list of all hardware signatures used in Activelock:
 Public Enum ALLockTypes
     lockNone = 0
-    lockWindows = 1
+    lockMAC = 1
     lockComp = 2
     lockHD = 4
-    lockMAC = 8
-    lockBIOS = 16
-    lockIP = 32
+    lockHDFirmware = 8
+    lockWindows = 16
+    lockBIOS = 32
     lockMotherboard = 64
-    lockExternalIP = 128          '[v3.6]
-    lockHDFirmware = 256
+    lockIP = 128
+    lockExternalIP = 256          '[v3.6]
     lockFingerprint = 512         '[v3.6]
     lockMemory = 1024             '[v3.6]
     lockCPUID = 2048              '[v3.6]
@@ -81,7 +81,8 @@ Public Enum ALLockTypes
     lockvideoID = 8192            '[v3.6]
 End Enum
 LockFingerprint is a new lock type introduced in v3.6 It is computed differently for VB6 and VB.NET.
-This is essentially a computer fingerprint computed as the combination of many different computer components, such the hard disk, BIOS, memory, video controller, baseboard, MAC card, etc.
+This is essentially a computer fingerprint computed as the combination of many different computer components, such the hard disk, BIOS, memory, video controller, baseboard, MAC card (removed due to uncertainty), etc.
+- UPDATE: The lockTypes order (as shown above) has been modified and is no longer the same with the previous versions of Activelock.
 - NEW: Short Key Licenses now use the new computer fingerprint instead of the HDD firmware serial number. HDD firmware serial could be problematic under limited user accounts in Vista with some SATA HDDs. In that case the machine fingerprint will still return a pretty reliable machine ID number.
 - FIX: If there's no binding to user's hardware necessary, then ReconstructedInstallationCode() was never invoked in Alugen. This is fixed.
 - NEW: Activelock v3.6 and above will support this feature. In order to lock your license to a user name alone, and no hardware keys (such as MAC address, HDD serial number, etc.), you must use "LockNone"  as the lock type in your application. Then in Alugen (the key generator), uncheck all Lock Types and then generate the key. You'll be warned that no keys were selected, but the license key will still be created. This type of license might be handy for those cases when you want to limit the execution of your program for a certain number of days (or limit to a certain deadline), but still make it machine independent. Then users can borrow the LIC file from one machine to another and use it freely for the period they are allowed to use your program. This is really a cross between a trial license and a regular license.
@@ -97,6 +98,9 @@ Root: HKLM; ValueType: string; Subkey: Software\Microsoft\Windows NT\CurrentVers
 - UPDATE: This is a real story: A customers takes the ALL file and renames it as a LIC file, and of course Activelock did not work. It took the developer many hours to diagnose the problem. Activelock will now detect this error and will warn the user.
 - UPDATE: Improved the ADS functions in VB6 version with new formulas that do not rely on running bat files.
 - UPDATE: Added checks against SoftwarePassword with length>255 characters and illegal characters.
+- UPDATE: Due to the possible uncertainty in the MAC address, it's not included in the Fingerprint class for now (For example in laptops where there's noth wireless and wired network cards, one could switch the wireless on and off changing the obtained MAC address).
+- NEW: The Acquire() method now returns several new optional arguments, such as strRemainingTrialDays, strRemainingTrialRuns, strTrialLength, strUsedDays, strExpirationDate, strRegisteredUser, strRegisteredLevel, strLicenseClas, strMaxCount, strLicenseFileType, strLicenseType, and strUsedLockType. These can be used instead of - for example - MyActivelock.LicenseFileType. This speeds up the form loading process and license checking tremendously since every MyActivelock object property triggers a license validation call and this takes a toll on the application speed.
+- UPDATE: MAC Addresses now use "-" instead of " " in the address string.
 
 
 
