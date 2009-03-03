@@ -554,8 +554,8 @@ test = GetBaseboardID
 If test <> "Not Available" Then S = S & test
 test = GetVideoID
 If test <> "Not Available" Then S = S & test
-test = GetMACAddress
-If test <> "Not Available" Then S = S & test
+'test = GetMACAddress
+'If test <> "Not Available" Then S = S & test
 ' Now pack them
 ' This is different then what I've done in VB.NET
 ' ismail - 2009
@@ -1515,7 +1515,7 @@ For Each obj In objset
     If Not IsNull(obj.MACAddress) Then
         If obj.AdapterType = "Ethernet 802.3" Then
             If InStr(obj.PNPDeviceID, "PCI\") <> 0 Then
-                GetMACAddress = Replace(obj.MACAddress, ":", " ")
+                GetMACAddress = Replace(obj.MACAddress, ":", "-")
                 Exit Function
             End If
         End If
@@ -1529,6 +1529,27 @@ End If
 
 End Function
 
+Public Function CheckMACaddress(usedMACaddress As String) As Boolean
+Dim nicSet As SWbemObjectSet
+Dim nic As SWbemObject
+Dim nicMACaddress As String
+'must have error handler enabled, as all
+'adapters do not return all information
+On Local Error Resume Next
+Set nicSet = GetObject("winmgmts:{impersonationLevel=impersonate}"). _
+                        InstancesOf("Win32_NetworkAdapterConfiguration")
+For Each nic In nicSet
+    nicMACaddress = Replace(nic.MACAddress, ":", "-")
+    If nicMACaddress = usedMACaddress Then
+        CheckMACaddress = True
+        Exit Function
+    End If
+'   If nic.IPEnabled Then
+'      itmx.SubItems(2) = nic.IPAddress(0)
+'   End If
+Next
+
+End Function
 '-----------------------------------------------------------------------------------
 ' Get the system's MAC address(es) via GetIfTable API function (IPHLPAPI.DLL)
 '
@@ -1563,7 +1584,7 @@ Public Function GetMACs_IfTable() As String
         With IfInfo
             'retStr = retStr & vbCrLf & "[" & i & "] " & Left$(.bDescr, .dwDescrLen - 1) & vbCrLf
             If (.dwType = MIB_IF_TYPE_ETHERNET And .dwOperStatus = MIB_IF_OPER_STATUS_OPERATIONAL) Then
-                retStr = Replace(MAC2String(.bPhysAddr), "-", " ") 'retStr & vbTab & MAC2String(.bPhysAddr) & vbCrLf
+                retStr = MAC2String(.bPhysAddr) 'retStr & vbTab & MAC2String(.bPhysAddr) & vbCrLf
             End If
         End With
     Next i

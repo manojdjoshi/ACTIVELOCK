@@ -51,13 +51,13 @@ Begin VB.Form frmMain
       TabCaption(0)   =   "Pro&duct Code Generator"
       TabPicture(0)   =   "frmMain3.frx":0CCA
       Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "cmdValidate"
-      Tab(0).Control(1)=   "Picture1"
-      Tab(0).Control(2)=   "cmdRemove"
+      Tab(0).Control(0)=   "Label1"
+      Tab(0).Control(1)=   "Label17"
+      Tab(0).Control(2)=   "gridProds"
       Tab(0).Control(3)=   "fraProdNew"
-      Tab(0).Control(4)=   "gridProds"
-      Tab(0).Control(5)=   "Label17"
-      Tab(0).Control(6)=   "Label1"
+      Tab(0).Control(4)=   "cmdRemove"
+      Tab(0).Control(5)=   "Picture1"
+      Tab(0).Control(6)=   "cmdValidate"
       Tab(0).ControlCount=   7
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
@@ -2218,7 +2218,7 @@ checkForResourcesError:
     MsgBox "CheckForResources error", vbCritical, "Error"
     End   'an error kills the program
 End Function
-Function WhereIsDLL(ByVal T As String) As String
+Function WhereIsDLL(ByVal t As String) As String
 'Places where programs look for DLLs
 '   1 directory containing the EXE
 '   2 current directory
@@ -2264,11 +2264,11 @@ If i = 0 Then
     a = Split(s, ";")
 End If
 
-T = Trim(T)
-If T = "" Then Exit Function
-If Not inString(Right$(T, 4), ".") Then T = T & ".DLL"   'default extension
+t = Trim(t)
+If t = "" Then Exit Function
+If Not inString(Right$(t, 4), ".") Then t = t & ".DLL"   'default extension
 For i = 0 To UBound(a)
-    If fileExist(a(i) & "\" & T) Then
+    If fileExist(a(i) & "\" & t) Then
         WhereIsDLL = a(i)
         Exit Function
     End If
@@ -2792,7 +2792,10 @@ Private Sub InitUI()
     
     ' Populate Product List on Product Code Generator tab
     ' and Key Gen tab with product info from licenses.ini
+  ' Initialize AL
     Dim arrProdInfos() As ProductInfo
+    
+    On Error GoTo error3704
     arrProdInfos = GeneratorInstance.RetrieveProducts()
     If IsArrayEmpty(arrProdInfos) Then Exit Sub
 
@@ -2801,6 +2804,12 @@ Private Sub InitUI()
         PopulateUI arrProdInfos(i)
     Next
     gridProds_Click
+    Exit Sub
+    
+error3704:
+    If Err.Number = 3704 Then
+        MsgBox "There's a problem. Perhaps, the storage file does not exist.", vbExclamation
+    End If
 End Sub
 Private Function IsArrayEmpty(arrVar As Variant) As Boolean
     IsArrayEmpty = True
