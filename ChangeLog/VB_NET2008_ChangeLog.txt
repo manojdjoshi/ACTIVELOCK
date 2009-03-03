@@ -53,15 +53,15 @@ Public Speed As Long ' Change from int to long for VISTA
 - NEW: As of v3.6, the following is the complete list of all hardware signatures used in Activelock:
 Public Enum ALLockTypes
     lockNone = 0
-    lockWindows = 1
+    lockMAC = 1
     lockComp = 2
     lockHD = 4
-    lockMAC = 8
-    lockBIOS = 16
-    lockIP = 32
+    lockHDFirmware = 8
+    lockWindows = 16
+    lockBIOS = 32
     lockMotherboard = 64
-    lockExternalIP = 128          '[v3.6]
-    lockHDFirmware = 256
+    lockIP = 128
+    lockExternalIP = 256          '[v3.6]
     lockFingerprint = 512         '[v3.6]
     lockMemory = 1024             '[v3.6]
     lockCPUID = 2048              '[v3.6]
@@ -69,7 +69,8 @@ Public Enum ALLockTypes
     lockvideoID = 8192            '[v3.6]
 End Enum
 LockFingerprint is a new lock type introduced in v3.6 It is computed differently for VB6 and VB.NET.
-This is essentially a computer fingerprint computed as the combination of many different computer components, such the hard disk, BIOS, memory, video controller, baseboard, MAC card, etc.
+This is essentially a computer fingerprint computed as the combination of many different computer components, such the hard disk, BIOS, memory, video controller, baseboard, MAC card (removed due to uncertainty), etc.
+- UPDATE: The lockTypes order (as shown above) has been modified and is no longer the same with the previous versions of Activelock.
 - NEW: Short Key Licenses now use the new computer fingerprint instead of the HDD firmware serial number. HDD firmware serial could be problematic under limited user accounts in Vista with some SATA HDDs. In that case the machine fingerprint will still return a pretty reliable machine ID number.
 - FIX: ALL file generatiand software usage on PCs with different cultures does not work due to the usage of Chr() function in Base64_Decode in modBase64.vb. The following is necessary to fix the problem:
         My.Application.ChangeCulture("en-US")
@@ -81,6 +82,10 @@ This is essentially a computer fingerprint computed as the combination of many d
 - NEW: Alugen now detects the software name and version number in the installation code and then picks the correct item from the listbox by itself. To implement this in Alugen, the software name and version had to be appended to the installation code which caused some significant rewriting in the DLL. Thanks to Alenxandre's comment, Alugen will tell you whether there's the software name and version available in the Alugen products database; if not, either the product was not stored or the name and version was used incorrectly in user's application.
 - UPDATE: This is a real story: A customers takes the ALL file and renames it as a LIC file, and of course Activelock did not work. It took the developer many hours to diagnose the problem. Activelock will now detect this error and will warn the user.
 - UPDATE: Added checks against SoftwarePassword with length>255 characters and illegal characters.
+- UPDATE: Due to the possible uncertainty in the MAC address, it's not included in the Fingerprint class for now (For example in laptops where there's noth wireless and wired network cards, one could switch the wireless on and off changing the obtained MAC address).
+- NEW: The Acquire() method now returns several new optional arguments, such as strRemainingTrialDays, strRemainingTrialRuns, strTrialLength, strUsedDays, strExpirationDate, strRegisteredUser, strRegisteredLevel, strLicenseClas, strMaxCount, strLicenseFileType, strLicenseType, and strUsedLockType. These can be used instead of - for example - MyActivelock.LicenseFileType. This speeds up the form loading process and license checking tremendously since every MyActivelock object property triggers a license validation call and this takes a toll on the application speed.
+- UPDATE: MAC Addresses now use "-" instead of " " in the address string.
+
 
 
 
