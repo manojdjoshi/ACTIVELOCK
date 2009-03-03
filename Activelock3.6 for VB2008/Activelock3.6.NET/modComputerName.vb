@@ -920,8 +920,8 @@ GetHDSerialFirmwareError:
         Dim netInfo As New clsNetworkStats
         Dim netStruct As clsNetworkStats.IFROW_HELPER
         netStruct = netInfo.GetAdapter
-        GetMACAddress = netStruct.PhysAddr.ToString().Replace("-", " ")
-        If GetMACAddress <> "00 00 00 00 00 00" Then Exit Function
+        GetMACAddress = netStruct.PhysAddr.ToString()
+        If GetMACAddress <> "00-00-00-00-00-00" Then Exit Function
 
         ' ******* METHOD 3 *******
         ' Here we are assuming that the user is NOT running .NET in a Win98/Me machine...
@@ -931,8 +931,8 @@ GetHDSerialFirmwareError:
         Dim moc As ManagementObjectCollection = mc.GetInstances()
         For Each mo In moc
             If mo.Item("IPEnabled").ToString() = "True" Then
-                GetMACAddress = mo.Item("MacAddress").ToString().Replace(":", " ")
-                If GetMACAddress <> "00 00 00 00 00 00" Then Exit Function
+                GetMACAddress = mo.Item("MacAddress").ToString().Replace(":", "-")
+                If GetMACAddress <> "00-00-00-00-00-00" Then Exit Function
             End If
         Next
 
@@ -943,8 +943,8 @@ GetHDSerialFirmwareError:
         objMOS = New ManagementObjectSearcher("Select * From Win32_NetworkAdapter")
         objMOC = objMOS.Get
         For Each objMO In objMOC
-            GetMACAddress = objMO("MACAddress").ToString.Replace("-", " ")
-            If GetMACAddress <> "00 00 00 00 00 00" Then Exit Function
+            GetMACAddress = objMO("MACAddress").ToString
+            If GetMACAddress <> "00-00-00-00-00-00" Then Exit Function
         Next
         objMOS.Dispose()
         objMOS = Nothing
@@ -953,8 +953,8 @@ GetHDSerialFirmwareError:
         ' ******* METHOD 5 *******
         Dim nic As System.Net.NetworkInformation.NetworkInterface = Nothing
         For Each nic In System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces
-            GetMACAddress = nic.GetPhysicalAddress().ToString.Replace("-", " ")
-            If GetMACAddress <> "" And GetMACAddress <> "00 00 00 00 00 00" Then
+            GetMACAddress = nic.GetPhysicalAddress().ToString
+            If GetMACAddress <> "" And GetMACAddress <> "00-00-00-00-00-00" Then
                 nic = Nothing
                 Exit Function
             End If
@@ -970,7 +970,7 @@ GetHDSerialFirmwareError:
             If Not IsDBNull(obj.MACAddress) Then
                 If obj.AdapterType = "Ethernet 802.3" Then
                     If InStr(obj.PNPDeviceID, "PCI\") <> 0 Then
-                        GetMACAddress = Replace_Renamed(obj.MACAddress, ":", " ")
+                        GetMACAddress = Replace_Renamed(obj.MACAddress, ":", "-")
                         Exit Function
                     End If
                 End If
@@ -982,6 +982,32 @@ GetMACAddressError:
             GetMACAddress = "Not Available"
         End If
 
+    End Function
+    Public Function WirelessIsFoundAndConnected() As Boolean
+        Dim adapters() As NetworkInformation.NetworkInterface = NetworkInformation.NetworkInterface.GetAllNetworkInterfaces()
+        Dim wirelessfound As Boolean = False
+        For Each adapter As NetworkInformation.NetworkInterface In adapters
+            If adapter.NetworkInterfaceType = NetworkInformation.NetworkInterfaceType.Wireless80211 Then
+                'If adapter.Description.ToLower.Contains("wireless") Then  ' this also works
+                If adapter.GetIPProperties().UnicastAddresses.Count > 0 Then
+                    WirelessIsFoundAndConnected = True
+                End If
+                'End If
+
+                'Debug.WriteLine("Name " & adapter.Name)
+                'Debug.WriteLine("Status:" & adapter.OperationalStatus.ToString)
+                'Debug.WriteLine("Speed:" & adapter.Speed.ToString())
+                'Debug.WriteLine(adapter.GetIPProperties.GetIPv4Properties)
+                'MessageBox.Show(adapter.GetIPProperties.GetIPv4Properties.IsDhcpEnabled.ToString)
+                'If adapter.GetIPProperties.GetIPv4Properties.IsDhcpEnabled Then
+                '    Debug.WriteLine("Dynamic IP")
+                'Else
+                '    Debug.WriteLine("Static IP")
+                'End If
+                'WirelessIsFoundAndConnected = True
+
+            End If
+        Next
     End Function
     '===============================================================================
     ' Name: Function GetWindowsSerial
@@ -1382,5 +1408,21 @@ GetIPaddressError:
         fp.ReturnLength = 8
         GetFingerprint = fp.Value
     End Function
+    Public Function CheckMACaddress(ByVal usedMACaddress As String) As Boolean
+        CheckMACaddress = False
+        Dim mc As ManagementClass
+        Dim mo As ManagementObject
+        Dim nicMACaddress As String
+        mc = New ManagementClass("Win32_NetworkAdapterConfiguration")
+        Dim moc As ManagementObjectCollection = mc.GetInstances()
+        For Each mo In moc
+            'If mo.Item("IPEnabled").ToString() = "True" Then
+            nicMACaddress = mo.Item("MacAddress").ToString().Replace(":", "-")
+            If nicMACaddress = usedMACaddress Then
+                Return True
+            End If
+            'End If
+        Next
 
+    End Function
 End Module
