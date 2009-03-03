@@ -147,7 +147,7 @@ Class clsNetworkStats
     Public Function GetAdapter() As IFROW_HELPER
         Dim i As Short
         For i = 0 To Convert.ToInt16(m_Adapters.Count)
-            Return CType(m_Adapters(i), IFROW_HELPER)
+            GetAdapter = CType(m_Adapters(i), IFROW_HELPER)
             If GetAdapter.PhysAddr.ToString <> "00-00-00-00-00-00" Then Exit Function
         Next
         Return Nothing

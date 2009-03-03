@@ -201,11 +201,15 @@ Public Class frmProductsStorage
     SaveSettings()
     mainForm.frmMain_Load(sender, e)
     Me.Close()
-  End Sub
+    End Sub
 
-  Private Sub frmProductsStorage_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-    LoadSettings()
-  End Sub
+    Private Sub frmProductsStorage_FormClosing(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosingEventArgs) Handles Me.FormClosing
+        SaveSettings()
+    End Sub
+
+    Private Sub frmProductsStorage_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        LoadSettings()
+    End Sub
 
   Private Sub LoadSettings()
     On Error GoTo LoadSettings_Error

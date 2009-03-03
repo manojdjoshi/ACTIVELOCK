@@ -105,10 +105,10 @@ Public Class FingerPrint
             If m_UseBaseID Then m_BaseID = BaseID()
             m_VideoID = ""
             If m_UseVideoID Then m_VideoID = VideoID()
-            m_MacID = ""
-            If m_UseMacID Then m_MacID = MacID()
+            'm_MacID = ""
+            'If m_UseMacID Then m_MacID = MacID()
 
-            Return Pack(m_CpuID & m_BiosID & m_DiskID & m_BaseID & m_VideoID & m_MacID)
+            Return Pack(m_CpuID & m_BiosID & m_DiskID & m_BaseID & m_VideoID) '& m_MacID)
 
             RaiseEvent DoneWith("All")
         End Get

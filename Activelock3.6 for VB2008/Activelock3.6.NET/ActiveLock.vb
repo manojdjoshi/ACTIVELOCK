@@ -897,6 +897,9 @@ finally_Renamed:
             End If
 
             trialStatus = ActivateTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, strMsg, mSoftwarePassword, mCheckTimeServerForClockTampering, mChecksystemfilesForClockTampering, mTrialWarning, mRemainingTrialDays, mRemainingTrialRuns)
+            strRemainingTrialDays = mRemainingTrialDays.ToString
+            strRemainingTrialRuns = mRemainingTrialRuns.ToString
+            strTrialLength = mTrialLength.ToString
             ' Set the locale date format to what we had before; can't leave changed
             Set_locale((regionalSymbol))
             If trialStatus = True Then
@@ -952,10 +955,8 @@ continueRegistration:
         ValidateLic(Lic)
         ' Return all needed properties for faster form loading
         dontValidateLicense = True
-        strRemainingTrialDays = mRemainingTrialDays.ToString
-        strRemainingTrialRuns = mRemainingTrialRuns.ToString
-        strTrialLength = mTrialLength.ToString
-        strUsedDays = IActiveLock_UsedDays.ToString
+        Dim mydate As DateTime = ActiveLockDate(Date.UtcNow)
+        strUsedDays = CStr(mydate.Subtract(ActiveLockDate(CDate(Lic.RegisteredDate))).Days)     'CInt(DateDiff("d", CDate(Replace(Lic.RegisteredDate, ".", "-")), Date.UtcNow))
         strExpirationDate = Lic.Expiration
         strRegisteredUser = Lic.Licensee
         strRegisteredLevel = Lic.RegisteredLevel
@@ -1603,8 +1604,14 @@ ErrHandler:
                         If aString <> noKey Then
                             IActiveLock_AddLockCode(IActiveLock.ALLockTypes.lockMAC, SizeLockType)
                             If aString <> modHardware.GetMACAddress() Then
-                                Set_locale(regionalSymbol)
-                                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
+                                ' Ok MAC address did not match
+                                ' Maybe the laptop owner turned on the wireless connection
+                                ' and it wasn't on when the license was registered
+                                If CheckMACaddress(aString) = False Then
+                                    ' we truly failed
+                                    Set_locale(regionalSymbol)
+                                    Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
+                                End If
                             End If
                         End If
                     ElseIf j = LBound(a) + 1 Then
@@ -1711,7 +1718,7 @@ ErrHandler:
                         End If
                     ElseIf j = LBound(a) + 13 Then
                         If aString <> noKey Then
-                            IActiveLock_AddLockCode(IActiveLock.ALLockTypes.lockVideoID, SizeLockType)
+                            IActiveLock_AddLockCode(IActiveLock.ALLockTypes.lockvideoID, SizeLockType)
                             If aString <> modHardware.GetVideoID() Then
                                 Set_locale(regionalSymbol)
                                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
