@@ -1,5 +1,46 @@
 Option Strict Off
 Option Explicit On
+
+#Region "Copyright"
+'*   ActiveLock
+'*   Copyright 1998-2002 Nelson Ferraz
+'*   Copyright 2006 The ActiveLock Software Group (ASG)
+'*   All material is the property of the contributing authors.
+'*
+'*   Redistribution and use in source and binary forms, with or without
+'*   modification, are permitted provided that the following conditions are
+'*   met:
+'*
+'*     [o] Redistributions of source code must retain the above copyright
+'*         notice, this list of conditions and the following disclaimer.
+'*
+'*     [o] Redistributions in binary form must reproduce the above
+'*         copyright notice, this list of conditions and the following
+'*         disclaimer in the documentation and/or other materials provided
+'*         with the distribution.
+'*
+'*   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+'*   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+'*   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+'*   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+'*   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+'*   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+'*   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+'*   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+'*   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+'*   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+'*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+'*
+'*
+#End Region
+
+''' <summary>
+''' _IActiveLock - Interface - Implimented by IActiveLock
+''' </summary>
+''' <remarks>
+''' <para> - MaintainedBy:</para>
+''' <para> - LastRevisionDate:</para>
+''' <para> - Comments:</para></remarks>
 Public Interface _IActiveLock
     ReadOnly Property RemainingTrialDays() As Integer
     ReadOnly Property RemainingTrialRuns() As Integer
@@ -20,7 +61,8 @@ Public Interface _IActiveLock
     WriteOnly Property AutoRegister() As IActiveLock.ALAutoRegisterTypes
     WriteOnly Property TrialWarning() As IActiveLock.ALTrialWarningTypes
     WriteOnly Property SoftwareCode() As String
-    Property SoftwareVersion() As String
+	Property SoftwareVersion() As String
+
     WriteOnly Property KeyStoreType() As IActiveLock.LicStoreType
     WriteOnly Property KeyStorePath() As String
     ReadOnly Property InstallationCode(Optional ByVal User As String = vbNullString, Optional ByVal Lic As ProductLicense = Nothing) As String
@@ -40,222 +82,198 @@ Public Interface _IActiveLock
     ReadOnly Property RegisteredUser() As String
     ReadOnly Property ExpirationDate() As String
 End Interface
-'Class instancing was changed to public.
+
+''' <summary>
+''' IActiveLock - Impliments _IActiveLock
+''' </summary>
+''' <remarks>Class instancing was changed to public.</remarks>
 <System.Runtime.InteropServices.ProgId("IActiveLock_NET.IActiveLock")> Public Class IActiveLock
-	Implements _IActiveLock
-	'*   ActiveLock
-	'*   Copyright 1998-2002 Nelson Ferraz
-    '*   Copyright 2006 The ActiveLock Software Group (ASG)
-	'*   All material is the property of the contributing authors.
-	'*
-	'*   Redistribution and use in source and binary forms, with or without
-	'*   modification, are permitted provided that the following conditions are
-	'*   met:
-	'*
-	'*     [o] Redistributions of source code must retain the above copyright
-	'*         notice, this list of conditions and the following disclaimer.
-	'*
-	'*     [o] Redistributions in binary form must reproduce the above
-	'*         copyright notice, this list of conditions and the following
-	'*         disclaimer in the documentation and/or other materials provided
-	'*         with the distribution.
-	'*
-	'*   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-	'*   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-	'*   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-	'*   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-	'*   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-	'*   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-	'*   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-	'*   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-	'*   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	'*   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-	'*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	'*
-	'*
-	'===============================================================================
-	' Name: IActivelock
-	' Purpose: This is the main interface into ActiveLock&#39;s functionalities.
-	' The user application interacts with ActiveLock primarily through this IActiveLock interface.
-	' Typically, the application would obtain an instance of this interface via the
-	' <a href="Globals.NewInstance.html">ActiveLock3.NewInstance()</a> accessor method. From there, initialization calls are done,
-	' and then various method such as <a href="IActiveLock.Register.html">Register()</a>, <a href="IActiveLock.Acquire.html">Acquire()</a>, etc..., can be used.
-	' <p>
-	' ActiveLock also sends COM event notifications to the user application whenever it needs help to perform
-	' some action, such as license property validation/encryption.  The user application can intercept
-	' these events via the ActiveLockEventNotifier object, which can be obtained from
-	' <a href="IActiveLock.Get.EventNotifier.html">IActiveLock.EventNotifier</a> property.
-	' <p>
-	' <b>Important Note</b><br>
-	' The user application is strongly advised to perform a checksum on the
-	' ActiveLock DLL prior to accessing and interacting with ActiveLock. Using the checksum, you can tell if
-	' the DLL has been tampered. Please refer to sample code below on how the checksumming can be done.
-	' <p>
-	' The sample code fragments below illustrate the typical usage flow between your application and ActiveLock.
-	' Please note that the code shown is only for illustration purposes and is not meant to be a complete
-	' compilable program. You may have to add variable declarations and function definitions around the code
-	' fragments before you can compile it.
-	' <p>
-	' <pre>
-	'   Form1.frm:
-	'   ...
-	'   Private MyActiveLock As ActiveLock3.IActiveLock
-	'   Private WithEvents ActiveLockEventSink As ActiveLockEventNotifier
-	'   Private Const AL_CRC& = 123+ &#39; ActiveLock3.dll&#39;s CRC checksum to be used for validation
-	'
-	'   &#39; This key will be used to set <a href="IActiveLock.Let.SoftwareCode.html">IActiveLock.SoftwareCode</a> property.
-	'   &#39; NOTE: This is NOT a complete key (complete key is to long to put in documentation).
-	'   &#39; You will generate your own product code using ALUGEN.  This is the <code>VCode</code> generated
-	'   by ALUGEN.
-	'   Private Const PROD_CODE$ = "AAAAB3NzaC1yc2EAAAABJQAAAIBZnXD4IKfrBH25ekwLWQMs5mJ..."
-	'
-	'   ....
-	'
-	'   Private Sub Form_Load()
-	'       On Error GoTo ErrHandler
-	'       &#39; Obtain an instance of AL. NewInstance() also calls IActiveLock.Init()
-	'       Set MyActiveLock = ActiveLock3.NewInstance()
-	'       &#39; At this point, either AL has been initialized or an error would have already been raised
-	'       &#39; if there were problems (such as ActiveLock3.dll having been tampered).
-	'
-	'       &#39; Verify AL&#39;s authenticity
-	'       &#39; modActiveLock.CRCCheckSumTypeLib() requires a public-creatable object to be passed in
-	'       &#39; so that it can determine the Type Library DLL on which to perform the checksum.
-	'       &#39; So can&#39;t use MyActiveLock object to authenticate since it is not a public creatable object.
-	'       &#39; So we&#39;ll use ActiveLock3.Globals, which is just as good because they are in the same DLL.
-	'       Dim crc As Long
-	'       crc = CRCCheckSumTypeLib(New ActiveLock3.Globals)
-	'       Debug.Print "Hash: " & crc
-	'       If crc &lt;&gt; AL_CRC Then
-	'           MsgBox "ActiveLock3.dll has been corrupted."
-	'           End ' terminate
-	'       End If
-	'
-	'      &#39; Initialize the keystore. We use a File keystore in this case.
-	'      MyActiveLock.KeyStoreType = alsFile
-	'      MyActiveLock.KeyStorePath = App.path & "\myapp.lic"
-	'
-	'      &#39; Obtain the EventNotifier so that we can receive notifications from AL.
-	'      Set ActiveLockEventSink = MyActiveLock.EventNotifier
-	'
-	'      &#39; Specify the name of the product that will be locked through AL.
-	'      MyActiveLock.SoftwareName = "MyApp"
-	'
-	'      &#39; Specify our product code.  This code will be used later by ActiveLock to validate license keys.
-	'      MyActiveLock.SoftwareCode = PROD_CODE
-	'
-	'      &#39; Specify product version
-	'       MyActiveLock.SoftwareVersion = txtVersion
-	'
-	'      &#39; Specify Lock Type
-	'      MyActiveLock.LockType = lockHD
-	'
-	'      &#39; Sets path to liberation key file for automatic registration
-	'      MyActiveLock.AutoRegisterKeyPath = App.path & "\myapp.alb"
-	'
-	'      &#39; Initialize the instance
-	'      MyActiveLock.Init
-	'
-	'      &#39; Check registration status by calling Acquire()
-	'      &#39; Note: Calling Acquire() may trigger ActiveLockEventNotifier_ValidateValue() event.
-	'      &#39; So we should be prepared to handle that.
-	'      MyActiveLock.Acquire
-	'
-	'      &#39; By now, if the product is not registered, then an error would have been raised,
-	'      &#39; which means if we get to here, then we're registered.
-	'
-	'      &#39; Just for fun, print out some registration status info
-	'      Debug.Print "Registered User: " & MyActiveLock.RegisteredUser
-	'      Debug.Print "Used Days: " & MyActiveLock.UsedDays
-	'      Debug.Print "Expiration Date: " & MyActiveLock.ExpirationDate
-	'      Exit Sub
-	'   ErrHandler:
-	'       MsgBox Err.Number & ": " & Err.Description
-	'       &#39; End program
-	'       End
-	'   End Sub
-	'   ...
-	'   <p>
-	'   (Optional) ActiveLock raises this event typically when it needs a value to be encrypted.
-	'   We can use any kind of encryption we&#39;d like here, as long as it&#39;s deterministic.
-	'   i.e. there&#39;s a one-to-one correspondence between unencrypted value and encrypted value.
-	'   NOTE: BlowFish is NOT an example of deterministic encryption so you can&#39;t use it here.
-	'   You are allowed to use asymmetric algorithm since you will never be asked to decrypt a value,
-	'   only to encrypt.
-	'   You don&#39;t have to handle this event if you don&#39;t want to; it just means that the value WILL NOT
-	'   be encrypted when it is saved to the keystore.
-	'
-	'   Private Sub ActiveLockEventSink_ValidateValue(ByVal Value As String, Result As String)
-	'       Result = Encrypt(Value)
-	'   End Sub
-	'<br>
-	'   &#39; Roll our own simple-yet-weird encryption routine.
-	'   &#39; Must keep in mind that our encryption algorithm must be deterministic.
-	'   &#39; In other words, given the same uncrypted string, it must always yield the same encrypted string.
-	'   Private Function Encrypt(strData As String) As String
-	'       Dim i&, n&
-	'       dim sResult$
-	'       n = Len(strData)
-	'       For i = 1 to n
-	'           sResult = sResult & Asc(Mid$(strData, i, 1)) * 7
-	'       Next i
-	'       Encrypt = sResult
-	'   End Function
-	'   ...
-	'   &#39; Returns the CRC checksum of the ActiveLock3.dll.
-	'   Private Property Get ALCRC() As Long
-	'       &#39; Don&#39;t just return a single value, but rather compute it using some simple arithmetic
-	'       &#39; so that hackers can&#39;t easily find it with a hex editor.
-	'       &#39; Of course, the values below will not make up the real checksum. For the most up-to-date
-	'       &#39; checksum, please refer to the ActiveLock Release Notes.
-	'       ALCRC = 123 + 456
-	'   End Property
-	' </pre>
-	'
-	' <p>Generating registration code from the user application to be sent to the vendor in exchange for
-	' a liberation key.
-	' <pre>
-	'    &#39; Generate Installation code
-	'    Dim strInstCode As String
-	'    strInstCode = MyActiveLock.InstallCode(txtUser)
-	'    &#39; strInstCode now contains the request code to be sent to the vendor for activation.
-	' </pre>
-	'
-	' <p>Key Registration functionality - register using a liberation key.
-	' <pre>
-	'    On Error GoTo ErrHandler
-	'    &#39; Register this key
-	'    &#39; txtLibKey contains the liberation key entered by the user.
-	'    &#39; This key could have be sent via an email to the user or a program that automatically
-	'    &#39; requests the key from a registration website.
-	'    MyActiveLock.Register txtLibKey
-	'    MsgBox "Registration successful!"
-	'    Exit Sub
-	'ErrHandler:
-	'    MsgBox Err.Number & ": " & Err.Description
-	' </pre>
-	' Remarks:
-	' Functions:
-	' Properties:
-	' Methods:
-	' Started: 21.04.2005
-	' Modified: 08.05.2005
-	'===============================================================================
-	
-	' @author activelock-admins
+    Implements _IActiveLock
+#Region "Notes"
+
+    '===============================================================================
+    ' Name: IActivelock
+    ' Purpose: This is the main interface into ActiveLock&#39;s functionalities.
+    ' The user application interacts with ActiveLock primarily through this IActiveLock interface.
+    ' Typically, the application would obtain an instance of this interface via the
+    ' <a href="Globals.NewInstance.html">ActiveLock3.NewInstance()</a> accessor method. From there, initialization calls are done,
+    ' and then various method such as <a href="IActiveLock.Register.html">Register()</a>, <a href="IActiveLock.Acquire.html">Acquire()</a>, etc..., can be used.
+    ' <p>
+    ' ActiveLock also sends COM event notifications to the user application whenever it needs help to perform
+    ' some action, such as license property validation/encryption.  The user application can intercept
+    ' these events via the ActiveLockEventNotifier object, which can be obtained from
+    ' <a href="IActiveLock.Get.EventNotifier.html">IActiveLock.EventNotifier</a> property.
+    ' <p>
+    ' <b>Important Note</b><br>
+    ' The user application is strongly advised to perform a checksum on the
+    ' ActiveLock DLL prior to accessing and interacting with ActiveLock. Using the checksum, you can tell if
+    ' the DLL has been tampered. Please refer to sample code below on how the checksumming can be done.
+    ' <p>
+    ' The sample code fragments below illustrate the typical usage flow between your application and ActiveLock.
+    ' Please note that the code shown is only for illustration purposes and is not meant to be a complete
+    ' compilable program. You may have to add variable declarations and function definitions around the code
+    ' fragments before you can compile it.
+    ' <p>
+    ' <pre>
+    '   Form1.frm:
+    '   ...
+    '   Private MyActiveLock As ActiveLock3.IActiveLock
+    '   Private WithEvents ActiveLockEventSink As ActiveLockEventNotifier
+    '   Private Const AL_CRC& = 123+ &#39; ActiveLock3.dll&#39;s CRC checksum to be used for validation
+    '
+    '   &#39; This key will be used to set <a href="IActiveLock.Let.SoftwareCode.html">IActiveLock.SoftwareCode</a> property.
+    '   &#39; NOTE: This is NOT a complete key (complete key is to long to put in documentation).
+    '   &#39; You will generate your own product code using ALUGEN.  This is the <code>VCode</code> generated
+    '   by ALUGEN.
+    '   Private Const PROD_CODE$ = "AAAAB3NzaC1yc2EAAAABJQAAAIBZnXD4IKfrBH25ekwLWQMs5mJ..."
+    '
+    '   ....
+    '
+    '   Private Sub Form_Load()
+    '       On Error GoTo ErrHandler
+    '       &#39; Obtain an instance of AL. NewInstance() also calls IActiveLock.Init()
+    '       Set MyActiveLock = ActiveLock3.NewInstance()
+    '       &#39; At this point, either AL has been initialized or an error would have already been raised
+    '       &#39; if there were problems (such as ActiveLock3.dll having been tampered).
+    '
+    '       &#39; Verify AL&#39;s authenticity
+    '       &#39; modActiveLock.CRCCheckSumTypeLib() requires a public-creatable object to be passed in
+    '       &#39; so that it can determine the Type Library DLL on which to perform the checksum.
+    '       &#39; So can&#39;t use MyActiveLock object to authenticate since it is not a public creatable object.
+    '       &#39; So we&#39;ll use ActiveLock3.Globals, which is just as good because they are in the same DLL.
+    '       Dim crc As Long
+    '       crc = CRCCheckSumTypeLib(New ActiveLock3.Globals)
+    '       Debug.Print "Hash: " & crc
+    '       If crc &lt;&gt; AL_CRC Then
+    '           MsgBox "ActiveLock3.dll has been corrupted."
+    '           End ' terminate
+    '       End If
+    '
+    '      &#39; Initialize the keystore. We use a File keystore in this case.
+    '      MyActiveLock.KeyStoreType = alsFile
+    '      MyActiveLock.KeyStorePath = App.path & "\myapp.lic"
+    '
+    '      &#39; Obtain the EventNotifier so that we can receive notifications from AL.
+    '      Set ActiveLockEventSink = MyActiveLock.EventNotifier
+    '
+    '      &#39; Specify the name of the product that will be locked through AL.
+    '      MyActiveLock.SoftwareName = "MyApp"
+    '
+    '      &#39; Specify our product code.  This code will be used later by ActiveLock to validate license keys.
+    '      MyActiveLock.SoftwareCode = PROD_CODE
+    '
+    '      &#39; Specify product version
+    '       MyActiveLock.SoftwareVersion = txtVersion
+    '
+    '      &#39; Specify Lock Type
+    '      MyActiveLock.LockType = lockHD
+    '
+    '      &#39; Sets path to liberation key file for automatic registration
+    '      MyActiveLock.AutoRegisterKeyPath = App.path & "\myapp.alb"
+    '
+    '      &#39; Initialize the instance
+    '      MyActiveLock.Init
+    '
+    '      &#39; Check registration status by calling Acquire()
+    '      &#39; Note: Calling Acquire() may trigger ActiveLockEventNotifier_ValidateValue() event.
+    '      &#39; So we should be prepared to handle that.
+    '      MyActiveLock.Acquire
+    '
+    '      &#39; By now, if the product is not registered, then an error would have been raised,
+    '      &#39; which means if we get to here, then we're registered.
+    '
+    '      &#39; Just for fun, print out some registration status info
+    '      Debug.Print "Registered User: " & MyActiveLock.RegisteredUser
+    '      Debug.Print "Used Days: " & MyActiveLock.UsedDays
+    '      Debug.Print "Expiration Date: " & MyActiveLock.ExpirationDate
+    '      Exit Sub
+    '   ErrHandler:
+    '       MsgBox Err.Number & ": " & Err.Description
+    '       &#39; End program
+    '       End
+    '   End Sub
+    '   ...
+    '   <p>
+    '   (Optional) ActiveLock raises this event typically when it needs a value to be encrypted.
+    '   We can use any kind of encryption we&#39;d like here, as long as it&#39;s deterministic.
+    '   i.e. there&#39;s a one-to-one correspondence between unencrypted value and encrypted value.
+    '   NOTE: BlowFish is NOT an example of deterministic encryption so you can&#39;t use it here.
+    '   You are allowed to use asymmetric algorithm since you will never be asked to decrypt a value,
+    '   only to encrypt.
+    '   You don&#39;t have to handle this event if you don&#39;t want to; it just means that the value WILL NOT
+    '   be encrypted when it is saved to the keystore.
+    '
+    '   Private Sub ActiveLockEventSink_ValidateValue(ByVal Value As String, Result As String)
+    '       Result = Encrypt(Value)
+    '   End Sub
+    '<br>
+    '   &#39; Roll our own simple-yet-weird encryption routine.
+    '   &#39; Must keep in mind that our encryption algorithm must be deterministic.
+    '   &#39; In other words, given the same uncrypted string, it must always yield the same encrypted string.
+    '   Private Function Encrypt(strData As String) As String
+    '       Dim i&, n&
+    '       dim sResult$
+    '       n = Len(strData)
+    '       For i = 1 to n
+    '           sResult = sResult & Asc(Mid$(strData, i, 1)) * 7
+    '       Next i
+    '       Encrypt = sResult
+    '   End Function
+    '   ...
+    '   &#39; Returns the CRC checksum of the ActiveLock3.dll.
+    '   Private Property Get ALCRC() As Long
+    '       &#39; Don&#39;t just return a single value, but rather compute it using some simple arithmetic
+    '       &#39; so that hackers can&#39;t easily find it with a hex editor.
+    '       &#39; Of course, the values below will not make up the real checksum. For the most up-to-date
+    '       &#39; checksum, please refer to the ActiveLock Release Notes.
+    '       ALCRC = 123 + 456
+    '   End Property
+    ' </pre>
+    '
+    ' <p>Generating registration code from the user application to be sent to the vendor in exchange for
+    ' a liberation key.
+    ' <pre>
+    '    &#39; Generate Installation code
+    '    Dim strInstCode As String
+    '    strInstCode = MyActiveLock.InstallCode(txtUser)
+    '    &#39; strInstCode now contains the request code to be sent to the vendor for activation.
+    ' </pre>
+    '
+    ' <p>Key Registration functionality - register using a liberation key.
+    ' <pre>
+    '    On Error GoTo ErrHandler
+    '    &#39; Register this key
+    '    &#39; txtLibKey contains the liberation key entered by the user.
+    '    &#39; This key could have be sent via an email to the user or a program that automatically
+    '    &#39; requests the key from a registration website.
+    '    MyActiveLock.Register txtLibKey
+    '    MsgBox "Registration successful!"
+    '    Exit Sub
+    'ErrHandler:
+    '    MsgBox Err.Number & ": " & Err.Description
+    ' </pre>
+    ' Remarks:
+    ' Functions:
+    ' Properties:
+    ' Methods:
+    ' Started: 21.04.2005
+    ' Modified: 08.05.2005
+    '===============================================================================
+#End Region
+    ' @author activelock-admins
     ' @version 3.3.0
     ' @date 3-23-2006
-	'
+    '
     ' License Lock Types.  Values can be combined (OR ed) together.
-	'
-	' @param lockNone       No locking - not recommended
-	' @param lockWindows    Lock to Windows Serial Number
-	' @param lockComp       Lock to Computer Name
-	' @param lockHD         Lock to Hard Drive Serial Number (Volume Serial Number)
-	' @param lockMAC        Lock to Network Interface Card Address
-	' @param lockBIOS       Lock to BIOS Serial Number
+    '
+    ' @param lockNone       No locking - not recommended
+    ' @param lockWindows    Lock to Windows Serial Number
+    ' @param lockComp       Lock to Computer Name
+    ' @param lockHD         Lock to Hard Drive Serial Number (Volume Serial Number)
+    ' @param lockMAC        Lock to Network Interface Card Address
+    ' @param lockBIOS       Lock to BIOS Serial Number
     ' @param lockIP         Lock to Computer Local IP Address
-	' @param lockMotherboard   Lock to Motherboard Serial Number
+    ' @param lockMotherboard   Lock to Motherboard Serial Number
     ' @param lockExternalIP Lock to External IP Address
     ' @param lockHDFirmware Lock to Hard Disk Firmware Serial (HDD Manufacturer's Serial Number)
     ' @param lockFingerprint   Lock to Fingerprint (Activelock Combination)
@@ -265,21 +283,84 @@ End Interface
     ' @param lockVideoID    Lock to Video Controller Name and Drive Version Number
 
     '###############################################################
+
+    ''' <summary>
+    ''' License Lock Types.
+    ''' </summary>
+    ''' <remarks>Values can be combined (OR ed) together.</remarks>
     Public Enum ALLockTypes
+        ''' <summary>No locking - not recommended</summary>
+        ''' <remarks></remarks>
         lockNone = 0
+        ''' <summary>
+        ''' Lock to Network Interface Card Address
+        ''' </summary>
+        ''' <remarks></remarks>
         lockMAC = 1             '8
+        ''' <summary>
+        ''' Lock to Computer Name
+        ''' </summary>
+        ''' <remarks></remarks>
         lockComp = 2
+        ''' <summary>
+        ''' Lock to Hard Drive Serial Number (Volume Serial Number)
+        ''' </summary>
+        ''' <remarks></remarks>
         lockHD = 4
+        ''' <summary>
+        ''' Lock to Hard Disk Firmware Serial (HDD Manufacturer's Serial Number)
+        ''' </summary>
+        ''' <remarks></remarks>
         lockHDFirmware = 8      '256
+        ''' <summary>
+        ''' Lock to Windows Serial Number
+        ''' </summary>
+        ''' <remarks></remarks>
         lockWindows = 16        '1
+        ''' <summary>
+        ''' Lock to BIOS Serial Number
+        ''' </summary>
+        ''' <remarks></remarks>
         lockBIOS = 32           '16
+        ''' <summary>
+        ''' Lock to Motherboard Serial Number
+        ''' </summary>
+        ''' <remarks></remarks>
         lockMotherboard = 64
+        ''' <summary>
+        ''' Lock to Computer Local IP Address
+        ''' </summary>
+        ''' <remarks></remarks>
         lockIP = 128            '32
+        ''' <summary>
+        ''' Lock to External IP Address
+        ''' </summary>
+        ''' <remarks></remarks>
         lockExternalIP = 256    '128
+        ''' <summary>
+        ''' Lock to Fingerprint (Activelock Combination)
+        ''' </summary>
+        ''' <remarks></remarks>
         lockFingerprint = 512
+        ''' <summary>
+        ''' Lock to Memory ID
+        ''' </summary>
+        ''' <remarks></remarks>
         lockMemory = 1024
+        ''' <summary>
+        ''' Lock to CPU ID
+        ''' </summary>
+        ''' <remarks></remarks>
         lockCPUID = 2048
+        ''' <summary>
+        ''' Lock to Baseboard Name and Serial Number
+        ''' </summary>
+        ''' <remarks></remarks>
         lockBaseboardID = 4096
+        ''' <summary>
+        ''' Lock to Video Controller Name and Drive Version Number
+        ''' </summary>
+        ''' <remarks></remarks>
         lockvideoID = 8192
     End Enum
 
