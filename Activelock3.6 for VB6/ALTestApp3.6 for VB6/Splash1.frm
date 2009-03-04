@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "Mscomctl.ocx"
 Begin VB.Form frmSplash1 
    BorderStyle     =   4  'Fixed ToolWindow
    ClientHeight    =   5955
@@ -178,7 +178,7 @@ End Sub
 Private Sub Form_Load()
 lblVersion.Caption = "Version " & App.Major & "." & App.Minor & "." & App.Revision
 lblProductName.Caption = App.Title
-If strMsg <> "" Then
+If strMsg <> "" And totalDays <> 0 Then
     ProgressBar1.Value = (1 - remainingDays / totalDays) * 100
     If remainingDays > 0 Then lblInfo.Caption = CStr(totalDays - remainingDays) & " day(s) used out of " & CStr(totalDays) & " trial days"
 End If
