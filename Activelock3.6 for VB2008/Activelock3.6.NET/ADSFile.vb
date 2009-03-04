@@ -1,3 +1,8 @@
+' TODO: ADSFile.vb - Add comment as to what this does/should do! Not Documented!
+''' <summary>
+''' Not Documented!
+''' </summary>
+''' <remarks></remarks>
 Module ADSFile
 
     Private _stream As String = String.Empty
@@ -22,13 +27,30 @@ Module ADSFile
 #End Region
 
 #Region "Win32 API Defines"
-
+    ''' <summary>
+    ''' Retrieves the size of the specified file, in bytes.
+    ''' </summary>
+    ''' <param name="handle">A handle to the file.</param>
+    ''' <param name="size">A pointer to the variable where the high-order doubleword of the file size is returned. This parameter can be NULL if the application does not require the high-order doubleword.</param>
+    ''' <returns>If the function succeeds, the return value is the low-order doubleword of the file size, and, if lpFileSizeHigh is non-NULL, the function puts the high-order doubleword of the file size into the variable pointed to by that parameter.</returns>
+    ''' <remarks>Note that if the return value is INVALID_FILE_SIZE (0xffffffff), an application must call GetLastError to determine whether the function has succeeded or failed. The reason the function may appear to fail when it has not is that lpFileSizeHigh could be non-NULL or the file size could be 0xffffffff. In this case, GetLastError will return NO_ERROR (0) upon success. Because of this behavior, it is recommended that you use GetFileSizeEx instead.</remarks>
     <System.Runtime.InteropServices.DllImport("kernel32", SetLastError:=True)> _
      Function GetFileSize(ByVal handle As System.Int32, ByVal size As IntPtr) As System.Int32
         'ToDo: Unsigned Integers not supported
         'ToDo: Unsigned Integers not supported
     End Function
 
+    ''' <summary>
+    ''' <para>Reads data from the specified file or input/output (I/O) device. Reads occur at the position specified by the file pointer if supported by the device.</para>
+    ''' <para>This function is designed for both synchronous and asynchronous operations. For a similar function designed solely for asynchronous operation, see <a href="http://msdn.microsoft.com/en-us/library/aa365468(VS.85).aspx">ReadFileEx</a>.</para>
+    ''' </summary>
+    ''' <param name="handle">A handle to the device (for example, a file, file stream, physical disk, volume, console buffer, tape drive, socket, communications resource, mailslot, or pipe).</param>
+    ''' <param name="buffer">A pointer to the buffer that receives the data read from a file or device.</param>
+    ''' <param name="byteToRead">The maximum number of bytes to be read.</param>
+    ''' <param name="bytesRead">A pointer to the variable that receives the number of bytes read when using a synchronous hFile parameter. ReadFile sets this value to zero before doing any work or error checking. Use NULL for this parameter if this is an asynchronous operation to avoid potentially erroneous results.</param>
+    ''' <param name="lpOverlapped">A pointer to an OVERLAPPED structure is required if the hFile parameter was opened with FILE_FLAG_OVERLAPPED, otherwise it can be NULL.</param>
+    ''' <returns>If the function succeeds, the return value is nonzero (TRUE).</returns>
+    ''' <remarks>see http://msdn.microsoft.com/en-us/library/aa365467(VS.85).aspx </remarks>
     <System.Runtime.InteropServices.DllImport("kernel32", SetLastError:=True)> _
      Function ReadFile(ByVal handle As System.Int32, ByVal buffer() As Byte, ByVal byteToRead As System.Int32, ByRef bytesRead As System.Int32, ByVal lpOverlapped As IntPtr) As System.Int32
         'ToDo: Unsigned Integers not supported
@@ -37,6 +59,22 @@ Module ADSFile
         'ToDo: Unsigned Integers not supported
     End Function
 
+    ''' <summary>
+    ''' <para>Creates or opens a file or I/O device. The most commonly used I/O devices are as follows: file, file stream, directory, physical disk, volume, console buffer, tape drive, communications resource, mailslot, and pipe. The function returns a handle that can be used to access the file or device for various types of I/O depending on the file or device and the flags and attributes specified.</para>
+    ''' <para>To perform this operation as a transacted operation, which results in a handle that can be used for transacted I/O, use the <a href="http://msdn.microsoft.com/en-us/library/aa363859(VS.85).aspx">CreateFileTransacted</a> function.</para>
+    ''' </summary>
+    ''' <param name="filename">The name of the file or device to be created or opened. </param>
+    ''' <param name="desiredAccess">The requested access to the file or device, which can be summarized as read, write, both or neither (zero).</param>
+    ''' <param name="shareMode">The requested sharing mode of the file or device, which can be read, write, both, delete, all of these, or none (refer to the following table). Access requests to attributes or extended attributes are not affected by this flag.</param>
+    ''' <param name="attributes">A pointer to a SECURITY_ATTRIBUTES structure that contains two separate but related data members: an optional security descriptor, and a Boolean value that determines whether the returned handle can be inherited by child processes.</param>
+    ''' <param name="creationDisposition">An action to take on a file or device that exists or does not exist.</param>
+    ''' <param name="flagsAndAttributes">The file or device attributes and flags, FILE_ATTRIBUTE_NORMAL being the most common default value for files.</param>
+    ''' <param name="templateFile">A valid handle to a template file with the GENERIC_READ access right. The template file supplies file attributes and extended attributes for the file that is being created.</param>
+    ''' <returns>
+    ''' <para>If the function succeeds, the return value is an open handle to the specified file, device, named pipe, or mail slot.</para>
+    ''' <para>If the function fails, the return value is INVALID_HANDLE_VALUE. To get extended error information, call GetLastError.</para>
+    ''' </returns>
+    ''' <remarks>See http://msdn.microsoft.com/en-us/library/aa363858.aspx for full documentation!</remarks>
     <System.Runtime.InteropServices.DllImport("kernel32", SetLastError:=True)> _
      Function CreateFile(ByVal filename As String, ByVal desiredAccess As System.Int32, ByVal shareMode As System.Int32, ByVal attributes As IntPtr, ByVal creationDisposition As System.Int32, ByVal flagsAndAttributes As System.Int32, ByVal templateFile As IntPtr) As System.Int32
         'ToDo: Unsigned Integers not supported
@@ -46,6 +84,16 @@ Module ADSFile
         'ToDo: Unsigned Integers not supported
     End Function
 
+    ''' <summary>
+    ''' Writes data to the specified file or input/output (I/O) device. Writes occur at the position specified by the file pointer, if the handle refers to a seeking device.
+    ''' </summary>
+    ''' <param name="hFile">A handle to the file or I/O device (for example, a file, file stream, physical disk, volume, console buffer, tape drive, socket, communications resource, mailslot, or pipe).</param>
+    ''' <param name="lpBuffer">A pointer to the buffer containing the data to be written to the file or device.</param>
+    ''' <param name="nNumberOfBytesToWrite">The number of bytes to be written to the file or device.</param>
+    ''' <param name="lpNumberOfBytesWritten">A pointer to the variable that receives the number of bytes written when using a synchronous hFile parameter. WriteFile sets this value to zero before doing any work or error checking. Use NULL for this parameter if this is an asynchronous operation to avoid potentially erroneous results.</param>
+    ''' <param name="lpOverlapped">A pointer to an <a href="http://msdn.microsoft.com/en-us/library/ms684342(VS.85).aspx">OVERLAPPED</a> structure is required if the hFile parameter was opened with FILE_FLAG_OVERLAPPED, otherwise this parameter can be NULL.</param>
+    ''' <returns>If the function succeeds, the return value is nonzero (TRUE).</returns>
+    ''' <remarks>See http://msdn.microsoft.com/en-us/library/aa365747(VS.85).aspx for full documentation!</remarks>
     <System.Runtime.InteropServices.DllImport("kernel32.dll", SetLastError:=True)> _
     Function WriteFile(ByVal hFile As System.Int32, ByVal lpBuffer() As Byte, ByVal nNumberOfBytesToWrite As System.Int32, ByRef lpNumberOfBytesWritten As System.Int32, ByVal lpOverlapped As IntPtr) As Boolean
         'ToDo: Unsigned Integers not supported
@@ -53,6 +101,12 @@ Module ADSFile
         'ToDo: Unsigned Integers not supported
     End Function
 
+    ''' <summary>
+    ''' Closes an open object handle.
+    ''' </summary>
+    ''' <param name="hFile">A valid handle to an open object.</param>
+    ''' <returns>If the function succeeds, the return value is nonzero.</returns>
+    ''' <remarks>See http://msdn.microsoft.com/en-us/library/ms724211(VS.85).aspx for full Documentation!</remarks>
     <System.Runtime.InteropServices.DllImport("kernel32.dll", SetLastError:=True)> _
      Function CloseHandle(ByVal hFile As System.Int32) As Boolean 'ToDo: Unsigned Integers not supported
     End Function
@@ -70,15 +124,16 @@ Module ADSFile
 
 #Region "Public Static Methods"
 
-    '/ <summary>
-    '/ Method called when an alternate data stream must be read from.
-    '/ </summary>
-    '/ <param name="file">The fully qualified name of the file from which
-    '/ the ADS data will be read.</param>
-    '/ <param name="stream">The name of the stream within the "normal" file
-    '/ from which to read.</param>
-    '/ <returns>The contents of the file as a string.  It will always return
-    '/ at least a zero-length string, even if the file does not exist.</returns>
+    ''' <summary>
+    ''' Method called when an alternate data stream must be read from.
+    ''' </summary>
+    ''' <param name="file">The fully qualified name of the file from which
+    ''' the ADS data will be read.</param>
+    ''' <param name="stream">The name of the stream within the "normal" file
+    ''' from which to read.</param>
+    ''' <returns>The contents of the file as a string.  It will always return
+    ''' at least a zero-length string, even if the file does not exist.
+    ''' </returns>
     Public Function Read(ByVal file As String, ByVal stream As String) As String
         Dim fHandle As System.Int32 = CreateFile(file + ":" + stream, GENERIC_READ, FILE_SHARE_READ, IntPtr.Zero, OPEN_EXISTING, 0, IntPtr.Zero) 'ToDo: Unsigned Integers not supported ' Filename
         ' Desired access
@@ -111,15 +166,15 @@ Module ADSFile
         End If
     End Function 'Read
 
-    '/ <summary>
-    '/ The static method to call when data must be written to a stream.
-    '/ </summary>
-    '/ <param name="data">The string data to embed in the stream in the file</param>
-    '/ <param name="file">The fully qualified name of the file with the
-    '/ stream into which the data will be written.</param>
-    '/ <param name="stream">The name of the stream within the normal file to
-    '/ write the data.</param>
-    '/ <returns>An unsigned integer of how many bytes were actually written.</returns>
+    ''' <summary>
+    ''' The static method to call when data must be written to a stream.
+    ''' </summary>
+    ''' <param name="data">The string data to embed in the stream in the file</param>
+    ''' <param name="file">The fully qualified name of the file with the
+    ''' stream into which the data will be written.</param>
+    ''' <param name="stream">The name of the stream within the normal file to
+    ''' write the data.</param>
+    ''' <returns>An unsigned integer of how many bytes were actually written.</returns>
     Public Function Write(ByVal data As String, ByVal file As String, ByVal stream As String) As System.Int32  'ToDo: Unsigned Integers not supported
         ' Convert the string data to be written to an array of ascii characters.
         Dim barData As Byte() = System.Text.Encoding.ASCII.GetBytes(data)
@@ -146,6 +201,13 @@ Module ADSFile
         Return nReturn
     End Function 'Write
 
+    ''' <summary>
+    ''' Not Documented!
+    ''' </summary>
+    ''' <param name="FileName"></param>
+    ''' <param name="stream"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Function ReadError(ByVal FileName As String, ByVal stream As String) As String
         _stream = stream
         _FileName = FileName
