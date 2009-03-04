@@ -3,7 +3,7 @@
     Private Sub frmSplash1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         lblVersion.Text = "Version " & Application.ProductVersion
         lblProductName.Text = Application.ProductName
-        If strMsg <> "" Then
+        If strMsg <> "" And totalDays <> 0 Then
             ProgressBar1.Value = CInt(Math.Abs(1 - remainingDays / totalDays) * 100)
             If remainingDays > 0 Then lblInfo.Text = CStr(totalDays - remainingDays) & " day(s) used out of " & CStr(totalDays) & " trial days"
         End If

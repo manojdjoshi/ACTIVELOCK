@@ -1588,7 +1588,7 @@ DLLnotRegistered:
         Dim i, j As Short
         Dim systemDir, s, pathName As String
 
-        WhereIsDLL("") 'initialize
+        'WhereIsDLL("") 'initialize
 
         systemDir = WindowsSystemDirectory() 'Get the Windows system directory
         For Each y In MyArray
@@ -1641,63 +1641,63 @@ checkForResourcesError:
 
     End Function
 
-    Function WhereIsDLL(ByVal T As String) As String
-        'Places where programs look for DLLs
-        '   1 directory containing the EXE
-        '   2 current directory
-        '   3 32 bit system directory   possibly \Windows\system32
-        '   4 16 bit system directory   possibly \Windows\system
-        '   5 windows directory         possibly \Windows
-        '   6 path
+    'Function WhereIsDLL(ByVal T As String) As String
+    '    'Places where programs look for DLLs
+    '    '   1 directory containing the EXE
+    '    '   2 current directory
+    '    '   3 32 bit system directory   possibly \Windows\system32
+    '    '   4 16 bit system directory   possibly \Windows\system
+    '    '   5 windows directory         possibly \Windows
+    '    '   6 path
 
-        'The current directory may be changed in the course of the program
-        'but current directory -- when the program starts -- is what matters
-        'so a call should be made to this function early on to "lock" the paths.
+    '    'The current directory may be changed in the course of the program
+    '    'but current directory -- when the program starts -- is what matters
+    '    'so a call should be made to this function early on to "lock" the paths.
 
-        'Add a call at the beginning of checkForResources
-        Dim A() As Object = Nothing
-        Dim s, d As String
-        Dim EnvString As String
-        Dim Indx As Short ' Declare variables.
-        Dim i As Short
+    '    'Add a call at the beginning of checkForResources
+    '    Dim A() As Object = Nothing
+    '    Dim s, d As String
+    '    Dim EnvString As String
+    '    Dim Indx As Short ' Declare variables.
+    '    Dim i As Short
 
-        On Error Resume Next
-        i = UBound(A)
-        If i = 0 Then
-            s = VB6.GetPath & ";" & CurDir() & ";"
+    '    On Error Resume Next
+    '    'i = UBound(A)
+    '    'If i = 0 Then
+    '    s = VB6.GetPath & ";" & CurDir() & ";"
 
-            d = WindowsSystemDirectory()
-            s = s & d & ";"
+    '    d = WindowsSystemDirectory()
+    '    s = s & d & ";"
 
-            If VB.Right(d, 2) = "32" Then 'I'm guessing at the name of the 16 bit windows directory (assuming it exists)
-                i = Len(d)
-                s = s & VB.Left(d, i - 2) & ";"
-            End If
+    '    If VB.Right(d, 2) = "32" Then 'I'm guessing at the name of the 16 bit windows directory (assuming it exists)
+    '        i = Len(d)
+    '        s = s & VB.Left(d, i - 2) & ";"
+    '    End If
 
-            s = s & WindowsDirectory() & ";"
-            Indx = 1 ' Initialize index to 1.
-            Do
-                EnvString = Environ(Indx) ' Get environment variable.
-                If StrComp(VB.Left(EnvString, 5), "PATH=", CompareMethod.Text) = 0 Then ' Check PATH entry.
-                    s = s & Mid(EnvString, 6)
-                    Exit Do
-                End If
-                Indx = Indx + 1
-            Loop Until EnvString = ""
-            A = s.Split(";")
-        End If
+    '    s = s & WindowsDirectory() & ";"
+    '    Indx = 1 ' Initialize index to 1.
+    '    Do
+    '        EnvString = Environ(Indx) ' Get environment variable.
+    '        If StrComp(VB.Left(EnvString, 5), "PATH=", CompareMethod.Text) = 0 Then ' Check PATH entry.
+    '            s = s & Mid(EnvString, 6)
+    '            Exit Do
+    '        End If
+    '        Indx = Indx + 1
+    '    Loop Until EnvString = ""
+    '    A = s.Split(";")
+    '    'End If
 
-        T = Trim(T)
-        If T = "" Then Return Nothing
-        If Not Instring(VB.Right(T, 4), ".") Then T = T & ".DLL" 'default extension
-        For i = 0 To UBound(A)
-            If File.Exists(A(i) & "\" & T) Then
-                WhereIsDLL = A(i)
-                Exit Function
-            End If
-        Next i
-        Return Nothing
-    End Function
+    '    T = Trim(T)
+    '    If T = "" Then Return Nothing
+    '    If Not Instring(VB.Right(T, 4), ".") Then T = T & ".DLL" 'default extension
+    '    For i = 0 To UBound(A)
+    '        If File.Exists(A(i) & "\" & T) Then
+    '            WhereIsDLL = A(i)
+    '            Exit Function
+    '        End If
+    '    Next i
+    '    Return Nothing
+    'End Function
     Function Instring(ByVal x As String, ByVal ParamArray MyArray() As Object) As Boolean
         'Do ANY of a group of sub-strings appear in within the first string?
         'Case doesn't count and we don't care WHERE or WHICH
