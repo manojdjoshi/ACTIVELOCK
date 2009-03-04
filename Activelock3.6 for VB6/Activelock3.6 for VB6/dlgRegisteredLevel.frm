@@ -101,17 +101,17 @@ Private blnCanEnabled(NumberOfControl - 1) As Boolean
 
 Private m_strDescription As String
 
-Private m_intItemData As Integer
+Private m_intItemData As Long
 
-Public Property Get ItemData() As Integer
-    If Val(txtItemData) > 32767 Then
-        MsgBox "ItemData cannot be greater than 32767.", vbExclamation
-        Exit Sub
+Public Property Get ItemData() As Long
+    If Val(txtItemData) > 2147483647 Then
+        MsgBox "ItemData cannot be greater than 2,147,483,647", vbExclamation
+        Exit Property
     End If
-    ItemData = Val(txtItemData)
+    ItemData = CLng(txtItemData.Text)
 End Property
 
-Public Property Let ItemData(ByVal intValue As Integer)
+Public Property Let ItemData(ByVal intValue As Long)
     m_intItemData = intValue
 End Property
 
@@ -169,8 +169,8 @@ End Sub
 
 Private Sub Form_Load()
     InitializeEnable
-    txtItemData = m_intItemData
-    txtDescription = m_strDescription
+    txtItemData.Text = m_intItemData
+    txtDescription.Text = m_strDescription
 End Sub
 
 Private Sub Form_QueryUnload(Cancel As Integer, _

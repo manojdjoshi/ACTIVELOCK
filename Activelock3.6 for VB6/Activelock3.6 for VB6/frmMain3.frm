@@ -1,8 +1,8 @@
 VERSION 5.00
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.OCX"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
+Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "Mscomctl.ocx"
 Begin VB.Form frmMain 
    Appearance      =   0  'Flat
    BorderStyle     =   1  'Fixed Single
@@ -13,6 +13,7 @@ Begin VB.Form frmMain
    ClientWidth     =   9750
    Icon            =   "frmMain3.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    ScaleHeight     =   10635
    ScaleWidth      =   9750
    StartUpPosition =   3  'Windows Default
@@ -46,22 +47,28 @@ Begin VB.Form frmMain
       _ExtentY        =   18098
       _Version        =   393216
       Tabs            =   2
-      Tab             =   1
       TabHeight       =   520
       TabCaption(0)   =   "Pro&duct Code Generator"
       TabPicture(0)   =   "frmMain3.frx":0CCA
-      Tab(0).ControlEnabled=   0   'False
+      Tab(0).ControlEnabled=   -1  'True
       Tab(0).Control(0)=   "Label1"
+      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).Control(1)=   "Label17"
+      Tab(0).Control(1).Enabled=   0   'False
       Tab(0).Control(2)=   "gridProds"
+      Tab(0).Control(2).Enabled=   0   'False
       Tab(0).Control(3)=   "fraProdNew"
+      Tab(0).Control(3).Enabled=   0   'False
       Tab(0).Control(4)=   "cmdRemove"
+      Tab(0).Control(4).Enabled=   0   'False
       Tab(0).Control(5)=   "Picture1"
+      Tab(0).Control(5).Enabled=   0   'False
       Tab(0).Control(6)=   "cmdValidate"
+      Tab(0).Control(6).Enabled=   0   'False
       Tab(0).ControlCount=   7
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
-      Tab(1).ControlEnabled=   -1  'True
+      Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "frmKeyGen"
       Tab(1).Control(0).Enabled=   0   'False
       Tab(1).Control(1)=   "cmdViewArchive"
@@ -70,7 +77,7 @@ Begin VB.Form frmMain
       Begin VB.CommandButton cmdValidate 
          Caption         =   "&Validate"
          Height          =   315
-         Left            =   -66480
+         Left            =   8520
          TabIndex        =   39
          Top             =   4755
          Width           =   1005
@@ -82,7 +89,7 @@ Begin VB.Form frmMain
          BorderStyle     =   0  'None
          ForeColor       =   &H80000008&
          Height          =   825
-         Left            =   -66270
+         Left            =   8730
          Picture         =   "frmMain3.frx":0D02
          ScaleHeight     =   825
          ScaleWidth      =   825
@@ -93,7 +100,7 @@ Begin VB.Form frmMain
       Begin VB.CommandButton cmdViewArchive 
          Caption         =   "&View License Database"
          Height          =   315
-         Left            =   1485
+         Left            =   -73515
          TabIndex        =   36
          ToolTipText     =   "View License Archive"
          Top             =   9855
@@ -103,7 +110,7 @@ Begin VB.Form frmMain
          Caption         =   "&Remove"
          Enabled         =   0   'False
          Height          =   315
-         Left            =   -66480
+         Left            =   8520
          TabIndex        =   11
          Top             =   5175
          Width           =   1000
@@ -111,7 +118,7 @@ Begin VB.Form frmMain
       Begin VB.Frame frmKeyGen 
          BorderStyle     =   0  'None
          Height          =   9735
-         Left            =   135
+         Left            =   -74865
          TabIndex        =   13
          Top             =   450
          Width           =   9495
@@ -248,7 +255,7 @@ Begin VB.Form frmMain
             Left            =   6480
             Style           =   2  'Dropdown List
             TabIndex        =   58
-            Top             =   90
+            Top             =   450
             Width           =   2625
          End
          Begin VB.TextBox txtMaxCount 
@@ -425,7 +432,7 @@ Begin VB.Form frmMain
             Height          =   330
             Left            =   6480
             TabIndex        =   41
-            Top             =   405
+            Top             =   765
             Width           =   2805
          End
          Begin VB.CommandButton cmdCopy 
@@ -547,6 +554,14 @@ Begin VB.Form frmMain
             _ExtentY        =   847
             _Version        =   393216
          End
+         Begin VB.Label lblKeyStrength 
+            ForeColor       =   &H00FF0000&
+            Height          =   255
+            Left            =   4995
+            TabIndex        =   77
+            Top             =   135
+            Width           =   4080
+         End
          Begin VB.Label Label8 
             Caption         =   "&Product:"
             Height          =   255
@@ -560,7 +575,7 @@ Begin VB.Form frmMain
             Height          =   255
             Left            =   5175
             TabIndex        =   56
-            Top             =   135
+            Top             =   495
             Width           =   1275
          End
          Begin VB.Image cmdViewLevel 
@@ -569,7 +584,7 @@ Begin VB.Form frmMain
             MouseIcon       =   "frmMain3.frx":7114
             MousePointer    =   99  'Custom
             Picture         =   "frmMain3.frx":741E
-            Top             =   90
+            Top             =   450
             Width           =   240
          End
          Begin VB.Label lblConcurrentUsers 
@@ -600,7 +615,7 @@ Begin VB.Form frmMain
             Width           =   1335
          End
          Begin VB.Label Label5 
-            Caption         =   "Liberation &File:"
+            Caption         =   "License &File:"
             Height          =   255
             Left            =   0
             TabIndex        =   25
@@ -632,7 +647,7 @@ Begin VB.Form frmMain
             Width           =   1335
          End
          Begin VB.Label Label12 
-            Caption         =   "Liberation &Key:"
+            Caption         =   "License &Key:"
             Height          =   255
             Left            =   0
             TabIndex        =   22
@@ -659,7 +674,7 @@ Begin VB.Form frmMain
       End
       Begin VB.Frame fraProdNew 
          Height          =   2835
-         Left            =   -74865
+         Left            =   135
          TabIndex        =   12
          Top             =   360
          Width           =   9495
@@ -885,7 +900,7 @@ Begin VB.Form frmMain
       End
       Begin MSFlexGridLib.MSFlexGrid gridProds 
          Height          =   6540
-         Left            =   -74880
+         Left            =   120
          TabIndex        =   10
          Top             =   3585
          Width           =   8265
@@ -912,7 +927,7 @@ Begin VB.Form frmMain
          Caption         =   "Activelock V3"
          ForeColor       =   &H00FF0000&
          Height          =   165
-         Left            =   -66390
+         Left            =   8610
          TabIndex        =   38
          Top             =   7335
          Width           =   1065
@@ -920,7 +935,7 @@ Begin VB.Form frmMain
       Begin VB.Label Label1 
          Caption         =   "&Product List:"
          Height          =   255
-         Left            =   -74865
+         Left            =   135
          TabIndex        =   30
          Top             =   3330
          Width           =   1215
@@ -1401,6 +1416,21 @@ End Function
 
 Private Sub cmbProds_Click()
     UpdateKeyGenButtonStatus
+    
+    If cmbProds.ItemData(cmbProds.ListIndex) = 512 Then
+        lblKeyStrength.Caption = "[Key Strength: CryptoAPI RSA 512-bit]"
+    ElseIf cmbProds.ItemData(cmbProds.ListIndex) = 1024 Then
+        lblKeyStrength.Caption = "[Key Strength: CryptoAPI RSA 1024-bit]"
+    ElseIf cmbProds.ItemData(cmbProds.ListIndex) = 1536 Then
+        lblKeyStrength.Caption = "[Key Strength: CryptoAPI RSA 1536-bit]"
+    ElseIf cmbProds.ItemData(cmbProds.ListIndex) = 2048 Then
+        lblKeyStrength.Caption = "[Key Strength: CryptoAPI RSA 2048-bit]"
+    ElseIf cmbProds.ItemData(cmbProds.ListIndex) = 4096 Then
+        lblKeyStrength.Caption = "[Key Strength: CryptoAPI RSA 4096-bit]"
+    ElseIf cmbProds.ItemData(cmbProds.ListIndex) = 0 Then
+        lblKeyStrength.Caption = "[Key Strength: ALCrypto 1024-bit]"
+    End If
+    
 End Sub
 
 Private Sub cmdAdd_Click()
@@ -1456,104 +1486,112 @@ Private Sub cmdCheckAll_Click()
 End Sub
 
 Private Sub cmdCodeGen_Click()
-    If SSTab1.Tab <> 0 Then Exit Sub ' our tab not active - do nothing
+If SSTab1.Tab <> 0 Then Exit Sub ' our tab not active - do nothing
+If inString(txtName.Text, "-") Then
+    MsgBox "Dash '-' is not allowed in Product Name.", vbInformation
+    Exit Sub
+End If
+If inString(txtVer.Text, "-") Then
+    MsgBox "Dash '-' is not allowed in Product Version.", vbInformation
+    Exit Sub
+End If
 
-    Screen.MousePointer = vbHourglass
-    fDisableNotifications = True
-    txtCode1 = ""
-    txtCode2 = ""
-    fDisableNotifications = False
-    Enabled = False
-    DoEvents
-    On Error GoTo Done
-    
-    ' Get the current date format and save it to regionalSymbol variable
-    Get_locale
-    ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
-    Set_locale ("")
-    
-    ' ALCrypto DLL with 1024-bit strength
-    If optStrength(0).Value = True Then
-        Dim Key As RSAKey
-        Dim progress As ProgressType
-        ' generate the key
-        If modALUGEN.rsa_generate(Key, 1024, AddressOf CryptoProgressUpdate, VarPtr(progress)) = RETVAL_ON_ERROR Then
-            Set_locale regionalSymbol
-            Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
-        End If
-        ' extract private and public key blobs
-        Dim strBlob As String
-        Dim blobLen As Long
-        If rsa_public_key_blob(Key, vbNullString, blobLen) = RETVAL_ON_ERROR Then
-            Set_locale regionalSymbol
-            Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
-        End If
-        If blobLen > 0 Then
-            strBlob = String(blobLen, 0)
-            If rsa_public_key_blob(Key, strBlob, blobLen) = RETVAL_ON_ERROR Then
-                Set_locale regionalSymbol
-                Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
-            End If
-            Debug.Print "Public blob: " & strBlob
-            txtCode1.Text = strBlob
-        End If
-        If modALUGEN.rsa_private_key_blob(Key, vbNullString, blobLen) = RETVAL_ON_ERROR Then
-            Set_locale regionalSymbol
-            Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
-        End If
-        If blobLen > 0 Then
-            strBlob = String(blobLen, 0)
-            If modALUGEN.rsa_private_key_blob(Key, strBlob, blobLen) = RETVAL_ON_ERROR Then
-                Set_locale regionalSymbol
-                Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
-            End If
-            Debug.Print "Private blob: " & strBlob
-            txtCode2.Text = strBlob
-        End If
-        ' done with the key - throw it away
-        If modALUGEN.rsa_freekey(Key) = RETVAL_ON_ERROR Then
-            Set_locale regionalSymbol
-            Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
-        End If
-        ' Test generated key for correctness by recreating it from the blobs
-        ' Note:
-        ' ====
-        ' Due to an outstanding bug in ALCrypto.dll, sometimes this step will crash the app because
-        ' the generated keyset is bad.
-        ' The work-around for the time being is to keep regenerating the keyset until eventually
-        ' you'll get a valid keyset that no longer crashes.
-        Dim strdata$: strdata = "This is a test string to be encrypted."
-        If modALUGEN.rsa_createkey(txtCode1, Len(txtCode1), txtCode2, Len(txtCode2), Key) = RETVAL_ON_ERROR Then
-            Set_locale regionalSymbol
-            Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
-        End If
-        ' It worked! We're all set to go.
-        If modALUGEN.rsa_freekey(Key) = RETVAL_ON_ERROR Then
-            Set_locale regionalSymbol
-            Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
-        End If
+Screen.MousePointer = vbHourglass
+fDisableNotifications = True
+txtCode1 = ""
+txtCode2 = ""
+fDisableNotifications = False
+Enabled = False
+DoEvents
+On Error GoTo Done
 
-    Else  ' CryptoAPI - RSA with given strength
-    
-        Dim strPublicBlob As String, strPrivateBlob As String
-        Dim ok As String, modulus As Long
-    
-        If optStrength(1).Value = True Then
-            modulus = 4096
-        ElseIf optStrength(2).Value = True Then
-            modulus = 2048
-        ElseIf optStrength(3).Value = True Then
-            modulus = 1536
-        ElseIf optStrength(4).Value = True Then
-            modulus = 1024
-        ElseIf optStrength(5).Value = True Then
-            modulus = 512
-        End If
-        ok = Globals.ContainerChange(txtName.Text & txtVer.Text)
-        ok = Globals.CryptoAPIAction(1, txtName.Text & txtVer.Text, "", "", strPublicBlob, strPrivateBlob, modulus)
-        txtCode1.Text = strPublicBlob
-        txtCode2.Text = strPrivateBlob
+' Get the current date format and save it to regionalSymbol variable
+Get_locale
+' Use this trick to temporarily set the date format to "yyyy/MM/dd"
+Set_locale ("")
+
+' ALCrypto DLL with 1024-bit strength
+If optStrength(0).Value = True Then
+    Dim Key As RSAKey
+    Dim progress As ProgressType
+    ' generate the key
+    If modALUGEN.rsa_generate(Key, 1024, AddressOf CryptoProgressUpdate, VarPtr(progress)) = RETVAL_ON_ERROR Then
+        Set_locale regionalSymbol
+        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
+    ' extract private and public key blobs
+    Dim strBlob As String
+    Dim blobLen As Long
+    If rsa_public_key_blob(Key, vbNullString, blobLen) = RETVAL_ON_ERROR Then
+        Set_locale regionalSymbol
+        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
+    End If
+    If blobLen > 0 Then
+        strBlob = String(blobLen, 0)
+        If rsa_public_key_blob(Key, strBlob, blobLen) = RETVAL_ON_ERROR Then
+            Set_locale regionalSymbol
+            Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
+        End If
+        Debug.Print "Public blob: " & strBlob
+        txtCode1.Text = strBlob
+    End If
+    If modALUGEN.rsa_private_key_blob(Key, vbNullString, blobLen) = RETVAL_ON_ERROR Then
+        Set_locale regionalSymbol
+        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
+    End If
+    If blobLen > 0 Then
+        strBlob = String(blobLen, 0)
+        If modALUGEN.rsa_private_key_blob(Key, strBlob, blobLen) = RETVAL_ON_ERROR Then
+            Set_locale regionalSymbol
+            Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
+        End If
+        Debug.Print "Private blob: " & strBlob
+        txtCode2.Text = strBlob
+    End If
+    ' done with the key - throw it away
+    If modALUGEN.rsa_freekey(Key) = RETVAL_ON_ERROR Then
+        Set_locale regionalSymbol
+        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
+    End If
+    ' Test generated key for correctness by recreating it from the blobs
+    ' Note:
+    ' ====
+    ' Due to an outstanding bug in ALCrypto.dll, sometimes this step will crash the app because
+    ' the generated keyset is bad.
+    ' The work-around for the time being is to keep regenerating the keyset until eventually
+    ' you'll get a valid keyset that no longer crashes.
+    Dim strdata$: strdata = "This is a test string to be encrypted."
+    If modALUGEN.rsa_createkey(txtCode1, Len(txtCode1), txtCode2, Len(txtCode2), Key) = RETVAL_ON_ERROR Then
+        Set_locale regionalSymbol
+        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
+    End If
+    ' It worked! We're all set to go.
+    If modALUGEN.rsa_freekey(Key) = RETVAL_ON_ERROR Then
+        Set_locale regionalSymbol
+        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
+    End If
+
+Else  ' CryptoAPI - RSA with given strength
+
+    Dim strPublicBlob As String, strPrivateBlob As String
+    Dim ok As String, modulus As Long
+
+    If optStrength(1).Value = True Then
+        modulus = 4096
+    ElseIf optStrength(2).Value = True Then
+        modulus = 2048
+    ElseIf optStrength(3).Value = True Then
+        modulus = 1536
+    ElseIf optStrength(4).Value = True Then
+        modulus = 1024
+    ElseIf optStrength(5).Value = True Then
+        modulus = 512
+    End If
+    ok = Globals.ContainerChange(txtName.Text & txtVer.Text)
+    ok = Globals.CryptoAPIAction(1, txtName.Text & txtVer.Text, "", "", strPublicBlob, strPrivateBlob, modulus)
+    txtCode1.Text = strPublicBlob
+    txtCode2.Text = strPrivateBlob
+End If
 
 Done:
     Set_locale regionalSymbol
@@ -2468,6 +2506,22 @@ Private Sub AddRow(name As String, Ver As String, Code1 As String, Code2 As Stri
         Call GeneratorInstance.SaveProduct(ProdInfo)
     End If
     cmbProds.AddItem name & " - " & Ver
+    
+    ' Save the VCode type in an array so that it can be shown later
+    If Mid(Code1, 4, 3) = "512" Then
+        cmbProds.ItemData(cmbProds.NewIndex) = 512
+    ElseIf Mid(Code1, 4, 4) = "1024" Then
+        cmbProds.ItemData(cmbProds.NewIndex) = 1024
+    ElseIf Mid(Code1, 4, 4) = "1536" Then
+        cmbProds.ItemData(cmbProds.NewIndex) = 1536
+    ElseIf Mid(Code1, 4, 4) = "2048" Then
+        cmbProds.ItemData(cmbProds.NewIndex) = 2048
+    ElseIf Mid(Code1, 4, 4) = "4096" Then
+        cmbProds.ItemData(cmbProds.NewIndex) = 4096
+    Else ' ALCrypto 1024-bit
+        cmbProds.ItemData(cmbProds.NewIndex) = 0
+    End If
+    
     cmdRemove.Enabled = True
 End Sub
 
