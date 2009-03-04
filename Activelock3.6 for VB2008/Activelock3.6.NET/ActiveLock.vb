@@ -8,56 +8,56 @@ Imports System.TimeSpan
 Imports System.Text ' For StringBuilder
 Imports System.Runtime.InteropServices ' For DLL Call
 
+#Region "Copyright"
+'*   ActiveLock
+'*   Copyright 1998-2002 Nelson Ferraz
+'*   Copyright 2003-2006 The ActiveLock Software Group (ASG)
+'*   All material is the property of the contributing authors.
+'*
+'*   Redistribution and use in source and binary forms, with or without
+'*   modification, are permitted provided that the following conditions are
+'*   met:
+'*
+'*     [o] Redistributions of source code must retain the above copyright
+'*         notice, this list of conditions and the following disclaimer.
+'*
+'*     [o] Redistributions in binary form must reproduce the above
+'*         copyright notice, this list of conditions and the following
+'*         disclaimer in the documentation and/or other materials provided
+'*         with the distribution.
+'*
+'*   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+'*   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+'*   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+'*   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+'*   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+'*   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+'*   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+'*   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+'*   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+'*   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+'*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+'*
+'*
+#End Region
 
+''' <summary>
+''' <para>This is an implementation of IActiveLock.</para>
+''' <para>It is not public-creatable, and so must only be accessed via ActiveLock.NewInstance() method.</para>
+''' <para>Includes Key generation and validation routines.</para>
+''' </summary>
+''' <remarks>If you want to turn off dll-checksumming, add this compilation flag to the Project Properties (Make tab) AL_DEBUG = 1</remarks>
 Friend Class ActiveLock
     Implements _IActiveLock
-    '*   ActiveLock
-    '*   Copyright 1998-2002 Nelson Ferraz
-    '*   Copyright 2003-2006 The ActiveLock Software Group (ASG)
-    '*   All material is the property of the contributing authors.
-    '*
-    '*   Redistribution and use in source and binary forms, with or without
-    '*   modification, are permitted provided that the following conditions are
-    '*   met:
-    '*
-    '*     [o] Redistributions of source code must retain the above copyright
-    '*         notice, this list of conditions and the following disclaimer.
-    '*
-    '*     [o] Redistributions in binary form must reproduce the above
-    '*         copyright notice, this list of conditions and the following
-    '*         disclaimer in the documentation and/or other materials provided
-    '*         with the distribution.
-    '*
-    '*   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-    '*   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-    '*   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-    '*   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-    '*   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-    '*   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-    '*   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-    '*   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-    '*   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-    '*   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-    '*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-    '*
-    '*
-    '===============================================================================
-    ' Name: Activelock
-    ' Purpose: This is an implementation of IActiveLock.<p>It is not public-creatable, and so must only
-    '   be accessed via ActiveLock.NewInstance() method.<p>Includes Key generation and validation routines.
-    ' Remarks: If you want to turn off dll-checksumming, add this compilation flag to the Project Properties (Make tab) AL_DEBUG = 1
-    ' Functions:
-    ' Properties:
-    ' Methods:
-    ' Started: 21.04.2005
-    ' Modified: 03.235.2006
-    '===============================================================================
+	' Started: 21.04.2005
+	' Modified: 03.235.2006
+	'===============================================================================
 
-    ' @author: activelock-admins
-    ' @version: 3.3.0
-    ' @date: 03.23.2006
+	' @author: activelock-admins
+	' @version: 3.3.0
+	' @date: 03.23.2006
 
-    ' Implements the IActiveLock interface.
+	' Implements the IActiveLock interface.
 
     Private mSoftwareName As String
     Private mSoftwareVer As String
@@ -85,39 +85,61 @@ Friend Class ActiveLock
     Private mUsedLockType As Integer
     Private dontValidateLicense As Boolean
 
-    ' Registry hive used to store Activelock settings.
+	''' <summary>
+	''' Registry hive used to store Activelock settings.
+	''' </summary>
+	''' <remarks></remarks>
     Private Const AL_REGISTRY_HIVE As String = "Software\ActiveLock\ActiveLock3"
 
-    ' Transients
+	' Transients
+
+	''' <summary>
+	''' flag to indicate that ActiveLock has been initialized
+	''' </summary>
+	''' <remarks></remarks>
     Private mfInit As Boolean ' flag to indicate that ActiveLock has been initialized
 
+	''' <summary>
+	''' <para>GetVolumeInformation</para>
+	''' </summary>
+	''' <param name="lpRootPathName">String - A pointer to a string that contains the root directory of the volume to be described.</param>
+	''' <param name="lpVolumeNameBuffer">A pointer to a buffer that receives the name of a specified volume. The maximum buffer size is MAX_PATH+1.</param>
+	''' <param name="nVolumeNameSize">The length of a volume name buffer, in TCHARs. The maximum buffer size is MAX_PATH+1.</param>
+	''' <param name="lpVolumeSerialNumber">A pointer to a variable that receives the volume serial number.</param>
+	''' <param name="lpMaximumComponentLength">A pointer to a variable that receives the maximum length, in TCHARs, of a file name component that a specified file system supports.</param>
+	''' <param name="lpFileSystemFlags">A pointer to a variable that receives flags associated with the specified file system.</param>
+	''' <param name="lpFileSystemNameBuffer">A pointer to a buffer that receives the name of the file system, for example, the FAT file system or the NTFS file system. The maximum buffer size is MAX_PATH+1.</param>
+	''' <param name="nFileSystemNameSize">The length of the file system name buffer, in TCHARs. The maximum buffer size is MAX_PATH+1.</param>
+	''' <returns>
+	''' <para>If all the requested information is retrieved, the return value is nonzero.</para>
+	''' <para>If not all the requested information is retrieved, the return value is zero (0). To get extended error information, call GetLastError.</para>
+	''' </returns>
+	''' <remarks>
+	''' <para>See <a href="http://msdn.microsoft.com/en-us/library/aa364993(VS.85).aspx">http://msdn.microsoft.com/en-us/library/aa364993(VS.85).aspx</a></para>
+	''' </remarks>
     Public Declare Function GetVolumeInformation Lib "kernel32" Alias "GetVolumeInformationA" _
        (ByVal lpRootPathName As String, ByVal lpVolumeNameBuffer As StringBuilder, _
        ByVal nVolumeNameSize As Integer, ByVal lpVolumeSerialNumber As Integer, _
        ByVal lpMaximumComponentLength As Integer, ByVal lpFileSystemFlags As Integer, _
        ByVal lpFileSystemNameBuffer As StringBuilder, ByVal nFileSystemNameSize As Integer) As Integer
 
-    '===============================================================================
-    ' Name: Property Let IActiveLock_LicenseKeyType
-    ' Input:
-    '   ByVal RHS As ALLicenseKeyTypes - ALLicenseKeyTypes type
-    ' Output: None
-    ' Purpose: Specifies the ALLicenseKeyTypes type
-    ' Remarks: None
-    '===============================================================================
+	''' <summary>
+	''' IActiveLock_LicenseKeyType - Specifies the ALLicenseKeyTypes type
+	''' </summary>
+	''' <value>ByVal RHS As ALLicenseKeyTypes - ALLicenseKeyTypes type</value>
+	''' <remarks>None</remarks>
     Private WriteOnly Property IActiveLock_LicenseKeyType() As IActiveLock.ALLicenseKeyTypes Implements _IActiveLock.LicenseKeyType
         Set(ByVal Value As IActiveLock.ALLicenseKeyTypes)
             mLicenseKeyTypes = Value
         End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Get IActiveLock_RegisteredLevel
-    ' Input: None
-    ' Output:
-    '   String - License RegisteredLevel
-    ' Purpose: Gets the Registered Level for the license after validating it.
-    ' Remarks: None
-    '===============================================================================
+	End Property
+
+	''' <summary>
+	''' Gets the Registered Level for the license after validating it.
+	''' </summary>
+	''' <value></value>
+	''' <returns>String - License RegisteredLevel</returns>
+	''' <remarks>None</remarks>
     Private ReadOnly Property IActiveLock_RegisteredLevel() As String Implements _IActiveLock.RegisteredLevel
         Get
             Dim Lic As ProductLicense
@@ -130,15 +152,14 @@ Friend Class ActiveLock
             ValidateLic(Lic)
             Return Lic.RegisteredLevel
         End Get
-    End Property
-    '===============================================================================
-    ' Name: Property Get IActiveLock_LicenseClass
-    ' Input: None
-    ' Output:
-    '   String - LicenseClass
-    ' Purpose: Gets the LicenseClass
-    ' Remarks: None
-    '===============================================================================
+	End Property
+
+	''' <summary>
+	''' Gets the LicenseClass
+	''' </summary>
+	''' <value></value>
+	''' <returns>String - LicenseClass</returns>
+	''' <remarks></remarks>
     Private ReadOnly Property IActiveLock_LicenseClass() As String Implements _IActiveLock.LicenseClass
         Get
             Dim Lic As ProductLicense
@@ -151,41 +172,38 @@ Friend Class ActiveLock
             ValidateLic(Lic)
             Return Lic.LicenseClass
         End Get
-    End Property
-    '===============================================================================
-    ' Name: Property Get IActiveLock_RemainingTrialDays
-    ' Input: None
-    ' Output:
-    '   Integer - License Used Trial Days
-    ' Purpose: Gets the Number of Used Trial Days
-    ' Remarks: None
-    '===============================================================================
+	End Property
+
+	''' <summary>
+	''' Gets the Number of Used Trial Days
+	''' </summary>
+	''' <value></value>
+	''' <returns>Integer - License Used Trial Days</returns>
+	''' <remarks></remarks>
     Private ReadOnly Property IActiveLock_RemainingTrialDays() As Integer Implements _IActiveLock.RemainingTrialDays
         Get
             Return mRemainingTrialDays
         End Get
-    End Property
-    '===============================================================================
-    ' Name: Property Get IActiveLock_RemainingTrialRuns
-    ' Input: None
-    ' Output:
-    '   Integer - License Used Trial Runs
-    ' Purpose: Gets the Number of Used Trial Runs
-    ' Remarks: None
-    '===============================================================================
+	End Property
+
+	''' <summary>
+	''' Gets the Number of Used Trial Runs
+	''' </summary>
+	''' <value></value>
+	''' <returns>Integer - License Used Trial Runs</returns>
+	''' <remarks></remarks>
     Private ReadOnly Property IActiveLock_RemainingTrialRuns() As Integer Implements _IActiveLock.RemainingTrialRuns
         Get
             Return mRemainingTrialRuns
         End Get
-    End Property
-    '===============================================================================
-    ' Name: Property Get IActiveLock_MaxCount
-    ' Input: None
-    ' Output:
-    '   Integer - Number of concurrent users for the networked license
-    ' Purpose: Gets the Number of concurrent users for the networked license
-    ' Remarks: None
-    '===============================================================================
+	End Property
+
+	''' <summary>
+	''' Gets the Number of concurrent users for the networked license
+	''' </summary>
+	''' <value></value>
+	''' <returns>Integer - Number of concurrent users for the networked license</returns>
+	''' <remarks></remarks>
     Private ReadOnly Property IActiveLock_MaxCount() As Integer Implements _IActiveLock.MaxCount
         Get
             Dim Lic As ProductLicense
@@ -198,56 +216,52 @@ Friend Class ActiveLock
             ValidateLic(Lic)
             Return Lic.MaxCount
         End Get
-    End Property
-    '===============================================================================
-    ' Name: Property Let IActiveLock_AutoRegisterKeyPath
-    ' Input:
-    '   ByVal RHS As String - Liberation key file auto path name
-    ' Output: None
-    ' Purpose: IActiveLock Interface implementation
-    '   <p>Specifies the liberation key auto file path name
-    ' Remarks: None
-    '===============================================================================
-    ' IActiveLock Interface implementations
-    ' @param RHS
+	End Property
+
+	''' <summary>
+	''' <para>IActiveLock Interface implementation</para>
+	''' <para>Specifies the liberation key auto file path name</para>
+	''' </summary>
+	''' <value>ByVal RHS As String - Liberation key file auto path name</value>
+	''' <remarks></remarks>
     Private WriteOnly Property IActiveLock_AutoRegisterKeyPath() As String Implements _IActiveLock.AutoRegisterKeyPath
         Set(ByVal Value As String)
             mLibKeyPath = Value
         End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Get AutoRegisterKeyPath
-    ' Input: None
-    ' Output: None
-    ' Purpose: Sets the auto register file full path
-    ' Remarks: None
-    '===============================================================================
+	End Property
+
+	' TODO: ActiveLock.vb - Property AutoRegisterKeyPath - I think this should read Gets, not Sets: japreja
+	''' <summary>
+	''' Sets the auto register file full path
+	''' </summary>
+	''' <value></value>
+	''' <returns></returns>
+	''' <remarks></remarks>
     Private ReadOnly Property AutoRegisterKeyPath() As String
         Get
             Return mLibKeyPath
         End Get
     End Property
 
-    '===============================================================================
-    ' Name: Property Get IActiveLock_EventNotifier
-    ' Input: None
-    ' Output: None
-    ' Purpose: Gets a notification from Activelock
-    ' Remarks: None
-    '===============================================================================
+	' TODO: ActiveLock.vb - Property IActiveLock_EventNotifier - Update the Returns comment!
+	''' <summary>
+	''' Gets a notification from Activelock
+	''' </summary>
+	''' <value></value>
+	''' <returns>ActiveLockEventNotifier - ???</returns>
+	''' <remarks></remarks>
     Private ReadOnly Property IActiveLock_EventNotifier() As ActiveLockEventNotifier Implements _IActiveLock.EventNotifier
         Get
             IActiveLock_EventNotifier = MyNotifier
         End Get
-    End Property
-    '===============================================================================
-    ' Name: Property Get IActiveLock_RegisteredDate
-    ' Input: None
-    ' Output:
-    '   String - License registration date.
-    ' Purpose: Gets the license registration date after validating it.
-    ' Remarks: This is the date the license was generated by Alugen. NOT the date the license was activated.
-    '===============================================================================
+	End Property
+
+	''' <summary>
+	''' Gets the license registration date after validating it.
+	''' </summary>
+	''' <value></value>
+	''' <returns>String - License registration date.</returns>
+	''' <remarks>This is the date the license was generated by Alugen. NOT the date the license was activated.</remarks>
     Private ReadOnly Property IActiveLock_RegisteredDate() As String Implements _IActiveLock.RegisteredDate
         Get
             Dim Lic As ProductLicense
@@ -260,15 +274,14 @@ Friend Class ActiveLock
             ValidateLic(Lic)
             Return Lic.RegisteredDate
         End Get
-    End Property
-    '===============================================================================
-    ' Name: Property Get IActiveLock_RegisteredUser
-    ' Input: None
-    ' Output:
-    '   String - Registered user name
-    ' Purpose: Gets the registered user name after validating the license
-    ' Remarks: None
-    '===============================================================================
+	End Property
+
+	''' <summary>
+	''' Gets the registered user name after validating the license
+	''' </summary>
+	''' <value></value>
+	''' <returns>String - Registered user name</returns>
+	''' <remarks></remarks>
     Private ReadOnly Property IActiveLock_RegisteredUser() As String Implements _IActiveLock.RegisteredUser
         Get
             Dim Lic As ProductLicense
@@ -281,15 +294,14 @@ Friend Class ActiveLock
             ValidateLic(Lic)
             Return Lic.Licensee
         End Get
-    End Property
-    '===============================================================================
-    ' Name: Property Get IActiveLock_ExpirationDate
-    ' Input: None
-    ' Output:
-    '   String - Expiration date of the license
-    ' Purpose: Returns the expiration date of the license after validating it
-    ' Remarks: None
-    '===============================================================================
+	End Property
+
+	''' <summary>
+	''' Returns the expiration date of the license after validating it
+	''' </summary>
+	''' <value></value>
+	''' <returns>String - Expiration date of the license</returns>
+	''' <remarks></remarks>
     Private ReadOnly Property IActiveLock_ExpirationDate() As String Implements _IActiveLock.ExpirationDate
         Get
             Dim Lic As ProductLicense
@@ -302,15 +314,13 @@ Friend Class ActiveLock
             ValidateLic(Lic)
             Return Lic.Expiration
         End Get
-    End Property
-    '===============================================================================
-    ' Name: Property Let IActiveLock_KeyStorePath
-    ' Input:
-    '   ByVal RHS As String - License file path name
-    ' Output: None
-    ' Purpose: Specifies the license file path name
-    ' Remarks: None
-    '===============================================================================
+	End Property
+
+	''' <summary>
+	''' Specifies the license file path name
+	''' </summary>
+	''' <value>ByVal RHS As String - License file path name</value>
+	''' <remarks></remarks>
     Private WriteOnly Property IActiveLock_KeyStorePath() As String Implements _IActiveLock.KeyStorePath
         Set(ByVal Value As String)
             If Not mKeyStore Is Nothing Then
@@ -318,16 +328,14 @@ Friend Class ActiveLock
             End If
             mKeyStorePath = Value
         End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Let IActiveLock_KeyStoreType
-    ' Input:
-    '   ByVal RHS As LicStoreType - License store type
-    ' Output: None
-    ' Purpose: Specifies the key store type
-    '   <p>This version of Activelock does not work with the registry
-    ' Remarks: Portions of this (RegistryKeyStoreProvider) not implemented yet
-    '===============================================================================
+	End Property
+
+	''' <summary>
+	''' <para>Specifies the key store type</para>
+	''' <para>This version of Activelock does not work with the registry</para>
+	''' </summary>
+	''' <value>ByVal RHS As LicStoreType - License store type</value>
+	''' <remarks>Portions of this (RegistryKeyStoreProvider) not implemented yet</remarks>
     Private WriteOnly Property IActiveLock_KeyStoreType() As IActiveLock.LicStoreType Implements _IActiveLock.KeyStoreType
         Set(ByVal Value As IActiveLock.LicStoreType)
             ' Instantiate Key Store Provider
@@ -335,7 +343,7 @@ Friend Class ActiveLock
                 mKeyStore = New FileKeyStoreProvider
             Else
                 ' Set mKeyStore = New RegistryKeyStoreProvider
-                ' TODO: Implement me!
+				' TODO: ActiveLock.vb - Property IActiveLock_KeyStoreType - Implement me!
                 Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNotImplemented, ACTIVELOCKSTRING, STRNOTIMPLEMENTED)
             End If
@@ -344,23 +352,14 @@ Friend Class ActiveLock
                 mKeyStore.KeyStorePath = mKeyStorePath
             End If
         End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Let IActiveLock_LockType
-    ' Input:
-    '   ByVal RHS As ALLockTypes - ALLockTypes type
-    ' Output: None
-    ' Purpose: Specifies the ALLockTypes type
-    ' Remarks: None
-    '===============================================================================
-    '===============================================================================
-    ' Name: Property Get IActiveLock_LockType
-    ' Input: None
-    ' Output:
-    '   ALLockTypes - Lock types type
-    ' Purpose: Gets the ALLockTypes type
-    ' Remarks: None
-    '===============================================================================
+	End Property
+
+	''' <summary>
+	''' Gets or Sets the ALLockTypes type
+	''' </summary>
+	''' <value>ByVal RHS As ALLockTypes - ALLockTypes type</value>
+	''' <returns>ALLockTypes - Lock types type</returns>
+	''' <remarks></remarks>
     Private Property IActiveLock_LockType() As IActiveLock.ALLockTypes Implements _IActiveLock.LockType
         Get
             Return mLockTypes
@@ -368,30 +367,26 @@ Friend Class ActiveLock
         Set(ByVal Value As IActiveLock.ALLockTypes)
             mLockTypes = Value
         End Set
-    End Property
-    '===============================================================================
-    ' Name: Sub IActiveLock_AddLockCode
-    ' Input:
-    '   ByVal LockType As ALLockTypes _ to be added to array
-    '   ByRef Byref LockTypes() As ALLockTypes - array of used LockTypes being built up
-    '   ByRef SizeLT as Integer - size of array of used LockTypes being built up
-    ' Output:
-    ' Purpose: Helper function to build up array of used LockType s
-    ' Remarks:
-    '===============================================================================
+	End Property
+
+	''' <summary>
+	''' Helper function to build up array of used LockType s
+	''' </summary>
+	''' <param name="LockType"><para>ByVal LockType As ALLockTypes _ to be added to array.</para><para>ByRef Byref LockTypes() As ALLockTypes - array of used LockTypes being built up.</para></param>
+	''' <param name="SizeLT">ByRef SizeLT as Integer - size of array of used LockTypes being built up</param>
+	''' <remarks></remarks>
     Private Sub IActiveLock_AddLockCode(ByVal LockType As IActiveLock.ALLockTypes, ByRef SizeLT As Integer)
         ReDim Preserve mUsedLockTypes(SizeLT)
         mUsedLockTypes(SizeLT) = LockType
         SizeLT = SizeLT + 1
-    End Sub
-    '===============================================================================
-    ' Name: Property Get IActiveLock_TrialHideType
-    ' Input: None
-    ' Output:
-    '   ALTrialHideTypes - Trial Hide types type
-    ' Purpose: Gets the ALTrialHideTypes type
-    ' Remarks: None
-    '===============================================================================
+	End Sub
+
+	''' <summary>
+	''' Gets the ALTrialHideTypes type
+	''' </summary>
+	''' <value></value>
+	''' <returns>ALTrialHideTypes - Trial Hide types type</returns>
+	''' <remarks></remarks>
     Private Property IActiveLock_TrialHideType() As IActiveLock.ALTrialHideTypes Implements _IActiveLock.TrialHideType
         Get
             Return mTrialHideTypes
@@ -399,15 +394,14 @@ Friend Class ActiveLock
         Set(ByVal Value As IActiveLock.ALTrialHideTypes)
             mTrialHideTypes = Value
         End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Get IActiveLock_SoftwareName
-    ' Input: None
-    ' Output:
-    '   String - Software name  for the license
-    ' Purpose: Gets the SoftwareName for the license
-    ' Remarks: None
-    '===============================================================================
+	End Property
+
+	''' <summary>
+	''' Gets the SoftwareName for the license
+	''' </summary>
+	''' <value></value>
+	''' <returns>String - Software name  for the license</returns>
+	''' <remarks></remarks>
     Private Property IActiveLock_SoftwareName() As String Implements _IActiveLock.SoftwareName
         Get
             Return mSoftwareName
@@ -415,24 +409,14 @@ Friend Class ActiveLock
         Set(ByVal Value As String)
             mSoftwareName = Value
         End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Let IActiveLock_SoftwarePassword
-    ' Input:
-    '   ByVal RHS As String - Software Password for the license
-    ' Output: None
-    ' Purpose: Specifies the SoftwarePassword for the license
-    ' Remarks: None
-    '===============================================================================
+	End Property
 
-    '===============================================================================
-    ' Name: Property Get IActiveLock_SoftwarePassword
-    ' Input: None
-    ' Output:
-    '   String - Software Password for the license
-    ' Purpose: Gets the SoftwarePassword for the license
-    ' Remarks: None
-    '===============================================================================
+	''' <summary>
+	''' Gets/Sets the SoftwarePassword for the license
+	''' </summary>
+	''' <value>ByVal RHS As String - Software Password for the license</value>
+	''' <returns>String - Software Password for the license</returns>
+	''' <remarks></remarks>
     Private Property IActiveLock_SoftwarePassword() As String Implements _IActiveLock.SoftwarePassword
         Get
             Return mSoftwarePassword
@@ -440,40 +424,37 @@ Friend Class ActiveLock
         Set(ByVal Value As String)
             mSoftwarePassword = Value
         End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Let IActiveLock_CheckTimeServerForClockTampering
-    ' Input:
-    '   ByVal iServer As Integer - Flag being passed to check the time server
-    ' Output: None
-    ' Purpose: Specifies whether a Time Server should be used to check Clock Tampering
-    ' Remarks: None
-    '===============================================================================
+	End Property
+
+	''' <summary>
+	''' Specifies whether a Time Server should be used to check Clock Tampering
+	''' </summary>
+	''' <value>ByVal iServer As Integer - Flag being passed to check the time server</value>
+	''' <remarks></remarks>
     Private WriteOnly Property IActiveLock_CheckTimeServerForClockTampering() As IActiveLock.ALTimeServerTypes Implements _IActiveLock.CheckTimeServerForClockTampering
         Set(ByVal Value As IActiveLock.ALTimeServerTypes)
             mCheckTimeServerForClockTampering = Value
         End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Let IActiveLock_CheckSystemFilesForClockTampering
-    ' Input:
-    '   ByVal iServer As Integer - Flag being passed to check the time server
-    ' Output: None
-    ' Purpose: Specifies whether a Time Server should be used to check Clock Tampering
-    ' Remarks: None
-    '===============================================================================
+	End Property
+
+	''' <summary>
+	''' Specifies whether a Time Server should be used to check Clock Tampering
+	''' </summary>
+	''' <value>ByVal iServer As Integer - Flag being passed to check the time server</value>
+	''' <remarks></remarks>
     Private WriteOnly Property IActiveLock_CheckSystemFilesForClockTampering() As IActiveLock.ALSystemFilesTypes Implements _IActiveLock.CheckSystemFilesForClockTampering
         Set(ByVal Value As IActiveLock.ALSystemFilesTypes)
             mChecksystemfilesForClockTampering = Value
         End Set
-    End Property
-    ' Name: Property Let IActiveLock_LicenseFileType
-    ' Input:
-    '   ByVal Value As IActiveLock.ALLicenseFileTypes - Flag to indicate the license file will be encrypted or not
-    ' Output: None
-    ' Purpose: Specifies whether the License File should be encrypted or not
-    ' Remarks: None
-    '===============================================================================
+	End Property
+
+	' TODO: ActiveLock.vb - Property IActiveLock_LicenseFileType - Update return value comment!
+	''' <summary>
+	''' Specifies whether the License File should be encrypted or not
+	''' </summary>
+	''' <value>ByVal Value As IActiveLock.ALLicenseFileTypes - Flag to indicate the license file will be encrypted or not</value>
+	''' <returns></returns>
+	''' <remarks></remarks>
     Private Property IActiveLock_LicenseFileType() As IActiveLock.ALLicenseFileTypes Implements _IActiveLock.LicenseFileType
         Set(ByVal Value As IActiveLock.ALLicenseFileTypes)
             mLicenseFileType = Value
@@ -481,34 +462,37 @@ Friend Class ActiveLock
         Get
             Return mLicenseFileType
         End Get
-    End Property
-    ' Name: Property Let IActiveLock_AutoRegister
-    '===============================================================================
+	End Property
+
+	' TODO: ActiveLock.vb - Property IActiveLock_AutoRegister - Update Comment - Not Documented!
+	''' <summary>
+	''' Not Documented!
+	''' </summary>
+	''' <value>ALAutoRegisterTypes - ALAutoRegisterType</value>
+	''' <remarks></remarks>
     Private WriteOnly Property IActiveLock_AutoRegister() As IActiveLock.ALAutoRegisterTypes Implements _IActiveLock.AutoRegister
         Set(ByVal Value As IActiveLock.ALAutoRegisterTypes)
             mAutoRegister = Value
         End Set
-    End Property
-    ' Name: Property Let IActiveLock_TrialWarning
-    ' Input:
-    '   ByVal Value As IActiveLock.ALTrialWarningTypes - Flag to indicate the license file will be encrypted or not
-    ' Output: None
-    ' Purpose: Specifies whether the License File should be encrypted or not
-    ' Remarks: None
-    '===============================================================================
+	End Property
+
+	''' <summary>
+	''' Specifies whether the License File should be encrypted or not
+	''' </summary>
+	''' <value>ByVal Value As IActiveLock.ALTrialWarningTypes - Flag to indicate the license file will be encrypted or not.</value>
+	''' <remarks></remarks>
     Private WriteOnly Property IActiveLock_TrialWarning() As IActiveLock.ALTrialWarningTypes Implements _IActiveLock.TrialWarning
         Set(ByVal Value As IActiveLock.ALTrialWarningTypes)
             mTrialWarning = Value
         End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Get IActiveLock_TrialType
-    ' Input: None
-    ' Output:
-    '   ALTrialTypes - Trial Type  for the license
-    ' Purpose: Gets the TrialType for the license
-    ' Remarks: None
-    '===============================================================================
+	End Property
+
+	''' <summary>
+	''' Gets/Sets the TrialType for the license
+	''' </summary>
+	''' <value>ByVal Value As IActiveLock.ALTrialTypes</value>
+	''' <returns>ALTrialTypes - Trial Type  for the license</returns>
+	''' <remarks></remarks>
     Private Property IActiveLock_TrialType() As IActiveLock.ALTrialTypes Implements _IActiveLock.TrialType
         Get
             Return mTrialType
@@ -516,15 +500,14 @@ Friend Class ActiveLock
         Set(ByVal Value As IActiveLock.ALTrialTypes)
             mTrialType = Value
         End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Get IActiveLock_TrialLength
-    ' Input: None
-    ' Output:
-    '   Integer - Trial Length  for the license
-    ' Purpose: Gets the TrialLength for the license
-    ' Remarks: None
-    '===============================================================================
+	End Property
+
+	''' <summary>
+	''' Gets/Sets the TrialLength for the license
+	''' </summary>
+	''' <value></value>
+	''' <returns>Integer - Trial Length  for the license</returns>
+	''' <remarks></remarks>
     Private Property IActiveLock_TrialLength() As Integer Implements _IActiveLock.TrialLength
         Get
             Return mTrialLength
@@ -532,16 +515,16 @@ Friend Class ActiveLock
         Set(ByVal Value As Integer)
             mTrialLength = Value
         End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Get IActiveLock_InstallationCode
-    ' Input:
-    '   ByVal User As String - User name
-    ' Output:
-    '   String - Installation code
-    ' Purpose: Combines the user name with the lock code and returns it as the installation code
-    ' Remarks: None
-    '===============================================================================
+	End Property
+
+	''' <summary>
+	''' Combines the user name with the lock code and returns it as the installation code
+	''' </summary>
+	''' <param name="User">Optional - String - User name</param>
+	''' <param name="Lic">Optional - ProductLicense - Product License</param>
+	''' <value></value>
+	''' <returns>String - Installation code</returns>
+	''' <remarks></remarks>
     Private ReadOnly Property IActiveLock_InstallationCode(Optional ByVal User As String = vbNullString, Optional ByVal Lic As ProductLicense = Nothing) As String Implements _IActiveLock.InstallationCode
         Get
             'Before we generate the installation code, let's check if this app is using a short key
@@ -606,15 +589,14 @@ Friend Class ActiveLock
             Return Nothing
         End Get
 
-    End Property
-    '===============================================================================
-    ' Name: Property Get IActiveLock_SoftwareVersion
-    ' Input: None
-    ' Output:
-    '   String - Software version  for the license
-    ' Purpose: Gets the SoftwareVersion for the license
-    ' Remarks: None
-    '===============================================================================
+	End Property
+
+	''' <summary>
+	''' Gets the SoftwareVersion for the license
+	''' </summary>
+	''' <value></value>
+	''' <returns>String - Software version  for the license</returns>
+	''' <remarks></remarks>
     Private Property IActiveLock_SoftwareVersion() As String Implements _IActiveLock.SoftwareVersion
         Get
             Return mSoftwareVer
@@ -622,27 +604,26 @@ Friend Class ActiveLock
         Set(ByVal Value As String)
             mSoftwareVer = Value
         End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Let IActiveLock_SoftwareCode
-    ' Input:
-    '   ByVal RHS As String - Software code for the license
-    ' Output: None
-    ' Purpose: Specifies the SoftwareCode for the license
-    ' Remarks: SoftwareCode is an RSA public key.  This code will be used to verify license keys later on
-    '===============================================================================
+	End Property
+
+	''' <summary>
+	''' Specifies the SoftwareCode for the license
+	''' </summary>
+	''' <value>ByVal RHS As String - Software code for the license</value>
+	''' <remarks>SoftwareCode is an RSA public key.  This code will be used to verify license keys later on.</remarks>
     Private WriteOnly Property IActiveLock_SoftwareCode() As String Implements _IActiveLock.SoftwareCode
         Set(ByVal Value As String)
             mSoftwareCode = Value
         End Set
-    End Property
-    '===============================================================================
-    ' Name: Property Get IActiveLock_UsedDays
-    ' Input: None
-    ' Output: None
-    ' Purpose: Gets the number of days the license was used after validating it.
-    ' Remarks: None
-    '===============================================================================
+	End Property
+
+	' TODO: ActiveLock.vb - Property IActiveLock_UsedDays - returns comment not documented!
+	''' <summary>
+	''' Gets the number of days the license was used after validating it.
+	''' </summary>
+	''' <value></value>
+	''' <returns>Integer - ?</returns>
+	''' <remarks></remarks>
     Public ReadOnly Property IActiveLock_UsedDays() As Integer Implements _IActiveLock.UsedDays
         Get
             Dim Lic As ProductLicense
@@ -663,14 +644,14 @@ Friend Class ActiveLock
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
             End If
         End Get
-    End Property
-    '===============================================================================
-    ' Name: Property Get IActiveLock_UsedLockType
-    ' Input: None
-    ' Output: None
-    ' Purpose: Gets the Lock Type selected in Alugen.
-    ' Remarks: None
-    '===============================================================================
+	End Property
+
+	''' <summary>
+	''' Gets the Lock Type selected in Alugen.
+	''' </summary>
+	''' <value></value>
+	''' <returns></returns>
+	''' <remarks></remarks>
     Public ReadOnly Property IActiveLock_UsedLockType() As Integer Implements _IActiveLock.UsedLockType
         Get
             Dim Lic As ProductLicense
@@ -718,26 +699,38 @@ Friend Class ActiveLock
                 IActiveLock_UsedLockType = counter
             End If
         End Get
-    End Property
-    'Class_Initialize was upgraded to Class_Initialize_Renamed
+	End Property
+
+	' TODO: ActiveLock.vb - Sub Class_Initialize_Renamed - Add documentation!
+	''' <summary>
+	''' Not documented!
+	''' </summary>
+	''' <remarks>Class_Initialize was upgraded to Class_Initialize_Renamed</remarks>
     Private Sub Class_Initialize_Renamed()
         ' Default to alsFile
         IActiveLock_KeyStoreType = IActiveLock.LicStoreType.alsFile
-    End Sub
+	End Sub
+
+	' TODO: ActiveLock.vb - Sub New - Add documentation!
+	''' <summary>
+	''' Not Documented!
+	''' </summary>
+	''' <remarks></remarks>
     Public Sub New()
         MyBase.New()
         Class_Initialize_Renamed()
     End Sub
 
-    '===============================================================================
-    ' Name: Sub IActiveLock_Init
-    ' Input:
-    '   ByRef autoLicString As String - Returned License Key of AutoRegister is successful
-    ' Output: None
-    ' Purpose: Initalizes Activelock
-    ' Remarks: Performs CRC check on Alcrypto
-    '   <p>Performs auto license registration if the license file is found
-    '===============================================================================
+	' TODO: ActiveLock.vb - Sub IActiveLock_Init - Update comment for strPath
+	''' <summary>
+	''' Initalizes Activelock
+	''' </summary>
+	''' <param name="strPath"></param>
+	''' <param name="autoLicString">ByRef autoLicString As String - Returned License Key of AutoRegister is successful.</param>
+	''' <remarks>
+	''' <para>Performs CRC check on Alcrypto.</para>
+	''' <para>Performs auto license registration if the license file is found.</para>
+	''' </remarks>
     Private Sub IActiveLock_Init(Optional ByVal strPath As String = "", Optional ByRef autoLicString As String = "") Implements _IActiveLock.Init
         ' If running in Debug mode, don't bother with dll authentication
 #If CBool(AL_DEBUG) <> False Then
@@ -786,15 +779,13 @@ Friend Class ActiveLock
         End If
 Done:
         mfInit = True
-    End Sub
-    '===============================================================================
-    ' Name: Sub DoAutoRegistration
-    ' Input:
-    '   strLibKey As String - Returned liberation key if auto register is successful
-    ' Output: None
-    ' Purpose: Checks the specified path to see if the auto registration liberation file is there
-    ' Remarks: None
-    '===============================================================================
+	End Sub
+
+	''' <summary>
+	''' Checks the specified path to see if the auto registration liberation file is there
+	''' </summary>
+	''' <param name="strLibKey">strLibKey As String - Returned liberation key if auto register is successful.</param>
+	''' <remarks></remarks>
     Private Sub DoAutoRegistration(ByRef strLibKey As String)
 
         ' Don't bother to proceed unless the file is there.
@@ -805,16 +796,14 @@ Done:
 
         ' If registration is successful, delete the liberation file so we won't register the same file on next startup
         Kill(AutoRegisterKeyPath)
-    End Sub
-    '===============================================================================
-    ' Name: Sub ReadLibKey
-    ' Input:
-    '   ByVal sFileName As String - File name to read the liberation key from
-    '   ByRef strLibKey As String -  Liberation key returned
-    ' Output: None
-    ' Purpose: Reads the liberation key from a file
-    ' Remarks: None
-    '===============================================================================
+	End Sub
+
+	''' <summary>
+	''' Reads the liberation key from a file
+	''' </summary>
+	''' <param name="sFileName">ByVal sFileName As String - File name to read the liberation key from.</param>
+	''' <param name="strLibKey">ByRef strLibKey As String -  Liberation key returned</param>
+	''' <remarks></remarks>
     Private Sub ReadLibKey(ByVal sFileName As String, ByRef strLibKey As String)
         Dim hFile As Integer
         hFile = FreeFile()
@@ -823,17 +812,27 @@ Done:
         strLibKey = InputString(hFile, LOF(hFile))
 finally_Renamed:
         FileClose(hFile)
-    End Sub
-    '===============================================================================
-    ' Name: Sub IActiveLock_Acquire
-    ' Input:
-    '   ByRef SoftwareName As String - Software name.
-    '   ByRef SoftwareVer As String - Software version.
-    ' Output: None
-    ' Purpose: Acquires an Activelock License.
-    '<p>This is the main method that retrieves an Activelock license, validates it, and ends the trial license if it exists.
-    ' Remarks: None
-    '===============================================================================
+	End Sub
+
+	' TODO: ActiveLock.vb - Sub IActiveLock_Acquire - Update the input paramaters comments!
+	''' <summary>
+	''' <para>Acquires an Activelock License.</para>
+	''' <para>This is the main method that retrieves an Activelock license, validates it, and ends the trial license if it exists.</para>
+	''' </summary>
+	''' <param name="strMsg"></param>
+	''' <param name="strRemainingTrialDays"></param>
+	''' <param name="strRemainingTrialRuns"></param>
+	''' <param name="strTrialLength"></param>
+	''' <param name="strUsedDays"></param>
+	''' <param name="strExpirationDate"></param>
+	''' <param name="strRegisteredUser"></param>
+	''' <param name="strRegisteredLevel"></param>
+	''' <param name="strLicenseClass"></param>
+	''' <param name="strMaxCount"></param>
+	''' <param name="strLicenseFileType"></param>
+	''' <param name="strLicenseType"></param>
+	''' <param name="strUsedLockType"></param>
+	''' <remarks></remarks>
     Private Sub IActiveLock_Acquire(Optional ByRef strMsg As String = "", Optional ByRef strRemainingTrialDays As String = "", Optional ByRef strRemainingTrialRuns As String = "", Optional ByRef strTrialLength As String = "", Optional ByRef strUsedDays As String = "", Optional ByRef strExpirationDate As String = "", Optional ByRef strRegisteredUser As String = "", Optional ByRef strRegisteredLevel As String = "", Optional ByRef strLicenseClass As String = "", Optional ByRef strMaxCount As String = "", Optional ByRef strLicenseFileType As String = "", Optional ByRef strLicenseType As String = "", Optional ByRef strUsedLockType As String = "") Implements _IActiveLock.Acquire
         Dim trialActivated As Boolean
         Dim adsText As String = String.Empty
@@ -967,7 +966,14 @@ continueRegistration:
         strUsedLockType = IActiveLock_UsedLockType.ToString
         dontValidateLicense = False
 
-    End Sub
+	End Sub
+
+	' TODO: ActiveLock.vb - Function CheckStreamCapability - Add Comments - Not Documented!
+	''' <summary>
+	''' Not Documented!
+	''' </summary>
+	''' <returns></returns>
+	''' <remarks></remarks>
     Public Function CheckStreamCapability() As Boolean
         ' The following WMI call also works but it seems to be a bit slower than the GetVolumeInformation
         ' especially when it checks the A: drive
@@ -1002,16 +1008,14 @@ continueRegistration:
             CheckStreamCapability = True
         End If
 
-    End Function
-    '===============================================================================
-    ' Name: Sub ValidateKey
-    ' Input:
-    '   Lic As ProductLicense - Product license
-    ' Output: None
-    ' Purpose: Validates the License Key using RSA signature verification.
-    '   <p>License key contains the RSA signature of IActiveLock_LockCode.
-    ' Remarks: None
-    '===============================================================================
+	End Function
+
+	''' <summary>
+	''' <para>Validates the License Key using RSA signature verification.</para>
+	''' <para>License key contains the RSA signature of IActiveLock_LockCode.</para>
+	''' </summary>
+	''' <param name="Lic">Lic As ProductLicense - Product license</param>
+	''' <remarks></remarks>
     Private Sub ValidateKey(ByRef Lic As ProductLicense)
         Dim strPubKey As String
         Dim strSig As String
@@ -1108,15 +1112,14 @@ continueRegistration:
             Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseExpired, ACTIVELOCKSTRING, STRLICENSEEXPIRED)
         End If
-    End Sub
-    '===============================================================================
-    ' Name: Sub ValidateShortKey
-    ' Input:
-    '   Lic As ProductLicense - Product license
-    ' Output: None
-    ' Purpose: Validates the License Key using the Short Key MD5 verification.
-    ' Remarks: None
-    '===============================================================================
+	End Sub
+
+	''' <summary>
+	''' Validates the License Key using the Short Key MD5 verification.
+	''' </summary>
+	''' <param name="Lic">Lic As ProductLicense - Product license</param>
+	''' <param name="user">String - User</param>
+	''' <remarks></remarks>
     Private Sub ValidateShortKey(ByRef Lic As ProductLicense, ByVal user As String)
 
         Dim oReg As clsShortSerial
@@ -1208,15 +1211,13 @@ continueRegistration:
             Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseExpired, ACTIVELOCKSTRING, STRLICENSEEXPIRED)
         End If
-    End Sub
-    '===============================================================================
-    ' Name: Sub ValidateLic
-    ' Input:
-    '  Lic As ProductLicense - Product License
-    ' Output: None
-    ' Purpose: Validates the entire license (including lastused, etc.)
-    ' Remarks: None
-    '===============================================================================
+	End Sub
+
+	''' <summary>
+	''' Validates the entire license (including lastused, etc.)
+	''' </summary>
+	''' <param name="Lic">ProductLicense - Product License</param>
+	''' <remarks></remarks>
     Private Sub ValidateLic(ByRef Lic As ProductLicense)
 
         ' Get the current date format and save it to regionalSymbol variable
@@ -1274,15 +1275,13 @@ continueRegistration:
         UpdateLastUsed(Lic)
         mKeyStore.Store(Lic, mLicenseFileType)
         Set_locale(regionalSymbol)
-    End Sub
-    '===============================================================================
-    ' Name: Sub UpdateLastUsed
-    ' Input:
-    '   Lic As ProductLicense - Product License
-    ' Output: None
-    ' Purpose: Updates LastUsed property with current date stamp.
-    ' Remarks: None
-    '===============================================================================
+	End Sub
+
+	''' <summary>
+	''' Updates LastUsed property with current date stamp.
+	''' </summary>
+	''' <param name="Lic">ProductLicense - Product License</param>
+	''' <remarks></remarks>
     Private Sub UpdateLastUsed(ByRef Lic As ProductLicense)
         ' Update license store with LastRunDate
         Dim strLastUsed As String
@@ -1292,15 +1291,14 @@ continueRegistration:
         Lic.LastUsed = strLastUsed
         MyNotifier.Notify("ValidateValue", strLastUsed)
         Lic.Hash1 = modMD5.Hash(strLastUsed)
-    End Sub
-    '===============================================================================
-    ' Name: Sub IActiveLock_Register
-    ' Input:
-    '   ByVal LibKey As String - Liberation Key
-    ' Output: None
-    ' Purpose: Registers Activelock license with a given liberation key
-    ' Remarks: None
-    '===============================================================================
+	End Sub
+
+	''' <summary>
+	''' Registers Activelock license with a given liberation key
+	''' </summary>
+	''' <param name="LibKey">String - Liberation Key</param>
+	''' <param name="user">Optional - String - User</param>
+	''' <remarks></remarks>
     Private Sub IActiveLock_Register(ByVal LibKey As String, Optional ByRef user As String = "") Implements _IActiveLock.Register
 
         Dim Lic As ActiveLock3_6NET.ProductLicense = New ActiveLock3_6NET.ProductLicense
@@ -1367,14 +1365,12 @@ continueRegistration:
         End If
         Set_locale(regionalSymbol)
 
-    End Sub
-    '===============================================================================
-    ' Name: Sub IActiveLock_KillTrial
-    ' Input: None
-    ' Output: None
-    ' Purpose: Kills a Trial License
-    ' Remarks: None
-    '===============================================================================
+	End Sub
+
+	''' <summary>
+	''' Kills a Trial License
+	''' </summary>
+	''' <remarks></remarks>
     Private Sub IActiveLock_KillTrial() Implements _IActiveLock.KillTrial
         On Error Resume Next
         'Expire the Trial
@@ -1391,7 +1387,21 @@ continueRegistration:
         Else
             trialStatus = ExpireTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, mSoftwarePassword)
         End If
-    End Sub
+	End Sub
+
+	' TODO: ActiveLock.vb - Function IActiveLock_GenerateShortKey - Needs Documentation!
+	''' <summary>
+	''' Not Documented!
+	''' </summary>
+	''' <param name="SoftwareCode"></param>
+	''' <param name="SerialNumber"></param>
+	''' <param name="LicenseeAndRegisteredLevel"></param>
+	''' <param name="Expiration"></param>
+	''' <param name="LicType"></param>
+	''' <param name="RegisteredLevel"></param>
+	''' <param name="MaxUsers"></param>
+	''' <returns></returns>
+	''' <remarks></remarks>
     Private Function IActiveLock_GenerateShortKey(ByVal SoftwareCode As String, ByVal SerialNumber As String, ByVal LicenseeAndRegisteredLevel As String, ByVal Expiration As String, ByVal LicType As ProductLicense.ALLicType, ByVal RegisteredLevel As Integer, Optional ByVal MaxUsers As Short = 1) As String Implements _IActiveLock.GenerateShortKey
 
         On Error GoTo ErrHandler
@@ -1423,14 +1433,12 @@ ErrHandler:
         oReg = Nothing
         m_Key = Nothing
 
-    End Function
-    '===============================================================================
-    ' Name: Sub IActiveLock_ResetTrial
-    ' Input: None
-    ' Output: None
-    ' Purpose: Resets a Trial License
-    ' Remarks: None
-    '===============================================================================
+	End Function
+
+	''' <summary>
+	''' Resets a Trial License
+	''' </summary>
+	''' <remarks></remarks>
     Private Sub IActiveLock_ResetTrial() Implements _IActiveLock.ResetTrial
         On Error Resume Next
         'Reset the Trial
@@ -1444,16 +1452,14 @@ ErrHandler:
         Else
             trialStatus = ResetTrial(mSoftwareName, mSoftwareVer, mTrialType, mTrialLength, mTrialHideTypes, mSoftwarePassword)
         End If
-    End Sub
-    '===============================================================================
-    ' Name: Function IActiveLock_LockCode
-    ' Input:
-    '   ByRef Lic As ProductLicense - Product License
-    ' Output:
-    '   String - Lock code
-    ' Purpose: Returns the lock code from a given Activelock license
-    ' Remarks: v3 includes the new lockHDFirmware option
-    '===============================================================================
+	End Sub
+
+	''' <summary>
+	''' Returns the lock code from a given Activelock license
+	''' </summary>
+	''' <param name="Lic">ProductLicense - Product License</param>
+	''' <returns>String - Lock code</returns>
+	''' <remarks>v3 includes the new lockHDFirmware option</remarks>
     Private Function IActiveLock_LockCode(Optional ByRef Lic As ProductLicense = Nothing) As String Implements _IActiveLock.LockCode
         Dim strLock As String = String.Empty
         Dim noKey As String
@@ -1751,34 +1757,30 @@ ErrHandler:
                 Return Nothing
             End If
         End If
-    End Function
-    '===============================================================================
-    ' Name: Sub AppendLockString
-    ' Input:
-    '   ByRef strLock As String - The lock string to be appended to, returns as an output
-    '   ByVal newSubString As String - The string to be appended to the lock string if strLock is empty string
-    ' Output:
-    '   Appended lock string and installation code
-    ' Purpose: Appends the lock string to the given installation code
-    ' Remarks: None
-    '===============================================================================
+	End Function
+
+	''' <summary>
+	''' Appends the lock string to the given installation code
+	''' </summary>
+	''' <param name="strLock">String - The lock string to be appended to, returns as an output</param>
+	''' <param name="newSubString">String - The string to be appended to the lock string if strLock is empty string</param>
+	''' <remarks></remarks>
     Private Sub AppendLockString(ByRef strLock As String, ByVal newSubString As String)
         If strLock = "" Then
             strLock = newSubString
         Else
             strLock = strLock & vbLf & newSubString
         End If
-    End Sub
-    '===============================================================================
-    ' Name: Function IActiveLock_Transfer
-    ' Input:
-    '   ByVal OtherSoftwareCode As String - Installation code from another machine/software
-    ' Output: None
-    ' Purpose: Not implemented yet
-    ' Remarks: Transfers an Activelock license from one machine/software to another
-    '===============================================================================
+	End Sub
+
+	''' <summary>
+	''' Not implemented yet
+	''' </summary>
+	''' <param name="OtherSoftwareCode">String - Installation code from another machine/software</param>
+	''' <returns></returns>
+	''' <remarks>Transfers an Activelock license from one machine/software to another</remarks>
     Private Function IActiveLock_Transfer(ByVal OtherSoftwareCode As String) As String Implements _IActiveLock.Transfer
-        ' TODO: Implement me!
+		' TODO: ActiveLock.vb - Function IActiveLock_Transfer - Implement me!
         Set_locale(regionalSymbol)
         Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNotImplemented, ACTIVELOCKSTRING, STRNOTIMPLEMENTED)
         Return Nothing
@@ -1792,7 +1794,13 @@ ErrHandler:
     ' HDDfirmwareSerial
     '
     ' DESCRIPTION:
-    ' Generates a Short Key (Serial Number)
+	' Generates a Short Key (Serial Number)
+	''' <summary>
+	''' Generates a Short Key (Serial Number)
+	''' </summary>
+	''' <param name="HDDfirmwareSerial"></param>
+	''' <returns></returns>
+	''' <remarks></remarks>
     Private Function IActivelock_GenerateShortSerial(ByVal HDDfirmwareSerial As String) As String Implements _IActiveLock.GenerateShortSerial
         Dim oReg As clsShortSerial
         Dim sKey As String
@@ -1804,7 +1812,15 @@ ErrHandler:
         'Left(sKey, 4) & "-" & Mid(sKey, 5, 4) & "-" & Mid(sKey, 9, 4) & "-" & Mid(sKey, 13, 4)
 
         oReg = Nothing
-    End Function
+	End Function
+
+	' TODO: ActiveLock.vb - Function specialChar - Add documentation - Not Documented!
+	''' <summary>
+	''' Not Documented!
+	''' </summary>
+	''' <param name="s"></param>
+	''' <returns></returns>
+	''' <remarks></remarks>
     Private Function specialChar(ByVal s As String) As Boolean
         Dim k As Integer
         s = s & Space(1) 'check against null-strings
