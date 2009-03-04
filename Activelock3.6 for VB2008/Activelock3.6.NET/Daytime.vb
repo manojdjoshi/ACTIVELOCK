@@ -3,11 +3,17 @@ Imports System.Net
 Imports System.Net.Sockets
 Imports System.Runtime.InteropServices
 
+''' <summary>
+''' Internet Time Server class by Alastair Dallas 01/27/04
+''' </summary>
+''' <remarks></remarks>
 Public Class Daytime
-    'Internet Time Server class by Alastair Dallas 01/27/04
 
-    Private Const THRESHOLD_SECONDS As Integer = 15 'Number of seconds
-    ' that Windows clock can deviate from NIST and still be okay
+    ''' <summary>
+    ''' Number of seconds that Windows clock can deviate from NIST and still be okay
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Const THRESHOLD_SECONDS As Integer = 15
 
     'Server IP addresses from 
     'http://www.boulder.nist.gov/timefreq/service/time-servers.html
@@ -30,11 +36,14 @@ Public Class Daytime
     Public Shared LastHost As String = ""
     Public Shared LastSysTime As DateTime
 
+    ''' <summary>
+    ''' Returns UTC/GMT using an NIST server if possible, degrading to simply returning the system clock
+    ''' </summary>
+    ''' <returns>DateTime - Returns UTC/GMT using an NIST server if possible</returns>
+    ''' <remarks></remarks>
     Public Shared Function GetTime() As DateTime
-        'Returns UTC/GMT using an NIST server if possible, 
-        ' degrading to simply returning the system clock
 
-        'If we are successful in getting NIST time, then
+        'If we are successful in getting NIST time, then 
         ' LastHost indicates which server was used and
         ' LastSysTime contains the system time of the call
         ' If LastSysTime is not within 15 seconds of NIST time,
@@ -135,8 +144,12 @@ Public Class Daytime
     Private Declare Function GetSystemTime Lib "kernel32.dll" (ByRef stru As SYSTEMTIME) As Int32
     Private Declare Function SetSystemTime Lib "kernel32.dll" (ByRef stru As SYSTEMTIME) As Int32
 
+    ''' <summary>
+    ''' Sets system time.
+    ''' </summary>
+    ''' <param name="dt"></param>
+    ''' <remarks>Note: Use UTC time; Windows will apply time zone</remarks>
     Public Shared Sub SetWindowsClock(ByVal dt As DateTime)
-        'Sets system time. Note: Use UTC time; Windows will apply time zone
 
         Dim timeStru As SYSTEMTIME
         Dim result As Int32
