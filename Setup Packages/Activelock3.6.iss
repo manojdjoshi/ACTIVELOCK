@@ -143,7 +143,7 @@ Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\winio.h; DestDir: "{app}\A
 ;Source: C:\ActiveLockCommunity\Alcrypto\Alcrypto3 C++\winio.obj; DestDir: "{app}\Alcrypto3 C++"; Flags: ignoreversion; Components: sourcecode
 
 ;Src_v3 folder for Activelock source files - including Alugen - for Classic VB6 only
-Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\Activelock3.6.dll; DestDir: "{sys}"; Flags: restartreplace sharedfile regserver allowunsafefiles; Components: bin sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\Activelock3.6.dll; DestDir: "{sys}"; Flags: restartreplace sharedfile regserver allowunsafefiles ignoreversion; Components: bin sourcecode
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\ActiveLock3.res; DestDir: "{app}\Activelock3.6 for VB6"; Flags: ignoreversion; Components: sourcecode
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\ActiveLock3.vbp; DestDir: "{app}\Activelock3.6 for VB6"; Flags: ignoreversion; Components: sourcecode
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\ActiveLock.cls; DestDir: "{app}\Activelock3.6 for VB6"; Flags: ignoreversion; Components: sourcecode
