@@ -42,6 +42,8 @@ Friend Class frmMain
     Inherits System.Windows.Forms.Form
     ' Precompiled base64 regular expression
     Public Shared ReadOnly ExpBase64 As Regex = New Regex("^[a-zA-Z0-9+/=]{4,}$", RegexOptions.Compiled)
+    Dim cboProducts_Array() As String
+
 
 #Region "Private variables "
     'listview sorter class
@@ -92,6 +94,7 @@ Friend Class frmMain
     Friend WithEvents chkLockVideoID As System.Windows.Forms.CheckBox
     Friend WithEvents lblLockBaseboardID As System.Windows.Forms.Label
     Friend WithEvents chkLockBaseboardID As System.Windows.Forms.CheckBox
+    Friend WithEvents lblKeyStrength As System.Windows.Forms.Label
 
     Private printPreviewDialog1 As New PrintPreviewDialog
 
@@ -333,6 +336,7 @@ Friend Class frmMain
         Me.mainStatusBarPanel = New System.Windows.Forms.StatusBarPanel
         Me.saveDlg = New System.Windows.Forms.SaveFileDialog
         Me.lnkActivelockSoftwareGroup = New System.Windows.Forms.LinkLabel
+        Me.lblKeyStrength = New System.Windows.Forms.Label
         CType(Me.picALBanner2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.picALBanner, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SSTab1.SuspendLayout()
@@ -372,7 +376,7 @@ Friend Class frmMain
         Me.cmdBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.cmdBrowse.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdBrowse.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdBrowse.Location = New System.Drawing.Point(576, 633)
+        Me.cmdBrowse.Location = New System.Drawing.Point(576, 607)
         Me.cmdBrowse.Name = "cmdBrowse"
         Me.cmdBrowse.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdBrowse.Size = New System.Drawing.Size(21, 22)
@@ -390,7 +394,7 @@ Friend Class frmMain
         Me.cmdSave.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdSave.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdSave.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdSave.Location = New System.Drawing.Point(598, 633)
+        Me.cmdSave.Location = New System.Drawing.Point(598, 607)
         Me.cmdSave.Name = "cmdSave"
         Me.cmdSave.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdSave.Size = New System.Drawing.Size(65, 22)
@@ -410,7 +414,7 @@ Friend Class frmMain
         Me.cmdKeyGen.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdKeyGen.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdKeyGen.ImageAlign = System.Drawing.ContentAlignment.BottomLeft
-        Me.cmdKeyGen.Location = New System.Drawing.Point(2, 408)
+        Me.cmdKeyGen.Location = New System.Drawing.Point(1, 415)
         Me.cmdKeyGen.Name = "cmdKeyGen"
         Me.cmdKeyGen.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdKeyGen.Size = New System.Drawing.Size(80, 24)
@@ -429,7 +433,7 @@ Friend Class frmMain
         Me.cmdViewArchive.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdViewArchive.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdViewArchive.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdViewArchive.Location = New System.Drawing.Point(3, 571)
+        Me.cmdViewArchive.Location = New System.Drawing.Point(3, 552)
         Me.cmdViewArchive.Name = "cmdViewArchive"
         Me.cmdViewArchive.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdViewArchive.Size = New System.Drawing.Size(79, 44)
@@ -450,7 +454,7 @@ Friend Class frmMain
         Me.lstvwProducts.Location = New System.Drawing.Point(3, 16)
         Me.lstvwProducts.MultiSelect = False
         Me.lstvwProducts.Name = "lstvwProducts"
-        Me.lstvwProducts.Size = New System.Drawing.Size(657, 379)
+        Me.lstvwProducts.Size = New System.Drawing.Size(657, 347)
         Me.lstvwProducts.Sorting = System.Windows.Forms.SortOrder.Ascending
         Me.lstvwProducts.TabIndex = 10
         Me.ToolTip1.SetToolTip(Me.lstvwProducts, "Products list")
@@ -640,7 +644,7 @@ Friend Class frmMain
         Me.picALBanner.BackColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.picALBanner.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
         Me.picALBanner.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.picALBanner.Location = New System.Drawing.Point(4, 128)
+        Me.picALBanner.Location = New System.Drawing.Point(4, 144)
         Me.picALBanner.Name = "picALBanner"
         Me.picALBanner.Size = New System.Drawing.Size(74, 38)
         Me.picALBanner.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage
@@ -656,7 +660,7 @@ Friend Class frmMain
         Me.cmdCopy.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdCopy.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdCopy.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdCopy.Location = New System.Drawing.Point(2, 434)
+        Me.cmdCopy.Location = New System.Drawing.Point(1, 441)
         Me.cmdCopy.Name = "cmdCopy"
         Me.cmdCopy.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdCopy.Size = New System.Drawing.Size(80, 24)
@@ -675,7 +679,7 @@ Friend Class frmMain
         Me.cmdPaste.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdPaste.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdPaste.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdPaste.Location = New System.Drawing.Point(577, 72)
+        Me.cmdPaste.Location = New System.Drawing.Point(579, 97)
         Me.cmdPaste.Name = "cmdPaste"
         Me.cmdPaste.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdPaste.Size = New System.Drawing.Size(86, 24)
@@ -694,11 +698,11 @@ Friend Class frmMain
         Me.txtUser.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtUser.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtUser.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtUser.Location = New System.Drawing.Point(87, 96)
+        Me.txtUser.Location = New System.Drawing.Point(88, 121)
         Me.txtUser.MaxLength = 0
         Me.txtUser.Name = "txtUser"
         Me.txtUser.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtUser.Size = New System.Drawing.Size(574, 20)
+        Me.txtUser.Size = New System.Drawing.Size(578, 20)
         Me.txtUser.TabIndex = 16
         Me.ToolTip1.SetToolTip(Me.txtUser, "Here will apear user name based on the instalation code")
         '
@@ -711,7 +715,7 @@ Friend Class frmMain
         Me.txtLicenseFile.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtLicenseFile.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtLicenseFile.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtLicenseFile.Location = New System.Drawing.Point(86, 634)
+        Me.txtLicenseFile.Location = New System.Drawing.Point(86, 608)
         Me.txtLicenseFile.MaxLength = 0
         Me.txtLicenseFile.Name = "txtLicenseFile"
         Me.txtLicenseFile.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -743,7 +747,7 @@ Friend Class frmMain
         Me.txtInstallCode.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtInstallCode.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtInstallCode.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtInstallCode.Location = New System.Drawing.Point(88, 74)
+        Me.txtInstallCode.Location = New System.Drawing.Point(88, 99)
         Me.txtInstallCode.MaxLength = 0
         Me.txtInstallCode.Name = "txtInstallCode"
         Me.txtInstallCode.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -761,14 +765,14 @@ Friend Class frmMain
         Me.txtLicenseKey.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtLicenseKey.Font = New System.Drawing.Font("Courier New", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtLicenseKey.ForeColor = System.Drawing.Color.Blue
-        Me.txtLicenseKey.Location = New System.Drawing.Point(87, 385)
+        Me.txtLicenseKey.Location = New System.Drawing.Point(86, 399)
         Me.txtLicenseKey.MaxLength = 0
         Me.txtLicenseKey.Multiline = True
         Me.txtLicenseKey.Name = "txtLicenseKey"
         Me.txtLicenseKey.ReadOnly = True
         Me.txtLicenseKey.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.txtLicenseKey.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtLicenseKey.Size = New System.Drawing.Size(575, 242)
+        Me.txtLicenseKey.Size = New System.Drawing.Size(580, 203)
         Me.txtLicenseKey.TabIndex = 27
         Me.txtLicenseKey.Text = "1234567890123456789012345678901234567890123456789012345678901234" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         Me.ToolTip1.SetToolTip(Me.txtLicenseKey, "License Key")
@@ -782,7 +786,7 @@ Friend Class frmMain
         Me.cboRegisteredLevel.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
         Me.cboRegisteredLevel.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cboRegisteredLevel.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cboRegisteredLevel.Location = New System.Drawing.Point(418, 4)
+        Me.cboRegisteredLevel.Location = New System.Drawing.Point(418, 25)
         Me.cboRegisteredLevel.Name = "cboRegisteredLevel"
         Me.cboRegisteredLevel.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cboRegisteredLevel.Size = New System.Drawing.Size(223, 22)
@@ -811,7 +815,7 @@ Friend Class frmMain
         Me.cmdViewLevel.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.cmdViewLevel.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdViewLevel.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdViewLevel.Location = New System.Drawing.Point(643, 4)
+        Me.cmdViewLevel.Location = New System.Drawing.Point(643, 25)
         Me.cmdViewLevel.Name = "cmdViewLevel"
         Me.cmdViewLevel.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdViewLevel.Size = New System.Drawing.Size(22, 22)
@@ -828,7 +832,7 @@ Friend Class frmMain
         Me.cmdPrintLicenseKey.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdPrintLicenseKey.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdPrintLicenseKey.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdPrintLicenseKey.Location = New System.Drawing.Point(2, 460)
+        Me.cmdPrintLicenseKey.Location = New System.Drawing.Point(1, 467)
         Me.cmdPrintLicenseKey.Name = "cmdPrintLicenseKey"
         Me.cmdPrintLicenseKey.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdPrintLicenseKey.Size = New System.Drawing.Size(80, 24)
@@ -846,7 +850,7 @@ Friend Class frmMain
         Me.cmdEmailLicenseKey.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdEmailLicenseKey.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdEmailLicenseKey.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdEmailLicenseKey.Location = New System.Drawing.Point(2, 486)
+        Me.cmdEmailLicenseKey.Location = New System.Drawing.Point(1, 493)
         Me.cmdEmailLicenseKey.Name = "cmdEmailLicenseKey"
         Me.cmdEmailLicenseKey.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdEmailLicenseKey.Size = New System.Drawing.Size(80, 24)
@@ -883,11 +887,11 @@ Friend Class frmMain
         Me.txtMaxCount.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtMaxCount.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtMaxCount.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtMaxCount.Location = New System.Drawing.Point(442, 177)
+        Me.txtMaxCount.Location = New System.Drawing.Point(323, 77)
         Me.txtMaxCount.MaxLength = 2
         Me.txtMaxCount.Name = "txtMaxCount"
         Me.txtMaxCount.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtMaxCount.Size = New System.Drawing.Size(121, 20)
+        Me.txtMaxCount.Size = New System.Drawing.Size(84, 20)
         Me.txtMaxCount.TabIndex = 68
         Me.txtMaxCount.Text = "5"
         Me.ToolTip1.SetToolTip(Me.txtMaxCount, "Enter or select license file")
@@ -925,7 +929,7 @@ Friend Class frmMain
         Me.SSTab1.Location = New System.Drawing.Point(0, 0)
         Me.SSTab1.Name = "SSTab1"
         Me.SSTab1.SelectedIndex = 1
-        Me.SSTab1.Size = New System.Drawing.Size(679, 689)
+        Me.SSTab1.Size = New System.Drawing.Size(679, 657)
         Me.SSTab1.TabIndex = 0
         '
         '_SSTab1_TabPage0
@@ -934,7 +938,7 @@ Friend Class frmMain
         Me._SSTab1_TabPage0.Controls.Add(Me.fraProdNew)
         Me._SSTab1_TabPage0.Location = New System.Drawing.Point(4, 22)
         Me._SSTab1_TabPage0.Name = "_SSTab1_TabPage0"
-        Me._SSTab1_TabPage0.Size = New System.Drawing.Size(671, 663)
+        Me._SSTab1_TabPage0.Size = New System.Drawing.Size(671, 631)
         Me._SSTab1_TabPage0.TabIndex = 0
         Me._SSTab1_TabPage0.Text = "Product Code Generator"
         '
@@ -946,7 +950,7 @@ Friend Class frmMain
         Me.grpProductsList.Controls.Add(Me.lstvwProducts)
         Me.grpProductsList.Location = New System.Drawing.Point(4, 262)
         Me.grpProductsList.Name = "grpProductsList"
-        Me.grpProductsList.Size = New System.Drawing.Size(663, 398)
+        Me.grpProductsList.Size = New System.Drawing.Size(663, 366)
         Me.grpProductsList.TabIndex = 1
         Me.grpProductsList.TabStop = False
         Me.grpProductsList.Text = " Products list "
@@ -1174,7 +1178,7 @@ Friend Class frmMain
         Me._SSTab1_TabPage1.Controls.Add(Me.frmKeyGen)
         Me._SSTab1_TabPage1.Location = New System.Drawing.Point(4, 22)
         Me._SSTab1_TabPage1.Name = "_SSTab1_TabPage1"
-        Me._SSTab1_TabPage1.Size = New System.Drawing.Size(671, 663)
+        Me._SSTab1_TabPage1.Size = New System.Drawing.Size(671, 631)
         Me._SSTab1_TabPage1.TabIndex = 1
         Me._SSTab1_TabPage1.Text = "License Key Generator"
         '
@@ -1184,6 +1188,8 @@ Friend Class frmMain
                     Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.frmKeyGen.BackColor = System.Drawing.SystemColors.Control
+        Me.frmKeyGen.Controls.Add(Me.lblKeyStrength)
+        Me.frmKeyGen.Controls.Add(Me.cboRegisteredLevel)
         Me.frmKeyGen.Controls.Add(Me.lblLockVideoID)
         Me.frmKeyGen.Controls.Add(Me.chkLockVideoID)
         Me.frmKeyGen.Controls.Add(Me.lblLockBaseboardID)
@@ -1243,7 +1249,6 @@ Friend Class frmMain
         Me.frmKeyGen.Controls.Add(Me.cmdViewArchive)
         Me.frmKeyGen.Controls.Add(Me.Label8)
         Me.frmKeyGen.Controls.Add(Me.Label15)
-        Me.frmKeyGen.Controls.Add(Me.cboRegisteredLevel)
         Me.frmKeyGen.Controls.Add(Me.cboProducts)
         Me.frmKeyGen.Controls.Add(Me.cmdViewLevel)
         Me.frmKeyGen.Cursor = System.Windows.Forms.Cursors.Default
@@ -1252,12 +1257,12 @@ Friend Class frmMain
         Me.frmKeyGen.Location = New System.Drawing.Point(2, 0)
         Me.frmKeyGen.Name = "frmKeyGen"
         Me.frmKeyGen.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.frmKeyGen.Size = New System.Drawing.Size(666, 660)
+        Me.frmKeyGen.Size = New System.Drawing.Size(666, 628)
         Me.frmKeyGen.TabIndex = 0
         '
         'lblLockVideoID
         '
-        Me.lblLockVideoID.Location = New System.Drawing.Point(293, 362)
+        Me.lblLockVideoID.Location = New System.Drawing.Point(293, 378)
         Me.lblLockVideoID.Name = "lblLockVideoID"
         Me.lblLockVideoID.Size = New System.Drawing.Size(368, 18)
         Me.lblLockVideoID.TabIndex = 91
@@ -1270,7 +1275,7 @@ Friend Class frmMain
         Me.chkLockVideoID.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkLockVideoID.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockVideoID.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkLockVideoID.Location = New System.Drawing.Point(87, 362)
+        Me.chkLockVideoID.Location = New System.Drawing.Point(87, 378)
         Me.chkLockVideoID.Name = "chkLockVideoID"
         Me.chkLockVideoID.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkLockVideoID.Size = New System.Drawing.Size(279, 18)
@@ -1280,7 +1285,7 @@ Friend Class frmMain
         '
         'lblLockBaseboardID
         '
-        Me.lblLockBaseboardID.Location = New System.Drawing.Point(293, 344)
+        Me.lblLockBaseboardID.Location = New System.Drawing.Point(293, 360)
         Me.lblLockBaseboardID.Name = "lblLockBaseboardID"
         Me.lblLockBaseboardID.Size = New System.Drawing.Size(368, 18)
         Me.lblLockBaseboardID.TabIndex = 89
@@ -1293,7 +1298,7 @@ Friend Class frmMain
         Me.chkLockBaseboardID.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkLockBaseboardID.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockBaseboardID.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkLockBaseboardID.Location = New System.Drawing.Point(87, 344)
+        Me.chkLockBaseboardID.Location = New System.Drawing.Point(87, 360)
         Me.chkLockBaseboardID.Name = "chkLockBaseboardID"
         Me.chkLockBaseboardID.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkLockBaseboardID.Size = New System.Drawing.Size(279, 18)
@@ -1303,7 +1308,7 @@ Friend Class frmMain
         '
         'lblLockCPUID
         '
-        Me.lblLockCPUID.Location = New System.Drawing.Point(293, 326)
+        Me.lblLockCPUID.Location = New System.Drawing.Point(293, 342)
         Me.lblLockCPUID.Name = "lblLockCPUID"
         Me.lblLockCPUID.Size = New System.Drawing.Size(368, 18)
         Me.lblLockCPUID.TabIndex = 87
@@ -1316,7 +1321,7 @@ Friend Class frmMain
         Me.chkLockCPUID.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkLockCPUID.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockCPUID.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkLockCPUID.Location = New System.Drawing.Point(87, 326)
+        Me.chkLockCPUID.Location = New System.Drawing.Point(87, 342)
         Me.chkLockCPUID.Name = "chkLockCPUID"
         Me.chkLockCPUID.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkLockCPUID.Size = New System.Drawing.Size(279, 18)
@@ -1326,7 +1331,7 @@ Friend Class frmMain
         '
         'lblLockMemory
         '
-        Me.lblLockMemory.Location = New System.Drawing.Point(293, 308)
+        Me.lblLockMemory.Location = New System.Drawing.Point(293, 324)
         Me.lblLockMemory.Name = "lblLockMemory"
         Me.lblLockMemory.Size = New System.Drawing.Size(368, 18)
         Me.lblLockMemory.TabIndex = 85
@@ -1339,7 +1344,7 @@ Friend Class frmMain
         Me.chkLockMemory.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkLockMemory.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockMemory.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkLockMemory.Location = New System.Drawing.Point(87, 308)
+        Me.chkLockMemory.Location = New System.Drawing.Point(87, 324)
         Me.chkLockMemory.Name = "chkLockMemory"
         Me.chkLockMemory.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkLockMemory.Size = New System.Drawing.Size(279, 18)
@@ -1349,7 +1354,7 @@ Friend Class frmMain
         '
         'lblLockFingerprint
         '
-        Me.lblLockFingerprint.Location = New System.Drawing.Point(293, 290)
+        Me.lblLockFingerprint.Location = New System.Drawing.Point(293, 306)
         Me.lblLockFingerprint.Name = "lblLockFingerprint"
         Me.lblLockFingerprint.Size = New System.Drawing.Size(368, 18)
         Me.lblLockFingerprint.TabIndex = 83
@@ -1362,7 +1367,7 @@ Friend Class frmMain
         Me.chkLockFingerprint.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkLockFingerprint.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockFingerprint.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkLockFingerprint.Location = New System.Drawing.Point(87, 290)
+        Me.chkLockFingerprint.Location = New System.Drawing.Point(87, 306)
         Me.chkLockFingerprint.Name = "chkLockFingerprint"
         Me.chkLockFingerprint.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkLockFingerprint.Size = New System.Drawing.Size(279, 18)
@@ -1372,7 +1377,7 @@ Friend Class frmMain
         '
         'lblLockExternalIP
         '
-        Me.lblLockExternalIP.Location = New System.Drawing.Point(293, 272)
+        Me.lblLockExternalIP.Location = New System.Drawing.Point(293, 288)
         Me.lblLockExternalIP.Name = "lblLockExternalIP"
         Me.lblLockExternalIP.Size = New System.Drawing.Size(368, 18)
         Me.lblLockExternalIP.TabIndex = 81
@@ -1385,7 +1390,7 @@ Friend Class frmMain
         Me.chkLockExternalIP.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkLockExternalIP.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockExternalIP.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkLockExternalIP.Location = New System.Drawing.Point(87, 272)
+        Me.chkLockExternalIP.Location = New System.Drawing.Point(87, 288)
         Me.chkLockExternalIP.Name = "chkLockExternalIP"
         Me.chkLockExternalIP.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkLockExternalIP.Size = New System.Drawing.Size(279, 18)
@@ -1395,63 +1400,63 @@ Friend Class frmMain
         '
         'lblLockIP
         '
-        Me.lblLockIP.Location = New System.Drawing.Point(293, 254)
+        Me.lblLockIP.Location = New System.Drawing.Point(293, 270)
         Me.lblLockIP.Name = "lblLockIP"
         Me.lblLockIP.Size = New System.Drawing.Size(368, 18)
         Me.lblLockIP.TabIndex = 79
         '
         'lblLockMotherboard
         '
-        Me.lblLockMotherboard.Location = New System.Drawing.Point(293, 236)
+        Me.lblLockMotherboard.Location = New System.Drawing.Point(293, 252)
         Me.lblLockMotherboard.Name = "lblLockMotherboard"
         Me.lblLockMotherboard.Size = New System.Drawing.Size(368, 18)
         Me.lblLockMotherboard.TabIndex = 78
         '
         'lblLockBIOS
         '
-        Me.lblLockBIOS.Location = New System.Drawing.Point(293, 218)
+        Me.lblLockBIOS.Location = New System.Drawing.Point(293, 234)
         Me.lblLockBIOS.Name = "lblLockBIOS"
         Me.lblLockBIOS.Size = New System.Drawing.Size(368, 18)
         Me.lblLockBIOS.TabIndex = 77
         '
         'lblLockWindows
         '
-        Me.lblLockWindows.Location = New System.Drawing.Point(293, 200)
+        Me.lblLockWindows.Location = New System.Drawing.Point(293, 216)
         Me.lblLockWindows.Name = "lblLockWindows"
         Me.lblLockWindows.Size = New System.Drawing.Size(368, 18)
         Me.lblLockWindows.TabIndex = 76
         '
         'lblLockHDfirmware
         '
-        Me.lblLockHDfirmware.Location = New System.Drawing.Point(293, 182)
+        Me.lblLockHDfirmware.Location = New System.Drawing.Point(293, 198)
         Me.lblLockHDfirmware.Name = "lblLockHDfirmware"
         Me.lblLockHDfirmware.Size = New System.Drawing.Size(368, 18)
         Me.lblLockHDfirmware.TabIndex = 75
         '
         'lblLockHD
         '
-        Me.lblLockHD.Location = New System.Drawing.Point(293, 164)
+        Me.lblLockHD.Location = New System.Drawing.Point(293, 180)
         Me.lblLockHD.Name = "lblLockHD"
         Me.lblLockHD.Size = New System.Drawing.Size(368, 18)
         Me.lblLockHD.TabIndex = 74
         '
         'lblLockComputer
         '
-        Me.lblLockComputer.Location = New System.Drawing.Point(293, 146)
+        Me.lblLockComputer.Location = New System.Drawing.Point(293, 162)
         Me.lblLockComputer.Name = "lblLockComputer"
         Me.lblLockComputer.Size = New System.Drawing.Size(368, 18)
         Me.lblLockComputer.TabIndex = 73
         '
         'lblLockMacAddress
         '
-        Me.lblLockMacAddress.Location = New System.Drawing.Point(293, 127)
+        Me.lblLockMacAddress.Location = New System.Drawing.Point(293, 143)
         Me.lblLockMacAddress.Name = "lblLockMacAddress"
         Me.lblLockMacAddress.Size = New System.Drawing.Size(368, 18)
         Me.lblLockMacAddress.TabIndex = 72
         '
         'cmdUncheckAll
         '
-        Me.cmdUncheckAll.Location = New System.Drawing.Point(4, 198)
+        Me.cmdUncheckAll.Location = New System.Drawing.Point(4, 214)
         Me.cmdUncheckAll.Name = "cmdUncheckAll"
         Me.cmdUncheckAll.Size = New System.Drawing.Size(72, 20)
         Me.cmdUncheckAll.TabIndex = 71
@@ -1459,7 +1464,7 @@ Friend Class frmMain
         '
         'cmdCheckAll
         '
-        Me.cmdCheckAll.Location = New System.Drawing.Point(4, 172)
+        Me.cmdCheckAll.Location = New System.Drawing.Point(4, 188)
         Me.cmdCheckAll.Name = "cmdCheckAll"
         Me.cmdCheckAll.Size = New System.Drawing.Size(72, 20)
         Me.cmdCheckAll.TabIndex = 70
@@ -1471,10 +1476,10 @@ Friend Class frmMain
         Me.lblConcurrentUsers.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblConcurrentUsers.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblConcurrentUsers.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblConcurrentUsers.Location = New System.Drawing.Point(464, 55)
+        Me.lblConcurrentUsers.Location = New System.Drawing.Point(222, 79)
         Me.lblConcurrentUsers.Name = "lblConcurrentUsers"
         Me.lblConcurrentUsers.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblConcurrentUsers.Size = New System.Drawing.Size(92, 17)
+        Me.lblConcurrentUsers.Size = New System.Drawing.Size(100, 17)
         Me.lblConcurrentUsers.TabIndex = 69
         Me.lblConcurrentUsers.Text = "Concurrent Users"
         Me.lblConcurrentUsers.Visible = False
@@ -1485,10 +1490,10 @@ Friend Class frmMain
         Me.chkNetworkedLicense.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkNetworkedLicense.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkNetworkedLicense.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkNetworkedLicense.Location = New System.Drawing.Point(326, 52)
+        Me.chkNetworkedLicense.Location = New System.Drawing.Point(88, 76)
         Me.chkNetworkedLicense.Name = "chkNetworkedLicense"
         Me.chkNetworkedLicense.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkNetworkedLicense.Size = New System.Drawing.Size(116, 22)
+        Me.chkNetworkedLicense.Size = New System.Drawing.Size(122, 22)
         Me.chkNetworkedLicense.TabIndex = 67
         Me.chkNetworkedLicense.Text = "Networked License"
         Me.chkNetworkedLicense.UseVisualStyleBackColor = False
@@ -1512,7 +1517,7 @@ Friend Class frmMain
         Me.chkLockIP.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkLockIP.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockIP.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkLockIP.Location = New System.Drawing.Point(87, 254)
+        Me.chkLockIP.Location = New System.Drawing.Point(87, 270)
         Me.chkLockIP.Name = "chkLockIP"
         Me.chkLockIP.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkLockIP.Size = New System.Drawing.Size(279, 18)
@@ -1528,7 +1533,7 @@ Friend Class frmMain
         Me.chkLockMotherboard.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkLockMotherboard.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockMotherboard.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkLockMotherboard.Location = New System.Drawing.Point(87, 236)
+        Me.chkLockMotherboard.Location = New System.Drawing.Point(87, 252)
         Me.chkLockMotherboard.Name = "chkLockMotherboard"
         Me.chkLockMotherboard.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkLockMotherboard.Size = New System.Drawing.Size(279, 18)
@@ -1544,7 +1549,7 @@ Friend Class frmMain
         Me.chkLockBIOS.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkLockBIOS.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockBIOS.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkLockBIOS.Location = New System.Drawing.Point(87, 218)
+        Me.chkLockBIOS.Location = New System.Drawing.Point(87, 234)
         Me.chkLockBIOS.Name = "chkLockBIOS"
         Me.chkLockBIOS.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkLockBIOS.Size = New System.Drawing.Size(279, 18)
@@ -1560,7 +1565,7 @@ Friend Class frmMain
         Me.chkLockWindows.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkLockWindows.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockWindows.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkLockWindows.Location = New System.Drawing.Point(87, 200)
+        Me.chkLockWindows.Location = New System.Drawing.Point(87, 216)
         Me.chkLockWindows.Name = "chkLockWindows"
         Me.chkLockWindows.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkLockWindows.Size = New System.Drawing.Size(279, 18)
@@ -1576,7 +1581,7 @@ Friend Class frmMain
         Me.chkLockHDfirmware.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkLockHDfirmware.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockHDfirmware.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkLockHDfirmware.Location = New System.Drawing.Point(87, 182)
+        Me.chkLockHDfirmware.Location = New System.Drawing.Point(87, 198)
         Me.chkLockHDfirmware.Name = "chkLockHDfirmware"
         Me.chkLockHDfirmware.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkLockHDfirmware.Size = New System.Drawing.Size(279, 18)
@@ -1592,7 +1597,7 @@ Friend Class frmMain
         Me.chkLockHD.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkLockHD.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockHD.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkLockHD.Location = New System.Drawing.Point(87, 164)
+        Me.chkLockHD.Location = New System.Drawing.Point(87, 180)
         Me.chkLockHD.Name = "chkLockHD"
         Me.chkLockHD.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkLockHD.Size = New System.Drawing.Size(279, 18)
@@ -1608,7 +1613,7 @@ Friend Class frmMain
         Me.chkLockComputer.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkLockComputer.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockComputer.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkLockComputer.Location = New System.Drawing.Point(87, 146)
+        Me.chkLockComputer.Location = New System.Drawing.Point(87, 162)
         Me.chkLockComputer.Name = "chkLockComputer"
         Me.chkLockComputer.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkLockComputer.Size = New System.Drawing.Size(279, 18)
@@ -1624,7 +1629,7 @@ Friend Class frmMain
         Me.chkLockMACaddress.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkLockMACaddress.Font = New System.Drawing.Font("Arial", 8.25!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkLockMACaddress.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkLockMACaddress.Location = New System.Drawing.Point(87, 127)
+        Me.chkLockMACaddress.Location = New System.Drawing.Point(87, 143)
         Me.chkLockMACaddress.Name = "chkLockMACaddress"
         Me.chkLockMACaddress.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkLockMACaddress.Size = New System.Drawing.Size(279, 18)
@@ -1638,7 +1643,7 @@ Friend Class frmMain
         Me.chkItemData.Cursor = System.Windows.Forms.Cursors.Default
         Me.chkItemData.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chkItemData.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkItemData.Location = New System.Drawing.Point(418, 28)
+        Me.chkItemData.Location = New System.Drawing.Point(418, 49)
         Me.chkItemData.Name = "chkItemData"
         Me.chkItemData.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkItemData.Size = New System.Drawing.Size(146, 22)
@@ -1669,7 +1674,7 @@ Friend Class frmMain
         Me.Label11.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label11.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label11.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label11.Location = New System.Drawing.Point(1, 98)
+        Me.Label11.Location = New System.Drawing.Point(3, 123)
         Me.Label11.Name = "Label11"
         Me.Label11.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Label11.Size = New System.Drawing.Size(89, 17)
@@ -1683,7 +1688,7 @@ Friend Class frmMain
         Me.Label5.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label5.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label5.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label5.Location = New System.Drawing.Point(2, 636)
+        Me.Label5.Location = New System.Drawing.Point(2, 610)
         Me.Label5.Name = "Label5"
         Me.Label5.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Label5.Size = New System.Drawing.Size(78, 17)
@@ -1722,7 +1727,7 @@ Friend Class frmMain
         Me.Label7.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label7.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label7.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label7.Location = New System.Drawing.Point(1, 76)
+        Me.Label7.Location = New System.Drawing.Point(3, 101)
         Me.Label7.Name = "Label7"
         Me.Label7.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Label7.Size = New System.Drawing.Size(89, 17)
@@ -1736,7 +1741,7 @@ Friend Class frmMain
         Me.lblLicenseKey.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.lblLicenseKey.ForeColor = System.Drawing.SystemColors.ControlText
         Me.lblLicenseKey.ImageAlign = System.Drawing.ContentAlignment.TopCenter
-        Me.lblLicenseKey.Location = New System.Drawing.Point(2, 344)
+        Me.lblLicenseKey.Location = New System.Drawing.Point(1, 351)
         Me.lblLicenseKey.Name = "lblLicenseKey"
         Me.lblLicenseKey.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.lblLicenseKey.Size = New System.Drawing.Size(82, 59)
@@ -1775,17 +1780,17 @@ Friend Class frmMain
         Me.Label15.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label15.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label15.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label15.Location = New System.Drawing.Point(326, 6)
+        Me.Label15.Location = New System.Drawing.Point(326, 27)
         Me.Label15.Name = "Label15"
         Me.Label15.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label15.Size = New System.Drawing.Size(90, 17)
+        Me.Label15.Size = New System.Drawing.Size(94, 17)
         Me.Label15.TabIndex = 2
         Me.Label15.Text = "Registered Level:"
         '
         'sbStatus
         '
         Me.sbStatus.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.sbStatus.Location = New System.Drawing.Point(0, 690)
+        Me.sbStatus.Location = New System.Drawing.Point(0, 658)
         Me.sbStatus.Name = "sbStatus"
         Me.sbStatus.Panels.AddRange(New System.Windows.Forms.StatusBarPanel() {Me.mainStatusBarPanel})
         Me.sbStatus.ShowPanels = True
@@ -1813,11 +1818,23 @@ Friend Class frmMain
         Me.lnkActivelockSoftwareGroup.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.lnkActivelockSoftwareGroup.VisitedLinkColor = System.Drawing.Color.Blue
         '
+        'lblKeyStrength
+        '
+        Me.lblKeyStrength.BackColor = System.Drawing.SystemColors.Control
+        Me.lblKeyStrength.Cursor = System.Windows.Forms.Cursors.Default
+        Me.lblKeyStrength.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblKeyStrength.ForeColor = System.Drawing.Color.Blue
+        Me.lblKeyStrength.Location = New System.Drawing.Point(328, 7)
+        Me.lblKeyStrength.Name = "lblKeyStrength"
+        Me.lblKeyStrength.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblKeyStrength.Size = New System.Drawing.Size(338, 17)
+        Me.lblKeyStrength.TabIndex = 92
+        '
         'frmMain
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(679, 712)
+        Me.ClientSize = New System.Drawing.Size(679, 680)
         Me.Controls.Add(Me.lnkActivelockSoftwareGroup)
         Me.Controls.Add(Me.sbStatus)
         Me.Controls.Add(Me.SSTab1)
@@ -2237,6 +2254,21 @@ noInfo:
         ' Update the view
         Dim itemProductInfo As New ProductInfoItem(productName, productVer)
         cboProducts.Items.Add(itemProductInfo)
+        ReDim Preserve cboProducts_Array(cboProducts.Items.Count - 1)
+        If productVCode.Contains("RSA512") Then
+            cboProducts_Array(cboProducts.Items.Count - 1) = "512"
+        ElseIf productVCode.Contains("RSA1024") Then
+            cboProducts_Array(cboProducts.Items.Count - 1) = "1024"
+        ElseIf productVCode.Contains("RSA1536") Then
+            cboProducts_Array(cboProducts.Items.Count - 1) = "1536"
+        ElseIf productVCode.Contains("RSA2048") Then
+            cboProducts_Array(cboProducts.Items.Count - 1) = "2048"
+        ElseIf productVCode.Contains("RSA4096") Then
+            cboProducts_Array(cboProducts.Items.Count - 1) = "4096"
+        Else ' ALCrypto 1024-bit
+            cboProducts_Array(cboProducts.Items.Count - 1) = "0"
+        End If
+
         Dim mainListItem As New ListViewItem(productName)
         mainListItem.SubItems.Add(productVer)
         mainListItem.SubItems.Add(productVCode)
@@ -2974,6 +3006,21 @@ SaveFormSettings_Error:
     Private Sub cboProducts_SelectedIndexChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cboProducts.SelectedIndexChanged
         'product selected from products combo - update the controls
         UpdateKeyGenButtonStatus()
+
+        If cboProducts_Array(cboProducts.SelectedIndex) = "512" Then
+            lblKeyStrength.Text = "[Key Strength: CryptoAPI RSA 512-bit]"
+        ElseIf cboProducts_Array(cboProducts.SelectedIndex) = "1024" Then
+            lblKeyStrength.Text = "[Key Strength: CryptoAPI RSA 1024-bit]"
+        ElseIf cboProducts_Array(cboProducts.SelectedIndex) = "1536" Then
+            lblKeyStrength.Text = "[Key Strength: CryptoAPI RSA 1536-bit]"
+        ElseIf cboProducts_Array(cboProducts.SelectedIndex) = "2048" Then
+            lblKeyStrength.Text = "[Key Strength: CryptoAPI RSA 2048-bit]"
+        ElseIf cboProducts_Array(cboProducts.SelectedIndex) = "4096" Then
+            lblKeyStrength.Text = "[Key Strength: CryptoAPI RSA 4096-bit]"
+        ElseIf cboProducts_Array(cboProducts.SelectedIndex) = "0" Then
+            lblKeyStrength.Text = "[Key Strength: ALCrypto 1024-bit]"
+        End If
+
     End Sub
 
     Private Sub cmdAdd_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdAdd.Click
@@ -3003,6 +3050,14 @@ SaveFormSettings_Error:
 
     Private Sub cmdCodeGen_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdCodeGen.Click
         If SSTab1.SelectedIndex <> 0 Then Exit Sub ' our tab not active - do nothing
+        If txtName.Text.Contains("-") Then
+            MsgBox("Dash '-' is not allowed in Product Name.", vbInformation)
+            Exit Sub
+        End If
+        If txtVer.Text.Contains("-") Then
+            MsgBox("Dash '-' is not allowed in Product Version.", vbInformation)
+            Exit Sub
+        End If
 
         Cursor = Cursors.WaitCursor
         UpdateStatus("Generating product codes! Please wait ...")
