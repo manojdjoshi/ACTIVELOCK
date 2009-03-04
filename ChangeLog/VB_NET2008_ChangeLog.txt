@@ -85,6 +85,9 @@ This is essentially a computer fingerprint computed as the combination of many d
 - UPDATE: Due to the possible uncertainty in the MAC address, it's not included in the Fingerprint class for now (For example in laptops where there's noth wireless and wired network cards, one could switch the wireless on and off changing the obtained MAC address).
 - NEW: The Acquire() method now returns several new optional arguments, such as strRemainingTrialDays, strRemainingTrialRuns, strTrialLength, strUsedDays, strExpirationDate, strRegisteredUser, strRegisteredLevel, strLicenseClas, strMaxCount, strLicenseFileType, strLicenseType, and strUsedLockType. These can be used instead of - for example - MyActivelock.LicenseFileType. This speeds up the form loading process and license checking tremendously since every MyActivelock object property triggers a license validation call and this takes a toll on the application speed.
 - UPDATE: MAC Addresses now use "-" instead of " " in the address string.
+- FIX: Added checks against using dashes "-" in product names and versions since they are causing trouble.
+- FIX: ItemData in VB6 has been made Long.
+- UPDATE: Alugen now shows the key type and strength right next to the selected product on the product key generator tab.
 
 
 
