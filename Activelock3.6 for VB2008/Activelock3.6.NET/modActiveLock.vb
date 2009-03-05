@@ -1,67 +1,73 @@
 Option Strict Off
-Option Explicit On 
+Option Explicit On
+
+#Region "Copyright"
+'*   ActiveLock
+'*   Copyright 1998-2002 Nelson Ferraz
+'*   Copyright 2003-2006 The ActiveLock Software Group (ASG)
+'*   All material is the property of the contributing authors.
+'*
+'*   Redistribution and use in source and binary forms, with or without
+'*   modification, are permitted provided that the following conditions are
+'*   met:
+'*
+'*     [o] Redistributions of source code must retain the above copyright
+'*         notice, this list of conditions and the following disclaimer.
+'*
+'*     [o] Redistributions in binary form must reproduce the above
+'*         copyright notice, this list of conditions and the following
+'*         disclaimer in the documentation and/or other materials provided
+'*         with the distribution.
+'*
+'*   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+'*   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+'*   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+'*   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+'*   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+'*   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+'*   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+'*   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+'*   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+'*   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+'*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+'*
+'*
+#End Region
+
 Imports System.IO
 Imports System.Security.Cryptography
-Imports System.text
+Imports System.Text
+
+
+''' <summary>
+''' <para>This module contains common utility routines that can be shared between
+''' ActiveLock and the client application.</para>
+''' </summary>
+''' <remarks>See the TODO List, within</remarks>
 Module modActiveLock
-	'*   ActiveLock
-	'*   Copyright 1998-2002 Nelson Ferraz
-	'*   Copyright 2003-2006 The ActiveLock Software Group (ASG)
-	'*   All material is the property of the contributing authors.
-	'*
-	'*   Redistribution and use in source and binary forms, with or without
-	'*   modification, are permitted provided that the following conditions are
-	'*   met:
-	'*
-	'*     [o] Redistributions of source code must retain the above copyright
-	'*         notice, this list of conditions and the following disclaimer.
-	'*
-	'*     [o] Redistributions in binary form must reproduce the above
-	'*         copyright notice, this list of conditions and the following
-	'*         disclaimer in the documentation and/or other materials provided
-	'*         with the distribution.
-	'*
-	'*   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-	'*   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-	'*   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-	'*   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-	'*   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-	'*   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-	'*   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-	'*   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-	'*   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	'*   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-	'*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	'*
-	'*
-	'===============================================================================
-	' Name: modActiveLock
-	' Purpose: This module contains common utility routines that can be shared
-	' between ActiveLock and the client application.
-	' Functions:
-	' Properties:
-	' Methods:
-	' Started: 04.21.2005
+
+    ' Started: 04.21.2005
     ' Modified: 03.25.2006
-	'===============================================================================
-	' @author activelock-admins
+    '===============================================================================
+    ' @author activelock-admins
     ' @version 3.3.0
     ' @date 03.25.2006
-	'
-	'* ///////////////////////////////////////////////////////////////////////
-	'  /                        MODULE TO DO LIST                            /
-	'  ///////////////////////////////////////////////////////////////////////
-	'
-	' @bug rsa_createkey() sometimes causes crash.  This is due to a bug in
-	'      ALCrypto3.dll in which a bad keyset is sometimes generated
-	'      (either caused by <code>rsa_generate()</code> or one of <code>rsa_private_key_blob()</code>
-	'      and <code>rsa_public_key_blob()</code>--we're not sure which is the culprit yet.
-	'      This causes the <code>rsa_createkey()</code> call encryption routines to crash.
-	'      The work-around for the time being is to keep regenerating the keyset
-	'      until eventually you'll get a valid keyset that no longer causes a crash.
-	'      You only need to go through this keyset generation step once.
-	'      Once you have a valid keyset, you should store it inside your app for later use.
-	'
+    '
+    '* ///////////////////////////////////////////////////////////////////////
+    '  /                        MODULE TO DO LIST                            /
+    '  ///////////////////////////////////////////////////////////////////////
+    '
+    ' @bug rsa_createkey() sometimes causes crash.  This is due to a bug in
+    '      ALCrypto3.dll in which a bad keyset is sometimes generated
+    '      (either caused by <code>rsa_generate()</code> or one of <code>rsa_private_key_blob()</code>
+    '      and <code>rsa_public_key_blob()</code>--we're not sure which is the culprit yet.
+    '      This causes the <code>rsa_createkey()</code> call encryption routines to crash.
+    '      The work-around for the time being is to keep regenerating the keyset
+    '      until eventually you'll get a valid keyset that no longer causes a crash.
+    '      You only need to go through this keyset generation step once.
+    '      Once you have a valid keyset, you should store it inside your app for later use.
+    '
+
     Public Const STRKEYSTOREINVALID As String = "A license property contains an invalid value."
 	Public Const STRLICENSEEXPIRED As String = "License expired."
 	Public Const STRLICENSEINVALID As String = "License invalid."
@@ -89,71 +95,289 @@ Module modActiveLock
     Public Const STRINTERNETNOTCONNECTED As String = "Internet Connection is Required. Please Connect and Try Again."
     Public Const STRSOFTWAREPASSWORDINVALID As String = "Password length>255 or invalid characters."
 
-	' RSA encrypts the data.
-	' @param CryptType CryptType = 0 for public&#59; 1 for private
-	' @param Data   Data to be encrypted
-	' @param dLen   [in/out] Length of data, in bytes. This parameter will contain length of encrypted data when returned.
-	' @param ptrKey Key to be used for encryption
+    ''' <summary>
+    ''' RSA encrypts the data.
+    ''' </summary>
+    ''' <param name="CryptType">0 for public&#59; 1 for private</param>
+    ''' <param name="data">Data to be encrypted</param>
+    ''' <param name="dLen">[in/out] Length of data, in bytes. This parameter will contain length of encrypted data when returned.</param>
+    ''' <param name="ptrKey">Key to be used for encryption</param>
+    ''' <returns>Integer - ?Not Documented</returns>
+    ''' <remarks></remarks>
     Public Declare Function rsa_encrypt Lib "ALCrypto3NET" (ByVal CryptType As Integer, ByVal data As String, ByRef dLen As Integer, ByRef ptrKey As RSAKey) As Integer
 
-	' RSA decrypts the data.
-	' @param CryptType CryptType = 0 for public&#59; 1 for private
-	' @param Data   Data to be encrypted
-	' @param dLen   [in/out] Length of data, in bytes. This parameter will contain length of encrypted data when returned.
-	' @param ptrKey Key to be used for encryption
+    ''' <summary>
+    ''' RSA decrypts the data.
+    ''' </summary>
+    ''' <param name="CryptType">0 for public&#59; 1 for private</param>
+    ''' <param name="data">Data to be decrypted</param>
+    ''' <param name="dLen">[in/out] Length of data, in bytes. This parameter will contain length of decrypted data when returned.</param>
+    ''' <param name="ptrKey">Key to be used for encryption</param>
+    ''' <returns>Integer - ?Not Documented!</returns>
+    ''' <remarks></remarks>
     Public Declare Function rsa_decrypt Lib "ALCrypto3NET" (ByVal CryptType As Integer, ByVal data As String, ByRef dLen As Integer, ByRef ptrKey As RSAKey) As Integer
 	
-	
-	' Computes an MD5 hash from the data.
-	' @param inData Data to be hashed
-	' @param nDataLen   Length of inData
-	' @param outData    [out] 32-byte Computed hash code
+    ''' <summary>
+    ''' Computes an MD5 hash from the data.
+    ''' </summary>
+    ''' <param name="inData">Data to be hashed</param>
+    ''' <param name="nDataLen">Length of inData</param>
+    ''' <param name="outData">[out] 32-byte Computed hash code</param>
+    ''' <returns>Integer - ?Undocumented!</returns>
+    ''' <remarks></remarks>
     Public Declare Function md5_hash Lib "ALCrypto3NET" (ByVal inData As String, ByVal nDataLen As Integer, ByVal outData As String) As Integer
 
-    ' ActiveLock Encryption Key
-    ' !!!WARNING!!! It is highly recommended that you change this key for your version of ActiveLock before deploying your app.
+    ''' <summary>
+    ''' ActiveLock Encryption Key
+    ''' </summary>
+    ''' <remarks>!!!WARNING!!! It is highly recommended that you change this key for your version of ActiveLock before deploying your app.</remarks>
     Public Const ENCRYPT_KEY As String = "AAAAgEPRFzhQEF7S91vt2K6kOcEdDDe5BfwNiEL30/+ozTFHc7cZctB8NIlS++ZR//D3AjSMqScjh7xUF/gwvUgGCjiExjj1DF/XWFWnPOCfF8UxYAizCLZ9fdqxb1FRpI5NoW0xxUmvxGjmxKwazIW4P4XVi/+i1Bvh2qQ6ri3whcsNAAAAQQCyWGsbJKO28H2QLYH+enb7ehzwBThqfAeke/Gv1Te95yIAWme71I9aCTTlLsmtIYSk9rNrp3sh9ItD2Re67SE7AAAAQQCAookH1nws1gS2XP9cZTPaZEmFLwuxlSVsLQ5RWmd9cuxpgw5y2gIskbL4c+4oBuj0IDwKtnMrZq7UfV9I5VfVAAAAQQCEnyAuO0ahXH3KhAboop9+tCmRzZInTrDYdMy23xf3PLCLd777dL/Y2Y+zmaH1VO03m6iOog7WLiN4dCL7m+Im" ' RSA Private Key
 
+    ''' <summary>
+    ''' ?Not Documented!
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Const MAGICNUMBER_YES As Integer = &HEFCDAB89
+    ''' <summary>
+    ''' ?Not Documented!
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Const MAGICNUMBER_NO As Integer = &H98BADCFE
 
+    ''' <summary>
+    ''' ?Not Documented!
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Const SERVICE_PROVIDER As String = "Microsoft Base Cryptographic Provider v1.0"
+    ''' <summary>
+    ''' ?Not Documented!
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Const KEY_CONTAINER As String = "ActiveLock"
+    ''' <summary>
+    ''' ?Not Documented!
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Const PROV_RSA_FULL As Integer = 1
 
-    Private fInit As Boolean ' flag to indicate that module initialization has been done
+    ''' <summary>
+    ''' flag to indicate that module initialization has been done
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private fInit As Boolean
+    ''' <summary>
+    ''' The RtlMoveMemory routine moves memory either forward or backward, aligned or unaligned, in 4-byte blocks, followed by any remaining bytes.
+    ''' </summary>
+    ''' <param name="Destination">Pointer to the destination of the move.</param>
+    ''' <param name="source">Pointer to the memory to be copied.</param>
+    ''' <param name="length">Specifies the number of bytes to be copied.</param>
+    ''' <remarks>See http://msdn.microsoft.com/en-us/library/ms803004.aspx for more Information</remarks>
     Private Declare Sub CopyMem Lib "kernel32" Alias "RtlMoveMemory" (ByRef Destination As Integer, ByRef source As Integer, ByVal length As Integer)
+    ''' <summary>
+    ''' Retrieves the fully-qualified path for the file that contains the specified module. The module must have been loaded by the current process.
+    ''' </summary>
+    ''' <param name="hModule">[in, optional] A handle to the loaded module whose path is being requested. If this parameter is NULL, GetModuleFileName retrieves the path of the executable file of the current process.</param>
+    ''' <param name="lpFileName">[out] A pointer to a buffer that receives the fully-qualified path of the module. If the length of the path is less than the size that the nSize parameter specifies, the function succeeds and the path is returned as a null-terminated string.</param>
+    ''' <param name="nSize">[in] The size of the lpFilename buffer, in TCHARs.</param>
+    ''' <returns>If the function succeeds, the return value is the length of the string that is copied
+    ''' to the buffer, in characters, not including the terminating null character. If the buffer is too
+    ''' small to hold the module name, the string is truncated to nSize characters including the
+    ''' terminating null character, the function returns nSize, and the function sets the last error
+    ''' to ERROR_INSUFFICIENT_BUFFER.</returns>
+    ''' <remarks>See http://msdn.microsoft.com/en-us/library/ms683197(VS.85).aspx for full Documentation!</remarks>
     Private Declare Function GetModuleFileName Lib "kernel32" Alias "GetModuleFileNameA" (ByVal hModule As Integer, ByVal lpFileName As String, ByVal nSize As Integer) As Integer
+
+    ' TODO: Check to ensure that the following enum is correct and modify the MapFileAndCheckSum Function, japreja!
+    ''' <summary>
+    ''' Not Inplimented - CheckSum return Values for MapFileAndCheckSum
+    ''' </summary>
+    ''' <remarks>See http://msdn.microsoft.com/en-us/library/ms680355(VS.85).aspx</remarks>
+    Public Enum CheckSumReturnValues
+        ' TODO: Impliment Me! 
+        ''' <summary>
+        ''' Success!
+        ''' </summary>
+        ''' <remarks></remarks>
+        CHECKSUM_SUCCESS = 0
+        ''' <summary>
+        ''' Could not open the file.
+        ''' </summary>
+        ''' <remarks></remarks>
+        CHECKSUM_OPEN_FAILURE = 1
+        ''' <summary>
+        ''' Could not map the file.
+        ''' </summary>
+        ''' <remarks></remarks>
+        CHECKSUM_MAP_FAILURE = 2
+        ''' <summary>
+        ''' Could not map a view of the file.
+        ''' </summary>
+        ''' <remarks></remarks>
+        CHECKSUM_MAPVIEW_FAILURE = 3
+        ''' <summary>
+        ''' Could not convert the file name to Unicode.
+        ''' </summary>
+        ''' <remarks></remarks>
+        CHECKSUM_UNICODE_FAILURE = 4
+    End Enum
+
+    ''' <summary>
+    ''' Computes the checksum of the specified file
+    ''' </summary>
+    ''' <param name="FileName">[in] The file name of the file for which the checksum is to be computed.</param>
+    ''' <param name="HeaderSum">[out] A pointer to a variable that receives the original checksum from the image file, or zero if there is an error.</param>
+    ''' <param name="CheckSum">[out] A pointer to a variable that receives the computed checksum.</param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Declare Function MapFileAndCheckSum Lib "imagehlp" Alias "MapFileAndCheckSumA" (ByVal FileName As String, ByRef HeaderSum As Integer, ByRef CheckSum As Integer) As Integer
 
+    ''' <summary>
+    ''' <para>Retrieves the path of a special folder, identified by its <a href="http://msdn.microsoft.com/en-us/library/bb762494(VS.85).aspx">CSIDL</a>.</para>
+    ''' <para>Note: In Windows Vista, these values have been replaced by <a href="http://msdn.microsoft.com/en-us/library/bb762584(VS.85).aspx">KNOWNFOLDERID</a> values.
+    ''' See that topic for a list of the new constants and their corresponding CSIDL values.  For
+    ''' convenience, corresponding KNOWNFOLDERID values are also noted here for each CSIDL value.  The
+    ''' CSIDL system is supported under Windows Vista for compatibility reasons. However, new development
+    ''' should use KNOWNFOLDERID values rather than CSIDL values.</para>
+    ''' </summary>
+    ''' <param name="hWnd">Reserved.</param>
+    ''' <param name="lpszPath">[out] A pointer to a null-terminated string that receives the drive and path of the specified folder. This buffer must be at least MAX_PATH characters in size.</param>
+    ''' <param name="nFolder">See notes at http://msdn.microsoft.com/en-us/library/bb762494(VS.85).aspx</param>
+    ''' <param name="fCreate">[in] Indicates whether the folder should be created if it does not already exist. If this value is nonzero, the folder will be created. If this value is zero, the folder will not be created.</param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Declare Function SHGetSpecialFolderPath Lib "SHELL32.DLL" Alias "SHGetSpecialFolderPathA" (ByVal hWnd As IntPtr, ByVal lpszPath As String, ByVal nFolder As Integer, ByVal fCreate As Boolean) As Boolean
 
-
+    ''' <summary>
+    ''' Specifies a date and time, using individual members for the month, day, year, weekday, hour, minute, second, and millisecond. The time is either in coordinated universal time (UTC) or local time, depending on the function that is being called.
+    ''' </summary>
+    ''' <remarks>See http://msdn.microsoft.com/en-us/library/ms724950(VS.85).aspx for full documentation!</remarks>
     Structure SYSTEMTIME
+        ''' <summary>
+        ''' The year. The valid values for this member are 1601 through 30827.
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim wYear As Short
+        ''' <summary>
+        ''' Month. - The valid values for this member are 1 through 12 corresponding to Jan. through Dec.
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim wMonth As Short
+        ''' <summary>
+        ''' Day of the week. The valid values for this member are 0 through 6, with Sunday being 0!
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim wDayOfWeek As Short
+        ''' <summary>
+        ''' The day of the month. The valid values for this member are 1 through 31.
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim wDay As Short
+        ''' <summary>
+        ''' The hour. The valid values for this member are 0 through 23.
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim wHour As Short
+        ''' <summary>
+        ''' The minute. The valid values for this member are 0 through 59.
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim wMinute As Short
+        ''' <summary>
+        ''' The second. The valid values for this member are 0 through 59.
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim wSecond As Short
+        ''' <summary>
+        ''' The millisecond. The valid values for this member are 0 through 999.
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim wMilliseconds As Short
     End Structure
 
+    ''' <summary>
+    ''' Specifies settings for a time zone.
+    ''' </summary>
+    ''' <remarks>See http://msdn.microsoft.com/en-us/library/ms725481.aspx for full documentation!</remarks>
     Private Structure TIME_ZONE_INFORMATION
+        ''' <summary>
+        ''' <para>The current bias for local time translation on this computer, in minutes. The bias
+        ''' is the difference, in minutes, between Coordinated Universal Time (UTC) and local time.
+        ''' All translations between UTC and local time are based on the following formula:</para>
+        ''' <para>UTC = local time + bias</para>
+        ''' <para>This member is required.</para>
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim bias As Integer ' current offset to GMT
+        ''' <summary>
+        ''' <para>A description for standard time. For example, "EST" could indicate Eastern Standard
+        ''' Time. The string will be returned unchanged by the <a href="http://msdn.microsoft.com/en-us/library/ms724421(VS.85).aspx">GetTimeZoneInformation</a> function. This
+        ''' string can be empty.</para>
+        ''' </summary>
+        ''' <remarks></remarks>
         <VBFixedArray(64)> Dim StandardName() As Byte ' unicode string
+        ''' <summary>
+        ''' <para>A SYSTEMTIME structure that contains a date and local time when the transition from
+        ''' daylight saving time to standard time occurs on this operating system. If the time zone does
+        ''' not support daylight saving time or if the caller needs to disable daylight saving time, the
+        ''' wMonth member in the SYSTEMTIME structure must be zero. If this date is specified, the
+        ''' DaylightDate member of this structure must also be specified. Otherwise, the system assumes
+        ''' the time zone data is invalid and no changes will be applied.</para>
+        ''' </summary>
+        ''' <remarks>See http://msdn.microsoft.com/en-us/library/ms725481.aspx for full Documentation!</remarks>
         Dim StandardDate As SYSTEMTIME
+        ''' <summary>
+        ''' <para>The bias value to be used during local time translations that occur during standard
+        ''' time. This member is ignored if a value for the StandardDate member is not supplied.</para>
+        ''' <para>This value is added to the value of the Bias member to form the bias used during
+        ''' standard time. In most time zones, the value of this member is zero.</para>
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim StandardBias As Integer
+        ''' <summary>
+        ''' <para>A description for daylight saving time. For example, "PDT" could indicate Pacific
+        ''' Daylight Time. The string will be returned unchanged by the GetTimeZoneInformation function.
+        ''' This string can be empty.</para>
+        ''' </summary>
+        ''' <remarks></remarks>
         <VBFixedArray(64)> Dim DaylightName() As Byte
+        ''' <summary>
+        ''' <para>A SYSTEMTIME structure that contains a date and local time when the transition from
+        ''' standard time to daylight saving time occurs on this operating system. If the time zone does
+        ''' not support daylight saving time or if the caller needs to disable daylight saving time, the
+        ''' wMonth member in the SYSTEMTIME structure must be zero. If this date is specified, the
+        ''' StandardDate member in this structure must also be specified. Otherwise, the system assumes
+        ''' the time zone data is invalid and no changes will be applied.</para>
+        ''' <para>To select the correct day in the month, set the wYear member to zero, the wHour and
+        ''' wMinute members to the transition time, the wDayOfWeek member to the appropriate weekday, and
+        ''' the wDay member to indicate the occurrence of the day of the week within the month (1 to 5,
+        ''' where 5 indicates the final occurrence during the month if that day of the week does not occur
+        ''' 5 times).</para>
+        ''' <para>If the wYear member is not zero, the transition date is absolute; it will only occur one
+        ''' time. Otherwise, it is a relative date that occurs yearly.</para>
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim DaylightDate As SYSTEMTIME
+        ''' <summary>
+        ''' <para>The bias value to be used during local time translations that occur during daylight
+        ''' saving time. This member is ignored if a value for the DaylightDate member is not supplied.</para>
+        ''' <para>This value is added to the value of the Bias member to form the bias used during
+        ''' daylight saving time. In most time zones, the value of this member is –60.</para>
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim DaylightBias As Integer
+
+        ' For more information about the Dynamic DST key, see <a href="http://msdn.microsoft.com/en-us/library/ms724253(VS.85).aspx">DYNAMIC_TIME_ZONE_INFORMATION</a>.
+
         Public Sub Initialize()
             ReDim StandardName(64)
             ReDim DaylightName(64)
         End Sub
     End Structure
 
+    ''' <summary>
+    ''' ?Not Documented!
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Enum TimeZoneReturn
         TimeZoneCode = 0
         TimeZoneName = 1
@@ -163,28 +387,185 @@ Module modActiveLock
         DST_Offset = 5
     End Enum
 
-    ' ----------------- For Time Zone Retrieval ------------------
+#Region "For Time Zone Retrieval"
+
+    ''' <summary>
+    ''' The system cannot determine the current time zone. If daylight saving time is not used in the
+    ''' current time zone, this value is returned because there are no transition dates.
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Const TIME_ZONE_ID_UNKNOWN As Short = 0
+    ''' <summary>
+    ''' The system is operating in the range covered by the StandardDate member of the
+    ''' TIME_ZONE_INFORMATION structure.
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Const TIME_ZONE_ID_STANDARD As Short = 1
+    ''' <summary>
+    ''' If the function fails, the return value is TIME_ZONE_ID_UNKNOWN. To get extended error
+    ''' information, call GetLastError.
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Const TIME_ZONE_ID_INVALID As Integer = &HFFFFFFFF
+    ''' <summary>
+    ''' The system is operating in the range covered by the DaylightDate member of the
+    ''' TIME_ZONE_INFORMATION structure.
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Const TIME_ZONE_ID_DAYLIGHT As Short = 2
 
+    ''' <summary>
+    ''' Retrieves the current system date and time. The system time is expressed in Coordinated
+    ''' Universal Time (UTC).
+    ''' </summary>
+    ''' <param name="lpSystemTime">A pointer to a SYSTEMTIME structure to receive the current system date and time. The lpSystemTime parameter must not be NULL. Using NULL will result in an access violation.</param>
+    ''' <remarks></remarks>
     Private Declare Sub GetSystemTime Lib "kernel32" (ByRef lpSystemTime As SYSTEMTIME)
+    ''' <summary>
+    ''' Retrieves the current time zone settings. These settings control the translations between
+    ''' Coordinated Universal Time (UTC) and local time.
+    ''' </summary>
+    ''' <param name="lpTimeZoneInformation">A pointer to a <see cref="TIME_ZONE_INFORMATION"/> structure to receive the current settings.</param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Declare Function GetTimeZoneInformation Lib "kernel32" (ByRef lpTimeZoneInformation As TIME_ZONE_INFORMATION) As Integer
 
-    ' To Report API errors:
+#End Region
+
+#Region "To Report API errors"
+
+    ''' <summary>
+    ''' The function allocates a buffer large enough to hold the formatted message, and places a pointer
+    ''' to the allocated buffer at the address specified by lpBuffer. The lpBuffer parameter is a pointer
+    ''' to an LPTSTR; you must cast the pointer to an LPTSTR (for example, (LPTSTR)&amp;lpBuffer). The nSize
+    ''' parameter specifies the minimum number of TCHARs to allocate for an output message buffer. The
+    ''' caller should use the LocalFree function to free the buffer when it is no longer needed.
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Const FORMAT_MESSAGE_ALLOCATE_BUFFER As Short = &H100S
+    ''' <summary>
+    ''' <para>The Arguments parameter is not a va_list structure, but is a pointer to an array of values
+    ''' that represent the arguments.</para>
+    ''' <para>This flag cannot be used with 64-bit integer values. If you are using a 64-bit integer,
+    ''' you must use the va_list structure.</para>
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Const FORMAT_MESSAGE_ARGUMENT_ARRAY As Short = &H2000S
+    ''' <summary>
+    ''' <para>The lpSource parameter is a module handle containing the message-table resource(s) to search. If
+    ''' this lpSource handle is NULL, the current process's application image file will be searched. This
+    ''' flag cannot be used with FORMAT_MESSAGE_FROM_STRING.</para>
+    ''' <para>If the module has no message table resource, the function fails with
+    ''' ERROR_RESOURCE_TYPE_NOT_FOUND.</para>
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Const FORMAT_MESSAGE_FROM_HMODULE As Short = &H800S
+    ''' <summary>
+    ''' The lpSource parameter is a pointer to a null-terminated string that contains a message 
+    ''' definition. The message definition may contain insert sequences, just as the message text in a
+    ''' message table resource may. This flag cannot be used with FORMAT_MESSAGE_FROM_HMODULE or
+    ''' FORMAT_MESSAGE_FROM_SYSTEM.
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Const FORMAT_MESSAGE_FROM_STRING As Short = &H400S
+    ''' <summary>
+    ''' <para>The function should search the system message-table resource(s) for the requested message.
+    ''' If this flag is specified with FORMAT_MESSAGE_FROM_HMODULE, the function searches the system
+    ''' message table if the message is not found in the module specified by lpSource. This flag cannot
+    ''' be used with FORMAT_MESSAGE_FROM_STRING.</para>
+    ''' <para>If this flag is specified, an application can pass the result of the GetLastError function
+    ''' to retrieve the message text for a system-defined error.</para>
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Const FORMAT_MESSAGE_FROM_SYSTEM As Short = &H1000S
+    ''' <summary>
+    ''' Insert sequences in the message definition are to be ignored and passed through to the output
+    ''' buffer unchanged. This flag is useful for fetching a message for later formatting. If this flag
+    ''' is set, the Arguments parameter is ignored.
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Const FORMAT_MESSAGE_IGNORE_INSERTS As Short = &H200S
+    ''' <summary>
+    ''' The function ignores regular line breaks in the message definition text. The function stores
+    ''' hard-coded line breaks in the message definition text into the output buffer. The function
+    ''' generates no new line breaks.
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Const FORMAT_MESSAGE_MAX_WIDTH_MASK As Short = &HFFS
 
+    ''' <summary>
+    ''' Formats a message string. The function requires a message definition as input. The message
+    ''' definition can come from a buffer passed into the function. It can come from a message table
+    ''' resource in an already-loaded module. Or the caller can ask the function to search the system's
+    ''' message table resource(s) for the message definition. The function finds the message definition
+    ''' in a message table resource based on a message identifier and a language identifier. The function
+    ''' copies the formatted message text to an output buffer, processing any embedded insert sequences
+    ''' if requested.
+    ''' </summary>
+    ''' <param name="dwFlags">[in] The formatting options, and how to interpret the lpSource parameter.
+    ''' The low-order byte of dwFlags specifies how the function handles line breaks in the output buffer.
+    ''' The low-order byte can also specify the maximum width of a formatted output line.</param>
+    ''' <param name="lpSource">[in, optional] The location of the message definition. The type of this
+    ''' parameter depends upon the settings in the dwFlags parameter. </param>
+    ''' <param name="dwMessageId">[in] The message identifier for the requested message. This parameter
+    ''' is ignored if dwFlags includes FORMAT_MESSAGE_FROM_STRING.</param>
+    ''' <param name="dwLanguageId">[in] The language identifier for the requested message. This parameter
+    ''' is ignored if dwFlags includes FORMAT_MESSAGE_FROM_STRING.</param>
+    ''' <param name="lpBuffer">[out]<para>A pointer to a buffer that receives the null-terminated string
+    ''' that specifies the formatted message. If dwFlags includes FORMAT_MESSAGE_ALLOCATE_BUFFER, the
+    ''' function allocates a buffer using the LocalAlloc function, and places the pointer to the buffer
+    ''' at the address specified in lpBuffer.</para>
+    ''' <para>This buffer cannot be larger than 64K bytes.</para></param>
+    ''' <param name="nSize">[in] <para>If the FORMAT_MESSAGE_ALLOCATE_BUFFER flag is not set, this
+    ''' parameter specifies the size of the output buffer, in TCHARs. If FORMAT_MESSAGE_ALLOCATE_BUFFER
+    ''' is set, this parameter specifies the minimum number of TCHARs to allocate for an output buffer.</para>
+    ''' <para>The output buffer cannot be larger than 64K bytes.</para>
+    ''' </param>
+    ''' <param name="Arguments">[in, optional] An array of values that are used as insert values in the
+    ''' formatted message. A %1 in the format string indicates the first value in the Arguments array;
+    ''' a %2 indicates the second argument; and so on.</param>
+    ''' <returns>If the function succeeds, the return value is the number of TCHARs stored in the output
+    ''' buffer, excluding the terminating null character. If the function fails, the return value is zero.
+    ''' To get extended error information, call GetLastError.</returns>
+    ''' <remarks></remarks>
     Public Declare Function FormatMessage Lib "kernel32" Alias "FormatMessageA" (ByVal dwFlags As Integer, ByRef lpSource As Long, ByVal dwMessageId As Integer, ByVal dwLanguageId As Integer, ByVal lpBuffer As String, ByVal nSize As Integer, ByRef Arguments As Integer) As Integer
+    ''' <summary>
+    ''' Retrieves the path of the Windows directory. The Windows directory contains such files as
+    ''' applications, initialization files, and help files.
+    ''' </summary>
+    ''' <param name="lpBuffer">[out] A pointer to a buffer that receives the path. This path does not end
+    ''' with a backslash unless the Windows directory is the root directory. For example, if the Windows
+    ''' directory is named Windows on drive C, the path of the Windows directory retrieved by this
+    ''' function is C:\Windows. If the system was installed in the root directory of drive C, the path
+    ''' retrieved is C:\.</param>
+    ''' <param name="nSize">[in] The maximum size of the buffer specified by the lpBuffer parameter, in
+    ''' TCHARs. This value should be set to MAX_PATH.</param>
+    ''' <returns><para>If the function succeeds, the return value is the length of the string copied to
+    ''' the buffer, in TCHARs, not including the terminating null character.</para>
+    ''' <para>If the length is greater than the size of the buffer, the return value is the size of the
+    ''' buffer required to hold the path.</para>
+    ''' </returns>
+    ''' <remarks>The Windows directory is the directory where an application should store initialization
+    ''' and help files. If the user is running a shared version of the system, the Windows directory is
+    ''' guaranteed to be private for each user.</remarks>
     Public Declare Function GeneralWinDirApi Lib "kernel32" Alias "GetWindowsDirectoryA" (ByVal lpBuffer As String, ByVal nSize As Integer) As Integer
-
+    ''' <summary>
+    ''' Retrieves the path of the system directory. The system directory contains system files such as
+    ''' dynamic-link libraries and drivers.
+    ''' </summary>
+    ''' <param name="lpBuffer">[out] A pointer to the buffer to receive the path. This path does not end
+    ''' with a backslash unless the system directory is the root directory. For example, if the system
+    ''' directory is named Windows\System on drive C, the path of the system directory retrieved by this
+    ''' function is C:\Windows\System.</param>
+    ''' <param name="nSize">[in] The maximum size of the buffer, in TCHARs.</param>
+    ''' <returns>If the function succeeds, the return value is the length, in TCHARs, of the string copied
+    ''' to the buffer, not including the terminating null character. If the length is greater than the
+    ''' size of the buffer, the return value is the size of the buffer required to hold the path,
+    ''' including the terminating null character.</returns>
+    ''' <remarks></remarks>
     Public Declare Function GetSystemDirectory Lib "kernel32.dll" Alias "GetSystemDirectoryA" (ByVal lpBuffer As String, ByVal nSize As Integer) As Integer
+
+#End Region
 
     ' The following constants and declares are used to Get/Set Locale Date format
     Private Declare Function GetLocaleInfo Lib "kernel32" Alias "GetLocaleInfoA" (ByVal Locale As Integer, ByVal LCType As Integer, ByVal lpLCData As String, ByVal cchData As Integer) As Integer
@@ -194,31 +575,68 @@ Module modActiveLock
     Public regionalSymbol As String
 
     ' Internet connection constants
+    ''' <summary>
+    ''' Used by Function IsWebConnected
+    ''' </summary>
+    ''' <remarks></remarks>
     Dim ConnectionQualityString As String = "Off"
 
+    ''' <summary>
+    ''' Retrieves the connected state of the local system.
+    ''' </summary>
+    ''' <param name="lpSFlags">[out] Pointer to a variable that receives the connection description. This
+    ''' parameter may return a valid flag even when the function returns FALSE.</param>
+    ''' <param name="dwReserved">[in] This parameter is reserved and must be 0.</param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Declare Function InternetGetConnectedState _
             Lib "wininet.dll" (ByRef lpSFlags As Int32, _
             ByVal dwReserved As Int32) As Boolean
 
+    ''' <summary>
+    ''' Internet connection states!
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Enum InetConnState
+        ''' <summary>
+        ''' Local system uses a modem to connect to the Internet.
+        ''' </summary>
+        ''' <remarks></remarks>
         modem = &H1
+        ''' <summary>
+        ''' Local system uses a local area network to connect to the Internet.
+        ''' </summary>
+        ''' <remarks></remarks>
         lan = &H2
+        ''' <summary>
+        ''' Local system uses a proxy server to connect to the Internet.
+        ''' </summary>
+        ''' <remarks></remarks>
         proxy = &H4
+        ''' <summary>
+        ''' ?Undocumented!
+        ''' </summary>
+        ''' <remarks></remarks>
         ras = &H10
+        ''' <summary>
+        ''' Local system is in offline mode.
+        ''' </summary>
+        ''' <remarks></remarks>
         offline = &H20
+        ''' <summary>
+        ''' Local system has a valid connection to the Internet, but it might or might not be currently
+        ''' connected.
+        ''' </summary>
+        ''' <remarks></remarks>
         configured = &H40
     End Enum
 
-
-    '===============================================================================
-    ' Name: Function TrimNulls
-    ' Input:
-    '   ByRef startstr As String - String to be trimmed
-    ' Output:
-    '   String - Trimmed string
-    ' Purpose: Trims Null characters from the string.
-    ' Remarks: None
-    '===============================================================================
+    ''' <summary>
+    ''' Trims Null characters from the string.
+    ''' </summary>
+    ''' <param name="startstr">String - String to be trimmed</param>
+    ''' <returns>String - Trimmed string</returns>
+    ''' <remarks></remarks>
     Public Function TrimNulls(ByRef startstr As String) As String
         Dim pos As Short
         pos = InStr(startstr, Chr(0))
@@ -228,16 +646,14 @@ Module modActiveLock
             TrimNulls = Trim(startstr)
         End If
     End Function
-    '===============================================================================
-    ' Name: Function ReadFile
-    ' Input:
-    '   ByVal sPath As String - Path to the file to be read
-    '   ByRef sData As String - Output parameter contains the data that has been read
-    ' Output:
-    '   Long - Number of bytes read, 0 if no file was read
-    ' Purpose: Reads a binary file into the sData buffer. Returns the number of bytes read.
-    ' Remarks: None
-    '===============================================================================
+
+    ''' <summary>
+    ''' Reads a binary file into the sData buffer. Returns the number of bytes read.
+    ''' </summary>
+    ''' <param name="sPath">String - Path to the file to be read</param>
+    ''' <param name="sData">String - Output parameter contains the data that has been read</param>
+    ''' <returns>Long - Number of bytes read, 0 if no file was read</returns>
+    ''' <remarks></remarks>
     Public Function ReadFile(ByVal sPath As String, ByRef sData As String) As Integer
 
         Dim c As New CRC32
@@ -284,42 +700,36 @@ Module modActiveLock
         ReadFile = Len(sData)
         Exit Function
 Hell:
-        Set_Locale(regionalSymbol)
+        Set_locale(regionalSymbol)
         Err.Raise(Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext)
     End Function
-    '===============================================================================
-    ' Name: Sub CryptoProgressUpdate
-    ' Input:
-    '   ByVal param As Long - TBD
-    '   ByVal action As Long - Action being performed
-    '   ByVal phase As Long - Current phase
-    '   ByVal iprogress As Long - Percent complete
-    ' Output: None
-    ' Purpose: [INTERNAL] Call-back routine used by ALCrypto3.dll during key generation process.
-    ' Remarks: None
-    '===============================================================================
+
+    ''' <summary>
+    ''' [INTERNAL] Call-back routine used by ALCrypto3.dll during key generation process.
+    ''' </summary>
+    ''' <param name="param">Long - TBD</param>
+    ''' <param name="action">Long - Action being performed</param>
+    ''' <param name="phase">Long - Current phase</param>
+    ''' <param name="iprogress">Long - Percent complete</param>
+    ''' <remarks></remarks>
     Public Sub CryptoProgressUpdate(ByVal param As Integer, ByVal action As Integer, ByVal phase As Integer, ByVal iprogress As Integer)
         System.Diagnostics.Debug.WriteLine("Progress Update received " & param & ", action: " & action & ", iprogress: " & iprogress)
     End Sub
-    '===============================================================================
-    ' Name: Sub EndSub
-    ' Input: None
-    ' Output: None
-    ' Purpose: This is a dummy sub. Used to circumvent the End statement restriction in COM DLLs.
-    ' Remarks: None
-    '===============================================================================
+
+    ''' <summary>
+    ''' This is a dummy sub. Used to circumvent the End statement restriction in COM DLLs.
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Sub EndSub()
         'Dummy sub
     End Sub
-    '===============================================================================
-    ' Name: Function MD5HashFile
-    ' Input:
-    '   ByVal strPath As String - File path
-    ' Output:
-    '   String - MD5 Hash Value
-    ' Purpose: Computes an MD5 hash of the specified file.
-    ' Remarks: None
-    '===============================================================================
+
+    ''' <summary>
+    ''' Computes an MD5 hash of the specified file.
+    ''' </summary>
+    ''' <param name="strPath">String - File path</param>
+    ''' <returns>String - MD5 Hash Value</returns>
+    ''' <remarks></remarks>
     Public Function MD5HashFile(ByVal strPath As String) As String
         System.Diagnostics.Debug.WriteLine("Hashing file " & strPath)
         System.Diagnostics.Debug.WriteLine("File Date: " & FileDateTime(strPath))
@@ -331,22 +741,20 @@ Hell:
         ' and instead of ALCrypto's md5_hash() function.
         MD5HashFile = LCase(sData)    '<--- ReadFile procedure already computes the MD5.Hash
     End Function
-    '===============================================================================
-    ' Name: Function FileExists
-    ' Input:
-    '   ByVal strFile As String - File path and name
-    ' Output:
-    '   Boolean - True if file exists, False if it doesn't
-    ' Purpose: Checks if a file exists in the system.
-    ' Remarks: None
-    '===============================================================================
+
+    ''' <summary>
+    ''' Checks if a file exists in the system.
+    ''' </summary>
+    ''' <param name="strFile">String - File path and name</param>
+    ''' <returns>Boolean - True if file exists, False if it doesn't</returns>
+    ''' <remarks></remarks>
     Public Function FileExists(ByVal strFile As String) As Boolean
         FileExists = False
         If File.Exists(strFile) = True Then
             FileExists = True
         End If
     End Function
-    '===============================================================================
+
     ' Name: Function LocalTimeZone
     ' Input:
     '   ByVal returnType As TimeZoneReturn - Type of time zone information being requested
@@ -354,11 +762,12 @@ Hell:
     '       UTC_Offset = UTC offset, including DST if active <br>
     '       DST_Active = True if DST is currently active, otherwise false <br>
     '       DST_Offset = Offset value for DST (generally -60, if in US)
-    ' Output:
-    '    Variant - Return type varies depending on returnValue parameter.
-    ' Purpose: Retrieves the local time zone.
-    ' Remarks: None
-    '===============================================================================
+    ''' <summary>
+    ''' Retrieves the local time zone.
+    ''' </summary>
+    ''' <param name="returnType">TimeZoneReturn - Type of time zone information being requested</param>
+    ''' <returns>Variant - Return type varies depending on returnValue parameter.</returns>
+    ''' <remarks></remarks>
     Public Function LocalTimeZone(ByVal returnType As TimeZoneReturn) As Object
         Dim x As Integer
         Dim tzi As TIME_ZONE_INFORMATION = Nothing
@@ -418,84 +827,79 @@ Hell:
             If bDST Then LocalTimeZone = LocalTimeZone - 60
         End If
     End Function
-    '===============================================================================
-    ' Name: Function RSASign
-    ' Input:
-    '   ByVal strPub As String - RSA Public key blob
-    '   ByVal strPriv As String - RSA Private key blob
-    '   ByVal strdata As String - Data to be signed
-    ' Output:
-    '   String - Signature string
-    ' Purpose: Performs RSA signing of <code>strData</code> using the specified key.
-    ' Remarks: 05.13.05    - alkan  - Removed the modActiveLock references
-    '===============================================================================
+
+    ''' <summary>
+    ''' Performs RSA signing of <code>strData</code> using the specified key.
+    ''' </summary>
+    ''' <param name="strPub">RSA Public key blob</param>
+    ''' <param name="strPriv">RSA Private key blob</param>
+    ''' <param name="strdata">String - Data to be signed</param>
+    ''' <returns>String - Signature string</returns>
+    ''' <remarks>05.13.05    - alkan  - Removed the modActiveLock references</remarks>
     Public Function RSASign(ByVal strPub As String, ByVal strPriv As String, ByVal strdata As String) As String
         Dim KEY As RSAKey = Nothing
         ' create the key from the key blobs
         If rsa_createkey(strPub, Len(strPub), strPriv, Len(strPriv), KEY) = RETVAL_ON_ERROR Then
-            Set_Locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
 
         ' sign the data using the created key
         Dim sLen As Integer
         If rsa_sign(KEY, strdata, Len(strdata), vbNullString, sLen) = RETVAL_ON_ERROR Then
-            Set_Locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         Dim strSig As String : strSig = New String(Chr(0), sLen)
         If rsa_sign(KEY, strdata, Len(strdata), strSig, sLen) = RETVAL_ON_ERROR Then
-            Set_Locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         ' throw away the key
         If rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-            Set_Locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         RSASign = strSig
     End Function
+
     '===============================================================================
-    ' Name: Function RSAVerify
-    ' Input:
-    '   ByVal strPub As String - Public key blob
-    '   ByVal strdata As String - Data to be signed
-    '   ByVal strSig As String - Private key blob
-    ' Output:
-    '   Long - Zero if verification is successful, non-zero otherwise.
-    ' Purpose: Verifies an RSA signature.
-    ' Remarks: None
-    '===============================================================================
+    ''' <summary>
+    ''' Verifies an RSA signature.
+    ''' </summary>
+    ''' <param name="strPub">String - Public key blob</param>
+    ''' <param name="strdata">String - Data to be signed</param>
+    ''' <param name="strSig">String - Private key blob</param>
+    ''' <returns>Long - Zero if verification is successful, non-zero otherwise.</returns>
+    ''' <remarks></remarks>
     Public Function RSAVerify(ByVal strPub As String, ByVal strdata As String, ByVal strSig As String) As Integer
         Dim KEY As RSAKey = Nothing
         Dim rc As Integer
         ' create the key from the public key blob
         If rsa_createkey(strPub, Len(strPub), vbNullString, 0, KEY) = RETVAL_ON_ERROR Then
-            Set_Locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         ' validate the key
         rc = rsa_verifysig(KEY, strSig, Len(strSig), strdata, Len(strdata))
         If rc = RETVAL_ON_ERROR Then
-            Set_Locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         ' de-allocate memory used by the key
         If rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-            Set_Locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         RSAVerify = rc
     End Function
-    '===============================================================================
-    ' Name: Function WinError
-    ' Input:
-    '   ByVal lLastDLLError As Long - Last DLL error as an input
-    ' Output:
-    '   String - Error message string
-    ' Purpose: Retrieves the error text for the specified Windows error code
-    ' Remarks: None
-    '===============================================================================
+
+    ''' <summary>
+    ''' Retrieves the error text for the specified Windows error code
+    ''' </summary>
+    ''' <param name="lLastDLLError">Long - Last DLL error as an input</param>
+    ''' <returns>String - Error message string</returns>
+    ''' <remarks></remarks>
     Public Function WinError(ByVal lLastDLLError As Integer) As String
         Dim sBuff As String
         Dim lCount As Integer
@@ -509,74 +913,89 @@ Hell:
             WinError = Left(sBuff, lCount)
         End If
     End Function
-    '===============================================================================
-    ' Name: Function WinDir
-    ' Input: None
-    ' Output:
-    '   String - Windows directory path
-    ' Purpose: Gets the windows directory
-    ' Remarks: None
-    '===============================================================================
+
+    ''' <summary>
+    ''' Gets the windows directory
+    ''' </summary>
+    ''' <returns>String - Windows directory path</returns>
+    ''' <remarks></remarks>
     Public Function WinDir() As String
         Dim WinSysPath As String = System.Environment.GetFolderPath(Environment.SpecialFolder.System)
         WinDir = WinSysPath.Substring(0, WinSysPath.LastIndexOf("\"))
     End Function
-    '===============================================================================
-    ' Name: Function WinSysDir
-    ' Input: None
-    ' Output:
-    '   String - Windows system directory path
-    ' Purpose: Gets the Windows system directory
-    ' Remarks: None
-    '===============================================================================
+
+    ''' <summary>
+    ''' Gets the Windows system directory
+    ''' </summary>
+    ''' <returns>String - Windows system directory path</returns>
+    ''' <remarks></remarks>
     Public Function WinSysDir() As String
         WinSysDir = System.Environment.GetFolderPath(Environment.SpecialFolder.System)
         ' or could use WinSysDir = System.Environment.SystemDirectory
     End Function
-    '===============================================================================
-    ' Name: Function FolderExists
-    ' Input:
-    '   ByVal sFolder As String -  Name of the folder in question
-    ' Output:
-    '   Boolean - Returns true if the Folder Exists
-    ' Purpose: Checks if a Folder Exists
-    ' Remarks: None
-    '===============================================================================
+
+    ''' <summary>
+    ''' Checks if a Folder Exists
+    ''' </summary>
+    ''' <param name="sFolder">String -  Name of the folder in question</param>
+    ''' <returns>Boolean - Returns true if the Folder Exists</returns>
+    ''' <remarks></remarks>
     Public Function FolderExists(ByVal sFolder As String) As Boolean
         FolderExists = Directory.Exists(sFolder)
     End Function
-    Public Function MakeWord(ByVal LoByte As Byte, ByVal HiByte As Byte) As Short
-        '===============================================================================
-        '   MakeWord - Packs 2 8-bit integers into a 16-bit integer.
-        '===============================================================================
 
+    ''' <summary>
+    ''' Packs two 8-bit integers into a 16-bit integer.
+    ''' </summary>
+    ''' <param name="LoByte">Byte - A byte that is to become the Low byte.</param>
+    ''' <param name="HiByte">Byte - A byte that is to become the High byte.</param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Function MakeWord(ByVal LoByte As Byte, ByVal HiByte As Byte) As Short
         If (HiByte And &H80S) <> 0 Then
             MakeWord = ((HiByte * 256) + LoByte) Or &HFFFF0000
         Else
             MakeWord = (HiByte * 256) + LoByte
         End If
-
     End Function
+
+    ''' <summary>
+    ''' ?Not Documented!
+    ''' </summary>
+    ''' <param name="w"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Function HiByte(ByVal w As Short) As Byte
         HiByte = (w And &HFF00) \ 256
     End Function
+
+    ''' <summary>
+    ''' ?Not Documented!
+    ''' </summary>
+    ''' <param name="w"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Function LoByte(ByVal w As Short) As Byte
         LoByte = w And &HFFS
     End Function
-    '===============================================================================
-    ' Name: Function UTC
-    ' Input:
-    '   ByRef dt As Date - Date-Time input to be converted into UTC Date-Time
-    ' Output:
-    '   Date - UTC Date-Time
-    ' Purpose: Converts a local date-time into UTC/GMT date-time
-    ' Remarks: None
-    '===============================================================================
+
+
+    ''' <summary>
+    ''' Converts a local date-time into UTC/GMT date-time
+    ''' </summary>
+    ''' <param name="dt">Date - Date-Time input to be converted into UTC Date-Time</param>
+    ''' <returns>Date - UTC Date-Time</returns>
+    ''' <remarks></remarks>
     Public Function UTC(ByVal dt As Date) As Date
         '  Returns current UTC date-time.
         UTC = dt.AddMinutes(LocalTimeZone(TimeZoneReturn.UTC_Offset))
     End Function
-    Public Sub Get_locale() ' Retrieve the regional setting
+
+    ''' <summary>
+    ''' Retrieves the regional setting
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Sub Get_locale()
         Dim Symbol As String
         Dim iRet1 As Integer
         Dim iRet2 As Integer
@@ -593,6 +1012,12 @@ Hell:
             If Symbol <> "yyyy/MM/dd" Then regionalSymbol = Symbol
         End If
     End Sub
+
+    ''' <summary>
+    ''' Changes the regional setting.
+    ''' </summary>
+    ''' <param name="localSymbol"></param>
+    ''' <remarks></remarks>
     Public Sub Set_locale(Optional ByVal localSymbol As String = "") 'Change the regional setting
         Dim Symbol As String
         Dim iRet As Integer
@@ -606,6 +1031,13 @@ Hell:
 
         iRet = SetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol)
     End Sub
+
+    ''' <summary>
+    ''' Gets special folders...
+    ''' </summary>
+    ''' <param name="CSIDL">See this functions Definition for detailed info...</param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Function ActivelockGetSpecialFolder(ByVal CSIDL As Long) As String
         'value  ID                      Result
         '2      CSIDL_PROGRAMS          C:\Documents and Settings\<USERNAME>\Start Menu\Programs
@@ -1130,10 +1562,24 @@ Hell:
         End Try
 
     End Function
+
+    ''' <summary>
+    ''' ?Not Documented!
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Function PSWD() As String
         ' Do not modify this unless you change all encrypted strings in the entire project
         PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
     End Function
+
+    ''' <summary>
+    ''' ?Not Documented!
+    ''' </summary>
+    ''' <param name="n1"></param>
+    ''' <param name="n2"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Function IsNumberIncluded(ByVal n1 As Long, ByVal n2 As Long) As Boolean
         ' n1 = the larger number which may include n2
         ' n2 = the number we're checking as "is this a component?"
@@ -1173,6 +1619,11 @@ Hell:
 
     End Function
 
+    ''' <summary>
+    ''' Checks to see if there is a web connection.
+    ''' </summary>
+    ''' <returns>True if connected, False otherwise.</returns>
+    ''' <remarks>This also sets the ConnectionQualityString</remarks>
     Public Function IsWebConnected() As Boolean
         ' Returns True if connection is available
 
