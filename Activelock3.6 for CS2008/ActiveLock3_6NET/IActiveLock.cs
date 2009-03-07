@@ -1,16 +1,33 @@
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.Compatibility;
-using System;
-using System.Collections;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Windows.Forms;
-
-#region "Copyright"
+// This project was converted to C#, from VB, using https://sourceforge.net/projects/sharpdevelop/
+// there are allot of errors, but for the most part, all the code converted...
+//
+// This project is available from SVN on SourceForge.net under the main project, Activelock !
+//
+// ProjectPage: https://sourceforge.net/projects/activelock/
+// WebSite: http://ActiveLockSoftware.com
+// DeveloperForums: http://www.ActiveLockSoftware.com/simplemachinesforum
+// ProjectManager: Ismail Alkan - http://ActiveLockSoftware.com/simplemachinesforum/index.php?action=profile;u=1
+// ProjectLicense: BSD Open License - http://www.opensource.org/licenses/bsd-license.php
+// ProjectPurpose: Software Locking, Anti Piracy
+//
+// I, wanted to convert this project to C# for several reasons:
+//
+//      * To make Activelock under Microsoft OS's available to:
+//        ** 
+//        ** Silverlight http://silverlight.live.com
+//        ** XNA http://creators.xna.com
+//        ** XBox http://creators.xna.com
+//        ** Zune http://creators.xna.com
+//        ** .NET Micro
+//        **
+//
+//      * To make Activelock available to Linux and Mac OS's through Mono http://www.mono-project.com/
+//        ** Novell-Moonlight https://sourceforge.net/projects/freshmeat_novell-moonlight/
+//
+////////////////////////////////////////////////////////////////////////////////////////////
 //*   ActiveLock
 //*   Copyright 1998-2002 Nelson Ferraz
-//*   Copyright 2006 The ActiveLock Software Group (ASG)
+//*   Copyright 2003-2009 The ActiveLock Software Group (ASG)
 //*   All material is the property of the contributing authors.
 //*
 //*   Redistribution and use in source and binary forms, with or without
@@ -38,7 +55,16 @@ using System.Windows.Forms;
 //*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //*
 //*
-#endregion
+
+using Microsoft.VisualBasic;
+using Microsoft.VisualBasic.Compatibility;
+using System;
+using System.Collections;
+using System.Data;
+using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms;
+
 
 #region "Changes"
 //* Reserverd for documenting changes
@@ -46,6 +72,10 @@ using System.Windows.Forms;
 //* japreja - March 03, 2009 - Updated comments for Intellisense & Object browser
 //*                            Comments should now be available when referancing the DLL
 //*                            Updated SVN Between 12:30PM and 1:30PM
+//* japreja - March 06, 2009 - Started converting the VB code to C# using #Develop
+//*                            https://sourceforge.net/projects/sharpdevelop/
+//* ismail - March 06, 2009  - Uploaded the C# project to SVN on sourceforge.net for
+//*                            easier updates to the C# code.
 //*
 #endregion
 
@@ -62,157 +92,126 @@ namespace ActiveLock3_6NET
 	// ERROR: Not supported in C#: OptionDeclaration
 	public interface _IActiveLock
 	{
-		int RemainingTrialDays
-		{
-			get;
-		}
-		int RemainingTrialRuns
-		{
-			get;
-		}
-		int MaxCount
-		{
-			get;
-		}
-		string RegisteredLevel
-		{
-			get;
-		}
-		string LicenseClass
-		{
-			get;
-		}
-		IActiveLock.ALLockTypes LockType
-		{
-			get;
-			set;
-		}
-		IActiveLock.ALLicenseKeyTypes LicenseKeyType
-		{
-			set;
-		}
-		int UsedLockType
-		{
-			get;
-		}
-		IActiveLock.ALTrialHideTypes TrialHideType
-		{
-			get;
-			set;
-		}
-		IActiveLock.ALTrialTypes TrialType
-		{
-			get;
-			set;
-		}
-		int TrialLength
-		{
-			get;
-			set;
-		}
-		string SoftwareName
-		{
-			get;
-			set;
-		}
-		string SoftwarePassword
-		{
-			get;
-			set;
-		}
-		IActiveLock.ALTimeServerTypes CheckTimeServerForClockTampering
-		{
-			set;
-		}
-		IActiveLock.ALSystemFilesTypes CheckSystemFilesForClockTampering
-		{
-			set;
-		}
-		IActiveLock.ALLicenseFileTypes LicenseFileType
-		{
-			get;
-			set;
-		}
-		IActiveLock.ALAutoRegisterTypes AutoRegister
-		{
-			set;
-		}
-		IActiveLock.ALTrialWarningTypes TrialWarning
-		{
-			set;
-		}
-		string SoftwareCode
-		{
-			set;
-		}
-		string SoftwareVersion
-		{
-			get;
-			set;
-
-		}
-		IActiveLock.LicStoreType KeyStoreType
-		{
-			set;
-		}
-		string KeyStorePath
-		{
-			set;
-		}
+		int RemainingTrialDays{get;}
+		int RemainingTrialRuns{get;}
+		int MaxCount{get;}
+		string RegisteredLevel{get;}
+		string LicenseClass{get;}
+		IActiveLock.ALLockTypes LockType{get;set;}
+		IActiveLock.ALLicenseKeyTypes LicenseKeyType{set;}
+		int UsedLockType{get;}
+		IActiveLock.ALTrialHideTypes TrialHideType{get;set;}
+		IActiveLock.ALTrialTypes TrialType{get;set;}
+		int TrialLength{get;set;}
+		string SoftwareName{get;set;}
+		string SoftwarePassword{get;set;}
+		IActiveLock.ALTimeServerTypes CheckTimeServerForClockTampering{set;}
+		IActiveLock.ALSystemFilesTypes CheckSystemFilesForClockTampering{set;}
+		IActiveLock.ALLicenseFileTypes LicenseFileType{get;set;}
+		IActiveLock.ALAutoRegisterTypes AutoRegister{set;}
+		IActiveLock.ALTrialWarningTypes TrialWarning{set;}
+		string SoftwareCode{set;}
+		string SoftwareVersion{get;set;}
+		IActiveLock.LicStoreType KeyStoreType{set;}
+		string KeyStorePath{set;}
 		//ReadOnly Property InstallationCode(Optional ByVal User As String = vbNullString, Optional ByVal Lic As ProductLicense = Nothing) As String
-		string InstallCode { get; }
-		string AutoRegisterKeyPath
-		{
-			set;
-		}
-		string LockCode([System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute(null)] ref  // ERROR: Optional parameters aren't supported in C#
-ProductLicense Lic);
-		void Register(string LibKey,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string user);
-		string Transfer(string InstallCode);
-		void Init([System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")]  // ERROR: Optional parameters aren't supported in C#
-string strPath,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string autoLicString);
-		void Acquire([System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strMsg,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strRemainingTrialDays,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strRemainingTrialRuns,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strTrialLength,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strUsedDays,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strExpirationDate,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strRegisteredUser,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strRegisteredLevel,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strLicenseClass,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strMaxCount,
-   [System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strLicenseFileType,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strLicenseType,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strUsedLockType);
+		string InstallationCode { get; }
+		string AutoRegisterKeyPath{set;}
+		string LockCode(
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute(null)
+			] ref ProductLicense Lic);
+		void Register(
+			string LibKey,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string user);
+		string Transfer(
+			string InstallCode);
+		void Init(
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strPath,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string autoLicString);
+		void Acquire(
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strMsg,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strRemainingTrialDays,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strRemainingTrialRuns,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strTrialLength,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strUsedDays,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strExpirationDate,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strRegisteredUser,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strRegisteredLevel,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strLicenseClass,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strMaxCount,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strLicenseFileType,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strLicenseType,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref  string strUsedLockType);
 		void ResetTrial();
 		void KillTrial();
-		string GenerateShortSerial(string HDDfirmwareSerial);
-		string GenerateShortKey(string SoftwareCode,string SerialNumber,string LicenseeAndRegisteredLevel,string Expiration,ProductLicense.ALLicType LicType,int RegisteredLevel,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute(1)]  // ERROR: Optional parameters aren't supported in C#
-short MaxUsers);
-		ActiveLockEventNotifier EventNotifier
-		{
-			get;
-		}
-		int UsedDays
-		{
-			get;
-		}
-		string RegisteredDate
-		{
-			get;
-		}
-		string RegisteredUser
-		{
-			get;
-		}
-		string ExpirationDate
-		{
-			get;
-		}
+		string GenerateShortSerial(
+			string HDDfirmwareSerial);
+		string GenerateShortKey(
+			string SoftwareCode,
+			string SerialNumber,
+			string LicenseeAndRegisteredLevel,
+			string Expiration,
+			ProductLicense.ALLicType LicType,
+			int RegisteredLevel,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute(1)
+			] ref short MaxUsers);
+		ActiveLockEventNotifier EventNotifier {get;}
+		int UsedDays{get;}
+		string RegisteredDate{get;}
+		string RegisteredUser{get;}
+		string ExpirationDate{get;}
 	}
 
 	/// <summary>
@@ -695,8 +694,12 @@ short MaxUsers);
 
 		#endregion
 
-		#region "Public Properties"
+#region "Public Properties"
+// RE: Properties - there are some things not supported in C# that the VB code uses
+//     see both VB and C# sections in -> ms-help://MS.VSCC.v90/MS.VSIPCC.v90/MS.W7SDK.1033/MS.W7SDKNET.1033/dv_fxdesignguide/html/652011f3-acfe-470e-bb58-7e5ef09d7374.htm
+///
 
+// the following region should be done!  Needs checking...
 		#region "Read Only"
 
 		/// <summary>
@@ -707,7 +710,8 @@ short MaxUsers);
 		/// <remarks>None</remarks>
 		public int RemainingTrialDays
 		{
-			get { RemainingTrialDays = 0; }
+			//get { RemainingTrialDays = 0; }
+			get { return 0; }
 		}
 
 		/// <summary>
@@ -718,7 +722,8 @@ short MaxUsers);
 		/// <remarks>None</remarks>
 		public int RemainingTrialRuns
 		{
-			get { RemainingTrialRuns = 0; }
+			//get { RemainingTrialRuns = 0; }
+			get { return 0; }
 		}
 
 		/// <summary>
@@ -729,7 +734,8 @@ short MaxUsers);
 		/// <remarks>None</remarks>
 		public string RegisteredLevel
 		{
-			get { RegisteredLevel = string.Empty; }
+			//get { RegisteredLevel = string.Empty; }
+			get { return string.Empty; }
 		}
 
 		/// <summary>
@@ -740,7 +746,8 @@ short MaxUsers);
 		/// <remarks>None</remarks>
 		public int MaxCount
 		{
-			get { MaxCount = 0; }
+			//get { MaxCount = 0; }
+			get { return 0; }
 		}
 
 		/// <summary>
@@ -751,7 +758,8 @@ short MaxUsers);
 		/// <remarks>None</remarks>
 		public string LicenseClass
 		{
-			get { LicenseClass = "Single"; }
+			//get { LicenseClass = "Single"; }
+			get { return "Single"; }
 		}
 
 		/// <summary>
@@ -762,8 +770,8 @@ short MaxUsers);
 		/// <remarks>None</remarks>
 		public int UsedLockType
 		{
-
-			get { }
+			// I defaulted this to -1 : japreja - admin@whatsAvailable.org
+			get { return -1; }
 		}
 
 		/// <summary>
@@ -776,7 +784,8 @@ short MaxUsers);
 		/// <remarks></remarks>
 		public string InstallationCode
 		{
-			get { InstallationCode = string.Empty; }
+			//get { InstallationCode = string.Empty; }
+			get { return string.Empty; }
 		}
 
 		/// <summary>
@@ -790,7 +799,8 @@ short MaxUsers);
 		/// </remarks>
 		public ActiveLockEventNotifier EventNotifier
 		{
-			get { EventNotifier = null; }
+			//get { EventNotifier = null; }
+			get { return null; }
 		}
 
 		/// <summary>
@@ -801,7 +811,8 @@ short MaxUsers);
 		/// <remarks>None</remarks>
 		public int UsedDays
 		{
-			get { UsedDays = 0; }
+			//get { UsedDays = 0; }
+			get { return 0; }
 		}
 
 		/// <summary>
@@ -812,7 +823,8 @@ short MaxUsers);
 		/// <remarks>None</remarks>
 		public string RegisteredDate
 		{
-			get { RegisteredDate = string.Empty; }
+			//get { RegisteredDate = string.Empty; }
+			get { return string.Empty; }
 		}
 
 		/// <summary>
@@ -823,7 +835,8 @@ short MaxUsers);
 		/// <remarks>None</remarks>
 		public string RegisteredUser
 		{
-			get { RegisteredUser = string.Empty; }
+			//get { RegisteredUser = string.Empty; }
+			get { return string.Empty; }
 		}
 
 		/// <summary>
@@ -834,11 +847,13 @@ short MaxUsers);
 		/// <remarks>None</remarks>
 		public string ExpirationDate
 		{
-			get { ExpirationDate = string.Empty; }
+			//get { ExpirationDate = string.Empty; }
+			get { return string.Empty; }
 		}
 
 		#endregion
 
+//
 		#region "Write Only"
 
 		/// <summary>
@@ -848,7 +863,6 @@ short MaxUsers);
 		/// <remarks>None</remarks>
 		public ALLicenseKeyTypes LicenseKeyType
 		{
-
 			set { }
 		}
 
@@ -881,7 +895,6 @@ short MaxUsers);
 		/// <remarks></remarks>
 		public ALAutoRegisterTypes AutoRegister
 		{
-
 			set { }
 		}
 
@@ -950,8 +963,8 @@ short MaxUsers);
 			set { }
 		}
 
-		#endregion
-
+		#endregion	// end region "Write Only"
+//
 		#region "Read Write"
 
 		/// <summary>
@@ -963,9 +976,9 @@ short MaxUsers);
 		public ALLockTypes LockType
 		{
 
-			get { }
+			get { return LockType; }
 
-			set { }
+			set { LockType = value; }
 		}
 
 		/// <summary>
@@ -977,9 +990,9 @@ short MaxUsers);
 		public ALTrialHideTypes TrialHideType
 		{
 
-			get { }
+			get { return TrialHideType; }
 
-			set { }
+			set { TrialHideType = value; }
 		}
 
 		/// <summary>
@@ -991,9 +1004,9 @@ short MaxUsers);
 		public ALTrialTypes TrialType
 		{
 
-			get { }
+			get { return TrialType; }
 
-			set { }
+			set { TrialType = value; }
 		}
 
 		/// <summary>
@@ -1005,9 +1018,9 @@ short MaxUsers);
 		public int TrialLength
 		{
 
-			get { }
+			get { return TrialLength; }
 
-			set { }
+			set { TrialLength = value; }
 		}
 
 		/// <summary>
@@ -1018,8 +1031,8 @@ short MaxUsers);
 		/// <remarks></remarks>
 		public string SoftwareName
 		{
-			get { SoftwareName = string.Empty; }
-
+			//get { SoftwareName = string.Empty; }
+			get { return SoftwareName;}
 			set { }
 		}
 
@@ -1031,7 +1044,7 @@ short MaxUsers);
 		/// <remarks></remarks>
 		public string SoftwarePassword
 		{
-			get { SoftwarePassword = string.Empty; }
+			get { return SoftwarePassword; }
 
 			set { }
 		}
@@ -1046,7 +1059,7 @@ short MaxUsers);
 		{
 
 			//LicenseFileType = String.Empty
-			get { }
+			get { return LicenseFileType; }
 			set { }
 		}
 
@@ -1058,14 +1071,14 @@ short MaxUsers);
 		/// <remarks></remarks>
 		public string SoftwareVersion
 		{
-			get { SoftwareVersion = string.Empty; }
+			get { return SoftwareVersion; }
 
 			set { }
 		}
 
 		#endregion
 
-		#endregion
+#endregion // end region "Public Properties"
 
 		#region "Functions"
 
@@ -1076,8 +1089,11 @@ short MaxUsers);
 		/// <param name="Lic">Optional - ByRef Lic As ProductLicense - Product License for which to compute the lock code.</param>
 		/// <returns>String - Lock code</returns>
 		/// <remarks></remarks>
-		public string LockCode([System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute(null)] ref  // ERROR: Optional parameters aren't supported in C#
-ProductLicense Lic)
+		public string LockCode(
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute(null)
+			] ref ProductLicense Lic)
 		{
 			return string.Empty;
 		}
@@ -1120,13 +1136,22 @@ ProductLicense Lic)
 		/// <returns></returns>
 		/// <remarks></remarks>
 
-		public string GenerateShortKey(string SoftwareCode,string SerialNumber,string LicenseeAndRegisteredLevel,string Expiration,ProductLicense.ALLicType LicType,int RegisteredLevel,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute(1)]  // ERROR: Optional parameters aren't supported in C#
-short MaxUsers)
+		public string GenerateShortKey(
+			string SoftwareCode,
+			string SerialNumber,
+			string LicenseeAndRegisteredLevel,
+			string Expiration,
+			ProductLicense.ALLicType LicType,
+			int RegisteredLevel,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute(1)
+			] ref short MaxUsers)
 		{
 			return null;
 		}
 
-		#endregion
+		#endregion   // end region "Functions"
 
 		#region "Methods"
 
@@ -1136,11 +1161,14 @@ short MaxUsers)
 		/// <param name="LibKey">ByVal LibKey As String - Liberation key</param>
 		/// <param name="user">Optional - String - User</param>
 		/// <remarks></remarks>
-
-		public void Register(string LibKey,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string user)
+		public void Register(
+			string LibKey,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string user)
 		{
-		}
+		} // end Register
 
 		/// <summary>
 		/// Init - Purpose: Initializes ActiveLock before use. Some of the routines, including <a href="IActiveLock.Acquire.html">Acquire()</a> and <a href="IActiveLock.Register.html">Register()</a> requires <code>Init()</code> to be called first.
@@ -1148,12 +1176,17 @@ string user)
 		/// <param name="strPath">Optional - ?Undocumented!</param>
 		/// <param name="autoLicString">Optional - autoLicString As String - license key if autoregister is successful</param>
 		/// <remarks></remarks>
-
-		public void Init([System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")]  // ERROR: Optional parameters aren't supported in C#
-string strPath,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string autoLicString)
+		public void Init(
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strPath,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string autoLicString)
 		{
-		}
+		} // end Init
 
 		/// <summary>
 		/// <para>Acquires a valid license token.</para>
@@ -1173,33 +1206,69 @@ string autoLicString)
 		/// <param name="strLicenseType">Optional - ?Undocumented!</param>
 		/// <param name="strUsedLockType">Optional - ?Undocumented!</param>
 		/// <remarks></remarks>
-		public void Acquire([System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strMsg,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strRemainingTrialDays,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strRemainingTrialRuns,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strTrialLength,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strUsedDays,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strExpirationDate,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strRegisteredUser,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strRegisteredLevel,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strLicenseClass,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strMaxCount,
-
-   [System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strLicenseFileType,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strLicenseType,[System.Runtime.InteropServices.OptionalAttribute,System.Runtime.InteropServices.DefaultParameterValueAttribute("")] ref  // ERROR: Optional parameters aren't supported in C#
-string strUsedLockType)
+		public void Acquire(
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strMsg,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strRemainingTrialDays,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strRemainingTrialRuns,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strTrialLength,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strUsedDays,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strExpirationDate,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strRegisteredUser,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strRegisteredLevel,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strLicenseClass,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strMaxCount,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strLicenseFileType,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strLicenseType,
+			[
+				System.Runtime.InteropServices.OptionalAttribute,
+				System.Runtime.InteropServices.DefaultParameterValueAttribute("")
+			] ref string strUsedLockType)
 		{
-		}
+		} // end Acquire
 
 		/// <summary>
 		/// ResetTrial - Resets the Trial Mode
 		/// </summary>
 		/// <remarks></remarks>
-
 		public void ResetTrial()
 		{
-		}
+		} // end ResetTrial
 
 		/// <summary>
 		/// KillTrial - Kills the Trial Mode
@@ -1208,11 +1277,8 @@ string strUsedLockType)
 
 		public void KillTrial()
 		{
-		}
+		} // end KillTrial
 
-		#endregion
-
-
-
-	}
+		#endregion   // end region "Methods"
+	} // end class IActiveLock
 }
