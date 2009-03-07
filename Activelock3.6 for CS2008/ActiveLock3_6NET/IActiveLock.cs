@@ -65,31 +65,11 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 
-
-#region "Changes"
-//* Reserverd for documenting changes
-//*
-//* japreja - March 03, 2009 - Updated comments for Intellisense & Object browser
-//*                            Comments should now be available when referancing the DLL
-//*                            Updated SVN Between 12:30PM and 1:30PM
-//* japreja - March 06, 2009 - Started converting the VB code to C# using #Develop
-//*                            https://sourceforge.net/projects/sharpdevelop/
-//* ismail - March 06, 2009  - Uploaded the C# project to SVN on sourceforge.net for
-//*                            easier updates to the C# code.
-//*
-#endregion
-
-namespace ActiveLock3_6NET
-{
-
-	/// <summary>
-	/// _IActiveLock - Interface - Implimented by IActiveLock
-	/// </summary>
+	/// <summary>_IActiveLock - Interface - Implimented by IActiveLock</summary>
 	/// <remarks>
 	/// <para> - MaintainedBy:</para>
 	/// <para> - LastRevisionDate:</para>
 	/// <para> - Comments:</para></remarks>
-	// ERROR: Not supported in C#: OptionDeclaration
 	public interface _IActiveLock
 	{
 		int RemainingTrialDays{get;}
@@ -98,6 +78,7 @@ namespace ActiveLock3_6NET
 		string RegisteredLevel{get;}
 		string LicenseClass{get;}
 		IActiveLock.ALLockTypes LockType{get;set;}
+		// change this to a method
 		IActiveLock.ALLicenseKeyTypes LicenseKeyType{set;}
 		int UsedLockType{get;}
 		IActiveLock.ALTrialHideTypes TrialHideType{get;set;}
@@ -105,17 +86,25 @@ namespace ActiveLock3_6NET
 		int TrialLength{get;set;}
 		string SoftwareName{get;set;}
 		string SoftwarePassword{get;set;}
+		// change this to a method
 		IActiveLock.ALTimeServerTypes CheckTimeServerForClockTampering{set;}
+		// change this to a method
 		IActiveLock.ALSystemFilesTypes CheckSystemFilesForClockTampering{set;}
 		IActiveLock.ALLicenseFileTypes LicenseFileType{get;set;}
+		// change this to a method
 		IActiveLock.ALAutoRegisterTypes AutoRegister{set;}
+		// change this to a method
 		IActiveLock.ALTrialWarningTypes TrialWarning{set;}
+		// change this to a method
 		string SoftwareCode{set;}
 		string SoftwareVersion{get;set;}
+		// change this to a method
 		IActiveLock.LicStoreType KeyStoreType{set;}
+		// change this to a method
 		string KeyStorePath{set;}
 		//ReadOnly Property InstallationCode(Optional ByVal User As String = vbNullString, Optional ByVal Lic As ProductLicense = Nothing) As String
 		string InstallationCode { get; }
+		// change this to a method
 		string AutoRegisterKeyPath{set;}
 		string LockCode(
 			[
@@ -398,296 +387,190 @@ namespace ActiveLock3_6NET
 
 		#region "Public Enums"
 
-		/// <summary>
-		/// License Lock Types.
-		/// </summary>
+		/// <summary>License Lock Types.</summary>
 		/// <remarks>Values can be combined (OR ed) together.</remarks>
 		public enum ALLockTypes
 		{
 			/// <summary>No locking - not recommended</summary>
 			/// <remarks></remarks>
 			lockNone=0,
-			/// <summary>
-			/// Lock to Network Interface Card Address
-			/// </summary>
+			/// <summary>Lock to Network Interface Card Address</summary>
 			/// <remarks></remarks>
 			lockMAC=1,
-			//8
-			/// <summary>
-			/// Lock to Computer Name
-			/// </summary>
+			/// <summary>Lock to Computer Name</summary>
 			/// <remarks></remarks>
 			lockComp=2,
-			/// <summary>
-			/// Lock to Hard Drive Serial Number (Volume Serial Number)
-			/// </summary>
+			/// <summary>Lock to Hard Drive Serial Number (Volume Serial Number)</summary>
 			/// <remarks></remarks>
 			lockHD=4,
-			/// <summary>
-			/// Lock to Hard Disk Firmware Serial (HDD Manufacturer's Serial Number)
-			/// </summary>
+			/// <summary>Lock to Hard Disk Firmware Serial (HDD Manufacturer's Serial Number)</summary>
 			/// <remarks></remarks>
 			lockHDFirmware=8,
-			//256
-			/// <summary>
-			/// Lock to Windows Serial Number
-			/// </summary>
+			/// <summary>Lock to Windows Serial Number</summary>
 			/// <remarks></remarks>
 			lockWindows=16,
-			//1
-			/// <summary>
-			/// Lock to BIOS Serial Number
-			/// </summary>
+			/// <summary>Lock to BIOS Serial Number</summary>
 			/// <remarks></remarks>
 			lockBIOS=32,
-			//16
-			/// <summary>
-			/// Lock to Motherboard Serial Number
-			/// </summary>
+			/// <summary>Lock to Motherboard Serial Number</summary>
 			/// <remarks></remarks>
 			lockMotherboard=64,
-			/// <summary>
-			/// Lock to Computer Local IP Address
-			/// </summary>
+			/// <summary>Lock to Computer Local IP Address</summary>
 			/// <remarks></remarks>
 			lockIP=128,
-			//32
-			/// <summary>
-			/// Lock to External IP Address
-			/// </summary>
+			/// <summary>Lock to External IP Address</summary>
 			/// <remarks></remarks>
 			lockExternalIP=256,
-			//128
-			/// <summary>
-			/// Lock to Fingerprint (Activelock Combination)
-			/// </summary>
+			/// <summary>Lock to Fingerprint (Activelock Combination)</summary>
 			/// <remarks></remarks>
 			lockFingerprint=512,
-			/// <summary>
-			/// Lock to Memory ID
-			/// </summary>
+			/// <summary>Lock to Memory ID</summary>
 			/// <remarks></remarks>
 			lockMemory=1024,
-			/// <summary>
-			/// Lock to CPU ID
-			/// </summary>
+			/// <summary>Lock to CPU ID</summary>
 			/// <remarks></remarks>
 			lockCPUID=2048,
-			/// <summary>
-			/// Lock to Baseboard Name and Serial Number
-			/// </summary>
+			/// <summary>Lock to Baseboard Name and Serial Number</summary>
 			/// <remarks></remarks>
 			lockBaseboardID=4096,
-			/// <summary>
-			/// Lock to Video Controller Name and Drive Version Number
-			/// </summary>
+			/// <summary>Lock to Video Controller Name and Drive Version Number</summary>
 			/// <remarks></remarks>
 			lockvideoID=8192
 		}
 
-		/// <summary>
-		/// License Key Type specifies the length/type
-		/// </summary>
+		/// <summary>License Key Type specifies the length/type</summary>
 		/// <remarks></remarks>
 		public enum ALLicenseKeyTypes
 		{
-			/// <summary>
-			/// 1024-bit Long keys by RSA via ALCrypto DLL
-			/// </summary>
+			/// <summary>1024-bit Long keys by RSA via ALCrypto DLL</summary>
 			/// <remarks></remarks>
 			alsRSA=0,
-			/// <summary>
-			/// Short license keys by MD5
-			/// </summary>
+			/// <summary>Short license keys by MD5</summary>
 			/// <remarks></remarks>
 			alsShortKeyMD5=1
 		}
 
-		/// <summary>
-		/// License Store Type specifies where to store license keys
-		/// </summary>
+		/// <summary>License Store Type specifies where to store license keys</summary>
 		/// <remarks></remarks>
 		public enum LicStoreType
 		{
-			/// <summary>
-			/// Store in Windows Registry
-			/// </summary>
+			/// <summary>Store in Windows Registry</summary>
 			/// <remarks></remarks>
 			alsRegistry=0,
-			/// <summary>
-			/// Store in a license file
-			/// </summary>
+			/// <summary>Store in a license file</summary>
 			/// <remarks></remarks>
 			alsFile=1
 		}
 
-		/// <summary>
-		/// Products Store Type specifies where to store products infos
-		/// </summary>
+		/// <summary>Products Store Type specifies where to store products infos</summary>
 		/// <remarks></remarks>
 		public enum ProductsStoreType
 		{
-			/// <summary>
-			/// Store in INI file (licenses.ini)
-			/// </summary>
+			/// <summary>Store in INI file (licenses.ini)</summary>
 			/// <remarks></remarks>
 			alsINIFile=0,
-			/// <summary>
-			/// Store in XML file (licenses.xml)
-			/// </summary>
+			/// <summary>Store in XML file (licenses.xml)</summary>
 			/// <remarks></remarks>
 			alsXMLFile=1,
-			/// <summary>
-			/// Store in MDB file (licenses.mdb)
-			/// </summary>
+			/// <summary>Store in MDB file (licenses.mdb)</summary>
 			/// <remarks>mdb file should contain a table named products with structure: ID(autonumber), name(text,150), version (text,50), vccode(memo), gcode(memo)</remarks>
 			alsMDBFile=2
 			// TODO: IActiveLock.vb - Enum ProductStoreType - Store in MSSQL database 'not implemented
-			///' <summary>
-			///' TODO: Store in MSSQL database 'not implemented
-			///' </summary>
+			///' <summary>TODO: Store in MSSQL database 'not implemented</summary>
 			///' <remarks></remarks>
 			//alsMSSQL = 3 'TODO
 		}
 
-		/// <summary>
-		/// Trial Type specifies what kind of Trial Feature is used
-		/// </summary>
+		/// <summary>Trial Type specifies what kind of Trial Feature is used</summary>
 		/// <remarks></remarks>
 		public enum ALTrialTypes
 		{
-			/// <summary>
-			/// No trial used
-			/// </summary>
+			/// <summary>No trial used</summary>
 			/// <remarks></remarks>
 			trialNone=0,
-			/// <summary>
-			/// Trial by Days
-			/// </summary>
+			/// <summary>Trial by Days</summary>
 			/// <remarks></remarks>
 			trialDays=1,
-			/// <summary>
-			/// Trial by Runs
-			/// </summary>
+			/// <summary>Trial by Runs</summary>
 			/// <remarks></remarks>
 			trialRuns=2
 		}
 
-		/// <summary>
-		/// Trial Hide Mode Type specifies what kind of Trial Hiding Mode is used
-		/// </summary>
+		/// <summary>Trial Hide Mode Type specifies what kind of Trial Hiding Mode is used</summary>
 		/// <remarks>Values can be combined (OR'ed) together.</remarks>
 		public enum ALTrialHideTypes
 		{
-			/// <summary>
-			/// Trial information is hidden in BMP files
-			/// </summary>
+			/// <summary>Trial information is hidden in BMP files</summary>
 			/// <remarks></remarks>
 			trialSteganography=1,
-			/// <summary>
-			/// Trial information is hidden in a folder which uses a default namespace
-			/// </summary>
+			/// <summary>Trial information is hidden in a folder which uses a default namespace</summary>
 			/// <remarks></remarks>
 			trialHiddenFolder=2,
-			/// <summary>
-			/// Trial information is encrypted and hidden in registry (per user)
-			/// </summary>
+			/// <summary>Trial information is encrypted and hidden in registry (per user)</summary>
 			/// <remarks></remarks>
 			trialRegistryPerUser=4,
 			// TODO: IActiveLock.vb - Enum ALTrialHideYypes - Please update this comment
-			/// <summary>
-			/// Not documented! Please Update!
-			/// </summary>
+			/// <summary>Not documented! Please Update!</summary>
 			/// <remarks></remarks>
 			trialIsolatedStorage=8
 		}
 
-		/// <summary>
-		/// Enum for accessing the Time Server to check Clock Tampering
-		/// </summary>
+		/// <summary>Enum for accessing the Time Server to check Clock Tampering</summary>
 		/// <remarks></remarks>
 		public enum ALTimeServerTypes
 		{
-			/// <summary>
-			/// Skips checking a Time Server
-			/// </summary>
+			/// <summary>Skips checking a Time Server</summary>
 			/// <remarks></remarks>
 			alsDontCheckTimeServer=0,
-			/// <summary>
-			/// Checks a Time Server
-			/// </summary>
+			/// <summary>Checks a Time Server</summary>
 			/// <remarks></remarks>
 			alsCheckTimeServer=1
 		}
 
-		/// <summary>
-		/// Enum for scanning the system folders/files to detect clock tampering
-		/// </summary>
+		/// <summary>Enum for scanning the system folders/files to detect clock tampering</summary>
 		/// <remarks></remarks>
 		public enum ALSystemFilesTypes
 		{
-			/// <summary>
-			/// Skips checking system files
-			/// </summary>
+			/// <summary>Skips checking system files</summary>
 			/// <remarks></remarks>
 			alsDontCheckSystemFiles=0,
-			/// <summary>
-			/// Checks system files
-			/// </summary>
+			/// <summary>Checks system files</summary>
 			/// <remarks></remarks>
 			alsCheckSystemFiles=1
 		}
 
-		/// <summary>
-		/// Enum for license file encryption
-		/// </summary>
+		/// <summary>Enum for license file encryption</summary>
 		/// <remarks></remarks>
 		public enum ALLicenseFileTypes
 		{
-			/// <summary>
-			/// Encrypts the license file
-			/// </summary>
+			/// <summary>Encrypts the license file</summary>
 			/// <remarks></remarks>
 			alsLicenseFilePlain=0,
-			/// <summary>
-			/// Leaves the license file readable
-			/// </summary>
+			/// <summary>Leaves the license file readable</summary>
 			/// <remarks></remarks>
 			alsLicenseFileEncrypted=1
 		}
 
-		/// <summary>
-		/// Enum for Auto Registeration via ALL files
-		/// </summary>
+		/// <summary>Enum for Auto Registeration via ALL files</summary>
 		/// <remarks></remarks>
 		public enum ALAutoRegisterTypes
 		{
-			/// <summary>
-			/// Enables auto license registration
-			/// </summary>
+			/// <summary>Enables auto license registration</summary>
 			/// <remarks></remarks>
 			alsEnableAutoRegistration=0,
-			/// <summary>
-			/// Disables auto license registration
-			/// </summary>
+			/// <summary>Disables auto license registration</summary>
 			/// <remarks></remarks>
 			alsDisableAutoRegistration=1
 		}
 
-		/// <summary>
-		/// Trial Warning can be persistent or temporary
-		/// </summary>
+		/// <summary>Trial Warning can be persistent or temporary</summary>
 		/// <remarks></remarks>
 		public enum ALTrialWarningTypes
 		{
-			/// <summary>
-			/// Trial Warning is Temporary (1-time only)
-			/// </summary>
+			/// <summary>Trial Warning is Temporary (1-time only)</summary>
 			/// <remarks></remarks>
 			trialWarningTemporary=0,
-			/// <summary>
-			/// Trial Warning is Persistent
-			/// </summary>
+			/// <summary>Trial Warning is Persistent</summary>
 			/// <remarks></remarks>
 			trialWarningPersistent=1
 		}
@@ -697,14 +580,12 @@ namespace ActiveLock3_6NET
 #region "Public Properties"
 // RE: Properties - there are some things not supported in C# that the VB code uses
 //     see both VB and C# sections in -> ms-help://MS.VSCC.v90/MS.VSIPCC.v90/MS.W7SDK.1033/MS.W7SDKNET.1033/dv_fxdesignguide/html/652011f3-acfe-470e-bb58-7e5ef09d7374.htm
-///
+//
 
 // the following region should be done!  Needs checking...
 		#region "Read Only"
 
-		/// <summary>
-		/// RemainingTrialDays - Read Only - Returns the Number of Used Trial Days.
-		/// </summary>
+		/// <summary>RemainingTrialDays - Read Only - Returns the Number of Used Trial Days.</summary>
 		/// <value></value>
 		/// <returns>Integer - Number of Used Trial Days</returns>
 		/// <remarks>None</remarks>
@@ -714,9 +595,7 @@ namespace ActiveLock3_6NET
 			get { return 0; }
 		}
 
-		/// <summary>
-		/// RemainingTrialRuns - Read Only - Returns the Number of Used Trial Runs.
-		/// </summary>
+		/// <summary>RemainingTrialRuns - Read Only - Returns the Number of Used Trial Runs.</summary>
 		/// <value></value>
 		/// <returns>Integer - Number of Used Trial Runs</returns>
 		/// <remarks>None</remarks>
@@ -726,9 +605,7 @@ namespace ActiveLock3_6NET
 			get { return 0; }
 		}
 
-		/// <summary>
-		/// RegisteredLevel - Read Only - Returns the registered level.
-		/// </summary>
+		/// <summary>RegisteredLevel - Read Only - Returns the registered level.</summary>
 		/// <value></value>
 		/// <returns>String - Registered level</returns>
 		/// <remarks>None</remarks>
@@ -738,9 +615,7 @@ namespace ActiveLock3_6NET
 			get { return string.Empty; }
 		}
 
-		/// <summary>
-		/// MaxCount - Read Only - Returns the Number of concurrent users for the networked license
-		/// </summary>
+		/// <summary>MaxCount - Read Only - Returns the Number of concurrent users for the networked license</summary>
 		/// <value></value>
 		/// <returns>Integer - Number of concurrent users for the networked license</returns>
 		/// <remarks>None</remarks>
@@ -750,9 +625,7 @@ namespace ActiveLock3_6NET
 			get { return 0; }
 		}
 
-		/// <summary>
-		/// LicenseClass - Read Only - Returns the LicenseClass
-		/// </summary>
+		/// <summary>LicenseClass - Read Only - Returns the LicenseClass</summary>
 		/// <value></value>
 		/// <returns>String - LicenseClass</returns>
 		/// <remarks>None</remarks>
@@ -762,9 +635,7 @@ namespace ActiveLock3_6NET
 			get { return "Single"; }
 		}
 
-		/// <summary>
-		/// UsedLockType - Read Only - Returns the Current Lock Type being used in this instance.
-		/// </summary>
+		/// <summary>UsedLockType - Read Only - Returns the Current Lock Type being used in this instance.</summary>
 		/// <value></value>
 		/// <returns>ALLockTypes - lock type object corresponding to the current lock type(s) being used</returns>
 		/// <remarks>None</remarks>
@@ -774,9 +645,7 @@ namespace ActiveLock3_6NET
 			get { return -1; }
 		}
 
-		/// <summary>
-		/// InstallationCode - Read Only - Returns the installation-specific code needed to obtain the liberation key.
-		/// </summary>
+		/// <summary>InstallationCode - Read Only - Returns the installation-specific code needed to obtain the liberation key.</summary>
 		/// <param name="User">Optional - String - User</param>
 		/// <param name="Lic">Optional - ProductLicense - License</param>
 		/// <value>ByVal User As String - Optionally tailors the installation code specific to this user.</value>
@@ -788,9 +657,7 @@ namespace ActiveLock3_6NET
 			get { return string.Empty; }
 		}
 
-		/// <summary>
-		/// EventNotifier - Read Only - Retrieves the event notifier.
-		/// </summary>
+		/// <summary>EventNotifier - Read Only - Retrieves the event notifier.</summary>
 		/// <value></value>
 		/// <returns>ActiveLockEventNotifier - An object that can be used as a COM event source. i.e. can be used in <code>WithEvents</code> statements in VB.</returns>
 		/// <remarks>
@@ -803,9 +670,7 @@ namespace ActiveLock3_6NET
 			get { return null; }
 		}
 
-		/// <summary>
-		/// UsedDays - Read Only - Returns the number of days this product has been used since its registration.
-		/// </summary>
+		/// <summary>UsedDays - Read Only - Returns the number of days this product has been used since its registration.</summary>
 		/// <value></value>
 		/// <returns>Long - Used days for the license</returns>
 		/// <remarks>None</remarks>
@@ -815,9 +680,7 @@ namespace ActiveLock3_6NET
 			get { return 0; }
 		}
 
-		/// <summary>
-		/// RegisteredDate - Read Only - Retrieves the registration date.
-		/// </summary>
+		/// <summary>RegisteredDate - Read Only - Retrieves the registration date.</summary>
 		/// <value></value>
 		/// <returns>String - Date on which the product is registered.</returns>
 		/// <remarks>None</remarks>
@@ -827,9 +690,7 @@ namespace ActiveLock3_6NET
 			get { return string.Empty; }
 		}
 
-		/// <summary>
-		/// RegisteredUser - Read Only - Returns the registered user.
-		/// </summary>
+		/// <summary>RegisteredUser - Read Only - Returns the registered user.</summary>
 		/// <value></value>
 		/// <returns>String - Registered user name</returns>
 		/// <remarks>None</remarks>
@@ -839,9 +700,7 @@ namespace ActiveLock3_6NET
 			get { return string.Empty; }
 		}
 
-		/// <summary>
-		/// ExpirationDate - Read Only - Retrieves the expiration date.
-		/// </summary>
+		/// <summary>ExpirationDate - Read Only - Retrieves the expiration date.</summary>
 		/// <value></value>
 		/// <returns>String - Date on which the license will expire.</returns>
 		/// <remarks>None</remarks>
@@ -853,7 +712,7 @@ namespace ActiveLock3_6NET
 
 		#endregion
 
-//
+// these should be made into methods/functions
 		#region "Write Only"
 
 		/// <summary>
@@ -1281,4 +1140,3 @@ namespace ActiveLock3_6NET
 
 		#endregion   // end region "Methods"
 	} // end class IActiveLock
-}

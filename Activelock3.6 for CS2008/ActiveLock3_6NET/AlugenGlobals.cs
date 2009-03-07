@@ -73,7 +73,7 @@ public class AlugenGlobals
 		/// Product Info is invalid
 		/// </summary>
 		/// <remarks></remarks>
-		alugenProdInvalid = 0x80040100
+		alugenProdInvalid = (int)0x80040100
 		// vbObjectError (&H80040000) + &H100
 	}
 
