@@ -260,10 +260,23 @@ internal class clsShortLicenseKey
 	/// <param name="RegisteredLevel"></param>
 	/// <returns>True if the license key checks out, False otherwise.</returns>
 	/// <remarks>See code for important notes!</remarks>
-	internal bool ValidateShortKey(string LicenseKey, string SerialNumber, string Licensee, int ProductCode, [System.Runtime.InteropServices.OptionalAttribute, System.Runtime.InteropServices.DefaultParameterValueAttribute(1970/01/01 12:00:00 AM)] ref  // ERROR: Optional parameters aren't supported in C#
-System.DateTime ExpireDate, [System.Runtime.InteropServices.OptionalAttribute, System.Runtime.InteropServices.DefaultParameterValueAttribute(0)] ref  // ERROR: Optional parameters aren't supported in C#
-short UserData, [System.Runtime.InteropServices.OptionalAttribute, System.Runtime.InteropServices.DefaultParameterValueAttribute(0)] ref  // ERROR: Optional parameters aren't supported in C#
-int RegisteredLevel)
+	internal bool ValidateShortKey(
+		string LicenseKey,
+		string SerialNumber,
+		string Licensee,
+		int ProductCode,
+		[
+			System.Runtime.InteropServices.OptionalAttribute,
+			System.Runtime.InteropServices.DefaultParameterValueAttribute("1970/01/01 12:00:00 AM")
+		] ref System.DateTime ExpireDate,
+		[
+			System.Runtime.InteropServices.OptionalAttribute,
+			System.Runtime.InteropServices.DefaultParameterValueAttribute(0)
+		] ref short UserData,
+		[
+			System.Runtime.InteropServices.OptionalAttribute,
+			System.Runtime.InteropServices.DefaultParameterValueAttribute(0)
+		] ref int RegisteredLevel)
 	{
 		bool functionReturnValue = false;
 		//*******************************************************************************

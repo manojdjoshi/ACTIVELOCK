@@ -11,7 +11,7 @@ using System.Windows.Forms;
 /// Not Documented!
 /// </summary>
 /// <remarks></remarks>
-static class ADSFile
+ class ADSFile
 {
 
 	private static string _stream = string.Empty;
@@ -20,7 +20,9 @@ static class ADSFile
 	#region "Win32 Constants"
 		//ToDo: Unsigned Integers not supported
 	private const System.Int32 GENERIC_WRITE = 0x40000000;
-	private const System.Int32 GENERIC_READ = 0x80000000;
+	int tmp;
+	tmp = Convert.ToInt32(0x80000000);
+	private const System.Int32 GENERIC_READ = tmp;
 	//ToDo: Unsigned Integers not supported
 	//
 	//ToDo: Error processing original source shown below

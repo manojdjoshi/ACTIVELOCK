@@ -1,26 +1,33 @@
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.Compatibility;
-using System;
-using System.Collections;
-using System.Data;
-using System.Diagnostics;
-using System.Drawing;
-using System.Windows.Forms;
-// ERROR: Not supported in C#: OptionDeclaration
-using System.IO;
-using ActiveLock3_6NET;
-using System.Security.Cryptography;
-using System.Management;
-//using System.TimeSpan;
-using System.Text;
-// For StringBuilder
-using System.Runtime.InteropServices;
-// For DLL Call
-
-#region "Copyright"
+// This project was converted to C#, from VB, using https://sourceforge.net/projects/sharpdevelop/
+// there are allot of errors, but for the most part, all the code converted...
+//
+// This project is available from SVN on SourceForge.net under the main project, Activelock !
+//
+// ProjectPage: https://sourceforge.net/projects/activelock/
+// WebSite: http://ActiveLockSoftware.com
+// DeveloperForums: http://www.ActiveLockSoftware.com/simplemachinesforum
+// ProjectManager: Ismail Alkan - http://ActiveLockSoftware.com/simplemachinesforum/index.php?action=profile;u=1
+// ProjectLicense: BSD Open License - http://www.opensource.org/licenses/bsd-license.php
+// ProjectPurpose: Software Locking, Anti Piracy
+//
+// I, wanted to convert this project to C# for several reasons:
+//
+//      * To make Activelock under Microsoft OS's available to:
+//        ** 
+//        ** Silverlight http://silverlight.live.com
+//        ** XNA http://creators.xna.com
+//        ** XBox http://creators.xna.com
+//        ** Zune http://creators.xna.com
+//        ** .NET Micro
+//        **
+//
+//      * To make Activelock available to Linux and Mac OS's through Mono http://www.mono-project.com/
+//        ** Novell-Moonlight https://sourceforge.net/projects/freshmeat_novell-moonlight/
+//
+////////////////////////////////////////////////////////////////////////////////////////////
 //*   ActiveLock
 //*   Copyright 1998-2002 Nelson Ferraz
-//*   Copyright 2003-2006 The ActiveLock Software Group (ASG)
+//*   Copyright 2003-2009 The ActiveLock Software Group (ASG)
 //*   All material is the property of the contributing authors.
 //*
 //*   Redistribution and use in source and binary forms, with or without
@@ -48,7 +55,24 @@ using System.Runtime.InteropServices;
 //*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 //*
 //*
-#endregion
+
+using Microsoft.VisualBasic;
+using Microsoft.VisualBasic.Compatibility;
+using System;
+using System.Collections;
+using System.Data;
+using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms;
+using System.IO;
+using ActiveLock3_6NET;
+using System.Security.Cryptography;
+using System.Management;
+//using System.TimeSpan;
+using System.Text;
+// For StringBuilder
+using System.Runtime.InteropServices;
+// For DLL Call
 
 namespace ActiveLock3_6NET
 {
@@ -70,8 +94,10 @@ namespace ActiveLock3_6NET
 		// @date: 03.23.2006
 
 		// Implements the IActiveLock interface.
-
+		
+		// convert the following line and all referances
 		Microsoft.VisualBasic.ErrObject Err;
+		// this is for getting around the optional values from VB being reuired in C#
 		object blank = null;
 
 		private string mSoftwareName;
@@ -100,23 +126,21 @@ namespace ActiveLock3_6NET
 		private int mUsedLockType;
 
 		private bool dontValidateLicense;
+		
 		/// <summary>
 		/// Registry hive used to store Activelock settings.
 		/// </summary>
 		/// <remarks></remarks>
-
 		private const string AL_REGISTRY_HIVE = "Software\\ActiveLock\\ActiveLock3";
+		
 		// Transients
 
 		/// <summary>
 		/// flag to indicate that ActiveLock has been initialized
 		/// </summary>
 		/// <remarks></remarks>
-		// flag to indicate that ActiveLock has been initialized
 		private bool mfInit;
-		[DllImport("kernel32",EntryPoint="GetVolumeInformationA",CharSet=CharSet.Ansi,SetLastError=true,ExactSpelling=true)]
-		public static extern int GetVolumeInformation(string lpRootPathName,StringBuilder lpVolumeNameBuffer,int nVolumeNameSize,int lpVolumeSerialNumber,int lpMaximumComponentLength,int lpFileSystemFlags,StringBuilder lpFileSystemNameBuffer,int nFileSystemNameSize);
-
+		
 		/// <summary>
 		/// <para>GetVolumeInformation</para>
 		/// </summary>
@@ -135,6 +159,8 @@ namespace ActiveLock3_6NET
 		/// <remarks>
 		/// <para>See <a href="http://msdn.microsoft.com/en-us/library/aa364993(VS.85).aspx">http://msdn.microsoft.com/en-us/library/aa364993(VS.85).aspx</a></para>
 		/// </remarks>
+		[DllImport("kernel32",EntryPoint="GetVolumeInformationA",CharSet=CharSet.Ansi,SetLastError=true,ExactSpelling=true)]
+		public static extern int GetVolumeInformation(string lpRootPathName,StringBuilder lpVolumeNameBuffer,int nVolumeNameSize,int lpVolumeSerialNumber,int lpMaximumComponentLength,int lpFileSystemFlags,StringBuilder lpFileSystemNameBuffer,int nFileSystemNameSize);
 
 		/// <summary>
 		/// IActiveLock_LicenseKeyType - Specifies the ALLicenseKeyTypes type
