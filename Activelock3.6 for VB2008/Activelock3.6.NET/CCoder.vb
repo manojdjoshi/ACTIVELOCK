@@ -5,21 +5,29 @@ Imports System.IO
 Imports System.Math
 Imports System.Text
 
+''' <summary>?Not Documented!</summary>
+''' <remarks></remarks>
 Public Class CCoder
     Implements IDisposable
 
 
 #Region "Atributes"
+    ''' <summary>?Not Documented!</summary>
+    ''' <remarks></remarks>
     Private Const gc_intPragCuloare As Integer = 245
 #End Region
 
 
 #Region "New/Dispose"
 
+    ''' <summary>?Not Documented!</summary>
+    ''' <remarks></remarks>
     Public Sub New()
 
     End Sub
 
+    ''' <summary>?Not Documented!</summary>
+    ''' <remarks></remarks>
     Public Sub Dispose() Implements IDisposable.Dispose
         Try
 
@@ -32,6 +40,11 @@ Public Class CCoder
 
 #Region "Private Functions"
 
+    ''' <summary>?Not Documented!</summary>
+    ''' <param name="bmpPatern"></param>
+    ''' <param name="InputText"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Overloads Function Code(ByVal bmpPatern As Bitmap, ByVal InputText As String) As Bitmap
         Dim bmpResult As Bitmap
 
@@ -76,6 +89,13 @@ Public Class CCoder
         Return bmpResult
     End Function
 
+    ''' <summary>?Not Documented!</summary>
+    ''' <param name="i"></param>
+    ''' <param name="j"></param>
+    ''' <param name="bmpPatern"></param>
+    ''' <param name="bmpNew"></param>
+    ''' <param name="cr"></param>
+    ''' <remarks></remarks>
     Private Sub SetR(ByRef i As Integer, ByRef j As Integer, ByRef bmpPatern As Bitmap, ByRef bmpNew As Bitmap, ByRef cr As Integer)
         Dim bOk As Boolean = False
         Dim clr As System.Drawing.Color
@@ -102,6 +122,13 @@ Public Class CCoder
         End Try
     End Sub
 
+    ''' <summary>?Not Documented!</summary>
+    ''' <param name="i"></param>
+    ''' <param name="j"></param>
+    ''' <param name="bmpPatern"></param>
+    ''' <param name="bmpNew"></param>
+    ''' <param name="cg"></param>
+    ''' <remarks></remarks>
     Private Sub SetG(ByRef i As Integer, ByRef j As Integer, ByRef bmpPatern As Bitmap, ByRef bmpNew As Bitmap, ByRef cg As Integer)
         Dim bOk As Boolean = False
         Dim clr As System.Drawing.Color
@@ -128,6 +155,13 @@ Public Class CCoder
         End Try
     End Sub
 
+    ''' <summary>?Not Documented!</summary>
+    ''' <param name="i"></param>
+    ''' <param name="j"></param>
+    ''' <param name="bmpPatern"></param>
+    ''' <param name="bmpNew"></param>
+    ''' <param name="cb"></param>
+    ''' <remarks></remarks>
     Private Sub SetB(ByRef i As Integer, ByRef j As Integer, ByRef bmpPatern As Bitmap, ByRef bmpNew As Bitmap, ByRef cb As Integer)
         Dim bOk As Boolean = False
         Dim clr As System.Drawing.Color
@@ -154,6 +188,11 @@ Public Class CCoder
         End Try
     End Sub
 
+    ''' <summary>?Not Documented!</summary>
+    ''' <param name="strPaternFile"></param>
+    ''' <param name="strMessageFile"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Overloads Function Decode(ByVal strPaternFile As String, ByVal strMessageFile As String) As String
         Dim bmpPatern As Bitmap
         Dim bmpMessage As Bitmap
@@ -183,6 +222,13 @@ Public Class CCoder
         End Try
     End Function
 
+    ''' <summary>?Not Documented!</summary>
+    ''' <param name="bmpPatern"></param>
+    ''' <param name="bmpMessage"></param>
+    ''' <param name="i"></param>
+    ''' <param name="j"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Function GetChar(ByVal bmpPatern As Bitmap, ByVal bmpMessage As Bitmap, ByRef i As Integer, ByRef j As Integer) As Char
         Dim charResult As Char
         Dim strChar As String
@@ -219,6 +265,13 @@ Public Class CCoder
         End Try
     End Function
 
+    ''' <summary>?Not Documented!</summary>
+    ''' <param name="bmpPatern"></param>
+    ''' <param name="bmpMessage"></param>
+    ''' <param name="i"></param>
+    ''' <param name="j"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Function GetR(ByVal bmpPatern As Bitmap, ByVal bmpMessage As Bitmap, ByRef i As Integer, ByRef j As Integer) As Integer
         Dim intResult As Integer
         Dim intPatern As Integer
@@ -267,6 +320,13 @@ Public Class CCoder
         End Try
     End Function
 
+    ''' <summary>?Not Documented!</summary>
+    ''' <param name="bmpPatern"></param>
+    ''' <param name="bmpMessage"></param>
+    ''' <param name="i"></param>
+    ''' <param name="j"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Function GetG(ByVal bmpPatern As Bitmap, ByVal bmpMessage As Bitmap, ByRef i As Integer, ByRef j As Integer) As Integer
         Dim intResult As Integer
         Dim intPatern As Integer
@@ -314,6 +374,13 @@ Public Class CCoder
         End Try
     End Function
 
+    ''' <summary>?Not Documented!</summary>
+    ''' <param name="bmpPatern"></param>
+    ''' <param name="bmpMessage"></param>
+    ''' <param name="i"></param>
+    ''' <param name="j"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Function GetB(ByVal bmpPatern As Bitmap, ByVal bmpMessage As Bitmap, ByRef i As Integer, ByRef j As Integer) As Integer
         Dim intResult As Integer
         Dim intPatern As Integer
@@ -361,6 +428,10 @@ Public Class CCoder
         End Try
     End Function
 
+    ''' <summary>?Not Documented!</summary>
+    ''' <param name="strFileText"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Function ReadFile(ByVal strFileText As String) As String
         Dim strResult As String = Nothing
         Dim srReadText As StreamReader = Nothing
@@ -387,6 +458,11 @@ Public Class CCoder
 
 #Region "Public Functions"
 
+    ''' <summary>?Not Documented!</summary>
+    ''' <param name="strPaternFile"></param>
+    ''' <param name="strMessage"></param>
+    ''' <param name="strMessageFile"></param>
+    ''' <remarks></remarks>
     Public Overloads Sub Code(ByVal strPaternFile As String, ByVal strMessage As String, ByVal strMessageFile As String)
         Dim bmpPatern As Bitmap = Nothing
         Dim bmpMessage As Bitmap = Nothing
@@ -413,6 +489,11 @@ Public Class CCoder
         End Try
     End Sub
 
+    ''' <summary>?Not Documented!</summary>
+    ''' <param name="strPaternFile"></param>
+    ''' <param name="strMessageFile"></param>
+    ''' <param name="strTextFile"></param>
+    ''' <remarks></remarks>
     Public Overloads Sub Decode(ByVal strPaternFile As String, ByVal strMessageFile As String, ByRef strTextFile As String)
         Dim swWrite As StreamWriter = Nothing
         Try
