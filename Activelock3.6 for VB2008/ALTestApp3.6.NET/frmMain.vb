@@ -1412,6 +1412,10 @@ Friend Class frmMain
         ' If it generates an error, that means there NO trial, NO license
         ' If no error and returns a string, there's a trial but No license. Parse the string to display a trial message.
         ' If no error and no string returned, you've got a valid license.
+
+        ' In case the Acquire method generates an error, so no license and no trial:
+        ' If InStr(1, Err.Description, "No valid license") > 0 Or InStr(1, Err.Description, "license invalid") > 0 Then '-2147221503 & -2147221502
+
         MyActiveLock.Acquire(strMsg, strRemainingTrialDays, strRemainingTrialRuns, strTrialLength, strUsedDays, strExpirationDate, strRegisteredUser, strRegisteredLevel, strLicenseClass, strMaxCount, strLicenseFileType, strLicenseType, strUsedLockType)
         ' strMsg is to get the trial status
         ' All other parameters are Optional and you can actually get all of them
