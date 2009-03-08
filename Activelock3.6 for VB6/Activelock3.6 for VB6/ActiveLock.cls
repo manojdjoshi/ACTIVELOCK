@@ -471,7 +471,7 @@ End Sub
 ' Remarks: None
 '===============================================================================
 Private Sub IActiveLock_Acquire(Optional ByRef strMsg As String = "", Optional ByRef strRemainingTrialDays As String = "", Optional ByRef strRemainingTrialRuns As String = "", Optional ByRef strTrialLength As String = "", Optional ByRef strUsedDays As String = "", Optional ByRef strExpirationDate As String = "", Optional ByRef strRegisteredUser As String = "", Optional ByRef strRegisteredLevel As String = "", Optional ByRef strLicenseClass As String = "", Optional ByRef strMaxCount As String = "", Optional ByRef strLicenseFileType As String = "", Optional ByRef strLicenseType As String = "", Optional ByRef strUsedLockType As String = "")
-    Dim adsText As String
+    Dim adsText As String, adsText2 As String
     Dim strStream As String
     Dim Lic As ProductLicense
     Dim trialStatus As Boolean
@@ -486,7 +486,7 @@ Private Sub IActiveLock_Acquire(Optional ByRef strMsg As String = "", Optional B
     ' Use calls like this in every location you want to debug
     OutputDebugString "Entered the IActiveLock_Acquire function"
     
-    strStream = mSoftwareName & mSoftwareVer & mSoftwarePassword
+    strStream = mSoftwareName & mSoftwareVer '& mSoftwarePassword
     
     ' Get the current date format and save it to regionalSymbol variable
     Get_locale
@@ -581,6 +581,13 @@ noRegistration:
             
             'adsText = ViewStream(mKeyStorePath & ":" & strStream) ' View the stream
             adsText = ADS_Read_Info(mKeyStorePath & ":" & strStream)
+            adsText2 = ADS_Read_Info(mKeyStorePath & ":" & "strStream2")
+            Dim lastRunDate As String
+            Dim oMD5 As clsMD5
+            Set oMD5 = New clsMD5
+
+            lastRunDate = ReadRegVal(HKEY_CURRENT_USER, "AppEvents\Schemes\Apps\" & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8), "usage", EncryptMyString(ActiveLockDate(UTC(Now)), PSWD))
+            lastRunDate = DecryptMyString(lastRunDate, PSWD)
             
             If adsText = "" Then
                 Set_locale regionalSymbol
@@ -588,7 +595,19 @@ noRegistration:
             End If
             dt1 = ActiveLockDate(CDate(adsText))
             dt2 = ActiveLockDate(UTC(Now))
+                
+            'Save the following stream only if we're going forward in time
+            Dim licenseRegistryKey As Boolean
+            If dt2 > ActiveLockDate(CDate(adsText2)) Then
+                Call ADS_Write_Info(mKeyStorePath & ":" & "strStream2", ActiveLockDate(UTC(Now)))
+                licenseRegistryKey = SaveString(HKEY_CURRENT_USER, "AppEvents\Schemes\Apps\" & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8), "usage", EncryptMyString(ActiveLockDate(UTC(Now)), PSWD))
+            ElseIf lastRunDate <> ActiveLockDate(CDate(adsText2)) Then
+                Set_locale regionalSymbol
+                Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, "This license has expired permanently. Please obtain a new key."
+            End If
+            
             If dt2 < dt1 Then
+            MsgBox "i am here 4"
                 Set_locale regionalSymbol
                 Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
             End If
@@ -1117,6 +1136,9 @@ Private Sub IActiveLock_Register(ByVal LibKey As String, Optional user As String
     Dim run As String
     Dim rc As Double
     
+    Dim oMD5 As clsMD5
+    Set oMD5 = New clsMD5
+    
     ' Get the current date format and save it to regionalSymbol variable
     Get_locale
     ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
@@ -1128,12 +1150,19 @@ Private Sub IActiveLock_Register(ByVal LibKey As String, Optional user As String
         ValidateShortKey Lic, user
     Else 'ALCrypto RSA key
         Lic.Load LibKey
+        Dim lastRegisteredDate As String
+        lastRegisteredDate = ReadRegVal(HKEY_CURRENT_USER, "AppEvents\Schemes\Apps\" & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8), "kind", EncryptMyString(Lic.RegisteredDate, PSWD))
+        lastRegisteredDate = DecryptMyString(lastRegisteredDate, PSWD)
+        If lastRegisteredDate <> Lic.RegisteredDate Then
+            Set_locale regionalSymbol
+            Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, "You're not allowed to re-use an old license key, obtain a new key."
+        End If
         ' Validate that the license key.
         '   - registered user
         '   - expiry date
         ValidateKey Lic
     End If
-    
+        
     ' License was validated successfuly. Check clock tampering for non-permanent licenses.
     If Lic.LicenseType <> allicPermanent Then
         If mCheckTimeServerForClockTampering = alsCheckTimeServer Then
@@ -1163,7 +1192,7 @@ Private Sub IActiveLock_Register(ByVal LibKey As String, Optional user As String
     ' This works under NTFS and is needed to prevent clock tampering
     If CheckStreamCapability() And Lic.LicenseType <> allicPermanent Then
         ' Write the current date and time into the ads
-        strStream = mSoftwareName & mSoftwareVer & mSoftwarePassword
+        strStream = mSoftwareName & mSoftwareVer '& mSoftwarePassword
         
         ' Write the stream to the file
 '        fileno = FreeFile
@@ -1177,8 +1206,11 @@ Private Sub IActiveLock_Register(ByVal LibKey As String, Optional user As String
 '        DoEvents
         
         Call ADS_Write_Info(mKeyStorePath & ":" & strStream, ActiveLockDate(UTC(Now)))
-
+        Call ADS_Write_Info(mKeyStorePath & ":" & "strStream2", ActiveLockDate(UTC(Now)))
     End If
+   
+    Dim licenseRegisteredDate As Boolean
+    licenseRegisteredDate = SaveString(HKEY_CURRENT_USER, "AppEvents\Schemes\Apps\" & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8), "kind", EncryptMyString(Lic.RegisteredDate, PSWD))
    
     ' Expire all trial licenses
     On Error Resume Next

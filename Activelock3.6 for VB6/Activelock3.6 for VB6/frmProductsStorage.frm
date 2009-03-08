@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Begin VB.Form frmProductsStorage 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Products Storage"
@@ -126,6 +126,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+
 Private Sub cmdBrowseForStorageFile_Click()
   'browse for storage file
   On Error GoTo cmdBrowseForStorageFile_Click_Error

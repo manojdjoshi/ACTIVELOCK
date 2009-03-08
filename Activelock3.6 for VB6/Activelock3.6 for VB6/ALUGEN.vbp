@@ -19,7 +19,6 @@ Module=modRegisteredLevel; modRegisteredLevel.bas
 Form=frmProductsStorage.frm
 Module=modWindowsVersion; modWindowsVersion.bas
 Module=modActiveLock; modActiveLock.bas
-IconForm="frmMain"
 Startup="frmMain"
 HelpFile=""
 Title="ALUGEN"

@@ -213,11 +213,11 @@ Private Function IKeyStoreProvider_Retrieve(ProductName As String, mLicenseFileT
     fileText = FileLoad(mINIFile.File)
     Dim astring As String
     If fileText = "" Then Exit Function
-    If mLicenseFileType = ALLicenseFileTypes.alsLicenseFileEncrypted Then
-        astring = DecryptMyString(fileText, PSWD)
-    Else
+'    If mLicenseFileType = ALLicenseFileTypes.alsLicenseFileEncrypted Then
+'        astring = DecryptMyString(fileText, PSWD)
+'    Else
         astring = fileText
-    End If
+'    End If
     If inString(LCase(astring), "productversion") = False Then
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREINVALID

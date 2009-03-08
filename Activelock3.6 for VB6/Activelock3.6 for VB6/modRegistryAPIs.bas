@@ -734,7 +734,7 @@ End Function
 ' Remarks:  EXAMPLE:<br>
 '   text1.text= savestring(HKEY_CURRENT_USER, "Software\VBW\Registry", "String", text1.text)
 '===============================================================================
-Public Function SaveString(hKey As Long, strPath As String, strValue As String, strdata As String)
+Public Function SaveString(hKey As Long, strPath As String, strValue As String, strdata As String) As Boolean
     'EXAMPLE:
     '
     'text1.text= savestring(HKEY_CURRENT_USER, "Sof
@@ -747,9 +747,9 @@ Public Function SaveString(hKey As Long, strPath As String, strValue As String, 
     r = RegSetValueEx(keyhand, strValue, 0, REG_SZ, ByVal strdata, Len(strdata))
     r = RegCloseKey(keyhand)
     If r = 0 Then
-        SaveString = "Success"
+        SaveString = True   '"Success"
     Else
-        SaveString = "Key to Delete Or Key Not Found"
+        SaveString = False  '"Key to Delete Or Key Not Found"
     End If
     
 End Function

@@ -277,6 +277,11 @@ Private Type ITEMIDLIST
     mkid As SHITEMID
 End Type
 Private Const MAX_PATH As Integer = 260
+Private Declare Function SHGetFolderPath Lib "shfolder" _
+        Alias "SHGetFolderPathA" (ByVal hwndOwner As Long, _
+        ByVal nFolder As Long, ByVal hToken As Long, _
+        ByVal dwFlags As Long, ByVal pszPath As String) As Long
+        
 
 'Declarations to find special folders for Vista
 Private Type GUID
@@ -398,15 +403,15 @@ Public Sub Get_locale() ' Retrieve the regional setting
     Dim iRet1 As Long
     Dim iRet2 As Long
     Dim lpLCDataVar As String
-    Dim pos As Integer
+    Dim Pos As Integer
     Dim Locale As Long
     Locale = GetUserDefaultLCID()
     iRet1 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, lpLCDataVar, 0)
     Symbol = String$(iRet1, 0)
     iRet2 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol, iRet1)
-    pos = InStr(Symbol, Chr$(0))
-    If pos > 0 Then
-         Symbol = Left$(Symbol, pos - 1)
+    Pos = InStr(Symbol, Chr$(0))
+    If Pos > 0 Then
+         Symbol = Left$(Symbol, Pos - 1)
          If Symbol <> "yyyy/MM/dd" Then regionalSymbol = Symbol
     End If
 End Sub
@@ -503,7 +508,14 @@ If SHGetSpecialFolderLocation(0, CSIDL, IDL) = 0 Then
     If SHGetPathFromIDList(ByVal IDL.mkid.cb, ByVal sPath) Then
         XPGetSpecialFolder = Left$(sPath, InStr(sPath, vbNullChar) - 1) & ""
     End If
+Else
+    ' Sometimes domain computers (most likely do not work with SHGetSpecialFolderLocation
+    ' in those cases, it's wise to use SHGetFolderPath
+    sPath = String(260, 0)
+    SHGetFolderPath 0, &H2E, 0, &H0, sPath
+    XPGetSpecialFolder = Left$(sPath, InStr(sPath, vbNullChar) - 1) & ""
 End If
+
 On Error GoTo 0
 Exit Function
 fGetSpecialFolder_Error:
@@ -1293,10 +1305,10 @@ End Function
 ' Remarks: None
 '===============================================================================
 Public Function TrimNulls(startstr As String) As String
-    Dim pos As Integer
-    pos = InStr(startstr, Chr$(0))
-    If pos Then
-        TrimNulls = Trim(Left$(startstr, pos - 1))
+    Dim Pos As Integer
+    Pos = InStr(startstr, Chr$(0))
+    If Pos Then
+        TrimNulls = Trim(Left$(startstr, Pos - 1))
     Else
         TrimNulls = Trim(startstr)
     End If
@@ -1581,12 +1593,12 @@ End Function
 
 Private Function TrimNull(item As String)
 
-    Dim pos As Integer
+    Dim Pos As Integer
    
    'double check that there is a chr$(0) in the string
-    pos = InStr(item, Chr$(0))
-    If pos Then
-       TrimNull = Left$(item, pos - 1)
+    Pos = InStr(item, Chr$(0))
+    If Pos Then
+       TrimNull = Left$(item, Pos - 1)
     Else
        TrimNull = item
     End If
