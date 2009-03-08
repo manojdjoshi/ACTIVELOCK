@@ -2090,12 +2090,6 @@ For i = 0 To 1
             t = WinDir() & "\Prefetch"
         Case 1
             t = WinDir() & "\Temp"
-'        Case 2
-'            t = WinDir() & "\Temp"
-'        Case 3
-'            t = WinDir() & "\Applog"
-'        Case 4
-'            t = WinDir() & "\Recent"
     End Select
     
     Count = 0
@@ -2103,7 +2097,7 @@ For i = 0 To 1
     Do While S <> ""
         If Not inString(Left$(S, 1), "$", "?") Then
             fileDate = FileDateTime(t & "\" & S)
-            If Abs(DateDiff("h", ActiveLockDate(UTC(Now)), ActiveLockDate(fileDate))) > 24 Then
+            If DateDiff("h", ActiveLockDate(UTC(Now)), ActiveLockDate(fileDate)) > 24 And ActiveLockDate(fileDate) > ActiveLockDate(UTC(Now)) Then
                 If Count > 1 Then
                     ClockTampering = True
                     Exit Function
@@ -2129,6 +2123,12 @@ Set oMD5 = New clsMD5
 strSource = ActivelockGetSpecialFolder(54) & "\Sample Pictures" & DecryptMyString("E7E3221D952287CBAE2F5ED363E923CE547F8075C9E093A1138DC7D03A76D0A1", PSWD) & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(98) & Chr(109) & Chr(112)
 If FolderExists(ActivelockGetSpecialFolder(54) & "\Sample Pictures") = False Then
     MkDir (ActivelockGetSpecialFolder(54) & "\Sample Pictures")
+End If
+If fileExist(strSource) = True Then
+    ' This is to take care of some files accidentally created but are empty
+    If FileLen(strSource) < 2000 Then
+        Kill strSource
+    End If
 End If
 If fileExist(strSource) = False Then
     SavePicture LoadResPicture(101, vbResBitmap), strSource
