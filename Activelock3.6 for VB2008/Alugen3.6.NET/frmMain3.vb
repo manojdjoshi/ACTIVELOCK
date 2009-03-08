@@ -2659,20 +2659,21 @@ noInfo:
             'cboRegisteredLevel.SelectedIndex = 0
         End If
 
+        'load form settings
+        LoadFormSetting()
+
         ' Initialize AL
         InitActiveLock()
 
         ' Initialize GUI
         InitUI()
 
-        'load form settings
-        LoadFormSetting()
-
         'Assume that the application LockType is not LOckNone only
         txtUser.Enabled = False
         txtUser.ReadOnly = True
         txtUser.BackColor = System.Drawing.ColorTranslator.FromOle(&H8000000F)
 
+        cboProducts.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboProducts", CStr(0)))
         Me.Text = "Alugen - ActiveLock v3.6 Key Generator for VB2008" '& Application.ProductVersion
         CheckIfWizardPresent()
     End Sub
@@ -2695,7 +2696,7 @@ noInfo:
         PROJECT_INI_FILENAME = AppPath() & "\" & Application.ProductName & ".ini"
 
         SSTab1.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", CStr(0)))
-        cboProducts.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboProducts", CStr(0)))
+        'cboProducts.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboProducts", CStr(0)))
         cboLicType.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboLicType", CStr(1)))
         cboRegisteredLevel.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboRegisteredLevel", CStr(0)))
         If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", CStr(0)) = "Unchecked" Then
@@ -2779,7 +2780,9 @@ noInfo:
         Else
             chkNetworkedLicense.CheckState = CheckState.Checked
         End If
+
         txtMaxCount.Text = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtMaxCount", CStr(5))
+        txtDays.Text = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtDays", CStr(365))
 
         optStrength0.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength0", "1"))
         optStrength1.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength1", "0"))
@@ -2866,7 +2869,9 @@ InitForm_Error:
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockCPUID", chkLockCPUID.CheckState.ToString)
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockBaseboardID", chkLockBaseboardID.CheckState.ToString)
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockVideoID", chkLockVideoID.CheckState.ToString)
+
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtMaxCount", txtMaxCount.Text)
+        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtDays", txtDays.Text)
 
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optstrength0", CStr(optStrength0.Checked))
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optstrength1", CStr(optStrength1.Checked))
@@ -3255,7 +3260,7 @@ SaveFormSettings_Error:
             End If
         End If
 
-        If Len(txtInstallCode.Text) <> 8 Then  'Not a Short Key License
+        If txtInstallCode.Text.Length <> 8 Then  'Not a Short Key License
             If chkLockMACaddress.CheckState = CheckState.Unchecked _
               And chkLockComputer.CheckState = CheckState.Unchecked _
               And chkLockHD.CheckState = CheckState.Unchecked _
@@ -3879,7 +3884,7 @@ exitValidate:
     Private Sub txtName_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtName.KeyPress
         If Char.IsControl(e.KeyChar) = False Then
             If Char.IsLetter(e.KeyChar) = False And Char.IsNumber(e.KeyChar) = False Then
-                If e.KeyChar <> "." Then
+                If e.KeyChar <> "." And e.KeyChar <> "_" And e.KeyChar <> " " Then
                     e.Handled = True
                 End If
             Else
@@ -3896,7 +3901,7 @@ exitValidate:
     Private Sub txtVer_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtVer.KeyPress
         If Char.IsControl(e.KeyChar) = False Then
             If Char.IsLetter(e.KeyChar) = False And Char.IsNumber(e.KeyChar) = False Then
-                If e.KeyChar <> "." Then
+                If e.KeyChar <> "." And e.KeyChar <> "_" And e.KeyChar <> " " Then
                     e.Handled = True
                 End If
             Else
