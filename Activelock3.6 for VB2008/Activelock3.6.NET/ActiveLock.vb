@@ -840,7 +840,7 @@ finally_Renamed:
         Dim Lic As ProductLicense
         Dim trialStatus As Boolean
 
-        strStream = mSoftwareName & mSoftwareVer & mSoftwarePassword
+        strStream = mSoftwareName & mSoftwareVer '& mSoftwarePassword
 
         ' Get the current date format and save it to regionalSymbol variable
         Get_locale()
@@ -1353,7 +1353,7 @@ continueRegistration:
             ' Write the current date and time into the ads
             Dim ok As Integer
             Dim strStream As String = String.Empty
-            strStream = mSoftwareName & mSoftwareVer & mSoftwarePassword
+            strStream = mSoftwareName & mSoftwareVer '& mSoftwarePassword
             ok = ADSFile.Write(ActiveLockDate(Date.UtcNow).ToString, mKeyStorePath, strStream)
         End If
 
