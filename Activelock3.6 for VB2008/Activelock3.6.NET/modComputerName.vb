@@ -7,7 +7,7 @@ Imports System.Management
 Imports Microsoft.win32
 Imports System.Runtime.InteropServices
 Imports System.Security
-Imports System.DirectoryServices
+'Imports System.DirectoryServices ' This isn't VS2005 compatible
 
 Module modHardware
 	'*   ActiveLock
@@ -1322,20 +1322,23 @@ GetIPaddressError:
         Next
     End Function
 
-    Private deDomainRoot As DirectoryEntry
+    'Private deDomainRoot As DirectoryEntry ' This isn't VS2005 compatible - commented out for now
     Private strDomainPath As String
     Private Declare Auto Function ConvertSidToStringSid Lib "advapi32.dll" (ByVal bSID As IntPtr, <System.Runtime.InteropServices.In(), System.Runtime.InteropServices.Out(), System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.LPTStr)> ByRef SIDString As String) As Integer
 
-    Private Function ConnectToAD() As Boolean
-        Try
-            deDomainRoot = New DirectoryEntry("LDAP://rootDSE")
-            strDomainPath = "LDAP://" + deDomainRoot.Properties("DefaultNamingContext")(0).ToString()
-            deDomainRoot = New DirectoryEntry(strDomainPath)
-            Return True
-        Catch ex As Exception
-            Return False
-        End Try
-    End Function
+    ' The following function was added here to
+    ' get the computer SID but turned out to be problematic
+    ' This isn't VS2005 compatible and the function requires admin rights which is no good
+    'Private Function ConnectToAD() As Boolean
+    '    Try
+    '        deDomainRoot = New DirectoryEntry("LDAP://rootDSE")
+    '        strDomainPath = "LDAP://" + deDomainRoot.Properties("DefaultNamingContext")(0).ToString()
+    '        deDomainRoot = New DirectoryEntry(strDomainPath)
+    '        Return True
+    '    Catch ex As Exception
+    '        Return False
+    '    End Try
+    'End Function
     Private query As ManagementObjectSearcher
     Private queryCollection As ManagementObjectCollection
 
