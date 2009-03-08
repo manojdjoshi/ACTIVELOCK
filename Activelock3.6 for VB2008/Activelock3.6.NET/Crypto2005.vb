@@ -4,57 +4,120 @@ Imports System.text
 Imports System.Text.Encoding
 Imports System.ComponentModel
 
+''' <summary>?Undocumented!</summary>
+''' <remarks></remarks>
 Public Class Crypto
 
 #Region "Class Variables"
+    ''' <summary>?Undocumented!</summary>
+    ''' <remarks></remarks>
     Public Enum KeySize As Integer
+        ''' <summary>?Undocumented!</summary>
+        ''' <remarks></remarks>
         RC2 = 64
+        ''' <summary>?Undocumented!</summary>
+        ''' <remarks></remarks>
         DES = 64
+        ''' <summary>?Undocumented!</summary>
+        ''' <remarks></remarks>
         TripleDES = 192
+        ''' <summary>?Undocumented!</summary>
+        ''' <remarks></remarks>
         AES = 128
+        ''' <summary>?Undocumented!</summary>
+        ''' <remarks></remarks>
         RSA = 2048
     End Enum
 
-
+    ''' <summary>
+    ''' ?Undocumented!
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Enum Algorithm As Integer
+        ''' <summary>?Undocumented!</summary>
+        ''' <remarks></remarks>
         SHA1 = 0
+        ''' <summary>?Undocumented!</summary>
+        ''' <remarks></remarks>
         SHA256 = 1
+        ''' <summary>?Undocumented!</summary>
+        ''' <remarks></remarks>
         SHA384 = 2
+        ''' <summary>?Undocumented!</summary>
+        ''' <remarks></remarks>
         Rijndael = 3
+        ''' <summary>?Undocumented!</summary>
+        ''' <remarks></remarks>
         TripleDES = 4
+        ''' <summary>?Undocumented!</summary>
+        ''' <remarks></remarks>
         RSA = 5
+        ''' <summary>?Undocumented!</summary>
+        ''' <remarks></remarks>
         RC2 = 6
+        ''' <summary>?Undocumented!</summary>
+        ''' <remarks></remarks>
         DES = 7
         'DSA = 8
+        ''' <summary>?Undocumented!</summary>
+        ''' <remarks></remarks>
         MD5 = 9
+        ''' <summary>?Undocumented!</summary>
+        ''' <remarks></remarks>
         RNG = 10
         'Base64 = 11
+        ''' <summary>?Undocumented!</summary>
+        ''' <remarks></remarks>
         SHA512 = 12
     End Enum
 
+    ''' <summary>
+    ''' ?Undocumented!
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Enum EncodingType As Integer
+        ''' <summary>
+        ''' ?Undocumented!
+        ''' </summary>
+        ''' <remarks></remarks>
         HEX = 0
+        ''' <summary>
+        ''' ?Undocumented!
+        ''' </summary>
+        ''' <remarks></remarks>
         BASE_64 = 1
     End Enum
 
-    'Initialization Vectors that we will use for symmetric encryption/decryption. These
-    'byte arrays are completely arbitrary, and you can change them to whatever you like.
+    ''' <summary></summary>
+    ''' <remarks>Initialization Vectors that we will use for symmetric encryption/decryption. These byte arrays are completely arbitrary, and you can change them to whatever you like.</remarks>
     Private Shared IV_8 As Byte() = New Byte() {2, 63, 9, 36, 235, 174, 78, 12}
+    ''' <summary></summary>
+    ''' <remarks>Initialization Vectors that we will use for symmetric encryption/decryption. These byte arrays are completely arbitrary, and you can change them to whatever you like.</remarks>
     Private Shared IV_16 As Byte() = New Byte() {15, 199, 56, 77, 244, 126, 107, 239, _
                                           9, 10, 88, 72, 24, 202, 31, 108}
+    ''' <summary></summary>
+    ''' <remarks>Initialization Vectors that we will use for symmetric encryption/decryption. These byte arrays are completely arbitrary, and you can change them to whatever you like.</remarks>
     Private Shared IV_24 As Byte() = New Byte() {37, 28, 19, 44, 25, 170, 122, 25, _
                                           25, 57, 127, 5, 22, 1, 66, 65, _
                                           14, 155, 224, 64, 9, 77, 18, 251}
+    ''' <summary></summary>
+    ''' <remarks>Initialization Vectors that we will use for symmetric encryption/decryption. These byte arrays are completely arbitrary, and you can change them to whatever you like.</remarks>
     Private Shared IV_32 As Byte() = New Byte() {133, 206, 56, 64, 110, 158, 132, 22, _
                                           99, 190, 35, 129, 101, 49, 204, 248, _
                                           251, 243, 13, 194, 160, 195, 89, 152, _
                                           149, 227, 245, 5, 218, 86, 161, 124}
 
-    'Salt value used to encrypt a plain text key. Again, this can be whatever you like
+    ''' <summary>
+    ''' Salt value used to encrypt a plain text key. Again, this can be whatever you like
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Shared SALT_BYTES As Byte() = New Byte() {162, 27, 98, 1, 28, 239, 64, 30, 156, 102, 223}
 
-    'File names to be used for public and private keys
+    ''' <summary>File name to use for the public key.</summary>
+    ''' <remarks></remarks>
     Private Const KEY_PUBLIC As String = "public.key"
+    ''' <summary>File name to use for the private key.</summary>
+    ''' <remarks></remarks>
     Private Const KEY_PRIVATE As String = "private.key"
 
     'Values used for RSA-based asymmetric encryption
@@ -80,6 +143,10 @@ Public Class Crypto
 #End Region
 
 #Region "Public Functions"
+    ''' <summary>Gets or Sets the key that is used to encrypt and decrypt data</summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     <Description("The key that is used to encrypt and decrypt data")> _
     Public Shared Property Key() As String
         Get
@@ -90,6 +157,10 @@ Public Class Crypto
         End Set
     End Property
 
+    ''' <summary>Gets or Sets the algorithm that will be used for encryption and decryption</summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     <Description("The algorithm that will be used for encryption and decryption")> _
     Public Shared Property EncryptionAlgorithm() As Algorithm
         Get
@@ -100,6 +171,11 @@ Public Class Crypto
         End Set
     End Property
 
+    ''' <summary>Gets or Sets the format in which content is returned after encryption,
+    '''  or provided for decryption</summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     <Description("The format in which content is returned after encryption, or provided for decryption")> _
     Public Shared Property Encoding() As EncodingType
         Get
@@ -110,6 +186,11 @@ Public Class Crypto
         End Set
     End Property
 
+    ''' <summary>Gets or Sets encrypted content to be retrieved after an encryption call,
+    '''  or provided for a decryption call</summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     <Description("Encrypted content to be retrieved after an encryption call, or provided for a decryption call")> _
     Public Shared Property Content() As String
         Get
@@ -120,6 +201,10 @@ Public Class Crypto
         End Set
     End Property
 
+    ''' <summary>Contains the exception from a failed encryption or decryption</summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     <Description("If an encryption or decryption call returns false, then this will contain the exception")> _
     Public Shared ReadOnly Property CryptoException() As CryptographicException
         Get
@@ -127,6 +212,10 @@ Public Class Crypto
         End Get
     End Property
 
+    ''' <summary>Determines whether the currently specified algorithm is a hash</summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     <Description("Determines whether the currently specified algorithm is a hash")> _
     Public Shared ReadOnly Property IsHashAlgorithm() As Boolean
         Get
@@ -139,6 +228,10 @@ Public Class Crypto
         End Get
     End Property
 
+    ''' <summary>Encryption of a string using the 'Key' and 'EncryptionAlgorithm' properties</summary>
+    ''' <param name="Content"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     <Description("Encryption of a string using the 'Key' and 'EncryptionAlgorithm' properties")> _
     Public Shared Function EncryptString(ByVal Content As String) As Boolean
         Dim cipherBytes() As Byte
@@ -159,6 +252,9 @@ Public Class Crypto
         Return True
     End Function
 
+    ''' <summary>?Undocumented!</summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Shared Function DecryptString() As Boolean
         Dim encText As Byte() = Nothing
         Dim clearText As Byte() = Nothing
@@ -175,6 +271,11 @@ Public Class Crypto
         Return True
     End Function
 
+    ''' <summary>Encrypts a file, outpus to a seperate file.</summary>
+    ''' <param name="Filename">String - File name of the file to encrypt!</param>
+    ''' <param name="Target">String - File name to create as the encrypted file</param>
+    ''' <returns>True on success, false otherwise.</returns>
+    ''' <remarks>Uses property CryproException to store the failure exception.</remarks>
     Public Shared Function EncryptFile(ByVal Filename As String, ByVal Target As String) As Boolean
         If Not File.Exists(Filename) Then
             _exception = New CryptographicException(ERR_NO_FILE)
@@ -236,6 +337,11 @@ Public Class Crypto
         Return True
     End Function
 
+    ''' <summary>Decrypts a file, outputs to a seperate file.</summary>
+    ''' <param name="Filename">String - File name of the encrypted file.</param>
+    ''' <param name="Target">String - File name to create as the decrypted file.</param>
+    ''' <returns>Boolean - True on success, false otherwise.</returns>
+    ''' <remarks>Uses property CryptoException to store the failure exception.</remarks>
     Public Shared Function DecryptFile(ByVal Filename As String, ByVal Target As String) As Boolean
         If Not File.Exists(Filename) Then
             _exception = New CryptographicException(ERR_NO_FILE)
@@ -286,6 +392,15 @@ Public Class Crypto
         Return True
     End Function
 
+    ''' <summary>Gnerates a hash of the provided string.</summary>
+    ''' <param name="Content">String - The string to hash.</param>
+    ''' <returns>True upon success, false otherwise.</returns>
+    ''' <remarks>
+    ''' <para>Uses property EncryptionAlgorithm for the hash algorithm.</para>
+    ''' <para>Uses property Encoding for the encoding type.</para>
+    ''' <para>Uses property Content.</para>
+    ''' <para>Upon failure -Uses property CryptoException to store the failure exception</para>
+    ''' </remarks>
     Public Shared Function GenerateHash(ByVal Content As String) As Boolean
         If Content Is Nothing OrElse Content.Equals(String.Empty) Then
             _exception = New CryptographicException(ERR_NO_CONTENT)
@@ -331,6 +446,8 @@ Public Class Crypto
         End Try
     End Function
 
+    ''' <summary>Clears data stored in the following properties: EncryptionAlgorithm, Content, Key, Encoding, CryptoException.</summary>
+    ''' <remarks></remarks>
     Public Shared Sub Clear()
         _algorithm = Algorithm.SHA1
         _content = String.Empty
@@ -673,10 +790,10 @@ Public Class Crypto
 #End Region
 
 #Region "Utility Functions"
-    '********************************************************
-    '* BytesToHex: Converts a byte array to a hex-encoded
-    '*             string
-    '********************************************************
+    ''' <summary>Converts a byte array to a hex-encoded string</summary>
+    ''' <param name="bytes">Byte Array</param>
+    ''' <returns>String</returns>
+    ''' <remarks></remarks>
     Private Shared Function BytesToHex(ByVal bytes() As Byte) As String
         Dim hex As New StringBuilder
         For n As Integer = 0 To bytes.Length - 1
@@ -685,10 +802,10 @@ Public Class Crypto
         Return hex.ToString
     End Function
 
-    '********************************************************
-    '* HexToBytes: Converts a hex-encoded string to a
-    '*             byte array
-    '********************************************************
+    ''' <summary>Converts a hex-encoded string to a byte array</summary>
+    ''' <param name="Hex"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Shared Function HexToBytes(ByVal Hex As String) As Byte()
         Dim numBytes As Integer = CType(Hex.Length / 2, Integer)  ' CType not necessary in VB 2005
         Dim bytes(numBytes - 1) As Byte
@@ -699,10 +816,9 @@ Public Class Crypto
         Return bytes
     End Function
 
-    '********************************************************
-    '* ClearBuffer: Clears a byte array to ensure
-    '*              that it cannot be read from memory
-    '********************************************************
+    ''' <summary>Clears a byte array to ensure that it cannot be read from memory</summary>
+    ''' <param name="bytes"></param>
+    ''' <remarks></remarks>
     Private Shared Sub ClearBuffer(ByVal bytes() As Byte)
         If bytes Is Nothing Then Exit Sub
         For n As Integer = 0 To bytes.Length - 1
@@ -710,11 +826,11 @@ Public Class Crypto
         Next
     End Sub
 
-    '********************************************************
-    '* GenerateSalt: No, this is not a culinary routine. This
-    '*               generates a random salt value for
-    '*               password generation
-    '********************************************************
+    ''' <summary>No, this is not a culinary routine. This generates a
+    ''' random salt value for password generation</summary>
+    ''' <param name="saltLength"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Shared Function GenerateSalt(ByVal saltLength As Integer) As Byte()
         Dim salt() As Byte
         If saltLength > 0 Then
@@ -728,10 +844,11 @@ Public Class Crypto
         Return salt
     End Function
 
-    '********************************************************
-    '* DerivePassword: This takes the original plain text key
-    '*                 and creates a secure key using SALT
-    '********************************************************
+    ''' <summary> This takes the original plain text key and creates a secure key using SALT</summary>
+    ''' <param name="originalPassword"></param>
+    ''' <param name="passwordLength"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Shared Function DerivePassword(ByVal originalPassword As String, ByVal passwordLength As Integer) As Byte()
 
         ' The following section works with VB 2005 only
@@ -743,11 +860,9 @@ Public Class Crypto
 
     End Function
 
-    '********************************************************
-    '* ValidateRSAKeys: Checks for the existence of a public
-    '*                  and private key file and creates them
-    '*                  if they do not exist
-    '********************************************************
+    ''' <summary>Checks for the existence of a public and private key
+    ''' file and creates them if they do not exist</summary>
+    ''' <remarks></remarks>
     Private Shared Sub ValidateRSAKeys()
         If Not File.Exists(KEY_PRIVATE) OrElse Not File.Exists(KEY_PUBLIC) Then
             'Dim rsa As New RSACryptoServiceProvider
@@ -766,9 +881,12 @@ Public Class Crypto
         End If
     End Sub
 
-    '********************************************************
-    '* GetTextFromFile: Reads the text from a file
-    '********************************************************
+    ''' <summary>
+    ''' Reads the text from a file
+    ''' </summary>
+    ''' <param name="fileName"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Shared Function GetTextFromFile(ByVal fileName As String) As String
         If File.Exists(fileName) Then
             Dim textFile As StreamReader = File.OpenText(fileName)

@@ -7,9 +7,17 @@ Imports System.Runtime.InteropServices
 Class clsNetworkStats
 
 #Region " DECLARES "
+    ''' <summary>?Not Documented!</summary>
+    ''' <remarks></remarks>
     Private Const ERROR_SUCCESS As Long = 0
+    ''' <summary>?Not Documented!</summary>
+    ''' <remarks></remarks>
     Private Const MAX_INTERFACE_NAME_LEN As Long = 256
+    ''' <summary>?Not Documented!</summary>
+    ''' <remarks></remarks>
     Private Const MAXLEN_IFDESCR As Long = 256
+    ''' <summary>?Not Documented!</summary>
+    ''' <remarks></remarks>
     Private Const MAXLEN_PHYSADDR As Long = 8
 
     ''' <summary>
@@ -323,6 +331,8 @@ Class clsNetworkStats
 
 #End Region
 
+    ''' <summary>?Not Documented!</summary>
+    ''' <remarks></remarks>
     Private m_Adapters As ArrayList
 
     ''' <summary>
