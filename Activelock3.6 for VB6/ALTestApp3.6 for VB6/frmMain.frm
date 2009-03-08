@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "Mscomctl.ocx"
 Begin VB.Form frmMain 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "ALTestApp - ActiveLock3 Test Application"
@@ -9,6 +9,7 @@ Begin VB.Form frmMain
    ClientWidth     =   9570
    Icon            =   "frmMain.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    ScaleHeight     =   11520
    ScaleWidth      =   9570
@@ -907,8 +908,8 @@ Private Sub Form_Load()
         
         ' Set the license file format; this could be encrypted or plain
         ' Even in a plain file format, certain keys and dates are still encrypted.
-        '.LicenseFileType = alsLicenseFileEncrypted
-        .LicenseFileType = alsLicenseFilePlain
+        .LicenseFileType = alsLicenseFileEncrypted
+        '.LicenseFileType = alsLicenseFilePlain
     
         ' Verify Activelock DLL's authenticity by checking its CRC
         ' This checkes the CRC of the Activelock DLL and compares it with the embedded value
@@ -968,6 +969,10 @@ Private Sub Form_Load()
     ' If it generates an error, that means there NO trial, NO license
     ' If no error and returns a string, there's a trial but No license. Parse the string to display a trial message.
     ' If no error and no string returned, you've got a valid license.
+    
+    ' In case the Acquire method generates an error, so no license and no trial:
+    ' If InStr(1, Err.Description, "No valid license") > 0 Or InStr(1, Err.Description, "license invalid") > 0 Then '-2147221503 & -2147221502
+
     MyActiveLock.Acquire strMsg, strRemainingTrialDays, strRemainingTrialRuns, strTrialLength, strUsedDays, strExpirationDate, strRegisteredUser, strRegisteredLevel, strLicenseClass, strMaxCount, strLicenseFileType, strLicenseType, strUsedLockType
     ' strMsg is to get the trial status
     ' All other parameters are Optional and you can actually get all of them
