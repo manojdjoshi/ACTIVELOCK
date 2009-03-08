@@ -6,7 +6,7 @@ AppPublisher=Activelock Software Group
 Uninstallable=true
 ; set installation folder based on target Windows version
 DefaultDirName={code:SetInstallDir}\Activelock_VB2008_3.6
-OutputBaseFilename=Activelock_VB2008_Setup_3.6
+OutputBaseFilename=Activelock_VB2008_Setup_3.6_March_6_2009
 OutputDir=.
 DefaultGroupName=Activelock Software Group
 WizardImageFile=C:\ActiveLockCommunity\Images\big-side.bmp
@@ -248,6 +248,17 @@ Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\windowsversion.h; D
 Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\winio.cpp; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
 Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\winio.h; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
 ;Source: C:\ActiveLockCommunity\ALCrypto\Alcrypto3.NET VS2008\winio.obj; DestDir: "{app}\Alcrypto3.NET"; Flags: ignoreversion; Components: sourcecode
+
+; VB2005 Solution and Project Files
+Source: C:\ActiveLockCommunity\Activelock3.6.NETVB2005\Activelock3.6.NETVB2005.sln; DestDir: "{app}\Activelock3.6.NETVB2005"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6.NETVB2005\Activelock3.6.NETVB2005.vbproj; DestDir: "{app}\Activelock3.6.NETVB2005"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6.NETVB2005\Activelock3.6.NETVB2005.vbproj.user; DestDir: "{app}\Activelock3.6.NETVB2005"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6.NETVB2005\ALTestApp3.6.NETVB2005.sln; DestDir: "{app}\Activelock3.6.NETVB2005"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6.NETVB2005\ALTestApp3.6.NETVB2005.suo; DestDir: "{app}\Activelock3.6.NETVB2005"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6.NETVB2005\ALTestApp3.6.NETVB2005.vbproj; DestDir: "{app}\Activelock3.6.NETVB2005"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6.NETVB2005\Alugen3.6NETVB2005.sln; DestDir: "{app}\Activelock3.6.NETVB2005"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6.NETVB2005\Alugen3.6NETVB2005.vbproj; DestDir: "{app}\Activelock3.6.NETVB2005"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6.NETVB2005\Alugen3.6NETVB2005.vbproj.user; DestDir: "{app}\Activelock3.6.NETVB2005"; Flags: ignoreversion; Components: sourcecode
 
 [Code]
 function InitializeSetup(): Boolean;
