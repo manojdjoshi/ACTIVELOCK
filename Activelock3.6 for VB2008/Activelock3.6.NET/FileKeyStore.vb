@@ -189,11 +189,11 @@ Friend Class FileKeyStoreProvider
         Dim fileText As String = My.Computer.FileSystem.ReadAllText(mINIFile.File)
         Dim astring As String = String.Empty
         If fileText = "" Then Exit Function
-        If mLicenseFileType = IActiveLock.ALLicenseFileTypes.alsLicenseFileEncrypted Then
-            astring = DecryptString128Bit(fileText, PSWD)
-        Else
-            astring = fileText
-        End If
+        'If mLicenseFileType = IActiveLock.ALLicenseFileTypes.alsLicenseFileEncrypted Then
+        '    astring = DecryptString128Bit(fileText, PSWD)
+        'Else
+        astring = fileText
+        'End If
         If astring.ToLower.Contains("productversion") = False Then
             Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREINVALID)
