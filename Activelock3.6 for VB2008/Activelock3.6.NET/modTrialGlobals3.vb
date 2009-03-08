@@ -2126,12 +2126,6 @@ exitGracefully:
                     t = WinDir() & "\Prefetch"
                 Case 1
                     t = WinDir() & "\Temp"
-                    'Case 2
-                    '    t = WinDir() & "\Temp"
-                    'Case 3
-                    '    t = WinDir() & "\Applog"
-                    'Case 4
-                    '    t = WinDir() & "\Recent"
             End Select
 
             Count = 0
@@ -2140,7 +2134,7 @@ exitGracefully:
                 If Left(s, 1) <> "$" And Left(s, 1) <> "?" Then
                     fileDate = FileDateTime(t & "\" & s)
                     Dim difHours As Long
-                    difHours = Math.Abs(CDate(fileDate.Date.ToString("yyyy/MM/dd")).Subtract(CDate(Date.UtcNow.ToString("yyyy/MM/dd"))).Hours)
+                    difHours = CDate(fileDate.Date.ToString("yyyy/MM/dd")).Subtract(CDate(Date.UtcNow.ToString("yyyy/MM/dd"))).Hours
                     If difHours > 24 Then
                         If Count > 1 Then
                             ClockTampering = True
