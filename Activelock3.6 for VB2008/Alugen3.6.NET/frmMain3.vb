@@ -2674,7 +2674,8 @@ noInfo:
         txtUser.BackColor = System.Drawing.ColorTranslator.FromOle(&H8000000F)
 
         cboProducts.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboProducts", CStr(0)))
-        Me.Text = "Alugen - ActiveLock v3.6 Key Generator for VB2008" '& Application.ProductVersion
+        txtDays.Text = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtDays", CStr(365))
+        Me.Text = "Alugen - ActiveLock v" & My.Application.Info.Version.Major & "." & My.Application.Info.Version.Minor & " Build (" & My.Application.Info.Version.Build & ") Key Generator for VB2008"
         CheckIfWizardPresent()
     End Sub
     Private Sub CheckIfWizardPresent()
@@ -2782,7 +2783,7 @@ noInfo:
         End If
 
         txtMaxCount.Text = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtMaxCount", CStr(5))
-        txtDays.Text = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtDays", CStr(365))
+        'txtDays.Text = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtDays", CStr(365))
 
         optStrength0.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength0", "1"))
         optStrength1.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength1", "0"))
@@ -2825,6 +2826,16 @@ LoadFormSetting_Error:
 
         ' Initialize Generator
         GeneratorInstance = MyGen.GeneratorInstance(mProductsStoreType)
+        If File.Exists(mProductsStoragePath) = False Then
+            Select Case mainForm.mProductsStoreType
+                Case IActiveLock.ProductsStoreType.alsINIFile
+                    mProductsStoragePath = modALUGEN.AppPath & "\licenses.ini"
+                Case IActiveLock.ProductsStoreType.alsMDBFile
+                    mProductsStoragePath = modALUGEN.AppPath & "\licenses.mdb"
+                Case IActiveLock.ProductsStoreType.alsXMLFile
+                    mProductsStoragePath = modALUGEN.AppPath & "\licenses.xml"
+            End Select
+        End If
         GeneratorInstance.StoragePath = mProductsStoragePath
 
         On Error GoTo 0
