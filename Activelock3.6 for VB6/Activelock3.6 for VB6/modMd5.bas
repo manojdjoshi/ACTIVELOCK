@@ -1,34 +1,43 @@
 Attribute VB_Name = "modMD5"
-'*   ActiveLock
-'*   Copyright 1998-2002 Nelson Ferraz
-'*   Copyright 2003-2006 The ActiveLock Software Group (ASG)
-'*   All material is the property of the contributing authors.
-'*
-'*   Redistribution and use in source and binary forms, with or without
-'*   modification, are permitted provided that the following conditions are
-'*   met:
-'*
-'*     [o] Redistributions of source code must retain the above copyright
-'*         notice, this list of conditions and the following disclaimer.
-'*
-'*     [o] Redistributions in binary form must reproduce the above
-'*         copyright notice, this list of conditions and the following
-'*         disclaimer in the documentation and/or other materials provided
-'*         with the distribution.
-'*
-'*   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-'*   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-'*   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-'*   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-'*   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-'*   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-'*   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-'*   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-'*   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-'*   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-'*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-'*
-'*
+' This project is available from SVN on SourceForge.net under the main project, Activelock !
+'
+' ProjectPage: http://sourceforge.net/projects/activelock
+' WebSite: http://www.activeLockSoftware.com
+' DeveloperForums: http://forums.activelocksoftware.com
+' ProjectManager: Ismail Alkan - http://activelocksoftware.com/simplemachinesforum/index.php?action=profile;u=1
+' ProjectLicense: BSD Open License - http://www.opensource.org/licenses/bsd-license.php
+' ProjectPurpose: Copy Protection, Software Locking, Anti Piracy
+'
+' //////////////////////////////////////////////////////////////////////////////////////////
+' *   ActiveLock
+' *   Copyright 1998-2002 Nelson Ferraz
+' *   Copyright 2003-2009 The ActiveLock Software Group (ASG)
+' *   All material is the property of the contributing authors.
+' *
+' *   Redistribution and use in source and binary forms, with or without
+' *   modification, are permitted provided that the following conditions are
+' *   met:
+' *
+' *     [o] Redistributions of source code must retain the above copyright
+' *         notice, this list of conditions and the following disclaimer.
+' *
+' *     [o] Redistributions in binary form must reproduce the above
+' *         copyright notice, this list of conditions and the following
+' *         disclaimer in the documentation and/or other materials provided
+' *         with the distribution.
+' *
+' *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+' *   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+' *   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+' *   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+' *   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+' *   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+' *   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+' *   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+' *   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+' *   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+' *   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+' *
 '===============================================================================
 ' Name: modMD5
 ' Purpose: MD5 Hashing Module
@@ -102,24 +111,24 @@ Dim w1 As String, w2 As String, w3 As String
 ' Purpose: [INTERNAL] MD5 function
 ' Remarks: None
 '===============================================================================
-Private Function MD5Round(strRound As String, a As Long, b As Long, C As Long, d As Long, x As Long, s As Long, ac As Long) As Long
+Private Function MD5Round(strRound As String, a As Long, b As Long, C As Long, d As Long, X As Long, S As Long, ac As Long) As Long
 
     Select Case strRound
         Case Is = "FF"
-            a = MD5LongAdd4(a, (b And C) Or (Not (b) And d), x, ac)
-            a = MD5Rotate(a, s)
+            a = MD5LongAdd4(a, (b And C) Or (Not (b) And d), X, ac)
+            a = MD5Rotate(a, S)
             a = MD5LongAdd(a, b)
         Case Is = "GG"
-            a = MD5LongAdd4(a, (b And d) Or (C And Not (d)), x, ac)
-            a = MD5Rotate(a, s)
+            a = MD5LongAdd4(a, (b And d) Or (C And Not (d)), X, ac)
+            a = MD5Rotate(a, S)
             a = MD5LongAdd(a, b)
         Case Is = "HH"
-            a = MD5LongAdd4(a, b Xor C Xor d, x, ac)
-            a = MD5Rotate(a, s)
+            a = MD5LongAdd4(a, b Xor C Xor d, X, ac)
+            a = MD5Rotate(a, S)
             a = MD5LongAdd(a, b)
         Case Is = "II"
-            a = MD5LongAdd4(a, C Xor (b Or Not (d)), x, ac)
-            a = MD5Rotate(a, s)
+            a = MD5LongAdd4(a, C Xor (b Or Not (d)), X, ac)
+            a = MD5Rotate(a, S)
             a = MD5LongAdd(a, b)
     End Select
 
@@ -265,7 +274,7 @@ End Function
 '===============================================================================
 Private Sub MD5Conversion(bytBuffer() As Byte)
 
-    Dim x(16) As Long, a As Long
+    Dim X(16) As Long, a As Long
     Dim b As Long, C As Long
     Dim d As Long
 
@@ -274,75 +283,75 @@ Private Sub MD5Conversion(bytBuffer() As Byte)
     C = arrLongConversion(3)
     d = arrLongConversion(4)
 
-    MD5Decode 64, x, bytBuffer
+    MD5Decode 64, X, bytBuffer
 
-    MD5Round "FF", a, b, C, d, x(0), S11, -680876936
-    MD5Round "FF", d, a, b, C, x(1), S12, -389564586
-    MD5Round "FF", C, d, a, b, x(2), S13, 606105819
-    MD5Round "FF", b, C, d, a, x(3), S14, -1044525330
-    MD5Round "FF", a, b, C, d, x(4), S11, -176418897
-    MD5Round "FF", d, a, b, C, x(5), S12, 1200080426
-    MD5Round "FF", C, d, a, b, x(6), S13, -1473231341
-    MD5Round "FF", b, C, d, a, x(7), S14, -45705983
-    MD5Round "FF", a, b, C, d, x(8), S11, 1770035416
-    MD5Round "FF", d, a, b, C, x(9), S12, -1958414417
-    MD5Round "FF", C, d, a, b, x(10), S13, -42063
-    MD5Round "FF", b, C, d, a, x(11), S14, -1990404162
-    MD5Round "FF", a, b, C, d, x(12), S11, 1804603682
-    MD5Round "FF", d, a, b, C, x(13), S12, -40341101
-    MD5Round "FF", C, d, a, b, x(14), S13, -1502002290
-    MD5Round "FF", b, C, d, a, x(15), S14, 1236535329
+    MD5Round "FF", a, b, C, d, X(0), S11, -680876936
+    MD5Round "FF", d, a, b, C, X(1), S12, -389564586
+    MD5Round "FF", C, d, a, b, X(2), S13, 606105819
+    MD5Round "FF", b, C, d, a, X(3), S14, -1044525330
+    MD5Round "FF", a, b, C, d, X(4), S11, -176418897
+    MD5Round "FF", d, a, b, C, X(5), S12, 1200080426
+    MD5Round "FF", C, d, a, b, X(6), S13, -1473231341
+    MD5Round "FF", b, C, d, a, X(7), S14, -45705983
+    MD5Round "FF", a, b, C, d, X(8), S11, 1770035416
+    MD5Round "FF", d, a, b, C, X(9), S12, -1958414417
+    MD5Round "FF", C, d, a, b, X(10), S13, -42063
+    MD5Round "FF", b, C, d, a, X(11), S14, -1990404162
+    MD5Round "FF", a, b, C, d, X(12), S11, 1804603682
+    MD5Round "FF", d, a, b, C, X(13), S12, -40341101
+    MD5Round "FF", C, d, a, b, X(14), S13, -1502002290
+    MD5Round "FF", b, C, d, a, X(15), S14, 1236535329
 
-    MD5Round "GG", a, b, C, d, x(1), S21, -165796510
-    MD5Round "GG", d, a, b, C, x(6), S22, -1069501632
-    MD5Round "GG", C, d, a, b, x(11), S23, 643717713
-    MD5Round "GG", b, C, d, a, x(0), S24, -373897302
-    MD5Round "GG", a, b, C, d, x(5), S21, -701558691
-    MD5Round "GG", d, a, b, C, x(10), S22, 38016083
-    MD5Round "GG", C, d, a, b, x(15), S23, -660478335
-    MD5Round "GG", b, C, d, a, x(4), S24, -405537848
-    MD5Round "GG", a, b, C, d, x(9), S21, 568446438
-    MD5Round "GG", d, a, b, C, x(14), S22, -1019803690
-    MD5Round "GG", C, d, a, b, x(3), S23, -187363961
-    MD5Round "GG", b, C, d, a, x(8), S24, 1163531501
-    MD5Round "GG", a, b, C, d, x(13), S21, -1444681467
-    MD5Round "GG", d, a, b, C, x(2), S22, -51403784
-    MD5Round "GG", C, d, a, b, x(7), S23, 1735328473
-    MD5Round "GG", b, C, d, a, x(12), S24, -1926607734
+    MD5Round "GG", a, b, C, d, X(1), S21, -165796510
+    MD5Round "GG", d, a, b, C, X(6), S22, -1069501632
+    MD5Round "GG", C, d, a, b, X(11), S23, 643717713
+    MD5Round "GG", b, C, d, a, X(0), S24, -373897302
+    MD5Round "GG", a, b, C, d, X(5), S21, -701558691
+    MD5Round "GG", d, a, b, C, X(10), S22, 38016083
+    MD5Round "GG", C, d, a, b, X(15), S23, -660478335
+    MD5Round "GG", b, C, d, a, X(4), S24, -405537848
+    MD5Round "GG", a, b, C, d, X(9), S21, 568446438
+    MD5Round "GG", d, a, b, C, X(14), S22, -1019803690
+    MD5Round "GG", C, d, a, b, X(3), S23, -187363961
+    MD5Round "GG", b, C, d, a, X(8), S24, 1163531501
+    MD5Round "GG", a, b, C, d, X(13), S21, -1444681467
+    MD5Round "GG", d, a, b, C, X(2), S22, -51403784
+    MD5Round "GG", C, d, a, b, X(7), S23, 1735328473
+    MD5Round "GG", b, C, d, a, X(12), S24, -1926607734
 
-    MD5Round "HH", a, b, C, d, x(5), S31, -378558
-    MD5Round "HH", d, a, b, C, x(8), S32, -2022574463
-    MD5Round "HH", C, d, a, b, x(11), S33, 1839030562
-    MD5Round "HH", b, C, d, a, x(14), S34, -35309556
-    MD5Round "HH", a, b, C, d, x(1), S31, -1530992060
-    MD5Round "HH", d, a, b, C, x(4), S32, 1272893353
-    MD5Round "HH", C, d, a, b, x(7), S33, -155497632
-    MD5Round "HH", b, C, d, a, x(10), S34, -1094730640
-    MD5Round "HH", a, b, C, d, x(13), S31, 681279174
-    MD5Round "HH", d, a, b, C, x(0), S32, -358537222
-    MD5Round "HH", C, d, a, b, x(3), S33, -722521979
-    MD5Round "HH", b, C, d, a, x(6), S34, 76029189
-    MD5Round "HH", a, b, C, d, x(9), S31, -640364487
-    MD5Round "HH", d, a, b, C, x(12), S32, -421815835
-    MD5Round "HH", C, d, a, b, x(15), S33, 530742520
-    MD5Round "HH", b, C, d, a, x(2), S34, -995338651
+    MD5Round "HH", a, b, C, d, X(5), S31, -378558
+    MD5Round "HH", d, a, b, C, X(8), S32, -2022574463
+    MD5Round "HH", C, d, a, b, X(11), S33, 1839030562
+    MD5Round "HH", b, C, d, a, X(14), S34, -35309556
+    MD5Round "HH", a, b, C, d, X(1), S31, -1530992060
+    MD5Round "HH", d, a, b, C, X(4), S32, 1272893353
+    MD5Round "HH", C, d, a, b, X(7), S33, -155497632
+    MD5Round "HH", b, C, d, a, X(10), S34, -1094730640
+    MD5Round "HH", a, b, C, d, X(13), S31, 681279174
+    MD5Round "HH", d, a, b, C, X(0), S32, -358537222
+    MD5Round "HH", C, d, a, b, X(3), S33, -722521979
+    MD5Round "HH", b, C, d, a, X(6), S34, 76029189
+    MD5Round "HH", a, b, C, d, X(9), S31, -640364487
+    MD5Round "HH", d, a, b, C, X(12), S32, -421815835
+    MD5Round "HH", C, d, a, b, X(15), S33, 530742520
+    MD5Round "HH", b, C, d, a, X(2), S34, -995338651
 
-    MD5Round "II", a, b, C, d, x(0), S41, -198630844
-    MD5Round "II", d, a, b, C, x(7), S42, 1126891415
-    MD5Round "II", C, d, a, b, x(14), S43, -1416354905
-    MD5Round "II", b, C, d, a, x(5), S44, -57434055
-    MD5Round "II", a, b, C, d, x(12), S41, 1700485571
-    MD5Round "II", d, a, b, C, x(3), S42, -1894986606
-    MD5Round "II", C, d, a, b, x(10), S43, -1051523
-    MD5Round "II", b, C, d, a, x(1), S44, -2054922799
-    MD5Round "II", a, b, C, d, x(8), S41, 1873313359
-    MD5Round "II", d, a, b, C, x(15), S42, -30611744
-    MD5Round "II", C, d, a, b, x(6), S43, -1560198380
-    MD5Round "II", b, C, d, a, x(13), S44, 1309151649
-    MD5Round "II", a, b, C, d, x(4), S41, -145523070
-    MD5Round "II", d, a, b, C, x(11), S42, -1120210379
-    MD5Round "II", C, d, a, b, x(2), S43, 718787259
-    MD5Round "II", b, C, d, a, x(9), S44, -343485551
+    MD5Round "II", a, b, C, d, X(0), S41, -198630844
+    MD5Round "II", d, a, b, C, X(7), S42, 1126891415
+    MD5Round "II", C, d, a, b, X(14), S43, -1416354905
+    MD5Round "II", b, C, d, a, X(5), S44, -57434055
+    MD5Round "II", a, b, C, d, X(12), S41, 1700485571
+    MD5Round "II", d, a, b, C, X(3), S42, -1894986606
+    MD5Round "II", C, d, a, b, X(10), S43, -1051523
+    MD5Round "II", b, C, d, a, X(1), S44, -2054922799
+    MD5Round "II", a, b, C, d, X(8), S41, 1873313359
+    MD5Round "II", d, a, b, C, X(15), S42, -30611744
+    MD5Round "II", C, d, a, b, X(6), S43, -1560198380
+    MD5Round "II", b, C, d, a, X(13), S44, 1309151649
+    MD5Round "II", a, b, C, d, X(4), S41, -145523070
+    MD5Round "II", d, a, b, C, X(11), S42, -1120210379
+    MD5Round "II", C, d, a, b, X(2), S43, 718787259
+    MD5Round "II", b, C, d, a, X(9), S44, -343485551
 
     arrLongConversion(1) = MD5LongAdd(arrLongConversion(1), a)
     arrLongConversion(2) = MD5LongAdd(arrLongConversion(2), b)
@@ -614,8 +623,8 @@ End Sub
 ' Purpose: [INTERNAL] MD5 function
 ' Remarks: None
 '===============================================================================
-Function MD5AA1F(ByVal tempstr As String, ByVal w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
-    MD5AA1F = BigAA1Mod32Add(BigAA1RotLeft(BigAA1Mod32Add(BigAA1Mod32Add(w, tempstr), BigAA1Mod32Add(in_, qdata)), rots), x)
+Function MD5AA1F(ByVal tempstr As String, ByVal w As String, ByVal X As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
+    MD5AA1F = BigAA1Mod32Add(BigAA1RotLeft(BigAA1Mod32Add(BigAA1Mod32Add(w, tempstr), BigAA1Mod32Add(in_, qdata)), rots), X)
 End Function
 '===============================================================================
 ' Name: Sub MD5AA1F1
@@ -631,11 +640,11 @@ End Function
 ' Purpose: [INTERNAL] MD5 sub
 ' Remarks: None
 '===============================================================================
-Sub MD5AA1F1(w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
+Sub MD5AA1F1(w As String, ByVal X As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
     Dim tempstr As String
     
-    tempstr = BigAA1XOR(z, BigAA1AND(x, BigAA1XOR(y, z)))
-    w = MD5AA1F(tempstr, w, x, y, z, in_, qdata, rots)
+    tempstr = BigAA1XOR(z, BigAA1AND(X, BigAA1XOR(y, z)))
+    w = MD5AA1F(tempstr, w, X, y, z, in_, qdata, rots)
 
 End Sub
 
@@ -653,11 +662,11 @@ End Sub
 ' Purpose: [INTERNAL] MD5 sub
 ' Remarks: None
 '===============================================================================
-Sub MD5AA1F2(w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
+Sub MD5AA1F2(w As String, ByVal X As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
     Dim tempstr As String
     
-    tempstr = BigAA1XOR(y, BigAA1AND(z, BigAA1XOR(x, y)))
-    w = MD5AA1F(tempstr, w, x, y, z, in_, qdata, rots)
+    tempstr = BigAA1XOR(y, BigAA1AND(z, BigAA1XOR(X, y)))
+    w = MD5AA1F(tempstr, w, X, y, z, in_, qdata, rots)
 
 End Sub
 
@@ -675,11 +684,11 @@ End Sub
 ' Purpose: [INTERNAL] MD5 sub
 ' Remarks: None
 '===============================================================================
-Sub MD5AA1F3(w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
+Sub MD5AA1F3(w As String, ByVal X As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
     Dim tempstr As String
     
-    tempstr = BigAA1XOR(x, BigAA1XOR(y, z))
-    w = MD5AA1F(tempstr, w, x, y, z, in_, qdata, rots)
+    tempstr = BigAA1XOR(X, BigAA1XOR(y, z))
+    w = MD5AA1F(tempstr, w, X, y, z, in_, qdata, rots)
 
 End Sub
 
@@ -697,11 +706,11 @@ End Sub
 ' Purpose: [INTERNAL] MD5 sub
 ' Remarks: None
 '===============================================================================
-Sub MD5AA1F4(w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
+Sub MD5AA1F4(w As String, ByVal X As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
     Dim tempstr As String
     
-    tempstr = BigAA1XOR(y, BigAA1OR(x, BigAA1NOT(z)))
-    w = MD5AA1F(tempstr, w, x, y, z, in_, qdata, rots)
+    tempstr = BigAA1XOR(y, BigAA1OR(X, BigAA1NOT(z)))
+    w = MD5AA1F(tempstr, w, X, y, z, in_, qdata, rots)
 
 End Sub
 
@@ -714,7 +723,7 @@ End Sub
 ' Remarks: None
 '===============================================================================
 Function MD5AA1Hash(ByVal hashthis As String) As String
-    ReDim buf(0 To 3) As String
+    ReDim Buf(0 To 3) As String
     ReDim in_(0 To 15) As String
     Dim tempnum As Integer, tempnum2 As Integer, loopit As Integer, loopouter As Integer, loopinner As Integer
     Dim a As String, b As String, C As String, d As String
@@ -734,17 +743,17 @@ Function MD5AA1Hash(ByVal hashthis As String) As String
     Next loopit
     
     ' Set magic numbers
-    buf(0) = "67452301"
-    buf(1) = "efcdab89"
-    buf(2) = "98badcfe"
-    buf(3) = "10325476"
+    Buf(0) = "67452301"
+    Buf(1) = "efcdab89"
+    Buf(2) = "98badcfe"
+    Buf(3) = "10325476"
     
     ' For each 512 bit section
     For loopouter = 0 To Len(hashthis) / 64 - 1
-        a = buf(0)
-        b = buf(1)
-        C = buf(2)
-        d = buf(3)
+        a = Buf(0)
+        b = Buf(1)
+        C = Buf(2)
+        d = Buf(3)
     
         ' Get the 512 bits
         For loopit = 0 To 15
@@ -827,17 +836,17 @@ Function MD5AA1Hash(ByVal hashthis As String) As String
         MD5AA1F4 C, d, a, b, in_(2), "2ad7d2bb", 15
         MD5AA1F4 b, C, d, a, in_(9), "eb86d391", 21
     
-        buf(0) = BigAA1Add(buf(0), a)
-        buf(1) = BigAA1Add(buf(1), b)
-        buf(2) = BigAA1Add(buf(2), C)
-        buf(3) = BigAA1Add(buf(3), d)
+        Buf(0) = BigAA1Add(Buf(0), a)
+        Buf(1) = BigAA1Add(Buf(1), b)
+        Buf(2) = BigAA1Add(Buf(2), C)
+        Buf(3) = BigAA1Add(Buf(3), d)
     Next loopouter
     
     ' Extract MD5Hash
     hashthis = ""
     For loopit = 0 To 3
         For loopinner = 3 To 0 Step -1
-            hashthis = hashthis + Mid$(buf(loopit), 1 + 2 * loopinner, 2)
+            hashthis = hashthis + Mid$(Buf(loopit), 1 + 2 * loopinner, 2)
         Next loopinner
     Next loopit
     
@@ -861,8 +870,8 @@ End Function
 ' Purpose: [INTERNAL] MD5 function
 ' Remarks: None
 '===============================================================================
-Function MD5AA2F(ByVal tempstr As String, ByVal w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
-    MD5AA2F = BigAA2Mod32Add(BigAA2RotLeft(BigAA2Mod32Add(BigAA2Mod32Add(w, tempstr), BigAA2Mod32Add(in_, qdata)), rots), x)
+Function MD5AA2F(ByVal tempstr As String, ByVal w As String, ByVal X As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
+    MD5AA2F = BigAA2Mod32Add(BigAA2RotLeft(BigAA2Mod32Add(BigAA2Mod32Add(w, tempstr), BigAA2Mod32Add(in_, qdata)), rots), X)
 
 End Function
 
@@ -880,11 +889,11 @@ End Function
 ' Purpose: [INTERNAL] MD5 sub
 ' Remarks: None
 '===============================================================================
-Sub MD5AA2F1(w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
+Sub MD5AA2F1(w As String, ByVal X As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
     Dim tempstr As String
     
-    tempstr = BigAA2XOR(z, BigAA2AND(x, BigAA2XOR(y, z)))
-    w = MD5AA2F(tempstr, w, x, y, z, in_, qdata, rots)
+    tempstr = BigAA2XOR(z, BigAA2AND(X, BigAA2XOR(y, z)))
+    w = MD5AA2F(tempstr, w, X, y, z, in_, qdata, rots)
 
 End Sub
 
@@ -902,11 +911,11 @@ End Sub
 ' Purpose: [INTERNAL] MD5 sub
 ' Remarks: None
 '===============================================================================
-Sub MD5AA2F2(w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
+Sub MD5AA2F2(w As String, ByVal X As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
     Dim tempstr As String
     
-    tempstr = BigAA2XOR(y, BigAA2AND(z, BigAA2XOR(x, y)))
-    w = MD5AA2F(tempstr, w, x, y, z, in_, qdata, rots)
+    tempstr = BigAA2XOR(y, BigAA2AND(z, BigAA2XOR(X, y)))
+    w = MD5AA2F(tempstr, w, X, y, z, in_, qdata, rots)
 
 End Sub
 
@@ -924,11 +933,11 @@ End Sub
 ' Purpose: [INTERNAL] MD5 sub
 ' Remarks: None
 '===============================================================================
-Sub MD5AA2F3(w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
+Sub MD5AA2F3(w As String, ByVal X As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
     Dim tempstr As String
     
-    tempstr = BigAA2XOR(x, BigAA2XOR(y, z))
-    w = MD5AA2F(tempstr, w, x, y, z, in_, qdata, rots)
+    tempstr = BigAA2XOR(X, BigAA2XOR(y, z))
+    w = MD5AA2F(tempstr, w, X, y, z, in_, qdata, rots)
 
 End Sub
 
@@ -946,11 +955,11 @@ End Sub
 ' Purpose: [INTERNAL] MD5 sub
 ' Remarks: None
 '===============================================================================
-Sub MD5AA2F4(w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
+Sub MD5AA2F4(w As String, ByVal X As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
     Dim tempstr As String
     
-    tempstr = BigAA2XOR(y, BigAA2OR(x, BigAA2NOT(z)))
-    w = MD5AA2F(tempstr, w, x, y, z, in_, qdata, rots)
+    tempstr = BigAA2XOR(y, BigAA2OR(X, BigAA2NOT(z)))
+    w = MD5AA2F(tempstr, w, X, y, z, in_, qdata, rots)
 
 End Sub
 
@@ -963,7 +972,7 @@ End Sub
 ' Remarks: None
 '===============================================================================
 Function MD5AA2Hash(ByVal hashthis As String) As String
-    ReDim buf(0 To 3) As String
+    ReDim Buf(0 To 3) As String
     ReDim in_(0 To 15) As String
     Dim tempnum As Integer, tempnum2 As Integer, loopit As Integer, loopouter As Integer, loopinner As Integer
     Dim a As String, b As String, C As String, d As String
@@ -983,17 +992,17 @@ Function MD5AA2Hash(ByVal hashthis As String) As String
     Next loopit
     
     ' Set magic numbers
-    buf(0) = "67452301"
-    buf(1) = "efcdab89"
-    buf(2) = "98badcfe"
-    buf(3) = "10325476"
+    Buf(0) = "67452301"
+    Buf(1) = "efcdab89"
+    Buf(2) = "98badcfe"
+    Buf(3) = "10325476"
     
     ' For each 512 bit section
     For loopouter = 0 To Len(hashthis) / 64 - 1
-        a = buf(0)
-        b = buf(1)
-        C = buf(2)
-        d = buf(3)
+        a = Buf(0)
+        b = Buf(1)
+        C = Buf(2)
+        d = Buf(3)
     
         ' Get the 512 bits
         For loopit = 0 To 15
@@ -1076,17 +1085,17 @@ Function MD5AA2Hash(ByVal hashthis As String) As String
         MD5AA2F4 C, d, a, b, in_(2), "2ad7d2bb", 15
         MD5AA2F4 b, C, d, a, in_(9), "eb86d391", 21
     
-        buf(0) = BigAA2Add(buf(0), a)
-        buf(1) = BigAA2Add(buf(1), b)
-        buf(2) = BigAA2Add(buf(2), C)
-        buf(3) = BigAA2Add(buf(3), d)
+        Buf(0) = BigAA2Add(Buf(0), a)
+        Buf(1) = BigAA2Add(Buf(1), b)
+        Buf(2) = BigAA2Add(Buf(2), C)
+        Buf(3) = BigAA2Add(Buf(3), d)
     Next loopouter
     
     ' Extract MD5Hash
     hashthis = ""
     For loopit = 0 To 3
         For loopinner = 3 To 0 Step -1
-            hashthis = hashthis + Mid$(buf(loopit), 1 + 2 * loopinner, 2)
+            hashthis = hashthis + Mid$(Buf(loopit), 1 + 2 * loopinner, 2)
         Next loopinner
     Next loopit
     
@@ -1110,7 +1119,7 @@ End Function
 ' Purpose: [INTERNAL] MD5 function
 ' Remarks: None
 '===============================================================================
-Function MD5AB1F(ByVal tempstr As String, ByVal w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
+Function MD5AB1F(ByVal tempstr As String, ByVal w As String, ByVal X As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
     Dim valueans As String
     Dim loopit As Integer, tempnum As Integer
 
@@ -1125,7 +1134,7 @@ Function MD5AB1F(ByVal tempstr As String, ByVal w As String, ByVal x As String, 
         tempnum = Int(tempnum / 16)
     Next loopit
 
-    MD5AB1F = BigAA1Mod32Add(BigAA1RotLeft(valueans, rots), x)
+    MD5AB1F = BigAA1Mod32Add(BigAA1RotLeft(valueans, rots), X)
                    
 End Function
 
@@ -1143,23 +1152,23 @@ End Function
 ' Purpose: [INTERNAL] MD5 sub
 ' Remarks: None
 '===============================================================================
-Sub MD5AB1F1(w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
+Sub MD5AB1F1(w As String, ByVal X As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
     Dim tempstr As String
     Dim loopit As Integer
     Dim xn As Integer, yn As Integer, zn As Integer
     
-    x = String$(8 - Len(x), "0") + x
+    X = String$(8 - Len(X), "0") + X
     y = String$(8 - Len(y), "0") + y
     z = String$(8 - Len(z), "0") + z
 
     For loopit = 1 To 8
-        xn = Val("&H" + Mid$(x, loopit, 1))
+        xn = Val("&H" + Mid$(X, loopit, 1))
         yn = Val("&H" + Mid$(y, loopit, 1))
         zn = Val("&H" + Mid$(z, loopit, 1))
         tempstr = tempstr + Hex$(zn Xor (xn And (yn Xor zn)))
     Next loopit
 
-    w = MD5AB1F(tempstr, w, x, y, z, in_, qdata, rots)
+    w = MD5AB1F(tempstr, w, X, y, z, in_, qdata, rots)
     
 End Sub
 
@@ -1177,23 +1186,23 @@ End Sub
 ' Purpose: [INTERNAL] MD5 sub
 ' Remarks: None
 '===============================================================================
-Sub MD5AB1F2(w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
+Sub MD5AB1F2(w As String, ByVal X As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
     Dim tempstr As String
     Dim loopit As Integer
     Dim xn As Integer, yn As Integer, zn As Integer
     
-    x = String$(8 - Len(x), "0") + x
+    X = String$(8 - Len(X), "0") + X
     y = String$(8 - Len(y), "0") + y
     z = String$(8 - Len(z), "0") + z
 
     For loopit = 1 To 8
-        xn = Val("&H" + Mid$(x, loopit, 1))
+        xn = Val("&H" + Mid$(X, loopit, 1))
         yn = Val("&H" + Mid$(y, loopit, 1))
         zn = Val("&H" + Mid$(z, loopit, 1))
         tempstr = tempstr + Hex$(yn Xor (zn And (xn Xor yn)))
     Next loopit
 
-    w = MD5AB1F(tempstr, w, x, y, z, in_, qdata, rots)
+    w = MD5AB1F(tempstr, w, X, y, z, in_, qdata, rots)
 
 End Sub
 
@@ -1211,23 +1220,23 @@ End Sub
 ' Purpose: [INTERNAL] MD5 sub
 ' Remarks: None
 '===============================================================================
-Sub MD5AB1F3(w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
+Sub MD5AB1F3(w As String, ByVal X As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
     Dim tempstr As String
     Dim loopit As Integer
     Dim xn As Integer, yn As Integer, zn As Integer
     
-    x = String$(8 - Len(x), "0") + x
+    X = String$(8 - Len(X), "0") + X
     y = String$(8 - Len(y), "0") + y
     z = String$(8 - Len(z), "0") + z
 
     For loopit = 1 To 8
-        xn = Val("&H" + Mid$(x, loopit, 1))
+        xn = Val("&H" + Mid$(X, loopit, 1))
         yn = Val("&H" + Mid$(y, loopit, 1))
         zn = Val("&H" + Mid$(z, loopit, 1))
         tempstr = tempstr + Hex$(zn Xor xn Xor yn)
     Next loopit
 
-    w = MD5AB1F(tempstr, w, x, y, z, in_, qdata, rots)
+    w = MD5AB1F(tempstr, w, X, y, z, in_, qdata, rots)
 
 End Sub
 
@@ -1245,23 +1254,23 @@ End Sub
 ' Purpose: [INTERNAL] MD5 sub
 ' Remarks: None
 '===============================================================================
-Sub MD5AB1F4(w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
+Sub MD5AB1F4(w As String, ByVal X As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
     Dim tempstr As String
     Dim loopit As Integer
     Dim xn As Integer, yn As Integer, zn As Integer
     
-    x = String$(8 - Len(x), "0") + x
+    X = String$(8 - Len(X), "0") + X
     y = String$(8 - Len(y), "0") + y
     z = String$(8 - Len(z), "0") + z
 
     For loopit = 1 To 8
-        xn = Val("&H" + Mid$(x, loopit, 1))
+        xn = Val("&H" + Mid$(X, loopit, 1))
         yn = Val("&H" + Mid$(y, loopit, 1))
         zn = Val("&H" + Mid$(z, loopit, 1))
         tempstr = tempstr + Hex$(yn Xor (xn Or (15 Xor zn)))
     Next loopit
 
-    w = MD5AB1F(tempstr, w, x, y, z, in_, qdata, rots)
+    w = MD5AB1F(tempstr, w, X, y, z, in_, qdata, rots)
 
 End Sub
 
@@ -1274,7 +1283,7 @@ End Sub
 ' Remarks: None
 '===============================================================================
 Function MD5AB1Hash(ByVal hashthis As String) As String
-    ReDim buf(0 To 3) As String
+    ReDim Buf(0 To 3) As String
     ReDim in_(0 To 15) As String
     Dim tempnum As Integer, tempnum2 As Integer, loopit As Integer, loopouter As Integer, loopinner As Integer
     Dim a As String, b As String, C As String, d As String
@@ -1294,17 +1303,17 @@ Function MD5AB1Hash(ByVal hashthis As String) As String
     Next loopit
     
     ' Set magic numbers
-    buf(0) = "67452301"
-    buf(1) = "efcdab89"
-    buf(2) = "98badcfe"
-    buf(3) = "10325476"
+    Buf(0) = "67452301"
+    Buf(1) = "efcdab89"
+    Buf(2) = "98badcfe"
+    Buf(3) = "10325476"
     
     ' For each 512 bit section
     For loopouter = 0 To Len(hashthis) / 64 - 1
-        a = buf(0)
-        b = buf(1)
-        C = buf(2)
-        d = buf(3)
+        a = Buf(0)
+        b = Buf(1)
+        C = Buf(2)
+        d = Buf(3)
     
         ' Get the 512 bits
         For loopit = 0 To 15
@@ -1387,17 +1396,17 @@ Function MD5AB1Hash(ByVal hashthis As String) As String
         MD5AB1F4 C, d, a, b, in_(2), "2ad7d2bb", 15
         MD5AB1F4 b, C, d, a, in_(9), "eb86d391", 21
     
-        buf(0) = BigAA1Add(buf(0), a)
-        buf(1) = BigAA1Add(buf(1), b)
-        buf(2) = BigAA1Add(buf(2), C)
-        buf(3) = BigAA1Add(buf(3), d)
+        Buf(0) = BigAA1Add(Buf(0), a)
+        Buf(1) = BigAA1Add(Buf(1), b)
+        Buf(2) = BigAA1Add(Buf(2), C)
+        Buf(3) = BigAA1Add(Buf(3), d)
     Next loopouter
     
     ' Extract MD5Hash
     hashthis = ""
     For loopit = 0 To 3
         For loopinner = 3 To 0 Step -1
-            hashthis = hashthis + Mid$(buf(loopit), 1 + 2 * loopinner, 2)
+            hashthis = hashthis + Mid$(Buf(loopit), 1 + 2 * loopinner, 2)
         Next loopinner
     Next loopit
     
@@ -1421,7 +1430,7 @@ End Function
 ' Purpose: [INTERNAL] MD5 function
 ' Remarks: None
 '===============================================================================
-Function MD5AB2F(ByVal tempstr As String, ByVal w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
+Function MD5AB2F(ByVal tempstr As String, ByVal w As String, ByVal X As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
     Dim valueans As String, tempvalstr  As String
     Dim loopit As Integer, tempnum As Long
     Dim temps1 As String, temps2 As String, temps3 As String, temps4 As String
@@ -1446,7 +1455,7 @@ Function MD5AB2F(ByVal tempstr As String, ByVal w As String, ByVal x As String, 
     tempnum = tempnum + Val("&H" + temps1 + "&") + Val("&H" + temps2 + "&") + Val("&H" + temps3 + "&") + Val("&H" + temps4 + "&")
     valueans = Hex$(tempnum) + valueans
 
-    MD5AB2F = BigAA2Mod32Add(BigAA2RotLeft(valueans, rots), x)
+    MD5AB2F = BigAA2Mod32Add(BigAA2RotLeft(valueans, rots), X)
                    
 
 End Function
@@ -1465,25 +1474,25 @@ End Function
 ' Purpose: [INTERNAL] MD5 sub
 ' Remarks: None
 '===============================================================================
-Sub MD5AB2F1(w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
+Sub MD5AB2F1(w As String, ByVal X As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
     Dim tempstr As String
     Dim xn As Long, yn As Long, zn As Long
     
-    x = String$(8 - Len(x), "0") + x
+    X = String$(8 - Len(X), "0") + X
     y = String$(8 - Len(y), "0") + y
     z = String$(8 - Len(z), "0") + z
 
-    xn = Val("&H" + Right$(x, 5) + "&")
+    xn = Val("&H" + Right$(X, 5) + "&")
     yn = Val("&H" + Right$(y, 5) + "&")
     zn = Val("&H" + Right$(z, 5) + "&")
     tempstr = Hex$(zn Xor (xn And (yn Xor zn)))
     tempstr = String$(5 - Len(tempstr), "0") + tempstr
-    xn = Val("&H" + Left$(x, 3))
+    xn = Val("&H" + Left$(X, 3))
     yn = Val("&H" + Left$(y, 3))
     zn = Val("&H" + Left$(z, 3))
     tempstr = Hex$(zn Xor (xn And (yn Xor zn))) + tempstr
     
-    w = MD5AB2F(tempstr, w, x, y, z, in_, qdata, rots)
+    w = MD5AB2F(tempstr, w, X, y, z, in_, qdata, rots)
 
 End Sub
 
@@ -1501,25 +1510,25 @@ End Sub
 ' Purpose: [INTERNAL] MD5 sub
 ' Remarks: None
 '===============================================================================
-Sub MD5AB2F2(w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
+Sub MD5AB2F2(w As String, ByVal X As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
     Dim tempstr As String
     Dim xn As Long, yn As Long, zn As Long
     
-    x = String$(8 - Len(x), "0") + x
+    X = String$(8 - Len(X), "0") + X
     y = String$(8 - Len(y), "0") + y
     z = String$(8 - Len(z), "0") + z
 
-    xn = Val("&H" + Right$(x, 5) + "&")
+    xn = Val("&H" + Right$(X, 5) + "&")
     yn = Val("&H" + Right$(y, 5) + "&")
     zn = Val("&H" + Right$(z, 5) + "&")
     tempstr = Hex$(yn Xor (zn And (xn Xor yn)))
     tempstr = String$(5 - Len(tempstr), "0") + tempstr
-    xn = Val("&H" + Left$(x, 3))
+    xn = Val("&H" + Left$(X, 3))
     yn = Val("&H" + Left$(y, 3))
     zn = Val("&H" + Left$(z, 3))
     tempstr = Hex$(yn Xor (zn And (xn Xor yn))) + tempstr
     
-    w = MD5AB2F(tempstr, w, x, y, z, in_, qdata, rots)
+    w = MD5AB2F(tempstr, w, X, y, z, in_, qdata, rots)
 
 End Sub
 
@@ -1537,25 +1546,25 @@ End Sub
 ' Purpose: [INTERNAL] MD5 sub
 ' Remarks: None
 '===============================================================================
-Sub MD5AB2F3(w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
+Sub MD5AB2F3(w As String, ByVal X As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
     Dim tempstr As String
     Dim xn As Long, yn As Long, zn As Long
     
-    x = String$(8 - Len(x), "0") + x
+    X = String$(8 - Len(X), "0") + X
     y = String$(8 - Len(y), "0") + y
     z = String$(8 - Len(z), "0") + z
 
-    xn = Val("&H" + Right$(x, 5) + "&")
+    xn = Val("&H" + Right$(X, 5) + "&")
     yn = Val("&H" + Right$(y, 5) + "&")
     zn = Val("&H" + Right$(z, 5) + "&")
     tempstr = Hex$(xn Xor (yn Xor zn))
     tempstr = String$(5 - Len(tempstr), "0") + tempstr
-    xn = Val("&H" + Left$(x, 3))
+    xn = Val("&H" + Left$(X, 3))
     yn = Val("&H" + Left$(y, 3))
     zn = Val("&H" + Left$(z, 3))
     tempstr = Hex$(xn Xor (yn Xor zn)) + tempstr
     
-    w = MD5AB2F(tempstr, w, x, y, z, in_, qdata, rots)
+    w = MD5AB2F(tempstr, w, X, y, z, in_, qdata, rots)
 
 End Sub
 
@@ -1573,25 +1582,25 @@ End Sub
 ' Purpose: [INTERNAL] MD5 sub
 ' Remarks: None
 '===============================================================================
-Sub MD5AB2F4(w As String, ByVal x As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
+Sub MD5AB2F4(w As String, ByVal X As String, ByVal y As String, ByVal z As String, ByVal in_ As String, ByVal qdata As String, ByVal rots As Integer)
     Dim tempstr As String
     Dim xn As Long, yn As Long, zn As Long
     
-    x = String$(8 - Len(x), "0") + x
+    X = String$(8 - Len(X), "0") + X
     y = String$(8 - Len(y), "0") + y
     z = String$(8 - Len(z), "0") + z
 
-    xn = Val("&H" + Right$(x, 5) + "&")
+    xn = Val("&H" + Right$(X, 5) + "&")
     yn = Val("&H" + Right$(y, 5) + "&")
     zn = Val("&H" + Right$(z, 5) + "&")
     tempstr = Hex$(yn Xor (xn Or (1048575 Xor zn)))
     tempstr = String$(5 - Len(tempstr), "0") + tempstr
-    xn = Val("&H" + Left$(x, 3))
+    xn = Val("&H" + Left$(X, 3))
     yn = Val("&H" + Left$(y, 3))
     zn = Val("&H" + Left$(z, 3))
     tempstr = Hex$(yn Xor (xn Or (4095 Xor zn))) + tempstr
     
-    w = MD5AB2F(tempstr, w, x, y, z, in_, qdata, rots)
+    w = MD5AB2F(tempstr, w, X, y, z, in_, qdata, rots)
 
 End Sub
 
@@ -1604,7 +1613,7 @@ End Sub
 ' Remarks: None
 '===============================================================================
 Function MD5AB2Hash(ByVal hashthis As String) As String
-    ReDim buf(0 To 3) As String
+    ReDim Buf(0 To 3) As String
     ReDim in_(0 To 15) As String
     Dim tempnum As Integer, tempnum2 As Integer, loopit As Integer, loopouter As Integer, loopinner As Integer
     Dim a As String, b As String, C As String, d As String
@@ -1624,17 +1633,17 @@ Function MD5AB2Hash(ByVal hashthis As String) As String
     Next loopit
     
     ' Set magic numbers
-    buf(0) = "67452301"
-    buf(1) = "efcdab89"
-    buf(2) = "98badcfe"
-    buf(3) = "10325476"
+    Buf(0) = "67452301"
+    Buf(1) = "efcdab89"
+    Buf(2) = "98badcfe"
+    Buf(3) = "10325476"
     
     ' For each 512 bit section
     For loopouter = 0 To Len(hashthis) / 64 - 1
-        a = buf(0)
-        b = buf(1)
-        C = buf(2)
-        d = buf(3)
+        a = Buf(0)
+        b = Buf(1)
+        C = Buf(2)
+        d = Buf(3)
     
         ' Get the 512 bits
         For loopit = 0 To 15
@@ -1717,17 +1726,17 @@ Function MD5AB2Hash(ByVal hashthis As String) As String
         MD5AB2F4 C, d, a, b, in_(2), "2ad7d2bb", 15
         MD5AB2F4 b, C, d, a, in_(9), "eb86d391", 21
     
-        buf(0) = BigAA2Add(buf(0), a)
-        buf(1) = BigAA2Add(buf(1), b)
-        buf(2) = BigAA2Add(buf(2), C)
-        buf(3) = BigAA2Add(buf(3), d)
+        Buf(0) = BigAA2Add(Buf(0), a)
+        Buf(1) = BigAA2Add(Buf(1), b)
+        Buf(2) = BigAA2Add(Buf(2), C)
+        Buf(3) = BigAA2Add(Buf(3), d)
     Next loopouter
     
     ' Extract MD5Hash
     hashthis = ""
     For loopit = 0 To 3
         For loopinner = 3 To 0 Step -1
-            hashthis = hashthis + Mid$(buf(loopit), 1 + 2 * loopinner, 2)
+            hashthis = hashthis + Mid$(Buf(loopit), 1 + 2 * loopinner, 2)
         Next loopinner
     Next loopit
     

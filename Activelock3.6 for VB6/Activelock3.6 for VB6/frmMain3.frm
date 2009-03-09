@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "Mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form frmMain 
    Appearance      =   0  'Flat
    BorderStyle     =   1  'Fixed Single
@@ -1387,13 +1387,13 @@ Else
     txtDays.ForeColor = &H8000000F
 End If
 If cmbLicType = "Time Locked" Then
-    lblExpiry = "&Expires on Date:"
-    txtDays = Format(Now, "yyyy/MM/dd")
-    lblDays = "yyyy/MM/dd"
+    lblExpiry.Caption = "&Expires on Date:"
+    txtDays.Text = Format(Now, "yyyy/MM/dd")
+    lblDays.Caption = "yyyy/MM/dd"
 Else
-    lblExpiry = "&Expires after:"
-    txtDays = "365"
-    lblDays = "Day(s)"
+    lblExpiry.Caption = "&Expires after:"
+    txtDays.Text = "365"
+    lblDays.Caption = "Day(s)"
 End If
 
 Set_locale regionalSymbol
@@ -2106,6 +2106,7 @@ Public Sub Form_Load()
     txtUser.BackColor = vbButtonFace
 
     cmbProds.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbProds", 0))
+    txtDays.Text = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtDays", CStr(365))
     Me.Caption = "ALUGEN - ActiveLock Key Generator for VB6 - v" & App.Major & "." & App.Minor & "." & App.Revision
     Move (Screen.Width - Me.Width) / 2, (Screen.Height - Me.Height) / 2
 
@@ -2119,6 +2120,7 @@ If Not blnIsFirstLaunch Then Exit Sub
 
 PROJECT_INI_FILENAME = App.path & "\Alugen3.ini"
 'On Error Resume Next
+systemEvent = True
 SSTab1.Tab = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", 0))
 'cmbProds.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbProds", 0))
 cmbLicType.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbLicType", 1))
@@ -2146,7 +2148,7 @@ chkLockBaseboardID.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Op
 chkLockVideoID.Value = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockVideoID", False))
 
 txtMaxCount.Text = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtMaxCount", CStr(5))
-txtDays.Text = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtDays", CStr(365))
+'txtDays.Text = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtDays", CStr(365))
 
 optStrength(0).Value = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength0", True))
 optStrength(1).Value = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength1", False))
@@ -2154,7 +2156,7 @@ optStrength(2).Value = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Opti
 optStrength(3).Value = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength3", False))
 optStrength(4).Value = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength4", False))
 optStrength(5).Value = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength5", False))
-
+systemEvent = False
 If Not fileExist(mProductsStoragePath) And mProductsStoreType = alsMDBFile Then
     mProductsStoreType = alsINIFile
     mProductsStoragePath = App.path & "\licenses.ini"
@@ -2172,22 +2174,32 @@ End Sub
 
 
 Private Sub InitActiveLock()
-  On Error GoTo InitForm_Error
-  ' Initialize AL
-  Set ActiveLock = ActiveLock3.NewInstance()
-  ActiveLock.KeyStoreType = mKeyStoreType
-  ActiveLock.Init
-  
-  ' Initialize Generator
-  Set GeneratorInstance = ActiveLock3.GeneratorInstance(mProductsStoreType) 'alsINIFile - for ini file, alsXMLFile for xml file, alsMDBFile for MDB file
-  GeneratorInstance.StoragePath = mProductsStoragePath
-   
-  On Error GoTo 0
-  Exit Sub
+On Error GoTo InitForm_Error
+' Initialize AL
+Set ActiveLock = ActiveLock3.NewInstance()
+ActiveLock.KeyStoreType = mKeyStoreType
+ActiveLock.Init
+
+' Initialize Generator
+Set GeneratorInstance = ActiveLock3.GeneratorInstance(mProductsStoreType) 'alsINIFile - for ini file, alsXMLFile for xml file, alsMDBFile for MDB file
+If FileExists(mProductsStoragePath) = False Then
+    Select Case frmMain.mProductsStoreType
+        Case alsINIFile
+            mProductsStoragePath = App.path & "\licenses.ini"
+        Case alsMDBFile
+            mProductsStoragePath = App.path & "\licenses.mdb"
+        Case alsXMLFile
+            mProductsStoragePath = App.path & "\licenses.xml"
+    End Select
+End If
+GeneratorInstance.StoragePath = mProductsStoragePath
+ 
+On Error GoTo 0
+Exit Sub
 
 InitForm_Error:
+    MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure InitForm of Form frmMain"
 
-  MsgBox "Error " & Err.Number & " (" & Err.Description & ") in procedure InitForm of Form frmMain"
 End Sub
 
 Function CheckForResources(ParamArray MyArray()) As Boolean
