@@ -6,44 +6,462 @@ ActiveLock3_6Net
 </name>
 </assembly>
 <members>
-<member name="F:ActiveLock3_6NET.AlugenGlobals.alugenErrCodeConstants.alugenOk">
+<member name="F:ActiveLock3_6NET.ActiveLock.AL_REGISTRY_HIVE">
 	<summary>
- No error.  Operation was successful.
+ Registry hive used to store Activelock settings.
  </summary>
 	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid">
+</member><member name="F:ActiveLock3_6NET.ActiveLock.mfInit">
 	<summary>
- Product Info is invalid
+ flag to indicate that ActiveLock has been initialized
  </summary>
 	<remarks></remarks>
-</member><member name="T:ActiveLock3_6NET.AlugenGlobals.alugenErrCodeConstants">
+</member><member name="M:ActiveLock3_6NET.ActiveLock.GetVolumeInformation(System.String,System.Text.StringBuilder,System.Int32,System.Int32,System.Int32,System.Int32,System.Text.StringBuilder,System.Int32)">
 	<summary>
-		<para>ActiveLock Error Codes.</para>
-		<para>These error codes are used for <code>Err.Number</code> whenever ActiveLock raises an error</para>
+		<para>GetVolumeInformation</para>
 	</summary>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.AlugenGlobals.GeneratorInstance(ActiveLock3_6NET.IActiveLock.ProductsStoreType)">
+	<param name="lpRootPathName">String - A pointer to a string that contains the root directory of the volume to be described.</param>
+	<param name="lpVolumeNameBuffer">A pointer to a buffer that receives the name of a specified volume. The maximum buffer size is MAX_PATH+1.</param>
+	<param name="nVolumeNameSize">The length of a volume name buffer, in TCHARs. The maximum buffer size is MAX_PATH+1.</param>
+	<param name="lpVolumeSerialNumber">A pointer to a variable that receives the volume serial number.</param>
+	<param name="lpMaximumComponentLength">A pointer to a variable that receives the maximum length, in TCHARs, of a file name component that a specified file system supports.</param>
+	<param name="lpFileSystemFlags">A pointer to a variable that receives flags associated with the specified file system.</param>
+	<param name="lpFileSystemNameBuffer">A pointer to a buffer that receives the name of the file system, for example, the FAT file system or the NTFS file system. The maximum buffer size is MAX_PATH+1.</param>
+	<param name="nFileSystemNameSize">The length of the file system name buffer, in TCHARs. The maximum buffer size is MAX_PATH+1.</param>
+	<returns>
+		<para>If all the requested information is retrieved, the return value is nonzero.</para>
+		<para>If not all the requested information is retrieved, the return value is zero (0). To get extended error information, call GetLastError.</para>
+	</returns>
+	<remarks>
+		<para>See <a href="http://msdn.microsoft.com/en-us/library/aa364993(VS.85).aspx">http://msdn.microsoft.com/en-us/library/aa364993(VS.85).aspx</a></para>
+	</remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_LicenseKeyType">
 	<summary>
- Returns a new Generator instance
+ IActiveLock_LicenseKeyType - Specifies the ALLicenseKeyTypes type
  </summary>
-	<param name="pProductStorageType">IActiveLock.ProductsStoreType - Storage Type!</param>
-	<returns>IALUGenerator - New Generator instance</returns>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.AlugenGlobals.CreateProductInfo(System.String,System.String,System.String,System.String)">
+	<value>ByVal RHS As ALLicenseKeyTypes - ALLicenseKeyTypes type</value>
+	<remarks>None</remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_RegisteredLevel">
 	<summary>
- Instantiates a new ProductInfo object
+ Gets the Registered Level for the license after validating it.
  </summary>
-	<param name="Name">String - Product name</param>
-	<param name="Ver">String - Product version</param>
-	<param name="VCode">String - Product VCODE (public key)</param>
-	<param name="GCode">String - Product GCODE (private key)</param>
-	<returns>ProductInfo - Product information</returns>
-	<remarks></remarks>
-</member><member name="T:ActiveLock3_6NET.AlugenGlobals">
+	<value></value>
+	<returns>String - License RegisteredLevel</returns>
+	<remarks>None</remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_LicenseClass">
 	<summary>
- Global Accessors to ALUGENLib
+ Gets the LicenseClass
  </summary>
-	<remarks>Class instancing was changed to public.</remarks>
+	<value></value>
+	<returns>String - LicenseClass</returns>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_RemainingTrialDays">
+	<summary>
+ Gets the Number of Used Trial Days
+ </summary>
+	<value></value>
+	<returns>Integer - License Used Trial Days</returns>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_RemainingTrialRuns">
+	<summary>
+ Gets the Number of Used Trial Runs
+ </summary>
+	<value></value>
+	<returns>Integer - License Used Trial Runs</returns>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_MaxCount">
+	<summary>
+ Gets the Number of concurrent users for the networked license
+ </summary>
+	<value></value>
+	<returns>Integer - Number of concurrent users for the networked license</returns>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_AutoRegisterKeyPath">
+	<summary>
+		<para>IActiveLock Interface implementation</para>
+		<para>Specifies the liberation key auto file path name</para>
+	</summary>
+	<value>ByVal RHS As String - Liberation key file auto path name</value>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.AutoRegisterKeyPath">
+	<summary>
+ Sets the auto register file full path
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_EventNotifier">
+	<summary>
+ Gets a notification from Activelock
+ </summary>
+	<value></value>
+	<returns>ActiveLockEventNotifier - ???</returns>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_RegisteredDate">
+	<summary>
+ Gets the license registration date after validating it.
+ </summary>
+	<value></value>
+	<returns>String - License registration date.</returns>
+	<remarks>This is the date the license was generated by Alugen. NOT the date the license was activated.</remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_RegisteredUser">
+	<summary>
+ Gets the registered user name after validating the license
+ </summary>
+	<value></value>
+	<returns>String - Registered user name</returns>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_ExpirationDate">
+	<summary>
+ Returns the expiration date of the license after validating it
+ </summary>
+	<value></value>
+	<returns>String - Expiration date of the license</returns>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_KeyStorePath">
+	<summary>
+ Specifies the license file path name
+ </summary>
+	<value>ByVal RHS As String - License file path name</value>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_KeyStoreType">
+	<summary>
+		<para>Specifies the key store type</para>
+		<para>This version of Activelock does not work with the registry</para>
+	</summary>
+	<value>ByVal RHS As LicStoreType - License store type</value>
+	<remarks>Portions of this (RegistryKeyStoreProvider) not implemented yet</remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_LockType">
+	<summary>
+ Gets or Sets the ALLockTypes type
+ </summary>
+	<value>ByVal RHS As ALLockTypes - ALLockTypes type</value>
+	<returns>ALLockTypes - Lock types type</returns>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLock.IActiveLock_AddLockCode(ActiveLock3_6NET.IActiveLock.ALLockTypes,System.Int32@)">
+	<summary>
+ Helper function to build up array of used LockType s
+ </summary>
+	<param name="LockType"><para>ByVal LockType As ALLockTypes _ to be added to array.</para><para>ByRef Byref LockTypes() As ALLockTypes - array of used LockTypes being built up.</para></param>
+	<param name="SizeLT">ByRef SizeLT as Integer - size of array of used LockTypes being built up</param>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_TrialHideType">
+	<summary>
+ Gets the ALTrialHideTypes type
+ </summary>
+	<value></value>
+	<returns>ALTrialHideTypes - Trial Hide types type</returns>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_SoftwareName">
+	<summary>
+ Gets the SoftwareName for the license
+ </summary>
+	<value></value>
+	<returns>String - Software name  for the license</returns>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_SoftwarePassword">
+	<summary>
+ Gets/Sets the SoftwarePassword for the license
+ </summary>
+	<value>ByVal RHS As String - Software Password for the license</value>
+	<returns>String - Software Password for the license</returns>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_CheckTimeServerForClockTampering">
+	<summary>
+ Specifies whether a Time Server should be used to check Clock Tampering
+ </summary>
+	<value>ByVal iServer As Integer - Flag being passed to check the time server</value>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_CheckSystemFilesForClockTampering">
+	<summary>
+ Specifies whether a Time Server should be used to check Clock Tampering
+ </summary>
+	<value>ByVal iServer As Integer - Flag being passed to check the time server</value>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_LicenseFileType">
+	<summary>
+ Specifies whether the License File should be encrypted or not
+ </summary>
+	<value>ByVal Value As IActiveLock.ALLicenseFileTypes - Flag to indicate the license file will be encrypted or not</value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_AutoRegister">
+	<summary>
+ Not Documented!
+ </summary>
+	<value>ALAutoRegisterTypes - ALAutoRegisterType</value>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_TrialWarning">
+	<summary>
+ Specifies whether the License File should be encrypted or not
+ </summary>
+	<value>ByVal Value As IActiveLock.ALTrialWarningTypes - Flag to indicate the license file will be encrypted or not.</value>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_TrialType">
+	<summary>
+ Gets/Sets the TrialType for the license
+ </summary>
+	<value>ByVal Value As IActiveLock.ALTrialTypes</value>
+	<returns>ALTrialTypes - Trial Type  for the license</returns>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_TrialLength">
+	<summary>
+ Gets/Sets the TrialLength for the license
+ </summary>
+	<value></value>
+	<returns>Integer - Trial Length  for the license</returns>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_InstallationCode(System.String,ActiveLock3_6NET.ProductLicense)">
+	<summary>
+ Combines the user name with the lock code and returns it as the installation code
+ </summary>
+	<param name="User">Optional - String - User name</param>
+	<param name="Lic">Optional - ProductLicense - Product License</param>
+	<value></value>
+	<returns>String - Installation code</returns>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_SoftwareVersion">
+	<summary>
+ Gets the SoftwareVersion for the license
+ </summary>
+	<value></value>
+	<returns>String - Software version  for the license</returns>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_SoftwareCode">
+	<summary>
+ Specifies the SoftwareCode for the license
+ </summary>
+	<value>ByVal RHS As String - Software code for the license</value>
+	<remarks>SoftwareCode is an RSA public key.  This code will be used to verify license keys later on.</remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_UsedDays">
+	<summary>
+ Gets the number of days the license was used after validating it.
+ </summary>
+	<value></value>
+	<returns>Integer - ?</returns>
+	<remarks></remarks>
+</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_UsedLockType">
+	<summary>
+ Gets the Lock Type selected in Alugen.
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLock.Class_Initialize_Renamed">
+	<summary>
+ Not documented!
+ </summary>
+	<remarks>Class_Initialize was upgraded to Class_Initialize_Renamed</remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLock.#ctor">
+	<summary>
+ Not Documented!
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLock.IActiveLock_Init(System.String,System.String@)">
+	<summary>
+ Initalizes Activelock
+ </summary>
+	<param name="strPath"></param>
+	<param name="autoLicString">ByRef autoLicString As String - Returned License Key of AutoRegister is successful.</param>
+	<remarks>
+		<para>Performs CRC check on Alcrypto.</para>
+		<para>Performs auto license registration if the license file is found.</para>
+	</remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLock.DoAutoRegistration(System.String@)">
+	<summary>
+ Checks the specified path to see if the auto registration liberation file is there
+ </summary>
+	<param name="strLibKey">strLibKey As String - Returned liberation key if auto register is successful.</param>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLock.ReadLibKey(System.String,System.String@)">
+	<summary>
+ Reads the liberation key from a file
+ </summary>
+	<param name="sFileName">ByVal sFileName As String - File name to read the liberation key from.</param>
+	<param name="strLibKey">ByRef strLibKey As String -  Liberation key returned</param>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLock.IActiveLock_Acquire(System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@)">
+	<summary>
+		<para>Acquires an Activelock License.</para>
+		<para>This is the main method that retrieves an Activelock license, validates it, and ends the trial license if it exists.</para>
+	</summary>
+	<param name="strMsg"></param>
+	<param name="strRemainingTrialDays"></param>
+	<param name="strRemainingTrialRuns"></param>
+	<param name="strTrialLength"></param>
+	<param name="strUsedDays"></param>
+	<param name="strExpirationDate"></param>
+	<param name="strRegisteredUser"></param>
+	<param name="strRegisteredLevel"></param>
+	<param name="strLicenseClass"></param>
+	<param name="strMaxCount"></param>
+	<param name="strLicenseFileType"></param>
+	<param name="strLicenseType"></param>
+	<param name="strUsedLockType"></param>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLock.CheckStreamCapability">
+	<summary>
+ Not Documented!
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLock.ValidateKey(ActiveLock3_6NET.ProductLicense@)">
+	<summary>
+		<para>Validates the License Key using RSA signature verification.</para>
+		<para>License key contains the RSA signature of IActiveLock_LockCode.</para>
+	</summary>
+	<param name="Lic">Lic As ProductLicense - Product license</param>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLock.ValidateShortKey(ActiveLock3_6NET.ProductLicense@,System.String)">
+	<summary>
+ Validates the License Key using the Short Key MD5 verification.
+ </summary>
+	<param name="Lic">Lic As ProductLicense - Product license</param>
+	<param name="user">String - User</param>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLock.ValidateLic(ActiveLock3_6NET.ProductLicense@)">
+	<summary>
+ Validates the entire license (including lastused, etc.)
+ </summary>
+	<param name="Lic">ProductLicense - Product License</param>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLock.UpdateLastUsed(ActiveLock3_6NET.ProductLicense@)">
+	<summary>
+ Updates LastUsed property with current date stamp.
+ </summary>
+	<param name="Lic">ProductLicense - Product License</param>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLock.IActiveLock_Register(System.String,System.String@)">
+	<summary>
+ Registers Activelock license with a given liberation key
+ </summary>
+	<param name="LibKey">String - Liberation Key</param>
+	<param name="user">Optional - String - User</param>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLock.IActiveLock_KillLicense(System.String,System.String)">
+	<summary>
+ KillLicense a specified Activelock license with a given an ID and file name
+ </summary>
+	<param name="SoftwareNameAndVersion">String - Software Name And Version</param>
+	<param name="LicPath">Optional - String - License file path and name</param>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLock.IActiveLock_KillTrial">
+	<summary>
+ Kills a Trial License
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLock.IActiveLock_GenerateShortKey(System.String,System.String,System.String,System.String,ActiveLock3_6NET.ProductLicense.ALLicType,System.Int32,System.Int16)">
+	<summary>
+ Not Documented!
+ </summary>
+	<param name="SoftwareCode"></param>
+	<param name="SerialNumber"></param>
+	<param name="LicenseeAndRegisteredLevel"></param>
+	<param name="Expiration"></param>
+	<param name="LicType"></param>
+	<param name="RegisteredLevel"></param>
+	<param name="MaxUsers"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLock.IActiveLock_ResetTrial">
+	<summary>
+ Resets a Trial License
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLock.IActiveLock_LockCode(ActiveLock3_6NET.ProductLicense@)">
+	<summary>
+ Returns the lock code from a given Activelock license
+ </summary>
+	<param name="Lic">ProductLicense - Product License</param>
+	<returns>String - Lock code</returns>
+	<remarks>v3 includes the new lockHDFirmware option</remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLock.AppendLockString(System.String@,System.String)">
+	<summary>
+ Appends the lock string to the given installation code
+ </summary>
+	<param name="strLock">String - The lock string to be appended to, returns as an output</param>
+	<param name="newSubString">String - The string to be appended to the lock string if strLock is empty string</param>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLock.IActiveLock_Transfer(System.String)">
+	<summary>
+ Not implemented yet
+ </summary>
+	<param name="OtherSoftwareCode">String - Installation code from another machine/software</param>
+	<returns></returns>
+	<remarks>Transfers an Activelock license from one machine/software to another</remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLock.IActivelock_GenerateShortSerial(System.String)">
+	<summary>
+ Generates a Short Key (Serial Number)
+ </summary>
+	<param name="HDDfirmwareSerial"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLock.specialChar(System.String)">
+	<summary>
+ Not Documented!
+ </summary>
+	<param name="s"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:ActiveLock3_6NET.ActiveLock">
+	<summary>
+		<para>This is an implementation of IActiveLock.</para>
+		<para>It is not public-creatable, and so must only be accessed via ActiveLock.NewInstance() method.</para>
+		<para>Includes Key generation and validation routines.</para>
+	</summary>
+	<remarks>If you want to turn off dll-checksumming, add this compilation flag to the Project Properties (Make tab) AL_DEBUG = 1</remarks>
+</member><member name="T:ActiveLock3_6NET.clsShortLicenseKey.Segments">
+	<summary>
+ segments to the license key
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsShortLicenseKey.MapFileChecksumErrors.CHECKSUM_OPEN_FAILURE">
+	<summary>
+ Could not open the file.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsShortLicenseKey.MapFileChecksumErrors.CHECKSUM_MAP_FAILURE">
+	<summary>
+ Could not map the file.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsShortLicenseKey.MapFileChecksumErrors.CHECKSUM_MAPVIEW_FAILURE">
+	<summary>
+ Could not map a view of the file.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsShortLicenseKey.MapFileChecksumErrors.CHECKSUM_UNICODE_FAILURE">
+	<summary>
+ Could not convert the file name to Unicode.
+ </summary>
+	<remarks></remarks>
+</member><member name="T:ActiveLock3_6NET.clsShortLicenseKey.MapFileChecksumErrors">
+	<summary>
+ Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.clsShortLicenseKey.ValidateShortKey(System.String,System.String,System.String,System.Int32,System.DateTime@,System.Int16@,System.Int32@)">
+	<summary>
+ Evaluates the supplied license key and tests that it is valid. We do this by recomputing the checksum and comparing it to the one embedded in the serial number.
+ </summary>
+	<param name="LicenseKey">The license number to validate. Liberation Key.</param>
+	<param name="SerialNumber">A magic string that is application specific. This should be the same as was originally created by the application.</param>
+	<param name="Licensee">Name of party to whom this license is issued. This should be the same as was used to create the serial number.</param>
+	<param name="ProductCode">A unique 4 digit number assigned to this product. This should be the same as was used to create the license key.</param>
+	<param name="ExpireDate">Use this field for time-based serial numbers. This should be the same as was used to create the license key.</param>
+	<param name="UserData">This field is caller defined. This should be the same as was used to create the license key.</param>
+	<param name="RegisteredLevel"></param>
+	<returns>True if the license key checks out, False otherwise.</returns>
+	<remarks>See code for important notes!</remarks>
+</member><member name="T:ActiveLock3_6NET.clsShortLicenseKey">
+	<summary>
+		<para>Use to provide license key generation and validation. This class exposes an
+ abstract interface that can be used to implement licensing for all of your
+ commerical and shareware applications.  Keys can be cloaked with a bit
+ swapping technique, and with a private key.  Keys can also be tied to a
+ licensee.</para>
+	</summary>
+	<remarks>See code, within, for more info!</remarks>
 </member><member name="T:ActiveLock3_6NET._IALUGenerator">
 	<summary>
  _IALUGenerator - Interface
@@ -106,6 +524,342 @@ ActiveLock3_6Net
  Interface for the ActiveLock Universal Generator (ALUGEN)
  </summary>
 	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.Daytime.THRESHOLD_SECONDS">
+	<summary>
+ Number of seconds that Windows clock can deviate from NIST and still be okay
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.Daytime.GetTime">
+	<summary>
+ Returns UTC/GMT using an NIST server if possible, degrading to simply returning the system clock
+ </summary>
+	<returns>DateTime - Returns UTC/GMT using an NIST server if possible</returns>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.Daytime.SetWindowsClock(System.DateTime)">
+	<summary>
+ Sets system time.
+ </summary>
+	<param name="dt"></param>
+	<remarks>Note: Use UTC time; Windows will apply time zone</remarks>
+</member><member name="T:ActiveLock3_6NET.Daytime">
+	<summary>
+ Internet Time Server class by Alastair Dallas 01/27/04
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.wszName">
+	<summary>
+ wszName - A pointer to a Unicode string that contains the name of the interface.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwIndex">
+	<summary>
+ dwIndex - The index that identifies the interface. This index value may change when a network adapter is disabled and then enabled, and should not be considered persistent.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwType">
+	<summary>
+ dwType = The interface type as defined by the Internet Assigned Names Authority (IANA). For more information, see <a href="http://www.iana.org/assignments/ianaiftype-mib">http://www.iana.org/assignments/ianaiftype-mib</a>. Possible values for the interface type are listed in the Ipifcons.h header file. 
+ </summary>
+	<remarks>See http://msdn.microsoft.com/en-us/library/aa366836(VS.85).aspx for more info!</remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwMtu">
+	<summary>
+ dwMtu - The Maximum Transmission Unit (MTU) size in bytes.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwSpeed">
+	<summary>
+ dwSpeed - The speed of the interface in bits per second.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwPhysAddrLen">
+	<summary>
+ dwPhysAddrLen - The length, in bytes, of the physical address specified by the bPhysAddr member.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.bPhysAddr">
+	<summary>
+ bPhysAddr - The physical address of the adapter for this interface.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwAdminStatus">
+	<summary>
+ dwAdminStatus - The interface is administratively enabled or disabled.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwOperStatus">
+	<summary>
+ dwOperStatus - The operational status of the interface. This member can be one of the following values defined in the INTERNAL_IF_OPER_STATUS enumeration defined in the Ipifcons.h header file.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwLastChange">
+	<summary>
+ dwLastChange - The length of time, in hundredths of seconds (10^-2 sec), starting from the last computer restart, when the interface entered its current operational state. This value rolls over after 2^32 hundredths of a second.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwInOctets">
+	<summary>
+ dwInOctets - The number of octets of data received through this interface.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwInUcastPkts">
+	<summary>
+ dwInUcastPkts - The number of unicast packets received through this interface.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwInNUcastPkts">
+	<summary>
+ dwInNUcastPkts - The number of non-unicast packets received through this interface. Broadcast and multicast packets are included.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwInDiscards">
+	<summary>
+ dwInDiscards - The number of incoming packets that were discarded even though they did not have errors.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwInErrors">
+	<summary>
+ dwInErrors - The number of incoming packets that were discarded because of errors.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwInUnknownProtos">
+	<summary>
+ dwInUnknownProtos - The number of incoming packets that were discarded because the protocol was unknown.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwOutOctets">
+	<summary>
+ dwOutOctets - The number of octets of data sent through this interface.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwOutUcastPkts">
+	<summary>
+ dwOutUcastPkts - The number of unicast packets sent through this interface.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwOutNUcastPkts">
+	<summary>
+ dwOutNUcastPkts - The number of non-unicast packets sent through this interface. Broadcast and multicast packets are included.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwOutDiscards">
+	<summary>
+ dwOutDiscards - The number of outgoing packets that were discarded even though they did not have errors.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwOutErrors">
+	<summary>
+ dwOutErrors - The number of outgoing packets that were discarded because of errors.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwOutQLen">
+	<summary>
+ dwOutQLen - The transmit queue length. This field is not currently used.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwDescrLen">
+	<summary>
+ dwDescrLen - The length, in bytes, of the bDescr member.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.bDescr">
+	<summary>
+ bDescr - A description of the interface.
+ </summary>
+	<remarks></remarks>
+</member><member name="T:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW">
+	<summary>
+ MIB_IFROW - The MIB_IFROW structure stores information about a particular interface.
+ </summary>
+	<remarks>See http://msdn.microsoft.com/en-us/library/aa366836(VS.85).aspx for Full Documentation!</remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.Name">
+	<summary>
+ Name - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.Index">
+	<summary>
+ Index - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.Type">
+	<summary>
+ Type - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.Mtu">
+	<summary>
+ Mtu - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.Speed">
+	<summary>
+ Speed - Undocumented!
+ </summary>
+	<remarks>Changed from Integer to Long for VISTA</remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.PhysAddrLen">
+	<summary>
+ PhysAddrLen - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.PhysAddr">
+	<summary>
+ PhysAddr - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.AdminStatus">
+	<summary>
+ AdminStatus - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.OperStatus">
+	<summary>
+ OperStatus - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.LastChange">
+	<summary>
+ LastChange - Undocumented!
+ </summary>
+	<remarks>Changed from Integer to Long to make it work</remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.InOctets">
+	<summary>
+ InOctets - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.InUcastPkts">
+	<summary>
+ InUcastPkts - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.InNUcastPkts">
+	<summary>
+ InNUcastPkts - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.InDiscards">
+	<summary>
+ InDiscards - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.InErrors">
+	<summary>
+ InErrors - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.InUnknownProtos">
+	<summary>
+ InUnknownProtos - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.OutOctets">
+	<summary>
+ OutOctets - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.OutUcastPkts">
+	<summary>
+ OutUcastPkts - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.OutNUcastPkts">
+	<summary>
+ OutNUcastPkts - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.OutDiscards">
+	<summary>
+ OutDiscards - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.OutErrors">
+	<summary>
+ OutErrors - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.OutQLen">
+	<summary>
+ OutQLen - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.Description">
+	<summary>
+ Description - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.InMegs">
+	<summary>
+ InMegs - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.OutMegs">
+	<summary>
+ OutMegs - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="T:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER">
+	<summary>
+ IFROW_HELPER - Undocumented!
+ </summary>
+	<remarks></remarks>
+</member><member name="T:ActiveLock3_6NET.clsNetworkStats.MIB_IFTABLE">
+	<summary>
+ The MIB_IFTABLE structure contains a table of interface entries.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.clsNetworkStats.GetIfTable(System.IntPtr,System.Int32@,System.Boolean)">
+	<summary>
+ The GetIfTable function retrieves the MIB-II interface table.
+ </summary>
+	<param name="pIfRowTable">A pointer to a buffer that receives the interface table as a MIB_IFTABLE structure.</param>
+	<param name="pdwSize">On input, specifies the size in bytes of the buffer pointed to by the pIfTable parameter.</param>
+	<param name="bOrder">A Boolean value that specifies whether the returned interface table should be sorted in ascending order by interface index. If this parameter is TRUE, the table is sorted.</param>
+	<returns>If the function succeeds, the return value is NO_ERROR.</returns>
+	<remarks>See http://msdn.microsoft.com/en-us/library/aa365943(VS.85).aspx for more info!</remarks>
+</member><member name="M:ActiveLock3_6NET.clsNetworkStats.GetIfEntry(ActiveLock3_6NET.clsNetworkStats.MIB_IFROW@)">
+	<summary>
+ The GetIfEntry function retrieves information for the specified interface on the local computer.
+ </summary>
+	<param name="pIfRow">A pointer to a <a href="http://msdn.microsoft.com/en-us/library/aa366836(VS.85).aspx">MIB_IFROW</a> structure that, on successful return, receives information for an interface on the local computer. On input, set the dwIndex member of MIB_IFROW to the index of the interface for which to retrieve information. The value for the dwIndex must be retrieved by a previous call to the GetIfTable, GetIfTable2, or GetIfTable2Ex function.</param>
+	<returns></returns>
+	<remarks>See http://msdn.microsoft.com/en-us/library/aa365939(VS.85).aspx for more info!</remarks>
+</member><member name="M:ActiveLock3_6NET.clsNetworkStats.#ctor(System.Boolean)">
+	<summary>
+ New - Undocumented!
+ </summary>
+	<param name="IgnoreLoopBack"></param>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.clsNetworkStats.GetAdapter">
+	<summary>
+ GetAdapter - Undocumented!
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.clsNetworkStats.PrivToPub(ActiveLock3_6NET.clsNetworkStats.MIB_IFROW)">
+	<summary>
+ PrivToPub - Undocumented!
+ </summary>
+	<param name="pri"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.clsNetworkStats.ToMegs(System.Int64)">
+	<summary>
+ ToMegs - Undocumented!
+ </summary>
+	<param name="lSize"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.clsNetworkStats.MAC2String(System.Byte[])">
+	<summary>
+ Convert a byte array containing a MAC address to a hex string
+ </summary>
+	<param name="AdrArray"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:ActiveLock3_6NET.clsNetworkStats">
+	<summary>
+ clsNetworkStats - Needs updates to comments!
+ </summary>
+	<remarks></remarks>
 </member><member name="P:ActiveLock3_6NET.FileKeyStoreProvider.IKeyStoreProvider_KeyStorePath">
 	<summary>
  Creates an empty file if it doesn't exist
@@ -138,47 +892,93 @@ ActiveLock3_6Net
  This IKeyStoreProvider implementation is used to  maintain the license keys on a file system.
  </summary>
 	<remarks>Implements IKeyStoreProvider interface.</remarks>
-</member><member name="E:ActiveLock3_6NET.ActiveLockEventNotifier.ValidateValue">
+</member><member name="M:ActiveLock3_6NET.ADSFile.GetFileSize(System.Int32,System.IntPtr)">
 	<summary>
-		<para>(Optional) Product License Property Value validation event allows the client application to return the encrypted version of a license property value (such as LastRunDate).</para>
-		<para></para>
+ Retrieves the size of the specified file, in bytes.
+ </summary>
+	<param name="handle">A handle to the file.</param>
+	<param name="size">A pointer to the variable where the high-order doubleword of the file size is returned. This parameter can be NULL if the application does not require the high-order doubleword.</param>
+	<returns>If the function succeeds, the return value is the low-order doubleword of the file size, and, if lpFileSizeHigh is non-NULL, the function puts the high-order doubleword of the file size into the variable pointed to by that parameter.</returns>
+	<remarks>Note that if the return value is INVALID_FILE_SIZE (0xffffffff), an application must call GetLastError to determine whether the function has succeeded or failed. The reason the function may appear to fail when it has not is that lpFileSizeHigh could be non-NULL or the file size could be 0xffffffff. In this case, GetLastError will return NO_ERROR (0) upon success. Because of this behavior, it is recommended that you use GetFileSizeEx instead.</remarks>
+</member><member name="M:ActiveLock3_6NET.ADSFile.ReadFile(System.Int32,System.Byte[],System.Int32,System.Int32@,System.IntPtr)">
+	<summary>
+		<para>Reads data from the specified file or input/output (I/O) device. Reads occur at the position specified by the file pointer if supported by the device.</para>
+		<para>This function is designed for both synchronous and asynchronous operations. For a similar function designed solely for asynchronous operation, see <a href="http://msdn.microsoft.com/en-us/library/aa365468(VS.85).aspx">ReadFileEx</a>.</para>
 	</summary>
-	<param name="Value"></param>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLockEventNotifier.Notify(System.String,System.String@)">
+	<param name="handle">A handle to the device (for example, a file, file stream, physical disk, volume, console buffer, tape drive, socket, communications resource, mailslot, or pipe).</param>
+	<param name="buffer">A pointer to the buffer that receives the data read from a file or device.</param>
+	<param name="byteToRead">The maximum number of bytes to be read.</param>
+	<param name="bytesRead">A pointer to the variable that receives the number of bytes read when using a synchronous hFile parameter. ReadFile sets this value to zero before doing any work or error checking. Use NULL for this parameter if this is an asynchronous operation to avoid potentially erroneous results.</param>
+	<param name="lpOverlapped">A pointer to an OVERLAPPED structure is required if the hFile parameter was opened with FILE_FLAG_OVERLAPPED, otherwise it can be NULL.</param>
+	<returns>If the function succeeds, the return value is nonzero (TRUE).</returns>
+	<remarks>see http://msdn.microsoft.com/en-us/library/aa365467(VS.85).aspx </remarks>
+</member><member name="M:ActiveLock3_6NET.ADSFile.CreateFile(System.String,System.Int32,System.Int32,System.IntPtr,System.Int32,System.Int32,System.IntPtr)">
 	<summary>
- Handles ActiveLock COM event notifications to the interested observers
- </summary>
-	<param name="EventName">String - Event name</param>
-	<param name="Args">Variant - Parametric array arguments</param>
-	<remarks></remarks>
-</member><member name="T:ActiveLock3_6NET.ActiveLockEventNotifier">
-	<summary>
-		<para>This class handles ActiveLock COM event notifications to the interested observers.</para>
-		<para>It is simply a wrapper containing public events.</para>
-		<para>These events should really belong in IActiveLock, but since VB doesn't support inheritance of events, we have to do it this way.</para>
+		<para>Creates or opens a file or I/O device. The most commonly used I/O devices are as follows: file, file stream, directory, physical disk, volume, console buffer, tape drive, communications resource, mailslot, and pipe. The function returns a handle that can be used to access the file or device for various types of I/O depending on the file or device and the flags and attributes specified.</para>
+		<para>To perform this operation as a transacted operation, which results in a handle that can be used for transacted I/O, use the <a href="http://msdn.microsoft.com/en-us/library/aa363859(VS.85).aspx">CreateFileTransacted</a> function.</para>
 	</summary>
-	<remarks>Class instancing was changed to public</remarks>
-</member><member name="F:ActiveLock3_6NET.Daytime.THRESHOLD_SECONDS">
+	<param name="filename">The name of the file or device to be created or opened. </param>
+	<param name="desiredAccess">The requested access to the file or device, which can be summarized as read, write, both or neither (zero).</param>
+	<param name="shareMode">The requested sharing mode of the file or device, which can be read, write, both, delete, all of these, or none (refer to the following table). Access requests to attributes or extended attributes are not affected by this flag.</param>
+	<param name="attributes">A pointer to a SECURITY_ATTRIBUTES structure that contains two separate but related data members: an optional security descriptor, and a Boolean value that determines whether the returned handle can be inherited by child processes.</param>
+	<param name="creationDisposition">An action to take on a file or device that exists or does not exist.</param>
+	<param name="flagsAndAttributes">The file or device attributes and flags, FILE_ATTRIBUTE_NORMAL being the most common default value for files.</param>
+	<param name="templateFile">A valid handle to a template file with the GENERIC_READ access right. The template file supplies file attributes and extended attributes for the file that is being created.</param>
+	<returns>
+		<para>If the function succeeds, the return value is an open handle to the specified file, device, named pipe, or mail slot.</para>
+		<para>If the function fails, the return value is INVALID_HANDLE_VALUE. To get extended error information, call GetLastError.</para>
+	</returns>
+	<remarks>See http://msdn.microsoft.com/en-us/library/aa363858.aspx for full documentation!</remarks>
+</member><member name="M:ActiveLock3_6NET.ADSFile.WriteFile(System.Int32,System.Byte[],System.Int32,System.Int32@,System.IntPtr)">
 	<summary>
- Number of seconds that Windows clock can deviate from NIST and still be okay
+ Writes data to the specified file or input/output (I/O) device. Writes occur at the position specified by the file pointer, if the handle refers to a seeking device.
  </summary>
+	<param name="hFile">A handle to the file or I/O device (for example, a file, file stream, physical disk, volume, console buffer, tape drive, socket, communications resource, mailslot, or pipe).</param>
+	<param name="lpBuffer">A pointer to the buffer containing the data to be written to the file or device.</param>
+	<param name="nNumberOfBytesToWrite">The number of bytes to be written to the file or device.</param>
+	<param name="lpNumberOfBytesWritten">A pointer to the variable that receives the number of bytes written when using a synchronous hFile parameter. WriteFile sets this value to zero before doing any work or error checking. Use NULL for this parameter if this is an asynchronous operation to avoid potentially erroneous results.</param>
+	<param name="lpOverlapped">A pointer to an <a href="http://msdn.microsoft.com/en-us/library/ms684342(VS.85).aspx">OVERLAPPED</a> structure is required if the hFile parameter was opened with FILE_FLAG_OVERLAPPED, otherwise this parameter can be NULL.</param>
+	<returns>If the function succeeds, the return value is nonzero (TRUE).</returns>
+	<remarks>See http://msdn.microsoft.com/en-us/library/aa365747(VS.85).aspx for full documentation!</remarks>
+</member><member name="M:ActiveLock3_6NET.ADSFile.CloseHandle(System.Int32)">
+	<summary>
+ Closes an open object handle.
+ </summary>
+	<param name="hFile">A valid handle to an open object.</param>
+	<returns>If the function succeeds, the return value is nonzero.</returns>
+	<remarks>See http://msdn.microsoft.com/en-us/library/ms724211(VS.85).aspx for full Documentation!</remarks>
+</member><member name="M:ActiveLock3_6NET.ADSFile.Read(System.String,System.String)">
+	<summary>
+ Method called when an alternate data stream must be read from.
+ </summary>
+	<param name="file">The fully qualified name of the file from which
+ the ADS data will be read.</param>
+	<param name="stream">The name of the stream within the "normal" file
+ from which to read.</param>
+	<returns>The contents of the file as a string.  It will always return
+ at least a zero-length string, even if the file does not exist.
+ </returns>
+</member><member name="M:ActiveLock3_6NET.ADSFile.Write(System.String,System.String,System.String)">
+	<summary>
+ The static method to call when data must be written to a stream.
+ </summary>
+	<param name="data">The string data to embed in the stream in the file</param>
+	<param name="file">The fully qualified name of the file with the
+ stream into which the data will be written.</param>
+	<param name="stream">The name of the stream within the normal file to
+ write the data.</param>
+	<returns>An unsigned integer of how many bytes were actually written.</returns>
+</member><member name="M:ActiveLock3_6NET.ADSFile.ReadError(System.String,System.String)">
+	<summary>
+ Not Documented!
+ </summary>
+	<param name="FileName"></param>
+	<param name="stream"></param>
+	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.Daytime.GetTime">
+</member><member name="T:ActiveLock3_6NET.ADSFile">
 	<summary>
- Returns UTC/GMT using an NIST server if possible, degrading to simply returning the system clock
- </summary>
-	<returns>DateTime - Returns UTC/GMT using an NIST server if possible</returns>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.Daytime.SetWindowsClock(System.DateTime)">
-	<summary>
- Sets system time.
- </summary>
-	<param name="dt"></param>
-	<remarks>Note: Use UTC time; Windows will apply time zone</remarks>
-</member><member name="T:ActiveLock3_6NET.Daytime">
-	<summary>
- Internet Time Server class by Alastair Dallas 01/27/04
+ Not Documented!
  </summary>
 	<remarks></remarks>
 </member><member name="M:ActiveLock3_6NET.modActiveLock.rsa_encrypt(System.Int32,System.String,System.Int32@,ActiveLock3_6NET.modALUGEN.RSAKey@)">
@@ -806,6 +1606,12 @@ ActiveLock3_6Net
  </summary>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.modActiveLock.REGKEY1">
+	<summary>
+ ?Not Documented!
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:ActiveLock3_6NET.modActiveLock.IsNumberIncluded(System.Int64,System.Int64)">
 	<summary>
  ?Not Documented!
@@ -826,6 +1632,65 @@ ActiveLock3_6Net
  ActiveLock and the client application.</para>
 	</summary>
 	<remarks>See the TODO List, within</remarks>
+</member><member name="E:ActiveLock3_6NET.ActiveLockEventNotifier.ValidateValue">
+	<summary>
+		<para>(Optional) Product License Property Value validation event allows the client application to return the encrypted version of a license property value (such as LastRunDate).</para>
+		<para></para>
+	</summary>
+	<param name="Value"></param>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.ActiveLockEventNotifier.Notify(System.String,System.String@)">
+	<summary>
+ Handles ActiveLock COM event notifications to the interested observers
+ </summary>
+	<param name="EventName">String - Event name</param>
+	<param name="Args">Variant - Parametric array arguments</param>
+	<remarks></remarks>
+</member><member name="T:ActiveLock3_6NET.ActiveLockEventNotifier">
+	<summary>
+		<para>This class handles ActiveLock COM event notifications to the interested observers.</para>
+		<para>It is simply a wrapper containing public events.</para>
+		<para>These events should really belong in IActiveLock, but since VB doesn't support inheritance of events, we have to do it this way.</para>
+	</summary>
+	<remarks>Class instancing was changed to public</remarks>
+</member><member name="F:ActiveLock3_6NET.AlugenGlobals.alugenErrCodeConstants.alugenOk">
+	<summary>
+ No error.  Operation was successful.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid">
+	<summary>
+ Product Info is invalid
+ </summary>
+	<remarks></remarks>
+</member><member name="T:ActiveLock3_6NET.AlugenGlobals.alugenErrCodeConstants">
+	<summary>
+		<para>ActiveLock Error Codes.</para>
+		<para>These error codes are used for <code>Err.Number</code> whenever ActiveLock raises an error</para>
+	</summary>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.AlugenGlobals.GeneratorInstance(ActiveLock3_6NET.IActiveLock.ProductsStoreType)">
+	<summary>
+ Returns a new Generator instance
+ </summary>
+	<param name="pProductStorageType">IActiveLock.ProductsStoreType - Storage Type!</param>
+	<returns>IALUGenerator - New Generator instance</returns>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.AlugenGlobals.CreateProductInfo(System.String,System.String,System.String,System.String)">
+	<summary>
+ Instantiates a new ProductInfo object
+ </summary>
+	<param name="Name">String - Product name</param>
+	<param name="Ver">String - Product version</param>
+	<param name="VCode">String - Product VCODE (public key)</param>
+	<param name="GCode">String - Product GCODE (private key)</param>
+	<returns>ProductInfo - Product information</returns>
+	<remarks></remarks>
+</member><member name="T:ActiveLock3_6NET.AlugenGlobals">
+	<summary>
+ Global Accessors to ALUGENLib
+ </summary>
+	<remarks>Class instancing was changed to public.</remarks>
 </member><member name="T:ActiveLock3_6NET._IActiveLock">
 	<summary>
  _IActiveLock - Interface - Implimented by IActiveLock
@@ -1333,6 +2198,13 @@ ActiveLock3_6Net
 	<param name="LibKey">ByVal LibKey As String - Liberation key</param>
 	<param name="user">Optional - String - User</param>
 	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.IActiveLock.KillLicense(System.String,System.String)">
+	<summary>
+ KillLicense - Kills the specified license.
+ </summary>
+	<param name="SoftwareNameAndVersion">ByVal SoftwareNameAndVersion As String - Software Name And Version</param>
+	<param name="LicPath">Optional - String - License file name and path</param>
+	<remarks></remarks>
 </member><member name="M:ActiveLock3_6NET.IActiveLock.Init(System.String,System.String@)">
 	<summary>
  Init - Purpose: Initializes ActiveLock before use. Some of the routines, including <a href="IActiveLock.Acquire.html">Acquire()</a> and <a href="IActiveLock.Register.html">Register()</a> requires <code>Init()</code> to be called first.
@@ -1374,858 +2246,6 @@ ActiveLock3_6Net
  IActiveLock - Impliments _IActiveLock
  </summary>
 	<remarks>Class instancing was changed to public.</remarks>
-</member><member name="T:ActiveLock3_6NET.clsShortLicenseKey.Segments">
-	<summary>
- segments to the license key
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsShortLicenseKey.MapFileChecksumErrors.CHECKSUM_OPEN_FAILURE">
-	<summary>
- Could not open the file.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsShortLicenseKey.MapFileChecksumErrors.CHECKSUM_MAP_FAILURE">
-	<summary>
- Could not map the file.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsShortLicenseKey.MapFileChecksumErrors.CHECKSUM_MAPVIEW_FAILURE">
-	<summary>
- Could not map a view of the file.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsShortLicenseKey.MapFileChecksumErrors.CHECKSUM_UNICODE_FAILURE">
-	<summary>
- Could not convert the file name to Unicode.
- </summary>
-	<remarks></remarks>
-</member><member name="T:ActiveLock3_6NET.clsShortLicenseKey.MapFileChecksumErrors">
-	<summary>
- Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.clsShortLicenseKey.ValidateShortKey(System.String,System.String,System.String,System.Int32,System.DateTime@,System.Int16@,System.Int32@)">
-	<summary>
- Evaluates the supplied license key and tests that it is valid. We do this by recomputing the checksum and comparing it to the one embedded in the serial number.
- </summary>
-	<param name="LicenseKey">The license number to validate. Liberation Key.</param>
-	<param name="SerialNumber">A magic string that is application specific. This should be the same as was originally created by the application.</param>
-	<param name="Licensee">Name of party to whom this license is issued. This should be the same as was used to create the serial number.</param>
-	<param name="ProductCode">A unique 4 digit number assigned to this product. This should be the same as was used to create the license key.</param>
-	<param name="ExpireDate">Use this field for time-based serial numbers. This should be the same as was used to create the license key.</param>
-	<param name="UserData">This field is caller defined. This should be the same as was used to create the license key.</param>
-	<param name="RegisteredLevel"></param>
-	<returns>True if the license key checks out, False otherwise.</returns>
-	<remarks>See code for important notes!</remarks>
-</member><member name="T:ActiveLock3_6NET.clsShortLicenseKey">
-	<summary>
-		<para>Use to provide license key generation and validation. This class exposes an
- abstract interface that can be used to implement licensing for all of your
- commerical and shareware applications.  Keys can be cloaked with a bit
- swapping technique, and with a private key.  Keys can also be tied to a
- licensee.</para>
-	</summary>
-	<remarks>See code, within, for more info!</remarks>
-</member><member name="M:ActiveLock3_6NET.ADSFile.GetFileSize(System.Int32,System.IntPtr)">
-	<summary>
- Retrieves the size of the specified file, in bytes.
- </summary>
-	<param name="handle">A handle to the file.</param>
-	<param name="size">A pointer to the variable where the high-order doubleword of the file size is returned. This parameter can be NULL if the application does not require the high-order doubleword.</param>
-	<returns>If the function succeeds, the return value is the low-order doubleword of the file size, and, if lpFileSizeHigh is non-NULL, the function puts the high-order doubleword of the file size into the variable pointed to by that parameter.</returns>
-	<remarks>Note that if the return value is INVALID_FILE_SIZE (0xffffffff), an application must call GetLastError to determine whether the function has succeeded or failed. The reason the function may appear to fail when it has not is that lpFileSizeHigh could be non-NULL or the file size could be 0xffffffff. In this case, GetLastError will return NO_ERROR (0) upon success. Because of this behavior, it is recommended that you use GetFileSizeEx instead.</remarks>
-</member><member name="M:ActiveLock3_6NET.ADSFile.ReadFile(System.Int32,System.Byte[],System.Int32,System.Int32@,System.IntPtr)">
-	<summary>
-		<para>Reads data from the specified file or input/output (I/O) device. Reads occur at the position specified by the file pointer if supported by the device.</para>
-		<para>This function is designed for both synchronous and asynchronous operations. For a similar function designed solely for asynchronous operation, see <a href="http://msdn.microsoft.com/en-us/library/aa365468(VS.85).aspx">ReadFileEx</a>.</para>
-	</summary>
-	<param name="handle">A handle to the device (for example, a file, file stream, physical disk, volume, console buffer, tape drive, socket, communications resource, mailslot, or pipe).</param>
-	<param name="buffer">A pointer to the buffer that receives the data read from a file or device.</param>
-	<param name="byteToRead">The maximum number of bytes to be read.</param>
-	<param name="bytesRead">A pointer to the variable that receives the number of bytes read when using a synchronous hFile parameter. ReadFile sets this value to zero before doing any work or error checking. Use NULL for this parameter if this is an asynchronous operation to avoid potentially erroneous results.</param>
-	<param name="lpOverlapped">A pointer to an OVERLAPPED structure is required if the hFile parameter was opened with FILE_FLAG_OVERLAPPED, otherwise it can be NULL.</param>
-	<returns>If the function succeeds, the return value is nonzero (TRUE).</returns>
-	<remarks>see http://msdn.microsoft.com/en-us/library/aa365467(VS.85).aspx </remarks>
-</member><member name="M:ActiveLock3_6NET.ADSFile.CreateFile(System.String,System.Int32,System.Int32,System.IntPtr,System.Int32,System.Int32,System.IntPtr)">
-	<summary>
-		<para>Creates or opens a file or I/O device. The most commonly used I/O devices are as follows: file, file stream, directory, physical disk, volume, console buffer, tape drive, communications resource, mailslot, and pipe. The function returns a handle that can be used to access the file or device for various types of I/O depending on the file or device and the flags and attributes specified.</para>
-		<para>To perform this operation as a transacted operation, which results in a handle that can be used for transacted I/O, use the <a href="http://msdn.microsoft.com/en-us/library/aa363859(VS.85).aspx">CreateFileTransacted</a> function.</para>
-	</summary>
-	<param name="filename">The name of the file or device to be created or opened. </param>
-	<param name="desiredAccess">The requested access to the file or device, which can be summarized as read, write, both or neither (zero).</param>
-	<param name="shareMode">The requested sharing mode of the file or device, which can be read, write, both, delete, all of these, or none (refer to the following table). Access requests to attributes or extended attributes are not affected by this flag.</param>
-	<param name="attributes">A pointer to a SECURITY_ATTRIBUTES structure that contains two separate but related data members: an optional security descriptor, and a Boolean value that determines whether the returned handle can be inherited by child processes.</param>
-	<param name="creationDisposition">An action to take on a file or device that exists or does not exist.</param>
-	<param name="flagsAndAttributes">The file or device attributes and flags, FILE_ATTRIBUTE_NORMAL being the most common default value for files.</param>
-	<param name="templateFile">A valid handle to a template file with the GENERIC_READ access right. The template file supplies file attributes and extended attributes for the file that is being created.</param>
-	<returns>
-		<para>If the function succeeds, the return value is an open handle to the specified file, device, named pipe, or mail slot.</para>
-		<para>If the function fails, the return value is INVALID_HANDLE_VALUE. To get extended error information, call GetLastError.</para>
-	</returns>
-	<remarks>See http://msdn.microsoft.com/en-us/library/aa363858.aspx for full documentation!</remarks>
-</member><member name="M:ActiveLock3_6NET.ADSFile.WriteFile(System.Int32,System.Byte[],System.Int32,System.Int32@,System.IntPtr)">
-	<summary>
- Writes data to the specified file or input/output (I/O) device. Writes occur at the position specified by the file pointer, if the handle refers to a seeking device.
- </summary>
-	<param name="hFile">A handle to the file or I/O device (for example, a file, file stream, physical disk, volume, console buffer, tape drive, socket, communications resource, mailslot, or pipe).</param>
-	<param name="lpBuffer">A pointer to the buffer containing the data to be written to the file or device.</param>
-	<param name="nNumberOfBytesToWrite">The number of bytes to be written to the file or device.</param>
-	<param name="lpNumberOfBytesWritten">A pointer to the variable that receives the number of bytes written when using a synchronous hFile parameter. WriteFile sets this value to zero before doing any work or error checking. Use NULL for this parameter if this is an asynchronous operation to avoid potentially erroneous results.</param>
-	<param name="lpOverlapped">A pointer to an <a href="http://msdn.microsoft.com/en-us/library/ms684342(VS.85).aspx">OVERLAPPED</a> structure is required if the hFile parameter was opened with FILE_FLAG_OVERLAPPED, otherwise this parameter can be NULL.</param>
-	<returns>If the function succeeds, the return value is nonzero (TRUE).</returns>
-	<remarks>See http://msdn.microsoft.com/en-us/library/aa365747(VS.85).aspx for full documentation!</remarks>
-</member><member name="M:ActiveLock3_6NET.ADSFile.CloseHandle(System.Int32)">
-	<summary>
- Closes an open object handle.
- </summary>
-	<param name="hFile">A valid handle to an open object.</param>
-	<returns>If the function succeeds, the return value is nonzero.</returns>
-	<remarks>See http://msdn.microsoft.com/en-us/library/ms724211(VS.85).aspx for full Documentation!</remarks>
-</member><member name="M:ActiveLock3_6NET.ADSFile.Read(System.String,System.String)">
-	<summary>
- Method called when an alternate data stream must be read from.
- </summary>
-	<param name="file">The fully qualified name of the file from which
- the ADS data will be read.</param>
-	<param name="stream">The name of the stream within the "normal" file
- from which to read.</param>
-	<returns>The contents of the file as a string.  It will always return
- at least a zero-length string, even if the file does not exist.
- </returns>
-</member><member name="M:ActiveLock3_6NET.ADSFile.Write(System.String,System.String,System.String)">
-	<summary>
- The static method to call when data must be written to a stream.
- </summary>
-	<param name="data">The string data to embed in the stream in the file</param>
-	<param name="file">The fully qualified name of the file with the
- stream into which the data will be written.</param>
-	<param name="stream">The name of the stream within the normal file to
- write the data.</param>
-	<returns>An unsigned integer of how many bytes were actually written.</returns>
-</member><member name="M:ActiveLock3_6NET.ADSFile.ReadError(System.String,System.String)">
-	<summary>
- Not Documented!
- </summary>
-	<param name="FileName"></param>
-	<param name="stream"></param>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="T:ActiveLock3_6NET.ADSFile">
-	<summary>
- Not Documented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.ActiveLock.AL_REGISTRY_HIVE">
-	<summary>
- Registry hive used to store Activelock settings.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.ActiveLock.mfInit">
-	<summary>
- flag to indicate that ActiveLock has been initialized
- </summary>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.GetVolumeInformation(System.String,System.Text.StringBuilder,System.Int32,System.Int32,System.Int32,System.Int32,System.Text.StringBuilder,System.Int32)">
-	<summary>
-		<para>GetVolumeInformation</para>
-	</summary>
-	<param name="lpRootPathName">String - A pointer to a string that contains the root directory of the volume to be described.</param>
-	<param name="lpVolumeNameBuffer">A pointer to a buffer that receives the name of a specified volume. The maximum buffer size is MAX_PATH+1.</param>
-	<param name="nVolumeNameSize">The length of a volume name buffer, in TCHARs. The maximum buffer size is MAX_PATH+1.</param>
-	<param name="lpVolumeSerialNumber">A pointer to a variable that receives the volume serial number.</param>
-	<param name="lpMaximumComponentLength">A pointer to a variable that receives the maximum length, in TCHARs, of a file name component that a specified file system supports.</param>
-	<param name="lpFileSystemFlags">A pointer to a variable that receives flags associated with the specified file system.</param>
-	<param name="lpFileSystemNameBuffer">A pointer to a buffer that receives the name of the file system, for example, the FAT file system or the NTFS file system. The maximum buffer size is MAX_PATH+1.</param>
-	<param name="nFileSystemNameSize">The length of the file system name buffer, in TCHARs. The maximum buffer size is MAX_PATH+1.</param>
-	<returns>
-		<para>If all the requested information is retrieved, the return value is nonzero.</para>
-		<para>If not all the requested information is retrieved, the return value is zero (0). To get extended error information, call GetLastError.</para>
-	</returns>
-	<remarks>
-		<para>See <a href="http://msdn.microsoft.com/en-us/library/aa364993(VS.85).aspx">http://msdn.microsoft.com/en-us/library/aa364993(VS.85).aspx</a></para>
-	</remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_LicenseKeyType">
-	<summary>
- IActiveLock_LicenseKeyType - Specifies the ALLicenseKeyTypes type
- </summary>
-	<value>ByVal RHS As ALLicenseKeyTypes - ALLicenseKeyTypes type</value>
-	<remarks>None</remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_RegisteredLevel">
-	<summary>
- Gets the Registered Level for the license after validating it.
- </summary>
-	<value></value>
-	<returns>String - License RegisteredLevel</returns>
-	<remarks>None</remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_LicenseClass">
-	<summary>
- Gets the LicenseClass
- </summary>
-	<value></value>
-	<returns>String - LicenseClass</returns>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_RemainingTrialDays">
-	<summary>
- Gets the Number of Used Trial Days
- </summary>
-	<value></value>
-	<returns>Integer - License Used Trial Days</returns>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_RemainingTrialRuns">
-	<summary>
- Gets the Number of Used Trial Runs
- </summary>
-	<value></value>
-	<returns>Integer - License Used Trial Runs</returns>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_MaxCount">
-	<summary>
- Gets the Number of concurrent users for the networked license
- </summary>
-	<value></value>
-	<returns>Integer - Number of concurrent users for the networked license</returns>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_AutoRegisterKeyPath">
-	<summary>
-		<para>IActiveLock Interface implementation</para>
-		<para>Specifies the liberation key auto file path name</para>
-	</summary>
-	<value>ByVal RHS As String - Liberation key file auto path name</value>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.AutoRegisterKeyPath">
-	<summary>
- Sets the auto register file full path
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_EventNotifier">
-	<summary>
- Gets a notification from Activelock
- </summary>
-	<value></value>
-	<returns>ActiveLockEventNotifier - ???</returns>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_RegisteredDate">
-	<summary>
- Gets the license registration date after validating it.
- </summary>
-	<value></value>
-	<returns>String - License registration date.</returns>
-	<remarks>This is the date the license was generated by Alugen. NOT the date the license was activated.</remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_RegisteredUser">
-	<summary>
- Gets the registered user name after validating the license
- </summary>
-	<value></value>
-	<returns>String - Registered user name</returns>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_ExpirationDate">
-	<summary>
- Returns the expiration date of the license after validating it
- </summary>
-	<value></value>
-	<returns>String - Expiration date of the license</returns>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_KeyStorePath">
-	<summary>
- Specifies the license file path name
- </summary>
-	<value>ByVal RHS As String - License file path name</value>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_KeyStoreType">
-	<summary>
-		<para>Specifies the key store type</para>
-		<para>This version of Activelock does not work with the registry</para>
-	</summary>
-	<value>ByVal RHS As LicStoreType - License store type</value>
-	<remarks>Portions of this (RegistryKeyStoreProvider) not implemented yet</remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_LockType">
-	<summary>
- Gets or Sets the ALLockTypes type
- </summary>
-	<value>ByVal RHS As ALLockTypes - ALLockTypes type</value>
-	<returns>ALLockTypes - Lock types type</returns>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.IActiveLock_AddLockCode(ActiveLock3_6NET.IActiveLock.ALLockTypes,System.Int32@)">
-	<summary>
- Helper function to build up array of used LockType s
- </summary>
-	<param name="LockType"><para>ByVal LockType As ALLockTypes _ to be added to array.</para><para>ByRef Byref LockTypes() As ALLockTypes - array of used LockTypes being built up.</para></param>
-	<param name="SizeLT">ByRef SizeLT as Integer - size of array of used LockTypes being built up</param>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_TrialHideType">
-	<summary>
- Gets the ALTrialHideTypes type
- </summary>
-	<value></value>
-	<returns>ALTrialHideTypes - Trial Hide types type</returns>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_SoftwareName">
-	<summary>
- Gets the SoftwareName for the license
- </summary>
-	<value></value>
-	<returns>String - Software name  for the license</returns>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_SoftwarePassword">
-	<summary>
- Gets/Sets the SoftwarePassword for the license
- </summary>
-	<value>ByVal RHS As String - Software Password for the license</value>
-	<returns>String - Software Password for the license</returns>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_CheckTimeServerForClockTampering">
-	<summary>
- Specifies whether a Time Server should be used to check Clock Tampering
- </summary>
-	<value>ByVal iServer As Integer - Flag being passed to check the time server</value>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_CheckSystemFilesForClockTampering">
-	<summary>
- Specifies whether a Time Server should be used to check Clock Tampering
- </summary>
-	<value>ByVal iServer As Integer - Flag being passed to check the time server</value>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_LicenseFileType">
-	<summary>
- Specifies whether the License File should be encrypted or not
- </summary>
-	<value>ByVal Value As IActiveLock.ALLicenseFileTypes - Flag to indicate the license file will be encrypted or not</value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_AutoRegister">
-	<summary>
- Not Documented!
- </summary>
-	<value>ALAutoRegisterTypes - ALAutoRegisterType</value>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_TrialWarning">
-	<summary>
- Specifies whether the License File should be encrypted or not
- </summary>
-	<value>ByVal Value As IActiveLock.ALTrialWarningTypes - Flag to indicate the license file will be encrypted or not.</value>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_TrialType">
-	<summary>
- Gets/Sets the TrialType for the license
- </summary>
-	<value>ByVal Value As IActiveLock.ALTrialTypes</value>
-	<returns>ALTrialTypes - Trial Type  for the license</returns>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_TrialLength">
-	<summary>
- Gets/Sets the TrialLength for the license
- </summary>
-	<value></value>
-	<returns>Integer - Trial Length  for the license</returns>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_InstallationCode(System.String,ActiveLock3_6NET.ProductLicense)">
-	<summary>
- Combines the user name with the lock code and returns it as the installation code
- </summary>
-	<param name="User">Optional - String - User name</param>
-	<param name="Lic">Optional - ProductLicense - Product License</param>
-	<value></value>
-	<returns>String - Installation code</returns>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_SoftwareVersion">
-	<summary>
- Gets the SoftwareVersion for the license
- </summary>
-	<value></value>
-	<returns>String - Software version  for the license</returns>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_SoftwareCode">
-	<summary>
- Specifies the SoftwareCode for the license
- </summary>
-	<value>ByVal RHS As String - Software code for the license</value>
-	<remarks>SoftwareCode is an RSA public key.  This code will be used to verify license keys later on.</remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_UsedDays">
-	<summary>
- Gets the number of days the license was used after validating it.
- </summary>
-	<value></value>
-	<returns>Integer - ?</returns>
-	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_UsedLockType">
-	<summary>
- Gets the Lock Type selected in Alugen.
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.Class_Initialize_Renamed">
-	<summary>
- Not documented!
- </summary>
-	<remarks>Class_Initialize was upgraded to Class_Initialize_Renamed</remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.#ctor">
-	<summary>
- Not Documented!
- </summary>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.IActiveLock_Init(System.String,System.String@)">
-	<summary>
- Initalizes Activelock
- </summary>
-	<param name="strPath"></param>
-	<param name="autoLicString">ByRef autoLicString As String - Returned License Key of AutoRegister is successful.</param>
-	<remarks>
-		<para>Performs CRC check on Alcrypto.</para>
-		<para>Performs auto license registration if the license file is found.</para>
-	</remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.DoAutoRegistration(System.String@)">
-	<summary>
- Checks the specified path to see if the auto registration liberation file is there
- </summary>
-	<param name="strLibKey">strLibKey As String - Returned liberation key if auto register is successful.</param>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.ReadLibKey(System.String,System.String@)">
-	<summary>
- Reads the liberation key from a file
- </summary>
-	<param name="sFileName">ByVal sFileName As String - File name to read the liberation key from.</param>
-	<param name="strLibKey">ByRef strLibKey As String -  Liberation key returned</param>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.IActiveLock_Acquire(System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@)">
-	<summary>
-		<para>Acquires an Activelock License.</para>
-		<para>This is the main method that retrieves an Activelock license, validates it, and ends the trial license if it exists.</para>
-	</summary>
-	<param name="strMsg"></param>
-	<param name="strRemainingTrialDays"></param>
-	<param name="strRemainingTrialRuns"></param>
-	<param name="strTrialLength"></param>
-	<param name="strUsedDays"></param>
-	<param name="strExpirationDate"></param>
-	<param name="strRegisteredUser"></param>
-	<param name="strRegisteredLevel"></param>
-	<param name="strLicenseClass"></param>
-	<param name="strMaxCount"></param>
-	<param name="strLicenseFileType"></param>
-	<param name="strLicenseType"></param>
-	<param name="strUsedLockType"></param>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.CheckStreamCapability">
-	<summary>
- Not Documented!
- </summary>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.ValidateKey(ActiveLock3_6NET.ProductLicense@)">
-	<summary>
-		<para>Validates the License Key using RSA signature verification.</para>
-		<para>License key contains the RSA signature of IActiveLock_LockCode.</para>
-	</summary>
-	<param name="Lic">Lic As ProductLicense - Product license</param>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.ValidateShortKey(ActiveLock3_6NET.ProductLicense@,System.String)">
-	<summary>
- Validates the License Key using the Short Key MD5 verification.
- </summary>
-	<param name="Lic">Lic As ProductLicense - Product license</param>
-	<param name="user">String - User</param>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.ValidateLic(ActiveLock3_6NET.ProductLicense@)">
-	<summary>
- Validates the entire license (including lastused, etc.)
- </summary>
-	<param name="Lic">ProductLicense - Product License</param>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.UpdateLastUsed(ActiveLock3_6NET.ProductLicense@)">
-	<summary>
- Updates LastUsed property with current date stamp.
- </summary>
-	<param name="Lic">ProductLicense - Product License</param>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.IActiveLock_Register(System.String,System.String@)">
-	<summary>
- Registers Activelock license with a given liberation key
- </summary>
-	<param name="LibKey">String - Liberation Key</param>
-	<param name="user">Optional - String - User</param>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.IActiveLock_KillTrial">
-	<summary>
- Kills a Trial License
- </summary>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.IActiveLock_GenerateShortKey(System.String,System.String,System.String,System.String,ActiveLock3_6NET.ProductLicense.ALLicType,System.Int32,System.Int16)">
-	<summary>
- Not Documented!
- </summary>
-	<param name="SoftwareCode"></param>
-	<param name="SerialNumber"></param>
-	<param name="LicenseeAndRegisteredLevel"></param>
-	<param name="Expiration"></param>
-	<param name="LicType"></param>
-	<param name="RegisteredLevel"></param>
-	<param name="MaxUsers"></param>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.IActiveLock_ResetTrial">
-	<summary>
- Resets a Trial License
- </summary>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.IActiveLock_LockCode(ActiveLock3_6NET.ProductLicense@)">
-	<summary>
- Returns the lock code from a given Activelock license
- </summary>
-	<param name="Lic">ProductLicense - Product License</param>
-	<returns>String - Lock code</returns>
-	<remarks>v3 includes the new lockHDFirmware option</remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.AppendLockString(System.String@,System.String)">
-	<summary>
- Appends the lock string to the given installation code
- </summary>
-	<param name="strLock">String - The lock string to be appended to, returns as an output</param>
-	<param name="newSubString">String - The string to be appended to the lock string if strLock is empty string</param>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.IActiveLock_Transfer(System.String)">
-	<summary>
- Not implemented yet
- </summary>
-	<param name="OtherSoftwareCode">String - Installation code from another machine/software</param>
-	<returns></returns>
-	<remarks>Transfers an Activelock license from one machine/software to another</remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.IActivelock_GenerateShortSerial(System.String)">
-	<summary>
- Generates a Short Key (Serial Number)
- </summary>
-	<param name="HDDfirmwareSerial"></param>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.specialChar(System.String)">
-	<summary>
- Not Documented!
- </summary>
-	<param name="s"></param>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="T:ActiveLock3_6NET.ActiveLock">
-	<summary>
-		<para>This is an implementation of IActiveLock.</para>
-		<para>It is not public-creatable, and so must only be accessed via ActiveLock.NewInstance() method.</para>
-		<para>Includes Key generation and validation routines.</para>
-	</summary>
-	<remarks>If you want to turn off dll-checksumming, add this compilation flag to the Project Properties (Make tab) AL_DEBUG = 1</remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.wszName">
-	<summary>
- wszName - A pointer to a Unicode string that contains the name of the interface.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwIndex">
-	<summary>
- dwIndex - The index that identifies the interface. This index value may change when a network adapter is disabled and then enabled, and should not be considered persistent.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwType">
-	<summary>
- dwType = The interface type as defined by the Internet Assigned Names Authority (IANA). For more information, see <a href="http://www.iana.org/assignments/ianaiftype-mib">http://www.iana.org/assignments/ianaiftype-mib</a>. Possible values for the interface type are listed in the Ipifcons.h header file. 
- </summary>
-	<remarks>See http://msdn.microsoft.com/en-us/library/aa366836(VS.85).aspx for more info!</remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwMtu">
-	<summary>
- dwMtu - The Maximum Transmission Unit (MTU) size in bytes.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwSpeed">
-	<summary>
- dwSpeed - The speed of the interface in bits per second.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwPhysAddrLen">
-	<summary>
- dwPhysAddrLen - The length, in bytes, of the physical address specified by the bPhysAddr member.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.bPhysAddr">
-	<summary>
- bPhysAddr - The physical address of the adapter for this interface.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwAdminStatus">
-	<summary>
- dwAdminStatus - The interface is administratively enabled or disabled.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwOperStatus">
-	<summary>
- dwOperStatus - The operational status of the interface. This member can be one of the following values defined in the INTERNAL_IF_OPER_STATUS enumeration defined in the Ipifcons.h header file.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwLastChange">
-	<summary>
- dwLastChange - The length of time, in hundredths of seconds (10^-2 sec), starting from the last computer restart, when the interface entered its current operational state. This value rolls over after 2^32 hundredths of a second.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwInOctets">
-	<summary>
- dwInOctets - The number of octets of data received through this interface.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwInUcastPkts">
-	<summary>
- dwInUcastPkts - The number of unicast packets received through this interface.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwInNUcastPkts">
-	<summary>
- dwInNUcastPkts - The number of non-unicast packets received through this interface. Broadcast and multicast packets are included.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwInDiscards">
-	<summary>
- dwInDiscards - The number of incoming packets that were discarded even though they did not have errors.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwInErrors">
-	<summary>
- dwInErrors - The number of incoming packets that were discarded because of errors.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwInUnknownProtos">
-	<summary>
- dwInUnknownProtos - The number of incoming packets that were discarded because the protocol was unknown.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwOutOctets">
-	<summary>
- dwOutOctets - The number of octets of data sent through this interface.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwOutUcastPkts">
-	<summary>
- dwOutUcastPkts - The number of unicast packets sent through this interface.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwOutNUcastPkts">
-	<summary>
- dwOutNUcastPkts - The number of non-unicast packets sent through this interface. Broadcast and multicast packets are included.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwOutDiscards">
-	<summary>
- dwOutDiscards - The number of outgoing packets that were discarded even though they did not have errors.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwOutErrors">
-	<summary>
- dwOutErrors - The number of outgoing packets that were discarded because of errors.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwOutQLen">
-	<summary>
- dwOutQLen - The transmit queue length. This field is not currently used.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.dwDescrLen">
-	<summary>
- dwDescrLen - The length, in bytes, of the bDescr member.
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW.bDescr">
-	<summary>
- bDescr - A description of the interface.
- </summary>
-	<remarks></remarks>
-</member><member name="T:ActiveLock3_6NET.clsNetworkStats.MIB_IFROW">
-	<summary>
- MIB_IFROW - The MIB_IFROW structure stores information about a particular interface.
- </summary>
-	<remarks>See http://msdn.microsoft.com/en-us/library/aa366836(VS.85).aspx for Full Documentation!</remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.Name">
-	<summary>
- Name - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.Index">
-	<summary>
- Index - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.Type">
-	<summary>
- Type - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.Mtu">
-	<summary>
- Mtu - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.Speed">
-	<summary>
- Speed - Undocumented!
- </summary>
-	<remarks>Changed from Integer to Long for VISTA</remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.PhysAddrLen">
-	<summary>
- PhysAddrLen - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.PhysAddr">
-	<summary>
- PhysAddr - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.AdminStatus">
-	<summary>
- AdminStatus - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.OperStatus">
-	<summary>
- OperStatus - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.LastChange">
-	<summary>
- LastChange - Undocumented!
- </summary>
-	<remarks>Changed from Integer to Long to make it work</remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.InOctets">
-	<summary>
- InOctets - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.InUcastPkts">
-	<summary>
- InUcastPkts - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.InNUcastPkts">
-	<summary>
- InNUcastPkts - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.InDiscards">
-	<summary>
- InDiscards - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.InErrors">
-	<summary>
- InErrors - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.InUnknownProtos">
-	<summary>
- InUnknownProtos - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.OutOctets">
-	<summary>
- OutOctets - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.OutUcastPkts">
-	<summary>
- OutUcastPkts - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.OutNUcastPkts">
-	<summary>
- OutNUcastPkts - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.OutDiscards">
-	<summary>
- OutDiscards - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.OutErrors">
-	<summary>
- OutErrors - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.OutQLen">
-	<summary>
- OutQLen - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.Description">
-	<summary>
- Description - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.InMegs">
-	<summary>
- InMegs - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="F:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER.OutMegs">
-	<summary>
- OutMegs - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="T:ActiveLock3_6NET.clsNetworkStats.IFROW_HELPER">
-	<summary>
- IFROW_HELPER - Undocumented!
- </summary>
-	<remarks></remarks>
-</member><member name="T:ActiveLock3_6NET.clsNetworkStats.MIB_IFTABLE">
-	<summary>
- The MIB_IFTABLE structure contains a table of interface entries.
- </summary>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.clsNetworkStats.GetIfTable(System.IntPtr,System.Int32@,System.Boolean)">
-	<summary>
- The GetIfTable function retrieves the MIB-II interface table.
- </summary>
-	<param name="pIfRowTable">A pointer to a buffer that receives the interface table as a MIB_IFTABLE structure.</param>
-	<param name="pdwSize">On input, specifies the size in bytes of the buffer pointed to by the pIfTable parameter.</param>
-	<param name="bOrder">A Boolean value that specifies whether the returned interface table should be sorted in ascending order by interface index. If this parameter is TRUE, the table is sorted.</param>
-	<returns>If the function succeeds, the return value is NO_ERROR.</returns>
-	<remarks>See http://msdn.microsoft.com/en-us/library/aa365943(VS.85).aspx for more info!</remarks>
-</member><member name="M:ActiveLock3_6NET.clsNetworkStats.GetIfEntry(ActiveLock3_6NET.clsNetworkStats.MIB_IFROW@)">
-	<summary>
- The GetIfEntry function retrieves information for the specified interface on the local computer.
- </summary>
-	<param name="pIfRow">A pointer to a <a href="http://msdn.microsoft.com/en-us/library/aa366836(VS.85).aspx">MIB_IFROW</a> structure that, on successful return, receives information for an interface on the local computer. On input, set the dwIndex member of MIB_IFROW to the index of the interface for which to retrieve information. The value for the dwIndex must be retrieved by a previous call to the GetIfTable, GetIfTable2, or GetIfTable2Ex function.</param>
-	<returns></returns>
-	<remarks>See http://msdn.microsoft.com/en-us/library/aa365939(VS.85).aspx for more info!</remarks>
-</member><member name="M:ActiveLock3_6NET.clsNetworkStats.#ctor(System.Boolean)">
-	<summary>
- New - Undocumented!
- </summary>
-	<param name="IgnoreLoopBack"></param>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.clsNetworkStats.GetAdapter">
-	<summary>
- GetAdapter - Undocumented!
- </summary>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.clsNetworkStats.PrivToPub(ActiveLock3_6NET.clsNetworkStats.MIB_IFROW)">
-	<summary>
- PrivToPub - Undocumented!
- </summary>
-	<param name="pri"></param>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.clsNetworkStats.ToMegs(System.Int64)">
-	<summary>
- ToMegs - Undocumented!
- </summary>
-	<param name="lSize"></param>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.clsNetworkStats.MAC2String(System.Byte[])">
-	<summary>
- Convert a byte array containing a MAC address to a hex string
- </summary>
-	<param name="AdrArray"></param>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="T:ActiveLock3_6NET.clsNetworkStats">
-	<summary>
- clsNetworkStats - Needs updates to comments!
- </summary>
-	<remarks></remarks>
 </member>
 </members>
 </doc>
