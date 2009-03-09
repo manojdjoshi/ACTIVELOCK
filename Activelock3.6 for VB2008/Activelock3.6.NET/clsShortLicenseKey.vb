@@ -1,5 +1,48 @@
+
 Option Strict Off
 Option Explicit On
+
+#Region "Copyright"
+' This project is available from SVN on SourceForge.net under the main project, Activelock !
+'
+' ProjectPage: http://sourceforge.net/projects/activelock
+' WebSite: http://www.activeLockSoftware.com
+' DeveloperForums: http://forums.activelocksoftware.com
+' ProjectManager: Ismail Alkan - http://activelocksoftware.com/simplemachinesforum/index.php?action=profile;u=1
+' ProjectLicense: BSD Open License - http://www.opensource.org/licenses/bsd-license.php
+' ProjectPurpose: Copy Protection, Software Locking, Anti Piracy
+'
+' //////////////////////////////////////////////////////////////////////////////////////////
+' *   ActiveLock
+' *   Copyright 1998-2002 Nelson Ferraz
+' *   Copyright 2003-2009 The ActiveLock Software Group (ASG)
+' *   All material is the property of the contributing authors.
+' *
+' *   Redistribution and use in source and binary forms, with or without
+' *   modification, are permitted provided that the following conditions are
+' *   met:
+' *
+' *     [o] Redistributions of source code must retain the above copyright
+' *         notice, this list of conditions and the following disclaimer.
+' *
+' *     [o] Redistributions in binary form must reproduce the above
+' *         copyright notice, this list of conditions and the following
+' *         disclaimer in the documentation and/or other materials provided
+' *         with the distribution.
+' *
+' *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+' *   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+' *   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+' *   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+' *   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+' *   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+' *   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+' *   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+' *   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+' *   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+' *   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+' *
+#End Region
 
 ''' <summary>
 ''' <para>Use to provide license key generation and validation. This class exposes an
@@ -71,9 +114,7 @@ Friend Class clsShortLicenseKey
     '===============================================================================
     '   Constants
     '===============================================================================
-
-    ''' <summary>?Not Documented!</summary>
-    ''' <remarks>UPGRADE_NOTE: Module was upgraded to Module_Renamed. Click for more: 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="vbup1061"'</remarks>
+    'UPGRADE_NOTE: Module was upgraded to Module_Renamed. Click for more: 'ms-help://MS.VSCC.2003/commoner/redir/redirect.htm?keyword="vbup1061"'
     Private Const Module_Renamed As String = "clsShortLicenseKey"
 
 #Region "Enums"
@@ -123,10 +164,13 @@ Friend Class clsShortLicenseKey
     '===============================================================================
     '   Types
     '===============================================================================
-    ''' <summary>This structure is used to store a reference to two bits that will be
-    '''  swapped. Each bit can be from a different segment in the key.  iCRC2 cannot
-    '''  be swapped since it is a checksum of the first 4 segments of the key.</summary>
-    ''' <remarks></remarks>
+    ' This structure is used to store a
+    ' reference to two bits that will be
+    ' swapped. Each bit can be from a
+    ' different segment in the key.
+    ' iCRC2 cannot be swapped since it
+    ' is a checksum of the first 4
+    ' segments of the key.
     Private Structure TBits
         Dim iWord1 As Byte
         Dim iBit1 As Byte
@@ -137,47 +181,36 @@ Friend Class clsShortLicenseKey
     '===============================================================================
     '   Private Members
     '===============================================================================
-    ''' <summary>?Not Documented!</summary>
-    ''' <remarks></remarks>
     Private m_Bits() As TBits
-    ''' <summary>?Not Documented!</summary>
-    ''' <remarks></remarks>
     Private m_nSwaps As Integer
 
     '===============================================================================
     '   Declares
     '===============================================================================
-    ''' <summary>
-    ''' Copies a block of memory from one location to another.
-    ''' </summary>
-    ''' <param name="lpDest">Integer - A pointer to the starting address of the copied block's destination.</param>
-    ''' <param name="lpSource">Integer - A pointer to the starting address of the block of memory to copy.</param>
-    ''' <param name="nBytes">Integer - The size of the block of memory to copy, in bytes.</param>
-    ''' <remarks>See ms-help://MS.W7SDK.1033/MS.W7SDKCOM.1033/memory/base/copymemory.htm for full documentation.</remarks>
     Private Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (ByVal lpDest As Integer, ByVal lpSource As Integer, ByVal nBytes As Integer)
-    ''' <summary>
-    ''' Computes the checksum of the specified file
-    ''' </summary>
-    ''' <param name="FileName">[in]String - The file name of the file for which the checksum is to be computed.</param>
-    ''' <param name="HeaderSum">[out]Integer - A pointer to a variable that receives the original checksum from the image file, or zero if there is an error.</param>
-    ''' <param name="CheckSum">[out]Integer - A pointer to a variable that receives the computed checksum.</param>
-    ''' <returns>If the function succeeds, the return value is CHECKSUM_SUCCESS (0). See ms-help://MS.W7SDK.1033/MS.W7SDKCOM.1033/debug/base/mapfileandchecksum.htm for failure results</returns>
-    ''' <remarks>See ms-help://MS.W7SDK.1033/MS.W7SDKCOM.1033/debug/base/mapfileandchecksum.htm</remarks>
     Private Declare Function MapFileAndCheckSumA Lib "IMAGEHLP.DLL" (ByVal FileName As String, ByRef HeaderSum As Integer, ByRef CheckSum As Integer) As Integer
 
     ' Note: add a project conditional compile argument "IncludeCreate"
     ' if the CreateShortKey is to be compiled into the application.
     '#If IncludeCreate = 1 Then
-    ''' <summary>Creates a new serial number.</summary>
-    ''' <param name="SerialNumber">String - The serial number is generated from the app name, version, and password, along with the HDD firmware serial number, which makes it unique for the machine running the app.</param>
-    ''' <param name="Licensee">String - Name of party to whom this license is issued.</param>
-    ''' <param name="ProductCode">Integer - A unique number assigned to this product. This is created from the app private key and is a 4 digit integer.</param>
-    ''' <param name="ExpireDate">Date - Use this field for time-based serial numbers. This allows serial number to be issued that expire in two weeks or at the end of the year.</param>
-    ''' <param name="UserData">Short - This field is caller defined. Currently we are using the MaxUser and LicType (using a LoByte/HiByte packed field).</param>
-    ''' <param name="RegisteredLevel">Integer - This is the Registered Level from Alugen. Long only.</param>
-    ''' <returns>String - A License Key in the form of "233C-3912-00FF-BE49"</returns>
-    ''' <remarks></remarks>
     Friend Function CreateShortKey(ByVal SerialNumber As String, ByVal Licensee As String, ByVal ProductCode As Integer, ByVal ExpireDate As Date, ByVal UserData As Short, ByVal RegisteredLevel As Integer) As String
+        '===============================================================================
+        '   CreateShortKey - Creates a new serial number.
+        '
+        '   SerialNumber    The serial number is generated from the app name, version,
+        '                   and password, along with the HDD firmware serial number,
+        '                   which makes it unique for the machine running the app.
+        '   Licensee        Name of party to whom this license is issued.
+        '   ProductCode     A unique number assigned to this product. This is created
+        '                   from the app private key and is a 4 digit integer.
+        '   ExpireDate      Use this field for time-based serial numbers. This allows
+        '                   serial number to be issued that expire in two weeks or at
+        '                   the end of the year.
+        '   UserData        This field is caller defined. Currently we are using
+        '                   the MaxUser and LicType (using a LoByte/HiByte packed field).
+        '   RegisteredLevel This is the Registered Level from Alugen. Long only.
+        '   RETURNS         A License Key in the form of "233C-3912-00FF-BE49"
+        '===============================================================================
 
         Dim KeySegs(4) As String
         Dim i As Integer
@@ -206,16 +239,14 @@ Friend Class clsShortLicenseKey
     '#End If
 
     '#If IncludeCheck = 1 Then
-    ''' <summary>Performs a simple CRC test to ensure the key was entered "correctly". Does NOT validate
-    ''' that the key is VALID. This function allows the caller to "test" the key input by the user,
-    ''' without having to execute the key validation code, making it more work for a cracker to generate
-    ''' a key for your application.
-    ''' </summary>
-    ''' <param name="LicenseKey">String - ?Not Documented!</param>
-    ''' <param name="Licensee">String - ?Not Documented!</param>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
     Friend Function TestKey(ByVal LicenseKey As String, ByVal Licensee As String) As Boolean
+        '===============================================================================
+        '   TestKey - Performs a simple CRC test to ensure the key was entered
+        '   "correctly". Does NOT validate that the key is VALID. This function allows
+        '   the caller to "test" the key input by the user, without having to execute
+        '   the key validation code, making it more work for a cracker to generate a
+        '   key for your application.
+        '===============================================================================
 
         Dim KeySegs As Object = Nothing
         Dim nCRC As Integer
@@ -342,23 +373,28 @@ ExitLabel:
     '#End If
 
     '#If IncludeValidate = 1 Or IncludeCreate = 1 Then
-    ''' <summary>
-    ''' <para>This is used to swap various bits in the serial number. It's sole purpose is to alter the
-    ''' output serial number.</para>
-    ''' <para>This process is "played" forwards during the key creation, and in reverse when validating.
-    ''' This mangling process should be identical for key creation and validation. Add as many
-    ''' combinations as you like.</para>
-    ''' </summary>
-    ''' <param name="Word1">The words to bit swap. There are 4 words in the serial #. This parameter is zero-based.</param>
-    ''' <param name="Bit1">The bits to swap. There are 16 bits to each word. This parameter is zero-based.</param>
-    ''' <param name="Word2">The words to bit swap. There are 4 words in the serial #. This parameter is zero-based.</param>
-    ''' <param name="Bit2">The bits to swap. There are 16 bits to each word. This parameter is zero-based.</param>
-    ''' <remarks>
-    ''' <para>Example: This scenario causes word 3, bit 8 to be swapped with word 1, bit 3!</para>
-    ''' <para><code>KeyGen.AddSwapBits 1, 3, 3, 8</code></para>
-    ''' <para>NOTE: It is recommended that there be at least 6 combinations in case the bits being swapped are the same (2 swap bits for words 2, 3 &amp; 4).</para>
-    ''' </remarks>
     Friend Sub AddSwapBits(ByVal Word1 As Integer, ByVal Bit1 As Integer, ByVal Word2 As Integer, ByVal Bit2 As Integer)
+        '===============================================================================
+        '   AddSwapBits - This is used to swap various bits in the serial number. It's
+        '   sole purpose is to alter the output serial number.
+        '
+        '   This process is "played" forwards during the key creation, and in reverse
+        '   when validating. This mangling process should be identical for key creation
+        '   and validation. Add as many combinations as you like.
+        '
+        '   Word1/Word2     The words to bit swap. There are 4 words in the serial #.
+        '                   This parameter is zero-based.
+        '   Bit1/Bit2       The bits to swap. There are 16 bits to each word.
+        '                   This parameter is zero-based.
+        '
+        '   Example: This scenario causes word 3, bit 8 to be swapped with word 1, bit 3
+        '
+        '       KeyGen.AddSwapBits 1, 3, 3, 8
+        '
+        '   NOTE:   It is recommended that there be at least 6 combinations in case
+        '   the bits being swapped are the same (2 swap bits for words 2, 3 & 4).
+        '===============================================================================
+
         ' TODO: don't even call this function if SoftIce was detected!
 
         ' Size array to fit
@@ -393,14 +429,12 @@ ExitLabel:
     '#End If
 
     '#If IncludeValidate = 1 Or IncludeCheck = 1 Then
-    ''' <summary>
-    ''' Shared code to massage the input serial number, and slice it into the required number of segments.
-    ''' </summary>
-    ''' <param name="LicenseKey">String - ?Undocumented!</param>
-    ''' <param name="KeySegs">Object - ?Undocumented!</param>
-    ''' <returns>Boolean - ?Undocumented!</returns>
-    ''' <remarks></remarks>
     Private Function SplitKey(ByRef LicenseKey As String, ByRef KeySegs As Object) As Boolean
+        '===============================================================================
+        '   SplitKey - Shared code to massage the input serial number, and slice it into
+        '   the required number of segments.
+        '===============================================================================
+
         ' ----------------------------------------------------------
         ' This section of code could raise red flags
         ' ----------------------------------------------------------
@@ -427,10 +461,6 @@ ExitLabel:
     End Function
     '#End If
 
-    ''' <summary>Converts a hex string representation into a 4 byte decimal value.</summary>
-    ''' <param name="HexString">String - The Hex string to convert.</param>
-    ''' <returns>Integer - Converted string</returns>
-    ''' <remarks></remarks>
     Private Function SegmentValue(ByVal HexString As String) As Integer
         '===============================================================================
         '   Converts a hex string representation into a 4 byte decimal value.
@@ -460,13 +490,11 @@ ExitLabel:
 
 
     '#If IncludeCreate = 1 Or IncludeValidate = 1 Then
-    ''' <summary>
-    ''' Swaps any two bits. The bits can differ as long as they are in the range of 0 and 15.
-    ''' </summary>
-    ''' <param name="BitList">TBits - ?Undocumented!</param>
-    ''' <param name="KeySegs">Object - ?Undocumented!</param>
-    ''' <remarks></remarks>
     Private Sub SwapBit(ByRef BitList As TBits, ByRef KeySegs As Object)
+        '===============================================================================
+        '   SwapBit - Swaps any two bits. The bits can differ as long as they are in
+        '   the range of 0 and 15.
+        '===============================================================================
         With BitList
             ' Essentially, we swap Bit1 with Bit2. We use a bitwise
             ' OR operator or a bitwise AND operator depending
@@ -491,14 +519,12 @@ ExitLabel:
     '#End If
 
     ' Generic helper function
-    ''' <summary>
-    ''' Returns a 16-bit CRC value for a data block.
-    ''' </summary>
-    ''' <param name="Buffer">Byte - </param>
-    ''' <param name="InputCrc">Integer - Optional - Defaults to 0</param>
-    ''' <returns>Integer - </returns>
-    ''' <remarks>Refer to CRC-CCITT compute-on-the-fly implementatations for more info.</remarks>
     Private Function CRC(ByRef Buffer() As Byte, Optional ByRef InputCrc As Integer = 0) As Integer
+        '===============================================================================
+        '   Crc - Returns a 16-bit CRC value for a data block.
+        '
+        '   Refer to CRC-CCITT compute-on-the-fly implementatations for more info.
+        '===============================================================================
 
         Dim Bit As Integer
         Dim i As Integer
@@ -534,14 +560,15 @@ ErrHandler:
 
     End Function
 
-    ''' <summary>
-    ''' Returns a hex string representation of a WORD.
-    ''' </summary>
-    ''' <param name="WORD">Integer - The 2 byte value to convert to a hex string.</param>
-    ''' <param name="Prefix">A value such as "0x" or "&amp;H".</param>
-    ''' <returns>String - The hex string representation of a Word</returns>
-    ''' <remarks>NOTE:  It's up to the caller to ensure the subject value is a 16-bit number.</remarks>
     Private Function HexWORD(ByVal WORD As Integer, Optional ByVal Prefix As String = "") As String
+        '===============================================================================
+        '   HexDWORD - Returns a hex string representation of a WORD.
+        '
+        '   WORD            The 2 byte value to convert to a hex string.
+        '   Prefix          A value such as "0x" or "&H".
+        '
+        '   NOTE:  It's up to the caller to ensure the subject value is a 16-bit number.
+        '===============================================================================
 
         'Dim bytes(1) As Byte
         'Dim i As Integer, str As String
@@ -572,14 +599,15 @@ ErrHandler:
 
     End Function
 
-    ''' <summary>
-    ''' Tests if the supplied file has been altered by computing a checksum for the file and comparing
-    ''' it against the checksum in the executable image.
-    ''' </summary>
-    ''' <param name="FilePath">Full path to file to check. Caller is responsible for ensuring that the path exists, and that it is an executable.</param>
-    ''' <returns>Boolean - </returns>
-    ''' <remarks>See notes within for more information.</remarks>
     Friend Function ExeIsPatched(ByVal FilePath As String) As Boolean
+        '===============================================================================
+        '   ExeIsPatched - Tests if the supplied file has been altered by computing a
+        '   checksum for the file and comparing it against the checksum in the
+        '   executable image.
+        '
+        '   FileName - Full path to file to check. Caller is responsible for ensuring
+        '   that the path exists, and that it is an executable.
+        '===============================================================================
 
         Dim FileCRC As Integer
         Dim HdrCRC As Integer

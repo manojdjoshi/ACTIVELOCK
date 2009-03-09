@@ -1,15 +1,48 @@
 Option Strict Off
 Option Explicit On
 
-''' <summary>
-''' This class is designed to create a 16 character licence key based on the name
-''' of the registered owner. The idea being that some person/company purchases a
-''' licence for your product. You take their name and generate a key for the
-''' application based on their name. Your application has a registration form
-''' that requests the registered name and key. The key is regenerated from the
-''' name and the key they enter is checked for equality.
-''' </summary>
-''' <remarks>See notes within this class for detailed information!</remarks>
+#Region "Copyright"
+' This project is available from SVN on SourceForge.net under the main project, Activelock !
+'
+' ProjectPage: http://sourceforge.net/projects/activelock
+' WebSite: http://www.activeLockSoftware.com
+' DeveloperForums: http://forums.activelocksoftware.com
+' ProjectManager: Ismail Alkan - http://activelocksoftware.com/simplemachinesforum/index.php?action=profile;u=1
+' ProjectLicense: BSD Open License - http://www.opensource.org/licenses/bsd-license.php
+' ProjectPurpose: Copy Protection, Software Locking, Anti Piracy
+'
+' //////////////////////////////////////////////////////////////////////////////////////////
+' *   ActiveLock
+' *   Copyright 1998-2002 Nelson Ferraz
+' *   Copyright 2003-2009 The ActiveLock Software Group (ASG)
+' *   All material is the property of the contributing authors.
+' *
+' *   Redistribution and use in source and binary forms, with or without
+' *   modification, are permitted provided that the following conditions are
+' *   met:
+' *
+' *     [o] Redistributions of source code must retain the above copyright
+' *         notice, this list of conditions and the following disclaimer.
+' *
+' *     [o] Redistributions in binary form must reproduce the above
+' *         copyright notice, this list of conditions and the following
+' *         disclaimer in the documentation and/or other materials provided
+' *         with the distribution.
+' *
+' *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+' *   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+' *   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+' *   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+' *   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+' *   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+' *   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+' *   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+' *   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+' *   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+' *   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+' *
+#End Region
+
 Friend Class clsShortSerial
 	'*******************************************************************************
 	' MODULE:       clsShortSerial based on clsOwnerRegistration originally
@@ -79,16 +112,22 @@ Friend Class clsShortSerial
 	
 	Private Const RANDOM_LOWER As Integer = 0
 	Private Const RANDOM_UPPER As Integer = 31
-
-    ''' <summary>
-    ''' Generates a short serial number by taking the app name, adding the app version number
-    ''' and the app password, creating an MD5 digest, and using the digest to select the 8
-    ''' characters for our serial.
-    ''' </summary>
-    ''' <param name="sAppNameVersionPassword">String - Application specific composite string</param>
-    ''' <param name="sHDDfirmwareSerial">String - HDD firmware serial number</param>
-    ''' <returns>String - The key</returns>
-    ''' <remarks></remarks>
+	
+	'*******************************************************************************
+	' Function GenerateKey
+	'
+	' PARAMETERS:
+	' (In/Out) - sAppNameVersionPassword - String - Application specific composite string
+	' (In/Out) - sHDDfirmwareSerial      - String - HDD firmware serial number
+	'
+	' RETURN VALUE:
+	' String - The key
+	'
+	' DESCRIPTION:
+	' Generates a short serial number by taking the app name, adding the app version
+	' number and the app password, creating an MD5 digest, and using the digest to select
+	' the 8 characters for our serial.
+	'*******************************************************************************
 	Public Function GenerateKey(ByRef sAppNameVersionPassword As String, ByRef sHDDfirmwareSerial As String) As String
 		Dim lChar As Integer
         Dim lCount As Integer
@@ -121,14 +160,20 @@ Friend Class clsShortSerial
 		GenerateKey = sKey
 	End Function
 	
-    ''' <summary>
-    ''' Takes the key, recalculates the MD5 part and tests for equality.
-    ''' </summary>
-    ''' <param name="sKey">String - Key to check</param>
-    ''' <param name="sAppNameVersionPassword">String - ?Outdated Documentation! Please update.</param>
-    ''' <param name="sHDDfirmwareSerial">String - ?Outdated Documentation! Please update.</param>
-    ''' <returns>Boolean - True if valid</returns>
-    ''' <remarks></remarks>
+	'*******************************************************************************
+	' IsKeyOK (FUNCTION)
+	'
+	' PARAMETERS:
+	' (In/Out) - sKey      - String - Key to check
+	' (In/Out) - sAppChars - String - Application specific characters used in
+	'                                 generating the key.
+	'
+	' RETURN VALUE:
+	' Boolean - True if valid
+	'
+	' DESCRIPTION:
+	' Takes the key, recalculates the MD5 part and tests for equality.
+	'*******************************************************************************
 	Public Function IsKeyOK(ByRef sKey As String, ByRef sAppNameVersionPassword As String, ByRef sHDDfirmwareSerial As String) As Boolean
 
 		Dim lChar As Integer
