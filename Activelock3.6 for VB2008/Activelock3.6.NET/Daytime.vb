@@ -3,6 +3,48 @@ Imports System.Net
 Imports System.Net.Sockets
 Imports System.Runtime.InteropServices
 
+#Region "Copyright"
+' This project is available from SVN on SourceForge.net under the main project, Activelock !
+'
+' ProjectPage: http://sourceforge.net/projects/activelock
+' WebSite: http://www.activeLockSoftware.com
+' DeveloperForums: http://forums.activelocksoftware.com
+' ProjectManager: Ismail Alkan - http://activelocksoftware.com/simplemachinesforum/index.php?action=profile;u=1
+' ProjectLicense: BSD Open License - http://www.opensource.org/licenses/bsd-license.php
+' ProjectPurpose: Copy Protection, Software Locking, Anti Piracy
+'
+' //////////////////////////////////////////////////////////////////////////////////////////
+' *   ActiveLock
+' *   Copyright 1998-2002 Nelson Ferraz
+' *   Copyright 2003-2009 The ActiveLock Software Group (ASG)
+' *   All material is the property of the contributing authors.
+' *
+' *   Redistribution and use in source and binary forms, with or without
+' *   modification, are permitted provided that the following conditions are
+' *   met:
+' *
+' *     [o] Redistributions of source code must retain the above copyright
+' *         notice, this list of conditions and the following disclaimer.
+' *
+' *     [o] Redistributions in binary form must reproduce the above
+' *         copyright notice, this list of conditions and the following
+' *         disclaimer in the documentation and/or other materials provided
+' *         with the distribution.
+' *
+' *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+' *   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+' *   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+' *   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+' *   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+' *   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+' *   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+' *   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+' *   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+' *   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+' *   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+' *
+#End Region
+
 ''' <summary>
 ''' Internet Time Server class by Alastair Dallas 01/27/04
 ''' </summary>
@@ -17,6 +59,26 @@ Public Class Daytime
 
     'Server IP addresses from 
     'http://www.boulder.nist.gov/timefreq/service/time-servers.html
+    'time-a.nist.gov 129.6.15.28 NIST, Gaithersburg, Maryland 
+    'time-b.nist.gov 129.6.15.29  
+    'time-a.timefreq.bldrdoc.gov 132.163.4.101 NIST, Boulder, Colorado 
+    'time-b.timefreq.bldrdoc.gov 132.163.4.102  
+    'time-c.timefreq.bldrdoc.gov 132.163.4.103  
+    'utcnist.colorado.edu 128.138.140.44 University of Colorado, Boulder 
+    'time.nist.gov 192.43.244.18 NCAR, Boulder, Colorado 
+    'time-nw.nist.gov 131.107.13.100 Microsoft, Redmond, Washington 
+    'nist1.symmetricom.com 69.25.96.13 Symmetricom, San Jose, California 
+    'nist1-dc.WiTime.net 206.246.118.250 WiTime, Virginia 
+    'nist1-ny.WiTime.net 208.184.49.9 WiTime, New York City 
+    'nist1-sj.WiTime.net 64.125.78.85 WiTime, San Jose, California 
+    'nist1.aol-ca.symmetricom.com 207.200.81.113 Symmetricom, AOL facility, Sunnyvale, California 
+    'nist1.aol-va.symmetricom.com 64.236.96.53 Symmetricom, AOL facility, Virginia 
+    'nist1.columbiacountyga.gov 68.216.79.113 Columbia County, Georgia 
+    'nist.expertsmi.com 71.13.91.122 Monroe, Michigan 
+    'nist.netservicesgroup.com 64.113.32.5 Southfield, Michigan 
+
+    ' Update this list whenever the server IPs change or new ones are added.
+
     Private Shared Servers() As String = { _
           "129.6.15.28" _
         , "129.6.15.29" _
@@ -25,13 +87,18 @@ Public Class Daytime
         , "132.163.4.103" _
         , "128.138.140.44" _
         , "192.43.244.18" _
-        , "131.107.1.10" _
-        , "66.243.43.21" _
-        , "216.200.93.8" _
+        , "131.107.13.100" _
+        , "69.25.96.13" _
+        , "206.246.118.250" _
         , "208.184.49.9" _
-        , "207.126.98.204" _
-        , "205.188.185.33" _
+        , "64.125.78.85" _
+        , "207.200.81.113" _
+        , "64.236.96.53" _
+        , "68.216.79.113" _
+        , "71.13.91.122" _
+        , "64.113.32.5" _
     }
+
 
     Public Shared LastHost As String = ""
     Public Shared LastSysTime As DateTime
