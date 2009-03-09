@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "Mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
 Begin VB.Form frmMain 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "ALTestApp - ActiveLock3 Test Application"
@@ -673,26 +673,21 @@ Clipboard.SetText txtReqCodeGen.Text
 End Sub
 
 Private Sub cmdKillLicense_Click()
-    Dim licFile As String
-    licFile = strKeyStorePath
-    If FileExist(licFile) Then
-        If FileLen(licFile) <> 0 Then
-            Kill licFile
-            MsgBox "Your license has been killed." & vbCrLf & _
-                "You need to get a new license for this application if you want to use it.", vbInformation
-                txtUsedDays.Text = ""
-                txtExpiration.Text = ""
-                txtRegisteredLevel.Text = ""
-                txtNetworkedLicense.Text = ""
-                txtMaxCount.Text = ""
-        Else
-            MsgBox "There's no license to kill.", vbInformation
-        End If
-    Else
-        MsgBox "There's no license to kill.", vbInformation
-    End If
-    Form_Load
-    cmdResetTrial.Visible = True
+    
+' Kill the License File
+' Let Activelock handle this
+MyActiveLock.KillLicense MyActiveLock.SoftwareName & MyActiveLock.SoftwareVersion, strKeyStorePath
+
+MsgBox "Your license has been killed." & vbCrLf & _
+    "You need to get a new license for this application if you want to use it.", vbInformation
+    txtUsedDays.Text = ""
+    txtExpiration.Text = ""
+    txtRegisteredLevel.Text = ""
+    txtNetworkedLicense.Text = ""
+    txtMaxCount.Text = ""
+    
+Form_Load
+cmdResetTrial.Visible = True
 End Sub
 Private Sub cmdKillTrial_Click()
 Screen.MousePointer = vbHourglass
@@ -908,8 +903,8 @@ Private Sub Form_Load()
         
         ' Set the license file format; this could be encrypted or plain
         ' Even in a plain file format, certain keys and dates are still encrypted.
-        .LicenseFileType = alsLicenseFileEncrypted
-        '.LicenseFileType = alsLicenseFilePlain
+        '.LicenseFileType = alsLicenseFileEncrypted
+        .LicenseFileType = alsLicenseFilePlain
     
         ' Verify Activelock DLL's authenticity by checking its CRC
         ' This checkes the CRC of the Activelock DLL and compares it with the embedded value
