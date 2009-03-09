@@ -860,6 +860,103 @@ ActiveLock3_6Net
  clsNetworkStats - Needs updates to comments!
  </summary>
 	<remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.CCoder.gc_intPragCuloare">
+	<summary>?Not Documented!</summary>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.CCoder.#ctor">
+	<summary>?Not Documented!</summary>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.CCoder.Dispose">
+	<summary>?Not Documented!</summary>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.CCoder.Code(System.Drawing.Bitmap,System.String)">
+	<summary>?Not Documented!</summary>
+	<param name="bmpPatern"></param>
+	<param name="InputText"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.CCoder.SetR(System.Int32@,System.Int32@,System.Drawing.Bitmap@,System.Drawing.Bitmap@,System.Int32@)">
+	<summary>?Not Documented!</summary>
+	<param name="i"></param>
+	<param name="j"></param>
+	<param name="bmpPatern"></param>
+	<param name="bmpNew"></param>
+	<param name="cr"></param>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.CCoder.SetG(System.Int32@,System.Int32@,System.Drawing.Bitmap@,System.Drawing.Bitmap@,System.Int32@)">
+	<summary>?Not Documented!</summary>
+	<param name="i"></param>
+	<param name="j"></param>
+	<param name="bmpPatern"></param>
+	<param name="bmpNew"></param>
+	<param name="cg"></param>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.CCoder.SetB(System.Int32@,System.Int32@,System.Drawing.Bitmap@,System.Drawing.Bitmap@,System.Int32@)">
+	<summary>?Not Documented!</summary>
+	<param name="i"></param>
+	<param name="j"></param>
+	<param name="bmpPatern"></param>
+	<param name="bmpNew"></param>
+	<param name="cb"></param>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.CCoder.Decode(System.String,System.String)">
+	<summary>?Not Documented!</summary>
+	<param name="strPaternFile"></param>
+	<param name="strMessageFile"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.CCoder.GetChar(System.Drawing.Bitmap,System.Drawing.Bitmap,System.Int32@,System.Int32@)">
+	<summary>?Not Documented!</summary>
+	<param name="bmpPatern"></param>
+	<param name="bmpMessage"></param>
+	<param name="i"></param>
+	<param name="j"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.CCoder.GetR(System.Drawing.Bitmap,System.Drawing.Bitmap,System.Int32@,System.Int32@)">
+	<summary>?Not Documented!</summary>
+	<param name="bmpPatern"></param>
+	<param name="bmpMessage"></param>
+	<param name="i"></param>
+	<param name="j"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.CCoder.GetG(System.Drawing.Bitmap,System.Drawing.Bitmap,System.Int32@,System.Int32@)">
+	<summary>?Not Documented!</summary>
+	<param name="bmpPatern"></param>
+	<param name="bmpMessage"></param>
+	<param name="i"></param>
+	<param name="j"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.CCoder.GetB(System.Drawing.Bitmap,System.Drawing.Bitmap,System.Int32@,System.Int32@)">
+	<summary>?Not Documented!</summary>
+	<param name="bmpPatern"></param>
+	<param name="bmpMessage"></param>
+	<param name="i"></param>
+	<param name="j"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.CCoder.ReadFile(System.String)">
+	<summary>?Not Documented!</summary>
+	<param name="strFileText"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.CCoder.Code(System.String,System.String,System.String)">
+	<summary>?Not Documented!</summary>
+	<param name="strPaternFile"></param>
+	<param name="strMessage"></param>
+	<param name="strMessageFile"></param>
+	<remarks></remarks>
+</member><member name="M:ActiveLock3_6NET.CCoder.Decode(System.String,System.String,System.String@)">
+	<summary>?Not Documented!</summary>
+	<param name="strPaternFile"></param>
+	<param name="strMessageFile"></param>
+	<param name="strTextFile"></param>
+	<remarks></remarks>
+</member><member name="T:ActiveLock3_6NET.CCoder">
+	<summary>?Not Documented!</summary>
+	<remarks></remarks>
 </member><member name="P:ActiveLock3_6NET.FileKeyStoreProvider.IKeyStoreProvider_KeyStorePath">
 	<summary>
  Creates an empty file if it doesn't exist
