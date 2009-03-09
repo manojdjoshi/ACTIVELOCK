@@ -1,63 +1,75 @@
 Option Strict Off
 Option Explicit On 
+#Region "Copyright"
+' This project is available from SVN on SourceForge.net under the main project, Activelock !
+'
+' ProjectPage: http://sourceforge.net/projects/activelock
+' WebSite: http://www.activeLockSoftware.com
+' DeveloperForums: http://forums.activelocksoftware.com
+' ProjectManager: Ismail Alkan - http://activelocksoftware.com/simplemachinesforum/index.php?action=profile;u=1
+' ProjectLicense: BSD Open License - http://www.opensource.org/licenses/bsd-license.php
+' ProjectPurpose: Copy Protection, Software Locking, Anti Piracy
+'
+' //////////////////////////////////////////////////////////////////////////////////////////
+' *   ActiveLock
+' *   Copyright 1998-2002 Nelson Ferraz
+' *   Copyright 2003-2009 The ActiveLock Software Group (ASG)
+' *   All material is the property of the contributing authors.
+' *
+' *   Redistribution and use in source and binary forms, with or without
+' *   modification, are permitted provided that the following conditions are
+' *   met:
+' *
+' *     [o] Redistributions of source code must retain the above copyright
+' *         notice, this list of conditions and the following disclaimer.
+' *
+' *     [o] Redistributions in binary form must reproduce the above
+' *         copyright notice, this list of conditions and the following
+' *         disclaimer in the documentation and/or other materials provided
+' *         with the distribution.
+' *
+' *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+' *   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+' *   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+' *   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+' *   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+' *   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+' *   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+' *   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+' *   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+' *   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+' *   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+' *
+#End Region
 
 Friend Class INIFile
-	'*   ActiveLock
-	'*   Copyright 1998-2002 Nelson Ferraz
-    '*   Copyright 2006 The ActiveLock Software Group (ASG)
-	'*   All material is the property of the contributing authors.
-	'*
-	'*   Redistribution and use in source and binary forms, with or without
-	'*   modification, are permitted provided that the following conditions are
-	'*   met:
-	'*
-	'*     [o] Redistributions of source code must retain the above copyright
-	'*         notice, this list of conditions and the following disclaimer.
-	'*
-	'*     [o] Redistributions in binary form must reproduce the above
-	'*         copyright notice, this list of conditions and the following
-	'*         disclaimer in the documentation and/or other materials provided
-	'*         with the distribution.
-	'*
-	'*   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-	'*   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-	'*   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-	'*   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-	'*   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-	'*   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-	'*   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-	'*   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-	'*   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-	'*   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-	'*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-	'*
-	'*
-	'===============================================================================
-	' Name: INIFile
-	' Purpose: Stores and retrieves product keys
-	' <p>An "object-oriented" approach to using Windows INI files, with some
-	'   useful additions.
-	' <p>Klaus H. Probst [kprobst@vbbox.com]
-	' Functions:
-	' Properties:
-	' Methods:
-	' Started: 07.07.2003
+
+    '===============================================================================
+    ' Name: INIFile
+    ' Purpose: Stores and retrieves product keys
+    ' <p>An "object-oriented" approach to using Windows INI files, with some
+    '   useful additions.
+    ' <p>Klaus H. Probst [kprobst@vbbox.com]
+    ' Functions:
+    ' Properties:
+    ' Methods:
+    ' Started: 07.07.2003
     ' Modified: 03.24.2006
-	'===============================================================================
-	
-	'  ///////////////////////////////////////////////////////////////////////
-	'  / Filename:  INIFile.cls                                              /
-	'  / Version:   1.0.0.1                                                  /
-	'  / Purpose:   Stores and retrieves product keys                         /
-	'  / Klaus H. Probst [kprobst@vbbox.com]                                 /
-	'  /                                                                     /
-	'  / Date Created:         ???? ??, ???? - KHP                           /
-	'  / Date Last Modified:   July 07, 2003 - MEC                           /
-	'  /                                                                     /
-	'  / This software is released under the license detailed below and is   /
-	'  / subject to said license. Neither this header nor the licese below   /
-	'  / may be removed from this module.                                    /
-	'  ///////////////////////////////////////////////////////////////////////
+    '===============================================================================
+
+    '  ///////////////////////////////////////////////////////////////////////
+    '  / Filename:  INIFile.cls                                              /
+    '  / Version:   1.0.0.1                                                  /
+    '  / Purpose:   Stores and retrieves product keys                         /
+    '  / Klaus H. Probst [kprobst@vbbox.com]                                 /
+    '  /                                                                     /
+    '  / Date Created:         ???? ??, ???? - KHP                           /
+    '  / Date Last Modified:   July 07, 2003 - MEC                           /
+    '  /                                                                     /
+    '  / This software is released under the license detailed below and is   /
+    '  / subject to said license. Neither this header nor the licese below   /
+    '  / may be removed from this module.                                    /
+    '  ///////////////////////////////////////////////////////////////////////
 
     'Private Declare Function GetPrivateProfileInt Lib "kernel32" Alias "GetPrivateProfileIntA" (ByVal lpApplicationName As String, ByVal lpKeyName As String, ByVal nDefault As Long, ByVal lpFileName As String) As Long
     Private Declare Function GetPrivateProfileString Lib "kernel32" Alias "GetPrivateProfileStringA" (ByVal lpApplicationName As String, ByVal lpKeyName As String, ByVal lpDefault As String, ByVal lpReturnedString As String, ByVal nSize As Integer, ByVal lpFileName As String) As Integer

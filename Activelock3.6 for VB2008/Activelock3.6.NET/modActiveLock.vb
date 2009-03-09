@@ -1,43 +1,51 @@
 Option Strict Off
 Option Explicit On
 
-#Region "Copyright"
-'*   ActiveLock
-'*   Copyright 1998-2002 Nelson Ferraz
-'*   Copyright 2003-2006 The ActiveLock Software Group (ASG)
-'*   All material is the property of the contributing authors.
-'*
-'*   Redistribution and use in source and binary forms, with or without
-'*   modification, are permitted provided that the following conditions are
-'*   met:
-'*
-'*     [o] Redistributions of source code must retain the above copyright
-'*         notice, this list of conditions and the following disclaimer.
-'*
-'*     [o] Redistributions in binary form must reproduce the above
-'*         copyright notice, this list of conditions and the following
-'*         disclaimer in the documentation and/or other materials provided
-'*         with the distribution.
-'*
-'*   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-'*   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-'*   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-'*   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-'*   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-'*   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-'*   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-'*   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-'*   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-'*   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-'*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-'*
-'*
-#End Region
-
 Imports System.IO
 Imports System.Security.Cryptography
 Imports System.Text
 
+#Region "Copyright"
+' This project is available from SVN on SourceForge.net under the main project, Activelock !
+'
+' ProjectPage: http://sourceforge.net/projects/activelock
+' WebSite: http://www.activeLockSoftware.com
+' DeveloperForums: http://forums.activelocksoftware.com
+' ProjectManager: Ismail Alkan - http://activelocksoftware.com/simplemachinesforum/index.php?action=profile;u=1
+' ProjectLicense: BSD Open License - http://www.opensource.org/licenses/bsd-license.php
+' ProjectPurpose: Copy Protection, Software Locking, Anti Piracy
+'
+' //////////////////////////////////////////////////////////////////////////////////////////
+' *   ActiveLock
+' *   Copyright 1998-2002 Nelson Ferraz
+' *   Copyright 2003-2009 The ActiveLock Software Group (ASG)
+' *   All material is the property of the contributing authors.
+' *
+' *   Redistribution and use in source and binary forms, with or without
+' *   modification, are permitted provided that the following conditions are
+' *   met:
+' *
+' *     [o] Redistributions of source code must retain the above copyright
+' *         notice, this list of conditions and the following disclaimer.
+' *
+' *     [o] Redistributions in binary form must reproduce the above
+' *         copyright notice, this list of conditions and the following
+' *         disclaimer in the documentation and/or other materials provided
+' *         with the distribution.
+' *
+' *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+' *   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+' *   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+' *   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+' *   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+' *   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+' *   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+' *   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+' *   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+' *   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+' *   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+' *
+#End Region
 
 ''' <summary>
 ''' <para>This module contains common utility routines that can be shared between
@@ -94,6 +102,9 @@ Module modActiveLock
     Public Const STRDATEERROR As String = "Date Error."
     Public Const STRINTERNETNOTCONNECTED As String = "Internet Connection is Required. Please Connect and Try Again."
     Public Const STRSOFTWAREPASSWORDINVALID As String = "Password length>255 or invalid characters."
+    Public Const STRNOKEYREUSE As String = "You're not allowed to reuse an old license key. Obtain new key."
+    Public Const STRNOLICENSEFILE As String = "License does not exist"
+    Public Const STREXPIREDPERMANENTLY As String = "This license has expired permanently. Obtain new key."
 
     ''' <summary>
     ''' RSA encrypts the data.
@@ -1571,6 +1582,19 @@ Hell:
     Public Function PSWD() As String
         ' Do not modify this unless you change all encrypted strings in the entire project
         PSWD = Chr(109) & Chr(121) & Chr(108) & Chr(111) & Chr(118) & Chr(101) & Chr(97) & Chr(99) & Chr(116) & Chr(105) & Chr(118) & Chr(101) & "lock"
+    End Function
+
+    ''' <summary>
+    ''' ?Not Documented!
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Function REGKEY1() As String
+        ' Do not modify this unless you change all encrypted strings in the entire project
+        REGKEY1 = Chr(65) & Chr(112) & Chr(112) & Chr(69) & Chr(118) & Chr(101) & _
+            Chr(110) & Chr(116) & Chr(115) & Chr(92) & Chr(83) & Chr(99) & Chr(104) & _
+            Chr(101) & Chr(109) & Chr(101) & Chr(115) & Chr(92) & Chr(65) & Chr(112) & _
+            Chr(112) & Chr(115) & Chr(92)
     End Function
 
     ''' <summary>

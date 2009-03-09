@@ -2,36 +2,45 @@ Option Strict Off
 Option Explicit On
 
 #Region "Copyright"
-'*   ActiveLock
-'*   Copyright 1998-2002 Nelson Ferraz
-'*   Copyright 2006 The ActiveLock Software Group (ASG)
-'*   All material is the property of the contributing authors.
-'*
-'*   Redistribution and use in source and binary forms, with or without
-'*   modification, are permitted provided that the following conditions are
-'*   met:
-'*
-'*     [o] Redistributions of source code must retain the above copyright
-'*         notice, this list of conditions and the following disclaimer.
-'*
-'*     [o] Redistributions in binary form must reproduce the above
-'*         copyright notice, this list of conditions and the following
-'*         disclaimer in the documentation and/or other materials provided
-'*         with the distribution.
-'*
-'*   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-'*   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-'*   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-'*   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-'*   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-'*   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-'*   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-'*   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-'*   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-'*   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-'*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-'*
-'*
+' This project is available from SVN on SourceForge.net under the main project, Activelock !
+'
+' ProjectPage: http://sourceforge.net/projects/activelock
+' WebSite: http://www.activeLockSoftware.com
+' DeveloperForums: http://forums.activelocksoftware.com
+' ProjectManager: Ismail Alkan - http://activelocksoftware.com/simplemachinesforum/index.php?action=profile;u=1
+' ProjectLicense: BSD Open License - http://www.opensource.org/licenses/bsd-license.php
+' ProjectPurpose: Copy Protection, Software Locking, Anti Piracy
+'
+' //////////////////////////////////////////////////////////////////////////////////////////
+' *   ActiveLock
+' *   Copyright 1998-2002 Nelson Ferraz
+' *   Copyright 2003-2009 The ActiveLock Software Group (ASG)
+' *   All material is the property of the contributing authors.
+' *
+' *   Redistribution and use in source and binary forms, with or without
+' *   modification, are permitted provided that the following conditions are
+' *   met:
+' *
+' *     [o] Redistributions of source code must retain the above copyright
+' *         notice, this list of conditions and the following disclaimer.
+' *
+' *     [o] Redistributions in binary form must reproduce the above
+' *         copyright notice, this list of conditions and the following
+' *         disclaimer in the documentation and/or other materials provided
+' *         with the distribution.
+' *
+' *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+' *   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+' *   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+' *   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+' *   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+' *   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+' *   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+' *   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+' *   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+' *   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+' *   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+' *
 #End Region
 
 #Region "Changes"
@@ -78,6 +87,7 @@ Public Interface _IActiveLock
     WriteOnly Property AutoRegisterKeyPath() As String
     Function LockCode(Optional ByRef Lic As ProductLicense = Nothing) As String
     Sub Register(ByVal LibKey As String, Optional ByRef user As String = "")
+    Sub KillLicense(ByVal SoftwareNameAndVersion As String, ByVal LicPath As String)
     Function Transfer(ByVal InstallCode As String) As String
     Sub Init(Optional ByVal strPath As String = "", Optional ByRef autoLicString As String = "")
     Sub Acquire(Optional ByRef strMsg As String = "", Optional ByRef strRemainingTrialDays As String = "", Optional ByRef strRemainingTrialRuns As String = "", Optional ByRef strTrialLength As String = "", Optional ByRef strUsedDays As String = "", Optional ByRef strExpirationDate As String = "", Optional ByRef strRegisteredUser As String = "", Optional ByRef strRegisteredLevel As String = "", Optional ByRef strLicenseClass As String = "", Optional ByRef strMaxCount As String = "", Optional ByRef strLicenseFileType As String = "", Optional ByRef strLicenseType As String = "", Optional ByRef strUsedLockType As String = "")
@@ -1014,6 +1024,16 @@ End Interface
     Public Sub Register(ByVal LibKey As String, Optional ByRef user As String = "") Implements _IActiveLock.Register
 
     End Sub
+    ''' <summary>
+    ''' KillLicense - Kills the specified license.
+    ''' </summary>
+    ''' <param name="SoftwareNameAndVersion">ByVal SoftwareNameAndVersion As String - Software Name And Version</param>
+    ''' <param name="LicPath">Optional - String - License file name and path</param>
+    ''' <remarks></remarks>
+    Public Sub KillLicense(ByVal SoftwareNameAndVersion As String, ByVal LicPath As String) Implements _IActiveLock.KillLicense
+
+    End Sub
+
 
     ''' <summary>
     ''' Init - Purpose: Initializes ActiveLock before use. Some of the routines, including <a href="IActiveLock.Acquire.html">Acquire()</a> and <a href="IActiveLock.Register.html">Register()</a> requires <code>Init()</code> to be called first.

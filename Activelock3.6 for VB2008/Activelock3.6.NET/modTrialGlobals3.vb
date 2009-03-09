@@ -7,37 +7,51 @@ Imports System.String
 Imports System.DateTime
 Imports System.Runtime.InteropServices
 Imports Microsoft.VisualBasic.ControlChars
+
+#Region "Copyright"
+' This project is available from SVN on SourceForge.net under the main project, Activelock !
+'
+' ProjectPage: http://sourceforge.net/projects/activelock
+' WebSite: http://www.activeLockSoftware.com
+' DeveloperForums: http://forums.activelocksoftware.com
+' ProjectManager: Ismail Alkan - http://activelocksoftware.com/simplemachinesforum/index.php?action=profile;u=1
+' ProjectLicense: BSD Open License - http://www.opensource.org/licenses/bsd-license.php
+' ProjectPurpose: Copy Protection, Software Locking, Anti Piracy
+'
+' //////////////////////////////////////////////////////////////////////////////////////////
+' *   ActiveLock
+' *   Copyright 1998-2002 Nelson Ferraz
+' *   Copyright 2003-2009 The ActiveLock Software Group (ASG)
+' *   All material is the property of the contributing authors.
+' *
+' *   Redistribution and use in source and binary forms, with or without
+' *   modification, are permitted provided that the following conditions are
+' *   met:
+' *
+' *     [o] Redistributions of source code must retain the above copyright
+' *         notice, this list of conditions and the following disclaimer.
+' *
+' *     [o] Redistributions in binary form must reproduce the above
+' *         copyright notice, this list of conditions and the following
+' *         disclaimer in the documentation and/or other materials provided
+' *         with the distribution.
+' *
+' *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+' *   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+' *   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+' *   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+' *   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+' *   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+' *   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+' *   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+' *   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+' *   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+' *   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+' *
+#End Region
+
 Module modTrial
-    '*   ActiveLock
-    '*   Copyright 1998-2002 Nelson Ferraz
-    '*   Copyright 2003-2006 The ActiveLock Software Group (ASG)
-    '*   All material is the property of the contributing authors.
-    '*
-    '*   Redistribution and use in source and binary forms, with or without
-    '*   modification, are permitted provided that the following conditions are
-    '*   met:
-    '*
-    '*     [o] Redistributions of source code must retain the above copyright
-    '*         notice, this list of conditions and the following disclaimer.
-    '*
-    '*     [o] Redistributions in binary form must reproduce the above
-    '*         copyright notice, this list of conditions and the following
-    '*         disclaimer in the documentation and/or other materials provided
-    '*         with the distribution.
-    '*
-    '*   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-    '*   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-    '*   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-    '*   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-    '*   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-    '*   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-    '*   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-    '*   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-    '*   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-    '*   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-    '*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-    '*
-    '*
+
     '===============================================================================
     ' Name: modTrialGlobals
     ' Purpose: This module is used by the Trial Period/Runs feature
@@ -328,8 +342,8 @@ ByVal flags As Int32) As IntPtr
         If session = 0 Then
             result = "Error: " & Marshal.GetLastWin32Error()
         Else
-            ReDim newBuffer(Length - 1)
-            response = InternetReadFile(session, newBuffer, Length, bytesRead)
+            ReDim newBuffer(length - 1)
+            response = InternetReadFile(session, newBuffer, length, bytesRead)
             If response = 0 Then
                 result = ""   '"Error Reading File: " & Marshal.GetLastWin32Error()
             Else
@@ -1958,10 +1972,10 @@ IsHiddenFolderExpiredError:
         End If
 
         If alockDays = 0 And trialPeriod = True Then
-            Set_Locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrInvalidTrialDays, ACTIVELOCKSTRING, STRINVALIDTRIALDAYS)
         ElseIf alockRuns = 0 And trialRuns = True Then
-            Set_Locale(regionalSymbol)
+            Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrInvalidTrialRuns, ACTIVELOCKSTRING, STRINVALIDTRIALRUNS)
         End If
 
@@ -2051,34 +2065,34 @@ IsHiddenFolderExpiredError:
                 ActivateTrial = True
                 System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default
                 GoTo exitGracefully
-                End If
+            End If
         Else
-                If Not RunsGood(alockRuns, runsLeft, TrialHideTypes) Then
-                    ExpireTrial(SoftwareName, SoftwareVer, TrialType, TrialLength, TrialHideTypes, SoftwarePassword)
-                    ' Trial Runs have expired
-                    Set_locale(regionalSymbol)
-                    Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
-                Else
-                    If fileExist(GetSteganographyFile()) = False And Directory.Exists(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD)) = False And dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
-                        If mCheckTimeServerForClockTampering = IActiveLock.ALTimeServerTypes.alsCheckTimeServer Then
-                            If SystemClockTampered() Then
-                                Set_locale(regionalSymbol)
-                                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
-                            End If
-                        End If
-                        If ClockTampering() Then
+            If Not RunsGood(alockRuns, runsLeft, TrialHideTypes) Then
+                ExpireTrial(SoftwareName, SoftwareVer, TrialType, TrialLength, TrialHideTypes, SoftwarePassword)
+                ' Trial Runs have expired
+                Set_locale(regionalSymbol)
+                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
+            Else
+                If fileExist(GetSteganographyFile()) = False And Directory.Exists(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD)) = False And dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
+                    If mCheckTimeServerForClockTampering = IActiveLock.ALTimeServerTypes.alsCheckTimeServer Then
+                        If SystemClockTampered() Then
                             Set_locale(regionalSymbol)
                             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                         End If
                     End If
-                    ' So far so good; trial mode seems to be fine
-                    HAD2HAMMER = False
-                    strMsg = "You are running this program in its Trial Runs Mode." & vbCrLf & CStr(runsLeft) & " run(s) left out of " & CStr(alockRuns) & " run trial."
-                    mRemainingTrialRuns = runsLeft
-                    ActivateTrial = True
-                    System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default
-                    GoTo exitGracefully
+                    If ClockTampering() Then
+                        Set_locale(regionalSymbol)
+                        Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
+                    End If
                 End If
+                ' So far so good; trial mode seems to be fine
+                HAD2HAMMER = False
+                strMsg = "You are running this program in its Trial Runs Mode." & vbCrLf & CStr(runsLeft) & " run(s) left out of " & CStr(alockRuns) & " run trial."
+                mRemainingTrialRuns = runsLeft
+                ActivateTrial = True
+                System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.Default
+                GoTo exitGracefully
+            End If
         End If
 
 keepChecking:
