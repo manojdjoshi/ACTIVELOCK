@@ -11,36 +11,45 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'*   ActiveLock
-'*   Copyright 1998-2002 Nelson Ferraz
-'*   Copyright 2005 The ActiveLock Software Group (ASG)
-'*   All material is the property of the contributing authors.
-'*
-'*   Redistribution and use in source and binary forms, with or without
-'*   modification, are permitted provided that the following conditions are
-'*   met:
-'*
-'*     [o] Redistributions of source code must retain the above copyright
-'*         notice, this list of conditions and the following disclaimer.
-'*
-'*     [o] Redistributions in binary form must reproduce the above
-'*         copyright notice, this list of conditions and the following
-'*         disclaimer in the documentation and/or other materials provided
-'*         with the distribution.
-'*
-'*   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-'*   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-'*   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-'*   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-'*   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-'*   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-'*   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-'*   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-'*   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-'*   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-'*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-'*
-'*
+' This project is available from SVN on SourceForge.net under the main project, Activelock !
+'
+' ProjectPage: http://sourceforge.net/projects/activelock
+' WebSite: http://www.activeLockSoftware.com
+' DeveloperForums: http://forums.activelocksoftware.com
+' ProjectManager: Ismail Alkan - http://activelocksoftware.com/simplemachinesforum/index.php?action=profile;u=1
+' ProjectLicense: BSD Open License - http://www.opensource.org/licenses/bsd-license.php
+' ProjectPurpose: Copy Protection, Software Locking, Anti Piracy
+'
+' //////////////////////////////////////////////////////////////////////////////////////////
+' *   ActiveLock
+' *   Copyright 1998-2002 Nelson Ferraz
+' *   Copyright 2003-2009 The ActiveLock Software Group (ASG)
+' *   All material is the property of the contributing authors.
+' *
+' *   Redistribution and use in source and binary forms, with or without
+' *   modification, are permitted provided that the following conditions are
+' *   met:
+' *
+' *     [o] Redistributions of source code must retain the above copyright
+' *         notice, this list of conditions and the following disclaimer.
+' *
+' *     [o] Redistributions in binary form must reproduce the above
+' *         copyright notice, this list of conditions and the following
+' *         disclaimer in the documentation and/or other materials provided
+' *         with the distribution.
+' *
+' *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+' *   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+' *   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+' *   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+' *   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+' *   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+' *   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+' *   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+' *   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+' *   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+' *   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+' *
 '===============================================================================
 ' Name: FileKeyStoreProvider
 ' Purpose: This IKeyStoreProvider implementation is used to  maintain the license keys on a file system.
@@ -94,7 +103,7 @@ Private Const KEY_MAXCOUNT$ = "MaxCount" ' Maximum number of users
 Private Const KEY_LICTYPE$ = "LicenseType"
 Private Const KEY_LICCLASS$ = "LicenseClass"
 Private Const KEY_LICKEY$ = "LicenseKey"
-Private Const KEY_LICCODE$ = "LicenseCode" ' New in v3.1
+Private Const KEY_REGKEY1$ = "LicenseCode" ' New in v3.1
 Private Const KEY_EXP$ = "Expiration"
 Private Const KEY_REGISTERED_DATE$ = "RegisteredDate"
 Private Const KEY_LASTRUN_DATE$ = "LastUsed" ' date and time stamp
@@ -166,7 +175,7 @@ Private Sub IKeyStoreProvider_Store(Lic As ProductLicense, mLicenseFileType As A
             mINIFile.Values(KEY_LASTRUN_DATE) = EncryptMyString(.LastUsed, PSWD)
             mINIFile.Values(KEY_LASTRUN_DATE_HASH) = EncryptMyString(.Hash1, PSWD)
             mINIFile.Values(KEY_EXP) = EncryptMyString(.Expiration, PSWD)
-            mINIFile.Values(KEY_LICCODE) = EncryptMyString(.LicenseCode, PSWD)
+            mINIFile.Values(KEY_REGKEY1) = EncryptMyString(.LicenseCode, PSWD)
         End With
     Else
         With Lic
@@ -181,7 +190,7 @@ Private Sub IKeyStoreProvider_Store(Lic As ProductLicense, mLicenseFileType As A
             mINIFile.Values(KEY_LASTRUN_DATE) = .LastUsed
             mINIFile.Values(KEY_LASTRUN_DATE_HASH) = .Hash1
             mINIFile.Values(KEY_EXP) = .Expiration
-            mINIFile.Values(KEY_LICCODE) = .LicenseCode
+            mINIFile.Values(KEY_REGKEY1) = .LicenseCode
         End With
 
     End If
@@ -240,7 +249,7 @@ Private Function IKeyStoreProvider_Retrieve(ProductName As String, mLicenseFileT
             .RegisteredDate = DecryptMyString(mINIFile.Values(KEY_REGISTERED_DATE), PSWD)
             .LastUsed = DecryptMyString(mINIFile.Values(KEY_LASTRUN_DATE), PSWD)
             .Hash1 = DecryptMyString(mINIFile.Values(KEY_LASTRUN_DATE_HASH), PSWD)
-            .LicenseCode = DecryptMyString(mINIFile.Values(KEY_LICCODE), PSWD)
+            .LicenseCode = DecryptMyString(mINIFile.Values(KEY_REGKEY1), PSWD)
         End With
     Else ' INI file (LIC) is in PLAIN format
 
@@ -258,7 +267,7 @@ Private Function IKeyStoreProvider_Retrieve(ProductName As String, mLicenseFileT
             .RegisteredDate = mINIFile.Values(KEY_REGISTERED_DATE)
             .LastUsed = mINIFile.Values(KEY_LASTRUN_DATE)
             .Hash1 = mINIFile.Values(KEY_LASTRUN_DATE_HASH)
-            .LicenseCode = mINIFile.Values(KEY_LICCODE)
+            .LicenseCode = mINIFile.Values(KEY_REGKEY1)
         End With
     End If
     Set IKeyStoreProvider_Retrieve = Lic
