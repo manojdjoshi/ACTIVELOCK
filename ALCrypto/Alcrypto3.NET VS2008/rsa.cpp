@@ -841,7 +841,7 @@ static void rsa2_createkey(unsigned char *pub_blob, int pub_len,
 {
   /* base64-decode the blobs */
   unsigned char *pub_blob_decoded = NULL, *priv_blob_decoded = NULL; /* holds the private key blob */
-  int           pub_decoded_len, priv_decoded_len;
+  int           pub_decoded_len, priv_decoded_len=0;
   struct RSAKey *key2;
 
   /* calculate the blob length */
