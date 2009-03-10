@@ -60,6 +60,11 @@ typedef struct _GETVERSIONOUTPARAMS {
 #define  CAP_IDE_ATAPI_ID                2  /* ATAPI ID command supported */
 #define  CAP_IDE_EXECUTE_SMART_FUNCTION  4  /* SMART commannds supported */
 
+/* Valid values for the bCommandReg member of IDEREGS. */
+#define  IDE_ATAPI_IDENTIFY  0xA1  /* Returns ID sector for ATAPI. */
+#define  IDE_ATA_IDENTIFY    0xEC  /* Returns ID sector for ATA. */
+
+#if impossible
 /* IDE registers */
 typedef struct _IDEREGS {
   BYTE bFeaturesReg;       /* Used for specifying SMART "commands". */
@@ -84,10 +89,6 @@ typedef struct _SENDCMDINPARAMS {
   BYTE      bBuffer[1];    /* Input buffer. */
 } SENDCMDINPARAMS, *PSENDCMDINPARAMS, *LPSENDCMDINPARAMS;
 
-/* Valid values for the bCommandReg member of IDEREGS. */
-#define  IDE_ATAPI_IDENTIFY  0xA1  /* Returns ID sector for ATAPI. */
-#define  IDE_ATA_IDENTIFY    0xEC  /* Returns ID sector for ATA. */
-
 /* Status returned from driver */
 typedef struct _DRIVERSTATUS {
   BYTE  bDriverError;   /* Error code from driver, or 0 if no error. */
@@ -103,6 +104,8 @@ typedef struct _SENDCMDOUTPARAMS {
   DRIVERSTATUS  DriverStatus; /* Driver status structure. */
   BYTE          bBuffer[1];   /* Buffer of arbitrary length in which to store the data read from the drive. */
 } SENDCMDOUTPARAMS, *PSENDCMDOUTPARAMS, *LPSENDCMDOUTPARAMS;
+
+#endif
 
 #define  SENDIDLENGTH  sizeof (SENDCMDOUTPARAMS) + IDENTIFY_BUFFER_SIZE
 
