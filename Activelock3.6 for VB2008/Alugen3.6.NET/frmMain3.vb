@@ -288,6 +288,7 @@ Friend Class frmMain
         Me.GroupBox1 = New System.Windows.Forms.GroupBox
         Me._SSTab1_TabPage1 = New System.Windows.Forms.TabPage
         Me.frmKeyGen = New System.Windows.Forms.Panel
+        Me.lblKeyStrength = New System.Windows.Forms.Label
         Me.lblLockVideoID = New System.Windows.Forms.Label
         Me.chkLockVideoID = New System.Windows.Forms.CheckBox
         Me.lblLockBaseboardID = New System.Windows.Forms.Label
@@ -336,7 +337,6 @@ Friend Class frmMain
         Me.mainStatusBarPanel = New System.Windows.Forms.StatusBarPanel
         Me.saveDlg = New System.Windows.Forms.SaveFileDialog
         Me.lnkActivelockSoftwareGroup = New System.Windows.Forms.LinkLabel
-        Me.lblKeyStrength = New System.Windows.Forms.Label
         CType(Me.picALBanner2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.picALBanner, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SSTab1.SuspendLayout()
@@ -376,7 +376,7 @@ Friend Class frmMain
         Me.cmdBrowse.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.cmdBrowse.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdBrowse.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.cmdBrowse.Location = New System.Drawing.Point(576, 607)
+        Me.cmdBrowse.Location = New System.Drawing.Point(576, 602)
         Me.cmdBrowse.Name = "cmdBrowse"
         Me.cmdBrowse.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdBrowse.Size = New System.Drawing.Size(21, 22)
@@ -394,7 +394,7 @@ Friend Class frmMain
         Me.cmdSave.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdSave.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdSave.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdSave.Location = New System.Drawing.Point(598, 607)
+        Me.cmdSave.Location = New System.Drawing.Point(598, 602)
         Me.cmdSave.Name = "cmdSave"
         Me.cmdSave.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdSave.Size = New System.Drawing.Size(65, 22)
@@ -433,7 +433,7 @@ Friend Class frmMain
         Me.cmdViewArchive.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.cmdViewArchive.ForeColor = System.Drawing.SystemColors.ControlText
         Me.cmdViewArchive.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft
-        Me.cmdViewArchive.Location = New System.Drawing.Point(3, 552)
+        Me.cmdViewArchive.Location = New System.Drawing.Point(3, 551)
         Me.cmdViewArchive.Name = "cmdViewArchive"
         Me.cmdViewArchive.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.cmdViewArchive.Size = New System.Drawing.Size(79, 44)
@@ -715,7 +715,7 @@ Friend Class frmMain
         Me.txtLicenseFile.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtLicenseFile.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtLicenseFile.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtLicenseFile.Location = New System.Drawing.Point(86, 608)
+        Me.txtLicenseFile.Location = New System.Drawing.Point(86, 603)
         Me.txtLicenseFile.MaxLength = 0
         Me.txtLicenseFile.Name = "txtLicenseFile"
         Me.txtLicenseFile.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -772,7 +772,7 @@ Friend Class frmMain
         Me.txtLicenseKey.ReadOnly = True
         Me.txtLicenseKey.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.txtLicenseKey.ScrollBars = System.Windows.Forms.ScrollBars.Vertical
-        Me.txtLicenseKey.Size = New System.Drawing.Size(580, 203)
+        Me.txtLicenseKey.Size = New System.Drawing.Size(580, 198)
         Me.txtLicenseKey.TabIndex = 27
         Me.txtLicenseKey.Text = "1234567890123456789012345678901234567890123456789012345678901234" & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         Me.ToolTip1.SetToolTip(Me.txtLicenseKey, "License Key")
@@ -887,7 +887,7 @@ Friend Class frmMain
         Me.txtMaxCount.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtMaxCount.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.txtMaxCount.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtMaxCount.Location = New System.Drawing.Point(323, 77)
+        Me.txtMaxCount.Location = New System.Drawing.Point(323, 76)
         Me.txtMaxCount.MaxLength = 2
         Me.txtMaxCount.Name = "txtMaxCount"
         Me.txtMaxCount.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -929,7 +929,7 @@ Friend Class frmMain
         Me.SSTab1.Location = New System.Drawing.Point(0, 0)
         Me.SSTab1.Name = "SSTab1"
         Me.SSTab1.SelectedIndex = 1
-        Me.SSTab1.Size = New System.Drawing.Size(679, 657)
+        Me.SSTab1.Size = New System.Drawing.Size(679, 656)
         Me.SSTab1.TabIndex = 0
         '
         '_SSTab1_TabPage0
@@ -1178,7 +1178,7 @@ Friend Class frmMain
         Me._SSTab1_TabPage1.Controls.Add(Me.frmKeyGen)
         Me._SSTab1_TabPage1.Location = New System.Drawing.Point(4, 22)
         Me._SSTab1_TabPage1.Name = "_SSTab1_TabPage1"
-        Me._SSTab1_TabPage1.Size = New System.Drawing.Size(671, 631)
+        Me._SSTab1_TabPage1.Size = New System.Drawing.Size(671, 630)
         Me._SSTab1_TabPage1.TabIndex = 1
         Me._SSTab1_TabPage1.Text = "License Key Generator"
         '
@@ -1257,8 +1257,20 @@ Friend Class frmMain
         Me.frmKeyGen.Location = New System.Drawing.Point(2, 0)
         Me.frmKeyGen.Name = "frmKeyGen"
         Me.frmKeyGen.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.frmKeyGen.Size = New System.Drawing.Size(666, 628)
+        Me.frmKeyGen.Size = New System.Drawing.Size(666, 627)
         Me.frmKeyGen.TabIndex = 0
+        '
+        'lblKeyStrength
+        '
+        Me.lblKeyStrength.BackColor = System.Drawing.SystemColors.Control
+        Me.lblKeyStrength.Cursor = System.Windows.Forms.Cursors.Default
+        Me.lblKeyStrength.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblKeyStrength.ForeColor = System.Drawing.Color.Blue
+        Me.lblKeyStrength.Location = New System.Drawing.Point(328, 7)
+        Me.lblKeyStrength.Name = "lblKeyStrength"
+        Me.lblKeyStrength.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.lblKeyStrength.Size = New System.Drawing.Size(338, 17)
+        Me.lblKeyStrength.TabIndex = 92
         '
         'lblLockVideoID
         '
@@ -1688,7 +1700,7 @@ Friend Class frmMain
         Me.Label5.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label5.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label5.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label5.Location = New System.Drawing.Point(2, 610)
+        Me.Label5.Location = New System.Drawing.Point(2, 605)
         Me.Label5.Name = "Label5"
         Me.Label5.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.Label5.Size = New System.Drawing.Size(78, 17)
@@ -1790,7 +1802,7 @@ Friend Class frmMain
         'sbStatus
         '
         Me.sbStatus.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.sbStatus.Location = New System.Drawing.Point(0, 658)
+        Me.sbStatus.Location = New System.Drawing.Point(0, 657)
         Me.sbStatus.Name = "sbStatus"
         Me.sbStatus.Panels.AddRange(New System.Windows.Forms.StatusBarPanel() {Me.mainStatusBarPanel})
         Me.sbStatus.ShowPanels = True
@@ -1818,23 +1830,11 @@ Friend Class frmMain
         Me.lnkActivelockSoftwareGroup.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.lnkActivelockSoftwareGroup.VisitedLinkColor = System.Drawing.Color.Blue
         '
-        'lblKeyStrength
-        '
-        Me.lblKeyStrength.BackColor = System.Drawing.SystemColors.Control
-        Me.lblKeyStrength.Cursor = System.Windows.Forms.Cursors.Default
-        Me.lblKeyStrength.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblKeyStrength.ForeColor = System.Drawing.Color.Blue
-        Me.lblKeyStrength.Location = New System.Drawing.Point(328, 7)
-        Me.lblKeyStrength.Name = "lblKeyStrength"
-        Me.lblKeyStrength.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblKeyStrength.Size = New System.Drawing.Size(338, 17)
-        Me.lblKeyStrength.TabIndex = 92
-        '
         'frmMain
         '
         Me.AutoScaleBaseSize = New System.Drawing.Size(5, 13)
         Me.BackColor = System.Drawing.SystemColors.Control
-        Me.ClientSize = New System.Drawing.Size(679, 680)
+        Me.ClientSize = New System.Drawing.Size(679, 679)
         Me.Controls.Add(Me.lnkActivelockSoftwareGroup)
         Me.Controls.Add(Me.sbStatus)
         Me.Controls.Add(Me.SSTab1)

@@ -991,16 +991,16 @@ Hell:
     End Function
 
 
-    ''' <summary>
-    ''' Converts a local date-time into UTC/GMT date-time
-    ''' </summary>
-    ''' <param name="dt">Date - Date-Time input to be converted into UTC Date-Time</param>
-    ''' <returns>Date - UTC Date-Time</returns>
-    ''' <remarks></remarks>
-    Public Function UTC(ByVal dt As Date) As Date
-        '  Returns current UTC date-time.
-        UTC = dt.AddMinutes(LocalTimeZone(TimeZoneReturn.UTC_Offset))
-    End Function
+    '''' <summary>
+    '''' Converts a local date-time into UTC/GMT date-time
+    '''' </summary>
+    '''' <param name="dt">Date - Date-Time input to be converted into UTC Date-Time</param>
+    '''' <returns>Date - UTC Date-Time</returns>
+    '''' <remarks></remarks>
+    'Public Function UTC(ByVal dt As Date) As Date
+    '    '  Returns current UTC date-time.
+    '    UTC = dt.AddMinutes(LocalTimeZone(TimeZoneReturn.UTC_Offset))
+    'End Function
 
     ''' <summary>
     ''' Retrieves the regional setting

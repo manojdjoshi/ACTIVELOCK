@@ -1112,23 +1112,18 @@ Friend Class frmMain
     End Sub
 
     Private Sub cmdKillLicense_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdKillLicense.Click
-        Dim licFile As String
-        licFile = strKeyStorePath
-        If File.Exists(licFile) Then
-            If FileLen(licFile) <> 0 Then
-                Kill(licFile)
-                MsgBox("Your license has been killed." & vbCrLf & "You need to get a new license for this application if you want to use it.", MsgBoxStyle.Information)
-                txtUsedDays.Text = ""
-                txtExpiration.Text = ""
-                txtRegisteredLevel.Text = ""
-                txtNetworkedLicense.Text = ""
-                txtMaxCount.Text = ""
-            Else
-                MsgBox("There's no license to kill.", MsgBoxStyle.Information)
-            End If
-        Else
-            MsgBox("There's no license to kill.", MsgBoxStyle.Information)
-        End If
+        ' Kill the License File
+        ' Let Activelock handle this
+        MyActiveLock.KillLicense(MyActiveLock.SoftwareName & MyActiveLock.SoftwareVersion, strKeyStorePath)
+
+        MsgBox("Your license has been killed." & vbCrLf & _
+            "You need to get a new license for this application if you want to use it.", vbInformation)
+        txtUsedDays.Text = ""
+        txtExpiration.Text = ""
+        txtRegisteredLevel.Text = ""
+        txtNetworkedLicense.Text = ""
+        txtMaxCount.Text = ""
+
         frmMain_Load(Me, New System.EventArgs)
         cmdResetTrial.Visible = True
     End Sub

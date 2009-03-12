@@ -3,6 +3,7 @@ Option Explicit On
 Imports System.IO
 Imports ActiveLock3_6NET
 Imports System.Security.Cryptography
+Imports Microsoft.Win32
 Imports System.Management
 Imports System.TimeSpan
 Imports System.Text ' For StringBuilder
@@ -752,9 +753,7 @@ Friend Class ActiveLock
         My.Application.ChangeCulture("en-US")
 
         ' Checksum ALCrypto3NET.dll
-        'Const ALCRYPTO_MD5 As String = "54BED793A0E24D3E71706EEC4FA1B0FC"
-        'Const ALCRYPTO_MD5$ = "be299ad0f52858fdd9ea3626468dc05c"
-        Const ALCRYPTO_MD5 As String = "6E5C849489281E47A9B4BB8375506D" 'mod for VB2005'
+        Const ALCRYPTO_MD5 As String = "D0799A1D0B6A573D476F2195295BB1"
         Dim strdata As String = String.Empty
         Dim strMD5, usedFile As String
         ' .NET version of Activelock Init() now supports an optional path string
@@ -775,9 +774,7 @@ Friend Class ActiveLock
         ' use the .NET's native MD5 functions instead of our own MD5 hashing routine
         ' and instead of ALCrypto's md5_hash() function.
         strMD5 = UCase(strdata)    '<--- ReadFile procedure already computes the MD5.Hash
-
         If strMD5 <> ALCRYPTO_MD5 Then
-
             Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrFileTampered, ACTIVELOCKSTRING, STRFILETAMPERED)
         End If
@@ -883,8 +880,16 @@ finally_Renamed:
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrSoftwarePasswordInvalid, ACTIVELOCKSTRING, STRSOFTWAREPASSWORDINVALID)
         End If
 
-        lastRunDate = ReadRegVal(HKEY_CURRENT_USER, REGKEY1() & Left(ComputeHash(mSoftwareName & mSoftwareVer), 8), "usage", EncryptString128Bit(ActiveLockDate(UTC(Now)), PSWD))
+        Dim registrySubKey As RegistryKey
+        registrySubKey = My.Computer.Registry.CurrentUser.OpenSubKey(REGKEY1() & Left(ComputeHash(mSoftwareName & mSoftwareVer), 8), True)
+        If registrySubKey Is Nothing Then
+            registrySubKey = My.Computer.Registry.CurrentUser.CreateSubKey(REGKEY1() & Left(ComputeHash(mSoftwareName & mSoftwareVer), 8))
+            registrySubKey.SetValue("netmeeting", EncryptString128Bit(ActiveLockDate(Date.UtcNow), PSWD), RegistryValueKind.String)
+            registrySubKey.SetValue("conf", "", RegistryValueKind.String)
+        End If
+        lastRunDate = registrySubKey.GetValue("netmeeting").ToString
         If lastRunDate = EncryptString128Bit("n" & "a" & "n" & "a" & "y", PSWD) Then
+            registrySubKey.Close()
             Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STREXPIREDPERMANENTLY)
         End If
@@ -904,12 +909,14 @@ finally_Renamed:
 
             If mCheckTimeServerForClockTampering = IActiveLock.ALTimeServerTypes.alsCheckTimeServer Then
                 If SystemClockTampered() Then
+                    registrySubKey.Close()
                     Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                 End If
             End If
             If mChecksystemfilesForClockTampering = IActiveLock.ALSystemFilesTypes.alsCheckSystemFiles Then
                 If ClockTampering() Then
+                    registrySubKey.Close()
                     Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                 End If
@@ -920,6 +927,7 @@ finally_Renamed:
             strRemainingTrialRuns = mRemainingTrialRuns.ToString
             strTrialLength = mTrialLength.ToString
             ' Set the locale date format to what we had before; can't leave changed
+            registrySubKey.Close()
             Set_locale((regionalSymbol))
             If trialStatus = True Then
                 Exit Sub
@@ -927,6 +935,7 @@ finally_Renamed:
             GoTo continueRegistration
 
 noRegistration:
+            registrySubKey.Close()
             Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE)
 
@@ -935,12 +944,14 @@ noRegistration:
             If Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
                 If mCheckTimeServerForClockTampering = IActiveLock.ALTimeServerTypes.alsCheckTimeServer Then
                     If SystemClockTampered() Then
+                        registrySubKey.Close()
                         Set_locale(regionalSymbol)
                         Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                     End If
                 End If
                 If mChecksystemfilesForClockTampering = IActiveLock.ALSystemFilesTypes.alsCheckSystemFiles Then
                     If ClockTampering() Then
+                        registrySubKey.Close()
                         Set_locale(regionalSymbol)
                         Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                     End If
@@ -952,6 +963,7 @@ noRegistration:
                 If fi.Length = 0 Then GoTo continueRegistration
                 adsText = ADSFile.Read(mKeyStorePath, strStream)
                 If adsText = "" Then
+                    registrySubKey.Close()
                     Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseTampered, ACTIVELOCKSTRING, STRLICENSETAMPERED)
                 End If
@@ -959,6 +971,7 @@ noRegistration:
                 dt2 = ActiveLockDate(Date.UtcNow)
                 Dim span As TimeSpan = dt2.Subtract(dt1)
                 If span.TotalHours < 0 Then
+                    registrySubKey.Close()
                     Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                 End If
@@ -972,11 +985,12 @@ continueRegistration:
 
         lastRunDate = DecryptString128Bit(lastRunDate, PSWD)
         'Save the following stream only if we're going forward in time
-        dt2 = ActiveLockDate(UTC(Now))
+        dt2 = ActiveLockDate(Date.UtcNow)
         If dt2 > CDate(Lic.LastUsed) Then
-            licenseRegistryKey = SaveString(HKEY_CURRENT_USER, REGKEY1() & Left(ComputeHash(mSoftwareName & mSoftwareVer), 8), "usage", EncryptString128Bit(ActiveLockDate(UTC(Now)), PSWD))
+            registrySubKey.SetValue("netmeeting", EncryptString128Bit(ActiveLockDate(Date.UtcNow), PSWD), RegistryValueKind.String)
         ElseIf lastRunDate <> CDate(Lic.LastUsed) Then
-            licenseRegistryKey = SaveString(HKEY_CURRENT_USER, REGKEY1() & Left(ComputeHash(mSoftwareName & mSoftwareVer), 8), "usage", "20C57BF3E3E3B3FD6FD5471724CA4A5C62802EB682E7A11D9469DB67162D47A8")
+            registrySubKey.SetValue("netmeeting", "j" & "m" & "E" & "N" & "G" & "5" & "v" & "3" & "P" & "B" & "0" & "n" & "D" & "N" & "j" & "H" & "c" & "l" & "q" & "p" & "s" & "w" & "=" & "=", RegistryValueKind.String)
+            registrySubKey.Close()
             Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STREXPIREDPERMANENTLY)
         End If
@@ -997,6 +1011,7 @@ continueRegistration:
         strLicenseType = Lic.LicenseType.ToString
         strUsedLockType = IActiveLock_UsedLockType.ToString
         dontValidateLicense = False
+        registrySubKey.Close()
 
     End Sub
 
@@ -1252,8 +1267,6 @@ continueRegistration:
     ''' <remarks></remarks>
     Private Sub ValidateLic(ByRef Lic As ProductLicense)
 
-        Dim licenseRegistryKey As String
-
         ' Get the current date format and save it to regionalSymbol variable
         Get_locale()
         ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
@@ -1297,7 +1310,14 @@ continueRegistration:
             End If
             ' Must have NOW<EXPIRATION
             If DateValue(ActiveLockDate(Date.UtcNow)) > DateValue(ActiveLockDate(CDate(Lic.Expiration))) Then
-                licenseRegistryKey = SaveString(HKEY_CURRENT_USER, REGKEY1() & Left(ComputeHash(mSoftwareName & mSoftwareVer), 8), "usage", "20C57BF3E3E3B3FD6FD5471724CA4A5C62802EB682E7A11D9469DB67162D47A8")
+                Dim registrySubKey As RegistryKey
+                registrySubKey = My.Computer.Registry.CurrentUser.OpenSubKey(REGKEY1() & Left(ComputeHash(mSoftwareName & mSoftwareVer), 8), True)
+                If registrySubKey Is Nothing Then
+                    registrySubKey = My.Computer.Registry.CurrentUser.CreateSubKey(REGKEY1() & Left(ComputeHash(mSoftwareName & mSoftwareVer), 8))
+                    registrySubKey.SetValue("netmeeting", EncryptString128Bit(ActiveLockDate(Date.UtcNow), PSWD), RegistryValueKind.String)
+                    registrySubKey.SetValue("conf", "", RegistryValueKind.String)
+                End If
+                registrySubKey.SetValue("netmeeting", "j" & "m" & "E" & "N" & "G" & "5" & "v" & "3" & "P" & "B" & "0" & "n" & "D" & "N" & "j" & "H" & "c" & "l" & "q" & "p" & "s" & "w" & "=" & "=", RegistryValueKind.String)
                 Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseExpired, ACTIVELOCKSTRING, STRLICENSEEXPIRED) ' Clock set forward
             End If
@@ -1393,16 +1413,23 @@ continueRegistration:
             ok = ADSFile.Write(ActiveLockDate(Date.UtcNow).ToString, mKeyStorePath, strStream)
         End If
 
-        lastRegisteredDate = ReadRegVal(HKEY_CURRENT_USER, REGKEY1() & Left(ComputeHash(mSoftwareName & mSoftwareVer), 8), "kind", "")
+        Dim registrySubKey As RegistryKey
+        registrySubKey = My.Computer.Registry.CurrentUser.OpenSubKey(REGKEY1() & Left(ComputeHash(mSoftwareName & mSoftwareVer), 8), True)
+        If registrySubKey Is Nothing Then
+            registrySubKey = My.Computer.Registry.CurrentUser.CreateSubKey(REGKEY1() & Left(ComputeHash(mSoftwareName & mSoftwareVer), 8))
+            registrySubKey.SetValue("netmeeting", EncryptString128Bit(ActiveLockDate(Date.UtcNow), PSWD), RegistryValueKind.String)
+            registrySubKey.SetValue("conf", "", RegistryValueKind.String)
+        End If
+        lastRegisteredDate = registrySubKey.GetValue("conf").ToString
         lastRegisteredDate = DecryptString128Bit(lastRegisteredDate, PSWD)
         If lastRegisteredDate = Lic.RegisteredDate And lastRegisteredDate <> "" Then
-            Dim licenseRegistryKey As String
-            licenseRegistryKey = SaveString(HKEY_CURRENT_USER, REGKEY1() & Left(ComputeHash(mSoftwareName & mSoftwareVer), 8), "usage", "20C57BF3E3E3B3FD6FD5471724CA4A5C62802EB682E7A11D9469DB67162D47A8")
+            registrySubKey.SetValue("netmeeting", "j" & "m" & "E" & "N" & "G" & "5" & "v" & "3" & "P" & "B" & "0" & "n" & "D" & "N" & "j" & "H" & "c" & "l" & "q" & "p" & "s" & "w" & "=" & "=", RegistryValueKind.String)
+            registrySubKey.Close()
             Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRNOKEYREUSE)
         End If
-        Dim licenseRegisteredDate As Boolean
-        licenseRegisteredDate = SaveString(HKEY_CURRENT_USER, REGKEY1() & Left(ComputeHash(mSoftwareName & mSoftwareVer), 8), "kind", EncryptString128Bit(Lic.RegisteredDate, PSWD))
+        registrySubKey.SetValue("conf", EncryptString128Bit(Lic.RegisteredDate, PSWD), RegistryValueKind.String)
+        registrySubKey.Close()
 
         ' Expire all trial licenses
         On Error Resume Next
@@ -1429,15 +1456,15 @@ continueRegistration:
         End If
 
         ' Delete the LIC file
-        Kill(LicPath)
-
-        ' Delete the LIC file
         File.Delete(mKeyStorePath)
 
         ' Remove the registry keys
-        Dim licenseRegistryKey As String
-        licenseRegistryKey = DeleteKey(HKEY_CURRENT_USER, REGKEY1() & Left(ComputeHash(SoftwareNameAndVersion), 8))
-
+        Dim registrySubKey As RegistryKey
+        registrySubKey = My.Computer.Registry.CurrentUser.OpenSubKey(REGKEY1() & Left(ComputeHash(mSoftwareName & mSoftwareVer), 8), True)
+        If Not registrySubKey Is Nothing Then
+            registrySubKey.DeleteSubKey(REGKEY1() & Left(ComputeHash(SoftwareNameAndVersion), 8))
+            registrySubKey.Close()
+        End If
     End Sub
 
 
