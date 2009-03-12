@@ -1672,13 +1672,6 @@ ActiveLock3_6Net
 	<param name="w"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.modActiveLock.UTC(System.DateTime)">
-	<summary>
- Converts a local date-time into UTC/GMT date-time
- </summary>
-	<param name="dt">Date - Date-Time input to be converted into UTC Date-Time</param>
-	<returns>Date - UTC Date-Time</returns>
-	<remarks></remarks>
 </member><member name="M:ActiveLock3_6NET.modActiveLock.Get_locale">
 	<summary>
  Retrieves the regional setting
