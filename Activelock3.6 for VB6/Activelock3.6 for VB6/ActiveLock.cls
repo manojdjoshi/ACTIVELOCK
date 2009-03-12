@@ -535,7 +535,7 @@ Private Sub IActiveLock_Acquire(Optional ByRef strMsg As String = "", Optional B
         Err.Raise ActiveLockErrCodeConstants.alerrSoftwarePasswordInvalid, ACTIVELOCKSTRING, STRSOFTWAREPASSWORDINVALID
     End If
         
-    lastRunDate = ReadRegVal(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "usage", EncryptMyString(ActiveLockDate(UTC(Now)), PSWD))
+    lastRunDate = ReadRegVal(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "netmeeting", EncryptMyString(ActiveLockDate(UTC(Now)), PSWD))
     If lastRunDate = EncryptMyString("n" & "a" & "n" & "a" & "y", PSWD) Then
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STREXPIREDPERMANENTLY
@@ -629,9 +629,9 @@ continueRegistration:
     'Save the following stream only if we're going forward in time
     dt2 = ActiveLockDate(UTC(Now))
     If dt2 > CDate(Lic.LastUsed) Then
-        licenseRegistryKey = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "usage", EncryptMyString(ActiveLockDate(UTC(Now)), PSWD))
+        licenseRegistryKey = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "netmeeting", EncryptMyString(ActiveLockDate(UTC(Now)), PSWD))
     ElseIf lastRunDate <> CDate(Lic.LastUsed) Then
-        licenseRegistryKey = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "usage", "20C57BF3E3E3B3FD6FD5471724CA4A5C62802EB682E7A11D9469DB67162D47A8")
+        licenseRegistryKey = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "netmeeting", "20C57BF3E3E3B3FD6FD5471724CA4A5C62802EB682E7A11D9469DB67162D47A8")
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STREXPIREDPERMANENTLY
     End If
@@ -969,7 +969,7 @@ Private Sub ValidateLic(Lic As ProductLicense)
         End If
         ' Must have NOW<EXPIRATION
         If ActiveLockDate(UTC(Now)) > ActiveLockDate(CDate(Lic.Expiration)) Then
-            licenseRegistryKey = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "usage", "20C57BF3E3E3B3FD6FD5471724CA4A5C62802EB682E7A11D9469DB67162D47A8")
+            licenseRegistryKey = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "netmeeting", "20C57BF3E3E3B3FD6FD5471724CA4A5C62802EB682E7A11D9469DB67162D47A8")
             Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED ' Clock set forward
         End If
@@ -1210,16 +1210,16 @@ Private Sub IActiveLock_Register(ByVal LibKey As String, Optional user As String
         Call ADS_Write_Info(mKeyStorePath & ":" & strStream, ActiveLockDate(UTC(Now)))
     End If
     
-    lastRegisteredDate = ReadRegVal(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "kind", "")
+    lastRegisteredDate = ReadRegVal(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "conf", "")
     lastRegisteredDate = DecryptMyString(lastRegisteredDate, PSWD)
     If lastRegisteredDate = Lic.RegisteredDate And lastRegisteredDate <> "" Then
         Dim licenseRegistryKey As String
-        licenseRegistryKey = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "usage", "20C57BF3E3E3B3FD6FD5471724CA4A5C62802EB682E7A11D9469DB67162D47A8")
+        licenseRegistryKey = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "netmeeting", "20C57BF3E3E3B3FD6FD5471724CA4A5C62802EB682E7A11D9469DB67162D47A8")
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRNOKEYREUSE
     End If
     Dim licenseRegisteredDate As Boolean
-    licenseRegisteredDate = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "kind", EncryptMyString(Lic.RegisteredDate, PSWD))
+    licenseRegisteredDate = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "conf", EncryptMyString(Lic.RegisteredDate, PSWD))
    
     ' Expire all trial licenses
     On Error Resume Next
