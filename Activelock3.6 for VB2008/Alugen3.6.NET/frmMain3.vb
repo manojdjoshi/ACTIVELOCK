@@ -3051,11 +3051,12 @@ SaveFormSettings_Error:
     Private Sub cmdBrowse_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdBrowse.Click
         Dim itemProductInfo As ProductInfoItem = CType(cboProducts.SelectedItem, ProductInfoItem)
         Dim strName As String = itemProductInfo.ProductName
+        Dim strVersion As String = itemProductInfo.ProductVersion
         Try
             With saveDlg
                 .InitialDirectory = Dir(txtLicenseFile.Text)
                 .Filter = "ALL Files (*.ALL)|*.ALL"
-                .FileName = strName
+                .FileName = strName & strVersion
                 .ShowDialog()
                 txtLicenseFile.Text = .FileName
             End With
@@ -3372,7 +3373,7 @@ SaveFormSettings_Error:
                 'split license key into 64byte chunks
                 txtLicenseKey.Text = Make64ByteChunks(strLibKey & "aLck" & txtInstallCode.Text)
                 'update license file path
-                txtLicenseFile.Text = Application.StartupPath & "\" & strName & ".all"
+                txtLicenseFile.Text = Application.StartupPath & "\" & strName & strVer & ".all"
             End If
 
             Cursor = Cursors.Default
@@ -3515,6 +3516,14 @@ continueHere:
     End Sub
 
     Private Sub cmdSave_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdSave.Click
+        Dim itemProductInfo As ProductInfoItem = CType(cboProducts.SelectedItem, ProductInfoItem)
+        Dim strName As String = itemProductInfo.ProductName
+        strName = strName.Replace("(", "").Replace(")", "").Trim
+        Dim strVersion As String = itemProductInfo.ProductVersion
+        If txtLicenseFile.Text.Contains(strName & strVersion & ".all") = False Then
+            MsgBox("The saved ALL file name should contain " & "'" & cboProducts.Text & ".all'.", vbExclamation)
+            Exit Sub
+        End If
         UpdateStatus("Saving license key to file...")
         ' save the license key
         SaveLicenseKey(txtLicenseKey.Text, txtLicenseFile.Text)
