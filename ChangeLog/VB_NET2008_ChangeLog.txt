@@ -88,7 +88,19 @@ This is essentially a computer fingerprint computed as the combination of many d
 - FIX: Added checks against using dashes "-" in product names and versions since they are causing trouble.
 - FIX: ItemData in VB6 has been made Long.
 - UPDATE: Alugen now shows the key type and strength right next to the selected product on the product key generator tab.
-
+- UPDATE: Alugen3.NET now displays the version and build info on the form title, suggested by Michael.
+- UPDATE: Time-server IP addresses have been updated and new ones have been added, thanks to japreja.
+- UPDATE: Target CPU has been set to x86 in all v3.6 VB2008 projects, as suggested by David.
+- UPDATE: KillLicense method has been added to Activelock. This new method not only deletes the LIC file but also does other necessary cleanup. KillLicense should be used with caution and is intended to be used by the developers only for their testing of their own application. The preferred method for the end user involves just deleting the LIC file and giving the user a newer (updated) version of the application with a different file version (revision). 
+- UPDATE: Alugen now makes sure that the saved ALL filename has the Software Name and Version appended, otherwise no ALL file is generated.
+- UPDATE: Illegal charcters are no longer allowed inside the software name and version in Alugen. Space, underscore and period are allowed.
+- FIX: Fixed the FormLoadSetting problem in Alugen.
+- UPDATE: Security patch has been applied to stop end-users reusing the saved LIC files.
+- UPDATE: Security patch has been applied to stop end-users reusing the saved license (liberation) keys.
+- UPDATE: Alugen now saves the Number of Days in the form settings file (Alugen.INI)
+- UPDATE: All source files have been revisited to update the Copyright info for Activelock.
+- UPDATE: Added "Permissions: everyone-full" to the ISS file, suggested by David.
+- UPDATE: Some additional files have been added to the source directories.
 
 
 
