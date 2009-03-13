@@ -7,6 +7,7 @@ Module=modRegistryAPIs; modRegistryAPIs.bas
 Form=Splash.Frm
 Form=Splash1.frm
 Form=frmMain.frm
+IconForm="frmMain"
 Startup="frmMain"
 HelpFile=""
 Title="ALVB6Sample"
@@ -17,7 +18,7 @@ HelpContextID="0"
 CompatibleMode="0"
 MajorVer=3
 MinorVer=6
-RevisionVer=0
+RevisionVer=1
 AutoIncrementVer=0
 ServerSupportFiles=0
 VersionCompanyName="The ActiveLock Software Group"
@@ -40,3 +41,5 @@ MaxNumberOfThreads=1
 
 [MS Transaction Server]
 AutoRefresh=1
+
+
