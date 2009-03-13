@@ -673,10 +673,19 @@ Clipboard.SetText txtReqCodeGen.Text
 End Sub
 
 Private Sub cmdKillLicense_Click()
-    
+        
+MsgBox "This feature is not intended to be sent to the end user." & vbCrLf & _
+    "Because it removes all traces of a license from a machine." & vbCrLf & vbCrLf & _
+    "The best way to terminate a license in an end-user's machine is to" & vbCrLf & _
+    "just delete his LIC file and send him a new build of your app with" & vbCrLf & _
+    "a new revision number (or upgrade in other terms).", vbInformation
+
 ' Kill the License File
 ' Let Activelock handle this
 MyActiveLock.KillLicense MyActiveLock.SoftwareName & MyActiveLock.SoftwareVersion, strKeyStorePath
+
+' Use the following in an end-user's machine.
+'Kill strKeyStorePath
 
 MsgBox "Your license has been killed." & vbCrLf & _
     "You need to get a new license for this application if you want to use it.", vbInformation
