@@ -52,13 +52,13 @@ Begin VB.Form frmMain
       TabCaption(0)   =   "Pro&duct Code Generator"
       TabPicture(0)   =   "frmMain3.frx":0CCA
       Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "Label1"
-      Tab(0).Control(1)=   "Label17"
-      Tab(0).Control(2)=   "gridProds"
+      Tab(0).Control(0)=   "cmdValidate"
+      Tab(0).Control(1)=   "Picture1"
+      Tab(0).Control(2)=   "cmdRemove"
       Tab(0).Control(3)=   "fraProdNew"
-      Tab(0).Control(4)=   "cmdRemove"
-      Tab(0).Control(5)=   "Picture1"
-      Tab(0).Control(6)=   "cmdValidate"
+      Tab(0).Control(4)=   "gridProds"
+      Tab(0).Control(5)=   "Label17"
+      Tab(0).Control(6)=   "Label1"
       Tab(0).ControlCount=   7
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
@@ -1704,7 +1704,7 @@ Else 'ALCrypto License Key
     ' Pass it to IALUGenerator to generate the key
     strLibKey = GeneratorInstance.GenKey(Lic, txtReqCodeIn, IIf(chkItemData.Value = vbUnchecked, cmbRegisteredLevel.List(cmbRegisteredLevel.ListIndex), cmbRegisteredLevel.ItemData(cmbRegisteredLevel.ListIndex)))
     txtLibKey.Text = Make64ByteChunks(strLibKey & "aLck" & txtReqCodeIn.Text)
-    txtLibFile.Text = App.path & "\" & strName & ".all"
+    txtLibFile.Text = App.path & "\" & strName & strVer & ".all"
 End If
 
 Screen.MousePointer = vbNormal
@@ -1888,6 +1888,12 @@ Private Sub cmdRemove_Click()
 End Sub
 
 Private Sub cmdSave_Click()
+    Dim arrProdVer() As String
+    arrProdVer = Split(cmbProds.Text, "-")
+    If inString(Trim(arrProdVer(0)) & Trim(arrProdVer(1)) & ".all") = False Then
+        MsgBox "The saved ALL file name should contain " & "'" & Trim(arrProdVer(0)) & Trim(arrProdVer(1)) & ".all'.", vbExclamation
+        Exit Sub
+    End If
     UpdateStatus "Saving liberation key to file..."
     ' save the liberation key
     SaveLiberationKey txtLibKey, txtLibFile
