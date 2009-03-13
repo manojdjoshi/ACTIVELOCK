@@ -1286,8 +1286,9 @@ Friend Class frmMain
             ' WARNING: Short key licenses use the lockFingerprint by default
             ' WARNING: This has no effect for short key licenses
             .LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockNone
+            .LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockComp
             '.LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockIP Or _
-            'ActiveLock3_6NET.IActiveLock.ALLockTypes.lockComp()
+            'ActiveLock3_6NET.IActiveLock.ALLockTypes.lockComp
 
             ' If you want to lock to any keys explicitly, combine them using OR
             ' But you won't be able to uncheck/check any of them while in Alugen (too late at that point).
