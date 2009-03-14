@@ -78,7 +78,6 @@ Module modTrial
 
     Public Const HIDDENFOLDER As String = "SM8YnnHzkjsvBayVJjIexcUpH5+7aO1WosnkqOTm8ZU="
     Public Const EXPIREDDAYS As String = "ExpiredDays"
-    Public Const ACTIVELOCKSTRING As String = "Activelock3"
     Public Const INITIALDATE As String = "01/01/2000"
     Public Const TRIALWARNING As String = "Trial Warning"
     Public Const EXPIREDWARNING As String = "Expired Warning"

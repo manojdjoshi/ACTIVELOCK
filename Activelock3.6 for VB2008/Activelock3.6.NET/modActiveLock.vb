@@ -5,6 +5,7 @@ Imports System.IO
 Imports System.Security.Cryptography
 Imports System.Text
 
+
 #Region "Copyright"
 ' This project is available from SVN on SourceForge.net under the main project, Activelock !
 '
@@ -75,6 +76,7 @@ Module modActiveLock
     '      You only need to go through this keyset generation step once.
     '      Once you have a valid keyset, you should store it inside your app for later use.
     '
+    Public Const ACTIVELOCKSTRING As String = "Activelock3"
 
     Public Const STRKEYSTOREINVALID As String = "A license property contains an invalid value."
 	Public Const STRLICENSEEXPIRED As String = "License expired."

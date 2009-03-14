@@ -2105,7 +2105,6 @@ noInfo:
         FileClose(hFile)
     End Sub
 
-
     Private Sub UpdateStatus(ByRef Msg As String)
         'write status on fist status bar panel
         sbStatus.Panels(0).Text = Msg
@@ -2606,7 +2605,6 @@ noInfo:
     End Sub
 
 #End Region
-
 
 
 #Region "Events"
@@ -4037,7 +4035,6 @@ exitValidate:
         System.Diagnostics.Process.Start(mailToString)
     End Sub
 #End Region
-
 
     Private Sub cmdProductsStorage_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdProductsStorage.Click
         Dim myProductsStorageForm As New frmProductsStorage
