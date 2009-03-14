@@ -1,0 +1,176 @@
+.ModernStyle
+{
+	background-color:#eeeeee;
+}
+
+.ModernStyle .TitleStyle
+{
+	background-color:#9fd19c;
+}
+
+.ModernStyle .TitleStyle table
+{
+	font-family:arial;
+	font-size:15px;
+	font-weight:bold;  
+	color:#ffffff;
+}
+
+.ModernStyle .TitleStyle td
+{
+	padding:2px;
+}
+
+.ModernStyle .TitleStyle .DropDownStyle,
+.ModernStyle .TitleStyle .DropDownOutStyle
+{
+	cursor:default;
+	border-style:solid;
+	border-width:1px;
+	border-color:#9fed9c;
+}
+
+.ModernStyle .TitleStyle .DropDownOverStyle
+{
+	cursor:default;
+	border-style:solid;
+	border-width:1px;
+	border-color:#9fff9c;
+}
+
+.ModernStyle .TitleStyle .DropDownStyle img,
+.ModernStyle .TitleStyle .DropDownOutStyle img,
+.ModernStyle .TitleStyle .DropDownOverStyle img
+{
+} 
+
+.ModernStyle .TitleStyle .CloseButtonStyle
+{
+	width:20px;
+	height:18px;
+	border:0;
+}
+
+.ModernStyle .BodyStyle
+{
+ 	font-family:verdana;
+	font-size:16px;
+}
+
+.ModernStyle .BodyStyle .HeaderStyle
+{
+	font-weight:bold; 
+	text-align:center;
+	padding:2px 2px 2px 0px; 
+	white-space:nowrap;  
+}
+
+.ModernStyle .BodyStyle .DateStyle
+{
+	cursor:default;
+	text-decoration:none;
+	text-align:center;  
+	color:#000000;
+	padding:2px 1px 2px 1px; 
+	white-space:nowrap;  
+}
+
+.ModernStyle .BodyStyle .DaysOutOfMonthStyle
+{
+	color:#c0c0c0!important; 
+}
+
+.ModernStyle .BodyStyle .WeekNumberStyle
+{
+	width:30px;
+	padding:0px;
+	text-align:center;
+}
+
+.ModernStyle .BodyStyle .SelectedDateStyle
+{
+	border-style:solid;
+	border-width:1px;
+	border-color:#a0a0a0;
+	font-size:15px!important;
+}
+
+.ModernStyle .BodyStyle .WeekendStyle
+{
+	color:#909090;
+}
+
+.ModernStyle .BodyStyle .CurrentDateStyle
+{
+	font-weight:bolder;  
+	color:#0000ff;
+	font-size:14px!important;
+}
+
+.ModernStyle .BodyStyle .SpecialDayStyle
+{
+	background-color:#90ddee;
+}
+
+.ModernStyle .BodyStyle .HolidayStyle
+{
+	color:#ffffff; 
+	background-color:#ff0000;
+}
+
+.ModernStyle .BodyStyle .DisableDateStyle
+{
+	cursor:default;
+	text-decoration:line-through;
+	/*
+	background-image:url(/PopCalendar/CSS/Modern_Images/BadDate.gif);
+	background-repeat:no-repeat;
+	background-position:center center;
+	*/
+}
+
+.ModernStyle .BodyStyle .DayOverStyle
+{
+	cursor:pointer;
+	border-style:solid;
+	border-width:1px;
+	border-color:#000000;
+	font-size:15px;
+}
+
+.ModernStyle .TodayStyle
+{
+	cursor:default;
+	font-size:15px;
+	background-color:#9fd19c;
+}
+
+.ModernStyle .TodayStyle .TextStyle
+{
+	font-family:arial;
+	font-size:15px;
+	font-weight:bold;  
+	text-decoration:none;
+	color:#000000;
+	cursor:default;	
+}
+
+.ModernStyle .ListStyle /* Month And Year List */
+{
+	font-family:verdana; 
+	font-size:12px;
+	background-color:#ccffcc;
+}
+
+.ModernStyle .ListStyle .OptionStyle,
+.ModernStyle .ListStyle .OptionOutStyle
+{
+	padding:3px;
+}
+
+.ModernStyle .ListStyle .OptionOverStyle
+{
+	background-color:#0000ff;
+	color:#ffffff;  
+	padding:3px;
+}

@@ -1,0 +1,32 @@
+﻿This report shows the steps taken to convert your Web application from ASP.NET 1.1 to ASP.NET 2.0. 
+There may be some unresolved conversion issues you will need to manually fix. 
+For more information, please refer to http://go.microsoft.com/fwlink/?LinkId=46995 or search for the help topic "Converting from Visual Studio .NET 2002 or 2003".
+Conversion Started on project file ASPNETAlugen3.vbproj at March 13 2009, 19:15:38.
+
+=========================ERRORS===================
+
+=========================WARNINGS=================
+File C:\ActiveLockCommunity\ASPNETAlugen3.6\..\ActiveLock3.5.Net\ActiveLock3_5NET.dll not found.
+
+=========================COMMENTS=================
+Renamed folder App_Code to App_Code_Old.
+Web.Config: Added 'xhtmlConformance' attribute.
+Web.Config: added a reference for assembly System.Windows.Forms.
+Access level of 'modRegisteredLevel' changed to 'public' in file modRegisteredLevel.vb (Line 38).    modRegisteredLevel.vb (Line 38)
+Added folder App_Code.
+Moved file modRegisteredLevel.vb to the App_Code\ directory.
+Access level of 'modMD5' changed to 'public' in file modMD5.vb (Line 41).    modMD5.vb (Line 41)
+Moved file modMD5.vb to the App_Code\ directory.
+Moved file clsCRC32.vb to the App_Code\ directory.
+Access level of 'modALUGEN' changed to 'public' in file modALUGEN.vb (Line 60).    modALUGEN.vb (Line 60)
+Moved file modALUGEN.vb to the App_Code\ directory.
+Moved file Global.asax.vb to the App_Code\ directory.
+Access level of 'ASPNETAlugen3.LimitColumn' changed to 'Public' in file clsLimitColumn.vb (Line 40).
+Moved file clsLimitColumn.vb to the App_Code\ directory.
+Access level of 'modActiveLock' changed to 'public' in file modActiveLock.vb (Line 42).    modActiveLock.vb (Line 42)
+Moved file modActiveLock.vb to the App_Code\ directory.
+Moved file AssemblyInfo.vb to the App_Code\ directory.
+Unable to convert user settings because user file C:\Documents and Settings\Ismail Alkan\VSWebCache\ISMAIL\ASPNETAlugen3\ASPNETAlugen3.vbproj.user was not found.
+Removed file ASPNETAlugen3.vbproj.
+Removed file ASPNETAlugen3.vbproj.webinfo.
+Project ASPNETAlugen3.vbproj has been converted successfully at March 13 2009, 19:15:41.

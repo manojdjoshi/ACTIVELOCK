@@ -1,0 +1,37 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "ASPNETAlugen3", "http://localhost/ASPNETAlugen3", "{73EEFC3A-6595-4472-B826-016554551A44}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFramework = "2.0"
+		Debug.AspNetCompiler.VirtualPath = "/ASPNETAlugen3"
+		Debug.AspNetCompiler.PhysicalPath = "..\ASPNETAlugen3.5\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\ASPNETAlugen3\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/ASPNETAlugen3"
+		Release.AspNetCompiler.PhysicalPath = "..\ASPNETAlugen3.5\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\ASPNETAlugen3\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		SlnRelativePath = "..\ASPNETAlugen3.5\"
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|.NET = Debug|.NET
+		Release|.NET = Release|.NET
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{73EEFC3A-6595-4472-B826-016554551A44}.Debug|.NET.ActiveCfg = Debug|.NET
+		{73EEFC3A-6595-4472-B826-016554551A44}.Debug|.NET.Build.0 = Debug|.NET
+		{73EEFC3A-6595-4472-B826-016554551A44}.Release|.NET.ActiveCfg = Release|.NET
+		{73EEFC3A-6595-4472-B826-016554551A44}.Release|.NET.Build.0 = Release|.NET
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
