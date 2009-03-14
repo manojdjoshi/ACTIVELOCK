@@ -1,0 +1,1 @@
+<%@ Application Inherits="ASPNETAlugen3.Global" Language="VB" %>

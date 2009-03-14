@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FxCopProject Version="1.32" Name="My FxCop Project">
+ <ProjectOptions>
+  <SharedProject>True</SharedProject>
+  <Stylesheet Apply="False">c:\program files\microsoft fxcop 1.32\Xml\FxCopReport.Xsl</Stylesheet>
+  <SaveMessages>
+   <Project Status="Active, Excluded" NewOnly="False" />
+   <Report Status="Active" NewOnly="False" />
+  </SaveMessages>
+  <ProjectFile Compress="True" DefaultTargetCheck="True" DefaultRuleCheck="True" SaveByRuleGroup="" Deterministic="True" />
+  <EnableMultithreadedLoad>True</EnableMultithreadedLoad>
+  <EnableMultithreadedAnalysis>True</EnableMultithreadedAnalysis>
+  <SourceLookup>True</SourceLookup>
+  <AnalysisExceptionsThreshold>100</AnalysisExceptionsThreshold>
+  <RuleExceptionsThreshold>10</RuleExceptionsThreshold>
+  <Spelling Locale="en-us" />
+  <VersionAware>False</VersionAware>
+  <OverrideRuleVisibilities>False</OverrideRuleVisibilities>
+  <CustomDictionaries SearchFxCopDir="True" SearchUserProfile="True" SearchProjectDir="True" />
+ </ProjectOptions>
+ <Targets>
+  <Target Name="$(ProjectDir)/bin/ASPNETAlugen3.dll" Analyze="True" AnalyzeAllChildren="True" />
+ </Targets>
+ <Rules>
+  <RuleFiles>
+   <RuleFile Name="$(FxCopDir)\Rules\DesignRules.dll" Enabled="False" AllRulesEnabled="False" />
+   <RuleFile Name="$(FxCopDir)\Rules\GlobalizationRules.dll" Enabled="False" AllRulesEnabled="False" />
+   <RuleFile Name="$(FxCopDir)\Rules\InteroperabilityRules.dll" Enabled="False" AllRulesEnabled="False" />
+   <RuleFile Name="$(FxCopDir)\Rules\MobilityRules.dll" Enabled="False" AllRulesEnabled="False" />
+   <RuleFile Name="$(FxCopDir)\Rules\NamingRules.dll" Enabled="False" AllRulesEnabled="False" />
+   <RuleFile Name="$(FxCopDir)\Rules\PerformanceRules.dll" Enabled="False" AllRulesEnabled="False" />
+   <RuleFile Name="$(FxCopDir)\Rules\PortabilityRules.dll" Enabled="False" AllRulesEnabled="False" />
+   <RuleFile Name="$(FxCopDir)\Rules\SecurityRules.dll" Enabled="False" AllRulesEnabled="False" />
+   <RuleFile Name="$(FxCopDir)\Rules\UsageRules.dll" Enabled="False" AllRulesEnabled="False" />
+  </RuleFiles>
+  <Groups />
+  <Settings />
+ </Rules>
+ <FxCopReport Version="1.32">
+  <Targets>
+   <Target Name="$(ProjectDir)/bin/ASPNETAlugen3.dll">
+    <Modules>
+     <Module Name="aspnetalugen3.dll">
+      <Messages>
+       <Message TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210" Created="2006-06-10 11:39:46Z">
+        <Issue Name="NoStrongName">
+         <Item>ASPNETAlugen3</Item>
+        </Issue>
+       </Message>
+       <Message TypeName="MarkAssembliesWithComVisible" Category="Microsoft.Design" CheckId="CA1017" Created="2006-06-10 11:39:46Z">
+        <Issue Name="NoAttribute" Level="CriticalError">
+         <Item>ASPNETAlugen3</Item>
+        </Issue>
+       </Message>
+      </Messages>
+      <Namespaces>
+       <Namespace Name="ASPNETAlugen3">
+        <Types>
+         <Type Name="ASPNETAlugen3">
+          <Members>
+           <Member Name="cmdGenerateCode_Click(System.Object,System.EventArgs):System.Void">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2006-06-10 11:39:46Z">
+              <Issue>
+               <Item>ASPNETAlugen3.cmdGenerateCode_Click(Object, EventArgs):Void</Item>
+               <Item>System.Exception</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="cmdGenerateLicenseKey_Click(System.Object,System.EventArgs):System.Void">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2006-06-10 11:39:46Z">
+              <Issue>
+               <Item>ASPNETAlugen3.cmdGenerateLicenseKey_Click(Object, EventArgs):Void</Item>
+               <Item>System.Exception</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="cmdValidateCode_Click(System.Object,System.EventArgs):System.Void">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2006-06-10 11:39:46Z">
+              <Issue>
+               <Item>ASPNETAlugen3.cmdValidateCode_Click(Object, EventArgs):Void</Item>
+               <Item>System.Exception</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="SaveLicenseKey(System.String,System.String):System.Void">
+            <Messages>
+             <Message TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031" Created="2006-06-10 11:39:46Z">
+              <Issue>
+               <Item>ASPNETAlugen3.SaveLicenseKey(String, String):Void</Item>
+               <Item>System.Exception</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="CRC32">
+          <Members>
+           <Member Name="GetCrc32(System.IO.Stream&amp;):System.Int32">
+            <Messages>
+             <Message Id="0#" TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045" Created="2006-06-10 11:39:46Z">
+              <Issue Level="CriticalWarning">
+               <Item>stream</Item>
+              </Issue>
+             </Message>
+             <Message TypeName="ValidateArgumentsOfPublicMethods" Category="Microsoft.Design" CheckId="CA1062" Created="2006-06-10 11:39:46Z">
+              <Issue>
+               <Item>'stream'</Item>
+               <Item>CRC32.GetCrc32(Stream&amp;):Int32</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="ImageTextButton">
+          <Members>
+           <Member Name="ImageUrl">
+            <Messages>
+             <Message TypeName="UriPropertiesShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1056" Created="2006-06-10 11:39:46Z">
+              <Issue>
+               <Item>ImageUrl</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="modALUGEN">
+          <Members>
+           <Member Name="rsa_createkey(System.String&amp;,System.Int32,System.String&amp;,System.Int32,ASPNETAlugen3.modALUGEN+RSAKey&amp;):System.Int32">
+            <Messages>
+             <Message TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060" Created="2006-06-10 11:39:46Z">
+              <Issue>
+               <Item>modALUGEN.rsa_createkey(String&amp;, Int32, String&amp;, Int32, RSAKey&amp;):Int32</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="rsa_freekey(ASPNETAlugen3.modALUGEN+RSAKey&amp;):System.Int32">
+            <Messages>
+             <Message TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060" Created="2006-06-10 11:39:46Z">
+              <Issue>
+               <Item>modALUGEN.rsa_freekey(RSAKey&amp;):Int32</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="rsa_generate(ASPNETAlugen3.modALUGEN+RSAKey&amp;,System.Int32,System.Int32,System.Int32):System.Int32">
+            <Messages>
+             <Message TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060" Created="2006-06-10 11:39:46Z">
+              <Issue>
+               <Item>modALUGEN.rsa_generate(RSAKey&amp;, Int32, Int32, Int32):Int32</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="rsa_generate2(ASPNETAlugen3.modALUGEN+RSAKey&amp;,System.Int64):System.Int64">
+            <Messages>
+             <Message TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060" Created="2006-06-10 11:39:46Z">
+              <Issue>
+               <Item>modALUGEN.rsa_generate2(RSAKey&amp;, Int64):Int64</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="rsa_private_key_blob(ASPNETAlugen3.modALUGEN+RSAKey&amp;,System.String&amp;,System.Int32&amp;):System.Int32">
+            <Messages>
+             <Message TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060" Created="2006-06-10 11:39:46Z">
+              <Issue>
+               <Item>modALUGEN.rsa_private_key_blob(RSAKey&amp;, String&amp;, Int32&amp;):Int32</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="rsa_public_key_blob(ASPNETAlugen3.modALUGEN+RSAKey&amp;,System.String&amp;,System.Int32&amp;):System.Int32">
+            <Messages>
+             <Message TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060" Created="2006-06-10 11:39:46Z">
+              <Issue>
+               <Item>modALUGEN.rsa_public_key_blob(RSAKey&amp;, String&amp;, Int32&amp;):Int32</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="rsa_sign(ASPNETAlugen3.modALUGEN+RSAKey&amp;,System.String&amp;,System.Int32,System.String&amp;,System.Int32&amp;):System.Int32">
+            <Messages>
+             <Message TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060" Created="2006-06-10 11:39:46Z">
+              <Issue>
+               <Item>modALUGEN.rsa_sign(RSAKey&amp;, String&amp;, Int32, String&amp;, Int32&amp;):Int32</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="rsa_verifysig(ASPNETAlugen3.modALUGEN+RSAKey&amp;,System.String&amp;,System.Int32,System.String&amp;,System.Int32):System.Int32">
+            <Messages>
+             <Message TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060" Created="2006-06-10 11:39:46Z">
+              <Issue>
+               <Item>modALUGEN.rsa_verifysig(RSAKey&amp;, String&amp;, Int32, String&amp;, Int32):Int32</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
+     </Module>
+    </Modules>
+   </Target>
+  </Targets>
+  <Rules>
+   <Rule TypeName="AssembliesShouldHaveValidStrongNames" Category="Microsoft.Design" CheckId="CA2210">
+    <Resolution Name="NoStrongName">Sign '{0}' with a strong name key.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotCatchGeneralExceptionTypes" Category="Microsoft.Design" CheckId="CA1031">
+    <Resolution Name="Default">Modify '{0}' to catch a more specific exception than '{1}' or rethrow the exception.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotPassTypesByReference" Category="Microsoft.Design" CheckId="CA1045">
+    <Resolution Name="Default">Consider a design that does not require that '{0}' be a reference parameter.</Resolution>
+   </Rule>
+   <Rule TypeName="MarkAssembliesWithComVisible" Category="Microsoft.Design" CheckId="CA1017">
+    <Resolution Name="NoAttribute">Mark '{0}' as ComVisible(false) at the assembly level, then mark all types within the assembly that should be exposed to Com clients as ComVisible(true).</Resolution>
+   </Rule>
+   <Rule TypeName="MovePInvokesToNativeMethodsClass" Category="Microsoft.Design" CheckId="CA1060">
+    <Resolution Name="Default">Because it is a DllImport method, {0} should be defined in a class named NativeMethods, SafeNativeMethods, or UnsafeNativeMethods.</Resolution>
+   </Rule>
+   <Rule TypeName="UriPropertiesShouldNotBeStrings" Category="Microsoft.Design" CheckId="CA1056">
+    <Resolution Name="Default">Change the type of property '{0}' from string to System.Uri.</Resolution>
+   </Rule>
+   <Rule TypeName="ValidateArgumentsOfPublicMethods" Category="Microsoft.Design" CheckId="CA1062">
+    <Resolution Name="Default">Validate parameter {0} passed to externally visible method {1}.</Resolution>
+   </Rule>
+  </Rules>
+ </FxCopReport>
+</FxCopProject>

@@ -1,0 +1,167 @@
+.SmallStyle
+{
+	background-color:#ffffff;
+}
+
+.SmallStyle .TitleStyle
+{
+	background-color:#0000aa;
+}
+
+.SmallStyle .TitleStyle table
+{
+	font-family:arial;
+	font-size:8px;
+	font-weight:bold;
+	color:#ffffff;
+	height:10px;
+}
+
+.SmallStyle .TitleStyle .DropDownStyle,
+.SmallStyle .TitleStyle .DropDownOutStyle
+{
+	cursor:default;
+	border-style:solid;
+	border-width:1px;
+	border-color:#3366ff;
+}
+
+.SmallStyle .TitleStyle .DropDownOverStyle
+{
+	cursor:default;
+	border-style:solid;
+	border-width:1px;
+	border-color:#88aaff;
+}
+
+.SmallStyle .TitleStyle .DropDownStyle img,
+.SmallStyle .TitleStyle .DropDownOutStyle img,
+.SmallStyle .TitleStyle .DropDownOverStyle img
+{
+	height:7px!important;
+	width:9px!important;
+} 
+
+.SmallStyle .TitleStyle .CloseButtonStyle
+{
+	width:9px;
+	height:9px;
+}
+
+.SmallStyle .BodyStyle
+{
+	font-family:arial;
+	font-size:7px;
+}
+
+.SmallStyle .BodyStyle .HeaderStyle
+{
+	font-weight:bold;
+	padding:1px 2px 1px 2px;
+	cursor:default;
+	white-space:nowrap;
+}
+
+.SmallStyle .BodyStyle .DateStyle
+{
+	text-decoration:none;
+	color:#000000;
+	cursor:default;
+	padding:1px 1px 1px 1px;
+	white-space:nowrap;
+}
+
+.SmallStyle .BodyStyle .DaysOutOfMonthStyle
+{
+	color:#c0c0c0!important; 
+}
+
+.SmallStyle .BodyStyle .WeekNumberStyle
+{
+	width:15px; 
+	padding:0px;
+	text-align:center;
+}
+
+.SmallStyle .BodyStyle .SelectedDateStyle
+{
+	border-style:solid;
+	border-width:1px;
+	border-color:#a0a0a0;
+	font-size:6px;
+}
+
+.SmallStyle .BodyStyle .WeekendStyle
+{
+	color:#909090;
+}
+
+.SmallStyle .BodyStyle .CurrentDateStyle
+{
+	font-weight:bold;
+	color:#ff0000;
+}
+
+.SmallStyle .BodyStyle .SpecialDayStyle
+{
+	background-color:#70ffd0;
+}
+
+.SmallStyle .BodyStyle .HolidayStyle
+{
+	background-color:#ffdddd;
+}
+
+.SmallStyle .BodyStyle .DisableDateStyle
+{
+	text-decoration:line-through;
+}
+
+
+.SmallStyle .BodyStyle .DayOverStyle
+{
+
+}
+
+.SmallStyle .TodayStyle
+{
+	cursor:default;
+	font-size:8px;
+	background-color:#f0f0f0;
+}
+
+.SmallStyle .TodayStyle .TextStyle
+{
+	font-family:arial;
+	font-size:8px;
+	font-weight:bold; 
+	text-decoration:none;
+	color:#000000;
+	cursor:default;	
+}
+
+.SmallStyle .ListStyle /* Month And Year List */
+{
+	font-family:arial; 
+	font-size:9px; 
+	background-color:#ffffdd;
+}
+
+.SmallStyle .ListStyle img
+{
+	height:6px;
+	width:8px;
+} 
+
+
+.SmallStyle .ListStyle .OptionStyle,
+.SmallStyle .ListStyle .OptionOutStyle
+{
+	padding:0px;
+}
+
+.SmallStyle .ListStyle .OptionOverStyle
+{
+	background-color:#ffcc99;
+	padding:0px;
+}
