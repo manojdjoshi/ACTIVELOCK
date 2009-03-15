@@ -95,3 +95,13 @@ else if ((("abcdefghijklmnopqrstuvwxyz0123456789.").indexOf(keychar) > -1))
 else
    return false;
 }
+
+
+function fnchkLockBIOS_CheckedChanged() {
+    if (document.getElementById("chkLockBIOS").checked) {
+        document.getElementById("chkLockBIOS").checked = true;
+    }
+    else {
+        document.getElementById("chkLockBIOS").checked = false;
+    }
+}

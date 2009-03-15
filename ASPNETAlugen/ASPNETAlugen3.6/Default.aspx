@@ -1,4 +1,4 @@
-<%@ Page Language="vb" AutoEventWireup="false" Inherits="ASPNETAlugen3.ASPNETAlugen3" CodeFile="~/Default.aspx.vb" %>
+<%@ Page Language="vb" AutoEventWireup="false" Inherits="ASPNETAlugen3.ASPNETAlugen3" CodeFile="~/Default.aspx.vb" validateRequest=false %>
 <%@ Register TagPrefix="ajax" Namespace="MagicAjax.UI.Controls" Assembly="MagicAjax" %>
 <%@ Register TagPrefix="cc1" Namespace="msWebControlsLibrary" Assembly="msWebControlsLibrary" %>
 <%@ Register TagPrefix="uc1" TagName="ImageTextButton" Src="ImageTextButton.ascx" %>
@@ -45,6 +45,18 @@
                     <td class="rowHeader" valign="top" width="150">
                         Strength</td>
                     <td valign="top">
+                        <asp:CheckBox ID="chkNetworkedLicense" runat="server" CssClass="rowHeader" 
+                            Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
+                            Style="z-index: 98; left: 123px; position: absolute; top: 138px; width: 150px;" 
+                            Text="Network License" />
+                        <asp:Label ID="lblNumberOfUsers" runat="server" CssClass="rowHeader" 
+                            Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
+                            Style="z-index: 98; left: 276px; position: absolute; top: 142px; width: 100px;" 
+                            Text="Number of Users" />
+                        <asp:TextBox ID="txtMaxCount" runat="server" CssClass="rowHeader" 
+                            Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
+                            Style="z-index: 99; left: 378px; position: absolute; top: 141px; width: 70px;" 
+                            Text="" />
                         <asp:RadioButton ID="optStrength0" runat="server" Checked="True" Font-Size="XX-Small"
                             Style="z-index: 100; left: 128px; position: absolute; top: 160px" Text="ALCrypto 1024-bit" GroupName="strength" Font-Bold="False" Width="137px" />
                         <asp:RadioButton ID="optStrength1" runat="server" Font-Size="XX-Small" Style="z-index: 101;
@@ -55,23 +67,29 @@
                             left: 343px; position: absolute; top: 160px" Text="1536-bit" GroupName="strength" Font-Bold="False" Width="86px" />
                         <asp:RadioButton ID="optStrength4" runat="server" Font-Size="XX-Small" Style="z-index: 104;
                             left: 399px; position: absolute; top: 160px" Text="1024-bit" Width="77px" GroupName="strength" Font-Bold="False" />
-                        <asp:RadioButton ID="optStrength5" runat="server" Font-Size="XX-Small" Style="z-index: 106;
+                        <asp:RadioButton ID="optStrength5" runat="server" Font-Size="XX-Small" Style="z-index: 105;
                             left: 458px; position: absolute; top: 160px" Text="512-bit" Width="72px" GroupName="strength" Font-Bold="False" />
                     </td>
                     <td align="center" valign="top" width="115">
+                        <cc1:ExImageButton ID="cmdValidate2" runat="server" 
+                            DisableImageURL="images/validate_codes_dis.gif" 
+                            ImageUrl="images/validate_codes.gif" Text="Validate codes" 
+                            ToolTip="Validate codes" Visible="False" />
                     </td>
                 </tr>
               <TR>
                 <TD class=rowHeader vAlign=top width=150><asp:Image id=imgVCode runat="server" ImageUrl="images/keys.gif"></asp:Image>&nbsp; 
                   VCode (PUB_KEY)</TD>
-                <TD vAlign=top><asp:TextBox id=txtVCode runat="server" Width="432px" TextMode="MultiLine" Rows="4"></asp:TextBox></TD>
+                <TD vAlign=top><asp:TextBox id=txtVCode runat="server" Width="432px" 
+                        TextMode="MultiLine" Rows="6" Font-Size="XX-Small"></asp:TextBox></TD>
                 <TD vAlign=middle align=center width=115><IMG 
                   class=htmlimagebuttons id=cmdCopyVCode alt="Copy VCode" 
                   src="images/copy_vcode.gif" border=0 runat="server"></TD></TR>
               <TR>
                 <TD class=rowHeader vAlign=top width=150><asp:Image id=imgGCode runat="server" ImageUrl="images/keys.gif"></asp:Image>&nbsp; 
                   GCode (PRV_KEY)</TD>
-                <TD vAlign=top><asp:TextBox id=txtGCode runat="server" Width="432px" TextMode="MultiLine" Rows="4"></asp:TextBox></TD>
+                <TD vAlign=top><asp:TextBox id=txtGCode runat="server" Width="432px" 
+                        TextMode="MultiLine" Rows="6" Font-Size="XX-Small"></asp:TextBox></TD>
                 <TD vAlign=middle align=center width=115><IMG 
                   class=htmlimagebuttons id=cmdCopyGCode alt="Copy GCode" 
                   src="images/copy_gcode.gif" border=0 runat="server"></TD></TR>
@@ -117,10 +135,18 @@
                 <TD align=center width=25><asp:ImageButton id=cmdSelectExpireDate runat="server" ToolTip="Select expire date" ImageUrl="images/calendar.gif" BorderWidth="0px" BorderColor="#808080"></asp:ImageButton></TD>
                 <TD class=rowHeader vAlign=top width=144>&nbsp; 
                   <asp:PlaceHolder id=plhDate runat="server"></asp:PlaceHolder></TD>
-                <TD vAlign=top>&nbsp;</TD></TR>
+                <TD vAlign=top>&nbsp;
+                        <asp:Label ID="lblKeyStrength" runat="server" CssClass="rowHeader" 
+                            Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
+                            Style="z-index: 98; left: 466px; position: absolute; top: 665px; width: 196px;" 
+                            Text="" />
+                
+                </TD>
+                </TR>
               <TR>
                 <TD class=rowHeader vAlign=top style="width: 150px">Install code</TD>
-                <TD vAlign=top width=330 colSpan=3><asp:TextBox id=txtInstallCode runat="server" Width="330px" AutoPostBack="True"></asp:TextBox></TD>
+                <TD vAlign=top width=330 colSpan=3><asp:TextBox id=txtInstallCode runat="server" 
+                        Width="330px" AutoPostBack="True" Font-Size="XX-Small"></asp:TextBox></TD>
                 <TD class=rowHeader vAlign=top align=left><IMG 
                   class=htmlimagebuttons id=cmdPasteInstallCode 
                   alt="Paste installation code" 
@@ -149,7 +175,7 @@
                         <asp:CheckBox ID="chkLockWindows" runat="server" CssClass="rowheader" Font-Names="Microsoft Sans Serif"
                             Font-Size="XX-Small" Style="z-index: 104; left: 126px; position: absolute; top: 285px"
                             Text="Lock to Windows Serial" Width="200px" />
-                        <asp:CheckBox ID="chkLockBIOS" runat="server" CssClass="rowheader" Font-Names="Microsoft Sans Serif"
+                        <asp:CheckBox ID="chkLockBIOS" runat="server" AutoPostBack="True" CssClass="rowheader" Font-Names="Microsoft Sans Serif"
                             Font-Size="XX-Small" Style="z-index: 105; left: 126px; position: absolute; top: 302px"
                             Text="Lock to BIOS Version" Width="200px" />
                         <asp:CheckBox ID="chkLockMotherboard" runat="server" CssClass="rowheader" Font-Names="Microsoft Sans Serif"
@@ -263,7 +289,8 @@
                       <TD class=rowHeader vAlign=top><cc1:ExImageButton id=cmdEmailLicenseKey runat="server" Text="Email license key" ToolTip="Email license key" ImageUrl="images/email_license.gif" DisableImageURL="images/email_license_dis.gif" Enabled="False"></cc1:ExImageButton></TD></TR>
                     <TR>
                       <TD class=rowHeader vAlign=top style="height: 22px"><cc1:ExImageButton id=cmdSaveLicenseFile runat="server" Text="Save license key" ToolTip="Save license key" ImageUrl="images/save_license.gif" DisableImageURL="images/save_license_dis.gif" Enabled="False" ></cc1:ExImageButton></TD></TR></TABLE></TD>
-                <TD vAlign=top colSpan=4><asp:TextBox id=txtLicenseKey runat="server" Width="545px" TextMode="MultiLine" Rows="9" Height="155px"></asp:TextBox></TD></TR></TABLE></asp:Panel></TD></TR></TABLE><INPUT 
+                <TD vAlign=top colSpan=4><asp:TextBox id=txtLicenseKey runat="server" Width="545px" 
+                        TextMode="MultiLine" Rows="9" Height="155px" Font-Size="XX-Small"></asp:TextBox></TD></TR></TABLE></asp:Panel></TD></TR></TABLE><INPUT 
       id=sortExpression type=hidden name=sortExpression runat="server"> <INPUT 
       id=sortOrder type=hidden name=sortOrder runat="server"> <asp:PlaceHolder id=plhSay runat="server"></asp:PlaceHolder><BR>
       <DIV id=myCalendar runat="server"><asp:Calendar id=Calendar1 runat="server" Width="200px" BorderColor="#999999" Font-Size="8pt" Font-Names="Verdana" CellPadding="4" Height="180px" BackColor="White" ForeColor="Black" Visible="False">

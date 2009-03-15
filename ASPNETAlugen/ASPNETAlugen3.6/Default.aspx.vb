@@ -54,7 +54,7 @@ Namespace ASPNETAlugen3
         Public mKeyStoreType As IActiveLock.LicStoreType
         Public mProductsStoreType As IActiveLock.ProductsStoreType
         Public mProductsStoragePath As String
-        Private blnIsFirstLaunch As Boolean
+        Public blnIsFirstLaunch As Boolean
 
         ' Hardware keys from the Installation Code
         Private MACaddress, ComputerName As String
@@ -66,7 +66,8 @@ Namespace ASPNETAlugen3
         Private BaseboardID, VideoID As String
         Private systemEvent As Boolean
 
-        Private PROJECT_INI_FILENAME As String
+        Public PROJECT_INI_FILENAME As String
+        Public cboProducts_Array() As String
 
 
 #Region " Web Form Designer Generated Code "
@@ -75,6 +76,7 @@ Namespace ASPNETAlugen3
         <System.Diagnostics.DebuggerStepThrough()> Private Sub InitializeComponent()
 
         End Sub
+
         'Protected WithEvents ltlAlert As System.Web.UI.WebControls.Literal
         Private Sub Page_Init(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Init
             'CODEGEN: This method call is required by the Web Form Designer
@@ -85,7 +87,6 @@ Namespace ASPNETAlugen3
 #End Region
 
         Public Shared ReadOnly ExpBase64 As Regex = New Regex("^[a-zA-Z0-9+/=]{4,}$", RegexOptions.Compiled)
-        Dim cboProducts_Array() As String
 
         Private Sub AppendLockString(ByRef strLock As String, ByVal newSubString As String)
             '===============================================================================
@@ -258,8 +259,16 @@ noInfo:
             arrProdInfos = GeneratorInstance.RetrieveProducts()
             If arrProdInfos.Length = 0 Then Exit Sub
 
-            'Populate the DataGrid control
+            If Not IsPostBack Then
+                blnIsFirstLaunch = True
+                'load form settings
+                LoadFormSetting()
+            End If
 
+            ' Initialize AL
+            'InitActiveLock()
+
+            'Populate the DataGrid control
             Dim dc As New DataColumn("Name", System.Type.GetType("System.String"))
             dt.Columns.Add(dc)
             dc = New DataColumn("Version", System.Type.GetType("System.String"))
@@ -300,7 +309,7 @@ noInfo:
             dgc.ItemStyle.Wrap = True
             dgc.ItemStyle.Width = Unit.Percentage(25)
             dgc.SortExpression = "VCode"
-            dgc.CharacterLimit = 25
+            dgc.CharacterLimit = 120
             grdProducts.Columns.Add(dgc)
 
             dgc = New LimitColumn 'BoundColumn
@@ -309,7 +318,7 @@ noInfo:
             dgc.ItemStyle.Wrap = True
             dgc.ItemStyle.Width = Unit.Percentage(25)
             dgc.SortExpression = "GCode"
-            dgc.CharacterLimit = 25
+            dgc.CharacterLimit = 120
             grdProducts.Columns.Add(dgc)
 
             ' Create a DataView from the DataTable.
@@ -349,8 +358,17 @@ noInfo:
                 txtProductName.Attributes.Add("onKeyPress", "return letternumber(event)")
                 txtProductVersion.Attributes.Add("onKeyPress", "return letternumber(event)")
 
+                'chkLockBIOS.Attributes.Add("onclick", "fnchkLockBIOS_CheckedChanged();")
+
                 pnlProducts.Visible = True
                 pnlLicenses.Visible = False
+
+                'Assume that the application LockType is not LOckNone only
+                txtUserName.Enabled = False
+                txtUserName.ReadOnly = True
+                txtUserName.BackColor = System.Drawing.ColorTranslator.FromOle(&H8000000F)
+                cboProduct.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboProducts", CStr(0)))
+                txtDays.Text = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtDays", CStr(365))
             End If
 
             'If CheckDuplicate(txtProductName.Text, txtProductVersion.Text) Then
@@ -362,6 +380,7 @@ noInfo:
             '    cmdAddProduct.Enabled = True
             '    cmdRemoveProduct.Enabled = False
             'End If
+            blnIsFirstLaunch = False
 
         End Sub
         Private Sub LoadFormSetting()
@@ -373,88 +392,88 @@ noInfo:
             On Error Resume Next
             'Read the program INI file to retrieve control settings
             Dim CallingAssemblyName As String = Assembly.GetCallingAssembly.GetName().Name
-            PROJECT_INI_FILENAME = AppPath() & "\" & CallingAssemblyName & ".ini"
+            PROJECT_INI_FILENAME = AppPath() & "\ASPNETAlugen3.6.ini"
 
             'cboProducts.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboProducts", CStr(0)))
             cboLicenseType.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboLicenseType", CStr(1)))
             cboRegLevel.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboRegLevel", CStr(0)))
-            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkUseItemData", CStr(0)) = "Unchecked" Then
+            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkUseItemData", CStr(0)) = "False" Then
                 chkUseItemData.Checked = False
             Else
                 chkUseItemData.Checked = True
             End If
-            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockBIOS", CStr(0)) = "Unchecked" Then
+            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockBIOS", CStr(0)) = "False" Then
                 chkLockBIOS.Checked = False
             Else
                 chkLockBIOS.Checked = True
             End If
-            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockComputer", CStr(0)) = "Unchecked" Then
+            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockComputer", CStr(0)) = "False" Then
                 chkLockComputer.Checked = False
             Else
                 chkLockComputer.Checked = True
             End If
-            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockHD", CStr(0)) = "Unchecked" Then
+            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockHD", CStr(0)) = "False" Then
                 chkLockHD.Checked = False
             Else
                 chkLockHD.Checked = True
             End If
-            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockHDfirmware", CStr(0)) = "Unchecked" Then
+            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockHDfirmware", CStr(0)) = "False" Then
                 chkLockHDfirmware.Checked = False
             Else
                 chkLockHDfirmware.Checked = True
             End If
-            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockIP", CStr(0)) = "Unchecked" Then
+            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockIP", CStr(0)) = "False" Then
                 chkLockIP.Checked = False
             Else
                 chkLockIP.Checked = True
             End If
-            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMACaddress", CStr(0)) = "Unchecked" Then
+            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMACaddress", CStr(0)) = "False" Then
                 chkLockMACaddress.Checked = False
             Else
                 chkLockMACaddress.Checked = True
             End If
-            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMotherboard", CStr(0)) = "Unchecked" Then
+            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMotherboard", CStr(0)) = "False" Then
                 chkLockMotherboard.Checked = False
             Else
                 chkLockMotherboard.Checked = True
             End If
-            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockWindows", CStr(0)) = "Unchecked" Then
+            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockWindows", CStr(0)) = "False" Then
                 chkLockWindows.Checked = False
             Else
                 chkLockWindows.Checked = True
             End If
-            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockExternalIP", CStr(0)) = "Unchecked" Then
+            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockExternalIP", CStr(0)) = "False" Then
                 chkLockExternalIP.Checked = False
             Else
                 chkLockExternalIP.Checked = True
             End If
-            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockFingerprint", CStr(0)) = "Unchecked" Then
+            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockFingerprint", CStr(0)) = "False" Then
                 chkLockFingerprint.Checked = False
             Else
                 chkLockFingerprint.Checked = True
             End If
-            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMemory", CStr(0)) = "Unchecked" Then
+            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMemory", CStr(0)) = "False" Then
                 chkLockMemory.Checked = False
             Else
                 chkLockMemory.Checked = True
             End If
-            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockCPUID", CStr(0)) = "Unchecked" Then
+            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockCPUID", CStr(0)) = "False" Then
                 chkLockCPUID.Checked = False
             Else
                 chkLockCPUID.Checked = True
             End If
-            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockBaseboardID", CStr(0)) = "Unchecked" Then
+            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockBaseboardID", CStr(0)) = "False" Then
                 chkLockBaseboardID.Checked = False
             Else
                 chkLockBaseboardID.Checked = True
             End If
-            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockVideoID", CStr(0)) = "Unchecked" Then
+            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockVideoID", CStr(0)) = "False" Then
                 chkLockVideoID.Checked = False
             Else
                 chkLockVideoID.Checked = True
             End If
 
-            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkNetworkedLicense", CStr(0)) = "Unchecked" Then
+            If ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkNetworkedLicense", CStr(0)) = "False" Then
                 chkNetworkedLicense.Checked = False
             Else
                 chkNetworkedLicense.Checked = True
@@ -463,12 +482,12 @@ noInfo:
             txtMaxCount.Text = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtMaxCount", CStr(5))
             'txtDays.Text = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtDays", CStr(365))
 
-            optStrength0.Checked = CBool(modinifile.ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength0", "1"))
-            optStrength1.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength1", "0"))
-            optStrength2.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength2", "0"))
-            optStrength3.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength3", "0"))
-            optStrength4.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength4", "0"))
-            optStrength5.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength5", "0"))
+            optStrength0.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength0", "False"))
+            optStrength1.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength1", "True"))
+            optStrength2.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength2", "False"))
+            optStrength3.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength3", "False"))
+            optStrength4.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength4", "False"))
+            optStrength5.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength5", "False"))
 
             mKeyStoreType = CType(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "KeyStoreType", CStr(1)), IActiveLock.LicStoreType)
             mProductsStoreType = CType(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoreType", CStr(0)), IActiveLock.ProductsStoreType)
@@ -488,6 +507,56 @@ LoadFormSetting_Error:
             SayAjax("Error " & Err.Number & " (" & Err.Description & ") in procedure LoadFormSetting of Form frmMain")
 
         End Sub
+        Public Sub SaveFormSettings()
+            'save form settings
+            On Error GoTo SaveFormSettings_Error
+            Dim mnReturnValue As Long
+
+            PROJECT_INI_FILENAME = AppPath() & "\ASPNETAlugen3.6.ini"
+
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboProducts", CStr(cboProduct.SelectedIndex))
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboLicType", CStr(cboLicenseType.SelectedIndex))
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboRegisteredLevel", CStr(cboRegLevel.SelectedIndex))
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkItemData", chkUseItemData.Checked.ToString)
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkNetworkedLicense", chkNetworkedLicense.Checked.ToString)
+
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "KeyStoreType", CStr(mKeyStoreType))
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoreType", CStr(mProductsStoreType))
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "ProductsStoragePath", CStr(mProductsStoragePath))
+
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockBIOS", chkLockBIOS.Checked.ToString)
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockComputer", chkLockComputer.Checked.ToString)
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockHD", chkLockHD.Checked.ToString)
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockHDfirmware", chkLockHDfirmware.Checked.ToString)
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockIP", chkLockIP.Checked.ToString)
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMACaddress", chkLockMACaddress.Checked.ToString)
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMotherboard", chkLockMotherboard.Checked.ToString)
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockWindows", chkLockWindows.Checked.ToString)
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockExternalIP", chkLockExternalIP.Checked.ToString)
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockFingerpoint", chkLockFingerprint.Checked.ToString)
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockMemory", chkLockMemory.Checked.ToString)
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockCPUID", chkLockCPUID.Checked.ToString)
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockBaseboardID", chkLockBaseboardID.Checked.ToString)
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "chkLockVideoID", chkLockVideoID.Checked.ToString)
+
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtMaxCount", txtMaxCount.Text)
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtDays", txtDays.Text)
+
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optstrength0", CStr(optStrength0.Checked))
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optstrength1", CStr(optStrength1.Checked))
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optstrength2", CStr(optStrength2.Checked))
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optstrength3", CStr(optStrength3.Checked))
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optstrength4", CStr(optStrength4.Checked))
+            mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optstrength5", CStr(optStrength5.Checked))
+
+            On Error GoTo 0
+            Exit Sub
+
+SaveFormSettings_Error:
+
+            SayAjax("Error " & Err.Number & " (" & Err.Description & ") in procedure SaveFormSettings of Page Unload")
+        End Sub
+
         Private Sub cmdProducts_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdProducts.Click
             ResetCalendarControls()
             pnlProducts.Visible = True
@@ -606,6 +675,8 @@ LoadFormSetting_Error:
             AddRow(txtProductName.Text, txtProductVersion.Text, txtVCode.Text, txtGCode.Text, True)
 
             cmdRemoveProduct.Enabled = True
+            cmdAddProduct.Enabled = False ' disallow repeated clicking of Add button
+            cmdValidateCode.Enabled = True
 
             SayAjax(String.Format("Product {0} ({1}) added successfuly.", txtProductName.Text, txtProductVersion.Text))
         End Sub
@@ -669,114 +740,231 @@ LoadFormSetting_Error:
                 txtGCode.Text = ""
                 Exit Sub
             End If
-
-            ' Get the current date format and save it to regionalSymbol variable
-            Get_locale()
-            ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
-            Set_locale("")
+            If txtProductName.Text.Contains("-") Then
+                MsgBox("Dash '-' is not allowed in Product Name.", vbInformation)
+                Exit Sub
+            End If
+            If txtProductVersion.Text.Contains("-") Then
+                MsgBox("Dash '-' is not allowed in Product Version.", vbInformation)
+                Exit Sub
+            End If
+            txtVCode.Text = ""
+            txtGCode.Text = ""
 
             Try
 
-                Dim Key As New RSAKey
-                ReDim Key.data(32)
-                'Adding a delegate for AddressOf CryptoProgressUpdate did not work
-                'for now. Modified alcrypto3NET.dll to create a second generate function
-                'rsa_generate2 that does not deal with progress monitoring - ialkan
-                'retrieve url info
-                Dim siteNameUrl As String
-                siteNameUrl = Request.ServerVariables.Get("SERVER_NAME")
-                Select Case siteNameUrl
-                    Case "localhost"
-                        rsa_generate2_local(Key, 1024)
-                    Case Else
-                        rsa_generate2(Key, 1024)
-                End Select
+                ' ALCrypto DLL with 1024-bit strength
+                If optStrength0.Checked = True Then
+                    Dim Key As New RSAKey
+                    ReDim Key.data(32)
+                    'Adding a delegate for AddressOf CryptoProgressUpdate did not work
+                    'for now. Modified alcrypto3NET.dll to create a second generate function
+                    'rsa_generate2 that does not deal with progress monitoring - ialkan
+                    'retrieve url info
 
-                ' extract private and public key blobs
-                Dim strBlob As String
-                Dim blobLen As Integer
-                Select Case siteNameUrl
-                    Case "localhost"
-                        rsa_public_key_blob_local(Key, vbNullString, blobLen)
-                    Case Else
-                        rsa_public_key_blob(Key, vbNullString, blobLen)
-                End Select
+                    ' Get the current date format and save it to regionalSymbol variable
+                    Get_locale()
+                    ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
+                    Set_locale("")
 
-                If blobLen > 0 Then
-                    strBlob = New String(Chr(0), blobLen)
+                    Dim siteNameUrl As String
+                    siteNameUrl = Request.ServerVariables.Get("SERVER_NAME")
                     Select Case siteNameUrl
                         Case "localhost"
-                            rsa_public_key_blob_local(Key, strBlob, blobLen)
+                            If modALUGEN.rsa_generate2_local(Key, 1024) = RETVAL_ON_ERROR Then
+                                Set_locale(regionalSymbol)
+                                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, modALUGEN.ACTIVELOCKSTRING, STRRSAERROR)
+                            End If
                         Case Else
-                            rsa_public_key_blob(Key, strBlob, blobLen)
+                            If modALUGEN.rsa_generate2(Key, 1024) = RETVAL_ON_ERROR Then
+                                Set_locale(regionalSymbol)
+                                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, modALUGEN.ACTIVELOCKSTRING, STRRSAERROR)
+                            End If
                     End Select
-                    'System.Diagnostics.Debug.WriteLine("Public blob: " & strBlob)
-                    txtVCode.Text = strBlob
-                End If
 
-                'FUTURE RSA IMPLEMENTATION USING NATIVE VB.NET FUNCTIONS
-                'Dim rsa As New RSACryptoServiceProvider
-                'Dim xmlPublicKey As String
-                'Dim xmlPrivateKey As String
-                'xmlPublicKey = rsa.ToXmlString(False)
-                'xmlPrivateKey = rsa.ToXmlString(True)
-                'rsa.FromXmlString(xmlPublicKey)
-                'txtCode1.Text = xmlPublicKey
-                'txtCode2.Text = xmlPrivateKey
-
-                Select Case siteNameUrl
-                    Case "localhost"
-                        rsa_private_key_blob_local(Key, vbNullString, blobLen)
-                    Case Else
-                        rsa_private_key_blob(Key, vbNullString, blobLen)
-                End Select
-
-                If blobLen > 0 Then
-                    strBlob = New String(Chr(0), blobLen)
+                    ' extract private and public key blobs
+                    Dim strBlob As String
+                    Dim blobLen As Integer
                     Select Case siteNameUrl
                         Case "localhost"
-                            rsa_private_key_blob_local(Key, strBlob, blobLen)
+                            If rsa_public_key_blob_local(Key, vbNullString, blobLen) = RETVAL_ON_ERROR Then
+                                Set_locale(regionalSymbol)
+                                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                            End If
                         Case Else
-                            rsa_private_key_blob(Key, strBlob, blobLen)
+                            If rsa_public_key_blob(Key, vbNullString, blobLen) = RETVAL_ON_ERROR Then
+                                Set_locale(regionalSymbol)
+                                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                            End If
                     End Select
-                    'System.Diagnostics.Debug.WriteLine("Private blob: " & strBlob)
-                    txtGCode.Text = strBlob
+
+                    If blobLen > 0 Then
+                        strBlob = New String(Chr(0), blobLen)
+                        Select Case siteNameUrl
+                            Case "localhost"
+                                If rsa_public_key_blob_local(Key, strBlob, blobLen) = RETVAL_ON_ERROR Then
+                                    Set_locale(regionalSymbol)
+                                    Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                                End If
+                            Case Else
+                                If rsa_public_key_blob(Key, strBlob, blobLen) = RETVAL_ON_ERROR Then
+                                    Set_locale(regionalSymbol)
+                                    Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                                End If
+                        End Select
+                        'System.Diagnostics.Debug.WriteLine("Public blob: " & strBlob)
+                        txtVCode.Text = strBlob
+                    End If
+
+                    'FUTURE RSA IMPLEMENTATION USING NATIVE VB.NET FUNCTIONS
+                    'Dim rsa As New RSACryptoServiceProvider
+                    'Dim xmlPublicKey As String
+                    'Dim xmlPrivateKey As String
+                    'xmlPublicKey = rsa.ToXmlString(False)
+                    'xmlPrivateKey = rsa.ToXmlString(True)
+                    'rsa.FromXmlString(xmlPublicKey)
+                    'txtCode1.Text = xmlPublicKey
+                    'txtCode2.Text = xmlPrivateKey
+
+                    Select Case siteNameUrl
+                        Case "localhost"
+                            rsa_private_key_blob_local(Key, vbNullString, blobLen)
+                            If modALUGEN.rsa_private_key_blob_local(Key, vbNullString, blobLen) = RETVAL_ON_ERROR Then
+                                Set_locale(regionalSymbol)
+                                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                            End If
+                        Case Else
+                            If modALUGEN.rsa_private_key_blob(Key, vbNullString, blobLen) = RETVAL_ON_ERROR Then
+                                Set_locale(regionalSymbol)
+                                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                            End If
+                    End Select
+
+                    If blobLen > 0 Then
+                        strBlob = New String(Chr(0), blobLen)
+                        Select Case siteNameUrl
+                            Case "localhost"
+                                If modALUGEN.rsa_private_key_blob_local(Key, strBlob, blobLen) = RETVAL_ON_ERROR Then
+                                    Set_locale(regionalSymbol)
+                                    Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                                End If
+                            Case Else
+                                If modALUGEN.rsa_private_key_blob(Key, strBlob, blobLen) = RETVAL_ON_ERROR Then
+                                    Set_locale(regionalSymbol)
+                                    Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                                End If
+                        End Select
+                        'System.Diagnostics.Debug.WriteLine("Private blob: " & strBlob)
+                        txtGCode.Text = strBlob
+                    End If
+
+                    ' done with the key - throw it away
+                    Select Case siteNameUrl
+                        Case "localhost"
+                            If modALUGEN.rsa_freekey_local(Key) = RETVAL_ON_ERROR Then
+                                Set_locale(regionalSymbol)
+                                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                            End If
+                        Case Else
+                            If modALUGEN.rsa_freekey(Key) = RETVAL_ON_ERROR Then
+                                Set_locale(regionalSymbol)
+                                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                            End If
+                    End Select
+
+                    ' Test generated key for correctness by recreating it from the blobs
+                    ' Note:
+                    ' ====
+                    ' Due to an outstanding bug in ALCrypto3NET.dll, sometimes this step will crash the app because
+                    ' the generated keyset is bad.
+                    ' The work-around for the time being is to keep regenerating the keyset until eventually
+                    ' you'll get a valid keyset that no longer crashes.
+                    Dim strdata As String : strdata = "This is a test string to be encrypted."
+                    Select Case siteNameUrl
+                        Case "localhost"
+                            If modALUGEN.rsa_createkey_local(txtVCode.Text, txtVCode.Text.Length, txtGCode.Text, txtGCode.Text.Length, Key) = RETVAL_ON_ERROR Then
+                                Set_locale(regionalSymbol)
+                                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                            End If
+                            ' It worked! We're all set to go.
+                            If modALUGEN.rsa_freekey_local(Key) = RETVAL_ON_ERROR Then
+                                Set_locale(regionalSymbol)
+                                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                            End If
+                        Case Else
+                            If modALUGEN.rsa_createkey(txtVCode.Text, txtVCode.Text.Length, txtGCode.Text, txtGCode.Text.Length, Key) = RETVAL_ON_ERROR Then
+                                Set_locale(regionalSymbol)
+                                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                            End If
+                            ' It worked! We're all set to go.
+                            If modALUGEN.rsa_freekey(Key) = RETVAL_ON_ERROR Then
+                                Set_locale(regionalSymbol)
+                                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                            End If
+                    End Select
+
+                Else   ' CryptoAPI - RSA with given strength
+
+                    Dim strPublicBlob As String, strPrivateBlob As String
+                    Dim imodulus As Integer
+
+                    If optStrength1.Checked = True Then
+                        imodulus = 4096
+                    ElseIf optStrength2.Checked = True Then
+                        imodulus = 2048
+                    ElseIf optStrength3.Checked = True Then
+                        imodulus = 1536
+                    ElseIf optStrength4.Checked = True Then
+                        imodulus = 1024
+                    ElseIf optStrength5.Checked = True Then
+                        imodulus = 512
+                    End If
+
+                    'create new instance of RSACryptoServiceProvider
+                    'Dim cspParam As CspParameters = New CspParameters
+                    'cspParam.Flags = CspProviderFlags.UseMachineKeyStore
+                    'cspParam.KeyContainerName = txtName.Text & txtVer.Text
+                    'cspParam.KeyNumber = 2 'signature key pair
+                    ''Set the CSP Provider Type PROV_RSA_FULL
+                    'cspParam.ProviderType = 1
+                    ''Set the CSP Provider Name
+                    'cspParam.ProviderName = "Microsoft Base Cryptographic Provider v1.0"
+
+                    'create new instance of RSACryptoServiceProvider
+                    Dim rsaCSP As New System.Security.Cryptography.RSACryptoServiceProvider(imodulus)   ', cspParam)
+
+                    'Generate public and private key data and allowing their exporting.
+                    'True to include private parameters; otherwise, false
+
+                    Dim rsaPubParams As RSAParameters       'stores public key
+                    Dim rsaPrivateParams As RSAParameters   'stores private key
+                    rsaPrivateParams = rsaCSP.ExportParameters(True)
+                    rsaPubParams = rsaCSP.ExportParameters(False)
+
+                    strPrivateBlob = rsaCSP.ToXmlString(True)
+                    strPublicBlob = rsaCSP.ToXmlString(False)
+
+                    'ok = ActiveLock3Globals_definst.ContainerChange(txtName.Text & txtVer.Text)
+                    'ok = ActiveLock3Globals_definst.CryptoAPIAction(1, txtName.Text & txtVer.Text, "", "", strPublicBlob, strPrivateBlob, modulus)
+                    txtVCode.Text = "RSA" & imodulus & strPublicBlob
+                    txtGCode.Text = "RSA" & imodulus & strPrivateBlob
+
+                    rsaPubParams = Nothing
+                    rsaPrivateParams = Nothing
+                    rsaCSP = Nothing
+
                 End If
-
-                ' done with the key - throw it away
-                Select Case siteNameUrl
-                    Case "localhost"
-                        rsa_freekey_local(Key)
-                    Case Else
-                        rsa_freekey(Key)
-                End Select
-
-                ' Test generated key for correctness by recreating it from the blobs
-                ' Note:
-                ' ====
-                ' Due to an outstanding bug in ALCrypto3NET.dll, sometimes this step will crash the app because
-                ' the generated keyset is bad.
-                ' The work-around for the time being is to keep regenerating the keyset until eventually
-                ' you'll get a valid keyset that no longer crashes.
-                Select Case siteNameUrl
-                    Case "localhost"
-                        rsa_createkey_local(txtVCode.Text, Len(txtVCode.Text), txtGCode.Text, Len(txtGCode.Text), Key)
-                        ' It worked! We're all set to go.
-                        rsa_freekey_local(Key)
-                    Case Else
-                        rsa_createkey(txtVCode.Text, Len(txtVCode.Text), txtGCode.Text, Len(txtGCode.Text), Key)
-                        ' It worked! We're all set to go.
-                        rsa_freekey(Key)
-                End Select
+                Set_locale(regionalSymbol)
 
                 'cmdGenerateCode.Enabled = False
 
-                SayAjax("Code generation successful!")
+                UpdateAddButtonStatus()
                 Set_locale(regionalSymbol)
+                SayAjax("Product codes generated successfully.")
 
             Catch ex As Exception
-                SayAjax("Error!")
                 Set_locale(regionalSymbol)
+                SayAjax("Error!")
 
             End Try
         End Sub
@@ -799,6 +987,10 @@ LoadFormSetting_Error:
         End Function
 
         Private Sub cmdValidateCode_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdValidateCode.Click
+            Dim KEY As RSAKey = Nothing
+            Dim strdata As String
+            Dim strSig As String, rc As Integer
+
             If txtVCode.Text = "" Then
                 SayAjax("Product VCode field is empty.")
                 Exit Sub
@@ -810,38 +1002,36 @@ LoadFormSetting_Error:
                 Exit Sub ' nothing to validate
             End If
 
+            strdata = "I love Activelock"
+
             ' Get the current date format and save it to regionalSymbol variable
             Get_locale()
             ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
             Set_locale("")
 
-            Try
+            ' ALCrypto DLL with 1024-bit strength
+            If strLeft(txtVCode.Text, 3) <> "RSA" Then
                 ' Validate to keyset to make sure it's valid.
                 SayAjax("Validating keyset...")
-                Dim Key As RSAKey
-                ReDim Key.data(32)
-                Dim strdata As String
-                strdata = "This is a test string to be signed."
-                Dim strSig As String
-                Dim txt1 As String, txt2 As String
-                Dim len1 As Integer, len2 As Integer
-                txt1 = txtVCode.Text
-                len1 = txtVCode.Text.Length
-                txt2 = txtGCode.Text
-                len2 = txtGCode.Text.Length
+                ReDim KEY.data(32)
 
                 Dim siteNameUrl As String
                 siteNameUrl = Request.ServerVariables.Get("SERVER_NAME")
                 Select Case siteNameUrl
                     Case "localhost"
-                        rsa_createkey_local(txt1, len1, txt2, len2, Key)
+                        rc = modALUGEN.rsa_createkey_local(txtVCode.Text, txtVCode.Text.Length, txtGCode.Text, txtGCode.Text.Length, KEY)
                     Case Else
-                        rsa_createkey(txt1, len1, txt2, len2, Key)
+                        rc = modALUGEN.rsa_createkey(txtVCode.Text, txtVCode.Text.Length, txtGCode.Text, txtGCode.Text.Length, KEY)
                 End Select
+                If rc = RETVAL_ON_ERROR Then
+                    Set_locale(regionalSymbol)
+                    SayAjax("Code not valid! " & vbCrLf & STRRSAERROR)
+                    'UpdateStatus(txtName.Text & " (" & txtVer.Text & ") " & STRRSAERROR)
+                    Exit Sub
+                End If
 
                 ' sign it
                 strSig = RSASign(txtVCode.Text, txtGCode.Text, strdata, siteNameUrl)
-                Dim rc As Integer
                 rc = RSAVerify(txtVCode.Text, strdata, strSig, siteNameUrl)
                 Dim dr As DataRow
                 dr = dt.Rows(grdProducts.SelectedIndex)
@@ -853,16 +1043,250 @@ LoadFormSetting_Error:
                 ' It worked! We're all set to go.
                 Select Case siteNameUrl
                     Case "localhost"
-                        rsa_freekey_local(Key)
+                        If modALUGEN.rsa_freekey_local(KEY) = RETVAL_ON_ERROR Then
+                            Set_locale(regionalSymbol)
+                            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                        End If
                     Case Else
-                        rsa_freekey(Key)
+                        If modALUGEN.rsa_freekey(KEY) = RETVAL_ON_ERROR Then
+                            Set_locale(regionalSymbol)
+                            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+                        End If
                 End Select
-                Set_locale(regionalSymbol)
 
-            Catch ex As Exception
-                SayAjax(ex.Message & ex.StackTrace)
-                Set_locale(regionalSymbol)
-            End Try
+            Else  '.NET RSA
+
+                Try
+
+                    ' ------------------ begin Message from Ismail ------------------
+                    ' This code block is used to Encrypt/Sign and then Validate/Decrypt
+                    ' a small size text.
+                    ' This code uses "I love Activelock" to validate the given Public/Private key pair
+                    ' If you try to do the same with a much longer string, these routines will fail
+                    ' with a "Bad Length" error
+                    ' Increasing the cpher strength (say from 1024 to 2048-bits) will allow you to
+                    ' run this code with much longer data strings
+                    ' Activelock DLL uses a different algorithm to sign/validate
+                    ' This section is functional, but more than that it's provided here
+                    ' as the entire solution for a typical RSA signing/validation algorithm
+                    ' ------------------ end Message from Ismail ------------------
+
+                    Dim rsaCSP As New System.Security.Cryptography.RSACryptoServiceProvider
+                    Dim rsaPubParams As RSAParameters 'stores public key
+                    Dim strPublicBlob, strPrivateBlob As String
+
+                    strPublicBlob = txtVCode.Text
+                    strPrivateBlob = txtGCode.Text
+
+                    ' ENCRYPT PLAIN TEXT USING THE PUBLIC KEY
+                    ' Convert the data string to a byte array.
+                    Dim toEncrypt As Byte()     ' Holds message in bytes
+                    Dim enc As New UTF8Encoding ' new instance of Unicode8 instance
+                    Dim encrypted As Byte() ' holds encrypted data
+                    Dim encryptedPlainText As String
+
+                    If strLeft(txtVCode.Text, 6) = "RSA512" Then
+                        strPublicBlob = strRight(txtVCode.Text, Len(txtVCode.Text) - 6)
+                    Else
+                        strPublicBlob = strRight(txtVCode.Text, Len(txtVCode.Text) - 7)
+                    End If
+                    rsaCSP.FromXmlString(strPublicBlob)
+                    rsaPubParams = rsaCSP.ExportParameters(False)
+                    ' import public key params into instance of RSACryptoServiceProvider
+                    rsaCSP.ImportParameters(rsaPubParams)
+                    toEncrypt = enc.GetBytes(strdata)
+
+
+                    '' The following Encrypt method works for long and short strings
+                    '' =============================== ACTIVATE FOR LONG AND SHORT STRINGS =============================
+                    ''The RSA algorithm works on individual blocks of unencoded bytes. In this case, the
+                    ''maximum is 58 bytes. Therefore, we are required to break up the text into blocks and
+                    ''encrypt each one individually. Each encrypted block will give us an output of 128 bytes.
+                    ''If we do not break up the blocks in this manner, we will throw a "key not valid for use
+                    ''in specified state" exception
+
+                    ''Get the size of the final block
+                    'Const RSA_BLOCKSIZE As Integer = 58
+                    'Dim lastBlockLength As Integer = toEncrypt.Length Mod RSA_BLOCKSIZE
+                    'Dim blockCount As Integer = CType(Math.Floor(toEncrypt.Length / RSA_BLOCKSIZE), Integer) ' CType not necessary in VB 2008
+                    'Dim hasLastBlock As Boolean = False
+                    'If Not lastBlockLength.Equals(0) Then
+                    '    'We need to create a final block for the remaining characters
+                    '    blockCount += 1
+                    '    hasLastBlock = True
+                    'End If
+
+                    ''Initialize the result buffer
+                    'Dim result() As Byte = New Byte() {}
+
+                    ''Initialize the RSA Service Provider with the public key
+                    ''rsaCSP.FromXmlString(strPublicBlob) 'This was taken care of already
+
+                    ''Break the text into blocks and work on each block individually
+                    'For blockIndex As Integer = 0 To blockCount - 1
+                    '    Dim thisBlockLength As Integer
+
+                    '    'If this is the last block and we have a remainder, then set the length accordingly
+                    '    If blockCount.Equals(blockIndex + 1) AndAlso hasLastBlock Then
+                    '        thisBlockLength = lastBlockLength
+                    '    Else
+                    '        thisBlockLength = RSA_BLOCKSIZE
+                    '    End If
+                    '    Dim startChar As Integer = blockIndex * RSA_BLOCKSIZE
+
+                    '    'Define the block that we will be working on
+                    '    Dim currentBlock(thisBlockLength - 1) As Byte
+                    '    Array.Copy(toEncrypt, startChar, currentBlock, 0, thisBlockLength)
+
+                    '    'Encrypt the current block and append it to the result stream
+                    '    Dim encryptedBlock() As Byte = rsaCSP.Encrypt(currentBlock, False)
+                    '    Dim originalResultLength As Integer = result.Length
+
+                    '    ReDim Preserve result(originalResultLength + encryptedBlock.Length) ' This is for VB 2008
+                    '    'Array.Resize(result, originalResultLength + encryptedBlock.Length)
+
+                    '    encryptedBlock.CopyTo(result, originalResultLength)
+                    'Next
+
+                    'encrypted = result
+                    ' =============================================================================================
+
+                    ' The following Encrypt method works only for short strings
+                    encrypted = rsaCSP.Encrypt(toEncrypt, False)
+                    encryptedPlainText = Convert.ToBase64String(encrypted) ' convert to base64/Radix output
+
+                    ' HASH AND SIGN THE SIGNATURE
+                    ' GENERATE SIGNATURE BLOCK USING SENDER'S PRIVATE KEY
+                    Dim signatureBlock As String
+                    ' Hash the encrypted data and generate a signature block on the hash
+                    ' using the sender's private key. (Signature Block)
+                    ' create new instance of SHA1 hash algorithm to compute hash
+                    Dim hash As New SHA1Managed
+                    Dim hashedData() As Byte ' a byte array to store hash value
+                    If strLeft(txtGCode.Text, 6) = "RSA512" Then
+                        strPrivateBlob = strRight(txtGCode.Text, Len(txtGCode.Text) - 6)
+                    Else
+                        strPrivateBlob = strRight(txtGCode.Text, Len(txtGCode.Text) - 7)
+                    End If
+                    ' import private key params into instance of RSACryptoServiceProvider
+                    rsaCSP.FromXmlString(strPrivateBlob)
+                    Dim rsaPrivateParams As RSAParameters 'stores private key
+                    rsaPrivateParams = rsaCSP.ExportParameters(True)
+                    rsaCSP.ImportParameters(rsaPrivateParams)
+                    ' compute hash with algorithm specified as here we have SHA1
+                    hashedData = hash.ComputeHash(encrypted)
+                    ' Sign Data using private key and  OID is simple name of the algorithm for which to get the object identifier (OID)
+                    Dim signature As Byte() ' holds signatures
+                    signature = rsaCSP.SignHash(hashedData, CryptoConfig.MapNameToOID("SHA1"))
+                    ' convert to base64/Radix output
+                    signatureBlock = Convert.ToBase64String(signature)
+
+                    ' VERIFY SIGNATURE BLOCK USING THE SENDER'S PUBLIC KEY
+                    ' VALIDATE THE STRING WITH THE PUBLIC/PRIVATE KEY PAIR
+                    ' Verify the signature is authentic using the sender's public key(decrypt Signature block)
+                    Dim myencrypted() As Byte
+                    Dim mysignature() As Byte
+                    myencrypted = Convert.FromBase64String(encryptedPlainText)
+                    mysignature = Convert.FromBase64String(signatureBlock)
+                    ' create new instance of SHA1 hash algorithm to compute hash
+                    Dim sha1hash As New SHA1Managed
+                    Dim sha1hashedData() As Byte ' a byte array to store hash value
+                    ' import  public key params into instance of RSACryptoServiceProvider
+                    rsaCSP.ImportParameters(rsaPubParams)
+                    ' compute hash with algorithm specified as here we have SHA1
+                    sha1hashedData = sha1hash.ComputeHash(myencrypted)
+                    ' Sign Data using public key and  OID is simple name of the algorithm for which to get the object identifier (OID)
+                    Dim verified As Boolean
+                    verified = rsaCSP.VerifyHash(sha1hashedData, CryptoConfig.MapNameToOID("SHA1"), mysignature)
+                    If verified Then
+                        SayAjax(txtProductName.Text & " (" & txtProductVersion.Text & ") validated successfully.")
+                        'MsgBox("Signature Valid", MsgBoxStyle.Information)
+                    Else
+                        SayAjax(txtProductName.Text & " (" & txtProductVersion.Text & ") GCode-VCode mismatch!")
+                        'MsgBox("Invalid Signature", MsgBoxStyle.Exclamation)
+                    End If
+
+                    ' THE FOLLOWING CODE BLOCK IS USED TO RETRIEVE THE ORIGINAL
+                    ' STRING strData BUT IS NOT NEEDED FOR THE VALIDATION PROCESS
+                    ' IT'S BEEN SHOWN HERE FOR DEMONSTRATION PURPOSES
+                    ' This works for short strings only
+                    Dim newencrypted() As Byte
+                    newencrypted = Convert.FromBase64String(encryptedPlainText)
+                    Dim fromEncrypt() As Byte ' a byte array to store decrypted bytes
+                    Dim roundTrip As String ' holds original message
+                    ' import  private key params into instance of RSACryptoServiceProvider
+                    rsaCSP.ImportParameters(rsaPrivateParams)
+
+
+                    '' The following Decrypt method works for long and short strings
+                    '' It's currently not functioning correctly
+                    '' =============================== ACTIVATE FOR LONG AND SHORT STRINGS =============================
+                    ''When we encrypt a string using RSA, it works on individual blocks of up to
+                    ''58 bytes. Each block generates an output of 128 encrypted bytes. Therefore, to
+                    ''decrypt the message, we need to break the encrypted stream into individual
+                    ''chunks of 128 bytes and decrypt them individually
+
+                    ''Determine how many bytes are in the encrypted stream. The input is in hex format,
+                    ''so we have to divide it by 2
+                    'Const RSA_DECRYPTBLOCKSIZE As Integer = 128
+                    'Dim maxBytes As Integer = CType(encryptedPlainText.Length / 2, Integer)  ' CType not necessary in VB 2008
+
+                    ''Ensure that the length of the encrypted stream is divisible by 128
+                    'If Not (maxBytes Mod RSA_DECRYPTBLOCKSIZE).Equals(0) Then
+                    '    Throw New System.Security.Cryptography.CryptographicException("Encrypted text is an invalid length")
+                    'End If
+
+                    ''Calculate the number of blocks we will have to work on
+                    'Dim blockCount2 As Integer = CType(maxBytes / RSA_DECRYPTBLOCKSIZE, Integer)
+
+                    ''Initialize the result buffer
+                    'Dim result2() As Byte = New Byte() {}
+
+                    ''rsaCSP.FromXmlString(strPrivateBlob) ' This was done already
+
+                    ''Iterate through each block and decrypt it
+                    'For blockIndex As Integer = 0 To blockCount2 - 1
+                    '    'Get the current block to work on
+                    '    Dim currentBlockHex As String = encryptedPlainText.Substring(blockIndex * (RSA_DECRYPTBLOCKSIZE * 2), RSA_DECRYPTBLOCKSIZE * 2)
+                    '    Dim currentBlockBytes As Byte() = HexToBytes(currentBlockHex)
+
+                    '    'Decrypt the current block and append it to the result stream
+                    '    Dim currentBlockDecrypted() As Byte = rsaCSP.Decrypt(currentBlockBytes, False)
+                    '    Dim originalResultLength As Integer = result2.Length
+
+                    '    ReDim Preserve result2(originalResultLength + currentBlockDecrypted.Length)
+                    '    'Array.Resize(result, originalResultLength + currentBlockDecrypted.Length) ' This is for VB 2008
+
+                    '    currentBlockDecrypted.CopyTo(result2, originalResultLength)
+                    'Next
+                    'fromEncrypt = result2
+                    ' =============================================================================================
+
+
+                    ' The following Decrypt works for short strings only
+                    'store decrypted data into byte array
+                    fromEncrypt = rsaCSP.Decrypt(newencrypted, False)
+
+                    'convert bytes to string
+                    roundTrip = enc.GetString(fromEncrypt)
+                    If roundTrip <> strdata Then
+                        SayAjax(txtProductName.Text & " (" & txtProductVersion.Text & ") GCode-VCode mismatch!")
+                    End If
+
+                    'Release any resources held by the RSA Service Provider
+                    rsaCSP.Clear()
+                    Set_locale(regionalSymbol)
+
+                Catch ex As Exception
+                    Set_locale(regionalSymbol)
+                    SayAjax(ex.Message & ex.StackTrace)
+                End Try
+            End If
+
+            Exit Sub
+exitValidate:
+            Set_locale(regionalSymbol)
+            SayAjax(txtProductName.Text & " (" & txtProductVersion.Text & ") GCode-VCode mismatch!")
 
         End Sub
 
@@ -870,14 +1294,32 @@ LoadFormSetting_Error:
             ResetCalendarControls()
             Select Case cboLicenseType.SelectedValue
                 Case "0" 'time locked
-                    lblExpiry.Text = "Expire on date"
+                    lblExpiry.Text = "Expiration:"
+                    txtDays.Text = Date.Now.AddDays(365).ToString("yyyy/MM/dd")
+                    'lblDays.Text = "yyyy/MM/dd"
+                    txtDays.Visible = False
+                    'dtpExpireDate.Visible = True
+                    'dtpExpireDate.Value = Date.Now.AddDays(30)
                     cmdSelectExpireDate.Visible = True
+                    txtDays.ReadOnly = False
+                    txtDays.BackColor = System.Drawing.ColorTranslator.FromOle(&H80000005)
+                    txtDays.ForeColor = System.Drawing.Color.Black
                 Case "1" 'periodic
-                    lblExpiry.Text = "Expire after"
                     cmdSelectExpireDate.Visible = False
+                    lblExpiry.Text = "Expires after:"
+                    txtDays.Text = "365"
+                    'lblDays.Text = "Day(s)"
+                    txtDays.Visible = True
+                    'dtpExpireDate.Visible = False
+                    txtDays.ReadOnly = False
+                    txtDays.BackColor = System.Drawing.ColorTranslator.FromOle(&H80000005)
+                    txtDays.ForeColor = System.Drawing.Color.Black
                 Case "2" 'permanent
-                    lblExpiry.Text = "Not expire"
+                    lblExpiry.Text = "Permanent"
                     cmdSelectExpireDate.Visible = False
+                    txtDays.ReadOnly = True
+                    txtDays.BackColor = System.Drawing.ColorTranslator.FromOle(&H8000000F)
+                    txtDays.ForeColor = System.Drawing.ColorTranslator.FromOle(&H8000000F)
             End Select
         End Sub
 
@@ -930,6 +1372,24 @@ LoadFormSetting_Error:
 
         Private Sub cboProduct_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboProduct.SelectedIndexChanged
             ResetCalendarControls()
+            'product selected from products combo - update the controls
+            UpdateKeyGenButtonStatus()
+
+            If cboProducts_Array Is Nothing Then Exit Sub
+
+            If cboProducts_Array(cboProduct.SelectedIndex) = "512" Then
+                lblKeyStrength.Text = "[Key Strength: CryptoAPI RSA 512-bit]"
+            ElseIf cboProducts_Array(cboProduct.SelectedIndex) = "1024" Then
+                lblKeyStrength.Text = "[Key Strength: CryptoAPI RSA 1024-bit]"
+            ElseIf cboProducts_Array(cboProduct.SelectedIndex) = "1536" Then
+                lblKeyStrength.Text = "[Key Strength: CryptoAPI RSA 1536-bit]"
+            ElseIf cboProducts_Array(cboProduct.SelectedIndex) = "2048" Then
+                lblKeyStrength.Text = "[Key Strength: CryptoAPI RSA 2048-bit]"
+            ElseIf cboProducts_Array(cboProduct.SelectedIndex) = "4096" Then
+                lblKeyStrength.Text = "[Key Strength: CryptoAPI RSA 4096-bit]"
+            ElseIf cboProducts_Array(cboProduct.SelectedIndex) = "0" Then
+                lblKeyStrength.Text = "[Key Strength: ALCrypto 1024-bit]"
+            End If
         End Sub
 
         Private Sub cboRegLevel_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboRegLevel.SelectedIndexChanged
@@ -1299,6 +1759,48 @@ LoadFormSetting_Error:
 
         Private Sub cmdGenerateLicenseKey_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdGenerateLicenseKey.Click
             'generate license key
+            Dim usedVCode As String = Nothing
+            Dim licFlag As ActiveLock3_6NET.ProductLicense.LicFlags, maximumUsers As Short
+
+            If txtInstallCode.Text.Length < 8 Then Exit Sub
+
+            ' Get the current date format and save it to regionalSymbol variable
+            Get_locale()
+            ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
+            Set_locale("")
+
+            'If cboLicenseType.Text = "Time Locked" Then
+            '    ' Check to see if there's a valid expiration date
+            '    If CDate(CType(dtpExpireDate.Value, DateTime).ToString("yyyy/MM/dd")) < CDate(Format(Date.Now, "yyyy/MM/dd")) Then
+            '        Set_locale(regionalSymbol)
+            '        MsgBox("Entered date occurs in the past.", vbExclamation)
+            '        Exit Sub
+            '    End If
+            'End If
+
+            If txtInstallCode.Text.Length <> 8 Then  'Not a Short Key License
+                If chkLockMACaddress.Checked = False _
+                  And chkLockComputer.Checked = False _
+                  And chkLockHD.Checked = False _
+                  And chkLockHDfirmware.Checked = False _
+                  And chkLockWindows.Checked = False _
+                  And chkLockBIOS.Checked = False _
+                  And chkLockMotherboard.Checked = False _
+                  And chkLockExternalIP.Checked = False _
+                  And chkLockFingerprint.Checked = False _
+                  And chkLockMemory.Checked = False _
+                  And chkLockCPUID.Checked = False _
+                  And chkLockBaseboardID.Checked = False _
+                  And chkLockVideoID.Checked = False _
+                  And chkLockIP.Checked = False Then
+                    SayAjax("Warning: You did not select any hardware keys to lock the license." & vbCrLf & "This license will be machine independent. License will be locked to the username only !!!")
+                End If
+            End If
+
+            systemEvent = True
+            If Len(txtInstallCode.Text) <> 8 Then txtInstallCode.Text = ReconstructedInstallationCode()
+            systemEvent = False
+
             Try
                 Dim strName, strVer As String
                 Dim itemProduct As ListItem = cboProduct.SelectedItem
@@ -1330,11 +1832,6 @@ LoadFormSetting_Error:
                     varLicType = ProductLicense.ALLicType.allicNone
                 End If
 
-                ' Get the current date format and save it to regionalSymbol variable
-                Get_locale()
-                ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
-                Set_locale("")
-
                 Dim strExpire As String
                 strExpire = GetExpirationDate()
                 Dim strRegDate As String
@@ -1349,36 +1846,73 @@ LoadFormSetting_Error:
                 Else
                     selRegLevelType = selRegLevel.Text
                 End If
-                Lic = ActiveLock3Globals_definst.CreateProductLicense(strName, strVer, "", _
-                          ProductLicense.LicFlags.alfSingle, varLicType, "", _
-                          selRegLevelType, _
-                          strExpire, , strRegDate)
 
-                Dim strLibKey As String
-                ' Pass it to IALUGenerator to generate the key
-                Dim selectedRegisteredLevel As String
-                Dim mList As ListItem
-                mList = cboRegLevel.SelectedItem
-                If chkUseItemData.Checked Then
-                    selectedRegisteredLevel = mList.Value
+                'Take care of the networked licenses
+                If chkNetworkedLicense.Checked = True Then
+                    licFlag = ProductLicense.LicFlags.alfMulti
                 Else
-                    selectedRegisteredLevel = mList.Text
+                    licFlag = ProductLicense.LicFlags.alfSingle
+                End If
+                If txtMaxCount.Text = "" Then
+                    maximumUsers = 1
+                Else
+                    maximumUsers = CShort(txtMaxCount.Text)
                 End If
 
-                strLibKey = GeneratorInstance.GenKey(Lic, txtInstallCode.Text, selectedRegisteredLevel)
-                'split license key into 64byte chunks
-                txtLicenseKey.Text = Make64ByteChunks(strLibKey & "aLck" & txtInstallCode.Text)
-                'save the license to local server file - for use in save
-                SaveLicenseKey(txtLicenseKey.Text, Session.SessionID.ToString & ".all")
+                Lic = ActiveLock3Globals_definst.CreateProductLicense(strName, strVer, "", _
+                          licFlag, varLicType, "", _
+                          selRegLevelType, _
+                          strExpire, , strRegDate, , maximumUsers)
 
-                If sender Is cmdGenerateLicenseKey Then
-                    SayAjax("License code generated successfuly!")
+                Dim strLibKey As String, i As Integer
+                If Len(txtInstallCode.Text) = 8 Then  'Short Key License
+                    Dim arrProdInfos() As ProductInfo
+                    Dim MyGen As New AlugenGlobals
+                    GeneratorInstance = MyGen.GeneratorInstance(IActiveLock.ProductsStoreType.alsINIFile)
+                    GeneratorInstance.StoragePath = AppPath() & "\licenses.ini"
+                    arrProdInfos = GeneratorInstance.RetrieveProducts()
+                    For i = 0 To arrProdInfos.Length - 1
+                        If arrProdInfos(i).Name = strName Then
+                            usedVCode = arrProdInfos(i).VCode
+                        End If
+                    Next
+
+                    'For i = 0 To grdProducts.Items.Count
+                    '    If strName = grdProducts.Items(i).Text And strVer = lstvwProducts.Items(i).SubItems(1).Text Then
+                    '        usedVCode = grdProducts.Items(i).SubItems(2).Text
+                    '        Exit For
+                    '    End If
+                    'Next
+                    strLibKey = ActiveLock.GenerateShortKey(usedVCode, txtInstallCode.Text, Trim(txtUserName.Text), strExpire, varLicType, cboRegLevel.SelectedIndex + 200, maximumUsers)
+                    txtLicenseKey.Text = strLibKey
+                Else 'ALCrypto License Key
+                    ' Pass it to IALUGenerator to generate the key
+                    Dim selectedRegisteredLevel As String
+                    Dim mList As ListItem
+                    mList = cboRegLevel.SelectedItem
+                    If chkUseItemData.Checked Then
+                        selectedRegisteredLevel = mList.Value
+                    Else
+                        selectedRegisteredLevel = mList.Text
+                    End If
+
+                    strLibKey = GeneratorInstance.GenKey(Lic, txtInstallCode.Text, selectedRegisteredLevel)
+                    'split license key into 64byte chunks
+                    txtLicenseKey.Text = Make64ByteChunks(strLibKey & "aLck" & txtInstallCode.Text)
+                    'save the license to local server file - for use in save
+                    SaveLicenseKey(txtLicenseKey.Text, strName & strVer & "_" & Session.SessionID.ToString & ".all")
+
+                    If sender Is cmdGenerateLicenseKey Then
+                        SayAjax("License code generated successfuly!")
+                    End If
                 End If
-                set_locale(regionalsymbol)
+                Set_locale(regionalSymbol)
+
             Catch ex As Exception
+                Set_locale(regionalSymbol)
                 SayAjax("Error: " & ex.Message)
-                set_locale(regionalsymbol)
             Finally
+                Set_locale(regionalSymbol)
             End Try
         End Sub
 
@@ -1439,11 +1973,18 @@ LoadFormSetting_Error:
         End Sub
 
         Private Sub cmdSaveLicenseFile_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdSaveLicenseFile.Click
+            Dim strName, strVer As String
+            Dim itemProduct As ListItem = cboProduct.SelectedItem
+            Dim a As String()
+
+            a = itemProduct.Value.Split(Convert.ToChar("|"))
+            strName = a(0)
+            strVer = a(1)
 
             'ensure it is correct key and license file generated
             cmdGenerateLicenseKey_Click(sender, e)
             'dowload file
-            DownloadFile(AppPath() & "\" & "GENKEYSFOLDER" & "\" & Session.SessionID.ToString & ".all", True)
+            DownloadFile(AppPath() & "\" & "GenKeys" & "\" & strName & strVer & "_" & Session.SessionID.ToString & ".all", True)
 
         End Sub
 
@@ -1489,7 +2030,7 @@ LoadFormSetting_Error:
         Private Sub SaveLicenseKey(ByVal sLibKey As String, ByVal sFileName As String)
             Dim fp As StreamWriter
             Try
-                fp = File.CreateText(Server.MapPath(".\" & "GENKEYSFOLDER" & "\") & sFileName)
+                fp = File.CreateText(Server.MapPath(".\" & "GenKeys" & "\") & sFileName)
                 fp.WriteLine(sLibKey)
                 fp.Close()
             Catch err As Exception
@@ -1603,7 +2144,341 @@ LoadFormSetting_Error:
             'write to page
             AjaxCallHelper.WriteLine("javascript:PrintLicenseKey(""" & msgToPrint.ToString & """, " & mWidth.ToString & ", " & mHeight.ToString & ");")
         End Sub
+        Private Sub InitActiveLock()
+            On Error GoTo InitForm_Error
+            ActiveLock = ActiveLock3Globals_definst.NewInstance()
+            ActiveLock.KeyStoreType = mKeyStoreType
 
+            Dim MyAL As New Globals
+            Dim MyGen As New AlugenGlobals
+
+            'Use the following for ASP.NET applications
+            'ActiveLock.Init(Application.StartupPath & "\bin")
+            'Use the following for the VB.NET applications
+            ActiveLock.Init(AppPath)
+
+            ' Initialize Generator
+            GeneratorInstance = MyGen.GeneratorInstance(mProductsStoreType)
+            If File.Exists(mProductsStoragePath) = False Then
+                Select Case mProductsStoreType
+                    Case IActiveLock.ProductsStoreType.alsINIFile
+                        mProductsStoragePath = AppPath() & "\licenses.ini"
+                    Case IActiveLock.ProductsStoreType.alsMDBFile
+                        mProductsStoragePath = AppPath() & "\licenses.mdb"
+                    Case IActiveLock.ProductsStoreType.alsXMLFile
+                        mProductsStoragePath = AppPath() & "\licenses.xml"
+                End Select
+            End If
+            GeneratorInstance.StoragePath = mProductsStoragePath
+
+            On Error GoTo 0
+            Exit Sub
+
+InitForm_Error:
+
+            SayAjax("Error " & Err.Number & " (" & Err.Description & ") in procedure in Page Load")
+        End Sub
+
+        Protected Sub chkLockBIOS_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles chkLockBIOS.CheckedChanged, chkLockComputer.CheckedChanged, chkLockHD.CheckedChanged, chkLockHDfirmware.CheckedChanged, chkLockIP.CheckedChanged, chkLockMACaddress.CheckedChanged, chkLockMotherboard.CheckedChanged, chkLockMotherboard.CheckedChanged, chkLockExternalIP.CheckedChanged, chkLockFingerprint.CheckedChanged, chkLockMemory.CheckedChanged, chkLockCPUID.CheckedChanged, chkLockBaseboardID.CheckedChanged, chkLockVideoID.CheckedChanged
+            If systemEvent Then Exit Sub
+            systemEvent = True
+            txtInstallCode.Text = ReconstructedInstallationCode()
+            systemEvent = False
+            SaveFormSettings()
+        End Sub
+
+        Protected Sub cmdPasteInstallCode_Init(ByVal sender As Object, ByVal e As System.EventArgs) Handles cmdPasteInstallCode.Init
+            If txtInstallCode.Text.Length < 8 Then Exit Sub
+
+            If txtInstallCode.Text.Substring(0, 8).ToLower = "you must" Then 'short key license
+                Dim arrProdVer() As String
+                arrProdVer = Split(txtInstallCode.Text, vbLf)
+                systemEvent = True
+                txtInstallCode.Text = (arrProdVer(1).Substring(15, 8)).Trim
+                txtUserName.Text = (arrProdVer(3).Substring(11, arrProdVer(3).Length - 11)).Trim
+                systemEvent = False
+                HandleInstallationCode()
+            End If
+        End Sub
+
+        Public Sub HandleInstallationCode()
+
+            If systemEvent Then Exit Sub
+            If txtInstallCode.Text.Length < 8 Then Exit Sub
+
+            If txtInstallCode.Text.Substring(0, 8).ToLower = "you must" Then 'short key license
+                Dim arrProdVer() As String
+                arrProdVer = Split(txtInstallCode.Text, vbLf)
+                systemEvent = True
+                txtInstallCode.Text = (arrProdVer(1).Substring(15, 8)).Trim
+                txtUserName.Text = (arrProdVer(3).Substring(11, arrProdVer(3).Length - 11)).Trim
+                systemEvent = False
+            End If
+
+            If txtInstallCode.Text.Length = 8 Then 'Short key authorization is much simpler
+                UpdateKeyGenButtonStatus()
+                'If fDisableNotifications Then Exit Sub
+
+                chkLockMACaddress.Visible = False
+                chkLockComputer.Visible = False
+                chkLockHD.Visible = False
+                chkLockHDfirmware.Visible = False
+                chkLockWindows.Visible = False
+                chkLockBIOS.Visible = False
+                chkLockMotherboard.Visible = False
+                chkLockIP.Visible = False
+                chkLockExternalIP.Visible = False
+                chkLockFingerprint.Visible = False
+                chkLockMemory.Visible = False
+                chkLockCPUID.Visible = False
+                chkLockBaseboardID.Visible = False
+                chkLockVideoID.Visible = False
+
+                'txtUserName.Text = ""
+                txtUserName.Enabled = True
+                txtUserName.ReadOnly = False
+                txtUserName.BackColor = Color.White
+
+                ' Label5.Visible = False
+                'txtLicenseFile.Visible = False
+                'cmdBrowse.Visible = False
+                cmdSaveLicenseFile.Visible = False
+                Exit Sub
+
+            Else 'ALCrypto
+
+                chkLockMACaddress.Visible = True
+                chkLockComputer.Visible = True
+                chkLockHD.Visible = True
+                chkLockHDfirmware.Visible = True
+                chkLockWindows.Visible = True
+                chkLockBIOS.Visible = True
+                chkLockMotherboard.Visible = True
+                chkLockIP.Visible = True
+                chkLockExternalIP.Visible = True
+                chkLockFingerprint.Visible = True
+                chkLockMemory.Visible = True
+                chkLockCPUID.Visible = True
+                chkLockBaseboardID.Visible = True
+                chkLockVideoID.Visible = True
+                txtUserName.Enabled = False
+                txtUserName.ReadOnly = True
+                txtUserName.BackColor = System.Drawing.SystemColors.Control
+
+                'Label5.Visible = True
+                'txtLicenseFile.Visible = True
+                'cmdBrowse.Visible = True
+                cmdSaveLicenseFile.Visible = True
+
+                If Len(txtInstallCode.Text) > 0 Then
+                    If systemEvent Then Exit Sub
+                    UpdateKeyGenButtonStatus()
+                    'If fDisableNotifications Then Exit Sub
+
+                    'fDisableNotifications = True
+                    txtUserName.Text = GetUserFromInstallCode(txtInstallCode.Text)
+                    'fDisableNotifications = False
+
+                    Dim installNameandVersion As String
+                    Dim i As Integer, success As Boolean
+                    installNameandVersion = GetUserSoftwareNameandVersionfromInstallCode(txtInstallCode.Text)
+                    For i = 0 To cboProduct.Items.Count - 1
+                        cboProduct.SelectedIndex = i
+                        If installNameandVersion = cboProduct.Text Then
+                            success = True
+                            Exit For
+                        End If
+                    Next i
+                    If Not success Then
+                        MsgBox("There's no matching Software Name and Version Number for this Installation Code.", MsgBoxStyle.Exclamation)
+                    End If
+                Else
+                    'fDisableNotifications = True
+                    chkLockComputer.Enabled = True
+                    chkLockComputer.Text = "Lock to Computer Name"
+                    chkLockHD.Enabled = True
+                    chkLockHD.Text = "Lock to HDD Volume Serial"
+                    chkLockHDfirmware.Enabled = True
+                    chkLockHDfirmware.Text = "Lock to HDD Firmware Serial"
+                    chkLockMACaddress.Enabled = True
+                    chkLockMACaddress.Text = "Lock to MAC Address"
+                    chkLockWindows.Enabled = True
+                    chkLockWindows.Text = "Lock to Windows Serial"
+                    chkLockBIOS.Enabled = True
+                    chkLockBIOS.Text = "Lock to BIOS Version"
+                    chkLockMotherboard.Enabled = True
+                    chkLockMotherboard.Text = "Lock to Motherboard Serial"
+                    chkLockIP.Enabled = True
+                    chkLockIP.Text = "Lock to Local IP Address"
+                    chkLockExternalIP.Enabled = True
+                    chkLockExternalIP.Text = "Lock to External IP Address"
+                    chkLockFingerprint.Enabled = True
+                    chkLockFingerprint.Text = "Lock to Computer Fingerprint [VB.NET]"
+                    chkLockMemory.Enabled = True
+                    chkLockMemory.Text = "Lock to Memory"
+                    chkLockCPUID.Enabled = True
+                    chkLockCPUID.Text = "Lock to CPU ID"
+                    chkLockBaseboardID.Enabled = True
+                    chkLockBaseboardID.Text = "Lock to Baseboard ID"
+                    chkLockVideoID.Enabled = True
+                    chkLockVideoID.Text = "Lock to Video Controller ID"
+                    txtUserName.Text = ""
+                    'fDisableNotifications = False
+                End If
+            End If
+
+        End Sub
+
+        Private Sub txtName_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtProductName.TextChanged
+            'fDisableNotifications = False
+            UpdateCodeGenButtonStatus()
+            UpdateAddButtonStatus()
+        End Sub
+        Private Sub txtVer_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtProductVersion.TextChanged
+            ' New product - will be processed by Add command
+            'fDisableNotifications = False
+            UpdateCodeGenButtonStatus()
+            UpdateAddButtonStatus()
+        End Sub
+
+        Private Sub cmdValidate2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdValidate2.Click
+
+            ' ------------------ begin Message from Ismail ------------------
+            ' This code block is used to Sign and then Validate any size text
+            ' If you try to do the same with the typical RSA and with long strings, 
+            ' routines will fail with a "Bad Length" error
+            ' I am providing this sample here to show a second type of sign/verify scheme
+            ' Although RSA is usually intended for signing/verifying short keys,
+            ' the routine below with sign/verify any length string
+            ' This 2nd type of validation button is hidden and is intended for 
+            ' developers to test and learn.
+            ' Note that no facility exists to retrieve the original data.
+            ' Similar code can be found under SourceForge in project NCrypto
+            ' ------------------ end Message from Ismail ------------------
+
+            ' Get the current date format and save it to regionalSymbol variable
+            Get_locale()
+            ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
+            Set_locale("")
+
+            If strLeft(txtVCode.Text, 3) = "RSA" Then
+
+                Try
+                    Dim strData As String
+                    strData = "TestApp" & vbCrLf & "3" & vbCrLf & "Single" & vbCrLf & "1" & vbCrLf & "Evaluation User" & vbCrLf & "0" & vbCrLf & "2006/11/22" & vbCrLf & "2006/12/22" & vbCrLf & "5" & vbLf & "+00 10 18 09 71 85" & vbCrLf & "MYSWEETBABY" & vbCrLf & "5CA9-4B2A" & vbCrLf & "3JT26AA0" & vbCrLf & "55274-OEM-0011903-00102" & vbCrLf & "DELL   - 7" & vbCrLf & "BFWB741" & vbCrLf & "192.168.0.1"
+                    Dim rsaCSP As New System.Security.Cryptography.RSACryptoServiceProvider
+                    Dim rsaPubParams As RSAParameters 'stores public key
+                    Dim strPublicBlob, strPrivateBlob As String
+
+                    strPublicBlob = txtVCode.Text
+                    strPrivateBlob = txtGCode.Text
+
+                    If strLeft(txtGCode.Text, 6) = "RSA512" Then
+                        strPrivateBlob = strRight(txtGCode.Text, Len(txtGCode.Text) - 6)
+                    Else
+                        strPrivateBlob = strRight(txtGCode.Text, Len(txtGCode.Text) - 7)
+                    End If
+                    ' import private key params into instance of RSACryptoServiceProvider
+                    rsaCSP.FromXmlString(strPrivateBlob)
+                    Dim rsaPrivateParams As RSAParameters 'stores private key
+                    rsaPrivateParams = rsaCSP.ExportParameters(True)
+                    rsaCSP.ImportParameters(rsaPrivateParams)
+
+                    Dim userData As Byte() = Encoding.UTF8.GetBytes(strData)
+                    Dim asf As AsymmetricSignatureFormatter = New RSAPKCS1SignatureFormatter(rsaCSP)
+                    Dim algorithm As HashAlgorithm = New SHA1Managed
+                    asf.SetHashAlgorithm(algorithm.ToString)
+                    Dim myhashedData() As Byte ' a byte array to store hash value
+                    Dim myhashedDataString As String
+                    myhashedData = algorithm.ComputeHash(userData)
+                    myhashedDataString = BitConverter.ToString(myhashedData).Replace("-", String.Empty)
+                    Dim mysignature As Byte() ' holds signatures
+                    mysignature = asf.CreateSignature(algorithm)
+                    Dim mySignatureBlock As String
+                    mySignatureBlock = Convert.ToBase64String(mysignature)
+
+                    ' Verify Signature
+                    If strLeft(txtVCode.Text, 6) = "RSA512" Then
+                        strPublicBlob = strRight(txtVCode.Text, Len(txtVCode.Text) - 6)
+                    Else
+                        strPublicBlob = strRight(txtVCode.Text, Len(txtVCode.Text) - 7)
+                    End If
+                    rsaCSP.FromXmlString(strPublicBlob)
+                    rsaPubParams = rsaCSP.ExportParameters(False)
+                    ' import public key params into instance of RSACryptoServiceProvider
+                    rsaCSP.ImportParameters(rsaPubParams)
+
+                    ' Also could use the following to check if the string is a base64 string
+                    If ExpBase64.IsMatch(mySignatureBlock) Then
+                    End If
+
+                    Dim newsignature() As Byte
+                    newsignature = Convert.FromBase64String(mySignatureBlock)
+                    Dim asd As AsymmetricSignatureDeformatter = New RSAPKCS1SignatureDeformatter(rsaCSP)
+                    asd.SetHashAlgorithm(algorithm.ToString)
+                    Dim newhashedData() As Byte ' a byte array to store hash value
+                    Dim newhashedDataString As String
+                    newhashedData = algorithm.ComputeHash(userData)
+                    newhashedDataString = BitConverter.ToString(newhashedData).Replace("-", String.Empty)
+                    Dim verified As Boolean
+                    verified = asd.VerifySignature(algorithm, newsignature)
+                    If verified Then
+                        SayAjax(txtProductName.Text & " (" & txtProductVersion.Text & ") validated successfully.")
+                        'MsgBox("Signature Valid", MsgBoxStyle.Information)
+                    Else
+                        SayAjax(txtProductName.Text & " (" & txtProductVersion.Text & ") GCode-VCode mismatch!")
+                        'MsgBox("Invalid Signature", MsgBoxStyle.Exclamation)
+                    End If
+
+                    'Release any resources held by the RSA Service Provider
+                    rsaCSP.Clear()
+                    Set_locale(regionalSymbol)
+
+                Catch ex As Exception
+                    Set_locale(regionalSymbol)
+                    SayAjax(ex.Message)
+                End Try
+            End If
+
+        End Sub
+        'Private Sub cmdCheckAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdCheckAll.Click
+        '    chkLockMACaddress.CheckState = CheckState.Checked
+        '    chkLockComputer.CheckState = CheckState.Checked
+        '    chkLockHD.CheckState = CheckState.Checked
+        '    chkLockHDfirmware.CheckState = CheckState.Checked
+        '    chkLockWindows.CheckState = CheckState.Checked
+        '    chkLockBIOS.CheckState = CheckState.Checked
+        '    chkLockMotherboard.CheckState = CheckState.Checked
+        '    chkLockIP.CheckState = CheckState.Checked
+        '    chkLockExternalIP.CheckState = CheckState.Checked
+        '    chkLockFingerprint.CheckState = CheckState.Checked
+        '    chkLockMemory.CheckState = CheckState.Checked
+        '    chkLockCPUID.CheckState = CheckState.Checked
+        '    chkLockBaseboardID.CheckState = CheckState.Checked
+        '    chkLockVideoID.CheckState = CheckState.Checked
+        'End Sub
+
+        'Private Sub cmdUncheckAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdUncheckAll.Click
+        '    chkLockMACaddress.CheckState = CheckState.Unchecked
+        '    chkLockComputer.CheckState = CheckState.Unchecked
+        '    chkLockHD.CheckState = CheckState.Unchecked
+        '    chkLockHDfirmware.CheckState = CheckState.Unchecked
+        '    chkLockWindows.CheckState = CheckState.Unchecked
+        '    chkLockBIOS.CheckState = CheckState.Unchecked
+        '    chkLockMotherboard.CheckState = CheckState.Unchecked
+        '    chkLockIP.CheckState = CheckState.Unchecked
+        '    chkLockExternalIP.CheckState = CheckState.Unchecked
+        '    chkLockFingerprint.CheckState = CheckState.Unchecked
+        '    chkLockMemory.CheckState = CheckState.Unchecked
+        '    chkLockCPUID.CheckState = CheckState.Unchecked
+        '    chkLockBaseboardID.CheckState = CheckState.Unchecked
+        '    chkLockVideoID.CheckState = CheckState.Unchecked
+        'End Sub
+
+
+        Protected Sub chkLockWindows_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles chkLockWindows.CheckedChanged
+
+        End Sub
     End Class
 
 End Namespace
