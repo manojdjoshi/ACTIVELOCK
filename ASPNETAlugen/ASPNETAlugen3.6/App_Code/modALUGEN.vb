@@ -62,6 +62,8 @@ Public Module modALUGEN
     '  ///////////////////////////////////////////////////////////////////////
     '  /                MODULE CODE BEGINS BELOW THIS LINE                   /
     '  ///////////////////////////////////////////////////////////////////////
+    Public Const ACTIVELOCKSTRING As String = "Activelock3"
+    Public Const ACTIVELOCKSOFTWAREWEB As String = "http://www.activelocksoftware.com"
 
     'Dim ActiveLock3AlugenGlobals As New AlugenGlobals
     'Dim ActiveLock3Globals As New Globals
@@ -139,6 +141,55 @@ Public Module modALUGEN
     Public Declare Function rsa_verifysig_local Lib "ALCrypto3NET" Alias "rsa_verifysig" (ByRef ptrKey As RSAKey, ByVal sig As String, ByVal sLen As Integer, ByVal data As String, ByVal dLen As Integer) As Integer
 
     Public Const LICENSES_FILE As String = "authorizations.txt"
+    Public Class ProductInfoItem
+        Private _ProductName As String
+        Private _productVersion As String
+
+        'constructors
+        Public Sub New()
+            _ProductName = ""
+            _productVersion = ""
+        End Sub
+        Public Sub New(ByVal ProductName As String, ByVal ProductVersion As String)
+            _ProductName = ProductName
+            _productVersion = ProductVersion
+        End Sub
+
+        Public Property ProductName() As String
+            Get
+                Return _ProductName
+            End Get
+            Set(ByVal Value As String)
+                _ProductName = Value
+            End Set
+        End Property
+
+        Public Property ProductVersion() As String
+            Get
+                Return _productVersion
+            End Get
+            Set(ByVal Value As String)
+                _productVersion = Value
+            End Set
+        End Property
+
+        Public ReadOnly Property ProductNameVersion() As String
+            Get
+                Dim mProductname As String
+                mProductname = _ProductName
+                If _productVersion.Length > 0 Then
+                    mProductname = mProductname & " (" & _productVersion & ")"
+                End If
+                Return mProductname
+            End Get
+        End Property
+    End Class
+    Public Function strLeft(ByVal vString As String, ByVal vLength As Integer) As String
+        strLeft = vString.Substring(0, vLength)
+    End Function
+    Public Function strRight(ByVal vString As String, ByVal vLength As Integer) As String
+        strRight = vString.Substring(vString.Length - vLength)
+    End Function
 
 End Module
 
