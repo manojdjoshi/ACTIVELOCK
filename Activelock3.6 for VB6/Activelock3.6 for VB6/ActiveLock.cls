@@ -535,12 +535,6 @@ Private Sub IActiveLock_Acquire(Optional ByRef strMsg As String = "", Optional B
         Err.Raise ActiveLockErrCodeConstants.alerrSoftwarePasswordInvalid, ACTIVELOCKSTRING, STRSOFTWAREPASSWORDINVALID
     End If
         
-    lastRunDate = ReadRegVal(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "netmeeting", EncryptMyString(ActiveLockDate(UTC(Now)), PSWD))
-    If lastRunDate = EncryptMyString("n" & "a" & "n" & "a" & "y", PSWD) Then
-        Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STREXPIREDPERMANENTLY
-    End If
-    
     Set Lic = mKeyStore.Retrieve(mSoftwareName, mLicenseFileType)
     If Lic Is Nothing Then
         
@@ -586,6 +580,14 @@ noRegistration:
     
     Else  'Lic exists therefore we'll check the LIC file ADS
         
+        If Lic.LicenseType <> allicPermanent Then
+            lastRunDate = ReadRegVal(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "netmeeting", EncryptMyString(ActiveLockDate(UTC(Now)), PSWD))
+            If lastRunDate = EncryptMyString("n" & "a" & "n" & "a" & "y", PSWD) Then
+                Set_locale regionalSymbol
+                Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STREXPIREDPERMANENTLY
+            End If
+        End If
+       
         ' Check clock tampering for non-permanent licenses.
         If Lic.LicenseType <> allicPermanent Then
             If mCheckTimeServerForClockTampering = alsCheckTimeServer Then
@@ -606,7 +608,7 @@ noRegistration:
             If FileLen(mKeyStorePath) = 0 Then GoTo continueRegistration
             
             adsText = ADS_Read_Info(mKeyStorePath & ":" & strStream)
-            If adsText = "" Then
+            If adsText = "" Or IsDate(adsText) = False Then
                 Set_locale regionalSymbol
                 Err.Raise ActiveLockErrCodeConstants.alerrLicenseTampered, ACTIVELOCKSTRING, STRLICENSETAMPERED
             End If
@@ -628,12 +630,14 @@ continueRegistration:
     lastRunDate = DecryptMyString(lastRunDate, PSWD)
     'Save the following stream only if we're going forward in time
     dt2 = ActiveLockDate(UTC(Now))
-    If dt2 > CDate(Lic.LastUsed) Then
-        licenseRegistryKey = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "netmeeting", EncryptMyString(ActiveLockDate(UTC(Now)), PSWD))
-    ElseIf lastRunDate <> CDate(Lic.LastUsed) Then
-        licenseRegistryKey = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "netmeeting", "20C57BF3E3E3B3FD6FD5471724CA4A5C62802EB682E7A11D9469DB67162D47A8")
-        Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STREXPIREDPERMANENTLY
+    If Lic.LicenseType <> allicPermanent Then
+        If dt2 > CDate(Lic.LastUsed) Then
+            licenseRegistryKey = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "netmeeting", EncryptMyString(ActiveLockDate(UTC(Now)), PSWD))
+        ElseIf lastRunDate <> CDate(Lic.LastUsed) Then
+            licenseRegistryKey = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "netmeeting", "20C57BF3E3E3B3FD6FD5471724CA4A5C62802EB682E7A11D9469DB67162D47A8")
+            Set_locale regionalSymbol
+            Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STREXPIREDPERMANENTLY
+        End If
     End If
     
     ' Validate license
@@ -1157,7 +1161,7 @@ Private Sub IActiveLock_Register(ByVal LibKey As String, Optional user As String
     
     Dim oMD5 As clsMD5
     Set oMD5 = New clsMD5
-    Dim lastRegisteredDate As String
+    Dim usedLic As Boolean, lastLic As String
     
     ' Get the current date format and save it to regionalSymbol variable
     Get_locale
@@ -1192,6 +1196,18 @@ Private Sub IActiveLock_Register(ByVal LibKey As String, Optional user As String
         End If
     End If
     
+    If Lic.LicenseType <> allicPermanent Then
+        'lastRegisteredDate = DecryptMyString(lastRegisteredDate, PSWD)
+        lastLic = DecryptMyString(ReadRegVal(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "yek", ""), PSWD)
+        'If lastRegisteredDate = Lic.RegisteredDate And lastRegisteredDate <> "" And reusedLic(Lic.LicenseKey) = lastLic Then
+        If LibKey = lastLic Then
+            'Dim licenseRegistryKey As String
+            'licenseRegistryKey = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "netmeeting", "20C57BF3E3E3B3FD6FD5471724CA4A5C62802EB682E7A11D9469DB67162D47A8")
+            Set_locale regionalSymbol
+            Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRNOKEYREUSE
+        End If
+    End If
+    
     ' License was validated successfuly.  Store it.
     If mKeyStore Is Nothing Then
         Set_locale regionalSymbol
@@ -1206,20 +1222,18 @@ Private Sub IActiveLock_Register(ByVal LibKey As String, Optional user As String
     If CheckStreamCapability() And Lic.LicenseType <> allicPermanent Then
         ' Write the current date and time into the ads
         strStream = mSoftwareName & mSoftwareVer '& mSoftwarePassword
-        
         Call ADS_Write_Info(mKeyStorePath & ":" & strStream, ActiveLockDate(UTC(Now)))
     End If
     
-    lastRegisteredDate = ReadRegVal(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "conf", "")
-    lastRegisteredDate = DecryptMyString(lastRegisteredDate, PSWD)
-    If lastRegisteredDate = Lic.RegisteredDate And lastRegisteredDate <> "" Then
+    If Lic.LicenseType <> allicPermanent Then
+        'lastRegisteredDate = ReadRegVal(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "conf", "")
+        'If lastRegisteredDate = "" Then
+        'licenseRegisteredDate = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "conf", EncryptMyString(Lic.RegisteredDate, PSWD))
         Dim licenseRegistryKey As String
-        licenseRegistryKey = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "netmeeting", "20C57BF3E3E3B3FD6FD5471724CA4A5C62802EB682E7A11D9469DB67162D47A8")
-        Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRNOKEYREUSE
-    End If
-    Dim licenseRegisteredDate As Boolean
-    licenseRegisteredDate = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "conf", EncryptMyString(Lic.RegisteredDate, PSWD))
+        licenseRegistryKey = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "netmeeting", EncryptMyString(ActiveLockDate(UTC(Now)), PSWD))
+        usedLic = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "yek", EncryptMyString(LibKey, PSWD))
+        'End If
+   End If
    
     ' Expire all trial licenses
     On Error Resume Next
