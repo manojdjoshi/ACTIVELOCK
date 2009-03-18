@@ -390,9 +390,11 @@ End Function
 
 Public Sub ADS_Write_Info(ADSFileName As String, FileData As Variant)
 ' Example: ADSFileName = "C:\:mydata.dat"
+On Error GoTo exitADSwrite
     Open ADSFileName For Binary Access Write As #1
         Put #1, , FileData
     Close #1
+exitADSwrite:
 End Sub
 
 Public Function IsWebConnected(Optional ByRef ConnType As String) As Boolean
