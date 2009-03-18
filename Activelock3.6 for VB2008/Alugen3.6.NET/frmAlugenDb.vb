@@ -772,9 +772,9 @@ ByVal registeredLevel As String, ByVal installationCode As String, ByVal license
         cm.Parameters.AddWithValue("@licenseType", licenseType)
         cm.Parameters.AddWithValue("@lockType", lockType)
         cm.Parameters.AddWithValue("@registeredLevel", registeredLevel)
-        cm.Parameters.AddWithValue("@installationCode", installationCode.Substring(0, 255))
+        cm.Parameters.AddWithValue("@installationCode", installationCode.Substring(0, installationCode.Length))
         cm.Parameters.AddWithValue("@userName", userName)
-        cm.Parameters.AddWithValue("@licenseCode", licenseCode.Substring(0, 255))
+        cm.Parameters.AddWithValue("@licenseCode", licenseCode.Substring(0, licenseCode.Length))
         Try
             If conn Is Nothing Then InitConnection()
             conn.Open()

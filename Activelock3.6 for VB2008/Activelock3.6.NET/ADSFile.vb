@@ -237,7 +237,7 @@ Module ADSFile
 
         ' Throw an exception if the data wasn't written successfully.
         If Not bOK Then
-            Throw New System.ComponentModel.Win32Exception(System.Runtime.InteropServices.Marshal.GetLastWin32Error())
+            'Throw New System.ComponentModel.Win32Exception(System.Runtime.InteropServices.Marshal.GetLastWin32Error())
         End If
         Return nReturn
     End Function 'Write

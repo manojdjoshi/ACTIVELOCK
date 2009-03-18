@@ -402,7 +402,7 @@ catch_Renamed:
   ' Remarks: None
   '===============================================================================
   Public Sub DeleteSection(ByVal SectionName As String)
-    Call WritePrivateProfileString(SectionName, 0, 0, m_sFileName)
+        Call WritePrivateProfileString(SectionName, Nothing, Nothing, m_sFileName)
   End Sub
   '===============================================================================
   ' Name: Sub DeleteKey

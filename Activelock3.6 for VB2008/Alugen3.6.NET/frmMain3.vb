@@ -3227,6 +3227,7 @@ SaveFormSettings_Error:
             UpdateStatus("Product codes generated successfully.")
             Cursor = Cursors.Default
             Enabled = True
+            fDisableNotifications = False
             Set_locale(regionalSymbol)
         End Try
     End Sub

@@ -1286,7 +1286,7 @@ Friend Class frmMain
             ' WARNING: Short key licenses use the lockFingerprint by default
             ' WARNING: This has no effect for short key licenses
             .LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockNone
-            .LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockComp
+            '.LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockComp
             '.LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockIP Or _
             'ActiveLock3_6NET.IActiveLock.ALLockTypes.lockComp
 
@@ -1469,6 +1469,7 @@ Friend Class frmMain
             cmdKillTrial.Visible = True
             cmdResetTrial.Visible = True
             txtLicenseType.Text = "Free Trial"
+            'cmdRegister.Enabled = True
             Me.Refresh()
             Exit Sub
         Else
@@ -1541,7 +1542,7 @@ Friend Class frmMain
         End If
 
         FunctionalitiesEnabled = True
-        txtUser.BackColor = Color.FromKnownColor(KnownColor.ButtonFace)
+        'txtUser.BackColor = Color.FromKnownColor(KnownColor.ButtonFace)
 
         ' If your code has reached this point successfully, then you're good.
         ' If not, revisit your code, check and recheck,
@@ -1555,6 +1556,7 @@ Friend Class frmMain
         timerCount = 5000
         Timer1.Interval = 1
         Timer1.Enabled = True
+        'cmdRegister.Enabled = False
 
         Exit Sub
 
@@ -1569,6 +1571,8 @@ NotRegistered:
         txtRegStatus.Text = Err.Description
         txtLicenseType.Text = "None"
         txtUser.Text = System.Environment.UserName
+
+        'cmdRegister.Enabled = True
         If strMsg <> "" Then
             MsgBox(strMsg, MsgBoxStyle.Information)
         End If
