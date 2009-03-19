@@ -682,6 +682,7 @@ MsgBox "This feature is not intended to be sent to the end user." & vbCrLf & _
 
 ' Kill the License File
 ' Let Activelock handle this
+On Error GoTo errorTrap
 MyActiveLock.KillLicense MyActiveLock.SoftwareName & MyActiveLock.SoftwareVersion, strKeyStorePath
 
 ' Use the following in an end-user's machine.
@@ -689,6 +690,8 @@ MyActiveLock.KillLicense MyActiveLock.SoftwareName & MyActiveLock.SoftwareVersio
 
 MsgBox "Your license has been killed." & vbCrLf & _
     "You need to get a new license for this application if you want to use it.", vbInformation
+    
+errorTrap:
     txtUsedDays.Text = ""
     txtExpiration.Text = ""
     txtRegisteredLevel.Text = ""
@@ -1018,6 +1021,7 @@ Private Sub Form_Load()
         cmdKillTrial.Visible = True
         cmdResetTrial.Visible = True
         txtLicenseType.Text = "Free Trial"
+        'cmdRegister.Enabled = True
         Exit Sub
     Else
         cmdKillTrial.Visible = False
@@ -1099,7 +1103,8 @@ Private Sub Form_Load()
     timerCount = 5000
     Timer1.Interval = 1
     Timer1.Enabled = True
-    
+    'cmdRegister.Enabled = False
+   
     Exit Sub
 
 NotRegistered:
@@ -1113,6 +1118,7 @@ NotRegistered:
     txtRegStatus.Text = Err.Description
     txtLicenseType.Text = "None"
     txtUser.Text = Current_User_Name
+    'cmdRegister.Enabled = True
     If strMsg <> "" Then
         MsgBox strMsg, vbInformation
     End If
