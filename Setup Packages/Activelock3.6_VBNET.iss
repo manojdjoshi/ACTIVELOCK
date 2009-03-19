@@ -5,8 +5,8 @@ AppVerName=Activelock VB2008 3.6
 AppPublisher=Activelock Software Group
 Uninstallable=true
 ; set installation folder based on target Windows version
-DefaultDirName={code:SetInstallDir}\Activelock_VB2008_3.6 Permissions: everyone-full
-OutputBaseFilename=Activelock_VB2008_Setup_3.6_March_13_2009
+DefaultDirName={code:SetInstallDir}\Activelock_VB2008_3.6; Permissions: everyone-full
+OutputBaseFilename=Activelock_VB2008_Setup_3.6_March_17_2009
 OutputDir=.
 DefaultGroupName=Activelock Software Group
 WizardImageFile=C:\ActiveLockCommunity\Images\big-side.bmp
@@ -98,7 +98,7 @@ Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Alugen3.6.NET\Alugen3.6N
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Alugen3.6.NET\Alugen3NET.vbproj; DestDir: "{app}\Alugen3.6.NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Alugen3.6.NET\Alugen3NET.vbproj.user; DestDir: "{app}\Alugen3.6.NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Alugen3.6.NET\Alugen3_6NET.vshost.exe; DestDir: "{app}\Alugen3.6.NET"; Flags: ignoreversion; Components: examples
-Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Alugen3.6.NET\Alugen3_6NET.vshost.exe.manifest; DestDir: "{app}\Alugen3.6.NET"; Flags: ignoreversion; Components: examples
+;Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Alugen3.6.NET\Alugen3_6NET.vshost.exe.manifest; DestDir: "{app}\Alugen3.6.NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Alugen3.6.NET\Alugen3_6NET.exe; DestDir: "{app}\Alugen3.6.NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Alugen3.6.NET\Alugen3_6NET.xml; DestDir: "{app}\Alugen3.6.NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Alugen3.6.NET\Alugen3_6NET.pdb; DestDir: "{app}\Alugen3.6.NET"; Flags: ignoreversion; Components: examples
