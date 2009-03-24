@@ -1813,6 +1813,7 @@ Private Function GetExpirationDate() As String
 End Function
 
 Private Sub cmdPaste_Click()
+cmdKeyGen.Enabled = True
 If LCase(Left(Clipboard.GetText, 13)) = "you must send" Then 'short key license
     Dim arrProdVer() As String
     arrProdVer = Split(Clipboard.GetText, vbLf) ' Extract the software name and version
@@ -1890,7 +1891,7 @@ End Sub
 Private Sub cmdSave_Click()
     Dim arrProdVer() As String
     arrProdVer = Split(cmbProds.Text, "-")
-    If inString(Trim(arrProdVer(0)) & Trim(arrProdVer(1)) & ".all") = False Then
+    If inString(txtLibFile.Text, Trim(arrProdVer(0)) & Trim(arrProdVer(1)) & ".all") = False Then
         MsgBox "The saved ALL file name should contain " & "'" & Trim(arrProdVer(0)) & Trim(arrProdVer(1)) & ".all'.", vbExclamation
         Exit Sub
     End If
@@ -2610,6 +2611,8 @@ End Sub
 Private Sub txtReqCodeIn_Change()
 
 If systemEvent Then Exit Sub
+cmdKeyGen.Enabled = True
+
 If Len(txtReqCodeIn.Text) < 8 Then Exit Sub
 
 If LCase(Left(txtReqCodeIn.Text, 13)) = "you must send" Then 'short key license
@@ -2698,6 +2701,7 @@ Else 'ALCrypto or RSA
         Next i
         If Not success Then
             MsgBox "There's no matching Software Name and Version Number for this Installation Code.", vbExclamation
+            cmdKeyGen.Enabled = False
         End If
         
     Else

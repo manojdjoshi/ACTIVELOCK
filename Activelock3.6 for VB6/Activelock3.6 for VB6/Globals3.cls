@@ -109,7 +109,6 @@ Option Explicit
 ' @param alerrClockChanged          System clock has been changed.
 ' @param alerrWrongIPaddress        Wrong IP Address.
 ' @param alerrKeyStoreInvalid       Key Store Provider has not been initialized yet.
-' @param alerrKeyStorePathInvalid   Key Store Path (LIC file path) hasn't been specified.
 ' @param alerrFileTampered          ActiveLock DLL file has been tampered.
 ' @param alerrNotInitialized        ActiveLock has not been initialized yet.
 ' @param alerrNotImplemented        An ActiveLock operation has not been implemented.
@@ -123,41 +122,41 @@ Option Explicit
 ' @param alerrNoSoftwareName        Software Name has not been specified.
 ' @param alerrNoSoftwareVersion     Software Version has not been specified.
 ' @param alerrRSAError              Something went wrong in the RSA routines.
-' @param alerrNoSoftwarePassword    Software Password has not been specified.
+' @param alerrKeyStorePathInvalid   Key Store Path (LIC file path) hasn't been specified.
 ' @param alerrCryptoAPIError        Crypto API error in CryptoAPI class.
+' @param alerrNoSoftwarePassword    Software Password has not been specified.
 ' @param alerrUndefinedSpecialFolder        The special folder used by Activelock is not defined or Virtual folder.
 ' @param alerrDateError             There's an error in setting a date used by Activelock.
 
 Public Enum ActiveLockErrCodeConstants
-    alerrOK = 0   ' successful
-    alerrNoLicense = &H80040001         ' vbObjectError (&H80040000) + 1
-    alerrLicenseInvalid = &H80040002
-    alerrLicenseExpired = &H80040003
-    alerrLicenseTampered = &H80040004
-    alerrClockChanged = &H80040005
-    alerrWrongIPaddress = &H80040006
-    alerrKeyStoreInvalid = &H80040010
-    alerrFileTampered = &H80040011
-    alerrNotInitialized = &H80040012
-    alerrNotImplemented = &H80040013
-    alerrUserNameTooLong = &H80040014
-    alerrUserNameInvalid = &H80040015
-    alerrInvalidTrialDays = &H80040020
-    alerrInvalidTrialRuns = &H80040021
-    alerrTrialInvalid = &H80040022
-    alerrTrialDaysExpired = &H80040023
-    alerrTrialRunsExpired = &H80040024
-    alerrNoSoftwareName = &H80040025
-    alerrNoSoftwareVersion = &H80040026
-    alerrRSAError = &H80040027
-    alerrKeyStorePathInvalid = &H80040028
-    alerrCryptoAPIError = &H80040029
-    alerrNoSoftwarePassword = &H80040030
-    alerrUndefinedSpecialFolder = &H80040031
-    alerrDateError = &H80040032
-    alerrInternetConnectionError = &H80040033
-    alerrSoftwarePasswordInvalid = &H80040034
-    
+    alerrOK = 0   ' successful          ' No error. Operation was successful.
+    alerrNoLicense = &H80040001         ' No license available.
+    alerrLicenseInvalid = &H80040002    ' License is invalid.
+    alerrLicenseExpired = &H80040003    ' License has expired.
+    alerrLicenseTampered = &H80040004   ' License has been tampered.
+    alerrClockChanged = &H80040005      ' System clock has been changed.
+    alerrWrongIPaddress = &H80040006    ' Wrong IP Address.
+    alerrKeyStoreInvalid = &H80040010   ' Key Store Path (LIC file path) hasn't been specified.
+    alerrFileTampered = &H80040011      ' ActiveLock DLL file has been tampered.
+    alerrNotInitialized = &H80040012    ' ActiveLock has not been initialized yet.
+    alerrNotImplemented = &H80040013    ' An ActiveLock operation has not been implemented.
+    alerrUserNameTooLong = &H80040014   ' Maximum User Name length of 2000 characters has been exceeded.
+    alerrUserNameInvalid = &H80040015   ' Used User name does not match with the license key.
+    alerrInvalidTrialDays = &H80040020  ' Specified number of Free Trial Days is invalid (possibly <=0).
+    alerrInvalidTrialRuns = &H80040021  ' Specified number of Free Trial Runs is invalid (possibly <=0).
+    alerrTrialInvalid = &H80040022      ' Trial is invalid.
+    alerrTrialDaysExpired = &H80040023  ' Trial Days have expired.
+    alerrTrialRunsExpired = &H80040024  ' Trial Runs have expired.
+    alerrNoSoftwareName = &H80040025    ' Software Name has not been specified.
+    alerrNoSoftwareVersion = &H80040026 ' Software Version has not been specified.
+    alerrRSAError = &H80040027          ' Something went wrong in the RSA routines.
+    alerrKeyStorePathInvalid = &H80040028       ' Key Store Path (LIC file path) hasn't been specified.
+    alerrCryptoAPIError = &H80040029    ' Crypto API error in CryptoAPI class.
+    alerrNoSoftwarePassword = &H80040030        ' Software Password has not been specified.
+    alerrUndefinedSpecialFolder = &H80040031    ' The special folder used by Activelock is not defined or Virtual folder.
+    alerrDateError = &H80040032         ' There's an error in setting a date used by Activelock
+    alerrInternetConnectionError = &H80040033   ' There's a problem with connecting to Internet.
+    alerrSoftwarePasswordInvalid = &H80040034   ' Password length>255 or invalid characters.
 End Enum
 
 ' USED BY CRYPTOAPI
@@ -242,7 +241,7 @@ Case 0   'create container
         cryptSession.SessionEnd
         Set cryptSession = Nothing
         Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE
+        Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE & "[0]"
     End If
     Set cryptSession = Nothing
 
@@ -276,7 +275,7 @@ Case 1   'generate exchange or signature key
         cryptSession.SessionEnd
         Set cryptSession = Nothing
         Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE
+        Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE & "[1]"
     End If
     Set cryptSession = Nothing
 
@@ -294,7 +293,7 @@ Case 2    'destroy container
         cryptSession.SessionEnd
         Set cryptSession = Nothing
         Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE
+        Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE & "[2]"
     End If
     Set cryptSession = Nothing
 
@@ -326,7 +325,7 @@ Case 3   'encrypt/decrypt
         cryptSession.SessionEnd
         Set cryptSession = Nothing
         Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE
+        Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE & "[3]"
     End If
     Set cryptSession = Nothing
 
@@ -335,7 +334,7 @@ Case 4    'sign the key
         cryptSession.DestroyContainer containerName
         cryptSession.SessionEnd
         Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE
+        Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE & "[4]"
     End If
     Set cryptSession = New clsCryptoAPI
     If cryptSession.VerifyContainer(containerName, False) = True Then
@@ -375,7 +374,7 @@ Case 5   'validate the key
             cryptSession.SessionEnd
             Set cryptSession = Nothing
             Set_locale regionalSymbol
-            Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE
+            Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE & "[5-1]"
         End If
         If cryptSession.ValidateString(plainText, inputText) = True Then
             ' Stay quiet here... everything is allright
@@ -385,7 +384,7 @@ Case 5   'validate the key
             cryptSession.SessionEnd
             Set cryptSession = Nothing
             Set_locale regionalSymbol
-            Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE
+            Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE & "[5-2]"
         End If
         
         ' This code is causing trouble -  investigate

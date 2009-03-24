@@ -311,3 +311,14 @@ cxIDg1Ck1ZU1dFRVRCQUJZCjVDQTktNEIyQQozSlQyNkFBMAo1NTI3NC1PRU0tMD
 AxMTkwMy0wMDEwMgpERUxMICAgLSA3CkJGV0I3NDEKMTkyLjE2OC4wLjEKRXZhbH
 VhdGlvbiBVc2Vy
 Lock Types: HDD Firmware Serial
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Program Name and Version: ALVB6Sample - 3.6
+User Name: Ismail Alkan
+Registration Date: 2009/03/20
+Expires After: 2009/03/21
+License Type: Periodic
+Registered Level: Limited A
+Installation/Site Code: K25va2V5CklTTUFJTApub2tleQpub2tleQpub2tleQpub2tleQpub2tleQpub2tleQpub2tleQpub2tleQpub2tleQpub2tleQpub2tleQpub2tleQpJc21haWwgQWxrYW4mJiZBTFZCNlNhbXBsZSAtIDMuNg
+Liberation/Unlock Code: QUxWQjZTYW1wbGUNCjMuNg0KU2luZ2xlDQoxDQpJc21haWwgQWxrYW4mJiZBTFZCNlNhbXBsZSAtIDMuNg0KTGltaXRlZCBBDQoyMDA5LzAzLzIwDQoyMDA5LzAzLzIxDQo1DQpRa3B6VFRCd1ozaFBNMHBFVm00emFHMTRhM0pXTmtSVU5tSTBlV2xIU1ZGS0t6QlRiVlkyYjBwc01WZHNjbXgwV1ZJME0zTTRMMjV1WVRKNWJqSldUamh1TjNWaGJXZFBRVGhJTDNSNVVXdFJWRzFRWVdJNFRucHplREF5YW5Ob09FWmtVbk5MZUhvelZXSnRlR3RqTXpsVmJrRk9kVlIyWVVsaVVEZHNaelZvZGtkSGEyWXpTblpOV0Rrd1dXUkRlazg1WWxwMGRETjNNRGRDTTNCbFpHVjNZaloyUkRsTFJYcFJQUQaLckK25va2V5CklTTUFJTApub2tleQpub2tleQpub2tleQpub2tleQpub2tleQpub2tleQpub2tleQpub2tleQpub2tleQpub2tleQpub2tleQpub2tleQpJc21haWwgQWxrYW4mJiZBTFZCNlNhbXBsZSAtIDMuNg
+Lock Types: Computer Name

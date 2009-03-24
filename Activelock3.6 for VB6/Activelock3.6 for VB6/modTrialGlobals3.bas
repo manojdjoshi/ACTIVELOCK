@@ -1030,7 +1030,6 @@ m = Month(newDate)
 d = Day(newDate)
 y = Year(newDate)
 ActiveLockDate = CDate(Format$(y, "0000") & "/" & Format$(m, "00") & "/" & Format$(d, "00"))
-'Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE
 End Function
 Public Function RunsGoodSteganography(numRuns As Integer, runsLeft As Integer) As Boolean
 On Error GoTo RunsGoodSteganographyError
