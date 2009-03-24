@@ -1199,7 +1199,9 @@ continueRegistration:
 
         ' Shortkeys are no longer using the HDD firmware serial number
         ' they are using the Computer Fingerprint after v3.6
-        SerialNumber = oReg.GenerateKey(mSoftwareName & mSoftwareVer & mSoftwarePassword, modHardware.GetFingerprint())
+        Dim fprint As String
+        fprint = modHardware.GetFingerprint()
+        SerialNumber = oReg.GenerateKey(mSoftwareName & mSoftwareVer & mSoftwarePassword, fprint)
 
         ' verify the key is valid
         If m_Key.ValidateShortKey(Lic.LicenseKey, SerialNumber, user, m_ProdCode, ExpireDate, UserData, RegisteredLevel) = True Then
@@ -1228,7 +1230,7 @@ continueRegistration:
             ' Finally check if the serial number is Ok
             ' Shortkeys are no longer using the HDD firmware serial number
             ' they are using the Computer Fingerprint after v3.6
-            If Not oReg.IsKeyOK(SerialNumber, mSoftwareName & mSoftwareVer & mSoftwarePassword, modHardware.GetFingerprint()) Then
+            If Not oReg.IsKeyOK(SerialNumber, mSoftwareName & mSoftwareVer & mSoftwarePassword, fprint) Then
                 ' Something wrong with the serial number used
                 Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)

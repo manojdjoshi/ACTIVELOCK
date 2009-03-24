@@ -78,7 +78,6 @@ Imports System.IO
     ' @param alerrClockChanged          System clock has been changed.
     ' @param alerrWrongIPaddress        Wrong IP Address.
     ' @param alerrKeyStoreInvalid       Key Store Provider has not been initialized yet.
-    ' @param alerrKeyStorePathInvalid   Key Store Path (LIC file path) hasn't been specified.
     ' @param alerrFileTampered          ActiveLock DLL file has been tampered.
     ' @param alerrNotInitialized        ActiveLock has not been initialized yet.
     ' @param alerrNotImplemented        An ActiveLock operation has not been implemented.
@@ -92,40 +91,41 @@ Imports System.IO
     ' @param alerrNoSoftwareName        Software Name has not been specified.
     ' @param alerrNoSoftwareVersion     Software Version has not been specified.
     ' @param alerrRSAError              Something went wrong in the RSA routines.
-    ' @param alerrNoSoftwarePassword    Software Password has not been specified.
+    ' @param alerrKeyStorePathInvalid   Key Store Path (LIC file path) hasn't been specified.
     ' @param alerrCryptoAPIError        Crypto API error in CryptoAPI class.
+    ' @param alerrNoSoftwarePassword    Software Password has not been specified.
     ' @param alerrUndefinedSpecialFolder        The special folder used by Activelock is not defined or Virtual folder.
     ' @param alerrDateError             There's an error in setting a date used by Activelock.
 
     Public Enum ActiveLockErrCodeConstants
-        AlerrOK = 0 ' successful
-        AlerrNoLicense = &H80040001 ' vbObjectError (&H80040000) + 1
-        AlerrLicenseInvalid = &H80040002
-        AlerrLicenseExpired = &H80040003
-        AlerrLicenseTampered = &H80040004
-        AlerrClockChanged = &H80040005
-        AlerrWrongIPaddress = &H80040006
-        AlerrKeyStoreInvalid = &H80040010
-        AlerrFileTampered = &H80040011
-        AlerrNotInitialized = &H80040012
-        AlerrNotImplemented = &H80040013
-        AlerrUserNameTooLong = &H80040014
-        AlerrInvalidTrialDays = &H80040020
-        AlerrInvalidTrialRuns = &H80040021
-        AlerrTrialInvalid = &H80040022
-        AlerrTrialDaysExpired = &H80040023
-        AlerrTrialRunsExpired = &H80040024
-        AlerrNoSoftwareName = &H80040025
-        AlerrNoSoftwareVersion = &H80040026
-        AlerrRSAError = &H80040027
-        AlerrKeyStorePathInvalid = &H80040028
-        AlerrCryptoAPIError = &H80040029
-        AlerrNoSoftwarePassword = &H80040030
-        AlerrUndefinedSpecialFolder = &H80040031
-        AlerrDateError = &H80040032
-        AlerrInternetConnectionError = &H80040033
-        AlerrSoftwarePasswordInvalid = &H80040034
-
+        alerrOK = 0   ' successful          ' No error. Operation was successful.
+        alerrNoLicense = &H80040001         ' No license available.
+        alerrLicenseInvalid = &H80040002    ' License is invalid.
+        alerrLicenseExpired = &H80040003    ' License has expired.
+        alerrLicenseTampered = &H80040004   ' License has been tampered.
+        alerrClockChanged = &H80040005      ' System clock has been changed.
+        alerrWrongIPaddress = &H80040006    ' Wrong IP Address.
+        alerrKeyStoreInvalid = &H80040010   ' Key Store Path (LIC file path) hasn't been specified.
+        alerrFileTampered = &H80040011      ' ActiveLock DLL file has been tampered.
+        alerrNotInitialized = &H80040012    ' ActiveLock has not been initialized yet.
+        alerrNotImplemented = &H80040013    ' An ActiveLock operation has not been implemented.
+        alerrUserNameTooLong = &H80040014   ' Maximum User Name length of 2000 characters has been exceeded.
+        alerrUserNameInvalid = &H80040015   ' Used User name does not match with the license key.
+        alerrInvalidTrialDays = &H80040020  ' Specified number of Free Trial Days is invalid (possibly <=0).
+        alerrInvalidTrialRuns = &H80040021  ' Specified number of Free Trial Runs is invalid (possibly <=0).
+        alerrTrialInvalid = &H80040022      ' Trial is invalid.
+        alerrTrialDaysExpired = &H80040023  ' Trial Days have expired.
+        alerrTrialRunsExpired = &H80040024  ' Trial Runs have expired.
+        alerrNoSoftwareName = &H80040025    ' Software Name has not been specified.
+        alerrNoSoftwareVersion = &H80040026 ' Software Version has not been specified.
+        alerrRSAError = &H80040027          ' Something went wrong in the RSA routines.
+        alerrKeyStorePathInvalid = &H80040028       ' Key Store Path (LIC file path) hasn't been specified.
+        alerrCryptoAPIError = &H80040029    ' Crypto API error in CryptoAPI class.
+        alerrNoSoftwarePassword = &H80040030        ' Software Password has not been specified.
+        alerrUndefinedSpecialFolder = &H80040031    ' The special folder used by Activelock is not defined or Virtual folder.
+        alerrDateError = &H80040032         ' There's an error in setting a date used by Activelock
+        alerrInternetConnectionError = &H80040033   ' There's a problem with connecting to Internet.
+        alerrSoftwarePasswordInvalid = &H80040034   ' Password length>255 or invalid characters.
     End Enum
     Private strCypherText As String
     Private bCypherOn As Boolean
