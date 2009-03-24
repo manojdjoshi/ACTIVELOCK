@@ -856,7 +856,9 @@ Private Sub ValidateShortKey(Lic As ProductLicense, ByVal user As String)
     
     ' Shortkeys are no longer using the HDD firmware serial number
     ' they are using the Computer Fingerprint after v3.6
-    SerialNumber = oReg.GenerateKey(mSoftwareName & mSoftwareVer & mSoftwarePassword, modHardware.GetFingerprint())
+    Dim fprint As String
+    fprint = modHardware.GetFingerprint()
+    SerialNumber = oReg.GenerateKey(mSoftwareName & mSoftwareVer & mSoftwarePassword, fprint)
 
     ' verify the key is valid
     If m_Key.ValidateShortKey(Lic.LicenseKey, SerialNumber, _
@@ -888,7 +890,7 @@ Private Sub ValidateShortKey(Lic As ProductLicense, ByVal user As String)
             
             ' Shortkeys are no longer using the HDD firmware serial number
             ' they are using the Computer Fingerprint after v3.6
-            If Not oReg.IsKeyOK(SerialNumber, mSoftwareName & mSoftwareVer & mSoftwarePassword, modHardware.GetFingerprint()) Then
+            If Not oReg.IsKeyOK(SerialNumber, mSoftwareName & mSoftwareVer & mSoftwarePassword, fprint) Then
                 ' Something wrong with the serial number used
                 Set_locale regionalSymbol
                 Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
