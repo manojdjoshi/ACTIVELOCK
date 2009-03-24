@@ -1285,8 +1285,8 @@ Friend Class frmMain
             ' You can combine any lockType(s) using OR as above
             ' WARNING: Short key licenses use the lockFingerprint by default
             ' WARNING: This has no effect for short key licenses
-            .LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockNone
-            '.LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockComp
+            '.LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockNone
+            .LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockFingerprint
             '.LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockIP Or _
             'ActiveLock3_6NET.IActiveLock.ALLockTypes.lockComp
 

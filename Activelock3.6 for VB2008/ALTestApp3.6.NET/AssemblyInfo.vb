@@ -14,7 +14,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Activelock Sample Application for VB2008")> 
 <Assembly: AssemblyCompany("The ActiveLock Software Group")>
 <Assembly: AssemblyProduct("ALTestApp3.6")> 
-<Assembly: AssemblyCopyright("The ActiveLock Software Group")> 
+<Assembly: AssemblyCopyright("Copyright ©2003-2009")> 
 <Assembly: AssemblyTrademark("")>
 <Assembly: AssemblyCulture("")>
 
@@ -29,6 +29,6 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below
 
 
-<Assembly: AssemblyVersion("3.6.0.*")> 
+<Assembly: AssemblyVersion("3.6.0.5")> 
 
 
