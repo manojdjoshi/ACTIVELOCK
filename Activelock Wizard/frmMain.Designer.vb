@@ -43,6 +43,7 @@ Partial Class frmMain
         Me.rbtnTimeServerEnable = New System.Windows.Forms.RadioButton
         Me.GroupTrialHideTypes = New System.Windows.Forms.GroupBox
         Me.ImageApplicationHelp12 = New System.Windows.Forms.PictureBox
+        Me.chkTrialHideTypeIsolatedStorage = New System.Windows.Forms.CheckBox
         Me.chkTrialHideTypeSteganography = New System.Windows.Forms.CheckBox
         Me.chkTrialHideTypeRegistry = New System.Windows.Forms.CheckBox
         Me.chkTrialHideTypeHiddenFolder = New System.Windows.Forms.CheckBox
@@ -82,6 +83,12 @@ Partial Class frmMain
         Me.Label7 = New System.Windows.Forms.Label
         Me.GroupBox5 = New System.Windows.Forms.GroupBox
         Me.ImageApplicationHelp15 = New System.Windows.Forms.PictureBox
+        Me.chkLicenseLockTypeVideoID = New System.Windows.Forms.CheckBox
+        Me.chkLicenseLockTypeBaseboardID = New System.Windows.Forms.CheckBox
+        Me.chkLicenseLockTypeCPUID = New System.Windows.Forms.CheckBox
+        Me.chkLicenseLockTypeMemory = New System.Windows.Forms.CheckBox
+        Me.chkLicenseLockTypeFingerprint = New System.Windows.Forms.CheckBox
+        Me.chkLicenseLockTypeExternalID = New System.Windows.Forms.CheckBox
         Me.chkLicenseLockTypeWindows = New System.Windows.Forms.CheckBox
         Me.chkLicenseLockTypeMotherboard = New System.Windows.Forms.CheckBox
         Me.chkLicenseLockTypeMAC = New System.Windows.Forms.CheckBox
@@ -95,9 +102,9 @@ Partial Class frmMain
         Me.FolderBrowserDialog = New System.Windows.Forms.FolderBrowserDialog
         Me.ImageApplicationHelp14 = New System.Windows.Forms.PictureBox
         Me.GroupBox14 = New System.Windows.Forms.GroupBox
+        Me.btnDLLPath = New System.Windows.Forms.Button
         Me.RadioButton2 = New System.Windows.Forms.RadioButton
         Me.RadioButton1 = New System.Windows.Forms.RadioButton
-        Me.LinkLabel1 = New System.Windows.Forms.LinkLabel
         Me.ImageApplicationHelp16 = New System.Windows.Forms.PictureBox
         Me.txtActivelockPath = New System.Windows.Forms.TextBox
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
@@ -162,7 +169,7 @@ Partial Class frmMain
         Me.GroupBox1.Controls.Add(Me.rbtnTrialTypeDays)
         Me.GroupBox1.Location = New System.Drawing.Point(6, 19)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(95, 94)
+        Me.GroupBox1.Size = New System.Drawing.Size(95, 109)
         Me.GroupBox1.TabIndex = 4
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Trial Type"
@@ -265,7 +272,7 @@ Partial Class frmMain
         '
         Me.lblTrialLength.AutoSize = True
         Me.lblTrialLength.Enabled = False
-        Me.lblTrialLength.Location = New System.Drawing.Point(38, 125)
+        Me.lblTrialLength.Location = New System.Drawing.Point(40, 157)
         Me.lblTrialLength.Name = "lblTrialLength"
         Me.lblTrialLength.Size = New System.Drawing.Size(63, 13)
         Me.lblTrialLength.TabIndex = 1
@@ -326,13 +333,14 @@ Partial Class frmMain
         'GroupTrialHideTypes
         '
         Me.GroupTrialHideTypes.Controls.Add(Me.ImageApplicationHelp12)
+        Me.GroupTrialHideTypes.Controls.Add(Me.chkTrialHideTypeIsolatedStorage)
         Me.GroupTrialHideTypes.Controls.Add(Me.chkTrialHideTypeSteganography)
         Me.GroupTrialHideTypes.Controls.Add(Me.chkTrialHideTypeRegistry)
         Me.GroupTrialHideTypes.Controls.Add(Me.chkTrialHideTypeHiddenFolder)
         Me.GroupTrialHideTypes.Enabled = False
         Me.GroupTrialHideTypes.Location = New System.Drawing.Point(108, 19)
         Me.GroupTrialHideTypes.Name = "GroupTrialHideTypes"
-        Me.GroupTrialHideTypes.Size = New System.Drawing.Size(133, 94)
+        Me.GroupTrialHideTypes.Size = New System.Drawing.Size(133, 109)
         Me.GroupTrialHideTypes.TabIndex = 4
         Me.GroupTrialHideTypes.TabStop = False
         Me.GroupTrialHideTypes.Text = "Trial Hide Type"
@@ -346,6 +354,16 @@ Partial Class frmMain
         Me.ImageApplicationHelp12.Size = New System.Drawing.Size(19, 18)
         Me.ImageApplicationHelp12.TabIndex = 3
         Me.ImageApplicationHelp12.TabStop = False
+        '
+        'chkTrialHideTypeIsolatedStorage
+        '
+        Me.chkTrialHideTypeIsolatedStorage.AutoSize = True
+        Me.chkTrialHideTypeIsolatedStorage.Location = New System.Drawing.Point(23, 89)
+        Me.chkTrialHideTypeIsolatedStorage.Name = "chkTrialHideTypeIsolatedStorage"
+        Me.chkTrialHideTypeIsolatedStorage.Size = New System.Drawing.Size(103, 17)
+        Me.chkTrialHideTypeIsolatedStorage.TabIndex = 5
+        Me.chkTrialHideTypeIsolatedStorage.Text = "Isolated Storage"
+        Me.chkTrialHideTypeIsolatedStorage.UseVisualStyleBackColor = True
         '
         'chkTrialHideTypeSteganography
         '
@@ -429,7 +447,7 @@ Partial Class frmMain
         Me.GroupBox8.Font = New System.Drawing.Font("Arial", 7.0!)
         Me.GroupBox8.Location = New System.Drawing.Point(6, 19)
         Me.GroupBox8.Name = "GroupBox8"
-        Me.GroupBox8.Size = New System.Drawing.Size(143, 65)
+        Me.GroupBox8.Size = New System.Drawing.Size(143, 71)
         Me.GroupBox8.TabIndex = 4
         Me.GroupBox8.TabStop = False
         Me.GroupBox8.Text = "Auto License Registration"
@@ -533,7 +551,7 @@ Partial Class frmMain
         '
         'txtTrialLength
         '
-        Me.txtTrialLength.Location = New System.Drawing.Point(131, 122)
+        Me.txtTrialLength.Location = New System.Drawing.Point(126, 154)
         Me.txtTrialLength.Name = "txtTrialLength"
         Me.txtTrialLength.Size = New System.Drawing.Size(110, 20)
         Me.txtTrialLength.TabIndex = 0
@@ -627,7 +645,7 @@ Partial Class frmMain
         Me.GroupBox10.Controls.Add(Me.GroupTrialHideTypes)
         Me.GroupBox10.Location = New System.Drawing.Point(293, 188)
         Me.GroupBox10.Name = "GroupBox10"
-        Me.GroupBox10.Size = New System.Drawing.Size(247, 152)
+        Me.GroupBox10.Size = New System.Drawing.Size(247, 193)
         Me.GroupBox10.TabIndex = 5
         Me.GroupBox10.TabStop = False
         Me.GroupBox10.Text = "Trial Details"
@@ -636,7 +654,7 @@ Partial Class frmMain
         '
         Me.ImageApplicationHelp13.Cursor = System.Windows.Forms.Cursors.Hand
         Me.ImageApplicationHelp13.Image = Global.ActiveLockWizard.My.Resources.Resources.Help
-        Me.ImageApplicationHelp13.Location = New System.Drawing.Point(13, 122)
+        Me.ImageApplicationHelp13.Location = New System.Drawing.Point(15, 156)
         Me.ImageApplicationHelp13.Name = "ImageApplicationHelp13"
         Me.ImageApplicationHelp13.Size = New System.Drawing.Size(19, 18)
         Me.ImageApplicationHelp13.TabIndex = 3
@@ -660,7 +678,7 @@ Partial Class frmMain
         Me.GroupBox12.Controls.Add(Me.GroupBox8)
         Me.GroupBox12.Location = New System.Drawing.Point(4, 272)
         Me.GroupBox12.Name = "GroupBox12"
-        Me.GroupBox12.Size = New System.Drawing.Size(289, 95)
+        Me.GroupBox12.Size = New System.Drawing.Size(289, 109)
         Me.GroupBox12.TabIndex = 6
         Me.GroupBox12.TabStop = False
         Me.GroupBox12.Text = "Auto Registry Details"
@@ -674,7 +692,7 @@ Partial Class frmMain
         Me.GroupBox13.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.0!)
         Me.GroupBox13.Location = New System.Drawing.Point(155, 20)
         Me.GroupBox13.Name = "GroupBox13"
-        Me.GroupBox13.Size = New System.Drawing.Size(128, 64)
+        Me.GroupBox13.Size = New System.Drawing.Size(128, 70)
         Me.GroupBox13.TabIndex = 10
         Me.GroupBox13.TabStop = False
         Me.GroupBox13.Text = "License Storage Type"
@@ -716,9 +734,9 @@ Partial Class frmMain
         '
         Me.btnSubmitDetails.AutoEllipsis = True
         Me.btnSubmitDetails.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.btnSubmitDetails.Location = New System.Drawing.Point(546, 426)
+        Me.btnSubmitDetails.Location = New System.Drawing.Point(586, 479)
         Me.btnSubmitDetails.Name = "btnSubmitDetails"
-        Me.btnSubmitDetails.Size = New System.Drawing.Size(177, 29)
+        Me.btnSubmitDetails.Size = New System.Drawing.Size(136, 29)
         Me.btnSubmitDetails.TabIndex = 7
         Me.btnSubmitDetails.Tag = "Generates The File"
         Me.btnSubmitDetails.Text = "Generate Source Code"
@@ -728,7 +746,7 @@ Partial Class frmMain
         '
         Me.cboDevEnviroment.FormattingEnabled = True
         Me.cboDevEnviroment.Items.AddRange(New Object() {"VB6", "VB2003", "VB2005", "VB2008"})
-        Me.cboDevEnviroment.Location = New System.Drawing.Point(419, 346)
+        Me.cboDevEnviroment.Location = New System.Drawing.Point(449, 479)
         Me.cboDevEnviroment.Name = "cboDevEnviroment"
         Me.cboDevEnviroment.Size = New System.Drawing.Size(115, 21)
         Me.cboDevEnviroment.TabIndex = 8
@@ -737,7 +755,7 @@ Partial Class frmMain
         'Label7
         '
         Me.Label7.AutoSize = True
-        Me.Label7.Location = New System.Drawing.Point(330, 349)
+        Me.Label7.Location = New System.Drawing.Point(360, 482)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(83, 13)
         Me.Label7.TabIndex = 1
@@ -746,6 +764,12 @@ Partial Class frmMain
         'GroupBox5
         '
         Me.GroupBox5.Controls.Add(Me.ImageApplicationHelp15)
+        Me.GroupBox5.Controls.Add(Me.chkLicenseLockTypeVideoID)
+        Me.GroupBox5.Controls.Add(Me.chkLicenseLockTypeBaseboardID)
+        Me.GroupBox5.Controls.Add(Me.chkLicenseLockTypeCPUID)
+        Me.GroupBox5.Controls.Add(Me.chkLicenseLockTypeMemory)
+        Me.GroupBox5.Controls.Add(Me.chkLicenseLockTypeFingerprint)
+        Me.GroupBox5.Controls.Add(Me.chkLicenseLockTypeExternalID)
         Me.GroupBox5.Controls.Add(Me.chkLicenseLockTypeWindows)
         Me.GroupBox5.Controls.Add(Me.chkLicenseLockTypeMotherboard)
         Me.GroupBox5.Controls.Add(Me.chkLicenseLockTypeMAC)
@@ -758,7 +782,7 @@ Partial Class frmMain
         Me.GroupBox5.FlatStyle = System.Windows.Forms.FlatStyle.Popup
         Me.GroupBox5.Location = New System.Drawing.Point(546, 12)
         Me.GroupBox5.Name = "GroupBox5"
-        Me.GroupBox5.Size = New System.Drawing.Size(179, 322)
+        Me.GroupBox5.Size = New System.Drawing.Size(179, 369)
         Me.GroupBox5.TabIndex = 9
         Me.GroupBox5.TabStop = False
         Me.GroupBox5.Text = "License Locking Type"
@@ -773,10 +797,70 @@ Partial Class frmMain
         Me.ImageApplicationHelp15.TabIndex = 3
         Me.ImageApplicationHelp15.TabStop = False
         '
+        'chkLicenseLockTypeVideoID
+        '
+        Me.chkLicenseLockTypeVideoID.AutoSize = True
+        Me.chkLicenseLockTypeVideoID.Location = New System.Drawing.Point(8, 318)
+        Me.chkLicenseLockTypeVideoID.Name = "chkLicenseLockTypeVideoID"
+        Me.chkLicenseLockTypeVideoID.Size = New System.Drawing.Size(67, 17)
+        Me.chkLicenseLockTypeVideoID.TabIndex = 6
+        Me.chkLicenseLockTypeVideoID.Text = "Video ID"
+        Me.chkLicenseLockTypeVideoID.UseVisualStyleBackColor = True
+        '
+        'chkLicenseLockTypeBaseboardID
+        '
+        Me.chkLicenseLockTypeBaseboardID.AutoSize = True
+        Me.chkLicenseLockTypeBaseboardID.Location = New System.Drawing.Point(6, 42)
+        Me.chkLicenseLockTypeBaseboardID.Name = "chkLicenseLockTypeBaseboardID"
+        Me.chkLicenseLockTypeBaseboardID.Size = New System.Drawing.Size(91, 17)
+        Me.chkLicenseLockTypeBaseboardID.TabIndex = 6
+        Me.chkLicenseLockTypeBaseboardID.Text = "Baseboard ID"
+        Me.chkLicenseLockTypeBaseboardID.UseVisualStyleBackColor = True
+        '
+        'chkLicenseLockTypeCPUID
+        '
+        Me.chkLicenseLockTypeCPUID.AutoSize = True
+        Me.chkLicenseLockTypeCPUID.Location = New System.Drawing.Point(6, 111)
+        Me.chkLicenseLockTypeCPUID.Name = "chkLicenseLockTypeCPUID"
+        Me.chkLicenseLockTypeCPUID.Size = New System.Drawing.Size(62, 17)
+        Me.chkLicenseLockTypeCPUID.TabIndex = 6
+        Me.chkLicenseLockTypeCPUID.Text = "CPU ID"
+        Me.chkLicenseLockTypeCPUID.UseVisualStyleBackColor = True
+        '
+        'chkLicenseLockTypeMemory
+        '
+        Me.chkLicenseLockTypeMemory.AutoSize = True
+        Me.chkLicenseLockTypeMemory.Location = New System.Drawing.Point(6, 272)
+        Me.chkLicenseLockTypeMemory.Name = "chkLicenseLockTypeMemory"
+        Me.chkLicenseLockTypeMemory.Size = New System.Drawing.Size(63, 17)
+        Me.chkLicenseLockTypeMemory.TabIndex = 6
+        Me.chkLicenseLockTypeMemory.Text = "Memory"
+        Me.chkLicenseLockTypeMemory.UseVisualStyleBackColor = True
+        '
+        'chkLicenseLockTypeFingerprint
+        '
+        Me.chkLicenseLockTypeFingerprint.AutoSize = True
+        Me.chkLicenseLockTypeFingerprint.Location = New System.Drawing.Point(6, 157)
+        Me.chkLicenseLockTypeFingerprint.Name = "chkLicenseLockTypeFingerprint"
+        Me.chkLicenseLockTypeFingerprint.Size = New System.Drawing.Size(75, 17)
+        Me.chkLicenseLockTypeFingerprint.TabIndex = 6
+        Me.chkLicenseLockTypeFingerprint.Text = "Fingerprint"
+        Me.chkLicenseLockTypeFingerprint.UseVisualStyleBackColor = True
+        '
+        'chkLicenseLockTypeExternalID
+        '
+        Me.chkLicenseLockTypeExternalID.AutoSize = True
+        Me.chkLicenseLockTypeExternalID.Location = New System.Drawing.Point(6, 134)
+        Me.chkLicenseLockTypeExternalID.Name = "chkLicenseLockTypeExternalID"
+        Me.chkLicenseLockTypeExternalID.Size = New System.Drawing.Size(77, 17)
+        Me.chkLicenseLockTypeExternalID.TabIndex = 6
+        Me.chkLicenseLockTypeExternalID.Text = "External IP"
+        Me.chkLicenseLockTypeExternalID.UseVisualStyleBackColor = True
+        '
         'chkLicenseLockTypeWindows
         '
         Me.chkLicenseLockTypeWindows.AutoSize = True
-        Me.chkLicenseLockTypeWindows.Location = New System.Drawing.Point(6, 203)
+        Me.chkLicenseLockTypeWindows.Location = New System.Drawing.Point(6, 341)
         Me.chkLicenseLockTypeWindows.Name = "chkLicenseLockTypeWindows"
         Me.chkLicenseLockTypeWindows.Size = New System.Drawing.Size(139, 17)
         Me.chkLicenseLockTypeWindows.TabIndex = 6
@@ -786,7 +870,7 @@ Partial Class frmMain
         'chkLicenseLockTypeMotherboard
         '
         Me.chkLicenseLockTypeMotherboard.AutoSize = True
-        Me.chkLicenseLockTypeMotherboard.Location = New System.Drawing.Point(6, 180)
+        Me.chkLicenseLockTypeMotherboard.Location = New System.Drawing.Point(6, 295)
         Me.chkLicenseLockTypeMotherboard.Name = "chkLicenseLockTypeMotherboard"
         Me.chkLicenseLockTypeMotherboard.Size = New System.Drawing.Size(155, 17)
         Me.chkLicenseLockTypeMotherboard.TabIndex = 6
@@ -796,7 +880,7 @@ Partial Class frmMain
         'chkLicenseLockTypeMAC
         '
         Me.chkLicenseLockTypeMAC.AutoSize = True
-        Me.chkLicenseLockTypeMAC.Location = New System.Drawing.Point(6, 157)
+        Me.chkLicenseLockTypeMAC.Location = New System.Drawing.Point(6, 249)
         Me.chkLicenseLockTypeMAC.Name = "chkLicenseLockTypeMAC"
         Me.chkLicenseLockTypeMAC.Size = New System.Drawing.Size(90, 17)
         Me.chkLicenseLockTypeMAC.TabIndex = 6
@@ -806,7 +890,7 @@ Partial Class frmMain
         'chkLicenseLockTypeIP
         '
         Me.chkLicenseLockTypeIP.AutoSize = True
-        Me.chkLicenseLockTypeIP.Location = New System.Drawing.Point(6, 134)
+        Me.chkLicenseLockTypeIP.Location = New System.Drawing.Point(6, 226)
         Me.chkLicenseLockTypeIP.Name = "chkLicenseLockTypeIP"
         Me.chkLicenseLockTypeIP.Size = New System.Drawing.Size(133, 17)
         Me.chkLicenseLockTypeIP.TabIndex = 6
@@ -816,7 +900,7 @@ Partial Class frmMain
         'chkLicenseLockTypeHDFW
         '
         Me.chkLicenseLockTypeHDFW.AutoSize = True
-        Me.chkLicenseLockTypeHDFW.Location = New System.Drawing.Point(6, 111)
+        Me.chkLicenseLockTypeHDFW.Location = New System.Drawing.Point(6, 180)
         Me.chkLicenseLockTypeHDFW.Name = "chkLicenseLockTypeHDFW"
         Me.chkLicenseLockTypeHDFW.Size = New System.Drawing.Size(162, 17)
         Me.chkLicenseLockTypeHDFW.TabIndex = 6
@@ -826,7 +910,7 @@ Partial Class frmMain
         'chkLicenseLockTypeHD
         '
         Me.chkLicenseLockTypeHD.AutoSize = True
-        Me.chkLicenseLockTypeHD.Location = New System.Drawing.Point(6, 88)
+        Me.chkLicenseLockTypeHD.Location = New System.Drawing.Point(6, 203)
         Me.chkLicenseLockTypeHD.Name = "chkLicenseLockTypeHD"
         Me.chkLicenseLockTypeHD.Size = New System.Drawing.Size(146, 17)
         Me.chkLicenseLockTypeHD.TabIndex = 6
@@ -836,7 +920,7 @@ Partial Class frmMain
         'chkLicenseLockTypeComp
         '
         Me.chkLicenseLockTypeComp.AutoSize = True
-        Me.chkLicenseLockTypeComp.Location = New System.Drawing.Point(6, 65)
+        Me.chkLicenseLockTypeComp.Location = New System.Drawing.Point(6, 88)
         Me.chkLicenseLockTypeComp.Name = "chkLicenseLockTypeComp"
         Me.chkLicenseLockTypeComp.Size = New System.Drawing.Size(102, 17)
         Me.chkLicenseLockTypeComp.TabIndex = 6
@@ -846,7 +930,7 @@ Partial Class frmMain
         'chkLicenseLockTypeBios
         '
         Me.chkLicenseLockTypeBios.AutoSize = True
-        Me.chkLicenseLockTypeBios.Location = New System.Drawing.Point(6, 42)
+        Me.chkLicenseLockTypeBios.Location = New System.Drawing.Point(6, 65)
         Me.chkLicenseLockTypeBios.Name = "chkLicenseLockTypeBios"
         Me.chkLicenseLockTypeBios.Size = New System.Drawing.Size(51, 17)
         Me.chkLicenseLockTypeBios.TabIndex = 6
@@ -869,9 +953,9 @@ Partial Class frmMain
         '
         Me.PicActiveLock.Cursor = System.Windows.Forms.Cursors.Hand
         Me.PicActiveLock.Image = Global.ActiveLockWizard.My.Resources.Resources.small_logo
-        Me.PicActiveLock.Location = New System.Drawing.Point(594, 340)
+        Me.PicActiveLock.Location = New System.Drawing.Point(611, 387)
         Me.PicActiveLock.Name = "PicActiveLock"
-        Me.PicActiveLock.Size = New System.Drawing.Size(80, 80)
+        Me.PicActiveLock.Size = New System.Drawing.Size(82, 77)
         Me.PicActiveLock.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
         Me.PicActiveLock.TabIndex = 10
         Me.PicActiveLock.TabStop = False
@@ -884,7 +968,7 @@ Partial Class frmMain
         '
         Me.ImageApplicationHelp14.Cursor = System.Windows.Forms.Cursors.Hand
         Me.ImageApplicationHelp14.Image = Global.ActiveLockWizard.My.Resources.Resources.Help
-        Me.ImageApplicationHelp14.Location = New System.Drawing.Point(306, 346)
+        Me.ImageApplicationHelp14.Location = New System.Drawing.Point(336, 479)
         Me.ImageApplicationHelp14.Name = "ImageApplicationHelp14"
         Me.ImageApplicationHelp14.Size = New System.Drawing.Size(19, 18)
         Me.ImageApplicationHelp14.TabIndex = 3
@@ -892,22 +976,32 @@ Partial Class frmMain
         '
         'GroupBox14
         '
+        Me.GroupBox14.Controls.Add(Me.btnDLLPath)
         Me.GroupBox14.Controls.Add(Me.RadioButton2)
         Me.GroupBox14.Controls.Add(Me.RadioButton1)
-        Me.GroupBox14.Controls.Add(Me.LinkLabel1)
         Me.GroupBox14.Controls.Add(Me.ImageApplicationHelp16)
         Me.GroupBox14.Controls.Add(Me.txtActivelockPath)
-        Me.GroupBox14.Location = New System.Drawing.Point(4, 452)
+        Me.GroupBox14.Location = New System.Drawing.Point(4, 387)
         Me.GroupBox14.Name = "GroupBox14"
-        Me.GroupBox14.Size = New System.Drawing.Size(721, 77)
+        Me.GroupBox14.Size = New System.Drawing.Size(577, 77)
         Me.GroupBox14.TabIndex = 12
         Me.GroupBox14.TabStop = False
         Me.GroupBox14.Text = "ActiveLock CRC Encoder"
         '
+        'btnDLLPath
+        '
+        Me.btnDLLPath.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnDLLPath.Location = New System.Drawing.Point(542, 17)
+        Me.btnDLLPath.Name = "btnDLLPath"
+        Me.btnDLLPath.Size = New System.Drawing.Size(28, 22)
+        Me.btnDLLPath.TabIndex = 8
+        Me.btnDLLPath.Text = "..."
+        Me.btnDLLPath.UseVisualStyleBackColor = True
+        '
         'RadioButton2
         '
         Me.RadioButton2.AutoSize = True
-        Me.RadioButton2.Location = New System.Drawing.Point(433, 50)
+        Me.RadioButton2.Location = New System.Drawing.Point(301, 54)
         Me.RadioButton2.Name = "RadioButton2"
         Me.RadioButton2.Size = New System.Drawing.Size(180, 17)
         Me.RadioButton2.TabIndex = 7
@@ -918,23 +1012,13 @@ Partial Class frmMain
         '
         Me.RadioButton1.AutoSize = True
         Me.RadioButton1.Checked = True
-        Me.RadioButton1.Location = New System.Drawing.Point(197, 50)
+        Me.RadioButton1.Location = New System.Drawing.Point(88, 54)
         Me.RadioButton1.Name = "RadioButton1"
         Me.RadioButton1.Size = New System.Drawing.Size(178, 17)
         Me.RadioButton1.TabIndex = 6
         Me.RadioButton1.TabStop = True
         Me.RadioButton1.Text = "Enable Individual CRC encoding"
         Me.RadioButton1.UseVisualStyleBackColor = True
-        '
-        'LinkLabel1
-        '
-        Me.LinkLabel1.AutoSize = True
-        Me.LinkLabel1.Location = New System.Drawing.Point(34, 54)
-        Me.LinkLabel1.Name = "LinkLabel1"
-        Me.LinkLabel1.Size = New System.Drawing.Size(107, 13)
-        Me.LinkLabel1.TabIndex = 5
-        Me.LinkLabel1.TabStop = True
-        Me.LinkLabel1.Text = "Path to Activelock.dll"
         '
         'ImageApplicationHelp16
         '
@@ -950,7 +1034,7 @@ Partial Class frmMain
         '
         Me.txtActivelockPath.Location = New System.Drawing.Point(37, 19)
         Me.txtActivelockPath.Name = "txtActivelockPath"
-        Me.txtActivelockPath.Size = New System.Drawing.Size(663, 20)
+        Me.txtActivelockPath.Size = New System.Drawing.Size(499, 20)
         Me.txtActivelockPath.TabIndex = 0
         '
         'OpenFileDialog1
@@ -961,7 +1045,7 @@ Partial Class frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(729, 532)
+        Me.ClientSize = New System.Drawing.Size(734, 517)
         Me.Controls.Add(Me.GroupBox14)
         Me.Controls.Add(Me.ImageApplicationHelp14)
         Me.Controls.Add(Me.PicActiveLock)
@@ -979,7 +1063,7 @@ Partial Class frmMain
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "frmMain"
-        Me.Text = "Activelock Protection Source Code Generation Wizard V1.0.3"
+        Me.Text = "Activelock Protection Source Code Generation Wizard V1.0.4"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         CType(Me.ImageApplicationHelp11, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1103,9 +1187,16 @@ Partial Class frmMain
     Friend WithEvents GroupBox14 As System.Windows.Forms.GroupBox
     Friend WithEvents RadioButton2 As System.Windows.Forms.RadioButton
     Friend WithEvents RadioButton1 As System.Windows.Forms.RadioButton
-    Friend WithEvents LinkLabel1 As System.Windows.Forms.LinkLabel
     Friend WithEvents ImageApplicationHelp16 As System.Windows.Forms.PictureBox
     Friend WithEvents txtActivelockPath As System.Windows.Forms.TextBox
     Friend WithEvents OpenFileDialog1 As System.Windows.Forms.OpenFileDialog
+    Friend WithEvents btnDLLPath As System.Windows.Forms.Button
+    Friend WithEvents chkLicenseLockTypeVideoID As System.Windows.Forms.CheckBox
+    Friend WithEvents chkLicenseLockTypeBaseboardID As System.Windows.Forms.CheckBox
+    Friend WithEvents chkLicenseLockTypeCPUID As System.Windows.Forms.CheckBox
+    Friend WithEvents chkLicenseLockTypeMemory As System.Windows.Forms.CheckBox
+    Friend WithEvents chkLicenseLockTypeFingerprint As System.Windows.Forms.CheckBox
+    Friend WithEvents chkLicenseLockTypeExternalID As System.Windows.Forms.CheckBox
+    Friend WithEvents chkTrialHideTypeIsolatedStorage As System.Windows.Forms.CheckBox
 
 End Class

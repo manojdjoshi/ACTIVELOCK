@@ -116,7 +116,7 @@ Module modGlobal
     Public Function GetHideTypeString(ByVal HideType As ArrayList) As String
         Dim strHideType As String = Nothing
         For Each item As String In HideType
-            strHideType = strHideType & "ActiveLock3_5NET.IActiveLock.ALTrialHideTypes." & item.ToString & " Or "
+            strHideType = strHideType & "ActiveLock3_6NET.IActiveLock.ALTrialHideTypes." & item.ToString & " Or "
         Next
         strHideType = Strings.Left(strHideType, (strHideType.Length - 4))
         Return strHideType

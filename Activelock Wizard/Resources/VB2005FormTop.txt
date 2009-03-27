@@ -1,34 +1,37 @@
 Option Strict Off
-Imports ActiveLock3_5NET
+Imports ActiveLock3_6NET
 Imports System.IO
-Imports VB = Microsoft.VisualBasic.Strings
-Imports Microsoft.VisualBasic.Compatibility
 
-Module modActiveLockVb2005
+Module modActiveLockVb2008
 #Region "Structures"
-Public Structure ActivelockValues_t
-Public AppName As String
-Public AppVersion As String
-Public RegStatus As String
-Public UsedDaysOrRuns As String
-Public ValidTrial As Boolean
-Public LicenceType As String
-Public ExpirationDate As String
-Public RegisteredUser As String
-Public RegisteredLevel As String
-Public LicenseClass As String
-Public MaxCount As Integer
-End Structure
+    Public Structure ActivelockValues_t
+        Public AppName As String
+        Public AppVersion As String
+        Public RegStatus As String
+        Public UsedDaysOrRuns As String
+        Public ValidTrial As Boolean
+        Public LicenceType As String
+        Public ExpirationDate As String
+        Public RegisteredUser As String
+        Public RegisteredLevel As String
+        Public LicenseClass As String
+        Public MaxCount As Integer
+    End Structure
 #End Region '"Structures"
 
 #Region "Public Declare"
-Public ActivelockValues As New ActivelockValues_t
+    Public ActivelockValues As New ActivelockValues_t
 #End Region '"Public Declare"
 
 #Region "Local Declare"
-Private strKeyStorePath As String
-Private noTrialThisTime As Boolean
-Private MyActiveLock As ActiveLock3_5NET._IActiveLock
-Private WithEvents ActiveLockEventSink As ActiveLock3_5NET.ActiveLockEventNotifier
-Private Declare Function GetSystemDirectory Lib "kernel32" Alias "GetSystemDirectoryA" (ByVal lpBuffer As String, ByVal nSize As Integer) As Integer
-Private Declare Function GetWindowsDirectory Lib "kernel32" Alias "GetWindowsDirectoryA" (ByVal lpBuffer As String, ByVal nSize As Integer) As Integer
+    Private Enum LicFlags
+        alfSingle = 0
+        alfMulti = 1
+    End Enum
+    Private strKeyStorePath As String
+    Private noTrialThisTime As Boolean
+    Private MyActiveLock As ActiveLock3_6NET._IActiveLock
+    Private WithEvents ActiveLockEventSink As ActiveLock3_6NET.ActiveLockEventNotifier
+    Private Declare Function GetSystemDirectory Lib "kernel32" Alias "GetSystemDirectoryA" (ByVal lpBuffer As String, ByVal nSize As Integer) As Integer
+    Private Declare Function GetWindowsDirectory Lib "kernel32" Alias "GetWindowsDirectoryA" (ByVal lpBuffer As String, ByVal nSize As Integer) As Integer
+    
