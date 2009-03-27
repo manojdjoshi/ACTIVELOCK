@@ -1,5 +1,12 @@
 Change Log For Activelock Wizard 
-Last Updated: 28 December 2008 
+Last Updated: 28 March 2008 
+
+Activelock Wizard V1.0.4 Updates:
+- Added: More License Locking types as was needed in V3.6
+-	Added: Isolated Storage as new Trial Hiding Type
+-	Updated: Some functions was using vb6.compatibility library, now it only uses the dot net framework
+-	Updated: Inside the Control Init Routine it is now using all the .Acquire parameters, this speed up the init phase
+-	Updated: Cleaned UP the code some   
 
 Activelock Wizard V1.0.3 Updates:
 - NEW: Modified both VB6 and VB2005 outputs for the encoded CRC. 
