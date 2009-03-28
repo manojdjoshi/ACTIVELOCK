@@ -1247,11 +1247,11 @@ Friend Class frmMain
 
             ' Set the trial type property
             ' this is either trialDays, or trialRuns or trialNone.
-            .TrialType = ActiveLock3_6NET.IActiveLock.ALTrialTypes.trialDays
+            .TrialType = ActiveLock3_6NET.IActiveLock.ALTrialTypes.trialRuns
 
             ' Set the Trial Length property.
             ' This number represents the number of days or the number of runs (whichever is applicable).
-            .TrialLength = 15
+            .TrialLength = 2
             If .TrialType <> ActiveLock3_6NET.IActiveLock.ALTrialTypes.trialNone And .TrialLength = 0 Then
                 ' In such cases Activelock automatically generates errors -11001100 or -11001101
                 ' to indicate that you're using the trial feature but, trial length was not specified
@@ -1265,6 +1265,12 @@ Friend Class frmMain
             ' This means initiating a trial with one user does not initiate a trial for another user.
             ' trialHiddenFolder and trialSteganography are for "All Users"
             .TrialHideType = ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialHiddenFolder Or ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialRegistryPerUser Or ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialSteganography
+
+            ' Use the following if you'd like to make the trial warning message persistent 
+            ' until a license is registered.
+            ' Expiration of the trial is not so clear to some users without any warnings.
+            ' .trialWarningTemporary will show the trial expired warning only once.
+            .TrialWarning = ActiveLock3_6NET.IActiveLock.ALTrialWarningTypes.trialWarningPersistent
 
             ' Set the Software code
             ' This is the same thing as VCode
