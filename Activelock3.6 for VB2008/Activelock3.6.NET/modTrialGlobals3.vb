@@ -2104,7 +2104,7 @@ keepChecking:
             strMsg = TEXTMSG_RUNS
             mRemainingTrialRuns = alockRuns
         End If
-        If intEXPIREDWARNING = 0 And mTrialWarning = IActiveLock.ALTrialWarningTypes.trialWarningPersistent Then
+        If intEXPIREDWARNING = 0 Or mTrialWarning = IActiveLock.ALTrialWarningTypes.trialWarningPersistent Then
             Call SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "1"), enc2(TRIALWARNING), enc2(EXPIREDWARNING), CStr(-1))
             strMsg = "Free Trial for this application has ended."
         End If

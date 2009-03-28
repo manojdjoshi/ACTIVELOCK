@@ -749,21 +749,12 @@ ByVal registeredLevel As String, ByVal installationCode As String, ByVal license
         cm.CommandText = "INSERT INTO license ( Progname, progver, RegDate, ExpDate, LicType, LockType, RegLevel, InstCode, UserName, LibCode )" & _
                         " VALUES(@productName,@productversion,@registrationDate,@expiresAfter,@licenseType,@lockType,@registeredLevel,@installationCode,@userName,@licenseCode)"
         cm.Parameters.Clear()
-        'walter'obsolete'cm.Parameters.Add("@productName", productName)
-        'walter'obsolete'cm.Parameters.Add("@productversion", productversion)
-        'walter'obsolete'cm.Parameters.Add("@registrationDate", registrationDate)
-        'walter'obsolete'cm.Parameters.Add("@expiresAfter", expiresAfter)
-        'walter'obsolete'cm.Parameters.Add("@licenseType", licenseType)
-        'walter'obsolete'cm.Parameters.Add("@lockType", lockType)
-        'walter'obsolete'cm.Parameters.Add("@registeredLevel", registeredLevel)
-        'walter'obsolete'cm.Parameters.Add("@installationCode", installationCode)
-        'walter'obsolete'cm.Parameters.Add("@userName", userName)
-        'walter'obsolete'cm.Parameters.Add("@licenseCode", licenseCode)
-        Dim flag As Boolean = False
-        If installationCode.Length > 255 Or licenseCode.Length > 255 Then flag = True
-        If flag Then
-            If MessageBox.Show("Installation code and/or license key are longer than 255 characters, therefore they will be truncated to 255 characters and then saved." & vbCrLf & "Would you like to continue?", ACTIVELOCKSTRING, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.No Then Exit Sub
-        End If
+
+        'Dim flag As Boolean = False
+        'If installationCode.Length > 255 Or licenseCode.Length > 255 Then flag = True
+        'If flag Then
+        '    If MessageBox.Show("Installation code and/or license key are longer than 255 characters, therefore they will be truncated to 255 characters and then saved." & vbCrLf & "Would you like to continue?", ACTIVELOCKSTRING, MessageBoxButtons.YesNo, MessageBoxIcon.Question) = Windows.Forms.DialogResult.No Then Exit Sub
+        'End If
 
         cm.Parameters.AddWithValue("@productName", productName)
         cm.Parameters.AddWithValue("@productversion", productversion)

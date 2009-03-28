@@ -2671,7 +2671,12 @@ noInfo:
         txtUser.ReadOnly = True
         txtUser.BackColor = System.Drawing.ColorTranslator.FromOle(&H8000000F)
 
-        cboProducts.SelectedIndex = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboProducts", CStr(0)))
+        Dim sIndex As Integer = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboProducts", CStr(0)))
+        If sIndex > cboProducts.Items.Count Then
+            cboProducts.SelectedIndex = cboProducts.Items.Count
+        Else
+            cboProducts.SelectedIndex = sIndex - 1
+        End If
         txtDays.Text = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtDays", CStr(365))
         Me.Text = "Alugen - ActiveLock v" & My.Application.Info.Version.Major & "." & My.Application.Info.Version.Minor & " Build (" & My.Application.Info.Version.Build & ") Key Generator for VB2008"
         CheckIfWizardPresent()
