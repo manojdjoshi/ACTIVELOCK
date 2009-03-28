@@ -245,7 +245,7 @@ noInfo:
             End If
         End Sub
 
-        Private Sub Page_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
+        Private Sub Page_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load, Me.Load
             'Put user code to initialize the page here
 
             ' Populate Product List on Product Code Generator tab
@@ -270,13 +270,13 @@ noInfo:
 
             'Populate the DataGrid control
             Dim dc As New DataColumn("Name", System.Type.GetType("System.String"))
-            dt.Columns.Add(dc)
+            If Not dt.Columns.Contains("Name") Then dt.Columns.Add(dc)
             dc = New DataColumn("Version", System.Type.GetType("System.String"))
-            dt.Columns.Add(dc)
+            If Not dt.Columns.Contains("Version") Then dt.Columns.Add(dc)
             dc = New DataColumn("VCode", System.Type.GetType("System.String"))
-            dt.Columns.Add(dc)
+            If Not dt.Columns.Contains("VCode") Then dt.Columns.Add(dc)
             dc = New DataColumn("GCode", System.Type.GetType("System.String"))
-            dt.Columns.Add(dc)
+            If Not dt.Columns.Contains("GCode") Then dt.Columns.Add(dc)
 
             If Not MagicAjax.MagicAjaxContext.Current.IsAjaxCall Then
                 cboProduct.Items.Clear()
@@ -2179,14 +2179,6 @@ InitForm_Error:
             SayAjax("Error " & Err.Number & " (" & Err.Description & ") in procedure in Page Load")
         End Sub
 
-        Protected Sub chkLockBIOS_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles chkLockBIOS.CheckedChanged, chkLockComputer.CheckedChanged, chkLockHD.CheckedChanged, chkLockHDfirmware.CheckedChanged, chkLockIP.CheckedChanged, chkLockMACaddress.CheckedChanged, chkLockMotherboard.CheckedChanged, chkLockMotherboard.CheckedChanged, chkLockExternalIP.CheckedChanged, chkLockFingerprint.CheckedChanged, chkLockMemory.CheckedChanged, chkLockCPUID.CheckedChanged, chkLockBaseboardID.CheckedChanged, chkLockVideoID.CheckedChanged
-            If systemEvent Then Exit Sub
-            systemEvent = True
-            txtInstallCode.Text = ReconstructedInstallationCode()
-            systemEvent = False
-            SaveFormSettings()
-        End Sub
-
         Protected Sub cmdPasteInstallCode_Init(ByVal sender As Object, ByVal e As System.EventArgs) Handles cmdPasteInstallCode.Init
             If txtInstallCode.Text.Length < 8 Then Exit Sub
 
@@ -2199,6 +2191,124 @@ InitForm_Error:
                 systemEvent = False
                 HandleInstallationCode()
             End If
+        End Sub
+
+        'Private Sub cmdCheckAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdCheckAll.Click
+        '    chkLockMACaddress.Checked = True
+        '    chkLockComputer.Checked = True
+        '    chkLockHD.Checked = True
+        '    chkLockHDfirmware.Checked = True
+        '    chkLockWindows.Checked = True
+        '    chkLockBIOS.Checked = True
+        '    chkLockMotherboard.Checked = True
+        '    chkLockIP.Checked = True
+        '    chkLockExternalIP.Checked = True
+        '    chkLockFingerprint.Checked = True
+        '    chkLockMemory.Checked = True
+        '    chkLockCPUID.Checked = True
+        '    chkLockBaseboardID.Checked = True
+        '    chkLockVideoID.Checked = True
+        'End Sub
+
+        'Private Sub cmdUncheckAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdUncheckAll.Click
+        '    chkLockMACaddress.Checked = False
+        '    chkLockComputer.Checked = False
+        '    chkLockHD.Checked = False
+        '    chkLockHDfirmware.Checked = False
+        '    chkLockWindows.Checked = False
+        '    chkLockBIOS.Checked = False
+        '    chkLockMotherboard.Checked = False
+        '    chkLockIP.Checked = False
+        '    chkLockExternalIP.Checked = False
+        '    chkLockFingerprint.Checked = False
+        '    chkLockMemory.Checked = False
+        '    chkLockCPUID.Checked = False
+        '    chkLockBaseboardID.Checked = False
+        '    chkLockVideoID.Checked = False
+        'End Sub
+
+        Private Sub chkLockMACaddress_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockMACaddress.CheckedChanged
+            If systemEvent Then Exit Sub
+            systemEvent = True
+            txtInstallCode.Text = ReconstructedInstallationCode()
+            systemEvent = False
+        End Sub
+
+        Private Sub chkLockComputer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockComputer.CheckedChanged
+            If systemEvent Then Exit Sub
+            systemEvent = True
+            txtInstallCode.Text = ReconstructedInstallationCode()
+            systemEvent = False
+        End Sub
+
+        Private Sub chkLockHD_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockHD.CheckedChanged
+            If systemEvent Then Exit Sub
+            systemEvent = True
+            txtInstallCode.Text = ReconstructedInstallationCode()
+            systemEvent = False
+        End Sub
+
+        Private Sub chkLockHDfirmware_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockHDfirmware.CheckedChanged
+            If systemEvent Then Exit Sub
+            systemEvent = True
+            txtInstallCode.Text = ReconstructedInstallationCode()
+            systemEvent = False
+        End Sub
+
+        Private Sub chkLockWindows_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockWindows.CheckedChanged
+            If systemEvent Then Exit Sub
+            systemEvent = True
+            txtInstallCode.Text = ReconstructedInstallationCode()
+            systemEvent = False
+        End Sub
+
+        Private Sub chkLockBIOS_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockBIOS.CheckedChanged
+            If systemEvent Then Exit Sub
+            systemEvent = True
+            txtInstallCode.Text = ReconstructedInstallationCode()
+            systemEvent = False
+        End Sub
+
+        Private Sub chkLockMotherboard_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockMotherboard.CheckedChanged
+            If systemEvent Then Exit Sub
+            systemEvent = True
+            txtInstallCode.Text = ReconstructedInstallationCode()
+            systemEvent = False
+        End Sub
+
+        Private Sub chkLockVideoID_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockVideoID.CheckedChanged
+            If systemEvent Then Exit Sub
+            systemEvent = True
+            txtInstallCode.Text = ReconstructedInstallationCode()
+            systemEvent = False
+        End Sub
+
+        Private Sub chkLockMemory_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockMemory.CheckedChanged
+            If systemEvent Then Exit Sub
+            systemEvent = True
+            txtInstallCode.Text = ReconstructedInstallationCode()
+            systemEvent = False
+        End Sub
+
+        Private Sub chkLockCPUID_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockCPUID.CheckedChanged
+            If systemEvent Then Exit Sub
+            systemEvent = True
+            txtInstallCode.Text = ReconstructedInstallationCode()
+            systemEvent = False
+        End Sub
+
+        Private Sub chkLockBaseboardID_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockBaseboardID.CheckedChanged
+            If systemEvent Then Exit Sub
+            systemEvent = True
+            txtInstallCode.Text = ReconstructedInstallationCode()
+            systemEvent = False
+        End Sub
+
+        Private Sub chkLockFingerprint_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockFingerprint.CheckedChanged
+            If systemEvent Then Exit Sub
+            systemEvent = True
+            txtInstallCode.Text = ReconstructedInstallationCode()
+            systemEvent = False
         End Sub
 
         Public Sub HandleInstallationCode()
@@ -2442,43 +2552,40 @@ InitForm_Error:
 
         End Sub
         'Private Sub cmdCheckAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdCheckAll.Click
-        '    chkLockMACaddress.CheckState = CheckState.Checked
-        '    chkLockComputer.CheckState = CheckState.Checked
-        '    chkLockHD.CheckState = CheckState.Checked
-        '    chkLockHDfirmware.CheckState = CheckState.Checked
-        '    chkLockWindows.CheckState = CheckState.Checked
-        '    chkLockBIOS.CheckState = CheckState.Checked
-        '    chkLockMotherboard.CheckState = CheckState.Checked
-        '    chkLockIP.CheckState = CheckState.Checked
-        '    chkLockExternalIP.CheckState = CheckState.Checked
-        '    chkLockFingerprint.CheckState = CheckState.Checked
-        '    chkLockMemory.CheckState = CheckState.Checked
-        '    chkLockCPUID.CheckState = CheckState.Checked
-        '    chkLockBaseboardID.CheckState = CheckState.Checked
-        '    chkLockVideoID.CheckState = CheckState.Checked
+        '    chkLockMACaddress.Checked = True
+        '    chkLockComputer.Checked = True
+        '    chkLockHD.Checked = True
+        '    chkLockHDfirmware.Checked = True
+        '    chkLockWindows.Checked = True
+        '    chkLockBIOS.Checked = True
+        '    chkLockMotherboard.Checked = True
+        '    chkLockIP.Checked = True
+        '    chkLockExternalIP.Checked = True
+        '    chkLockFingerprint.Checked = True
+        '    chkLockMemory.Checked = True
+        '    chkLockCPUID.Checked = True
+        '    chkLockBaseboardID.Checked = True
+        '    chkLockVideoID.Checked = True
         'End Sub
 
         'Private Sub cmdUncheckAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdUncheckAll.Click
-        '    chkLockMACaddress.CheckState = CheckState.Unchecked
-        '    chkLockComputer.CheckState = CheckState.Unchecked
-        '    chkLockHD.CheckState = CheckState.Unchecked
-        '    chkLockHDfirmware.CheckState = CheckState.Unchecked
-        '    chkLockWindows.CheckState = CheckState.Unchecked
-        '    chkLockBIOS.CheckState = CheckState.Unchecked
-        '    chkLockMotherboard.CheckState = CheckState.Unchecked
-        '    chkLockIP.CheckState = CheckState.Unchecked
-        '    chkLockExternalIP.CheckState = CheckState.Unchecked
-        '    chkLockFingerprint.CheckState = CheckState.Unchecked
-        '    chkLockMemory.CheckState = CheckState.Unchecked
-        '    chkLockCPUID.CheckState = CheckState.Unchecked
-        '    chkLockBaseboardID.CheckState = CheckState.Unchecked
-        '    chkLockVideoID.CheckState = CheckState.Unchecked
+        '    chkLockMACaddress.Checked = False
+        '    chkLockComputer.Checked = False
+        '    chkLockHD.Checked = False
+        '    chkLockHDfirmware.Checked = False
+        '    chkLockWindows.Checked = False
+        '    chkLockBIOS.Checked = False
+        '    chkLockMotherboard.Checked = False
+        '    chkLockIP.Checked = False
+        '    chkLockExternalIP.Checked = False
+        '    chkLockFingerprint.Checked = False
+        '    chkLockMemory.Checked = False
+        '    chkLockCPUID.Checked = False
+        '    chkLockBaseboardID.Checked = False
+        '    chkLockVideoID.Checked = False
         'End Sub
 
 
-        Protected Sub chkLockWindows_CheckedChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles chkLockWindows.CheckedChanged
-
-        End Sub
     End Class
 
 End Namespace
