@@ -213,6 +213,14 @@ Public Function CryptoAPIAction(Index As Integer, containerName As String, plain
 ' This sub generates Public/Private Exchange or Signature keys, Signs/Validates Exchange or Signature keys,
 ' Creates containers if they don't exist and destroys containers
 
+OutputDebugString "Inside CryptoAPIAction"
+OutputDebugString "containerName: " & containerName
+OutputDebugString "plainText: " & plainText
+OutputDebugString "signedText: " & signedText
+OutputDebugString "publicKey: " & publicKey
+OutputDebugString "privateKey: " & privateKey
+OutputDebugString "modulus: " & modulus
+
 Set cryptSession = New clsCryptoAPI
 Dim sKeyDongle As String, lX As Long
 
@@ -348,8 +356,12 @@ Case 4    'sign the key
         
         Dim inputText As String
         inputText = plainText
+OutputDebugString "Before SignString"
+OutputDebugString "inputText: " & inputText
         Call cryptSession.SignString(inputText, True)
         signedText = inputText
+OutputDebugString "After SignString"
+OutputDebugString "signedText: " & signedText
         
         ' This code is causing trouble -  investigate
         cryptSession.DestroyContainer containerName
@@ -376,7 +388,11 @@ Case 5   'validate the key
             Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE & "[5-1]"
         End If
+OutputDebugString "Before ValidateString"
+OutputDebugString "plainText: " & plainText
+OutputDebugString "inputText: " & inputText
         If cryptSession.ValidateString(plainText, inputText) = True Then
+
             ' Stay quiet here... everything is allright
             'MsgBox "Valid signature !!", vbInformation
         Else
