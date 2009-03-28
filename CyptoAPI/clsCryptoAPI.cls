@@ -112,7 +112,7 @@ Private Const NTE_FIXEDPARAMETER            As Long = &H80090025
 
 Private Declare Function CryptAcquireContext _
     Lib "advapi32.dll" _
-        Alias "CryptAcquireContextA" ( _
+            Alias "CryptAcquireContextA" ( _
             phProv As Long, _
             pszContainer As Byte, _
             pszProvider As Byte, _
@@ -306,17 +306,7 @@ Private Declare Function CryptSignHash _
             pdwSigLen As Long _
                 ) As Long
 
-Private Declare Function CryptVerifySignature _
-    Lib "advapi32.dll" _
-        Alias "CryptVerifySignatureA" ( _
-            ByVal hHash As Long, _
-            pbSignature As Byte, _
-            ByVal dwSigLen As Long, _
-            ByVal hPubKey As Long, _
-            ByVal sDescription As String, _
-            ByVal dwFlags As Long _
-                ) As Long
-
+Private Declare Function CryptVerifySignature Lib "advapi32.dll" Alias "CryptVerifySignatureA" (ByVal hHash As Long, pbSignature As Byte, ByVal dwSigLen As Long, ByVal hPubKey As Long, ByVal sDescription As String, ByVal dwFlags As Long) As Long
 Private Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (hpvDest As Any, hpvSource As Any, ByVal cbCopy As Long)
 
 Dim bReturnStat As Boolean          'status after encrypt/decrypt
@@ -718,7 +708,7 @@ Dim abKeyBlob() As Byte
     ' Added by Ismail
     Dim b64 As clsCryptoAPIBase64
     Set b64 = New clsCryptoAPIBase64
-    abPublicBlob = b64.Decode("BgIAAAAkAABSU0ExAAQAAAEAAQBzS/M72hPk7up8p8DEusFjABY3+me/88SiGVFrUe/ZguftxajYee0buK3yBPCBHP356vxob82JQtPKyB4TwIPRnGyocFbX52L/Lm8Qad+Cpo3kv+7c0ogVOCR36i+hqQgYA6kkoDs1o6luHe0PojPY+53Hckgyz7Bf1NjE9l3i1g==")
+    abPublicBlob = b64.Decode("BgIAAAAkAABSU0ExAAQAAAEAAQCBcwKp9p1rkQhZyxTeREh9EM273wBqpODS+KLkeu/xn/Q0+w8uhBQfZq8f/sdRfL+S5LIBItOv0okG42mKcaNk0mRoSoJkUPMrRp43j8nAKVCmRrD7pZ1Do3uHM4SjydLY0omeK8vOCyZ2WldYy0IxwgQjNqMHLuG1rCg1DR4+5g==")
     lngPubBlobLength = Len(ByteArrayToString(abPublicBlob))
     ' Added by Ismail
     
@@ -754,7 +744,7 @@ Dim lLen As Long
     ' added by Ismail
     Dim b64 As clsCryptoAPIBase64
     Set b64 = New clsCryptoAPIBase64
-    abPrivateBlob = b64.Decode("BwIAAAAkAAD4eEFtuTwbjhCgyJITO8K+cxUKkHjf0CpStHTAOISWtqSzXbsoJezEo8yG2+W9qQekX+zV50V8obd/I3GmNfSOGrIN1AlOtDvOaDX/+XHh2p5fXvPyY1+CDxPhKVYXNAwJnOi/8AMrGhvw68CCaVWbEJWUH9MY9AtPk6DK2LGceWH5PTWjvUqLBPQD1Yy4AFpE3M40fT/S/P9LaTgLlBoxxOgOlaFA/FP1Xv+hssVXGkMz/LtbthsRDX+FxXN/kVPYxPkKSsOwj9rlpHeVQAorJUu+gSJY+Vg7zbvpzPy5N46joy89Iz8gxE6HuXUXTGcBTRRoqn7vLLVPsewwypT4OaoAE18jERk/SyxdYJQU5RGY5yFB9mvdAgNKYmW1mX0Q0yQZFd5/4+2XrYHlJgm8IcU8UOKOs4RMmpXDu73ReR+vwX9VimhHe6ybQDHPPbxnLthOLvuFUMjRLxvTticG311tnSYrOMx8osn9o5tnU/OXtJHHKldRUxuTPg+wD9dTE2DdtIMlpWeYTfvqTh9AXVVlZ6R30HHa+668gOnD23aEFHO/eCrmG3oyTBLD3uqVfr2ILAataigrwf+4PPDbhaz3wANeMzE3re5xEgdK9WOeZIz2tikEwyPXUfCys9JNy4SAp/TkXuVjw/mJyzvw6j4wzPhZ7ciUscwAinnazjKkcdpYZfxF42iad+wsBDEz9o6rhKGZmAyriE6Q8ykrEZiU1ODLXsFZHrC2lh3CcwmI9PkW/uTnVgjuSgreE0If/HUq2M/vSdSUgP4=")
+    abPrivateBlob = b64.Decode("BwIAAAAkAAD4eEFtuTwbjhCgyJLhAzMsX5uF75r6vP5ISv3eKF8ak8NmCp9YxB9LiMyuxvZkl6BSohXROUeRW4CvQzPNO7rnV6wrRFOCn0xX2RVKt3kh4Ers6WImC66l6QWjpotVzVIu6/3pa1zbw7DyixpCuHUhm2Vvt1wAs7EY+tEj4Sh4PYrM3GRJxbp6/7ff5Yi0hWdVntx64HI4K+YABG7ZAj3PEE2AXA4AB7Ghx7Fuqxxm3BNS5xy6XiLJw6FU0lLIe/K4vmqXR1nsQ5vLaHBDCVs3qf2IN9J2N/TgfrFbLRRensgLiGmI1e3POkpDq7IGP4SgNA2XqVPPj0eOqKWSdVJy6v11AuDQuBvischmtE63cg0L/S+qUUr77NLrMb8kH3Bf1as7Y5mCBXqF9W3sFBKG1bHkXMhWlYzEJSxldHA+9velfxsgtJAlfHRL+ItxRzUhUHqTLgDMX19xSXM4E9xNLbAI5mUJluzd7avkDlpOxdPTkP0MeaHC33b4AoQUN/AdTkcF+Cs/Y651kwMQOdY/DaD+rBCDdx3JNRcNzoQL+JFEqii1pDyXiW2Rqv3cNv6JRn7JrZMo1Hn5kRYOHDA/E4cIJdE1xMHu3pGLiuYX7Uu6U9yz/u9H6JASaJnZ8y0K4Atm1igVtl+wxD1tOvoeHcJ2JUTdmS12ae4f40c2uwhv/oD8Ecu6Oc1OuKIN+dlRHuYwvUfzBrcU7BqD63n215P5c5REEbw3ETItv7BEaHHpZ9RaLLjX73XCoXKTb5MV8cgtqLE7MxEqbB4=")
     lngPvtBlobLength = Len(ByteArrayToString(abPrivateBlob))
     ' added by Ismail
     
@@ -834,7 +824,7 @@ Dim lngLength As Long
     Dim b64 As clsCryptoAPIBase64
     Set b64 = New clsCryptoAPIBase64
     publicPublicKeyBlob = b64.Encode(abPublicBlob)
-    ' "BgIAAAAkAABSU0ExAAIAAAEAAQD/lSmzzJy6+17PgPDciaBpRgrEmnLPG+EcyTyLi76/Uq4oqU3stGS1bi9LT6rVGQoIqa7xkZuMdZJBHeoqwubb"
+    ' "BgIAAAAkAABSU0ExAAQAAAEAAQCBcwKp9p1rkQhZyxTeREh9EM273wBqpODS+KLkeu/xn/Q0+w8uhBQfZq8f/sdRfL+S5LIBItOv0okG42mKcaNk0mRoSoJkUPMrRp43j8nAKVCmRrD7pZ1Do3uHM4SjydLY0omeK8vOCyZ2WldYy0IxwgQjNqMHLuG1rCg1DR4+5g=="
     ' Added by Ismail
 
 End Sub
@@ -988,7 +978,7 @@ Dim lngLength As Long
     Dim b64 As clsCryptoAPIBase64
     Set b64 = New clsCryptoAPIBase64
     publicPrivateKeyBlob = b64.Encode(abPrivateBlob)
-    ' "BwIAAAAkAAD4eEFtuTobjhCgyJKf5Rg2ZZpUhcxs9xpKhxXKfphl1rHDtZ6W9YEkeZ3gC6x4xeKQkmV7McfF6u0rJoZXdqYX5OQI40jFYc/3alD1dGWVAjnnh+NYUv7/d0xIv4XBWC7eTG12IQb7w9EASTmV1waGQBjp/OTT3uWg6F0ukkQrSwJNZUFOjpAhUDVq6pb8BHTF1YZ2NRPoywRIF/Oi2Hw5hsi956OLc9eqx30gsEAhqu0EUZ4h702Ey7oP7rcEEmIcmOLxt11wk8fXsULZZ9aBdm5tHut0Kh9oihT38CN+NCs9eFk8ROyy04ois3TQlhMITprgU5gfrVJH4OROR3+Nm7wkaU9Tg8L4JjCBwaYPzdSKax8tyjZh60BuySsVzg46L+k4X8/qR8y/cB8="
+    ' "BwIAAAAkAAD4eEFtuTwbjhCgyJLhAzMsX5uF75r6vP5ISv3eKF8ak8NmCp9YxB9LiMyuxvZkl6BSohXROUeRW4CvQzPNO7rnV6wrRFOCn0xX2RVKt3kh4Ers6WImC66l6QWjpotVzVIu6/3pa1zbw7DyixpCuHUhm2Vvt1wAs7EY+tEj4Sh4PYrM3GRJxbp6/7ff5Yi0hWdVntx64HI4K+YABG7ZAj3PEE2AXA4AB7Ghx7Fuqxxm3BNS5xy6XiLJw6FU0lLIe/K4vmqXR1nsQ5vLaHBDCVs3qf2IN9J2N/TgfrFbLRRensgLiGmI1e3POkpDq7IGP4SgNA2XqVPPj0eOqKWSdVJy6v11AuDQuBvischmtE63cg0L/S+qUUr77NLrMb8kH3Bf1as7Y5mCBXqF9W3sFBKG1bHkXMhWlYzEJSxldHA+9velfxsgtJAlfHRL+ItxRzUhUHqTLgDMX19xSXM4E9xNLbAI5mUJluzd7avkDlpOxdPTkP0MeaHC33b4AoQUN/AdTkcF+Cs/Y651kwMQOdY/DaD+rBCDdx3JNRcNzoQL+JFEqii1pDyXiW2Rqv3cNv6JRn7JrZMo1Hn5kRYOHDA/E4cIJdE1xMHu3pGLiuYX7Uu6U9yz/u9H6JASaJnZ8y0K4Atm1igVtl+wxD1tOvoeHcJ2JUTdmS12ae4f40c2uwhv/oD8Ecu6Oc1OuKIN+dlRHuYwvUfzBrcU7BqD63n215P5c5REEbw3ETItv7BEaHHpZ9RaLLjX73XCoXKTb5MV8cgtqLE7MxEqbB4="
     ' Added by Ismail
 End Sub
 
@@ -1909,10 +1899,10 @@ Dim lngY As Long
         If lngReturnValue = 0 Then Err.Raise Err.LastDllError, , _
             "DLL error code shown above. Could not obtain key pair"
         'Determine the size of the signature
-        lngReturnValue = CryptSignHash(hHash, AT_SIGNATURE, 0, 0, vbNull, lngSigLength)
+        lngReturnValue = CryptSignHash(hHash, AT_SIGNATURE, "sign", 0, vbNull, lngSigLength)
         If lngSigLength > 0 Then ReDim abSig(lngSigLength - 1)
         'Sign the hash object
-        lngReturnValue = CryptSignHash(hHash, AT_SIGNATURE, 0, 0, abSig(0), lngSigLength)
+        lngReturnValue = CryptSignHash(hHash, AT_SIGNATURE, "sign", 0, abSig(0), lngSigLength)
         If lngReturnValue = 0 Then Err.Raise Err.LastDllError, , "DLL error code shown above. Could not sign the hash"
         ' the signature is now available
         ' size returned array to signature length
@@ -1924,10 +1914,11 @@ Dim lngY As Long
         lngSigLength = UBound(abSigned) + 1
         ReDim abSig(UBound(abSigned))
         abSig = abSigned ' load the Signature array
-        'MsgBox hHash & "  " & abSig(0) & "  " & lngSigLength & "  " & hKeyPair
-        lngReturnValue = CryptVerifySignature(hHash, abSig(0), lngSigLength, hKeyPair, 0, 0)
+        MsgBox hHash & "  " & abSig(0) & "  " & lngSigLength & "  " & hKeyPair
+        lngReturnValue = CryptVerifySignature(hHash, abSig(0), lngSigLength, hKeyPair, "sign", 0)
         If lngReturnValue = 0 Then 'some error occurred
             SignValidate = Err.LastDllError
+            MsgBox "SignValidate returns " & SignValidate
         Else
             SignValidate = 0
         End If

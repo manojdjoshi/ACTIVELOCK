@@ -124,7 +124,7 @@ Begin VB.Form frmCryptoAPI
          MultiLine       =   -1  'True
          ScrollBars      =   2  'Vertical
          TabIndex        =   12
-         Text            =   "frmCryptoAPI.frx":0321
+         Text            =   "frmCryptoAPI.frx":00CB
          Top             =   360
          Width           =   9000
       End
@@ -176,7 +176,6 @@ Begin VB.Form frmCryptoAPI
          MultiLine       =   -1  'True
          ScrollBars      =   2  'Vertical
          TabIndex        =   17
-         Text            =   "frmCryptoAPI.frx":03EC
          Top             =   405
          Width           =   9000
       End
@@ -186,7 +185,7 @@ Begin VB.Form frmCryptoAPI
          MultiLine       =   -1  'True
          ScrollBars      =   2  'Vertical
          TabIndex        =   7
-         Text            =   "frmCryptoAPI.frx":03F7
+         Text            =   "frmCryptoAPI.frx":03EC
          Top             =   1620
          Width           =   9000
       End
@@ -229,7 +228,7 @@ Begin VB.Form frmCryptoAPI
       Height          =   285
       Left            =   1920
       TabIndex        =   0
-      Text            =   "TestApp3.0"
+      Text            =   "ALVB6Sample3.6"
       Top             =   135
       Width           =   2910
    End
@@ -275,6 +274,12 @@ If cryptSession.VerifyContainer(Me.txtContainer.Text, False) Then
     Me.cmdBtn(1).Enabled = True
     Me.cmdBtn(2).Enabled = True
 End If
+
+txtResult.Text = "ALVB6Sample" & vbLf & "3.6" & vbLf & "Single" & vbLf & "2" & vbLf & "test&&&ALVB6Sample - 3.6" _
+    & vbLf & "Limited A" & vbLf & "2009/03/26" & vbLf & "5" & vbLf & "+nokey" & vbLf & _
+    "nokey" & vbLf & "nokey" & vbLf & "nokey" & vbLf & "nokey" & vbLf & "nokey" & vbLf & _
+    "nokey" & vbLf & "nokey" & vbLf & "nokey" & vbLf & "nokey" & vbLf & "nokey" & vbLf & _
+    "nokey" & vbLf & "nokey" & vbLf & "nokey"
 
 End Sub
 
@@ -466,7 +471,6 @@ Dim sKeyDongle As String, sKeyDonglePrivate As String
             Dim publicKey As String, privateKey As String
             'privateKey = "UzMwODoHAgAAACQAAPh4QW25OhuOEKDIksffuUuJYQTsMeu/lKoemvJz8Oj56ShbVvou69rbAybVHXbhKnhrDnS9wjuIqOt9MWNmzld4G2tr33ll/8aQ9MaOZT/0G7hDmOVFPtl3L/3OtbGR9nj5oSoGlNWTrsgYNa9fV2M5kD4tVnheVqa55pf23K2iN40nufeAd2Oqnk7p8JHx58nITbCkQ1Q1W1zGm4z6jIktn0sPdgGuxmI5Rnx0onBtVp9XMIkwJgyzWvWUqrUKG4v2bu98Vmms3+3o9WOJDNYbZB1MeaGfBA+B6lUonRATh7jfefSh/8WCKxnu7JJPtp23rM64CpclIhjq2s+YAYhUPe9J/u+lx0hE61psS9rlAhBFu8nqOPVLiPuJSu+p3K5kjF59O5u1Sp9nxA"
             'publicKey = "Uzg3fDg0OgYCAAAAJAAAUlNBMQACAAABAAEAp6+IziBn6pKjSMh+PBAvUUtiSbUqJPUpcBJWdSkgeYwfJo2FBE0PuuIqtS3vFUK9PLnGsQ1k7/0F/RnaGzhC6A"
-            '             Uzg3fDg0OgYCAAAAJAAAUlNBMQACAAABAAEAq9jBcc/NfSSpBcNdTcXUnp/aEm/wLr5jIJ1u/GqzFCQi6uFNCr90OvC3KlR2hGK3S/4s9UsjbEZ9lQTpX4vaww
             'privateKey = Base64_Decode(privateKey)
             'publicKey = Base64_Decode(publicKey)
             'privateBlob = cryptSession.StringToByteArray(privateKey, True, False)
