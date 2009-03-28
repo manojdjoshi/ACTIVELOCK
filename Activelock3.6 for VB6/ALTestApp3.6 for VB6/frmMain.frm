@@ -840,6 +840,12 @@ Private Sub Form_Load()
         ' trialHiddenFolder and trialSteganography are for "All Users"
         .TrialHideType = trialHiddenFolder Or trialRegistryPerUser Or trialSteganography
         
+        ' Use the following if you'd like to make the trial warning message persistent
+        ' until a license is registered.
+        ' Expiration of the trial is not so clear to some users without any warnings.
+        ' .trialWarningTemporary will show the trial expired warning only once.
+        .TrialWarning = trialWarningPersistent
+        
         ' Set the Software code
         ' This is the same thing as VCode
         ' Run Alugen first and create a VCode and GCode
