@@ -1,3 +1,4 @@
+
 Option Explicit
    Type ActivelockValues_t
          RegStatus As String
