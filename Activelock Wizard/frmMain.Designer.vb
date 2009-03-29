@@ -1064,7 +1064,7 @@ Partial Class frmMain
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "frmMain"
-        Me.Text = "Activelock Protection Source Code Generation Wizard V1.0.4"
+        Me.Text = "Activelock Protection Source Code Generation Wizard V3.6 RC1"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         CType(Me.ImageApplicationHelp11, System.ComponentModel.ISupportInitialize).EndInit()
