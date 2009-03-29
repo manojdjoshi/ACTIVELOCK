@@ -66,7 +66,7 @@ Public Class frmMain
             If RadioButton1.Checked = True Then 'added
                 GetCRC32Encoded() 'added
             Else
-                GetOwnCRC32Encoded() 'added V1.0.4
+                GetOwnCRC32Encoded() 'added V3.6
             End If
             LaunchCreateDevEnvModBuilder()
         Catch ex As Exception
