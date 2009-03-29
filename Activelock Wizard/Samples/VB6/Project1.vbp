@@ -1,6 +1,6 @@
 Type=Exe
-Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\..\WINDOWS\system32\stdole2.tlb#OLE Automation
-Reference=*\G{24AC23D4-F432-42C8-A6F0-70D5D58FCD2F}#1.0#0#..\..\..\..\..\WINDOWS\system32\activelock3.5.dll#ActiveLock Object Library 3.5
+Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\..\..\Windows\system32\stdole2.tlb#OLE Automation
+Reference=*\G{DB5E7E82-6F9F-4474-B564-46BF32858A79}#1.0#0#..\..\..\..\Windows\System32\activelock3.6.dll#ActiveLock Object Library 3.6
 Form=Form1.frm
 Module=modALVB6; modALVB6.bas
 IconForm="frmMain"

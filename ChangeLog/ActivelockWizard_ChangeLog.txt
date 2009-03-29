@@ -7,6 +7,10 @@ Activelock Wizard V1.0.4 Updates:
 -	Updated: Some functions was using vb6.compatibility library, now it only uses the dot net framework
 -	Updated: Inside the Control Init Routine it is now using all the .Acquire parameters, this speed up the init phase
 -	Updated: Cleaned UP the code some   
+-	Added: Support for the VB6 project creation
+-	Fixed: CRC calculation for VB6 project
+-	Added: Check for Trial Hiding Types   
+-	Removed: Support For Isolated Storage 
 
 Activelock Wizard V1.0.3 Updates:
 - NEW: Modified both VB6 and VB2005 outputs for the encoded CRC. 

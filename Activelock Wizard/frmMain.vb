@@ -2,16 +2,18 @@
 '"Activelock Wizard.exe" "AppName=Test App" "AppVersion=1.0.0" "PUB_KEY=frf4378t475gy54vgyw5g5y6cg556g576fg6f"
 Option Strict Off
 Imports System.IO
+Imports System.Text
+Imports System.Security.Cryptography
 
 Public Class frmMain
-    #Region "Form Routines"
-    
+#Region "Form Routines"
+
     Private Sub frmMain_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         LoadValuesFromAlugen()
     End Sub
-    
+
     Private Sub cboDevEnviroment_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboDevEnviroment.SelectedIndexChanged
-        
+
         If Strings.StrComp(cboDevEnviroment.Text, "VB2003", CompareMethod.Binary) = 0 Then
             btnSubmitDetails.Enabled = False
             MsgBox("Sorry VB2003 is not available in this" & vbCrLf & _
@@ -26,11 +28,11 @@ Public Class frmMain
             btnSubmitDetails.Enabled = True
         End If
     End Sub
-    
-    #End Region '"Form Routines"
-    
-    #Region "Form Button Routines"
-    
+
+#End Region '"Form Routines"
+
+#Region "Form Button Routines"
+
     Private Sub rbtnTrialTypeNone_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbtnTrialTypeNone.CheckedChanged
         If rbtnTrialTypeNone.Checked = True Then
             txtTrialLength.Enabled = False
@@ -42,32 +44,33 @@ Public Class frmMain
             lblTrialLength.Enabled = True
         End If
     End Sub
-    
+
     Private Sub btnSubmitDetails_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSubmitDetails.Click
         Try
-        ClearAllVariableValues()
-        GetSoftwareName()
-        GetSoftwareVersion()
-        GetSoftwarePassword()
-        GetSoftwareCode()
-        GetLicenceKeyType()
-        GetLicenceFileType()
-        GetAutoRegister()
-        GetTimeServerClockTampering()
-        GetSystemFilesClockTampering()
-        GetTrialType()
-        GetTrialHideType()
-        GetTrialLength()
-        GetLockTypes()
-        GetKeyStoreTypes()
-        GetDevEnvironment()
-        If RadioButton1.Checked = True Then 'added
-            GetCRC32Encoded() 'added
-            
-        End If
-        LaunchCreateDevEnvModBuilder()
+            ClearAllVariableValues()
+            GetSoftwareName()
+            GetSoftwareVersion()
+            GetSoftwarePassword()
+            GetSoftwareCode()
+            GetLicenceKeyType()
+            GetLicenceFileType()
+            GetAutoRegister()
+            GetTimeServerClockTampering()
+            GetSystemFilesClockTampering()
+            GetTrialType()
+            GetTrialHideType()
+            GetTrialLength()
+            GetLockTypes()
+            GetKeyStoreTypes()
+            GetDevEnvironment()
+            If RadioButton1.Checked = True Then 'added
+                GetCRC32Encoded() 'added
+            Else
+                GetOwnCRC32Encoded() 'added V1.0.4
+            End If
+            LaunchCreateDevEnvModBuilder()
         Catch ex As Exception
-        MsgBox(ex.Message.ToString, MsgBoxStyle.Critical)
+            MsgBox(ex.Message.ToString, MsgBoxStyle.Critical)
         End Try
     End Sub
 
@@ -313,10 +316,14 @@ Public Class frmMain
     Private Sub GetTrialHideType()
         'TrialHideType
         If TrialType <> TrialType_t.trialNone Then
-            If chkTrialHideTypeHiddenFolder.Checked = True Then TrialHideType.Add("trialHiddenFolder")
-            If chkTrialHideTypeRegistry.Checked = True Then TrialHideType.Add("trialRegistryPerUser")
-            If chkTrialHideTypeSteganography.Checked = True Then TrialHideType.Add("trialSteganography")
-            If chkTrialHideTypeIsolatedStorage.Checked = True Then TrialHideType.Add("trialIsolatedStorage")
+            If chkTrialHideTypeHiddenFolder.Checked = True Or chkTrialHideTypeSteganography.Checked = True Or chkTrialHideTypeIsolatedStorage.Checked = True Then
+                If chkTrialHideTypeHiddenFolder.Checked = True Then TrialHideType.Add("trialHiddenFolder")
+                If chkTrialHideTypeRegistry.Checked = True Then TrialHideType.Add("trialRegistryPerUser")
+                If chkTrialHideTypeSteganography.Checked = True Then TrialHideType.Add("trialSteganography")
+                If chkTrialHideTypeIsolatedStorage.Checked = True Then TrialHideType.Add("trialIsolatedStorage")
+            Else
+                Err.Raise(1, "GetTrialHideType", "Please Select The Trial hiding Types")
+            End If
         End If
     End Sub
 
@@ -407,41 +414,71 @@ Public Class frmMain
         'get the path from txtActiveLockPath
         'get its crc32
         'encode the crc
-
-
         Dim raw As String
         Dim c As New CRC32
         Dim crc As Integer = 0
-        Dim fileName As String = txtActivelockPath.Text 'System.Windows.Forms.Application.StartupPath & "\ActiveLock3_6Net.dll"
+        Dim fileName As String = txtActivelockPath.Text
         If txtActivelockPath.Text.Length = 0 Then
-            Err.Raise(1, "Private Sub GetSoftwarePassword", "Please Select The Activelock DLL first")
+            Err.Raise(1, "Private Sub GetCRC32Encoded", "Please Select The Activelock DLL first")
         End If
         If File.Exists(fileName) Then
+            If cboDevEnviroment.Text = "VB6" Then 'added V1.0.4
+                'This Is for VB6 ONLY
+                Dim vb6crc As Long = CRCCheckSumTypeLib(fileName)
+                CrcDataEnc = vb6crc - 121 'this will be added in the value() routine
+            Else
+                'This is for VB2005 and VB2008
+                Dim f As FileStream = New FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read, 8192)
+                crc = c.GetCrc32(f)
+                ' as the most commonly known format
+                raw = String.Format("{0:X8}", crc)
+                f.Close()
+                CrcDataEnc = Enc(raw)
+                System.Diagnostics.Debug.WriteLine("Hash: " & crc)
+            End If
+        End If
+    End Sub
+
+    Private Sub GetOwnCRC32Encoded() 'added V1.0.4
+        'Use the dll in System32 folder
+        'get its crc32
+        'encode the crc
+        Dim raw As String
+        Dim c As New CRC32
+        Dim crc As Integer = 0
+        Dim fileName As String = Nothing
+        If cboDevEnviroment.Text = "VB6" Then
+            'This Is for VB6 ONLY
+            fileName = System.Windows.Forms.Application.StartupPath & "\ActiveLock3.6.dll"
+            Dim vb6crc As Long = CRCCheckSumTypeLib(fileName)
+            CrcDataEnc = vb6crc - 121 'this will be added in the value() routine
+            System.Diagnostics.Debug.WriteLine("Hash: " & vb6crc)
+        Else
+            'This is for VB2005 and VB2008
+            fileName = System.Windows.Forms.Application.StartupPath & "\ActiveLock3_6Net.dll"
             Dim f As FileStream = New FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read, 8192)
             crc = c.GetCrc32(f)
             ' as the most commonly known format
-
-
             raw = String.Format("{0:X8}", crc)
             f.Close()
             CrcDataEnc = Enc(raw)
-
             System.Diagnostics.Debug.WriteLine("Hash: " & crc)
-            'Use Following Line only to get the CRC in Encoded format
-            'Dim GetCRC As String = Enc(VerifyActiveLockNETdll)
-            'If VerifyActiveLockNETdll() <> Dec("273.210.231.302.2E1.273.252.2EC") Then
-            ' Encrypted version of "activelock3NET.dll has been corrupted. If you were running a real application, it should terminate at this point."
-            'walter'MsgBox(Dec("42B.441.4FC.483.512.457.4A4.4C5.441.499.231.35A.2F7.39C.1FA.44C.4A4.4A4.160.478.42B.4F1.160.436.457.457.4BA.160.441.4C5.4E6.4E6.507.4D0.4FC.457.44C.1FA"))
-            'walter'End
-            'End If
-            'Else
-            'MsgBox(Dec("42B.441.4FC.483.512.457.4A4.4C5.441.499.231.35A.2F7.39C.1FA.44C.4A4.4A4.160.4BA.4C5.4FC.160.462.4C5.507.4BA.44C"))
-            'End
         End If
-        'End Sub
     End Sub
 
 #End Region '"General Form Routines"
+
+#Region "Calculate VB6 Checksum" 'added V1.0.4
+    Private Declare Function MapFileAndCheckSum Lib "imagehlp" Alias "MapFileAndCheckSumA" (ByVal Filename As String, ByRef HeaderSum As Long, ByRef CheckSum As Long) As Long
+
+    Private Function CRCCheckSumTypeLib(ByVal filename As String) As Long
+        Dim HeaderSum As Long
+        Dim RealSum As Long
+        MapFileAndCheckSum(filename, HeaderSum, RealSum)
+        CRCCheckSumTypeLib = RealSum
+    End Function
+
+#End Region '"Calculate VB6 Checksum"
 
 #Region "Help Provider"
 

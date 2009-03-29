@@ -38,11 +38,17 @@ Attribute VB_Name = "modALVB6"
 '* -----------------------------------------------------------------------------*'
 '*  Date     | Author | Revision       | Description                            *'
 '* ----------+--------+----------------+----------------------------------------*'
-'*  08.11.07 |  WS    | 1.0            | Initial revision.                      *'
+'*  25.10.07 |  WS    | 1.0.1          | Initial revision.                      *'
+'* ----------+--------+----------------+----------------------------------------*'
+'*  01.01.08 |  WS    | 1.0.2          | added VCode Decoding.                  *'
+'* ----------+--------+----------------+----------------------------------------*'
+'*  05.01.09 |  ZP    | 1.0.3          | added CRC Check.                       *'
+'* ----------+--------+----------------+----------------------------------------*'
+'*  28.03.09 |  WS    | 1.0.4          | added Activelock 3.6 Features          *'
 '* ----------+--------+----------------+----------------------------------------*'
 '********************************************************************************'
-'*              This Module was Created By ActiveLock Wizard V3.5.5             *'
-'*                     For Use With Activelock VB6 V3.5.5                       *'
+'*              This Module was Created By ActiveLock Wizard V1.0.4             *'
+'*                     For Use With Activelock VB6 V3.6                         *'
 '********************************************************************************'
 
 '********************************************************************************'
@@ -68,9 +74,11 @@ Attribute VB_Name = "modALVB6"
 '* General Notes                                                                *'
 '*------------------------------------------------------------------------------*'
 '* Please Add These References to your Project                                  *'
-'*        Activelock3_5                                                         *'
+'*        Activelock3_6                                                         *'
 '*                                                                              *'
-'********************************************************************************'Option Explicit
+'********************************************************************************'
+
+Option Explicit
    Type ActivelockValues_t
          RegStatus As String
          UsedDaysOrRuns As String
@@ -108,7 +116,8 @@ Public Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
 Dim expireTrialLicense As Boolean
 Dim strKeyStorePath As String
 Dim strAutoRegisterKeyPath As String
-Public Const PUB_KEY As String = "386.391.2CB.21B.210.226.23C.2D6.46D.323.2CB.2CB.2CB.2CB.499.2CB.2CB.2D6.391.3A7.210.2F7.528.2CB.2CB.37B.2CB.2CB.2CB.2F7.2CB.2CB.37B.2E1.2D6.46D.3A7.499.483.4D0.35A.48E.533.39C.2EC.507.3B2.370.3B2.370.23C.210.25D.46D.2E1.441.386.533.231.457.2CB.457.4D0.4D0.3DE.318.318.3B2.231.441.2EC.210.507.344.2D6.436.1D9.268.318.3C8.4AF.391.30D.2EC.226.247.318.2D6.4DB.2E1.2F7.528.3C8.21B.3A7.32E.533.302.365.436.268.3DE.2EC.273.268.34F.3C8.2E1.39C.3D3.231.4D0.231.23C.4D0.4D0.386.370.3BD.231.4C5.3A7.2E1.483.339.247.37B.44C.365.365.51D.42B.4C5.3D3.23C.512.4FC.4F1.4C5.37B.37B.39C.4BA.205.1D9.4BA.21B.53E.4FC.48E.483.391.386.34F.34F.457.499.4D0.37B.51D.462.35A.4D0.4D0.462.512.2E1.231.39C.462.231.499.344.1D9.436.44C.4DB.35A.370.3A7.3D3.391.370.2CB.35A.2EC.3B2.478.436.48E.344.3D3.2EC.4D0.512.37B.53E.512.370.4C5.2CB.370.4A4.23C.46D.29F.29F"
+Private Const CrcPartValue As Long = 711000
+Private Const PUB_KEY As String = "386.391.2CB.21B.210.226.23C.2D6.46D.323.2CB.2CB.2CB.2CB.499.2CB.2CB.2D6.391.3A7.210.2F7.528.2CB.2CB.37B.2CB.2CB.2CB.2F7.2CB.2CB.37B.2E1.2D6.441.51D.339.4D0.273.4D0.21B.4E6.499.37B.478.3DE.533.528.39C.457.386.2F7.478.273.2F7.34F.226.25D.231.51D.2D6.4DB.4D0.365.2EC.391.1D9.339.344.499.457.507.205.528.4BA.205.37B.210.1D9.51D.268.507.478.2D6.37B.462.3DE.4DB.268.462.205.4F1.44C.386.462.344.1D9.391.247.344.323.2D6.323.4FC.365.512.210.4C5.499.30D.23C.226.4AF.339.441.42B.35A.499.210.4AF.386.4C5.391.4C5.32E.499.3A7.370.34F.4E6.386.4D0.23C.231.48E.268.4BA.2CB.339.3B2.2E1.4AF.386.4E6.2EC.25D.4D0.3DE.21B.2EC.4C5.231.507.318.34F.23C.391.48E.533.44C.344.3D3.210.4C5.4AF.457.339.268.512.365.2E1.533.3DE.226.3BD.4A4.44C.3D3.533.210.323.528.51D.46D.37B.48E.35A.4DB.34F.318.344.507.30D.21B.4E6.2E1.46D.21B.2EC.386.23C.1D9.247.46D.29F.29F"
 
 Public Function InitActivelock() As Boolean
    Dim autoRegisterKey As String
@@ -125,24 +134,24 @@ Public Function InitActivelock() As Boolean
    ' Obtain AL instance and initialize its properties
    Set MyActiveLock = ActiveLock3.NewInstance()
    With MyActiveLock
-       .SoftwareName = "TestApp"
-       .SoftwareVersion = "3.0"
+       .SoftwareName = "WalterTest"
+       .SoftwareVersion = "1"
        .SoftwarePassword = Chr(99) & Chr(111) & Chr(111) & Chr(108)
        .LicenseKeyType = alsRSA
        .TrialType = trialRuns
        .TrialLength = 10
-       .TrialHideType = trialHiddenFolder Or trialRegistry
+       .TrialHideType = trialHiddenFolder Or trialRegistryPerUser
        .SoftwareCode = Dec(PUB_KEY)
-       .LockType = lockBIOS Or lockComp Or lockHD Or lockHDFirmware Or lockIP Or lockMAC Or lockMotherboard Or lockWindows
+       .LockType = lockFingerprint
        strAutoRegisterKeyPath = App.Path & "\" & .SoftwareName & ".all"
-       .AutoRegister = alsEnableAutoRegistration
+       .AutoRegister = alsDisableAutoRegistration
        .AutoRegisterKeyPath = strAutoRegisterKeyPath
        If FileExist(strAutoRegisterKeyPath) Then boolAutoRegisterKeyPath = True
        ' use alsCheckTimeServer to enforce time server check for clock tampering detection
        .CheckTimeServerForClockTampering = alsDontCheckTimeServer
        ' use alsCheckSystemFiles to enforce system files scanning for clock tampering detection
-       .CheckTimeServerForClockTampering = alsCheckSystemFiles
-       .LicenseFileType = alsLicenseFilePlain
+       .CheckTimeServerForClockTampering = alsDontCheckSystemFiles
+       .LicenseFileType = alsLicenseFileEncrypted
    ' Verify AL's authenticity
    VerifyActiveLockdll
    ' Initialize the keystore. We use a File keystore in this case.
@@ -164,7 +173,19 @@ Public Function InitActivelock() As Boolean
    End If
    ' Check registration status
    Dim strMsg As String
-   MyActiveLock.Acquire strMsg
+   Dim strRemainingTrialDays As String
+   Dim strRemainingTrialRuns As String
+   Dim strTrialLength As String
+   Dim strUsedDays As String
+   Dim strExpirationDate As String
+   Dim strRegisteredUser As String
+   Dim strRegisteredLevel As String
+   Dim strLicenseClass As String
+   Dim strMaxCount As String
+   Dim strLicenseFileType As String
+   Dim strLicenseType As String
+   Dim strUsedLockType As String
+   MyActiveLock.Acquire strMsg, strRemainingTrialDays, strRemainingTrialRuns, strTrialLength, strUsedDays, strExpirationDate, strRegisteredUser, strRegisteredLevel, strLicenseClass, strMaxCount, strLicenseFileType, strLicenseType, strUsedLockType
    If strMsg <> "" Then 'There's a trial
        A = Split(strMsg, vbCrLf)
        ActivelockValues.RegStatus = A(0)
@@ -190,32 +211,27 @@ Public Function InitActivelock() As Boolean
    ' aa = MyActiveLock.UsedLockType
    ' MsgBox aa(0) 'For example, if only lockHDfirmware was used, this will return 256
    ActivelockValues.RegStatus = "Registered"
-   ActivelockValues.UsedDaysOrRuns = MyActiveLock.UsedDays
-   ActivelockValues.ExpirationDate = MyActiveLock.ExpirationDate
+   ActivelockValues.UsedDaysOrRuns = strUsedDays
+   ActivelockValues.ExpirationDate = strExpirationDate
    If ActivelockValues.ExpirationDate = "" Then ActivelockValues.ExpirationDate = "Permanent"  'App has a permanent license
-   ActivelockValues.RegisteredUser = MyActiveLock.RegisteredUser
-   ActivelockValues.RegisteredLevel = MyActiveLock.RegisteredLevel
+   ActivelockValues.RegisteredUser = strRegisteredUser
+   ActivelockValues.RegisteredLevel = strRegisteredLevel
    ' Networked Licenses
-   If MyActiveLock.LicenseClass = "MultiUser" Then
+   If strLicenseClass = "0" Then  'MultiUser
        ActivelockValues.LicenseClass = "Networked"
    Else
        ActivelockValues.LicenseClass = "Single User"
    End If
-   ActivelockValues.MaxCount = MyActiveLock.MaxCount
-   'Read the license file into a string to determine the license type
-   Dim strBuff As String
-   Dim fNum As Integer
-   fNum = FreeFile
-   Open strKeyStorePath For Input As #fNum
-   strBuff = Input(LOF(1), 1)
-   Close #fNum
-   If Instring(strBuff, "LicenseType=3") Then
-       ActivelockValues.LicenceType = "Time Limited"
-   ElseIf Instring(strBuff, "LicenseType=1") Then
-       ActivelockValues.LicenceType = "Periodic"
-   ElseIf Instring(strBuff, "LicenseType=2") Then
-       ActivelockValues.LicenceType = "Permanent"
-   End If
+   ActivelockValues.MaxCount = strMaxCount
+   'Determine The License Type
+   Select Case strLicenseType
+       Case 3
+           ActivelockValues.LicenceType = "Time Limited"
+       Case 2
+           ActivelockValues.LicenceType = "Permanent"
+       Case 1
+           ActivelockValues.LicenceType = "Periodic"
+   End Select
    InitActivelock = True
    ActivelockValues.ValidTrial = True
    Exit Function
@@ -465,10 +481,10 @@ CheckIfDLLIsRegistered = True
 strDllPath = GetTypeLibPathFromObject()
 Result = IsDLLAvailable(strDllPath)
 If Result Then
-    ' MsgBox "Activelock3.dll is Registered !"
+    ' MsgBox "Activelock3.6.dll is Registered !"
     ' Just quietly proceed
 Else
-    MsgBox "Activelock3.dll is Not Registered!"
+    MsgBox "Activelock3.6.dll is Not Registered!"
     CheckIfDLLIsRegistered = False
 End If
 
@@ -476,7 +492,7 @@ End Function
 
 Public Function GetTypeLibPathFromObject() As String
     Dim strDllPath As String
-    GetTypeLibPathFromObject = WinSysDir() & "\activelock3.5.dll"
+    GetTypeLibPathFromObject = WinSysDir() & "\activelock3.6.dll"
 End Function
 
 Private Function IsDLLAvailable(ByVal DllFilename As String) As Boolean
@@ -513,7 +529,7 @@ End Function
 ' Returns the expected CRC value of ActiveLock3.dll
 '
 Private Property Get Value() As Long
-    Value = 895622 + 838      ' compute it so that it can't be easily spotted via a Hex Editor
+    Value = CrcPartValue + 121
 End Property
 
 

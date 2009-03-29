@@ -358,6 +358,7 @@ Partial Class frmMain
         'chkTrialHideTypeIsolatedStorage
         '
         Me.chkTrialHideTypeIsolatedStorage.AutoSize = True
+        Me.chkTrialHideTypeIsolatedStorage.Enabled = False
         Me.chkTrialHideTypeIsolatedStorage.Location = New System.Drawing.Point(23, 89)
         Me.chkTrialHideTypeIsolatedStorage.Name = "chkTrialHideTypeIsolatedStorage"
         Me.chkTrialHideTypeIsolatedStorage.Size = New System.Drawing.Size(103, 17)
@@ -1039,7 +1040,7 @@ Partial Class frmMain
         '
         'OpenFileDialog1
         '
-        Me.OpenFileDialog1.FileName = "OpenFileDialog1"
+        Me.OpenFileDialog1.Filter = "DLL File|*.dll"
         '
         'frmMain
         '
