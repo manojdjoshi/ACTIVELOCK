@@ -14,8 +14,8 @@
 			<table cellSpacing="0" cellPadding="0" width="660" border="0">
 				<tr>
 					<td vAlign="middle" align="center" style="width: 59px"><IMG height="31" src="images/I_Trust_AL_small.gif" width="68" border="0"></td>
-					<td vAlign="middle" align="center" style="text-align: left"><b>Alugen - ActiveLock Key Generator for 
-							ASP.NET v3.6</b></td>
+					<td vAlign="middle" align="center" style="text-align: left"><b>ASPNETAlugen v3.6 - ActiveLock Key Generator for 
+							ASP.NET</b></td>
 				</tr>
 				<tr>
 					<td colSpan="2">&nbsp;</td>
@@ -45,18 +45,6 @@
                     <td class="rowHeader" valign="top" width="150">
                         Strength</td>
                     <td valign="top">
-                        <asp:CheckBox ID="chkNetworkedLicense" runat="server" AutoPostBack="True" CssClass="rowHeader" 
-                            Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 98; left: 123px; position: absolute; top: 138px; width: 150px;" 
-                            Text="Network License" />
-                        <asp:Label ID="lblNumberOfUsers" runat="server" CssClass="rowHeader" 
-                            Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 98; left: 276px; position: absolute; top: 142px; width: 100px;" 
-                            Text="Number of Users" />
-                        <asp:TextBox ID="txtMaxCount" runat="server" CssClass="rowHeader" 
-                            Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 99; left: 378px; position: absolute; top: 141px; width: 70px;" 
-                            Text="" />
                         <asp:RadioButton ID="optStrength0" runat="server" Checked="True" Font-Size="XX-Small"
                             Style="z-index: 100; left: 128px; position: absolute; top: 160px" Text="ALCrypto 1024-bit" GroupName="strength" Font-Bold="False" Width="137px" />
                         <asp:RadioButton ID="optStrength1" runat="server" Font-Size="XX-Small" Style="z-index: 101;
@@ -128,10 +116,10 @@
 														</asp:DropDownList></TD>
                 <TD width=25 height=1>&nbsp; </TD>
                 <TD class=rowHeader vAlign=top width=144 height=1>&nbsp;</TD>
-                <TD vAlign=top height=1><asp:CheckBox id=chkUseItemData runat="server" Text="Use item data for code" CssClass="rowHeader"></asp:CheckBox></TD></TR>
+                <TD vAlign=top height=1><asp:CheckBox id=chkUseItemData runat="server" AutoPostBack="True" Text="Use item data for code" CssClass="rowHeader"></asp:CheckBox></TD></TR>
               <TR>
                 <TD class=rowHeader vAlign=top style="width: 150px"><asp:Label id=lblExpiry runat="server">Expire on date</asp:Label></TD>
-                <TD vAlign=top><asp:TextBox id=txtDays runat="server" Width="160px"></asp:TextBox></TD>
+                <TD vAlign=top><asp:TextBox id=txtDays runat="server" AutoPostBack="True" Width="160px"></asp:TextBox></TD>
                 <TD align=center width=25><asp:ImageButton id=cmdSelectExpireDate runat="server" ToolTip="Select expire date" ImageUrl="images/calendar.gif" BorderWidth="0px" BorderColor="#808080"></asp:ImageButton></TD>
                 <TD class=rowHeader vAlign=top width=144>&nbsp; 
                   <asp:PlaceHolder id=plhDate runat="server"></asp:PlaceHolder></TD>
@@ -144,127 +132,155 @@
                 </TD>
                 </TR>
               <TR>
-                <TD class=rowHeader vAlign=top style="width: 150px">Install code</TD>
+                <TD class=rowHeader vAlign=top style="width: 150px">&nbsp;</TD>
                 <TD vAlign=top width=330 colSpan=3>
-                    <asp:TextBox id=txtInstallCode runat="server" 
-                        Width="341px" Font-Size="XX-Small" Height="22px"></asp:TextBox></TD>
-                <TD class=rowHeader vAlign=top align=left><IMG 
-                  class=htmlimagebuttons id=cmdPasteInstallCode 
-                  alt="Paste installation code" 
-                  src="images/paste_install_code.gif" border=0 
-              runat="server"></TD></TR>
+                
+                        <asp:CheckBox ID="chkNetworkedLicense" runat="server" AutoPostBack="True" CssClass="rowHeader" 
+                            Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
+                            Style="z-index: 98; left: 126px; position: absolute; top: 164px; width: 150px;" 
+                            Text="Network License" />
+                        <asp:Label ID="lblNumberOfUsers" runat="server" CssClass="rowHeader" 
+                            Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
+                            Style="z-index: 98; left: 276px; position: absolute; top: 168px; width: 100px;" 
+                            Text="Number of Users" />
+                        <asp:TextBox ID="txtMaxCount" runat="server" CssClass="rowHeader" 
+                            Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
+                            Style="z-index: 99; left: 378px; position: absolute; top: 167px; width: 54px;" 
+                            Text="" />
+                
+                    &nbsp;</TD>
+                <TD class=rowHeader vAlign=top align=left>&nbsp;</TD></TR>
+                <tr>
+                    <td class="rowHeader" style="width: 150px" valign="top">
+                        Install code</td>
+                    <td colspan="3" valign="top" width="330">
+                        <asp:TextBox ID="txtInstallCode" runat="server" AutoPostBack="True" Font-Size="XX-Small" 
+                            Height="22px" Width="343px"></asp:TextBox>
+                    </td>
+                    <td align="left" class="rowHeader" valign="top">
+                        <img id="cmdPasteInstallCode" runat="server" AutoPostBack="True" alt="Paste installation code" 
+                            border="0" class="htmlimagebuttons" src="images/paste_install_code.gif">
+                        </img>
+                        <asp:Button ID="cmdPaste" runat="server"  AutoPostBack="True" Height="22px" Text="Paste" 
+                            Width="53px" />
+                    </td>
+                </tr>
               <TR>
                 <TD class=rowHeader vAlign=top style="width: 150px">User name</TD>
-                <TD vAlign=top colSpan=4><asp:TextBox id=txtUserName runat="server" Width="545px"></asp:TextBox></TD></TR>
-                <tr>
+                <TD vAlign=top colSpan=4><asp:TextBox id=txtUserName runat="server" Width="546px"></asp:TextBox></TD></TR>
+               <tr>
                     <td class="rowHeader" style="width: 150px; height: 178px" valign="top">
-                        &nbsp;</td>
+                        <asp:Button ID="cmdCheckAll" runat="server" Text="Check All" />
+                        <br />
+                        <br />
+                        <asp:Button ID="cmdUnCheckAll" runat="server" Text="Uncheck All" Width="84px" />
+                    </td>
                     <td class="rowheader" colspan="4" style="height: 250px" valign="top">
                         <asp:CheckBox ID="chkLockMACaddress" runat="server" AutoPostBack="True" CssClass="rowHeader" 
                             Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 100; left: 126px; position: absolute; top: 217px; width: 200px;" 
+                            Style="z-index: 100; left: 126px; position: absolute; top: 239px; width: 200px;" 
                             Text="Lock to MAC Address" />
                         <asp:CheckBox ID="chkLockComputer" runat="server" AutoPostBack="True" CssClass="rowheader" Font-Names="Microsoft Sans Serif"
-                            Font-Size="XX-Small" Style="z-index: 101; left: 126px; position: absolute; top: 234px"
+                            Font-Size="XX-Small" Style="z-index: 101; left: 126px; position: absolute; top: 256px"
                             Text="Lock to Computer Name" Width="200px" />
                         <asp:CheckBox ID="chkLockHD" runat="server" AutoPostBack="True" CssClass="rowheader" Font-Names="Microsoft Sans Serif"
-                            Font-Size="XX-Small" Style="z-index: 102; left: 126px; position: absolute; top: 251px"
+                            Font-Size="XX-Small" Style="z-index: 102; left: 126px; position: absolute; top: 273px"
                             Text="Lock to HDD Volume Serial" Width="200px" />
                         <asp:CheckBox ID="chkLockHDfirmware" runat="server" AutoPostBack="True" CssClass="rowheader" Font-Names="Microsoft Sans Serif"
-                            Font-Size="XX-Small" Style="z-index: 103; left: 126px; position: absolute; top: 268px"
+                            Font-Size="XX-Small" Style="z-index: 103; left: 126px; position: absolute; top: 290px"
                             Text="Lock to HDD Firmware Serial" Width="200px" />
                         <asp:CheckBox ID="chkLockWindows" runat="server" AutoPostBack="True" CssClass="rowheader" Font-Names="Microsoft Sans Serif"
-                            Font-Size="XX-Small" Style="z-index: 104; left: 126px; position: absolute; top: 285px"
+                            Font-Size="XX-Small" Style="z-index: 104; left: 126px; position: absolute; top: 307px"
                             Text="Lock to Windows Serial" Width="200px" />
                         <asp:CheckBox ID="chkLockBIOS" runat="server" AutoPostBack="True" CssClass="rowheader" Font-Names="Microsoft Sans Serif"
-                            Font-Size="XX-Small" Style="z-index: 105; left: 126px; position: absolute; top: 302px"
+                            Font-Size="XX-Small" Style="z-index: 105; left: 126px; position: absolute; top: 324px"
                             Text="Lock to BIOS Version" Width="200px" />
                         <asp:CheckBox ID="chkLockMotherboard" runat="server" AutoPostBack="True" CssClass="rowheader" Font-Names="Microsoft Sans Serif"
-                            Font-Size="XX-Small" Style="z-index: 106; left: 126px; position: absolute; top: 319px"
+                            Font-Size="XX-Small" Style="z-index: 106; left: 126px; position: absolute; top: 341px"
                             Text="Lock to Motherboard Serial" Width="200px" />
                         <asp:CheckBox ID="chkLockIP" runat="server" AutoPostBack="True" CssClass="rowheader" Font-Names="Microsoft Sans Serif"
-                            Font-Size="XX-Small" Style="z-index: 107; left: 126px; position: absolute; top: 336px"
+                            Font-Size="XX-Small" Style="z-index: 107; left: 126px; position: absolute; top: 358px"
                             Text="Lock to Local IP Number" Width="200px" />
                         <asp:CheckBox ID="chkLockExternalIP" runat="server" AutoPostBack="True" CssClass="rowheader" 
                             Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 108; left: 126px; position: absolute; top: 353px" 
+                            Style="z-index: 108; left: 126px; position: absolute; top: 375px" 
                             Text="Lock to External IP Number" Width="200px" />
                         <asp:CheckBox ID="chkLockFingerprint" runat="server" AutoPostBack="True" CssClass="rowheader" 
                             Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 109; left: 126px; position: absolute; top: 370px" 
+                            Style="z-index: 109; left: 126px; position: absolute; top: 392px" 
                             Text="Lock to Computer Fingerprint" Width="200px" />
                         <asp:CheckBox ID="chkLockMemory" runat="server" AutoPostBack="True" CssClass="rowheader" 
                             Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 110; left: 126px; position: absolute; top: 387px" 
+                            Style="z-index: 110; left: 126px; position: absolute; top: 409px" 
                             Text="Lock to Memory ID" Width="200px" />
                         <asp:CheckBox ID="chkLockCPUID" runat="server" AutoPostBack="True" CssClass="rowheader" 
                             Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 111; left: 126px; position: absolute; top: 404px" 
+                            Style="z-index: 111; left: 126px; position: absolute; top: 426px" 
                             Text="Lock to CPU ID" Width="200px" />
                         <asp:CheckBox ID="chkLockBaseboardID" runat="server" AutoPostBack="True" CssClass="rowheader" 
                             Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 112; left: 126px; position: absolute; top: 421px" 
+                            Style="z-index: 112; left: 126px; position: absolute; top: 443px" 
                             Text="Lock to Baseboard ID" Width="200px" />
                         <asp:CheckBox ID="chkLockVideoID" runat="server" AutoPostBack="True" CssClass="rowheader" 
                             Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 113; left: 126px; position: absolute; top: 438px" 
+                            Style="z-index: 113; left: 126px; position: absolute; top: 460px" 
                             Text="Lock to Video ID" Width="200px" />
 
                         <asp:Label ID="lblLockMACaddress" runat="server" CssClass="rowheader" 
                             Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 114; left: 330px; position: absolute; top: 219" 
+                            Style="z-index: 114; left: 330px; position: absolute; top: 247" 
                             Text="" Width="200px" />
                         <asp:Label ID="lblLockComputer" runat="server" CssClass="rowheader" 
                             Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 115; left: 330px; position: absolute; top: 236" 
+                            Style="z-index: 115; left: 330px; position: absolute; top: 264" 
                             Text="" Width="200px" />
                         <asp:Label ID="lblLockHD" runat="server" CssClass="rowheader" 
                             Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 116; left: 330px; position: absolute; top: 253" 
+                            Style="z-index: 116; left: 330px; position: absolute; top: 281" 
                             Text="" Width="200px" />
                         <asp:Label ID="lblLockHDfirmware" runat="server" CssClass="rowheader" 
                             Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 117; left: 330px; position: absolute; top: 270" 
+                            Style="z-index: 117; left: 330px; position: absolute; top: 298" 
                             Text="" Width="200px" />
                         <asp:Label ID="lblLockWindows" runat="server" CssClass="rowheader" 
                             Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 118; left: 330px; position: absolute; top: 287" 
+                            Style="z-index: 118; left: 330px; position: absolute; top: 315" 
                             Text="" Width="200px" />
                         <asp:Label ID="lblLockBIOS" runat="server" CssClass="rowheader" 
                             Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 119; left: 330px; position: absolute; top: 304" 
+                            Style="z-index: 119; left: 330px; position: absolute; top: 332" 
                             Text="" Width="200px" />
                         <asp:Label ID="lblLockMotherboard" runat="server" CssClass="rowheader" 
                             Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 120; left: 330px; position: absolute; top: 321" 
+                            Style="z-index: 120; left: 330px; position: absolute; top: 349" 
                             Text="" Width="200px" />
                         <asp:Label ID="lblLockIP" runat="server" CssClass="rowheader" 
                             Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 121; left: 330px; position: absolute; top: 338" 
+                            Style="z-index: 121; left: 330px; position: absolute; top: 366" 
                             Text="" Width="200px" />
                         <asp:Label ID="lblLockExternalIP" runat="server" CssClass="rowheader" 
                             Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 122; left: 330px; position: absolute; top: 355" 
+                            Style="z-index: 122; left: 330px; position: absolute; top: 383" 
                             Text="" Width="200px" />
                         <asp:Label ID="lblLockFingerprint" runat="server" CssClass="rowheader" 
                             Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 123; left: 330px; position: absolute; top: 372" 
+                            Style="z-index: 123; left: 330px; position: absolute; top: 400" 
                             Text="" Width="200px" />
                         <asp:Label ID="lblLockMemory" runat="server" CssClass="rowheader" 
                             Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 124; left: 330px; position: absolute; top: 389" 
+                            Style="z-index: 124; left: 330px; position: absolute; top: 417" 
                             Text="" Width="200px" />
                         <asp:Label ID="lblLockCPUID" runat="server" CssClass="rowheader" 
                             Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 125; left: 330px; position: absolute; top: 406" 
+                            Style="z-index: 125; left: 330px; position: absolute; top: 434" 
                             Text="" Width="200px" />
                         <asp:Label ID="lblLockBaseboardID" runat="server" CssClass="rowheader" 
                             Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 126; left: 330px; position: absolute; top: 423" 
+                            Style="z-index: 126; left: 330px; position: absolute; top: 451" 
                             Text="" Width="200px" />
                         <asp:Label ID="lblLockVideoID" runat="server" CssClass="rowheader" 
                             Font-Names="Microsoft Sans Serif" Font-Size="XX-Small" 
-                            Style="z-index: 127; left: 330px; position: absolute; top: 440" 
+                            Style="z-index: 127; left: 330px; position: absolute; top: 468" 
                             Text="" Width="200px" />
                    </td>
                 </tr>
