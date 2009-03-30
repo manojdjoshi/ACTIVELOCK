@@ -2626,29 +2626,29 @@ noInfo:
             With cboRegisteredLevel
                 .Items.Clear()
                 .Items.Add(New Mylist("Limited A", 0))
-                .Items.Add(New Mylist("Limited B", 0))
-                .Items.Add(New Mylist("Limited C", 0))
-                .Items.Add(New Mylist("Limited D", 0))
-                .Items.Add(New Mylist("Limited E", 0))
-                .Items.Add(New Mylist("No Print/Save", 0))
-                .Items.Add(New Mylist("Educational A", 0))
-                .Items.Add(New Mylist("Educational B", 0))
-                .Items.Add(New Mylist("Educational C", 0))
-                .Items.Add(New Mylist("Educational D", 0))
-                .Items.Add(New Mylist("Educational E", 0))
-                .Items.Add(New Mylist("Level 1", 0))
-                .Items.Add(New Mylist("Level 2", 0))
-                .Items.Add(New Mylist("Level 3", 0))
-                .Items.Add(New Mylist("Level 4", 0))
-                .Items.Add(New Mylist("Light Version", 0))
-                .Items.Add(New Mylist("Pro Version", 0))
-                .Items.Add(New Mylist("Enterprise Version", 0))
-                .Items.Add(New Mylist("Demo Only", 0))
-                .Items.Add(New Mylist("Full Version-Europe", 0))
-                .Items.Add(New Mylist("Full Version-Africa", 0))
-                .Items.Add(New Mylist("Full Version-Asia", 0))
-                .Items.Add(New Mylist("Full Version-USA", 0))
-                .Items.Add(New Mylist("Full Version-International", 0))
+                .Items.Add(New Mylist("Limited B", 1))
+                .Items.Add(New Mylist("Limited C", 2))
+                .Items.Add(New Mylist("Limited D", 3))
+                .Items.Add(New Mylist("Limited E", 4))
+                .Items.Add(New Mylist("No Print/Save", 5))
+                .Items.Add(New Mylist("Educational A", 6))
+                .Items.Add(New Mylist("Educational B", 7))
+                .Items.Add(New Mylist("Educational C", 8))
+                .Items.Add(New Mylist("Educational D", 9))
+                .Items.Add(New Mylist("Educational E", 10))
+                .Items.Add(New Mylist("Level 1", 11))
+                .Items.Add(New Mylist("Level 2", 12))
+                .Items.Add(New Mylist("Level 3", 13))
+                .Items.Add(New Mylist("Level 4", 14))
+                .Items.Add(New Mylist("Light Version", 15))
+                .Items.Add(New Mylist("Pro Version", 16))
+                .Items.Add(New Mylist("Enterprise Version", 17))
+                .Items.Add(New Mylist("Demo Only", 18))
+                .Items.Add(New Mylist("Full Version-Europe", 19))
+                .Items.Add(New Mylist("Full Version-Africa", 20))
+                .Items.Add(New Mylist("Full Version-Asia", 21))
+                .Items.Add(New Mylist("Full Version-USA", 22))
+                .Items.Add(New Mylist("Full Version-International", 23))
                 .SelectedIndex = 0
                 SaveComboBox(strRegisteredLevelDBName, cboRegisteredLevel.Items.GetEnumerator, True)
             End With
@@ -2674,6 +2674,8 @@ noInfo:
         Dim sIndex As Integer = Convert.ToInt32(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cboProducts", CStr(0)))
         If sIndex > cboProducts.Items.Count Then
             cboProducts.SelectedIndex = cboProducts.Items.Count
+        ElseIf sIndex < 0 Then
+            cboProducts.SelectedIndex = 0
         Else
             cboProducts.SelectedIndex = sIndex - 1
         End If
