@@ -259,7 +259,7 @@ RetrieveProductsError:
 
         Dim strLic As String
         strLic = Lic.ToString_Renamed() & vbLf & strLock
-        System.Diagnostics.Debug.WriteLine("strLic: " & vbCrLf & strLic)
+        'System.Diagnostics.Debug.WriteLine("strLic: " & vbCrLf & strLic)
 
         If strLeft(ProdInfo.VCode, 3) <> "RSA" Then
             ' sign it
