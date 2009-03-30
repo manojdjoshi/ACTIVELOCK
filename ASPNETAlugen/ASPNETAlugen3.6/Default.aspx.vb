@@ -57,14 +57,14 @@ Namespace ASPNETAlugen3
         Public blnIsFirstLaunch As Boolean
 
         ' Hardware keys from the Installation Code
-        Private MACaddress, ComputerName As String
-        Private VolumeSerial, FirmwareSerial As String
-        Private WindowsSerial, BIOSserial As String
-        Private MotherboardSerial, IPaddress As String
-        Private ExternalIP, Fingerprint As String
-        Private Memory, CPUID As String
-        Private BaseboardID, VideoID As String
-        Private systemEvent As Boolean
+        Public MACaddress, ComputerName As String
+        Public VolumeSerial, FirmwareSerial As String
+        Public WindowsSerial, BIOSserial As String
+        Public MotherboardSerial, IPaddress As String
+        Public ExternalIP, Fingerprint As String
+        Public Memory, CPUID As String
+        Public BaseboardID, VideoID As String
+        Public systemEvent As Boolean
 
         Public PROJECT_INI_FILENAME As String
         Public cboProducts_Array() As String
@@ -88,7 +88,7 @@ Namespace ASPNETAlugen3
 
         Public Shared ReadOnly ExpBase64 As Regex = New Regex("^[a-zA-Z0-9+/=]{4,}$", RegexOptions.Compiled)
 
-        Private Sub AppendLockString(ByRef strLock As String, ByVal newSubString As String)
+        Public Sub AppendLockString(ByRef strLock As String, ByVal newSubString As String)
             '===============================================================================
             ' Name: Sub AppendLockString
             ' Input:
@@ -106,7 +106,7 @@ Namespace ASPNETAlugen3
                 strLock = strLock & vbLf & newSubString
             End If
         End Sub
-        Private Function ReconstructedInstallationCode() As String
+        Public Function ReconstructedInstallationCode() As String
             Dim strLock As String = Nothing
             Dim strReq As String
             Dim noKey As String
@@ -216,7 +216,7 @@ Namespace ASPNETAlugen3
             strReq = strLock & vbLf & user
 
             ' combine with app name and version
-            strReq = strReq & "&&&" & cboProduct.Text
+            strReq = strReq & "&&&" & cboProduct.Items(cboProduct.SelectedIndex).Text
 
             ' base-64 encode the request
             Dim strReq2 As String
@@ -225,7 +225,7 @@ Namespace ASPNETAlugen3
 
         End Function
 
-        Private Function GetUserSoftwareNameandVersionfromInstallCode(ByVal strInstCode As String) As String
+        Public Function GetUserSoftwareNameandVersionfromInstallCode(ByVal strInstCode As String) As String
             On Error GoTo noInfo
             If strInstCode = "" Then Return String.Empty
             strInstCode = ActiveLock3Globals_definst.Base64Decode(txtInstallCode.Text)
@@ -351,6 +351,7 @@ noInfo:
                 cmdCopyGCode.Attributes.Add("OnClick", "CopyToClipboard('" & txtGCode.ClientID & "');")
                 cmdCopyLicenseKey.Attributes.Add("OnClick", "CopyToClipboard('" & txtLicenseKey.ClientID & "');")
                 cmdPasteInstallCode.Attributes.Add("OnClick", "PasteFromClipboard('" & txtInstallCode.ClientID & "');")
+                cmdPaste.Attributes.Add("OnClick", "PasteFromClipboard('" & txtInstallCode.ClientID & "');")
 
                 grdProducts.SelectedItem.Attributes.Item("onmouseover") = "this.style.cursor='hand'"
                 grdProducts.SelectedItem.Attributes.Remove("onmouseout")
@@ -383,7 +384,7 @@ noInfo:
             blnIsFirstLaunch = False
 
         End Sub
-        Private Sub LoadFormSetting()
+        Public Sub LoadFormSetting()
             'Read the program INI file to retrieve control settings
             On Error GoTo LoadFormSetting_Error
 
@@ -1294,10 +1295,10 @@ exitValidate:
             ResetCalendarControls()
             Select Case cboLicenseType.SelectedValue
                 Case "0" 'time locked
-                    lblExpiry.Text = "Expiration:"
+                    lblExpiry.Text = "Expiration:   "
                     txtDays.Text = Date.Now.AddDays(365).ToString("yyyy/MM/dd")
                     'lblDays.Text = "yyyy/MM/dd"
-                    txtDays.Visible = False
+                    'txtDays.Visible = False
                     'dtpExpireDate.Visible = True
                     'dtpExpireDate.Value = Date.Now.AddDays(30)
                     cmdSelectExpireDate.Visible = True
@@ -1309,13 +1310,13 @@ exitValidate:
                     lblExpiry.Text = "Expires after:"
                     txtDays.Text = "365"
                     'lblDays.Text = "Day(s)"
-                    txtDays.Visible = True
+                    'txtDays.Visible = True
                     'dtpExpireDate.Visible = False
                     txtDays.ReadOnly = False
                     txtDays.BackColor = System.Drawing.ColorTranslator.FromOle(&H80000005)
                     txtDays.ForeColor = System.Drawing.Color.Black
                 Case "2" 'permanent
-                    lblExpiry.Text = "Permanent"
+                    lblExpiry.Text = "Permanent     "
                     cmdSelectExpireDate.Visible = False
                     txtDays.ReadOnly = True
                     txtDays.BackColor = System.Drawing.ColorTranslator.FromOle(&H8000000F)
@@ -1419,7 +1420,8 @@ exitValidate:
                 grdProducts.SelectedIndex = dt.Rows.Count - 1
             End If
             If Not MagicAjax.MagicAjaxContext.Current.IsAjaxCall Then
-                cboProduct.Items.Add(New ListItem(Name & " - " & Ver, Name & "|" & Ver))
+                'cboProduct.Items.Add(New ListItem(Name & " - " & Ver, Name & "|" & Ver))
+                cboProduct.Items.Add(New ListItem(Name & " (" & Ver & ")", Name & "|" & Ver))
 
                 ReDim Preserve cboProducts_Array(cboProduct.Items.Count - 1)
                 If Code1.Contains("RSA512") Then
@@ -1457,13 +1459,22 @@ exitValidate:
                 cmdAddProduct.Enabled = True
             End If
         End Sub
-
-        Private Sub txtProductVersion_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtProductVersion.TextChanged
-            '  
+        Private Sub txtLicenseKey_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtLicenseKey.TextChanged
+            cmdSaveLicenseFile.Enabled = CBool(txtLicenseKey.Text.Length > 0)
+        End Sub
+        Private Sub txtproductName_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtProductName.TextChanged
+            UpdateCodeGenButtonStatus()
+            UpdateAddButtonStatus()
+        End Sub
+        Private Sub txtProductVersion_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtProductVersion.TextChanged
+            ' New product - will be processed by Add command
+            UpdateCodeGenButtonStatus()
+            UpdateAddButtonStatus()
         End Sub
 
-        Private Sub txtProductName_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtProductName.TextChanged
-            '
+        Private Sub txtUser_TextChanged(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtUserName.TextChanged
+            If systemEvent Then Exit Sub
+            If Len(txtInstallCode.Text) <> 8 Then txtInstallCode.Text = ActiveLock.InstallationCode(Trim(txtUserName.Text))
         End Sub
 
         Private Sub txtInstallCode_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles txtInstallCode.TextChanged
@@ -1769,14 +1780,14 @@ exitValidate:
             ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
             Set_locale("")
 
-            'If cboLicenseType.Text = "Time Locked" Then
-            '    ' Check to see if there's a valid expiration date
-            '    If CDate(CType(dtpExpireDate.Value, DateTime).ToString("yyyy/MM/dd")) < CDate(Format(Date.Now, "yyyy/MM/dd")) Then
-            '        Set_locale(regionalSymbol)
-            '        MsgBox("Entered date occurs in the past.", vbExclamation)
-            '        Exit Sub
-            '    End If
-            'End If
+            If cboLicenseType.Text = "Time Locked" Then
+                ' Check to see if there's a valid expiration date
+                If CDate(CType(txtDays.Text, DateTime).ToString("yyyy/MM/dd")) < CDate(Format(Date.Now, "yyyy/MM/dd")) Then
+                    Set_locale(regionalSymbol)
+                    MsgBox("Entered date occurs in the past.", vbExclamation)
+                    Exit Sub
+                End If
+            End If
 
             If txtInstallCode.Text.Length <> 8 Then  'Not a Short Key License
                 If chkLockMACaddress.Checked = False _
@@ -1798,7 +1809,10 @@ exitValidate:
             End If
 
             systemEvent = True
-            If Len(txtInstallCode.Text) <> 8 Then txtInstallCode.Text = ReconstructedInstallationCode()
+            If Len(txtInstallCode.Text) <> 8 Then
+                Dim dummyUser As String = GetUserFromInstallCode(txtInstallCode.Text)
+                txtInstallCode.Text = ReconstructedInstallationCode()
+            End If
             systemEvent = False
 
             Try
@@ -1931,7 +1945,7 @@ exitValidate:
             Dim i As Integer
             Dim Count As Integer
             Dim strNew64Chunk As String
-            Dim sResult As New StringBuilder(String.Empty)
+            Dim sResult As String = ""
 
             Count = strdata.Length
             For i = 0 To Count Step 64
@@ -1942,14 +1956,14 @@ exitValidate:
                     strNew64Chunk = strdata.Substring(i, 64)
                 End If
                 If sResult.Length > 0 Then
-                    sResult.Append(vbCrLf)
-                    sResult.Append(strNew64Chunk)
+                    sResult = sResult & strNew64Chunk
+                    'sResult = sResult & vbCrLf & strNew64Chunk
                 Else
-                    sResult.Append(strNew64Chunk)
+                    sResult = sResult & strNew64Chunk
                 End If
             Next
 
-            Make64ByteChunks = sResult.ToString
+            Make64ByteChunks = sResult
         End Function
 
         Private Sub cmdEmailLicenseKey_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdEmailLicenseKey.Click
@@ -2178,9 +2192,8 @@ InitForm_Error:
 
             SayAjax("Error " & Err.Number & " (" & Err.Description & ") in procedure in Page Load")
         End Sub
-
-        Protected Sub cmdPasteInstallCode_Init(ByVal sender As Object, ByVal e As System.EventArgs) Handles cmdPasteInstallCode.Init
-            If txtInstallCode.Text.Length < 8 Then Exit Sub
+        Private Sub cmdPaste_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles cmdPaste.Click
+            If txtInstallCode.Text.Length < 8 Then GoTo continueHere
 
             If txtInstallCode.Text.Substring(0, 8).ToLower = "you must" Then 'short key license
                 Dim arrProdVer() As String
@@ -2190,48 +2203,102 @@ InitForm_Error:
                 txtUserName.Text = (arrProdVer(3).Substring(11, arrProdVer(3).Length - 11)).Trim
                 systemEvent = False
                 HandleInstallationCode()
+            Else
+continueHere:
+                'If Clipboard.GetDataObject.GetDataPresent(DataFormats.Text) Then
+                '    txtInstallCode.Text = CType(Clipboard.GetDataObject.GetData(DataFormats.Text), String)
+                UpdateKeyGenButtonStatus()
+                HandleInstallationCode()
+            End If
+
+        End Sub
+
+        '        Protected Sub cmdPasteInstallCode_Init(ByVal sender As Object, ByVal e As System.EventArgs) Handles cmdPasteInstallCode.Init
+
+        '            If txtInstallCode.Text.Length < 8 Then GoTo continueHere
+
+        '            If txtInstallCode.Text.Substring(0, 8).ToLower = "you must" Then 'short key license
+        '                Dim arrProdVer() As String
+        '                arrProdVer = Split(txtInstallCode.Text, vbLf)
+        '                systemEvent = True
+        '                txtInstallCode.Text = (arrProdVer(1).Substring(15, 8)).Trim
+        '                txtUserName.Text = (arrProdVer(3).Substring(11, arrProdVer(3).Length - 11)).Trim
+        '                systemEvent = False
+        '                HandleInstallationCode()
+        '            Else
+        'continueHere:
+        '                'If Clipboard.GetDataObject.GetDataPresent(DataFormats.Text) Then
+        '                '    txtInstallCode.Text = CType(Clipboard.GetDataObject.GetData(DataFormats.Text), String)
+        '                UpdateKeyGenButtonStatus()
+        '                HandleInstallationCode()
+        '            End If
+        '        End Sub
+
+        Private Sub txtDays_TextChanged(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtDays.TextChanged
+            SaveFormSettings()
+        End Sub
+
+        Private Sub chkLockIP_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockIP.CheckedChanged
+            If systemEvent Then Exit Sub
+            systemEvent = True
+            txtInstallCode.Text = ReconstructedInstallationCode()
+            systemEvent = False
+            If chkLockIP.Checked Then
+                MsgBox("Warning: Use Local IP addresses cautiously since they may not be static.", MsgBoxStyle.Exclamation, "Static IP Address Warning")
+            End If
+        End Sub
+        Private Sub chkLockexternalIP_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockExternalIP.CheckedChanged
+            If systemEvent Then Exit Sub
+            systemEvent = True
+            txtInstallCode.Text = ReconstructedInstallationCode()
+            systemEvent = False
+            If chkLockExternalIP.Checked Then
+                MsgBox("Warning: Use External IP addresses cautiously since they may not be static.", MsgBoxStyle.Exclamation, "Static IP Address Warning")
             End If
         End Sub
 
-        'Private Sub cmdCheckAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdCheckAll.Click
-        '    chkLockMACaddress.Checked = True
-        '    chkLockComputer.Checked = True
-        '    chkLockHD.Checked = True
-        '    chkLockHDfirmware.Checked = True
-        '    chkLockWindows.Checked = True
-        '    chkLockBIOS.Checked = True
-        '    chkLockMotherboard.Checked = True
-        '    chkLockIP.Checked = True
-        '    chkLockExternalIP.Checked = True
-        '    chkLockFingerprint.Checked = True
-        '    chkLockMemory.Checked = True
-        '    chkLockCPUID.Checked = True
-        '    chkLockBaseboardID.Checked = True
-        '    chkLockVideoID.Checked = True
-        'End Sub
+        Private Sub cmdCheckAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdCheckAll.Click
+            chkLockMACaddress.Checked = True
+            chkLockComputer.Checked = True
+            chkLockHD.Checked = True
+            chkLockHDfirmware.Checked = True
+            chkLockWindows.Checked = True
+            chkLockBIOS.Checked = True
+            chkLockMotherboard.Checked = True
+            chkLockIP.Checked = True
+            chkLockExternalIP.Checked = True
+            chkLockFingerprint.Checked = True
+            chkLockMemory.Checked = True
+            chkLockCPUID.Checked = True
+            chkLockBaseboardID.Checked = True
+            chkLockVideoID.Checked = True
+            SaveFormSettings()
+        End Sub
 
-        'Private Sub cmdUncheckAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdUncheckAll.Click
-        '    chkLockMACaddress.Checked = False
-        '    chkLockComputer.Checked = False
-        '    chkLockHD.Checked = False
-        '    chkLockHDfirmware.Checked = False
-        '    chkLockWindows.Checked = False
-        '    chkLockBIOS.Checked = False
-        '    chkLockMotherboard.Checked = False
-        '    chkLockIP.Checked = False
-        '    chkLockExternalIP.Checked = False
-        '    chkLockFingerprint.Checked = False
-        '    chkLockMemory.Checked = False
-        '    chkLockCPUID.Checked = False
-        '    chkLockBaseboardID.Checked = False
-        '    chkLockVideoID.Checked = False
-        'End Sub
+        Private Sub cmdUncheckAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdUncheckAll.Click
+            chkLockMACaddress.Checked = False
+            chkLockComputer.Checked = False
+            chkLockHD.Checked = False
+            chkLockHDfirmware.Checked = False
+            chkLockWindows.Checked = False
+            chkLockBIOS.Checked = False
+            chkLockMotherboard.Checked = False
+            chkLockIP.Checked = False
+            chkLockExternalIP.Checked = False
+            chkLockFingerprint.Checked = False
+            chkLockMemory.Checked = False
+            chkLockCPUID.Checked = False
+            chkLockBaseboardID.Checked = False
+            chkLockVideoID.Checked = False
+            SaveFormSettings()
+        End Sub
 
         Private Sub chkLockMACaddress_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockMACaddress.CheckedChanged
             If systemEvent Then Exit Sub
             systemEvent = True
             txtInstallCode.Text = ReconstructedInstallationCode()
             systemEvent = False
+            SaveFormSettings()
         End Sub
 
         Private Sub chkLockComputer_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockComputer.CheckedChanged
@@ -2239,6 +2306,7 @@ InitForm_Error:
             systemEvent = True
             txtInstallCode.Text = ReconstructedInstallationCode()
             systemEvent = False
+            SaveFormSettings()
         End Sub
 
         Private Sub chkLockHD_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockHD.CheckedChanged
@@ -2246,6 +2314,7 @@ InitForm_Error:
             systemEvent = True
             txtInstallCode.Text = ReconstructedInstallationCode()
             systemEvent = False
+            SaveFormSettings()
         End Sub
 
         Private Sub chkLockHDfirmware_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockHDfirmware.CheckedChanged
@@ -2253,6 +2322,7 @@ InitForm_Error:
             systemEvent = True
             txtInstallCode.Text = ReconstructedInstallationCode()
             systemEvent = False
+            SaveFormSettings()
         End Sub
 
         Private Sub chkLockWindows_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockWindows.CheckedChanged
@@ -2260,6 +2330,7 @@ InitForm_Error:
             systemEvent = True
             txtInstallCode.Text = ReconstructedInstallationCode()
             systemEvent = False
+            SaveFormSettings()
         End Sub
 
         Private Sub chkLockBIOS_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockBIOS.CheckedChanged
@@ -2267,6 +2338,7 @@ InitForm_Error:
             systemEvent = True
             txtInstallCode.Text = ReconstructedInstallationCode()
             systemEvent = False
+            SaveFormSettings()
         End Sub
 
         Private Sub chkLockMotherboard_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockMotherboard.CheckedChanged
@@ -2274,6 +2346,7 @@ InitForm_Error:
             systemEvent = True
             txtInstallCode.Text = ReconstructedInstallationCode()
             systemEvent = False
+            SaveFormSettings()
         End Sub
 
         Private Sub chkLockVideoID_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockVideoID.CheckedChanged
@@ -2281,6 +2354,7 @@ InitForm_Error:
             systemEvent = True
             txtInstallCode.Text = ReconstructedInstallationCode()
             systemEvent = False
+            SaveFormSettings()
         End Sub
 
         Private Sub chkLockMemory_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockMemory.CheckedChanged
@@ -2288,6 +2362,7 @@ InitForm_Error:
             systemEvent = True
             txtInstallCode.Text = ReconstructedInstallationCode()
             systemEvent = False
+            SaveFormSettings()
         End Sub
 
         Private Sub chkLockCPUID_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockCPUID.CheckedChanged
@@ -2295,6 +2370,7 @@ InitForm_Error:
             systemEvent = True
             txtInstallCode.Text = ReconstructedInstallationCode()
             systemEvent = False
+            SaveFormSettings()
         End Sub
 
         Private Sub chkLockBaseboardID_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockBaseboardID.CheckedChanged
@@ -2302,6 +2378,7 @@ InitForm_Error:
             systemEvent = True
             txtInstallCode.Text = ReconstructedInstallationCode()
             systemEvent = False
+            SaveFormSettings()
         End Sub
 
         Private Sub chkLockFingerprint_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkLockFingerprint.CheckedChanged
@@ -2309,6 +2386,7 @@ InitForm_Error:
             systemEvent = True
             txtInstallCode.Text = ReconstructedInstallationCode()
             systemEvent = False
+            SaveFormSettings()
         End Sub
 
         Public Sub HandleInstallationCode()
@@ -2394,7 +2472,7 @@ InitForm_Error:
                     installNameandVersion = GetUserSoftwareNameandVersionfromInstallCode(txtInstallCode.Text)
                     For i = 0 To cboProduct.Items.Count - 1
                         cboProduct.SelectedIndex = i
-                        If installNameandVersion = cboProduct.Text Then
+                        If installNameandVersion = cboProduct.Items(cboProduct.SelectedIndex).Text Then
                             success = True
                             Exit For
                         End If
@@ -2451,6 +2529,16 @@ InitForm_Error:
             UpdateAddButtonStatus()
         End Sub
 
+        Private Sub chkNetworkedLicense_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkNetworkedLicense.CheckedChanged
+            If chkNetworkedLicense.Checked = True Then
+                lblNumberOfUsers.Visible = True
+                txtMaxCount.Visible = True
+            Else
+                lblNumberOfUsers.Visible = False
+                txtMaxCount.Visible = False
+            End If
+            SaveFormSettings()
+        End Sub
         Private Sub cmdValidate2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdValidate2.Click
 
             ' ------------------ begin Message from Ismail ------------------
@@ -2551,40 +2639,6 @@ InitForm_Error:
             End If
 
         End Sub
-        'Private Sub cmdCheckAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdCheckAll.Click
-        '    chkLockMACaddress.Checked = True
-        '    chkLockComputer.Checked = True
-        '    chkLockHD.Checked = True
-        '    chkLockHDfirmware.Checked = True
-        '    chkLockWindows.Checked = True
-        '    chkLockBIOS.Checked = True
-        '    chkLockMotherboard.Checked = True
-        '    chkLockIP.Checked = True
-        '    chkLockExternalIP.Checked = True
-        '    chkLockFingerprint.Checked = True
-        '    chkLockMemory.Checked = True
-        '    chkLockCPUID.Checked = True
-        '    chkLockBaseboardID.Checked = True
-        '    chkLockVideoID.Checked = True
-        'End Sub
-
-        'Private Sub cmdUncheckAll_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdUncheckAll.Click
-        '    chkLockMACaddress.Checked = False
-        '    chkLockComputer.Checked = False
-        '    chkLockHD.Checked = False
-        '    chkLockHDfirmware.Checked = False
-        '    chkLockWindows.Checked = False
-        '    chkLockBIOS.Checked = False
-        '    chkLockMotherboard.Checked = False
-        '    chkLockIP.Checked = False
-        '    chkLockExternalIP.Checked = False
-        '    chkLockFingerprint.Checked = False
-        '    chkLockMemory.Checked = False
-        '    chkLockCPUID.Checked = False
-        '    chkLockBaseboardID.Checked = False
-        '    chkLockVideoID.Checked = False
-        'End Sub
-
 
     End Class
 
