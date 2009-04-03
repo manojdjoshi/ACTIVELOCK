@@ -63,7 +63,7 @@ errHandler:
         ' the method below is very suitable for .NET and more appropriate
         Dim c As New CRC32
         Dim crc As Integer = 0
-        Dim fileName As String = AppPath() & "\ActiveLock3_6NET.dll"
+        Dim fileName As String = AppPath() & "\" & MyDLLName
         If File.Exists(fileName) Then
             Dim f As FileStream = New FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read, 8192)
             crc = c.GetCrc32(f)

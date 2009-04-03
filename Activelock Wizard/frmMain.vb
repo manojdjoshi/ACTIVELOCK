@@ -14,6 +14,7 @@ Public Class frmMain
 
     Private Sub cboDevEnviroment_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboDevEnviroment.SelectedIndexChanged
 
+
         If Strings.StrComp(cboDevEnviroment.Text, "VB2003", CompareMethod.Binary) = 0 Then
             btnSubmitDetails.Enabled = False
             MsgBox("Sorry VB2003 is not available in this" & vbCrLf & _
@@ -26,6 +27,11 @@ Public Class frmMain
             '       "file instead that can be imported", MsgBoxStyle.Information)
         Else
             btnSubmitDetails.Enabled = True
+        End If
+        If Strings.StrComp(cboDevEnviroment.Text, "VB6", CompareMethod.Binary) = 0 Then
+            GroupBox15.Enabled = True
+        Else
+            GroupBox15.Enabled = False
         End If
     End Sub
 
@@ -425,10 +431,13 @@ Public Class frmMain
             If cboDevEnviroment.Text = "VB6" Then 'added V1.0.4
                 'This Is for VB6 ONLY
                 Dim vb6crc As Long = CRCCheckSumTypeLib(fileName)
+                MyDLLName = OpenFileDialog1.SafeFileName
                 CrcDataEnc = vb6crc - 121 'this will be added in the value() routine
+                CustomNameSpace = txtCustomNamespace.Text
             Else
                 'This is for VB2005 and VB2008
                 Dim f As FileStream = New FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read, 8192)
+                MyDLLName = OpenFileDialog1.SafeFileName
                 crc = c.GetCrc32(f)
                 ' as the most commonly known format
                 raw = String.Format("{0:X8}", crc)
@@ -452,10 +461,13 @@ Public Class frmMain
             fileName = System.Windows.Forms.Application.StartupPath & "\ActiveLock3.6.dll"
             Dim vb6crc As Long = CRCCheckSumTypeLib(fileName)
             CrcDataEnc = vb6crc - 121 'this will be added in the value() routine
+            MyDLLName = "ActiveLock3.6.dll"
+            CustomNameSpace = txtCustomNamespace.Text
             System.Diagnostics.Debug.WriteLine("Hash: " & vb6crc)
         Else
             'This is for VB2005 and VB2008
             fileName = System.Windows.Forms.Application.StartupPath & "\ActiveLock3_6Net.dll"
+            MyDLLName = "ActiveLock3_6Net.dll"
             Dim f As FileStream = New FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read, 8192)
             crc = c.GetCrc32(f)
             ' as the most commonly known format
@@ -543,11 +555,13 @@ Public Class frmMain
     End Sub
 
     'added
-
     Private Sub ImageApplicationHelp16_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ImageApplicationHelp16.Click
         MsgBox("Just select the activelock dll that you are going to use." & vbCrLf & "The CRC will be Encoded by the Wizard for better protection")
     End Sub
 
+    Private Sub ImageApplicationHelp17_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ImageApplicationHelp17.Click
+        MsgBox("Change the Default Namespace to your custom Namespace" & vbCrLf & "The custom namespace will be used the generated code")
+    End Sub
 #End Region '"Help Provider"
 
 #Region "CRC provider" 'added
@@ -617,5 +631,15 @@ Public Class frmMain
     Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDLLPath.Click
         OpenFileDialog1.ShowDialog()
     End Sub
+
+    Private Sub chkUseDefaultNameSpace_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkUseDefaultNameSpace.CheckedChanged
+        If chkUseDefaultNameSpace.Checked = True Then
+            txtCustomNamespace.Text = "ActiveLock3"
+            txtCustomNamespace.Enabled = False
+        Else
+            txtCustomNamespace.Enabled = True
+        End If
+    End Sub
+
 
 End Class

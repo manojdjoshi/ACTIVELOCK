@@ -9,7 +9,7 @@ Uninstallable=true
 DefaultDirName={pf}\Activelock_Wizard_3.6
 ;DefaultDirName={code:SetInstallDir}\Activelock_Wizard_3.6
 ; Permissions: everyone-full
-OutputBaseFilename=Activelock_Wizard_Setup_3.6_March_29_2009
+OutputBaseFilename=Activelock_Wizard_3.6_RC2_Setup_April_03_2009
 OutputDir=.
 DefaultGroupName=Activelock Software Group
 WizardImageFile=C:\ActiveLockCommunity\Images\big-side.bmp

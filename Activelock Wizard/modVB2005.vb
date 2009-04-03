@@ -20,12 +20,13 @@ Module modVB2005
         MsgBox("File Created Successfully, The New FileName Is: " & TheFileName, MsgBoxStyle.Information)
     End Sub
     Private Sub CreateFile()
-        My.Computer.FileSystem.WriteAllText(FilePath & "\" & TheFileName, String.Empty, False)
+        My.Computer.FileSystem.WriteAllText(FilePath & "\" & TheFileName, String.Empty, False, System.Text.Encoding.ASCII)
     End Sub
     Private Sub WriteToFile(ByVal Data As String)
-        My.Computer.FileSystem.WriteAllText(FilePath & "\" & TheFileName, Data, True)
+        My.Computer.FileSystem.WriteAllText(FilePath & "\" & TheFileName, Data, True, System.Text.Encoding.ASCII)
     End Sub
     Private Sub CreateRoutineInitActivelock()
+        WriteToFile("Private Const MyDLLName as string = " & Chr(34) & MyDLLName & Chr(34) & vbCrLf)
         WriteToFile("Private Const CrcDataEnc As String = " & Chr(34) & CrcDataEnc & Chr(34) & vbCrLf) 'added
         WriteToFile("Private Const PUB_KEY as string = " & Chr(34) & Enc(SoftwareCode) & Chr(34) & vbCrLf)
         WriteToFile("#End Region '" & Chr(34) & "Local Declare" & Chr(34) & vbCrLf)
