@@ -108,6 +108,10 @@ Partial Class frmMain
         Me.ImageApplicationHelp16 = New System.Windows.Forms.PictureBox
         Me.txtActivelockPath = New System.Windows.Forms.TextBox
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
+        Me.GroupBox15 = New System.Windows.Forms.GroupBox
+        Me.txtCustomNamespace = New System.Windows.Forms.TextBox
+        Me.ImageApplicationHelp17 = New System.Windows.Forms.PictureBox
+        Me.chkUseDefaultNameSpace = New System.Windows.Forms.CheckBox
         Me.GroupBox1.SuspendLayout()
         CType(Me.ImageApplicationHelp11, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox2.SuspendLayout()
@@ -140,6 +144,8 @@ Partial Class frmMain
         CType(Me.ImageApplicationHelp14, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox14.SuspendLayout()
         CType(Me.ImageApplicationHelp16, System.ComponentModel.ISupportInitialize).BeginInit()
+        Me.GroupBox15.SuspendLayout()
+        CType(Me.ImageApplicationHelp17, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'Label1
@@ -448,7 +454,7 @@ Partial Class frmMain
         Me.GroupBox8.Font = New System.Drawing.Font("Arial", 7.0!)
         Me.GroupBox8.Location = New System.Drawing.Point(6, 19)
         Me.GroupBox8.Name = "GroupBox8"
-        Me.GroupBox8.Size = New System.Drawing.Size(143, 71)
+        Me.GroupBox8.Size = New System.Drawing.Size(143, 79)
         Me.GroupBox8.TabIndex = 4
         Me.GroupBox8.TabStop = False
         Me.GroupBox8.Text = "Auto License Registration"
@@ -467,7 +473,7 @@ Partial Class frmMain
         '
         Me.rbtnAutoRegisterDisable.AutoSize = True
         Me.rbtnAutoRegisterDisable.Checked = True
-        Me.rbtnAutoRegisterDisable.Location = New System.Drawing.Point(34, 42)
+        Me.rbtnAutoRegisterDisable.Location = New System.Drawing.Point(34, 46)
         Me.rbtnAutoRegisterDisable.Name = "rbtnAutoRegisterDisable"
         Me.rbtnAutoRegisterDisable.Size = New System.Drawing.Size(60, 17)
         Me.rbtnAutoRegisterDisable.TabIndex = 2
@@ -693,7 +699,7 @@ Partial Class frmMain
         Me.GroupBox13.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.0!)
         Me.GroupBox13.Location = New System.Drawing.Point(155, 20)
         Me.GroupBox13.Name = "GroupBox13"
-        Me.GroupBox13.Size = New System.Drawing.Size(128, 70)
+        Me.GroupBox13.Size = New System.Drawing.Size(128, 78)
         Me.GroupBox13.TabIndex = 10
         Me.GroupBox13.TabStop = False
         Me.GroupBox13.Text = "License Storage Type"
@@ -712,7 +718,7 @@ Partial Class frmMain
         '
         Me.rbtnKeyStorageTypeRegistry.AutoSize = True
         Me.rbtnKeyStorageTypeRegistry.Enabled = False
-        Me.rbtnKeyStorageTypeRegistry.Location = New System.Drawing.Point(31, 41)
+        Me.rbtnKeyStorageTypeRegistry.Location = New System.Drawing.Point(31, 45)
         Me.rbtnKeyStorageTypeRegistry.Name = "rbtnKeyStorageTypeRegistry"
         Me.rbtnKeyStorageTypeRegistry.Size = New System.Drawing.Size(62, 17)
         Me.rbtnKeyStorageTypeRegistry.TabIndex = 4
@@ -1042,11 +1048,55 @@ Partial Class frmMain
         '
         Me.OpenFileDialog1.Filter = "DLL File|*.dll"
         '
+        'GroupBox15
+        '
+        Me.GroupBox15.Controls.Add(Me.chkUseDefaultNameSpace)
+        Me.GroupBox15.Controls.Add(Me.ImageApplicationHelp17)
+        Me.GroupBox15.Controls.Add(Me.txtCustomNamespace)
+        Me.GroupBox15.Location = New System.Drawing.Point(9, 464)
+        Me.GroupBox15.Name = "GroupBox15"
+        Me.GroupBox15.Size = New System.Drawing.Size(322, 44)
+        Me.GroupBox15.TabIndex = 13
+        Me.GroupBox15.TabStop = False
+        Me.GroupBox15.Text = "Custom Namespace"
+        '
+        'txtCustomNamespace
+        '
+        Me.txtCustomNamespace.Enabled = False
+        Me.txtCustomNamespace.Location = New System.Drawing.Point(32, 17)
+        Me.txtCustomNamespace.Name = "txtCustomNamespace"
+        Me.txtCustomNamespace.Size = New System.Drawing.Size(190, 20)
+        Me.txtCustomNamespace.TabIndex = 1
+        Me.txtCustomNamespace.Text = "ActiveLock3"
+        '
+        'ImageApplicationHelp17
+        '
+        Me.ImageApplicationHelp17.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.ImageApplicationHelp17.Image = Global.ActiveLockWizard.My.Resources.Resources.Help
+        Me.ImageApplicationHelp17.Location = New System.Drawing.Point(6, 16)
+        Me.ImageApplicationHelp17.Name = "ImageApplicationHelp17"
+        Me.ImageApplicationHelp17.Size = New System.Drawing.Size(19, 18)
+        Me.ImageApplicationHelp17.TabIndex = 4
+        Me.ImageApplicationHelp17.TabStop = False
+        '
+        'chkUseDefaultNameSpace
+        '
+        Me.chkUseDefaultNameSpace.AutoSize = True
+        Me.chkUseDefaultNameSpace.Checked = True
+        Me.chkUseDefaultNameSpace.CheckState = System.Windows.Forms.CheckState.Checked
+        Me.chkUseDefaultNameSpace.Location = New System.Drawing.Point(228, 18)
+        Me.chkUseDefaultNameSpace.Name = "chkUseDefaultNameSpace"
+        Me.chkUseDefaultNameSpace.Size = New System.Drawing.Size(82, 17)
+        Me.chkUseDefaultNameSpace.TabIndex = 5
+        Me.chkUseDefaultNameSpace.Text = "Use Default"
+        Me.chkUseDefaultNameSpace.UseVisualStyleBackColor = True
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(734, 517)
+        Me.Controls.Add(Me.GroupBox15)
         Me.Controls.Add(Me.GroupBox14)
         Me.Controls.Add(Me.ImageApplicationHelp14)
         Me.Controls.Add(Me.PicActiveLock)
@@ -1064,7 +1114,7 @@ Partial Class frmMain
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "frmMain"
-        Me.Text = "Activelock Protection Source Code Generation Wizard V3.6 RC1"
+        Me.Text = "Activelock Protection Source Code Generation Wizard V3.6 RC2"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         CType(Me.ImageApplicationHelp11, System.ComponentModel.ISupportInitialize).EndInit()
@@ -1110,6 +1160,9 @@ Partial Class frmMain
         Me.GroupBox14.ResumeLayout(False)
         Me.GroupBox14.PerformLayout()
         CType(Me.ImageApplicationHelp16, System.ComponentModel.ISupportInitialize).EndInit()
+        Me.GroupBox15.ResumeLayout(False)
+        Me.GroupBox15.PerformLayout()
+        CType(Me.ImageApplicationHelp17, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -1199,5 +1252,9 @@ Partial Class frmMain
     Friend WithEvents chkLicenseLockTypeFingerprint As System.Windows.Forms.CheckBox
     Friend WithEvents chkLicenseLockTypeExternalID As System.Windows.Forms.CheckBox
     Friend WithEvents chkTrialHideTypeIsolatedStorage As System.Windows.Forms.CheckBox
+    Friend WithEvents GroupBox15 As System.Windows.Forms.GroupBox
+    Friend WithEvents ImageApplicationHelp17 As System.Windows.Forms.PictureBox
+    Friend WithEvents txtCustomNamespace As System.Windows.Forms.TextBox
+    Friend WithEvents chkUseDefaultNameSpace As System.Windows.Forms.CheckBox
 
 End Class

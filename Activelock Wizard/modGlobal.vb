@@ -58,6 +58,8 @@ Module modGlobal
     Public KeyStoreType As KeyStoreType_t
     Public DevEnvironment As DevEnvironment_t
     Public CrcDataEnc As String = Nothing 'added
+    Public MyDLLName As String = Nothing
+    Public CustomNameSpace As String = Nothing
 
 #End Region '"LocalVariables"
 
@@ -104,6 +106,7 @@ Module modGlobal
         Next
         frmMain.ShowDialog()
     End Sub
+
     Public Function EncodedPassword(ByVal Password As String) As String
         Dim encPassword As String = Nothing
         For Each c As Char In Password
@@ -148,6 +151,7 @@ Module modGlobal
         stringLockType = Strings.Left(stringLockType, (stringLockType.Length - 4))
         Return stringLockType
     End Function
+
     Public Function Enc(ByRef strdata As String) As String
         Dim i, n As Integer
         Dim sResult As String = Nothing

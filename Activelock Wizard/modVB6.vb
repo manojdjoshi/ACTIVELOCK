@@ -1,6 +1,7 @@
 Module modVB6
     Dim TheFileName As String = "modALVB6.bas"
     Dim FilePath As String = Nothing
+
     Public Sub CreateVB6Module()
         Dim MyDialogResult As DialogResult
         frmMain.FolderBrowserDialog.SelectedPath = Application.StartupPath
@@ -19,15 +20,21 @@ Module modVB6
         WriteToFile(My.Resources.VB6FormRoutines)
         MsgBox("File Created Successfully, The New FileName Is: " & TheFileName, MsgBoxStyle.Information)
     End Sub
+
     Private Sub CreateFile()
-        My.Computer.FileSystem.WriteAllText(FilePath & "\" & TheFileName, String.Empty, False)
+        My.Computer.FileSystem.WriteAllText(FilePath & "\" & TheFileName, String.Empty, False, System.Text.Encoding.ASCII)
     End Sub
+
     Private Sub WriteToFile(ByVal Data As String)
-        My.Computer.FileSystem.WriteAllText(FilePath & "\" & TheFileName, Data, True)
+        My.Computer.FileSystem.WriteAllText(FilePath & "\" & TheFileName, Data, True, System.Text.Encoding.ASCII)
     End Sub
+
     Private Sub CreateRoutineInitActivelock()
+        WriteToFile("Public MyActiveLock As " & CustomNameSpace & ".IActiveLock" & vbCrLf)
+        WriteToFile(vbCrLf)
+        WriteToFile("Private Const MyDLLName As String = " & Chr(34) & MyDLLName & Chr(34) & vbCrLf)
         WriteToFile("Private Const CrcPartValue As Long = " & CrcDataEnc & vbCrLf) 'added
-        WriteToFile("Private Const PUB_KEY as string = " & Chr(34) & Enc(SoftwareCode) & Chr(34) & vbCrLf)
+        WriteToFile("Public Const PUB_KEY as string = " & Chr(34) & Enc(SoftwareCode) & Chr(34) & vbCrLf)
         WriteToFile(vbCrLf)
         WriteToFile("Public Function InitActivelock() As Boolean" & vbCrLf)
         WriteToFile("   Dim autoRegisterKey As String" & vbCrLf)
@@ -38,11 +45,11 @@ Module modVB6
         WriteToFile("   On Error GoTo DLLnotRegistered" & vbCrLf)
         WriteToFile("   ' Check the existence of necessary files to run this application" & vbCrLf)
         WriteToFile("   Call CheckForResources(" & Chr(34) & "Alcrypto3.dll" & Chr(34) & ", " & Chr(34) & "comctl32.ocx" & Chr(34) & ", " & Chr(34) & "tabctl32.ocx" & Chr(34) & ")" & vbCrLf)
-        WriteToFile("   ' Check if the Activelock3.dll is registered. If not no need to continue." & vbCrLf)
+        WriteToFile("   ' Check if the " & CustomNameSpace & ".dll is registered. If not no need to continue." & vbCrLf)
         WriteToFile("   If CheckIfDLLIsRegistered = False Then End" & vbCrLf)
         WriteToFile("   On Error GoTo NotRegistered" & vbCrLf)
         WriteToFile("   ' Obtain AL instance and initialize its properties" & vbCrLf)
-        WriteToFile("   Set MyActiveLock = ActiveLock3.NewInstance()" & vbCrLf)
+        WriteToFile("   Set MyActiveLock = " & CustomNameSpace & ".NewInstance()" & vbCrLf)
         WriteToFile("   With MyActiveLock" & vbCrLf)
         WriteToFile("       .SoftwareName = " & Chr(34) & SoftwareName & Chr(34) & vbCrLf)
         WriteToFile("       .SoftwareVersion = " & Chr(34) & SoftwareVersion & Chr(34) & vbCrLf)
@@ -118,7 +125,7 @@ Module modVB6
         WriteToFile("       'This should never happen (it should be caught by ErrorTrap)" & vbCrLf)
         WriteToFile("   End If" & vbCrLf)
         WriteToFile("   ' Uncomment the following to retrieve the usedlocktypes" & vbCrLf)
-        WriteToFile("   ' Dim aa() As ActiveLock3.ALLockTypes" & vbCrLf)
+        WriteToFile("   ' Dim aa() As " & CustomNameSpace & ".ALLockTypes" & vbCrLf)
         WriteToFile("   ' ReDim aa(UBound(MyActiveLock.UsedLockType))" & vbCrLf)
         WriteToFile("   ' aa = MyActiveLock.UsedLockType" & vbCrLf)
         WriteToFile("   ' MsgBox aa(0) 'For example, if only lockHDfirmware was used, this will return 256" & vbCrLf)
@@ -162,5 +169,6 @@ Module modVB6
         WriteToFile("End Function" & vbCrLf)
         WriteToFile("" & vbCrLf)
     End Sub
+
 End Module
 ' & Chr(34) & "

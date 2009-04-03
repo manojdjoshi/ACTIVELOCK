@@ -230,10 +230,10 @@ CheckIfDLLIsRegistered = True
 strDllPath = GetTypeLibPathFromObject()
 Result = IsDLLAvailable(strDllPath)
 If Result Then
-    ' MsgBox "Activelock3.6.dll is Registered !"
+    ' MsgBox MyDLLName & " is Registered !"
     ' Just quietly proceed
 Else
-    MsgBox "Activelock3.6.dll is Not Registered!"
+    MsgBox MyDLLName & " is Not Registered!"
     CheckIfDLLIsRegistered = False
 End If
 
@@ -241,7 +241,7 @@ End Function
 
 Public Function GetTypeLibPathFromObject() As String
     Dim strDllPath As String
-    GetTypeLibPathFromObject = WinSysDir() & "\activelock3.6.dll"
+    GetTypeLibPathFromObject = WinSysDir() & "\" & MyDLLName
 End Function
 
 Private Function IsDLLAvailable(ByVal DllFilename As String) As Boolean

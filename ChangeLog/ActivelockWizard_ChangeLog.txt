@@ -1,5 +1,5 @@
 Change Log For Activelock Wizard 
-Last Updated: 28 March 2008 
+Last Updated: 03 April 2008 
 
 Activelock Wizard V3.6 Updates:
 - Added: More License Locking types as was needed in V3.6
@@ -10,7 +10,9 @@ Activelock Wizard V3.6 Updates:
 -	Added: Support for the VB6 project creation
 -	Fixed: CRC calculation for VB6 project
 -	Added: Check for Trial Hiding Types   
--	Removed: Support For Isolated Storage 
+-	Removed: Support For Isolated Storage\
+- Added: You can specify your own dll name to use
+- Added: You can specify your own namespace of the DLL to use (only for VB6) 
 
 Activelock Wizard V1.0.3 Updates:
 - NEW: Modified both VB6 and VB2005 outputs for the encoded CRC. 

@@ -47,10 +47,19 @@ Option Explicit On
 ' *
 #End Region
 
+''' <summary>
+''' <para>This Class is Used to calculate the CRC32 of a file</para>
+''' </summary>
+''' <remarks></remarks>
 Public Class CRC32
     Private crc32Table() As Integer
     Private Const BUFFER_SIZE As Integer = 1024
-
+    ''' <summary>
+    ''' Gets the CRC32 of a FileStream
+    ''' </summary>
+    ''' <input>System.IO.Stream - The File Stream</input>
+    ''' <returns>Integer - The CRC32</returns>
+    ''' <remarks></remarks>
     Public Function GetCrc32(ByRef stream As System.IO.Stream) As Integer
 
         Dim crc32Result As Integer
@@ -76,6 +85,10 @@ Public Class CRC32
 
     End Function
 
+    ''' <summary>
+    ''' Create a New Reference to the CRC32 Class
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Sub New()
         ' This is the official polynomial used by CRC32 in PKZip.
         ' Often the polynomial is shown reversed (04C11DB7).
