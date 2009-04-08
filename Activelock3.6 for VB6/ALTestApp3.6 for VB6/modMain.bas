@@ -345,7 +345,7 @@ End Function
 ' Returns the expected CRC value of ActiveLock3.dll
 '
 Private Property Get Value() As Long
-    Value = 711000 + 121       ' compute it so that it can't be easily spotted via a Hex Editor
+    Value = 905000 + 81       ' compute it so that it can't be easily spotted via a Hex Editor
 End Property
 
 ' Callback function for rsa_generate()
@@ -378,11 +378,11 @@ End Function
 '===============================================================================
 Public Function WinSysDir() As String
     Const FIX_LENGTH% = 4096
-    Dim Length As Integer
+    Dim length As Integer
     Dim Buffer As String * FIX_LENGTH
 
-    Length = GetSystemDirectory(Buffer, FIX_LENGTH - 1)
-    WinSysDir = Left$(Buffer, Length)
+    length = GetSystemDirectory(Buffer, FIX_LENGTH - 1)
+    WinSysDir = Left$(Buffer, length)
 End Function
 
 ''
