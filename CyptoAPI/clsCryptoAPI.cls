@@ -1884,7 +1884,7 @@ Dim lngY As Long
     abText = abData
     
     'Create a hash object to sign/validate
-    lngReturnValue = CryptCreateHash(hCryptProv, CALG_SHA, 0, 0, hHash)
+    lngReturnValue = CryptCreateHash(hCryptProv, CALG_MD5, 0, 0, hHash)
     If lngReturnValue = 0 Then Err.Raise Err.LastDllError, , "DLL error code shown above. Could not create a Hash Object (CryptCreateHash API)"
     'Hash the data
     lngW = UBound(abText) + 1
