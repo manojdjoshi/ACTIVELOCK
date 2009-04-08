@@ -327,7 +327,7 @@ Friend Class MDBGenerator
 
         Dim strLic As String
         strLic = Lic.ToString_Renamed() & vbLf & strLock
-        System.Diagnostics.Debug.WriteLine("strLic: " & vbCrLf & strLic)
+        'System.Diagnostics.Debug.WriteLine("strLic: " & vbCrLf & strLic)
 
         If strLeft(ProdInfo.VCode, 3) <> "RSA" Then
             ' sign it
@@ -382,8 +382,9 @@ Friend Class MDBGenerator
                 mysignature = asf.CreateSignature(algorithm)
                 Dim mySignatureBlock As String
                 mySignatureBlock = Convert.ToBase64String(mysignature)
+                Lic.LicenseKey = mySignatureBlock
             Catch ex As Exception
-                Set_Locale(regionalSymbol)
+                Set_locale(regionalSymbol)
                 Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, ex.Message)
             End Try
 

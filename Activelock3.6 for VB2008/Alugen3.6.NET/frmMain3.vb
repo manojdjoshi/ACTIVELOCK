@@ -3450,6 +3450,10 @@ SaveFormSettings_Error:
                 Call frmAlugenDatabase.ArchiveLicense(strName, strVer, txtUser.Text.Trim, strRegDate, strExpire, cboLicType.Text, lockTypesString, cboRegisteredLevel.Text, txtInstallCode.Text, txtLicenseKey.Text)
 
             End If
+            Label5.Visible = True
+            txtLicenseFile.Visible = True
+            cmdBrowse.Visible = True
+            cmdSave.Visible = True
             Set_locale(regionalSymbol)
         Catch ex As Exception
             Set_locale(regionalSymbol)
@@ -3522,6 +3526,11 @@ continueHere:
     End Sub
 
     Private Sub cmdSave_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdSave.Click
+        If txtInstallCode.Text.Length = 8 Then
+            MsgBox("ALL files are not used for Short-Key licenses.", vbInformation)
+            Exit Sub
+        End If
+
         Dim itemProductInfo As ProductInfoItem = CType(cboProducts.SelectedItem, ProductInfoItem)
         Dim strName As String = itemProductInfo.ProductName
         strName = strName.Replace("(", "").Replace(")", "").Trim
@@ -4313,6 +4322,8 @@ exitValidate:
         systemEvent = False
     End Sub
     Public Sub HandleInstallationCode()
+        Dim installNameandVersion As String
+        Dim i As Integer, success As Boolean
 
         If systemEvent Then Exit Sub
         If txtInstallCode.Text.Length < 8 Then Exit Sub
@@ -4390,8 +4401,6 @@ exitValidate:
                 txtUser.Text = GetUserFromInstallCode(txtInstallCode.Text)
                 fDisableNotifications = False
 
-                Dim installNameandVersion As String
-                Dim i As Integer, success As Boolean
                 installNameandVersion = GetUserSoftwareNameandVersionfromInstallCode(txtInstallCode.Text)
                 For i = 0 To cboProducts.Items.Count - 1
                     cboProducts.SelectedIndex = i
@@ -4402,6 +4411,7 @@ exitValidate:
                 Next i
                 If Not success Then
                     MsgBox("There's no matching Software Name and Version Number for this Installation Code.", MsgBoxStyle.Exclamation)
+                    cmdKeyGen.Enabled = False
                 End If
             Else
                 fDisableNotifications = True

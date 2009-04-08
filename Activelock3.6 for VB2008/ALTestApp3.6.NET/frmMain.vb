@@ -1180,7 +1180,6 @@ Friend Class frmMain
     ' ActiveLock Initialization
     '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     Private Sub frmMain_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
-        Dim autoRegisterKey As String = Nothing
         Dim boolAutoRegisterKeyPath As Boolean
         Dim Msg As String
         On Error GoTo NotRegistered
@@ -1202,6 +1201,8 @@ Friend Class frmMain
         If AppfilePath.Trim <> Chr(0) Then
             AppfilePath = VB.Left(AppfilePath, InStr(AppfilePath, Chr(0)) - 1)
         End If
+
+        Dim strSD As String = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern
 
         'The second line is used when unmanaged Activelock3NET.dll is used
         Dim MyAL As New ActiveLock3_6NET.Globals
@@ -1314,6 +1315,9 @@ Friend Class frmMain
             ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockBaseboardID Or _
             ' ActiveLock3_6NET.IActiveLock.ALLockTypes.lockVideoID
 
+            ' USAGE OF .ALL (AUTO-REGISTER) FILES
+            ' THESE FILES CARRY THE LICENSE (LIBERATION) KEY FOR AUTO REGISTRATION
+            ' ALL FILES ARE NOT USED WITH SHORT-KEY LICENSES
             ' Set the .ALL file path if you're using an ALL file.
             ' .ALL is an auto registration file.
             ' You generate .ALL files via Alugen and then send to the users
@@ -1324,15 +1328,33 @@ Friend Class frmMain
             ' since multiple .ALL files might exist in the same directory
             ' If you don't want to use the software name and version number explicitly, use an .ALL
             ' filename that is specific to this application
-            If Directory.Exists(AppfilePath & "\" & .SoftwareName & .SoftwareVersion) = False Then
-                MkDir(AppfilePath & "\" & .SoftwareName & .SoftwareVersion)
+            ' Be aware that Alugen will not accept creation of ALL files without
+            ' the software name and version in the ALL filename.
+            ' You can rename the ALL file afterwards, but that name should match the ALL filename used here.
+
+            ' .ALL FILE STORAGE OPTION-1
+            ' Try to use the simplest accessible solution for both XP and Vista such as C:\TEMP
+            If Directory.Exists("c:\temp") = False Then
+                Directory.CreateDirectory("c:\temp")
             End If
-            strAutoRegisterKeyPath = AppfilePath & "\" & .SoftwareName & .SoftwareVersion & "\" & .SoftwareName & .SoftwareVersion & ".all"
-            ' AppPath could be an option for XP, but not so for Vista
+            strAutoRegisterKeyPath = "c:\temp\" & .SoftwareName & .SoftwareVersion & ".all"
+
+            ' .ALL FILE STORAGE OPTION-2
+            ' The following (AppfilePath) is another option for both XP and Vista
+            ' but you should be sure that the directory exists.
+            ' Since this is also the folder where the LIC file resides, it's not recommended
+            'If Directory.Exists(AppfilePath & "\" & .SoftwareName & .SoftwareVersion) = False Then
+            '    MkDir(AppfilePath & "\" & .SoftwareName & .SoftwareVersion)
+            'End If
+            'strAutoRegisterKeyPath = AppfilePath & "\" & .SoftwareName & .SoftwareVersion & "\" & .SoftwareName & .SoftwareVersion & ".all"
+
+            ' .ALL FILE STORAGE OPTION-3
+            ' AppPath could be an option for XP, but not for Vista
             'If Directory.Exists(AppPath & "\" & .SoftwareName & .SoftwareVersion ) = False Then
             '    MkDir(AppPath & "\" & .SoftwareName & .SoftwareVersion)
             'End If
             'strAutoRegisterKeyPath = AppPath() & "\" & .SoftwareName & .SoftwareVersion & "\" & .SoftwareName & .SoftwareVersion & ".all"
+
             .AutoRegisterKeyPath = strAutoRegisterKeyPath
             If File.Exists(strAutoRegisterKeyPath) Then boolAutoRegisterKeyPath = True
 
@@ -1407,8 +1429,8 @@ Friend Class frmMain
             ' Use the following with ASP.NET applications
             ' MyActiveLock.Init(Application.StartupPath & "\bin")
             ' Use the following with VB.NET applications
-            .Init(Application.StartupPath, strKeyStorePath)
-            If File.Exists(strKeyStorePath) And boolAutoRegisterKeyPath = True And autoRegisterKey <> "" Then
+            .Init(Application.StartupPath, strAutoRegisterKeyPath)
+            If File.Exists(strKeyStorePath) And boolAutoRegisterKeyPath = True And strAutoRegisterKeyPath <> "" Then
                 ' This means, an ALL file existed and was used to create a LIC file
                 ' Init() method successfully registered the ALL file
                 ' and returned the license key
@@ -1495,8 +1517,12 @@ Friend Class frmMain
         'MyActiveLock.UsedDays
         txtUsedDays.Text = strUsedDays
         'MyActiveLock.ExpirationDate
-        txtExpiration.Text = strExpirationDate
-        If txtExpiration.Text = "" Then txtExpiration.Text = "Permanent" 'App has a permanent license
+
+        ' This will display the date in user's locale short date format
+        txtExpiration.Text = DateTime.ParseExact(strExpirationDate, "yyyy/MM/dd", Nothing).ToString(strSD)
+        If txtExpiration.Text = "" Then
+            txtExpiration.Text = "Permanent" 'App has a permanent license
+        End If
 
         Dim arrProdVer() As String
         'MyActiveLock.RegisteredUser
