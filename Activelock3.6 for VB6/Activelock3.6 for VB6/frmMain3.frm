@@ -2,7 +2,7 @@ VERSION 5.00
 Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
 Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "Mscomctl.ocx"
 Begin VB.Form frmMain 
    Appearance      =   0  'Flat
    BorderStyle     =   1  'Fixed Single
@@ -52,13 +52,13 @@ Begin VB.Form frmMain
       TabCaption(0)   =   "Pro&duct Code Generator"
       TabPicture(0)   =   "frmMain3.frx":0CCA
       Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "cmdValidate"
-      Tab(0).Control(1)=   "Picture1"
-      Tab(0).Control(2)=   "cmdRemove"
+      Tab(0).Control(0)=   "Label1"
+      Tab(0).Control(1)=   "Label17"
+      Tab(0).Control(2)=   "gridProds"
       Tab(0).Control(3)=   "fraProdNew"
-      Tab(0).Control(4)=   "gridProds"
-      Tab(0).Control(5)=   "Label17"
-      Tab(0).Control(6)=   "Label1"
+      Tab(0).Control(4)=   "cmdRemove"
+      Tab(0).Control(5)=   "Picture1"
+      Tab(0).Control(6)=   "cmdValidate"
       Tab(0).ControlCount=   7
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
@@ -1445,14 +1445,15 @@ Private Sub cmdBrowse_Click()
     On Error GoTo ErrHandler
     Dim arrProdVer() As String
     arrProdVer = Split(cmbProds, "-")
-    Dim strName As String
+    Dim strName As String, strVer As String
     strName = Trim$(arrProdVer(0))
+    strVer = Trim$(arrProdVer(1))
     With CommonDlg
         .InitDir = Dir(txtLibFile.Text)
         .Filter = "ALL Files (*.ALL)|*.ALL"
         .Flags = cdlOFNExplorer Or cdlOFNShareAware Or cdlOFNNoChangeDir
         .CancelError = True
-        .FileName = strName
+        .FileName = strName & strVer
         .ShowOpen
         txtLibFile.Text = .FileName
     End With
@@ -1777,8 +1778,13 @@ If MsgBox("Would you like to save the new license in the License Database?", vbY
     Set frmAlugenDatabase = Nothing
 End If
 
+Label5.Visible = True
+txtLibFile.Visible = True
+cmdBrowse.Visible = True
+cmdSave.Visible = True
 Set_locale regionalSymbol
 Exit Sub
+
 ErrHandler:
     Set_locale regionalSymbol
     UpdateStatus "Error: " + Err.Description
@@ -1813,6 +1819,7 @@ Private Function GetExpirationDate() As String
 End Function
 
 Private Sub cmdPaste_Click()
+
 cmdKeyGen.Enabled = True
 If LCase(Left(Clipboard.GetText, 13)) = "you must send" Then 'short key license
     Dim arrProdVer() As String
@@ -1824,7 +1831,6 @@ If LCase(Left(Clipboard.GetText, 13)) = "you must send" Then 'short key license
     txtReqCodeIn_Change
 Else
     txtReqCodeIn.Text = Clipboard.GetText
-    'txtReqCodeIn_Change
 End If
 End Sub
 
@@ -1889,6 +1895,10 @@ Private Sub cmdRemove_Click()
 End Sub
 
 Private Sub cmdSave_Click()
+    If Len(txtReqCodeIn.Text) = 8 Then
+        MsgBox "ALL files are not used for Short-Key licenses.", vbInformation
+        Exit Sub
+    End If
     Dim arrProdVer() As String
     arrProdVer = Split(cmbProds.Text, "-")
     If inString(txtLibFile.Text, Trim(arrProdVer(0)) & Trim(arrProdVer(1)) & ".all") = False Then
@@ -2609,6 +2619,8 @@ End Sub
 
 
 Private Sub txtReqCodeIn_Change()
+Dim installNameandVersion As String
+Dim i As Integer, success As Boolean
 
 If systemEvent Then Exit Sub
 cmdKeyGen.Enabled = True
@@ -2648,10 +2660,10 @@ If Len(txtReqCodeIn.Text) = 8 Then 'Short key authorization is much simpler
     txtUser.Locked = False
     txtUser.BackColor = vbWhite
     
-'    Label5.Enabled = False
-'    txtLibFile.Enabled = False
-'    cmdBrowse.Enabled = False
-'    cmdSave.Enabled = False
+    Label5.Visible = False
+    txtLibFile.Visible = False
+    cmdBrowse.Visible = False
+    cmdSave.Visible = False
     Exit Sub
 
 Else 'ALCrypto or RSA
@@ -2675,10 +2687,10 @@ Else 'ALCrypto or RSA
     txtUser.Locked = True
     txtUser.BackColor = vbButtonFace
     
-'    Label5.Enabled = False
-'    txtLibFile.Enabled = False
-'    cmdBrowse.Enabled = False
-'    cmdSave.Enabled = False
+    Label5.Visible = False
+    txtLibFile.Visible = False
+    cmdBrowse.Visible = False
+    cmdSave.Visible = False
 
     If Len(txtReqCodeIn.Text) > 0 Then
         If systemEvent Then Exit Sub
@@ -2689,8 +2701,6 @@ Else 'ALCrypto or RSA
         txtUser.Text = GetUserFromInstallCode(txtReqCodeIn.Text)
         fDisableNotifications = False
         
-        Dim installNameandVersion As String
-        Dim i As Integer, success As Boolean
         installNameandVersion = GetUserSoftwareNameandVersionfromInstallCode(txtReqCodeIn.Text)
         For i = 0 To cmbProds.ListCount - 1
             If installNameandVersion = cmbProds.List(i) Then
