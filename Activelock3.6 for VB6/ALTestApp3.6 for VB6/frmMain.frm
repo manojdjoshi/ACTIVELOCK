@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "Mscomctl.ocx"
 Begin VB.Form frmMain 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "ALTestApp - ActiveLock3 Test Application"
@@ -641,6 +641,15 @@ Private Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
 
 Private Declare Function SHGetSpecialFolderPath Lib "SHELL32.DLL" Alias "SHGetSpecialFolderPathA" (ByVal hWnd As Long, ByVal lpszPath As String, ByVal nFolder As Integer, ByVal fCreate As Boolean) As Boolean
 
+Private Declare Function GetSystemDefaultLCID Lib "kernel32" () As Long
+Private Declare Function GetLocaleInfo Lib "kernel32" _
+   Alias "GetLocaleInfoA" _
+  (ByVal Locale As Long, _
+   ByVal LCType As Long, _
+   ByVal lpLCData As String, _
+   ByVal cchData As Long) As Long
+Const LOCALE_SSHORTDATE As Long = &H1F 'short date format string
+
 Public Function LooseSpace(invoer$) As String
 'This routine terminates a string if it detects char 0.
 
@@ -746,7 +755,6 @@ End Sub
 ' ActiveLock Initialization
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 Private Sub Form_Load()
-    Dim autoRegisterKey As String
     Dim boolAutoRegisterKeyPath As Boolean
     Dim Msg As String
     Dim A() As String
@@ -812,8 +820,8 @@ Private Sub Form_Load()
         ' however ALCrypto uses 1024 bit strength key only.
         ' alsShortKeyMD5 is for short key protection only
         ' WARNING: Short key licenses use the lockFingerprint by default
-        '.LicenseKeyType = alsShortKeyMD5
-        .LicenseKeyType = alsRSA
+        .LicenseKeyType = alsShortKeyMD5
+        '.LicenseKeyType = alsRSA
         
         ' Set the Trial Feature properties
         ' If you don't want to use the trial feature in your app, set the TrialType
@@ -882,6 +890,8 @@ Private Sub Form_Load()
         ' WARNING: This has no effect for short key licenses
         .LockType = lockNone
         
+        ' USAGE OF .ALL (AUTO-REGISTER) FILES
+        ' THESE FILES CARRY THE LICENSE (LIBERATION) KEY FOR AUTO REGISTRATION
         ' Set the .ALL file path if you're using an ALL file.
         ' .ALL is an auto registration file.
         ' You generate .ALL files via Alugen and then send to the users
@@ -892,15 +902,33 @@ Private Sub Form_Load()
         ' since multiple .ALL files might exist in the same directory
         ' If you don't want to use the software name and version number explicitly, use an .ALL
         ' filename that is specific to this application
-        If FolderExists(AppfilePath & "\" & .SoftwareName & .SoftwareVersion) = False Then
-            MkDir (AppfilePath & "\" & .SoftwareName & .SoftwareVersion)
+        ' Be aware that Alugen will not accept creation of ALL files without
+        ' the software name and version in the ALL filename.
+        ' You can rename the ALL file afterwards, but that name should match the ALL filename used here.
+        
+        ' .ALL FILE STORAGE OPTION-1
+        ' Try to use the simplest accessible solution for both XP and Vista such as C:\TEMP
+        If FolderExists("c:\temp") = False Then
+            MkDir ("c:\temp")
         End If
-        strAutoRegisterKeyPath = AppfilePath & "\" & .SoftwareName & .SoftwareVersion & "\" & .SoftwareName & .SoftwareVersion & ".all"
-        ' App.Path could be an option for XP, but not so for Vista
+        strAutoRegisterKeyPath = "c:\temp\" & .SoftwareName & .SoftwareVersion & ".all"
+        
+        ' .ALL FILE STORAGE OPTION-2
+        ' The following (AppfilePath) is another option for both XP and Vista
+        ' but you should be sure that the directory exists.
+        ' Since it's also the folder where the LIC file resides, it's not recommended
+        'If FolderExists(AppfilePath & "\" & .SoftwareName & .SoftwareVersion) = False Then
+        '    MkDir (AppfilePath & "\" & .SoftwareName & .SoftwareVersion)
+        'End If
+        'strAutoRegisterKeyPath = AppfilePath & "\" & .SoftwareName & .SoftwareVersion & "\" & .SoftwareName & .SoftwareVersion & ".all"
+        
+        ' .ALL FILE STORAGE OPTION-3
+        ' App.Path could be an option for XP, but not for Vista
         'If FolderExists(App.Path & "\" & .SoftwareName & .SoftwareVersion) = False Then
         '    MkDir (App.Path & "\" & .SoftwareName & .SoftwareVersion)
         'End If
         'strAutoRegisterKeyPath = App.Path & "\" & .SoftwareName & .SoftwareVersion & "\" & .SoftwareName & .SoftwareVersion & ".all"
+        
         .AutoRegisterKeyPath = strAutoRegisterKeyPath
         If FileExist(strAutoRegisterKeyPath) Then boolAutoRegisterKeyPath = True
         
@@ -946,6 +974,7 @@ Private Sub Form_Load()
             MkDir (AppfilePath & "\" & .SoftwareName & .SoftwareVersion)
         End If
         strKeyStorePath = AppfilePath & "\" & .SoftwareName & .SoftwareVersion & "\" & .SoftwareName & .SoftwareVersion & ".lic"
+        
         ' App.Path could be an option for XP, but not so for Vista
         'If FolderExists(App.Path & "\" & .SoftwareName & .SoftwareVersion) = False Then
         '    MkDir (App.Path & "\" & .SoftwareName & .SoftwareVersion)
@@ -962,8 +991,8 @@ Private Sub Form_Load()
         ' Init() method below checkes the ALCrypto CRC, and registeres the
         ' application if an ALL file was used.
         ' Note that ALCrypto DLL must be placed inside the system32 along with the Activelock DLL
-        .Init autoRegisterKey
-        If FileExist(strKeyStorePath) And boolAutoRegisterKeyPath = True And autoRegisterKey <> "" Then
+        .Init strAutoRegisterKeyPath
+        If FileExist(strKeyStorePath) And boolAutoRegisterKeyPath = True And strAutoRegisterKeyPath <> "" Then
             ' This means, an ALL file existed and was used to create a LIC file
             ' Init() method successfully registered the ALL file
             ' and returned the license key
@@ -1047,8 +1076,16 @@ Private Sub Form_Load()
     ' Set the textboxes in your app accordingly.
     txtRegStatus.Text = "Registered"
     txtUsedDays.Text = strUsedDays                          'MyActiveLock.UsedDays
-    txtExpiration.Text = strExpirationDate                  'MyActiveLock.ExpirationDate
+    
+    Dim LCID As Long, strSD As String
+    'get the system's locale ID. Where the
+    'user's locale ID is required, call
+    'GetUserLocaleLCID instead.
+    LCID = GetSystemDefaultLCID()
+    strSD = GetUserLocaleInfo(LCID, LOCALE_SSHORTDATE)
+    txtExpiration.Text = Format(strExpirationDate, strSD)                 'MyActiveLock.ExpirationDate
     If txtExpiration.Text = "" Then txtExpiration.Text = "Permanent" 'App has a permanent license
+    
     Dim arrProdVer() As String
     arrProdVer = Split(strRegisteredUser, "&&&") ' Extract the software name and version
     'arrProdVer = Split(MyActiveLock.RegisteredUser, "&&&") ' Extract the software name and version
@@ -1134,6 +1171,38 @@ DLLnotRegistered:
     End
 
 End Sub
+Private Function GetUserLocaleInfo(ByVal dwLocaleID As Long, _
+                                  ByVal dwLCType As Long) As String
+
+   Dim sReturn As String
+   Dim r As Long
+
+  'call the function passing the Locale type
+  'variable to retrieve the required size of
+  'the string buffer needed
+   r = GetLocaleInfo(dwLocaleID, dwLCType, sReturn, Len(sReturn))
+    
+  'if successful..
+   If r Then
+    
+     'pad the buffer with spaces
+      sReturn = Space$(r)
+       
+     'and call again passing the buffer
+      r = GetLocaleInfo(dwLocaleID, dwLCType, sReturn, Len(sReturn))
+     
+     'if successful (r > 0)
+      If r Then
+      
+        'r holds the size of the string
+        'including the terminating null
+         GetUserLocaleInfo = Left$(sReturn, r - 1)
+      
+      End If
+   
+   End If
+    
+End Function
 Function Current_User_Name() As String
 
 ' Dimension variables
