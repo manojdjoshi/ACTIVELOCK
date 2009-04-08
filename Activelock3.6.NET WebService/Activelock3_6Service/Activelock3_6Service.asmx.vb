@@ -32,10 +32,10 @@ Public Class Activelock3_6Service
     Friend objDataReader As OleDbDataReader
     Friend fileMDB As String = AppPath() & "\" & "licenses.mdb"
 
-    <WebMethod()> _
-    Public Function HelloWorld() As String
-        Return "Hello World"
-    End Function
+    '<WebMethod()> _
+    'Public Function HelloWorld() As String
+    '    Return "Hello World"
+    'End Function
     <WebMethod()> _
     Public Function GetTrial(ByVal pInstallCode As String, ByVal pSoftwareName As String, _
         ByVal pSoftwareVersion As String) As String
@@ -47,7 +47,7 @@ Public Class Activelock3_6Service
             Dim mLicType As ProductLicense.ALLicType = ProductLicense.ALLicType.allicPeriodic
             Dim mDays As String = "15"
             Dim mExpireDate As String = GetExpirationDate(mLicType, mDays)
-            Dim mRegDate As String = DateTime.UtcNow.ToString("yyyy/MM/dd")
+            Dim mRegDate As String = Date.UtcNow.ToString("yyyy/MM/dd")
             Dim maximumUsers As Short = 5
             Dim networkLicense As ProductLicense.LicFlags = ProductLicense.LicFlags.alfSingle
             mLicenseKey = GenerateKey(pInstallCode, pSoftwareName, pSoftwareVersion, mLicType _
@@ -70,10 +70,12 @@ Public Class Activelock3_6Service
             'Dim mLicType As ProductLicense.ALLicType = ProductLicense.ALLicType.allicPeriodic
             'Dim mDays As String = "30"
             Dim mExpireDate As String = GetExpirationDate(mLicType, mDays)
-            Dim mRegDate As String = DateTime.UtcNow.ToString("yyyy/MM/dd")
+            Dim mRegDate As String = Date.UtcNow.ToString("yyyy/MM/dd")
             'Dim maximumUsers As Short = 5
             mLicenseKey = GenerateKey(pInstallCode, pSoftwareName, pSoftwareVersion, mLicType _
               , pRegisteredLevel, mExpireDate, mRegDate, networkLicense, maximumUsers)
+        Else
+            mLicenseKey = "You have already obtained a License for this installation code"
         End If
         Return mLicenseKey
     End Function
@@ -144,6 +146,15 @@ Public Class Activelock3_6Service
             'TODO - get locktype and username from InstallCode
             Dim pLockType As String = GetLockTypeFromInstallCode(pInstallCode)
             Dim pUserName As String = GetUserFromInstallCode(pInstallCode)
+            Dim strLicType As String = String.Empty
+            Select Case pLicType
+                Case ProductLicense.ALLicType.allicPeriodic
+                    strLicType = "Periodic"
+                Case ProductLicense.ALLicType.allicPermanent
+                    strLicType = "Permanent"
+                Case ProductLicense.ALLicType.allicTimeLocked
+                    strLicType = "Time Locked"
+            End Select
             'save the license to licenses database
             Try
                 strSQL = "INSERT INTO license ( Progname, progver, RegDate, ExpDate, LicType, LockType, RegLevel, InstCode, UserName, LibCode )" & _
@@ -163,7 +174,7 @@ Public Class Activelock3_6Service
                 objCommand.Parameters.AddWithValue("@productversion", pSoftwareVersion)
                 objCommand.Parameters.AddWithValue("@registrationDate", pRegDate)
                 objCommand.Parameters.AddWithValue("@expiresAfter", pExpireDate)
-                objCommand.Parameters.AddWithValue("@licenseType", pLicType)
+                objCommand.Parameters.AddWithValue("@licenseType", strLicType)
                 objCommand.Parameters.AddWithValue("@lockType", pLockType)
                 objCommand.Parameters.AddWithValue("@registeredLevel", pRegisteredLevel)
                 objCommand.Parameters.AddWithValue("@installationCode", pInstallCode)
@@ -195,11 +206,11 @@ Public Class Activelock3_6Service
     Private Function GetExpirationDate(ByVal pLicType As ProductLicense.ALLicType, ByVal pDays As String) As String
         Dim mResult As String = String.Empty
         If pLicType = ProductLicense.ALLicType.allicTimeLocked Then
-            If pDays.Length = 0 Then mResult = DateTime.UtcNow.AddDays(30).ToString("yyyy/MM/dd")
+            If pDays.Length = 0 Then mResult = Date.UtcNow.AddDays(30).ToString("yyyy/MM/dd")
             mResult = CType(mResult, DateTime).ToString("yyyy/MM/dd")
         Else
             If pDays.Length = 0 Then pDays = "30"
-            mResult = DateTime.UtcNow.AddDays(CType(pDays, Double)).ToString("yyyy/MM/dd")
+            mResult = Date.UtcNow.AddDays(CType(pDays, Double)).ToString("yyyy/MM/dd")
         End If
         Return mResult
     End Function
