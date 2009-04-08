@@ -2920,8 +2920,10 @@ minusAttributesError:
 
         ' Obviously, for this function to work, there must be a connection to Internet
         If IsWebConnected() = False Then
-            Set_locale(regionalSymbol)
-            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrInternetConnectionError, ACTIVELOCKSTRING, STRINTERNETNOTCONNECTED)
+            SystemClockTampered = False
+            Exit Function
+            'Set_locale(regionalSymbol)
+            'Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrInternetConnectionError, ACTIVELOCKSTRING, STRINTERNETNOTCONNECTED)
         End If
 
         Dim ss, aa As String
