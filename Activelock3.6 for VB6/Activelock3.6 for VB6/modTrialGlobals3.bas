@@ -2999,8 +2999,10 @@ Public Function SystemClockTampered() As Boolean
 
 ' Obviously, for this function to work, there must be a connection to Internet
 If IsWebConnected() = False Then
-    Set_locale (regionalSymbol)
-    Err.Raise ActiveLockErrCodeConstants.alerrNotInitialized, ACTIVELOCKSTRING, STRINTERNETNOTCONNECTED
+    SystemClockTampered = False
+    Exit Function
+    'Set_locale (regionalSymbol)
+    'Err.Raise ActiveLockErrCodeConstants.alerrNotInitialized, ACTIVELOCKSTRING, STRINTERNETNOTCONNECTED
 End If
 
 Dim ss As String, aa As String
