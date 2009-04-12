@@ -254,7 +254,8 @@ noInfo:
             Dim arrProdInfos() As ProductInfo
             Dim MyGen As New AlugenGlobals
             GeneratorInstance = MyGen.GeneratorInstance(IActiveLock.ProductsStoreType.alsINIFile)
-            GeneratorInstance.StoragePath = AppPath() & "\licenses.ini"
+            'GeneratorInstance.StoragePath = AppPath() & "\licenses.ini"
+            GeneratorInstance.StoragePath = Server.MapPath("..\aspnetalugen3.6\licenses.ini")
 
             arrProdInfos = GeneratorInstance.RetrieveProducts()
             If arrProdInfos.Length = 0 Then Exit Sub
