@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "ASPNETAlugen3", "http://localhost/ASPNETAlugen3.6", "{73EEFC3A-6595-4472-B826-016554551A44}"
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "ASPNETAlugen3.6", "http://localhost/ASPNETAlugen3.6", "{73EEFC3A-6595-4472-B826-016554551A44}"
 	ProjectSection(WebsiteProperties) = preProject
 		TargetFramework = "2.0"
 		Debug.AspNetCompiler.VirtualPath = "/ASPNETAlugen3"
