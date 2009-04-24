@@ -217,7 +217,10 @@ Friend Class clsShortLicenseKey
 
         ' convert each segment value to a hex string
         KeySegs(Segments.iProdCode) = HexWORD(ProductCode)
-        KeySegs(Segments.iExpire) = HexWORD(DateValue(CStr(CDate(ExpireDate.ToString("yyyy/MM/dd")))).Subtract(DateValue(CStr(#1/1/1970#))).Days)
+        '* KeySegs(Segments.iExpire) = HexWORD(DateValue(CStr(CDate(ExpireDate.ToString("yyyy/MM/dd")))).Subtract(DateValue(CStr(#1/1/1970#))).Days)
+        '* removed all the string to date to string to dates
+        KeySegs(Segments.iExpire) = HexWORD(DateValue(ExpireDate).Subtract(DateValue(#1/1/1970#)).Days) '*
+
         KeySegs(Segments.iUserData) = HexWORD(UserData)
 
         ' Compute CRC against pertinent info.
@@ -407,13 +410,13 @@ ExitLabel:
 
         ' This implementation hardcodes keys that are 8 bytes/4 words
         If Word1 < 0 Or Word1 > 3 Or Word2 < 0 Or Word2 > 3 Then
-            Set_locale(regionalSymbol)
+            '* Set_locale(regionalSymbol)
             Err.Raise(5, Module_Renamed, "Word specification is not within 0-3.")
         End If
 
         ' There are only 16 bits to a word.
         If Bit1 < 0 Or Bit1 > 15 Or Bit2 < 0 Or Bit2 > 15 Then
-            Set_locale(regionalSymbol)
+            '* Set_locale(regionalSymbol)
             Err.Raise(5, Module_Renamed, "Bit specification is not within 0-15.")
         End If
 

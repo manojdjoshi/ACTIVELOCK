@@ -209,79 +209,79 @@ Friend Class XMLGenerator
     'Set MyXMLDoc.schemas = schemaCache
     'Set result = MyXMLDoc.Validate
     'If result.errorCode = 0 Then
-        '    Set_locale(regionalSymbol)
+        '    '* Set_locale(regionalSymbol)
         '    Err.Raise ("XML Validation Error:" & result.reason)
-    'End If
-    MyXMLDoc.Save(fileXML)
-  End Sub
-  '===============================================================================
-  ' Name: IALUGenerator_RetrieveProducts
-  ' Input: None
-  ' Output:
-  '   ProductInfo - Product info object
-  ' Purpose: Retrieves all product information from INI.
-  ' Remarks: Returns as an array.
-  '===============================================================================
-  Private Function IALUGenerator_RetrieveProducts() As ProductInfo() Implements _IALUGenerator.RetrieveProducts
-    'Retrieve all product information from XML file.  Return as an array.
-    On Error GoTo RetrieveProductsError
+        'End If
+        MyXMLDoc.Save(fileXML)
+    End Sub
+    '===============================================================================
+    ' Name: IALUGenerator_RetrieveProducts
+    ' Input: None
+    ' Output:
+    '   ProductInfo - Product info object
+    ' Purpose: Retrieves all product information from INI.
+    ' Remarks: Returns as an array.
+    '===============================================================================
+    Private Function IALUGenerator_RetrieveProducts() As ProductInfo() Implements _IALUGenerator.RetrieveProducts
+        'Retrieve all product information from XML file.  Return as an array.
+        On Error GoTo RetrieveProductsError
         Dim arrProdInfos() As ProductInfo = Nothing
-    Dim Count As Integer
-    Dim xmlCount As Integer
-    Count = 0
-    Dim rootProducts As XmlNodeList
-    rootProducts = MyXMLDoc.GetElementsByTagName("Products")
+        Dim Count As Integer
+        Dim xmlCount As Integer
+        Count = 0
+        Dim rootProducts As XmlNodeList
+        rootProducts = MyXMLDoc.GetElementsByTagName("Products")
 
-    xmlCount = rootProducts.Count
+        xmlCount = rootProducts.Count
 
-    ' If there are no products in the XML file, exit gracefully
+        ' If there are no products in the XML file, exit gracefully
         If xmlCount < 1 Then Return Nothing
-    For Count = 0 To xmlCount - 1
-      ReDim Preserve arrProdInfos(Count)
-      arrProdInfos(Count) = New ProductInfo
-      LoadProdInfo(rootProducts(Count), arrProdInfos(Count))
-    Next
-    IALUGenerator_RetrieveProducts = arrProdInfos
-    Exit Function
+        For Count = 0 To xmlCount - 1
+            ReDim Preserve arrProdInfos(Count)
+            arrProdInfos(Count) = New ProductInfo
+            LoadProdInfo(rootProducts(Count), arrProdInfos(Count))
+        Next
+        IALUGenerator_RetrieveProducts = arrProdInfos
+        Exit Function
 
 RetrieveProductsError:
-  End Function
-  '===============================================================================
-  ' Name: Function IALUGenerator_RetrieveProduct
-  ' Input:
-  '   ByVal name As String - Product name
-  '   ByVal Ver As String - Product version
-  ' Output: None
-  ' Purpose: Retrieves product VCode and GCode from the store file
-  ' Remarks: todo Error Handling - Need to return Nothing if store file doesn't contain the product
-  '===============================================================================
-  Private Function IALUGenerator_RetrieveProduct(ByVal Name As String, ByVal Ver As String) As ProductInfo Implements _IALUGenerator.RetrieveProduct
-    '@todo Error Handling - Need to return Nothing if store file doesn't contain the product
-    Dim ProdInfo As New ProductInfo
-    ProdInfo.Name = Name
-    ProdInfo.Version = Ver
+    End Function
+    '===============================================================================
+    ' Name: Function IALUGenerator_RetrieveProduct
+    ' Input:
+    '   ByVal name As String - Product name
+    '   ByVal Ver As String - Product version
+    ' Output: None
+    ' Purpose: Retrieves product VCode and GCode from the store file
+    ' Remarks: todo Error Handling - Need to return Nothing if store file doesn't contain the product
+    '===============================================================================
+    Private Function IALUGenerator_RetrieveProduct(ByVal Name As String, ByVal Ver As String) As ProductInfo Implements _IALUGenerator.RetrieveProduct
+        '@todo Error Handling - Need to return Nothing if store file doesn't contain the product
+        Dim ProdInfo As New ProductInfo
+        ProdInfo.Name = Name
+        ProdInfo.Version = Ver
 
-    Dim xmlCount As Integer
-    Dim Count As Integer
-    Count = 0
+        Dim xmlCount As Integer
+        Dim Count As Integer
+        Count = 0
 
-    Dim rootProducts As XmlNodeList
-    rootProducts = MyXMLDoc.GetElementsByTagName("Products")
+        Dim rootProducts As XmlNodeList
+        rootProducts = MyXMLDoc.GetElementsByTagName("Products")
 
-    xmlCount = rootProducts.Count
+        xmlCount = rootProducts.Count
 
-    For Count = 0 To xmlCount - 1
-      With rootProducts(Count)
-        If .SelectSingleNode("name").InnerText = Name And _
-              .SelectSingleNode("version").InnerText = Ver Then
-          ProdInfo.VCode = .SelectSingleNode("vcode").InnerText
-          ProdInfo.GCode = .SelectSingleNode("gcode").InnerText
-          Exit For
-        End If
-      End With
-    Next
-    If ProdInfo.VCode = "" Or ProdInfo.GCode = "" Then
-            Set_Locale(regionalSymbol)
+        For Count = 0 To xmlCount - 1
+            With rootProducts(Count)
+                If .SelectSingleNode("name").InnerText = Name And _
+                      .SelectSingleNode("version").InnerText = Ver Then
+                    ProdInfo.VCode = .SelectSingleNode("vcode").InnerText
+                    ProdInfo.GCode = .SelectSingleNode("gcode").InnerText
+                    Exit For
+                End If
+            End With
+        Next
+        If ProdInfo.VCode = "" Or ProdInfo.GCode = "" Then
+            '* Set_locale(regionalSymbol)
             Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, "Product code set is invalid.")
         End If
         IALUGenerator_RetrieveProduct = ProdInfo
@@ -344,7 +344,8 @@ RetrieveProductsError:
         Dim strRegDate As String
         ' registered level
         Lic.RegisteredLevel = RegisteredLevel
-        strRegDate = Lic.RegisteredDate
+        '* strRegDate = Lic.RegisteredDate
+        strRegDate = DateToDblString(Lic.RegisteredDate) '*
 
         Dim strEncrypted As String
         ' @todo Rethink this bit about encrypting the dates.
@@ -422,7 +423,7 @@ RetrieveProductsError:
                 mySignatureBlock = Convert.ToBase64String(mysignature)
                 Lic.LicenseKey = mySignatureBlock
             Catch ex As Exception
-                Set_locale(regionalSymbol)
+                '* Set_locale(regionalSymbol)
                 Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, ex.Message)
             End Try
 

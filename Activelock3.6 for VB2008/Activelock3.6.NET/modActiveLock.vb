@@ -67,7 +67,7 @@ Module modActiveLock
     '  ///////////////////////////////////////////////////////////////////////
     '
     ' @bug rsa_createkey() sometimes causes crash.  This is due to a bug in
-    '      ALCrypto3.dll in which a bad keyset is sometimes generated
+    '      ALCrypto3NET.dll in which a bad keyset is sometimes generated
     '      (either caused by <code>rsa_generate()</code> or one of <code>rsa_private_key_blob()</code>
     '      and <code>rsa_public_key_blob()</code>--we're not sure which is the culprit yet.
     '      This causes the <code>rsa_createkey()</code> call encryption routines to crash.
@@ -88,7 +88,7 @@ Module modActiveLock
 	Public Const STRCLOCKCHANGED As String = STRLICENSEINVALID & " System clock has been tampered."
 	Public Const STRINVALIDTRIALDAYS As String = "Zero Free Trial days allowed."
 	Public Const STRINVALIDTRIALRUNS As String = "Zero Free Trial runs allowed."
-	Public Const STRFILETAMPERED As String = "Alcrypto3.dll has been tampered."
+    Public Const STRFILETAMPERED As String = "Alcrypto3NET.dll has been tampered."
 	Public Const STRKEYSTOREUNINITIALIZED As String = "Key Store Provider hasn't been initialized yet."
     Public Const STRKEYSTOREPATHISEMPTY As String = "Key Store Path (LIC file path) not specified."
     Public Const STRNOSOFTWARECODE As String = "Software code has not been set."
@@ -713,12 +713,12 @@ Module modActiveLock
         ReadFile = Len(sData)
         Exit Function
 Hell:
-        Set_locale(regionalSymbol)
+        '* Set_locale(regionalSymbol)
         Err.Raise(Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext)
     End Function
 
     ''' <summary>
-    ''' [INTERNAL] Call-back routine used by ALCrypto3.dll during key generation process.
+    ''' [INTERNAL] Call-back routine used by ALCrypto3NET.dll during key generation process.
     ''' </summary>
     ''' <param name="param">Long - TBD</param>
     ''' <param name="action">Long - Action being performed</param>
@@ -853,24 +853,24 @@ Hell:
         Dim KEY As RSAKey = Nothing
         ' create the key from the key blobs
         If rsa_createkey(strPub, Len(strPub), strPriv, Len(strPriv), KEY) = RETVAL_ON_ERROR Then
-            Set_locale(regionalSymbol)
+            '* Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
 
         ' sign the data using the created key
         Dim sLen As Integer
         If rsa_sign(KEY, strdata, Len(strdata), vbNullString, sLen) = RETVAL_ON_ERROR Then
-            Set_locale(regionalSymbol)
+            '* Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         Dim strSig As String : strSig = New String(Chr(0), sLen)
         If rsa_sign(KEY, strdata, Len(strdata), strSig, sLen) = RETVAL_ON_ERROR Then
-            Set_locale(regionalSymbol)
+            '* Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         ' throw away the key
         If rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-            Set_locale(regionalSymbol)
+            '* Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         RSASign = strSig
@@ -890,18 +890,18 @@ Hell:
         Dim rc As Integer
         ' create the key from the public key blob
         If rsa_createkey(strPub, Len(strPub), vbNullString, 0, KEY) = RETVAL_ON_ERROR Then
-            Set_locale(regionalSymbol)
+            '* Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         ' validate the key
         rc = rsa_verifysig(KEY, strSig, Len(strSig), strdata, Len(strdata))
         If rc = RETVAL_ON_ERROR Then
-            Set_locale(regionalSymbol)
+            '* Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         ' de-allocate memory used by the key
         If rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-            Set_locale(regionalSymbol)
+            '* Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
         End If
         RSAVerify = rc
@@ -1004,46 +1004,46 @@ Hell:
     '    UTC = dt.AddMinutes(LocalTimeZone(TimeZoneReturn.UTC_Offset))
     'End Function
 
-    ''' <summary>
-    ''' Retrieves the regional setting
-    ''' </summary>
-    ''' <remarks></remarks>
-    Public Sub Get_locale()
-        Dim Symbol As String
-        Dim iRet1 As Integer
-        Dim iRet2 As Integer
-        Dim lpLCDataVar As String = String.Empty
-        Dim Pos As Short
-        Dim Locale As Integer
-        Locale = GetUserDefaultLCID()
-        iRet1 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, lpLCDataVar, 0)
-        Symbol = New String(Chr(0), iRet1)
-        iRet2 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol, iRet1)
-        Pos = InStr(Symbol, Chr(0))
-        If Pos > 0 Then
-            Symbol = Left(Symbol, Pos - 1)
-            If Symbol <> "yyyy/MM/dd" Then regionalSymbol = Symbol
-        End If
-    End Sub
+    '''' <summary>
+    '''' Retrieves the regional setting
+    '''' </summary>
+    '''' <remarks></remarks>
+    '*  Public Sub Get_locale()
+    '*  Dim Symbol As String
+    '*  Dim iRet1 As Integer
+    '*   Dim iRet2 As Integer
+    '*  Dim lpLCDataVar As String = String.Empty
+    '* Dim Pos As Short
+    '* Dim Locale As Integer
+    '*   Locale = GetUserDefaultLCID()
+    '*   iRet1 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, lpLCDataVar, 0)
+    '*    Symbol = New String(Chr(0), iRet1)
+    '*    iRet2 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol, iRet1)
+    '*    Pos = InStr(Symbol, Chr(0))
+    '*   If Pos > 0 Then
+    '*        Symbol = Left(Symbol, Pos - 1)
+    '*       If Symbol <> "yyyy/MM/dd" Then regionalSymbol = Symbol
+    '*    End If
+    '* End Sub
 
-    ''' <summary>
-    ''' Changes the regional setting.
-    ''' </summary>
-    ''' <param name="localSymbol"></param>
-    ''' <remarks></remarks>
-    Public Sub Set_locale(Optional ByVal localSymbol As String = "") 'Change the regional setting
-        Dim Symbol As String
-        Dim iRet As Integer
-        Dim Locale As Integer
-        Locale = GetUserDefaultLCID() 'Get user Locale ID
-        If localSymbol = "" Then
-            Symbol = "yyyy/MM/dd" 'New character for the locale
-        Else
-            Symbol = localSymbol
-        End If
+    '''' <summary>
+    '''' Changes the regional setting.
+    '''' </summary>
+    '''' <param name="localSymbol"></param>
+    '''' <remarks></remarks>
+    '* Public Sub Set_locale(Optional ByVal localSymbol As String = "") 'Change the regional setting
+    'Dim Symbol As String
+    '*Dim iRet As Integer
+    '* Dim Locale As Integer
+    '*   Locale = GetUserDefaultLCID() 'Get user Locale ID
+    '* If localSymbol = "" Then
+    '*   Symbol = "yyyy/MM/dd" 'New character for the locale
+    '*    Else
+    '*      Symbol = localSymbol
+    '*   End If
 
-        iRet = SetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol)
-    End Sub
+    '*    iRet = SetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol)
+    '* End Sub
 
     ''' <summary>
     ''' Gets special folders...
@@ -1571,7 +1571,7 @@ Hell:
             ActivelockGetSpecialFolder = Trash
             Return ActivelockGetSpecialFolder
         Catch ex As Exception
-            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrUndefinedSpecialFolder, ACTIVELOCKSTRING, STRUNDEFINEDSPECIALFOLDER)
+            Err.Raise(Globals.ActiveLockErrCodeConstants.alerrUndefinedSpecialFolder, ACTIVELOCKSTRING, STRUNDEFINEDSPECIALFOLDER)
         End Try
 
     End Function

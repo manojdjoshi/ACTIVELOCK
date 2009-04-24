@@ -153,7 +153,7 @@ Imports System.IO
     '   ByVal LicType As ActiveLock3.ALLicType - License type
     '   ByVal Licensee As String - Registered party for which the license has been issued
     '   ByVal RegisteredLevel As String - Registered level
-    '   ByVal Expiration As String - Expiration date
+    '*   ByVal Expiration As Date - Expiration date
     '   ByVal LicKey As String - License key
     '   ByVal RegisteredDate As String - Date on which the product is registered
     '   ByVal Hash1 As String - Hash-1 code
@@ -164,7 +164,8 @@ Imports System.IO
     ' <p>If <code>LicType</code> is <i>Permanent</i>, then <code>Expiration</code> date parameter will be ignored.
     ' Remarks: None
     '===============================================================================
-    Public Function CreateProductLicense(ByVal Name As String, ByVal Ver As String, ByVal Code As String, ByVal Flags As ProductLicense.LicFlags, ByVal LicType As ProductLicense.ALLicType, ByVal Licensee As String, ByVal RegisteredLevel As String, ByVal Expiration As String, Optional ByVal LicKey As String = "", Optional ByVal RegisteredDate As String = "", Optional ByVal Hash1 As String = "", Optional ByVal MaxUsers As Short = 1, Optional ByVal LicCode As String = "") As ProductLicense
+    '* Public Function CreateProductLicense(ByVal Name As String, ByVal Ver As String, ByVal Code As String, ByVal Flags As ProductLicense.LicFlags, ByVal LicType As ProductLicense.ALLicType, ByVal Licensee As String, ByVal RegisteredLevel As String, ByVal Expiration As String, Optional ByVal LicKey As String = "", Optional ByVal RegisteredDate As String = "", Optional ByVal Hash1 As String = "", Optional ByVal MaxUsers As Short = 1, Optional ByVal LicCode As String = "") As ProductLicense
+    Public Function CreateProductLicense(ByVal Name As String, ByVal Ver As String, ByVal Code As String, ByVal Flags As ProductLicense.LicFlags, ByVal LicType As ProductLicense.ALLicType, ByVal Licensee As String, ByVal RegisteredLevel As String, ByVal Expiration As Date, Optional ByVal LicKey As String = "", Optional ByVal RegisteredDate As Date = #1/1/1900#, Optional ByVal Hash1 As String = "", Optional ByVal MaxUsers As Short = 1, Optional ByVal LicCode As String = "") As ProductLicense '*
         Dim NewLic As New ProductLicense
         With NewLic
             .ProductName = Name
@@ -188,7 +189,8 @@ Imports System.IO
                 .LicenseKey = LicKey
             End If
             'IsMissing() was changed to IsNothing()
-            If Not IsNothing(RegisteredDate) Then
+            '*If Not IsNothing(RegisteredDate) Then
+            If RegisteredDate > #1/1/1900# Then '*
                 .RegisteredDate = RegisteredDate
             End If
             'IsMissing() was changed to IsNothing()

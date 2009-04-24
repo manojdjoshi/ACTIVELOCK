@@ -6,7 +6,28 @@ ActiveLock3_6Net
 </name>
 </assembly>
 <members>
-<member name="F:ActiveLock3_6NET.ActiveLock.AL_REGISTRY_HIVE">
+<member name="M:ActiveLock3_6NET.modTrial.DateToDblString(System.DateTime@)">
+* <summary>
+* converts a date to a double and then to a string
+* useful for ensureing dates can be read when pulled back out
+* no matter the locale
+* </summary>
+* <param name="Dte">the date to convert</param>
+* <returns>a double number in a string</returns>
+* <remarks>can blow up if passed an invalid date?</remarks>
+</member><member name="M:ActiveLock3_6NET.modTrial.DblStringToDate(System.String@)">
+* <summary>
+* Function is used to convert doubles stored in strings to dates
+* useful becuase whenever we store dates we convert them (to doubles and then strings)
+* in case the user changes the locale in between storage and retrieval.
+* minor handling of actual date strings for some semblance of backward 
+* compatibility
+* </summary>
+* <param name="Dstr">The string to pass</param>
+* <returns>a date representation on the passed Dstr or
+*  1/1/1900 if a conversion error occurred</returns>
+* <remarks></remarks>
+</member><member name="F:ActiveLock3_6NET.ActiveLock.AL_REGISTRY_HIVE">
 	<summary>
  Registry hive used to store Activelock settings.
  </summary>
@@ -1671,17 +1692,6 @@ ActiveLock3_6Net
  </summary>
 	<param name="w"></param>
 	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.modActiveLock.Get_locale">
-	<summary>
- Retrieves the regional setting
- </summary>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.modActiveLock.Set_locale(System.String)">
-	<summary>
- Changes the regional setting.
- </summary>
-	<param name="localSymbol"></param>
 	<remarks></remarks>
 </member><member name="M:ActiveLock3_6NET.modActiveLock.ActivelockGetSpecialFolder(System.Int64)">
 	<summary>

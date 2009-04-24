@@ -385,37 +385,49 @@ ByVal flags As Int32) As IntPtr
 
         On Error GoTo DateGoodRegistryError
 
-        TmpCRD = ActiveLockDate(Date.UtcNow)
-        TmpLRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
-        TmpFRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+        TmpCRD = Date.UtcNow '* TmpCRD = ActiveLockDate(Date.UtcNow)
+        '*TmpLRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+        '*TmpFRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+        TmpLRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+        TmpFRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
         DateGoodRegistry = False
 
         'If this is the applications first load, write initial settings
         'to the registry
         If TmpLRD = CDate(dec2("93.8D.93.8D.96.90.90.90")) Then '1/1/2000
-            SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(CStr(TmpCRD)))
-            SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", enc2(CStr(TmpCRD)))
+            '*  SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(CStr(TmpCRD)))
+            '* SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", enc2(CStr(TmpCRD)))
+            SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(DateToDblString(TmpCRD))) '*
+            SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", enc2(DateToDblString(TmpCRD))) '*
             SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2("0"))
         End If
         'Read LRD and FRD from registry
-        TmpLRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
-        TmpFRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+        '*   TmpLRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+        '*  TmpFRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+        TmpLRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+        TmpFRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
 
-        If ActiveLockDate(TmpFRD) > ActiveLockDate(TmpCRD) Then 'System clock rolled back
+        '* If ActiveLockDate(TmpFRD) > ActiveLockDate(TmpCRD) Then 'System clock rolled back
+        If TmpFRD > TmpCRD Then 'System clock rolled back
             DateGoodRegistry = False
-        ElseIf ActiveLockDate(Date.UtcNow) > ActiveLockDate(TmpFRD).AddDays(numDays) Then  'trial expired
+            '*        ElseIf ActiveLockDate(Date.UtcNow) > ActiveLockDate(TmpFRD).AddDays(numDays) Then  'trial expired
+        ElseIf Date.UtcNow > (TmpFRD).AddDays(numDays) Then  'trial expired
             SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & EXPIRED_DAYS & "_" & EXPIRED_DAYS & "_" & EXPIRED_RUNS))
             DateGoodRegistry = False
-        ElseIf ActiveLockDate(TmpCRD) > ActiveLockDate(TmpLRD) Then  'Everything OK write New LRD date
-            SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(CStr(TmpCRD)))
+            '* ElseIf ActiveLockDate(TmpCRD) > ActiveLockDate(TmpLRD) Then  'Everything OK write New LRD date
+            '*   SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(CStr(TmpCRD)))
+        ElseIf TmpCRD > TmpLRD Then  'Everything OK write New LRD date
+            SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(DateToDblString(TmpCRD)))
             DateGoodRegistry = True
-        ElseIf ActiveLockDate(TmpCRD) = ActiveLockDate(TmpLRD) Then
+            '* ElseIf ActiveLockDate(TmpCRD) = ActiveLockDate(TmpLRD) Then
+        ElseIf TmpCRD = TmpLRD Then
             DateGoodRegistry = True
         Else
             DateGoodRegistry = False
         End If
         If DateGoodRegistry Then
-            daysLeft = numDays - ActiveLockDate(Date.UtcNow).Subtract(ActiveLockDate(TmpFRD)).Days
+            '* daysLeft = numDays - ActiveLockDate(Date.UtcNow).Subtract(ActiveLockDate(TmpFRD)).Days
+            daysLeft = numDays - Date.UtcNow.Subtract(TmpFRD).Days '*
         Else
             daysLeft = 0
         End If
@@ -443,21 +455,27 @@ DateGoodRegistryError:
         Dim TmpFRD As Date
 
         TmpCRD = CDate(INITIALDATE)
-        TmpLRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
-        TmpFRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+        '* TmpLRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+        '* TmpFRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+        TmpLRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+        TmpFRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
         runsLeft = Int(CDbl(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2(CStr(numRuns - 1)))))) - 1
         RunsGoodRegistry = False
 
         'If this is the applications first load, write initial settings
         'to the registry
         If TmpLRD = CDate(dec2("93.8D.93.8D.96.90.90.90")) Then '1/1/2000
-            SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(CStr(Now)))
-            SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", enc2(CStr(TmpCRD)))
+            '*SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(CStr(Now)))
+            '*SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", enc2(CStr(TmpCRD)))
+            SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(DateToDblString(Now)))
+            SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", enc2(DateToDblString(TmpCRD)))
             SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2(CStr(numRuns - 1)))
         End If
         'Read LRD and FRD from registry
-        TmpLRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
-        TmpFRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+        '*TmpLRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+        '*TmpFRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+        TmpLRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+        TmpFRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
         runsLeft = Int(CDbl(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2(CStr(numRuns - 1))))))
         If TmpLRD = "#12:00:00 AM#" Then
             TmpLRD = CDate(INITIALDATE)
@@ -502,7 +520,7 @@ RunsGoodRegistryError:
 
         If TrialSteganographyExists(TrialHideTypes) Then
             If DateGoodSteganography(numDays, daysLeft2) = False Then
-                Set_locale(regionalSymbol)
+                '* Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
                 'MsgBox "DateGoodSteganography " & daysLeft2
                 Exit Function
@@ -511,7 +529,7 @@ RunsGoodRegistryError:
         End If
         If TrialHiddenFolderExists(TrialHideTypes) Then
             If DateGoodHiddenFolder(numDays, daysLeft3) = False Then
-                Set_locale(regionalSymbol)
+                '* Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
                 'MsgBox "DateGoodHiddenFolder " & daysLeft3
                 Exit Function
@@ -520,7 +538,7 @@ RunsGoodRegistryError:
         End If
         If TrialRegistryPerUserExists(TrialHideTypes) Then
             If DateGoodRegistry(numDays, daysLeft4) = False Then
-                Set_locale(regionalSymbol)
+                '* Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
                 'MsgBox "DateGoodRegistry " & daysLeft4
                 Exit Function
@@ -562,7 +580,7 @@ RunsGoodRegistryError:
 
         If TrialSteganographyExists(TrialHideTypes) Then
             If RunsGoodSteganography(numRuns, runsLeft2) = False Then
-                Set_locale(regionalSymbol)
+                '* Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
                 'MsgBox "RunsGoodSteganography " & runsLeft2
                 Exit Function
@@ -572,7 +590,7 @@ RunsGoodRegistryError:
 
         If TrialHiddenFolderExists(TrialHideTypes) Then
             If RunsGoodHiddenFolder(numRuns, runsLeft3) = False Then
-                Set_locale(regionalSymbol)
+                '* Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
                 'MsgBox "RunsGoodHiddenFolder " & runsLeft3
                 Exit Function
@@ -582,7 +600,7 @@ RunsGoodRegistryError:
 
         If TrialRegistryPerUserExists(TrialHideTypes) Then
             If RunsGoodRegistry(numRuns, runsLeft4) = False Then
-                Set_locale(regionalSymbol)
+                '* Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
                 'MsgBox "RunsGoodRegistry " & runsLeft4
                 Exit Function
@@ -666,7 +684,8 @@ RunsGoodRegistryError:
 
         CreateHdnFile()
 
-        TmpCRD = ActiveLockDate(Date.UtcNow)
+        '*TmpCRD = ActiveLockDate(Date.UtcNow)
+        TmpCRD = Date.UtcNow
         Dim a() As String
         Dim aa As String
         If fileExist(strSource) Then
@@ -691,8 +710,10 @@ RunsGoodRegistryError:
 
             If strMyString <> "" Then
                 a = strMyString.Split("_")
-                If a(1) <> "" Then TmpLRD = CDate(a(1))
-                If a(2) <> "" Then TmpFRD = CDate(a(2))
+                '*    If a(1) <> "" Then TmpLRD = CDate(a(1))
+                '*  If a(2) <> "" Then TmpFRD = CDate(a(2))
+                If a(1) <> "" Then TmpLRD = DblStringToDate(a(1))
+                If a(2) <> "" Then TmpFRD = DblStringToDate(a(2))
                 If a(0) <> LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD Then
                     DateGoodHiddenFolder = False
                     Exit Function
@@ -714,7 +735,8 @@ RunsGoodRegistryError:
             ' Write to the file...
             intFF = FreeFile()
             FileOpen(intFF, strSource, OpenMode.Output)
-            PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & TmpLRD & "_" & TmpFRD & "_" & "0", PSWD))
+            '* PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & TmpLRD & "_" & TmpFRD & "_" & "0", PSWD))
+            PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(TmpLRD) & "_" & DateToDblString(TmpFRD) & "_" & "0", PSWD)) '*
             FileClose(intFF)
         End If
         'Read LRD and FRD from Hidden Folder
@@ -739,8 +761,10 @@ RunsGoodRegistryError:
         'FileClose(intFF)
 
         b = strMyString.Split("_")
-        If b(1) <> "" Then TmpLRD = CDate(b(1))
-        If b(2) <> "" Then TmpFRD = CDate(b(2))
+        '* If b(1) <> "" Then TmpLRD = CDate(b(1))
+        '* If b(2) <> "" Then TmpFRD = CDate(b(2))
+        If b(1) <> "" Then TmpLRD = DblStringToDate(b(1))
+        If b(2) <> "" Then TmpFRD = DblStringToDate(b(2))
         If b(0) <> LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD Then
             DateGoodHiddenFolder = False
             Exit Function
@@ -748,23 +772,28 @@ RunsGoodRegistryError:
         If TmpLRD = "#12:00:00 AM#" Then TmpLRD = CDate(INITIALDATE)
         If TmpFRD = "#12:00:00 AM#" Then TmpFRD = CDate(INITIALDATE)
 
-        If ActiveLockDate(TmpFRD) > ActiveLockDate(TmpCRD) Then 'System clock rolled back
+        '*If ActiveLockDate(TmpFRD) > ActiveLockDate(TmpCRD) Then 'System clock rolled back
+        If TmpFRD > TmpCRD Then 'System clock rolled back
             DateGoodHiddenFolder = False
-        ElseIf ActiveLockDate(Date.UtcNow) > ActiveLockDate(TmpFRD).AddDays(numDays) Then  'trial expired
+            '* ElseIf ActiveLockDate(Date.UtcNow) > ActiveLockDate(TmpFRD).AddDays(numDays) Then  'trial expired
+        ElseIf Date.UtcNow > TmpFRD.AddDays(numDays) Then  'trial expired
             ' Write to the file...
             intFF = FreeFile()
             FileOpen(intFF, strSource, OpenMode.Output)
             PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & EXPIRED_DAYS & "_" & EXPIRED_DAYS & "_" & EXPIRED_RUNS, PSWD))
             FileClose(intFF)
             DateGoodHiddenFolder = False
-        ElseIf ActiveLockDate(TmpCRD) > ActiveLockDate(TmpLRD) Then  'Everything OK write New LRD date
+            '* ElseIf ActiveLockDate(TmpCRD) > ActiveLockDate(TmpLRD) Then  'Everything OK write New LRD date
+        ElseIf TmpCRD > TmpLRD Then  'Everything OK write New LRD date
             ' Write to the file...
             intFF = FreeFile()
             FileOpen(intFF, strSource, OpenMode.Output)
-            PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & TmpCRD & "_" & TmpFRD & "_" & "0", PSWD))
+            '* PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & TmpCRD & "_" & TmpFRD & "_" & "0", PSWD))
+            PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(TmpCRD) & "_" & DateToDblString(TmpFRD) & "_" & "0", PSWD)) '*
             FileClose(intFF)
             DateGoodHiddenFolder = True
-        ElseIf ActiveLockDate(TmpCRD) = ActiveLockDate(TmpLRD) Then
+            '*ElseIf ActiveLockDate(TmpCRD) = ActiveLockDate(TmpLRD) Then
+        ElseIf TmpCRD = TmpLRD Then '*
             DateGoodHiddenFolder = True
         Else
             DateGoodHiddenFolder = False
@@ -774,7 +803,8 @@ RunsGoodRegistryError:
         PlusAttributes()
 
         If DateGoodHiddenFolder Then
-            daysLeft = numDays - ActiveLockDate(Date.UtcNow).Subtract(ActiveLockDate(TmpFRD)).Days
+            '* daysLeft = numDays - ActiveLockDate(Date.UtcNow).Subtract(ActiveLockDate(TmpFRD)).Days
+            daysLeft = numDays - Date.UtcNow.Subtract(TmpFRD).Days '*
         Else
             daysLeft = 0
         End If
@@ -855,8 +885,10 @@ DateGoodHiddenFolderError:
             If strMyString <> "" Then
                 On Error GoTo [continue]
                 a = strMyString.Split("_")
-                If a(1) <> "" Then TmpLRD = CDate(a(1))
-                If a(2) <> "" Then TmpFRD = CDate(a(2))
+                '* If a(1) <> "" Then TmpLRD = CDate(a(1))
+                '*If a(2) <> "" Then TmpFRD = CDate(a(2))
+                If a(1) <> "" Then TmpLRD = DblStringToDate(a(1)) '*
+                If a(2) <> "" Then TmpFRD = DblStringToDate(a(2)) '*
                 runsLeft = Int(CDbl(a(3))) - 1
                 If a(0) <> LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD Then
                     RunsGoodHiddenFolder = False
@@ -884,7 +916,8 @@ DateGoodHiddenFolderError:
             ' Write to the file...
             intFF = FreeFile()
             FileOpen(intFF, strSource, OpenMode.Output)
-            PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(numRuns - 1), PSWD))
+            '*PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(numRuns - 1), PSWD))
+            PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(Date.UtcNow) & "_" & DateToDblString(TmpFRD) & "_" & CStr(numRuns - 1), PSWD))
             FileClose(intFF)
         End If
         'Read LRD and FRD from Hidden Folder
@@ -909,8 +942,10 @@ DateGoodHiddenFolderError:
         'FileClose(intFF)
 
         b = strMyString.Split("_")
-        If b(1) <> "" Then TmpLRD = CDate(b(1))
-        If b(2) <> "" Then TmpFRD = CDate(b(2))
+        '* If b(1) <> "" Then TmpLRD = CDate(b(1))
+        '* If b(2) <> "" Then TmpFRD = CDate(b(2))
+        If b(1) <> "" Then TmpLRD = DblStringToDate(b(1)) '*
+        If b(2) <> "" Then TmpFRD = DblStringToDate(b(2)) '*
         runsLeft = CShort(b(3))
         If b(0) <> LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD Then
             RunsGoodHiddenFolder = False
@@ -936,9 +971,11 @@ DateGoodHiddenFolderError:
             intFF = FreeFile()
             FileOpen(intFF, strSource, OpenMode.Output)
             If TmpLRD = CDate(INITIALDATE) Then
-                PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(numRuns - 1), PSWD))
+                '*  PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(numRuns - 1), PSWD))
+                PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(Date.UtcNow) & "_" & DateToDblString(TmpFRD) & "_" & CStr(numRuns - 1), PSWD)) '*
             Else
-                PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(runsLeft - 1), PSWD))
+                '* PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(runsLeft - 1), PSWD))
+                PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(Date.UtcNow) & "_" & DateToDblString(TmpFRD) & "_" & CStr(runsLeft - 1), PSWD)) '*
             End If
             FileClose(intFF)
             RunsGoodHiddenFolder = True
@@ -980,15 +1017,18 @@ RunsGoodHiddenFolderError:
             GetSteganographyInfo()
         End If
 
-        TmpCRD = ActiveLockDate(Date.UtcNow)
+        '* TmpCRD = ActiveLockDate(Date.UtcNow)
+        TmpCRD = Date.UtcNow
         Dim a() As String
         Dim aa As String
         aa = StegInfo
         If aa <> "" Then
             On Error GoTo [continue]
             a = aa.Split("_")
-            If a(1) <> "" Then TmpLRD = CDate(a(1))
-            If a(2) <> "" Then TmpFRD = CDate(a(2))
+            '* If a(1) <> "" Then TmpLRD = CDate(a(1))
+            '* If a(2) <> "" Then TmpFRD = CDate(a(2))
+            If a(1) <> "" Then TmpLRD = DblStringToDate(a(1)) '*
+            If a(2) <> "" Then TmpFRD = DblStringToDate(a(2)) '*
             If a(0) <> LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD Then
                 DateGoodSteganography = False
                 Exit Function
@@ -1004,7 +1044,8 @@ RunsGoodHiddenFolderError:
         If TmpLRD = CDate(INITIALDATE) Then
             TmpLRD = TmpCRD
             TmpFRD = TmpCRD
-            SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & TmpCRD & "_" & TmpFRD & "_" & "0")
+            '*SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & TmpCRD & "_" & TmpFRD & "_" & "0")
+            SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(TmpCRD) & "_" & DateToDblString(TmpFRD) & "_" & "0")
             GetSteganographyInfo()
         End If
         'Read LRD and FRD from the hidden text in the image
@@ -1012,8 +1053,10 @@ RunsGoodHiddenFolderError:
         Dim bb As String
         bb = StegInfo
         b = bb.Split("_")
-        If b(1) <> "" Then TmpLRD = CDate(b(1))
-        If b(2) <> "" Then TmpFRD = CDate(b(2))
+        '* If b(1) <> "" Then TmpLRD = CDate(b(1))
+        '*If b(2) <> "" Then TmpFRD = CDate(b(2))
+        If b(1) <> "" Then TmpLRD = DblStringToDate(b(1)) '*
+        If b(2) <> "" Then TmpFRD = DblStringToDate(b(2)) '*
         If b(0) <> LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD Then
             DateGoodSteganography = False
             Exit Function
@@ -1021,21 +1064,27 @@ RunsGoodHiddenFolderError:
         If TmpLRD = "#12:00:00 AM#" Then TmpLRD = CDate(INITIALDATE)
         If TmpFRD = "#12:00:00 AM#" Then TmpFRD = CDate(INITIALDATE)
 
-        If ActiveLockDate(TmpFRD) > ActiveLockDate(TmpCRD) Then 'System clock rolled back
+        '*If ActiveLockDate(TmpFRD) > ActiveLockDate(TmpCRD) Then 'System clock rolled back
+        If TmpFRD > TmpCRD Then 'System clock rolled back
             DateGoodSteganography = False
-        ElseIf ActiveLockDate(Date.UtcNow) > ActiveLockDate(TmpFRD).AddDays(numDays) Then  'trial expired
+            '*ElseIf ActiveLockDate(Date.UtcNow) > ActiveLockDate(TmpFRD).AddDays(numDays) Then  'trial expired
+        ElseIf Date.UtcNow > TmpFRD.AddDays(numDays) Then  'trial expired
             SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & EXPIRED_DAYS & "_" & EXPIRED_DAYS & "_" & EXPIRED_RUNS)
             DateGoodSteganography = False
-        ElseIf ActiveLockDate(TmpCRD) > ActiveLockDate(TmpLRD) Then  'Everything OK write New LRD date
-            SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & TmpCRD & "_" & TmpFRD & "_" & "0")
+            '* ElseIf ActiveLockDate(TmpCRD) > ActiveLockDate(TmpLRD) Then  'Everything OK write New LRD date
+            '* SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & TmpCRD & "_" & TmpFRD & "_" & "0")
+        ElseIf TmpCRD > TmpLRD Then  'Everything OK write New LRD date
+            SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(TmpCRD) & "_" & DateToDblString(TmpFRD) & "_" & "0") '*
             DateGoodSteganography = True
-        ElseIf ActiveLockDate(TmpCRD) = ActiveLockDate(TmpLRD) Then
+            '* ElseIf ActiveLockDate(TmpCRD) = ActiveLockDate(TmpLRD) Then
+        ElseIf TmpCRD = TmpLRD Then '*
             DateGoodSteganography = True
         Else
             DateGoodSteganography = False
         End If
         If DateGoodSteganography Then
-            daysLeft = numDays - ActiveLockDate(Date.UtcNow).Subtract(ActiveLockDate(TmpFRD)).Days
+            '* daysLeft = numDays - ActiveLockDate(Date.UtcNow).Subtract(ActiveLockDate(TmpFRD)).Days
+            daysLeft = numDays - Date.UtcNow.Subtract(TmpFRD).Days '*
         Else
             daysLeft = 0
         End If
@@ -1044,6 +1093,74 @@ DateGoodSteganographyError:
         daysLeft = 0
         DateGoodSteganography = False
         Exit Function
+    End Function
+    '''* <summary>
+    '''* converts a date to a double and then to a string
+    '''* useful for ensureing dates can be read when pulled back out
+    '''* no matter the locale
+    '''* </summary>
+    '''* <param name="Dte">the date to convert</param>
+    '''* <returns>a double number in a string</returns>
+    '''* <remarks>can blow up if passed an invalid date?</remarks>
+    Public Function DateToDblString(ByRef Dte As Date) As String
+#If VBC_VER > 6.0 Then
+        Return Dte.ToOADate().ToString
+#Else
+        Return CStr(CDbl(Dte))
+#End If
+
+    End Function
+
+    '''* <summary>
+    '''* Function is used to convert doubles stored in strings to dates
+    '''* useful becuase whenever we store dates we convert them (to doubles and then strings)
+    '''* in case the user changes the locale in between storage and retrieval.
+    '''* minor handling of actual date strings for some semblance of backward 
+    '''* compatibility
+    '''* </summary>
+    '''* <param name="Dstr">The string to pass</param>
+    '''* <returns>a date representation on the passed Dstr or
+    '''*  1/1/1900 if a conversion error occurred</returns>
+    '''* <remarks></remarks>
+    Public Function DblStringToDate(ByRef Dstr As String) As Date
+#If VBC_VER > 6.0 Then
+
+        ' double varaible to hold our return if tryparse succeeds
+        ' culture to ensure we do this the same way everytime
+        Dim Dr As Double
+        Dim Drd As Date
+        Dim culture As Globalization.CultureInfo = Globalization.CultureInfo.CurrentUICulture
+
+        If Double.TryParse(Dstr, Globalization.NumberStyles.Float, culture, Dr) Then
+            Return Date.FromOADate(Dr)
+        Else
+            'this is an older version we need to start the upgrade process
+            If Date.TryParse(Dstr, culture, Globalization.DateTimeStyles.AdjustToUniversal, Drd) Then
+                Return Drd
+            Else
+                Return #1/1/1900#
+            End If
+        End If
+#Else
+
+        Try
+            ' do something similar
+            If Dstr <> "" Then
+                Dim Dbl As Double = CDbl(Dstr)
+                Return CDate(Dbl)
+            End If
+
+        Catch ex As Exception
+            'probably a date it wasn't empty
+            Try
+                Return CDate(Dstr)
+            Catch ex As Exception
+                Return #1/1/1900#
+            End Try
+
+        End Try
+
+#End If
     End Function
 
     Public Function ActiveLockDate(ByVal dt As Date) As Date
@@ -1079,8 +1196,10 @@ DateGoodSteganographyError:
         If aa <> "" Then
             On Error GoTo [continue]
             a = aa.Split("_")
-            If a(1) <> "" Then TmpLRD = CDate(a(1))
-            If a(2) <> "" Then TmpFRD = CDate(a(2))
+            '* If a(1) <> "" Then TmpLRD = CDate(a(1))
+            '* If a(2) <> "" Then TmpFRD = CDate(a(2))
+            If a(1) <> "" Then TmpLRD = DblStringToDate(a(1)) '*
+            If a(2) <> "" Then TmpFRD = DblStringToDate(a(2)) '*
             runsLeft = Int(CDbl(a(3))) - 1
             If a(0) <> LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD Then
                 RunsGoodSteganography = False
@@ -1100,13 +1219,16 @@ DateGoodSteganographyError:
         If TmpLRD = CDate(INITIALDATE) Then
             TmpFRD = CDate(INITIALDATE)
             runsLeft = numRuns - 1
-            SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(numRuns - 1))
+            '*SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(numRuns - 1))
+            SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(Date.UtcNow) & "_" & DateToDblString(TmpFRD) & "_" & CStr(numRuns - 1)) '*
         End If
         'Read LRD and FRD from the hidden text in the image
         Dim b() As String
         b = SteganographyPull(strSource).Split("_")
-        If b(1) <> "" Then TmpLRD = CDate(b(1))
-        If b(2) <> "" Then TmpFRD = CDate(b(2))
+        '* If b(1) <> "" Then TmpLRD = CDate(b(1))
+        '* If b(2) <> "" Then TmpFRD = CDate(b(2))
+        If b(1) <> "" Then TmpLRD = DblStringToDate(b(1)) '*
+        If b(2) <> "" Then TmpFRD = DblStringToDate(b(2)) '*
         runsLeft = CShort(b(3))
         If b(0) <> LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD Then
             RunsGoodSteganography = False
@@ -1125,9 +1247,11 @@ DateGoodSteganographyError:
             RunsGoodSteganography = False
         ElseIf numRuns >= runsLeft Then  'Everything OK write the remaining number of runs
             If TmpLRD = CDate(INITIALDATE) Then
-                SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(numRuns - 1))
+                '*SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(numRuns - 1))
+                SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(Date.UtcNow) & "_" & DateToDblString(TmpFRD) & "_" & CStr(numRuns - 1)) '*
             Else
-                SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(runsLeft - 1))
+                '*SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(runsLeft - 1))
+                SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(Date.UtcNow) & "_" & DateToDblString(TmpFRD) & "_" & CStr(numRuns - 1)) '*
             End If
             RunsGoodSteganography = True
         Else
@@ -1971,10 +2095,10 @@ IsHiddenFolderExpiredError:
         End If
 
         If alockDays = 0 And trialPeriod = True Then
-            Set_locale(regionalSymbol)
+            '* Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrInvalidTrialDays, ACTIVELOCKSTRING, STRINVALIDTRIALDAYS)
         ElseIf alockRuns = 0 And trialRuns = True Then
-            Set_locale(regionalSymbol)
+            '* Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrInvalidTrialRuns, ACTIVELOCKSTRING, STRINVALIDTRIALRUNS)
         End If
 
@@ -1992,29 +2116,29 @@ IsHiddenFolderExpiredError:
         ' A regular user account cannot have write access to these two registry hives
         ' I am removing these from v3.6 - ialkan 12-27-2008
         'If IsRegistryExpired1() = True Then
-        '    Set_locale(regionalSymbol)
+        '    '* Set_locale(regionalSymbol)
         '    Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
         'End If
         'If IsRegistryExpired2() = True Then
-        '    Set_locale(regionalSymbol)
+        '    '* Set_locale(regionalSymbol)
         '    Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
         'End If
         If IsEncryptedFileExpired() = True Then
-            Set_locale(regionalSymbol)
+            '* Set_locale(regionalSymbol)
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
         End If
         ' *** We are disabling folder date stamp in v3.2 since it's not application specific ***
         ' Well... nothing was found
         ' Check the last indicator
         'If IsFolderStampExpired() = True Then
-        '    Set_locale(regionalSymbol)
+        '    '* Set_locale(regionalSymbol)
         '    Err.Raise -10100, , TEXTMSG
         'End If
 
         ' Must check Registry for Trial
         If TrialRegistryPerUserExists(TrialHideTypes) Then
             If IsRegistryExpired() = True Then
-                Set_locale(regionalSymbol)
+                '* Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
             End If
         End If
@@ -2022,7 +2146,7 @@ IsHiddenFolderExpiredError:
         ' Must check picture for Trial
         If TrialSteganographyExists(TrialHideTypes) Then
             If IsSteganographyExpired() = True Then
-                Set_locale(regionalSymbol)
+                '* Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
             End If
         End If
@@ -2030,7 +2154,7 @@ IsHiddenFolderExpiredError:
         ' Must check folder for Trial
         If TrialHiddenFolderExists(TrialHideTypes) Then
             If IsHiddenFolderExpired() = True Then
-                Set_locale(regionalSymbol)
+                '* Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
             End If
         End If
@@ -2040,19 +2164,19 @@ IsHiddenFolderExpiredError:
             If Not DateGood(alockDays, daysLeft, TrialHideTypes) Then
                 ExpireTrial(SoftwareName, SoftwareVer, TrialType, TrialLength, TrialHideTypes, SoftwarePassword)
                 ' Trial Period has expired
-                Set_locale(regionalSymbol)
+                '* Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
             Else
                 If fileExist(GetSteganographyFile()) = False And Directory.Exists(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD)) = False And dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
                     If mCheckTimeServerForClockTampering = IActiveLock.ALTimeServerTypes.alsCheckTimeServer Then
                         If SystemClockTampered() Then
-                            Set_locale(regionalSymbol)
+                            '* Set_locale(regionalSymbol)
                             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                         End If
                     End If
                     If mChecksystemfilesForClockTampering = IActiveLock.ALSystemFilesTypes.alsCheckSystemFiles Then
                         If ClockTampering() Then
-                            Set_locale(regionalSymbol)
+                            '* Set_locale(regionalSymbol)
                             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                         End If
                     End If
@@ -2069,18 +2193,18 @@ IsHiddenFolderExpiredError:
             If Not RunsGood(alockRuns, runsLeft, TrialHideTypes) Then
                 ExpireTrial(SoftwareName, SoftwareVer, TrialType, TrialLength, TrialHideTypes, SoftwarePassword)
                 ' Trial Runs have expired
-                Set_locale(regionalSymbol)
+                '* Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
             Else
                 If fileExist(GetSteganographyFile()) = False And Directory.Exists(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD)) = False And dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
                     If mCheckTimeServerForClockTampering = IActiveLock.ALTimeServerTypes.alsCheckTimeServer Then
                         If SystemClockTampered() Then
-                            Set_locale(regionalSymbol)
+                            '* Set_locale(regionalSymbol)
                             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                         End If
                     End If
                     If ClockTampering() Then
-                        Set_locale(regionalSymbol)
+                        '* Set_locale(regionalSymbol)
                         Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                     End If
                 End If
@@ -2147,7 +2271,8 @@ exitGracefully:
                 If Left(s, 1) <> "$" And Left(s, 1) <> "?" Then
                     fileDate = FileDateTime(t & "\" & s)
                     Dim difHours As Long
-                    difHours = CDate(fileDate.Date.ToString("yyyy/MM/dd")).Subtract(CDate(Date.UtcNow.ToString("yyyy/MM/dd"))).Hours
+                    '* difHours = CDate(fileDate.Date.ToString("yyyy/MM/dd")).Subtract(CDate(Date.UtcNow.ToString("yyyy/MM/dd"))).Hours
+                    difHours = fileDate.Subtract(Date.UtcNow).Hours '*
                     If difHours > 24 Then
                         If Count > 1 Then
                             ClockTampering = True
@@ -2164,15 +2289,38 @@ exitGracefully:
 
     End Function
     Private Function GetSteganographyFile() As Object
+
         Dim strSource As String
+        Dim commonPicsFolder As String
+
         GetSteganographyFile = Nothing
         Try
-            strSource = ActivelockGetSpecialFolder(54) & "\Sample Pictures" & DecryptString128Bit("Qspq9Tu3sG/IE+ugm+o1RQ==", PSWD) & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(98) & Chr(109) & Chr(112)
+            commonPicsFolder = ActivelockGetSpecialFolder(54)
+
+            If Directory.Exists(commonPicsFolder) = False Then
+                ' Unable to retrieve common pics folder, so we generate one
+                commonPicsFolder = ActivelockGetSpecialFolder(46) ' common documents
+
+                ' Note that the common pictures folder is different in
+                ' Windows XP/2003 compare to Vista/2008.  This also means
+                ' that the name can change again in future versions of
+                ' Windows and this section of code will need to be modified.
+                Dim version_info As New CWindows.OperatingSystemVersion()
+                If (version_info.IsWinVistaPlus()) Then
+                    commonPicsFolder &= "\Pictures"
+                Else
+                    commonPicsFolder &= "\My Pictures"
+                End If
+
+                My.Computer.FileSystem.CreateDirectory(commonPicsFolder)
+            End If
+
+            strSource = commonPicsFolder & "\Sample Pictures" & DecryptString128Bit("Qspq9Tu3sG/IE+ugm+o1RQ==", PSWD) & Left(ComputeHash(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(98) & Chr(109) & Chr(112)
             Dim b As System.Drawing.Bitmap
             Dim r As New System.Resources.ResourceManager("ActiveLock3_6Net.ProjectResources", System.Reflection.Assembly.GetExecutingAssembly)
             b = r.GetObject("bmp101")
-            If Directory.Exists(ActivelockGetSpecialFolder(54) & "\Sample Pictures") = False Then
-                My.Computer.FileSystem.CreateDirectory(ActivelockGetSpecialFolder(54) & "\Sample Pictures")
+            If Directory.Exists(commonPicsFolder & "\Sample Pictures") = False Then
+                My.Computer.FileSystem.CreateDirectory(commonPicsFolder & "\Sample Pictures")
             End If
             If fileExist(strSource) = False Then
                 b.Save(strSource)
@@ -2180,9 +2328,10 @@ exitGracefully:
             'If fileExist(strSource) = False Then VB6.LoadResPicture(101, VB6.LoadResConstants.ResBitmap).Save(strSource)
             GetSteganographyFile = strSource
         Catch ex As Exception
-            Set_locale(regionalSymbol)
+            '* Set_locale(regionalSymbol)
             Err.Raise(Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext)
         End Try
+
     End Function
     '===============================================================================
     ' Name: Function ReadUntil
@@ -2922,7 +3071,7 @@ minusAttributesError:
         If IsWebConnected() = False Then
             SystemClockTampered = False
             Exit Function
-            'Set_locale(regionalSymbol)
+            ''* Set_locale(regionalSymbol)
             'Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrInternetConnectionError, ACTIVELOCKSTRING, STRINTERNETNOTCONNECTED)
         End If
 
@@ -2960,9 +3109,15 @@ minusAttributesError:
                 Exit For
             End If
         Next
-        ss = Format(CDate(ss), "yyyy/MM/dd")   '"short date")
-        aa = Date.UtcNow.Year.ToString("0000") & "/" & Date.UtcNow.Month.ToString("00") & "/" & Date.UtcNow.Day.ToString("00")
-        diff = CDate(ss).Subtract(CDate(aa)).Days
+        ' I am leaving this alone because it works - yes it's crazy
+        '* ss = Format(CDate(ss), "yyyy/MM/dd")   '"short date")
+        '* aa = Date.UtcNow.Year.ToString("0000") & "/" & Date.UtcNow.Month.ToString("00") & "/" & Date.UtcNow.Day.ToString("00")
+        'Ok, I'll give it a try
+        ss = CDate(ss).Date.ToString '*
+        aa = Date.UtcNow.ToString '*
+        '*diff = CDate(ss).Subtract(CDate(aa)).Days
+        diff = CDate(ss).Date.Subtract(Date.UtcNow).Days '*
+
         If diff > 1 Then SystemClockTampered = True
 
     End Function

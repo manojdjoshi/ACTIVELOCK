@@ -369,7 +369,7 @@ Module modHardware
         <VBFixedString(30), System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.ByValTStr, SizeConst:=30)> Public myStr As String
         Dim mL As Integer
     End Structure
-    Private Declare Function getHardDriveFirmware Lib "ALCrypto3.dll" (ByRef myU As MyUDT2) As Integer
+    Private Declare Function getHardDriveFirmware Lib "ALCrypto3NET.dll" (ByRef myU As MyUDT2) As Integer
 
     'MAC Address
     Public Const NCBASTAT As Integer = &H33S
@@ -585,7 +585,7 @@ GetHDSeriAlerror:
         ' Pure VB6 version of the code found in several online resources
         ' described in GetHDSerialFirmwareVB6 function
         ' This eliminates the dependency of the HDD firmware serial number
-        ' function from ALCrypto3.dll
+        ' function from ALCrypto3NET.dll
         For jj = 0 To 15 ' Controller index
             a = GetHDSerialFirmwareVBNET(jj, True) ' Check the Master drive
             If a <> "" Then GetHDSerialFirmware = a.Trim
@@ -628,7 +628,6 @@ GetHDSeriAlerror:
         ' a serial number in our hands...
         ' Cannot return an empty string...
 GetHDSerialFirmwareError:
-        MsgBox(Err.Description)
         If GetHDSerialFirmware = "" Then
             'GetHDSerialFirmware = "Not Available"
             ' Per suggestion by Jeroen, we must have something decent returned from this
@@ -1135,10 +1134,10 @@ GetIPaddressError:
     End Function
     Private Function GetHDSerialFirmwareVBNET(ByVal controller As Integer, Optional ByVal masterDrive As Boolean = True) As Object
 
-        ' Created with the help of the following articles and clues from ALCrypto3.dll
+        ' Created with the help of the following articles and clues from ALCrypto3NET.dll
         ' SOURCE 1: http://discuss.develop.com/archives/wa.exe?A2=ind0309a&L=advanced-dotnet&D=0&T=0&P=3760
         ' SOURCE 2: http://www.visual-basic.it/scarica.asp?ID=611
-        ' SOURCE 3: ALCrypto3.dll and DISKID32 program
+        ' SOURCE 3: ALCrypto3NET.dll and DISKID32 program
 
         ' This code DOES NOT require admin rights in the user's machine
         ' This code DOES NOT require WMI

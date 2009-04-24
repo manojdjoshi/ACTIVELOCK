@@ -243,7 +243,7 @@ Friend Class MDBGenerator
     End Try
 
     If ProdInfo.VCode = "" Or ProdInfo.GCode = "" Then
-            Set_Locale(regionalSymbol)
+            '* Set_locale(regionalSymbol)
             Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, "Product code set is invalid.")
         End If
         IALUGenerator_RetrieveProduct = ProdInfo
@@ -306,7 +306,8 @@ Friend Class MDBGenerator
         Dim strRegDate As String
         ' registered level
         Lic.RegisteredLevel = RegisteredLevel
-        strRegDate = Lic.RegisteredDate
+        '* strRegDate = Lic.RegisteredDate
+        strRegDate = DateToDblString(Lic.RegisteredDate) '*
 
         Dim strEncrypted As String
         ' @todo Rethink this bit about encrypting the dates.
@@ -384,7 +385,7 @@ Friend Class MDBGenerator
                 mySignatureBlock = Convert.ToBase64String(mysignature)
                 Lic.LicenseKey = mySignatureBlock
             Catch ex As Exception
-                Set_locale(regionalSymbol)
+                '* Set_locale(regionalSymbol)
                 Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, ex.Message)
             End Try
 
