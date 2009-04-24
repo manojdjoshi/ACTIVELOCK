@@ -2126,11 +2126,31 @@ End Function
 
 Private Function GetSteganographyFile()
 Dim strSource As String
+Dim commonPicsFolder As String
 Dim oMD5 As clsMD5
 Set oMD5 = New clsMD5
-strSource = ActivelockGetSpecialFolder(54) & "\Sample Pictures" & DecryptMyString("E7E3221D952287CBAE2F5ED363E923CE547F8075C9E093A1138DC7D03A76D0A1", PSWD) & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(98) & Chr(109) & Chr(112)
-If FolderExists(ActivelockGetSpecialFolder(54) & "\Sample Pictures") = False Then
-    MkDir (ActivelockGetSpecialFolder(54) & "\Sample Pictures")
+
+commonPicsFolder = ActivelockGetSpecialFolder(54)
+
+If Dir(commonPicsFolder, vbDirectory) = 0 Then
+    ' Unable to retrieve common pics folder, so we generate one
+    commonPicsFolder = ActivelockGetSpecialFolder(46) ' common documents
+    ' Note that the common pictures folder is different in
+    ' Windows XP/2003 compare to Vista/2008.  This also means
+    ' that the name can change again in future versions of
+    ' Windows and this section of code will need to be modified.
+    If IsWinVistaPlus = True Then
+        commonPicsFolder = "\Pictures"
+    Else
+        commonPicsFolder = "\My Pictures"
+    End If
+
+    MkDir commonPicsFolder
+End If
+
+strSource = commonPicsFolder & "\Sample Pictures" & DecryptMyString("E7E3221D952287CBAE2F5ED363E923CE547F8075C9E093A1138DC7D03A76D0A1", PSWD) & Left(oMD5.CalculateMD5(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), 8) & "." & Chr(98) & Chr(109) & Chr(112)
+If FolderExists(commonPicsFolder & "\Sample Pictures") = False Then
+    MkDir (commonPicsFolder & "\Sample Pictures")
 End If
 If fileExist(strSource) = True Then
     ' This is to take care of some files accidentally created but are empty

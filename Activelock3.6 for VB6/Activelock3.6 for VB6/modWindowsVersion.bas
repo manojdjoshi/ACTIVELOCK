@@ -517,6 +517,19 @@ Public Function IsWinXPPlus() As Boolean
 
 End Function
 
+Public Function IsWinVistaPlus() As Boolean
+
+  'returns True if running Windows Vista or later
+   Dim osv As OSVERSIONINFO
+
+   osv.OSVSize = Len(osv)
+   If GetVersionEx(osv) = 1 Then
+      IsWinVistaPlus = (osv.PlatformID = VER_PLATFORM_WIN32_NT) And _
+                    (osv.dwVerMajor >= 6 And osv.dwVerMinor >= 0)
+   End If
+
+End Function
+
 Public Function IsWinXPHomeEdition() As Boolean
 
   'returns True if running Windows XP Home Edition
