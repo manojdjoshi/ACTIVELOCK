@@ -1248,7 +1248,8 @@ Friend Class frmMain
 
             ' Set the trial type property
             ' this is either trialDays, or trialRuns or trialNone.
-            .TrialType = ActiveLock3_6NET.IActiveLock.ALTrialTypes.trialRuns
+            '.TrialType = ActiveLock3_6NET.IActiveLock.ALTrialTypes.trialRuns
+            .TrialType = ActiveLock3_6NET.IActiveLock.ALTrialTypes.trialDays
 
             ' Set the Trial Length property.
             ' This number represents the number of days or the number of runs (whichever is applicable).
@@ -1519,7 +1520,8 @@ Friend Class frmMain
         'MyActiveLock.ExpirationDate
 
         ' This will display the date in user's locale short date format
-        txtExpiration.Text = DateTime.ParseExact(strExpirationDate, "yyyy/MM/dd", Nothing).ToString(strSD)
+        '* changed the following back to how it was, sorry but I deleted the orignal in my rush to check it
+        txtExpiration.Text = strExpirationDate '*
         If txtExpiration.Text = "" Then
             txtExpiration.Text = "Permanent" 'App has a permanent license
         End If

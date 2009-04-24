@@ -70,10 +70,13 @@ Option Explicit On
 	Private mstrProductVer As String
 	Private mstrLicenseKey As String
 	Private mstrLicenseCode As String
-	Private mstrExpiration As String
-	Private mstrRegisteredDate As String
-	Private mstrLastUsed As String
-	Private mstrHash1 As String ' hash of mstrRegisteredDate
+    '* Private mstrExpiration As String
+    '* Private mstrRegisteredDate As String
+    '* Private mstrLastUsed As String
+    Private mstrExpiration As Date = #1/1/1900# '*
+    Private mstrRegisteredDate As Date = #1/1/1900# '*
+    Private mstrLastUsed As Date = #1/1/1900# '*
+    Private mstrHash1 As String ' hash of mstrRegisteredDate
 	Private mnMaxCount As Integer ' max number of concurrent users
     Private mnUsedDays As Integer ' number of days the license was used
     Private mnLicenseFileType As Integer ' type of License file; 0 for Plain, 1 for encrypted
@@ -357,62 +360,78 @@ Option Explicit On
     ' Purpose: Returns the expiration date string in "yyyy/MM/dd" format.
 	' Remarks: None
 	'===============================================================================
-	Public Property Expiration() As String
-		Get
-			Return mstrExpiration
-		End Get
-		Set(ByVal Value As String)
-			mstrExpiration = Value
-		End Set
-	End Property
-	'===============================================================================
-	' Name: Property Get RegisteredDate
-	' Input: None
-	' Output:
-	'   String - Product registration date
-    ' Purpose: Returns the date in "yyyy/MM/dd" format on which the product was registered.
-	' Remarks: None
-	'===============================================================================
-	'===============================================================================
-	' Name: Property Let RegisteredDate
-	' Input:
-	'   ByVal strDate As String - Product registration date
-	' Output: None
-	' Purpose: [INTERNAL] Specifies the registered date.
-	' Remarks: None
-	'===============================================================================
-	Public Property RegisteredDate() As String
-		Get
-			Return mstrRegisteredDate
-		End Get
-		Set(ByVal Value As String)
-			mstrRegisteredDate = Value
-		End Set
-	End Property
+    '*Public Property Expiration() As String
+    '*	Get
+    '*		Return mstrExpiration
+    '*	End Get
+    '*	Set(ByVal Value As String)
+    '*		mstrExpiration = Value
+    '*	End Set
+    '*End Property
+    Public Property Expiration() As Date '*
+        Get '*
+            Return mstrExpiration '*
+        End Get '*
+        Set(ByVal Value As Date) '*
+            mstrExpiration = Value '*
+        End Set '*
+    End Property '*
     '===============================================================================
-	' Name: Property Get MaxCount
-	' Input: None
-	' Output:
-	'   Long - Maximum concurrent user count
-	' Purpose: Returns maximum number of concurrent users
-	' Remarks: None
-	'===============================================================================
-	
-	'===============================================================================
-	' Name: Property Let MaxCount
-	' Input:
-	'   nCount As Long - maximum number of concurrent users
-	' Output: None
-	' Purpose: Specifies maximum number of concurrent users
-	' Remarks: None
-	'===============================================================================
-	Public Property MaxCount() As Integer
-		Get
-			Return mnMaxCount
-		End Get
-		Set(ByVal Value As Integer)
-			mnMaxCount = Value
-		End Set
+    ' Name: Property Get RegisteredDate
+    ' Input: None
+    ' Output:
+    '   String - Product registration date
+    ' Purpose: Returns the date in "yyyy/MM/dd" format on which the product was registered.
+    ' Remarks: None
+    '===============================================================================
+    '===============================================================================
+    ' Name: Property Let RegisteredDate
+    ' Input:
+    '   ByVal strDate As String - Product registration date
+    ' Output: None
+    ' Purpose: [INTERNAL] Specifies the registered date.
+    ' Remarks: None
+    '===============================================================================
+    '*Public Property RegisteredDate() As String
+    '*  Get
+    '*    Return mstrRegisteredDate
+    '*   End Get
+    '* Set(ByVal Value As String)
+    '*   mstrRegisteredDate = Value
+    '*   End Set
+    '*End Property
+    Public Property RegisteredDate() As Date '*
+        Get '*
+            Return mstrRegisteredDate '*
+        End Get '*
+        Set(ByVal Value As Date) '*
+            mstrRegisteredDate = Value '*
+        End Set '*
+    End Property '*
+    '===============================================================================
+    ' Name: Property Get MaxCount
+    ' Input: None
+    ' Output:
+    '   Long - Maximum concurrent user count
+    ' Purpose: Returns maximum number of concurrent users
+    ' Remarks: None
+    '===============================================================================
+
+    '===============================================================================
+    ' Name: Property Let MaxCount
+    ' Input:
+    '   nCount As Long - maximum number of concurrent users
+    ' Output: None
+    ' Purpose: Specifies maximum number of concurrent users
+    ' Remarks: None
+    '===============================================================================
+    Public Property MaxCount() As Integer
+        Get
+            Return mnMaxCount
+        End Get
+        Set(ByVal Value As Integer)
+            mnMaxCount = Value
+        End Set
     End Property
     '===============================================================================
     ' Name: Property Get UsedDays
@@ -456,64 +475,74 @@ Option Explicit On
     '    End Set
     'End Property
 
-	'===============================================================================
-	' Name: Property Get LastUsed
-	' Input: None
-	' Output:
-	'   String - DateTiem string
+    '===============================================================================
+    ' Name: Property Get LastUsed
+    ' Input: None
+    ' Output:
+    '   String - DateTiem string
     ' Purpose: Returns the date and time, in "yyyy/MM/dd" format, when the product was last run.
-	' Remarks: None
-	'===============================================================================
+    ' Remarks: None
     '===============================================================================
-	' Name: Property Let LastUsed
-	' Input:
-	'   ByVal strDateTime As String - Date and time string
-	' Output: None
-	' Purpose: [INTERNAL] Sets the last used date.
-	' Remarks: None
-	'===============================================================================
-	Public Property LastUsed() As String
-		Get
-			Return mstrLastUsed
-		End Get
-		Set(ByVal Value As String)
-			mstrLastUsed = Value
-		End Set
-	End Property
     '===============================================================================
-	' Name: Property Get Hash1
-	' Input: None
-	' Output:
-	'   String - Hash code
-	' Purpose: Returns Hash-1 code. Hash-1 code is the encryption hash of the <code>LastUsed</code> property.
-	' Remarks: None
-	'===============================================================================
+    ' Name: Property Let LastUsed
+    ' Input:
+    '   ByVal strDateTime As String - Date and time string
+    ' Output: None
+    ' Purpose: [INTERNAL] Sets the last used date.
+    ' Remarks: None
     '===============================================================================
-	' Name: Property Let Hash1
-	' Input:
-	'   ByVal hcode As String - Hash code
-	' Output: None
-	' Purpose: [INTERNAL] Sets the Hash-1 code.
-	' Remarks: None
-	'===============================================================================
-	Public Property Hash1() As String
-		Get
-			Return mstrHash1
-		End Get
-		Set(ByVal Value As String)
-			mstrHash1 = Value
-		End Set
-	End Property
-	'===============================================================================
-	' Name: Function ToString
-	' Input: None
-	' Output:
-	'   String - Formatted license string
-	' Purpose: Returns a line-feed delimited string encoding of this object&#39;s properties.
-	' Remarks: Note: LicenseKey is not included in this string.
-	'===============================================================================
+    '* Public Property LastUsed() As String
+    '* Get
+    '*    Return mstrLastUsed
+    '* End Get
+    '* Set(ByVal Value As String)
+    '*      mstrLastUsed = Value
+    '*    End Set
+    '*End Property
+    Public Property LastUsed() As Date '*
+        Get '*
+            Return mstrLastUsed '*
+        End Get '*
+        Set(ByVal Value As Date) '*
+            mstrLastUsed = Value '*
+        End Set '*
+    End Property '*
+    '===============================================================================
+    ' Name: Property Get Hash1
+    ' Input: None
+    ' Output:
+    '   String - Hash code
+    ' Purpose: Returns Hash-1 code. Hash-1 code is the encryption hash of the <code>LastUsed</code> property.
+    ' Remarks: None
+    '===============================================================================
+    '===============================================================================
+    ' Name: Property Let Hash1
+    ' Input:
+    '   ByVal hcode As String - Hash code
+    ' Output: None
+    ' Purpose: [INTERNAL] Sets the Hash-1 code.
+    ' Remarks: None
+    '===============================================================================
+    Public Property Hash1() As String
+        Get
+            Return mstrHash1
+        End Get
+        Set(ByVal Value As String)
+            mstrHash1 = Value
+        End Set
+    End Property
+    '===============================================================================
+    ' Name: Function ToString
+    ' Input: None
+    ' Output:
+    '   String - Formatted license string
+    ' Purpose: Returns a line-feed delimited string encoding of this object&#39;s properties.
+    ' Remarks: Note: LicenseKey is not included in this string.
+    '===============================================================================
     Public Function ToString_Renamed() As String
-        ToString_Renamed = ProductName & vbCrLf & ProductVer & vbCrLf & LicenseClass & vbCrLf & LicenseType & vbCrLf & Licensee & vbCrLf & RegisteredLevel & vbCrLf & RegisteredDate & vbCrLf & Expiration & vbCrLf & MaxCount
+        '* ToString_Renamed = ProductName & vbCrLf & ProductVer & vbCrLf & LicenseClass & vbCrLf & LicenseType & vbCrLf & Licensee & vbCrLf & RegisteredLevel & vbCrLf & RegisteredDate & vbCrLf & Expiration & vbCrLf & MaxCount
+        'remember to save the dates as doubles!
+        ToString_Renamed = ProductName & vbCrLf & ProductVer & vbCrLf & LicenseClass & vbCrLf & LicenseType & vbCrLf & Licensee & vbCrLf & RegisteredLevel & vbCrLf & DateToDblString(RegisteredDate) & vbCrLf & DateToDblString(Expiration) & vbCrLf & MaxCount '*
     End Function
     '===============================================================================
     ' Name: Sub Load
@@ -553,8 +582,10 @@ Option Explicit On
         LicenseType = CInt(arrParts(3))
         Licensee = arrParts(4)
         RegisteredLevel = arrParts(5)
-        RegisteredDate = arrParts(6)
-        Expiration = arrParts(7)
+        '* RegisteredDate = arrParts(6)
+        '*Expiration = arrParts(7)
+        RegisteredDate = DblStringToDate(arrParts(6)) '*
+        Expiration = DblStringToDate(arrParts(7)) '*
         MaxCount = CInt(arrParts(8))
         LicenseKey = arrParts(9)
     End Sub

@@ -194,7 +194,7 @@ RetrieveProductsError:
         End With
         If ProdInfo.VCode = "" Or ProdInfo.GCode = "" Then
             'ACTIVELOCKSTRING could be replaced by System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).ProductName
-            Set_Locale(regionalSymbol)
+            '* Set_locale(regionalSymbol)
             Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, "Product code set is invalid.")
         End If
         IALUGenerator_RetrieveProduct = ProdInfo
@@ -240,7 +240,10 @@ RetrieveProductsError:
         Dim strRegDate As String
         ' registered level
         Lic.RegisteredLevel = RegisteredLevel
-        strRegDate = Lic.RegisteredDate
+        '* this never gets used again,but what the heck
+        '* strRegDate = Lic.RegisteredDate
+        strRegDate = DateToDblString(Lic.RegisteredDate) '*.ToString
+
 
         Dim strEncrypted As String
         ' @todo Rethink this bit about encrypting the dates.
@@ -317,7 +320,7 @@ RetrieveProductsError:
                 mySignatureBlock = Convert.ToBase64String(mysignature)
                 Lic.LicenseKey = mySignatureBlock
             Catch ex As Exception
-                Set_Locale(regionalSymbol)
+                '* Set_locale(regionalSymbol)
                 Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, ex.Message)
             End Try
 

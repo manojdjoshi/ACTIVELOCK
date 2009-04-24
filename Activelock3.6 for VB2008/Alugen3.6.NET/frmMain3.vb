@@ -1512,8 +1512,10 @@ Friend Class frmMain
         '
         'dtpExpireDate
         '
-        Me.dtpExpireDate.CustomFormat = "yyyy/MM/dd"
-        Me.dtpExpireDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
+        '* Me.dtpExpireDate.CustomFormat = "yyyy/MM/dd"
+        '* Me.dtpExpireDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
+        Me.dtpExpireDate.CustomFormat = ""
+        Me.dtpExpireDate.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
         Me.dtpExpireDate.Location = New System.Drawing.Point(88, 52)
         Me.dtpExpireDate.Name = "dtpExpireDate"
         Me.dtpExpireDate.Size = New System.Drawing.Size(118, 20)
@@ -2087,15 +2089,22 @@ noInfo:
 
         Make64ByteChunks = sResult
     End Function
+    '* Convenience function coverts Expire date to string
+    Private Function GetExpirationString() As String '*
+        Return GetExpirationDate().ToString '*
+    End Function '*
 
-    Private Function GetExpirationDate() As String
+
+    Private Function GetExpirationDate() As Date
         If cboLicType.Text = "Time Locked" Then
             'GetExpirationDate = txtDays.Text
-            GetExpirationDate = CType(dtpExpireDate.Value, DateTime).ToString("yyyy/MM/dd")
+            '* GetExpirationDate = CType(dtpExpireDate.Value, DateTime).ToString("yyyy/MM/dd")
+            Return CType(dtpExpireDate.Value, DateTime) '*
         Else
-            GetExpirationDate = Date.UtcNow.AddDays(CShort(txtDays.Text)).ToString("yyyy/MM/dd")
+            GetExpirationDate = Date.UtcNow.AddDays(CShort(txtDays.Text)) '*.ToString("yyyy/MM/dd")
         End If
     End Function
+
 
     Private Sub SaveLicenseKey(ByVal sLibKey As String, ByVal sFileName As String)
         Dim hFile As Integer
@@ -3105,26 +3114,26 @@ SaveFormSettings_Error:
                 'rsa_generate2 that does not deal with progress monitoring
 
                 ' Get the current date format and save it to regionalSymbol variable
-                Get_locale()
+                '* Get_Locale()
                 ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
-                Set_locale("")
+                '* Set_locale("")
 
                 If modALUGEN.rsa_generate2(KEY, 1024) = RETVAL_ON_ERROR Then
-                    Set_locale(regionalSymbol)
+                    '* Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
                 End If
                 ' extract private and public key blobs
                 Dim strBlob As String
                 Dim blobLen As Integer
                 If rsa_public_key_blob(KEY, vbNullString, blobLen) = RETVAL_ON_ERROR Then
-                    Set_locale(regionalSymbol)
+                    '* Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
                 End If
 
                 If blobLen > 0 Then
                     strBlob = New String(Chr(0), blobLen)
                     If rsa_public_key_blob(KEY, strBlob, blobLen) = RETVAL_ON_ERROR Then
-                        Set_locale(regionalSymbol)
+                        '* Set_locale(regionalSymbol)
                         Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
                     End If
 
@@ -3133,14 +3142,14 @@ SaveFormSettings_Error:
                 End If
 
                 If modALUGEN.rsa_private_key_blob(KEY, vbNullString, blobLen) = RETVAL_ON_ERROR Then
-                    Set_locale(regionalSymbol)
+                    '* Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
                 End If
 
                 If blobLen > 0 Then
                     strBlob = New String(Chr(0), blobLen)
                     If modALUGEN.rsa_private_key_blob(KEY, strBlob, blobLen) = RETVAL_ON_ERROR Then
-                        Set_locale(regionalSymbol)
+                        '* Set_locale(regionalSymbol)
                         Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
                     End If
 
@@ -3149,7 +3158,7 @@ SaveFormSettings_Error:
                 End If
                 ' done with the key - throw it away
                 If modALUGEN.rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-                    Set_locale(regionalSymbol)
+                    '* Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
                 End If
 
@@ -3162,13 +3171,13 @@ SaveFormSettings_Error:
                 ' you'll get a valid keyset that no longer crashes.
                 Dim strdata As String : strdata = "This is a test string to be encrypted."
                 If modALUGEN.rsa_createkey(txtVCode.Text, txtVCode.Text.Length, txtGCode.Text, txtGCode.Text.Length, KEY) = RETVAL_ON_ERROR Then
-                    Set_locale(regionalSymbol)
+                    '* Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
                 End If
 
                 ' It worked! We're all set to go.
                 If modALUGEN.rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-                    Set_locale(regionalSymbol)
+                    '* Set_locale(regionalSymbol)
                     Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
                 End If
 
@@ -3222,10 +3231,10 @@ SaveFormSettings_Error:
                 rsaPrivateParams = Nothing
                 rsaCSP = Nothing
             End If
-            Set_locale(regionalSymbol)
+            '* Set_locale(regionalSymbol)
 
         Catch ex As Exception
-            Set_locale(regionalSymbol)
+            '* Set_locale(regionalSymbol)
             MessageBox.Show(ex.Message, ACTIVELOCKSTRING, MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
             'update controls
@@ -3235,7 +3244,7 @@ SaveFormSettings_Error:
             Cursor = Cursors.Default
             Enabled = True
             fDisableNotifications = False
-            Set_locale(regionalSymbol)
+            '* Set_locale(regionalSymbol)
         End Try
     End Sub
 
@@ -3265,14 +3274,14 @@ SaveFormSettings_Error:
 
         If SSTab1.SelectedIndex <> 1 Then Exit Sub ' our tab not active - do nothing
         ' Get the current date format and save it to regionalSymbol variable
-        Get_locale()
+        '* Get_Locale()
         ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
-        Set_locale("")
+        '* Set_locale("")
 
         If cboLicType.Text = "Time Locked" Then
             ' Check to see if there's a valid expiration date
             If CDate(CType(dtpExpireDate.Value, DateTime).ToString("yyyy/MM/dd")) < CDate(Format(Date.Now, "yyyy/MM/dd")) Then
-                Set_locale(regionalSymbol)
+                '* Set_locale(regionalSymbol)
                 MsgBox("Entered date occurs in the past.", vbExclamation)
                 Exit Sub
             End If
@@ -3326,11 +3335,12 @@ SaveFormSettings_Error:
             Else
                 varLicType = ProductLicense.ALLicType.allicNone
             End If
-
+            '* get the dates ready, first we need strings for the expiration and the registration
             Dim strExpire As String
-            strExpire = GetExpirationDate()
+            '* strExpire = GetExpirationDate()
+            strExpire = GetExpirationString()
             Dim strRegDate As String
-            strRegDate = Date.UtcNow.ToString("yyyy/MM/dd")
+            strRegDate = Date.UtcNow.ToString '*("yyyy/MM/dd")
             Dim Lic As ProductLicense
 
             'generate license object
@@ -3349,11 +3359,12 @@ SaveFormSettings_Error:
                 licFlag = ProductLicense.LicFlags.alfSingle
             End If
             maximumUsers = CShort(txtMaxCount.Text)
-
+            '* create the license object passing the expiration and registration date
             Lic = ActiveLock3Globals_definst.CreateProductLicense(strName, strVer, "", _
                       licFlag, varLicType, "", _
                       selRelLevelType, _
-                      strExpire, , strRegDate, , maximumUsers)
+                      GetExpirationDate, , Date.UtcNow, , maximumUsers)
+            '* strExpire, , strRegDate, , maximumUsers)
 
             Dim strLibKey As String, i As Integer
             If Len(txtInstallCode.Text) = 8 Then  'Short Key License
@@ -3363,7 +3374,11 @@ SaveFormSettings_Error:
                         Exit For
                     End If
                 Next
-                strLibKey = ActiveLock.GenerateShortKey(usedVCode, txtInstallCode.Text, Trim(txtUser.Text), strExpire, varLicType, cboRegisteredLevel.SelectedIndex + 200, maximumUsers)
+                '* this generates the key we send to the person (short key)
+                '* strLibKey = ActiveLock.GenerateShortKey(usedVCode, txtInstallCode.Text, Trim(txtUser.Text), strExpire, varLicType, cboRegisteredLevel.SelectedIndex + 200, maximumUsers)
+                strLibKey = ActiveLock.GenerateShortKey(usedVCode, txtInstallCode.Text, _
+                Trim(txtUser.Text), GetExpirationString(), varLicType, _
+                cboRegisteredLevel.SelectedIndex + 200, maximumUsers)
                 txtLicenseKey.Text = strLibKey
             Else 'ALCrypto License Key
                 ' Pass it to IALUGenerator to generate the key
@@ -3454,12 +3469,12 @@ SaveFormSettings_Error:
             txtLicenseFile.Visible = True
             cmdBrowse.Visible = True
             cmdSave.Visible = True
-            Set_locale(regionalSymbol)
+            '* Set_locale(regionalSymbol)
         Catch ex As Exception
-            Set_locale(regionalSymbol)
+            '* Set_locale(regionalSymbol)
             UpdateStatus("Error: " & ex.Message)
         Finally
-            Set_locale(regionalSymbol)
+            '* Set_locale(regionalSymbol)
             Cursor = Cursors.Default
         End Try
     End Sub
@@ -3560,9 +3575,9 @@ continueHere:
         'strdata = "TestApp" & vbCrLf & "3" & vbCrLf & "Single" & vbCrLf & "1" & vbCrLf & "Evaluation User" & vbCrLf & "0" & vbCrLf & "2006/11/22" & vbCrLf & "2006/12/22" & vbCrLf & "5" & vbLf & "+00 10 18 09 71 85" & vbCrLf & "MYSWEETBABY" & vbCrLf & "5CA9-4B2A" & vbCrLf & "3JT26AA0" & vbCrLf & "55274-OEM-0011903-00102" & vbCrLf & "DELL   - 7" & vbCrLf & "BFWB741" & vbCrLf & "192.168.0.1"
 
         ' Get the current date format and save it to regionalSymbol variable
-        Get_locale()
+        '* Get_Locale()
         ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
-        Set_locale("")
+        '* Set_locale("")
 
         ' ALCrypto DLL with 1024-bit strength
         If strLeft(txtVCode.Text, 3) <> "RSA" Then
@@ -3570,7 +3585,7 @@ continueHere:
             UpdateStatus("Validating keyset...")
             rc = modALUGEN.rsa_createkey(txtVCode.Text, txtVCode.Text.Length, txtGCode.Text, txtGCode.Text.Length, KEY)
             If rc = RETVAL_ON_ERROR Then
-                Set_locale(regionalSymbol)
+                '* Set_locale(regionalSymbol)
                 MessageBox.Show("Code not valid! " & vbCrLf & STRRSAERROR, ACTIVELOCKSTRING, MessageBoxButtons.OK, MessageBoxIcon.Error)
                 UpdateStatus(txtName.Text & " (" & txtVer.Text & ") " & STRRSAERROR)
                 Exit Sub
@@ -3586,7 +3601,7 @@ continueHere:
             End If
             ' It worked! We're all set to go.
             If modALUGEN.rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-                Set_locale(regionalSymbol)
+                '* Set_locale(regionalSymbol)
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
             End If
         Else  '.NET RSA
@@ -3809,10 +3824,10 @@ continueHere:
 
                 'Release any resources held by the RSA Service Provider
                 rsaCSP.Clear()
-                Set_locale(regionalSymbol)
+                '* Set_locale(regionalSymbol)
 
             Catch ex As Exception
-                Set_locale(regionalSymbol)
+                '* Set_locale(regionalSymbol)
                 UpdateStatus(ex.Message)
             End Try
 
@@ -3822,7 +3837,7 @@ continueHere:
         Exit Sub
 
 exitValidate:
-        Set_locale(regionalSymbol)
+        '* Set_locale(regionalSymbol)
         UpdateStatus(txtName.Text & " (" & txtVer.Text & ") GCode-VCode mismatch!")
         Cursor = Cursors.Default
     End Sub
@@ -4085,9 +4100,9 @@ exitValidate:
         ' ------------------ end Message from Ismail ------------------
 
         ' Get the current date format and save it to regionalSymbol variable
-        Get_locale()
+        '* Get_Locale()
         ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
-        Set_locale("")
+        '* Set_locale("")
 
         If strLeft(txtVCode.Text, 3) = "RSA" Then
 
@@ -4160,10 +4175,10 @@ exitValidate:
 
                 'Release any resources held by the RSA Service Provider
                 rsaCSP.Clear()
-                Set_locale(regionalSymbol)
+                '* Set_locale(regionalSymbol)
 
             Catch ex As Exception
-                Set_locale(regionalSymbol)
+                '* Set_locale(regionalSymbol)
                 UpdateStatus(ex.Message)
             End Try
         End If
