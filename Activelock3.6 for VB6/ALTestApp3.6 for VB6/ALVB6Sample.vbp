@@ -1,7 +1,7 @@
 Type=Exe
 Reference=*\G{00020430-0000-0000-C000-000000000046}#2.0#0#..\..\WINDOWS\system32\stdole2.tlb#OLE Automation
-Reference=*\G{DB5E7E82-6F9F-4474-B564-46BF32858A79}#1.0#0#..\Activelock3.6 for VB6\activelock3.6.dll#ActiveLock Object Library 3.6
-Object={831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0; Mscomctl.ocx
+Reference=*\G{DB5E7E82-6F9F-4474-B564-46BF32858A79}#1.0#0#..\..\WINDOWS\system32\activelock3.6.dll#ActiveLock Object Library 3.6
+Object={831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0; MSCOMCTL.OCX
 Module=modMain; modMain.bas
 Module=modRegistryAPIs; modRegistryAPIs.bas
 Form=Splash.Frm
@@ -41,3 +41,5 @@ MaxNumberOfThreads=1
 
 [MS Transaction Server]
 AutoRefresh=1
+
+

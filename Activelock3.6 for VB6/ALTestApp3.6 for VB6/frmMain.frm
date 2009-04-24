@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "Mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmMain 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "ALTestApp - ActiveLock3 Test Application"
@@ -820,8 +820,8 @@ Private Sub Form_Load()
         ' however ALCrypto uses 1024 bit strength key only.
         ' alsShortKeyMD5 is for short key protection only
         ' WARNING: Short key licenses use the lockFingerprint by default
-        .LicenseKeyType = alsShortKeyMD5
-        '.LicenseKeyType = alsRSA
+        '.LicenseKeyType = alsShortKeyMD5
+        .LicenseKeyType = alsRSA
         
         ' Set the Trial Feature properties
         ' If you don't want to use the trial feature in your app, set the TrialType
