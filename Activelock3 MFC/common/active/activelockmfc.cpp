@@ -1,14 +1,19 @@
 #include "stdafx.h" 
+#include <vector>
 #include <string>
-
-#include "comutilfix.h"  
-using namespace _com_util_fix; 
-
-
-#import "C:\\windows\\system32\\ActiveLock3.5.dll" 
-using namespace ActiveLock3; 
-
 using namespace std;
+
+// in the distant past - com_util was faulty - this was the fix
+// considering this was many years ago this must have been fixed but keep in case problems
+//#include "comutilfix.h"  
+//using namespace _com_util_fix; 
+
+#include <comutil.h>
+using namespace _com_util;
+
+
+#import "C:\\Windows\\SysWOW64\\ActiveLock3.6.dll"   // ******* this maybe somewhere else - check *************
+using namespace ActiveLock3; 
 
 #include "ConnectionAdvisor.h"   
 #include "EventSink.h" 
@@ -16,17 +21,32 @@ using namespace std;
 
 IID iid_IActiveLockEventSink(__uuidof(__ActiveLockEventNotifier) );
 
-
 void ActiveLockHandleException(_com_error ce, BOOL bShow = FALSE);
 string GetIt();
 
-
 void ActiveLockHandleException(_com_error ce, BOOL bShow) 
 { 
-  const TCHAR* pCause = ce.ErrorMessage(); 
+  _bstr_t bDesc = ce.Description();
+  _bstr_t bContext = ce.HelpContext();
+  _bstr_t bFile = ce.HelpFile();
+  CString  Desc( ConvertBSTRToString(bDesc)); 
+  CString  Context( ConvertBSTRToString(bContext)); 
+  CString  File( ConvertBSTRToString(bFile)); 
+  CString Cause = ce.ErrorMessage();
+  CString mes = "Descr. " + Desc + " Context: " + Context + " File: " + File + " Cause: " + Cause;
+
   if(bShow){ 
-    AfxMessageBox(pCause);
+    AfxMessageBox(LPCSTR(mes));
   }
+} 
+
+CString& CActiveLockWrap::BSTRToCString(BSTR& bs) 
+{ 
+  char *pc = ConvertBSTRToString(bs); 
+  CString* pstr = new CString(pc); 
+  delete pc; 
+  SysFreeString(bs); 
+  return *pstr; 
 } 
 
 const CString CActiveLockWrap::GetInstallationCode(const CString& strUsn) const
@@ -42,71 +62,78 @@ const CString CActiveLockWrap::GetInstallationCode(const CString& strUsn) const
     ActiveLockHandleException(ce,TRUE); 
     return _T("Not Valid"); 
   } 
-  catch (...) 
-  { 
-    AfxMessageBox(_T("Unknown exception during retrive of installation code, please report authors about this problem")); 
-    return _T("Not Valid"); 
-  } 
-
-  return strInstCode; 
-} 
-
-
-const CString CActiveLockWrap::LockCode() const
-{ 
-
-  CString strInstCode = _T(""); 
-  try 
-  { 
-    _ProductLicense* pProductLicense = 0;
-    strInstCode = S(m_ActiveLock->LockCode(&pProductLicense)); 
-  } 
-  catch (_com_error ce) 
-  { 
-    ActiveLockHandleException(ce,TRUE); 
-    return _T("Not Valid"); 
-  } 
-  catch (...) 
-  { 
-    AfxMessageBox(_T("Unknown exception during retrive of installation code, please report authors about this problem")); 
-    return _T("Not Valid"); 
-  } 
-
   return strInstCode; 
 } 
 
 // next 2 procs bury details of providing an "out" string to acquire.
+
 const CString CActiveLockWrap::InitBSTR() 
 { 
-  //if(0){
-  _ActiveLockEventNotifier* alen = GetEventNotifier(); 
-  BOOL bRes = m_ActiveLockEventSink.Advise(alen, iid_IActiveLockEventSink); 
-  if(!bRes) 
-    AfxMessageBox(_T("m_ActiveLockEventSink.Advise(...) == FALSE")); 
-  //}
-
-  BSTR autoLicString = SysAllocStringByteLen( "", 1000); // license could be large 
+  BSTR autoLicString = SysAllocStringByteLen( "", 10000); // license could be large and this is freed below
   m_ActiveLock->Init(&autoLicString); 
-  char *pci = _com_util_fix::ConvertBSTRToString(autoLicString); 
-  CString strInitAns(pci); 
-  delete pci; 
-  SysFreeString(autoLicString); 
-
-  return strInitAns; 
+  return BSTRToCString(autoLicString); 
 } 
 
 
-const CString CActiveLockWrap::AcquireBSTR() 
+const CString CActiveLockWrap::AcquireBSTR(        
+        CString & strRemainingTrialDays,
+        CString & strRemainingTrialRuns,
+        CString & strTrialLength,
+        CString & strUsedDays,
+        CString & strExpirationDate,
+        CString & strRegisteredUser,
+        CString & strRegisteredLevel,
+        CString & strLicenseClass,
+        CString & strMaxCount,
+        CString & strLicenseFileType,
+        CString & strLicenseType,
+        CString & strUsedLockType )
 { 
   BSTR bstrAcquireAns = SysAllocStringByteLen( "", 100); 
+  BSTR bstrRemainingTrialDays = SysAllocStringByteLen( "", 100); 
+  BSTR bstrRemainingTrialRuns = SysAllocStringByteLen( "", 100); 
+  BSTR bstrTrialLength = SysAllocStringByteLen( "", 100); 
+  BSTR bstrUsedDays = SysAllocStringByteLen( "", 100); 
+  BSTR bstrExpirationDate = SysAllocStringByteLen( "", 100); 
+  BSTR bstrRegisteredUser = SysAllocStringByteLen( "", 100); 
+  BSTR bstrRegisteredLevel = SysAllocStringByteLen( "", 100); 
+  BSTR bstrLicenseClass = SysAllocStringByteLen( "", 100); 
+  BSTR bstrMaxCount = SysAllocStringByteLen( "", 100); 
+  BSTR bstrLicenseFileType = SysAllocStringByteLen( "", 100); 
+  BSTR bstrLicenseType = SysAllocStringByteLen( "", 100); 
+  BSTR bstrUsedLockType = SysAllocStringByteLen( "", 100); 
+  
   //AfxMessageBox(_T("Starting Acquire...")); 
-  m_ActiveLock->Acquire(&bstrAcquireAns); // Check to see if we have a valid license 
+     // Check to see if we have a valid license 
+  m_ActiveLock->Acquire(&bstrAcquireAns,
+        &bstrRemainingTrialDays,
+        &bstrRemainingTrialRuns,
+        &bstrTrialLength,
+        &bstrUsedDays,
+        &bstrExpirationDate,
+        &bstrRegisteredUser,
+        &bstrRegisteredLevel,
+        &bstrLicenseClass,
+        &bstrMaxCount,
+        &bstrLicenseFileType,
+        &bstrLicenseType,
+        &bstrUsedLockType );
   //AfxMessageBox(_T("Finished Acquire...")); 
-  char *pc = _com_util_fix::ConvertBSTRToString(bstrAcquireAns); 
-  CString strAcquireAns(pc); 
-  delete pc; 
-  SysFreeString(bstrAcquireAns); 
-  return strAcquireAns; 
+
+  strRemainingTrialDays = BSTRToCString(bstrRemainingTrialDays); 
+  strRemainingTrialRuns = BSTRToCString(bstrRemainingTrialRuns); 
+  strTrialLength = BSTRToCString(bstrTrialLength); 
+  strUsedDays = BSTRToCString(bstrUsedDays); 
+  strExpirationDate = BSTRToCString(bstrExpirationDate); 
+  strRegisteredUser = BSTRToCString(bstrRegisteredUser); 
+  strRegisteredLevel = BSTRToCString(bstrRegisteredLevel); 
+  strLicenseClass = BSTRToCString(bstrLicenseClass); 
+  strMaxCount = BSTRToCString(bstrMaxCount); 
+  strLicenseFileType = BSTRToCString(bstrLicenseFileType); 
+  strLicenseType = BSTRToCString(bstrLicenseType); 
+  strUsedLockType = BSTRToCString(bstrUsedLockType); 
+
+  return BSTRToCString(bstrAcquireAns);; 
 } 
 
 void CActiveLockWrap::DisconnectEvent() 
@@ -117,48 +144,68 @@ void CActiveLockWrap::DisconnectEvent()
 
 void CActiveLockWrap::DestroyActiveLock() 
 { 
-  m_ActiveLock = 0;    // destroy activelock - this simple line is correct and also very complex 
+  m_ActiveLock = 0;                                 // destroy activelock - this simple line is correct and also very complex 
 } 
 
-
-
-
-
+/*
+Public Enum ALLockTypes
+    lockNone = 0
+    lockMAC = 1             '8
+    lockComp = 2
+    lockHD = 4
+    lockHDFirmware = 8      '256
+    lockWindows = 16        '1
+    lockBIOS = 32           '16
+    lockMotherboard = 64
+    lockIP = 128            '32
+    lockExternalIP = 256    '128
+    lockFingerprint = 512
+    lockMemory = 1024
+    lockCPUID = 2048
+    lockBaseboardID = 4096
+    lockvideoID = 8192
+End Enum
+*/
 enum ALLockTypes CActiveLockWrapEx::LockTypeFromInt(int i)      const 
   {
     switch(i){
       case 0:
         return lockNone;
-        break;
       case 1:
-        return lockWindows;
-        break;
+        return lockMAC;
       case 2:
         return lockComp;
-        break;
       case 4:
         return lockHD;
-        break;
       case 8:
-        return lockMAC;
-        break;
+        return lockHDFirmware;
       case 16:
-        return lockBIOS;
-        break;
+        return lockWindows;
       case 32:
-        return lockIP;
-        break;
+        return lockBIOS;
       case 64:
         return lockMotherboard;
-        break;
+      case 128:
+        return lockIP;
       case 256:
-        return lockHDFirmware;
+        return lockExternalIP;
+        break;
+      case 512:
+        return lockFingerprint;
+      case 1024:
+        return lockMemory;
+        break;
+      case 2048:
+        return lockCPUID;
+      case 4096:
+        return lockBaseboardID;
+      case 8192:
+        return lockvideoID;
+      default:
         break;
     }
     return lockNone;
   }
-
-
 
 
 
@@ -169,7 +216,6 @@ CActiveLockMFC::CActiveLockMFC()
   Init();
 } 
 
-
 CActiveLockMFC::~CActiveLockMFC() 
 { 
 } 
@@ -177,17 +223,11 @@ CActiveLockMFC::~CActiveLockMFC()
 
 void CActiveLockMFC::Init() 
 { 
-  m_bCreated            = FALSE; 
-  m_bInitialized        = FALSE; 
   m_bRegStatus          = FALSE; 
   m_bLimited            = FALSE; 
-} 
-
-
-void CActiveLockMFC::ResetCollectionData(void) 
-{ 
   m_bTrial               = FALSE; 
-  m_lUsedDays            = 0; 
+  m_strUsedDays          = ""; 
+
   m_strExpirationDate.Empty(); 
   m_strRegisteredDate.Empty(); 
   m_strRegisteredUser.Empty(); 
@@ -195,75 +235,25 @@ void CActiveLockMFC::ResetCollectionData(void)
   m_strLicenseStatus   = _T("Not registered"); 
 } 
 
-
-BOOL CActiveLockMFC::CollectLicenseData() 
-{ 
-  //DW? ResetCollectionData(); 
-
-  // we have a license 1. a real one or 2. a trial license 
-  // a trial license will throw an exception on some of the following 
-  // a real one will work 
-  // could parse strAcquireAns, but I am lazy 
-  try 
-  { 
-    m_lUsedDays            = GetUsedDays();
-    m_strRegisteredUser    = GetRegisteredUser(); 
-    m_strRegisteredDate    = GetRegisteredDate(); 
-    m_strRegisteredLevel   = GetRegisteredLevel(); 
-    m_lLockType            = m_ActiveLock->GetLockType();                       // Activelock index 
-    if(m_strRegisteredLevel.Left(7).CompareNoCase(_T("Limited")) == 0) 
-      m_bLimited = TRUE; 
-    else 
-      m_bLimited = FALSE; 
-    CString strVersion   = GetSoftwareVersion(); 
-    m_bRegStatus         = TRUE; 
-    m_strLicenseStatus   = _T("Registered"); 
-  } 
-  catch (_com_error ce) 
-  { 
-    // must (I hope) be a trial license 
-    m_bRegStatus         = TRUE; 
-    m_bTrial               = TRUE; 
-    m_strLicenseStatus   = _T("Trial License"); 
-  } 
-
-  return TRUE; 
-} 
-
-
-BOOL CActiveLockMFC::Create() 
+void CActiveLockMFC::Create() 
 { 
   _GlobalsPtr alGlobals; 
   HRESULT hr;
-  if(!m_bCreated) 
-  { 
-    // Initialize OLE libraries
-    if (!AfxOleInit()){
-      AfxMessageBox("OLE initialization failed.");
-      return 3;
-    }
-    try 
-    {
-      hr = alGlobals.CreateInstance("ActiveLock3.Globals", NULL); 
-      m_ActiveLock = alGlobals->NewInstance(); 
-
-      m_bCreated = TRUE; 
-    } 
-    catch (_com_error ce) 
-    { 
-      ActiveLockHandleException(ce, TRUE); 
-      throw 1;
-      return FALSE; 
-    } 
-    catch (...) 
-    { 
-      AfxMessageBox(_T("Failed to create protection instance, please report authors about this problem")); 
-      throw 2;
-      return FALSE; 
-    } 
+  // Initialize OLE libraries
+  if (!AfxOleInit()){
+    AfxMessageBox("OLE initialization failed.");
+    return;
+  }
+  try 
+  {
+    hr = alGlobals.CreateInstance("ActiveLock3.Globals", NULL); 
+    m_ActiveLock = alGlobals->NewInstance(); 
   } 
-
-  return TRUE; 
+  catch (_com_error ce) 
+  { 
+    ActiveLockHandleException(ce, TRUE); 
+    throw 1;
+  } 
 } 
 
 
@@ -274,19 +264,18 @@ BOOL CActiveLockMFC::Initialize()
 
   try 
   { 
-    if(!m_bInitialized) 
-    { 
-      // Init and Acquire return a CString, so you need the following 
+    _ActiveLockEventNotifier* alen = GetEventNotifier(); 
+    BOOL bRes = m_ActiveLockEventSink.Advise(alen, iid_IActiveLockEventSink); 
+    if(!bRes) 
+      AfxMessageBox(_T("m_ActiveLockEventSink.Advise(...) == FALSE")); 
 
-      strTmp = InitBSTR(); 
-      m_strInitAnswer.Format(_T("Initial answer: %s"),strTmp); 
+    // Init and Acquire return a CString, so you need the following 
 
-      if(0) 
-      { //DEBUG TESTING set to 1 to simulate no license 
-        AfxThrowUserException(); 
-      } 
+    m_strInitAnswer = InitBSTR(); 
 
-      m_bInitialized = TRUE; 
+    if(0) 
+    { //DEBUG TESTING set to 1 to simulate no license 
+      AfxThrowUserException(); 
     } 
   } 
   catch (_com_error ce) 
@@ -295,20 +284,13 @@ BOOL CActiveLockMFC::Initialize()
     throw 1;
     // return FALSE; 
   } 
-  catch (...) 
-  { 
-    AfxMessageBox(_T("Unknown exception during initialization of protection instance, please report authors about this problem")); 
-    throw 2;
-    return FALSE; 
-  } 
-
   return TRUE; 
 } 
 
 
 BOOL CActiveLockMFC::CheckLicense() 
 { 
-  m_bRegStatus = FALSE; 
+  m_bRegStatus = FALSE;                                           // assume the worst - no valid license
   m_bTrial = FALSE; 
   m_strAcquireAnswer.Empty(); 
 
@@ -317,26 +299,61 @@ BOOL CActiveLockMFC::CheckLicense()
 
     // if you have problems with the trial feature you may have to uncomment the 
     // following line and run the program and then reinsert the comments 
-    ResetTrial();  // in case things go wrong 
-    ResetTrial();  // a post said I should do it twice-easy enough-can not do any harm 
+    //ResetTrial();  // in case things go wrong 
+    //ResetTrial();  // a post said I should do it twice-easy enough-can not do any harm 
 
-    CString strTmp = AcquireBSTR(); 
-    m_strAcquireAnswer.Format(_T("%s"),strTmp); 
-    CollectLicenseData(); 
+    CString strAns = AcquireBSTR(
+        m_strRemainingTrialDays,
+        m_strRemainingTrialRuns,
+        m_strTrialLength,
+        m_strUsedDays,             //
+        m_strExpirationDate,      //
+        m_strRegisteredUser,
+        m_strRegisteredLevel,     //
+        m_strLicenseClass,
+        m_strMaxCount,
+        m_strLicenseFileType,
+        m_strLicenseType,
+        m_strUsedLockType ); 
+
+    // license fails - exception thrown - caught in catch below
+    // license ok gets to here with strAns as empty string
+    // license is a valid trial license gets to here with strAns blah blah trial license 16 days of 31 days left 
+
+    m_strAcquireAnswer.Format(_T("%s"),strAns); 
+    if(strAns != "")                                        // trial license
+    {
+      // a trial license 
+      m_bRegStatus         = TRUE; 
+      m_bTrial             = TRUE; 
+      m_strLicenseStatus   = _T("Trial License"); 
+    }
+    else
+    {                                                                               // successfully registered
+      try 
+      {                                                                             // get all info
+        m_bRegStatus         = TRUE; 
+        m_strLicenseStatus   = _T("Registered"); 
+        m_strRegisteredDate  = GetRegisteredDate(); 
+        m_lLockType          = m_ActiveLock->GetLockType();                         // Activelock index 
+        
+        if(m_strRegisteredLevel.Left(7).CompareNoCase(_T("Limited")) == 0)          // I do not use RegisterLevel - so following is just a play
+          m_bLimited = TRUE; 
+        else 
+          m_bLimited = FALSE; 
+      } 
+      catch (_com_error ce) 
+      { 
+      } 
+
+    } 
   } 
   catch (_com_error ce) 
   { 
+    // default is set to faulty so not much to do - print some info to help sort this out
     ActiveLockHandleException(ce); 
     throw 1;
-    //      return FALSE; 
   } 
-  catch (...) 
-  { 
-    AfxMessageBox(_T("Unknown exception during put of acquire/collecting license data, please report authors about this problem")); 
-    throw 2;
-    return FALSE; 
-  } 
-
   return TRUE; 
 } 
 
