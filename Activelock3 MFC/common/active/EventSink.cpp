@@ -5,13 +5,15 @@
 #include <iomanip>
 #include <string>
 using namespace std;
-#include "comutilfix.h"
+#include <comutil.h>
+using namespace _com_util;
 
-#import "C:\\windows\\system32\\ActiveLock3.5.dll" 
+#import "C:\\Windows\\SysWOW64\\ActiveLock3.6.dll"   // ******* this maybe somewhere else - check ************* 
 using namespace ActiveLock3; 
 
 #include "ConnectionAdvisor.h"
 #include "EventSink.h"
+
 
 /*----------------------------------------------------------------------------*/
 /*
@@ -89,12 +91,12 @@ void CActiveLockEventSink::OnFinalRelease()
 
 HRESULT CActiveLockEventSink::ValidateValue(BSTR* pbstr) 
 {
-  char *pc = _com_util_fix::ConvertBSTRToString(*pbstr);
+  char *pc = ConvertBSTRToString(*pbstr);
   string str(pc);
   delete pc;
   string sans = Enc(str);
   SysFreeString(*pbstr);
-  BSTR bans =_com_util_fix::ConvertStringToBSTR(sans.c_str());
+  BSTR bans = ConvertStringToBSTR(sans.c_str());
   *pbstr=::SysAllocString(bans);
   return TRUE;
 }

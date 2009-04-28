@@ -1,7 +1,6 @@
 #pragma once 
 
 
-
 inline CString S(char *c)
 {
   return c ? c : "";
@@ -26,8 +25,7 @@ public:
   void             PutTrialHideType ( enum ALTrialHideTypes arg )     {m_ActiveLock->PutTrialHideType(arg); };
   void             PutTrialType (enum ALTrialTypes arg )              {m_ActiveLock->PutTrialType(arg); };
   void             PutTrialLength (long arg )                         {m_ActiveLock->PutTrialLength(arg); };
-  ALLockTypes           GetLockType()       const                     {return m_ActiveLock->GetLockType(); };
-  //ALLockTypes           GetUsedLockType()   const                     {return m_ActiveLock->GetUsedLockType(); };
+  enum ALLockTypes      GetLockType()       const                     {return m_ActiveLock->GetLockType(); };
   enum ALTrialHideTypes GetTrialHideType ( )const                     {return m_ActiveLock->GetTrialHideType(); };
   enum ALTrialTypes     GetTrialType ( )    const                     {return m_ActiveLock->GetTrialType(); };
   long             GetTrialLength() const                             {return m_ActiveLock->GetTrialLength();  };
@@ -43,11 +41,21 @@ public:
   void             PutKeyStorePath (const CString&  arg )             {m_ActiveLock->PutKeyStorePath(LPCTSTR(arg)); };
   const CString    GetInstallationCode(const CString& strUsn) const; 
   void             PutAutoRegisterKeyPath (const CString& arg)        {m_ActiveLock->PutAutoRegisterKeyPath(LPCTSTR(arg)); };
-  const CString    LockCode()             const;
-  //const CString    Register(const CString& arg)                       {m_ActiveLock->Register(LPCTSTR(arg)); };
   void             Transfer (const CString& arg)                      {m_ActiveLock->Transfer(LPCTSTR(arg)); };
   const CString    InitBSTR(); 
-  const CString    AcquireBSTR(); 
+  const CString    AcquireBSTR(
+        CString & strRemainingTrialDays,
+        CString & strRemainingTrialRuns,
+        CString & strTrialLength,
+        CString & strUsedDays,
+        CString & strExpirationDate,
+        CString & strRegisteredUser,
+        CString & strRegisteredLevel,
+        CString & strLicenseClass,
+        CString & strMaxCount,
+        CString & strLicenseFileType,
+        CString & strLicenseType,
+        CString & strUsedLockType ); 
   void             ResetTrial ()                                      {m_ActiveLock->ResetTrial(); };
   void             KillTrial ()                                       {m_ActiveLock->KillTrial(); };
   _ActiveLockEventNotifier* GetEventNotifier () const                 {return m_ActiveLock->GetEventNotifier(); };
@@ -66,8 +74,8 @@ public:
   CString               m_strAcquireAnswer; 
 
 protected: 
+  CString& BSTRToCString(BSTR& bs);
 
-  //   CGlobals alGlobals; 
   _IActiveLockPtr       m_ActiveLock;
   CActiveLockEventSink  m_ActiveLockEventSink;
 }; 
@@ -90,7 +98,7 @@ public:
   enum ALLockTypes LockType()      const                              {return m_lLockType;    };
   // following used in reading/writing value to ini file
   enum ALLockTypes LockTypeFromInt(int i)      const ;
-  int              LockTypeToInt(enum ALLockTypes  alt)      const    {return alt;};
+  int              LockTypeToInt(enum ALLockTypes  alt)      const    {return (int)alt;};
 
 protected: 
 
@@ -116,24 +124,27 @@ public:
   BOOL             IsTrialLicense()      const      { return m_bTrial;            } 
   BOOL             IsLimitedLicense()    const      { return m_bLimited;          } 
 
-  BOOL Create(); 
+  void Create(); 
   BOOL Initialize(); 
   BOOL CheckLicense(); 
-  //BOOL Register(const CString& strLibKey); 
-  void ResetCollectionData(void); 
+  BOOL Register(const CString& strLibKey); 
 
-  BOOL CollectLicenseData(); 
-  void SetSoftwareVersion (const CString& arg)       {m_strSoftwareVersion = arg; };
+  void SetSoftwareVersion (const CString& arg)      {m_strSoftwareVersion = arg; PutSoftwareVersion (arg);};
+  void SetTrialType (enum ALTrialTypes arg )        {m_lTrialType = arg; PutTrialType(arg); };
+  CString RegisteredDate ()                         {return m_strRegisteredDate;};
+  CString RemainingTrialDays ()                     {return m_strRemainingTrialDays;};
+  CString RemainingTrialRuns ()                     {return m_strRemainingTrialRuns;};
+  CString TrialLength ()                            {return m_strTrialLength;};
+  
 
 protected: 
+public:  //dw remove me
   void Init();
   BOOL                  m_bRegStatus; 
   CString               m_strLicenseStatus; 
 
 
   //   CGlobals alGlobals; 
-  BOOL                  m_bInitialized; 
-  BOOL                  m_bCreated; 
   BOOL                  m_bTrial; 
   BOOL                  m_bLimited; 
 
@@ -141,8 +152,7 @@ protected:
 
   CString               m_strSoftwareName; 
   CString               m_strSoftwareVersion; 
-  // good design would have the next variable
-  // but we really wish this variable hidden from prying eyes
+  // we do not want next variable easy to find so lets not define it
   //CString               m_strSoftwareCode; 
   CString               m_strKeyStorePath; 
   CString               m_strAutoRegisterKeyPath; 
@@ -152,11 +162,21 @@ protected:
 
   enum ALLicType        m_lLicType; 
   enum ALTrialTypes     m_lTrialType; 
-  long                  m_lTrialLength; 
   enum ALTrialHideTypes m_lTrialHideType; 
 
   CString               m_strRegisteredDate; 
   CString               m_strExpirationDate; 
-  long                  m_lUsedDays; 
+  CString               m_strUsedDays; 
+  
+  CString m_strRemainingTrialDays;    
+  CString m_strRemainingTrialRuns;    
+  CString m_strTrialLength;           
+  CString m_strRegisteredUser;        
+  CString m_strLicenseClass;          
+  CString m_strMaxCount;              
+  CString m_strLicenseFileType;       
+  CString m_strLicenseType;           
+  CString m_strUsedLockType;        
+  
 }; 
 
