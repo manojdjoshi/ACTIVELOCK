@@ -109,9 +109,9 @@ Partial Class frmMain
         Me.txtActivelockPath = New System.Windows.Forms.TextBox
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog
         Me.GroupBox15 = New System.Windows.Forms.GroupBox
-        Me.txtCustomNamespace = New System.Windows.Forms.TextBox
-        Me.ImageApplicationHelp17 = New System.Windows.Forms.PictureBox
         Me.chkUseDefaultNameSpace = New System.Windows.Forms.CheckBox
+        Me.ImageApplicationHelp17 = New System.Windows.Forms.PictureBox
+        Me.txtCustomNamespace = New System.Windows.Forms.TextBox
         Me.GroupBox1.SuspendLayout()
         CType(Me.ImageApplicationHelp11, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox2.SuspendLayout()
@@ -1060,25 +1060,6 @@ Partial Class frmMain
         Me.GroupBox15.TabStop = False
         Me.GroupBox15.Text = "Custom Namespace"
         '
-        'txtCustomNamespace
-        '
-        Me.txtCustomNamespace.Enabled = False
-        Me.txtCustomNamespace.Location = New System.Drawing.Point(32, 17)
-        Me.txtCustomNamespace.Name = "txtCustomNamespace"
-        Me.txtCustomNamespace.Size = New System.Drawing.Size(190, 20)
-        Me.txtCustomNamespace.TabIndex = 1
-        Me.txtCustomNamespace.Text = "ActiveLock3"
-        '
-        'ImageApplicationHelp17
-        '
-        Me.ImageApplicationHelp17.Cursor = System.Windows.Forms.Cursors.Hand
-        Me.ImageApplicationHelp17.Image = Global.ActiveLockWizard.My.Resources.Resources.Help
-        Me.ImageApplicationHelp17.Location = New System.Drawing.Point(6, 16)
-        Me.ImageApplicationHelp17.Name = "ImageApplicationHelp17"
-        Me.ImageApplicationHelp17.Size = New System.Drawing.Size(19, 18)
-        Me.ImageApplicationHelp17.TabIndex = 4
-        Me.ImageApplicationHelp17.TabStop = False
-        '
         'chkUseDefaultNameSpace
         '
         Me.chkUseDefaultNameSpace.AutoSize = True
@@ -1090,6 +1071,25 @@ Partial Class frmMain
         Me.chkUseDefaultNameSpace.TabIndex = 5
         Me.chkUseDefaultNameSpace.Text = "Use Default"
         Me.chkUseDefaultNameSpace.UseVisualStyleBackColor = True
+        '
+        'ImageApplicationHelp17
+        '
+        Me.ImageApplicationHelp17.Cursor = System.Windows.Forms.Cursors.Hand
+        Me.ImageApplicationHelp17.Image = Global.ActiveLockWizard.My.Resources.Resources.Help
+        Me.ImageApplicationHelp17.Location = New System.Drawing.Point(6, 16)
+        Me.ImageApplicationHelp17.Name = "ImageApplicationHelp17"
+        Me.ImageApplicationHelp17.Size = New System.Drawing.Size(19, 18)
+        Me.ImageApplicationHelp17.TabIndex = 4
+        Me.ImageApplicationHelp17.TabStop = False
+        '
+        'txtCustomNamespace
+        '
+        Me.txtCustomNamespace.Enabled = False
+        Me.txtCustomNamespace.Location = New System.Drawing.Point(32, 17)
+        Me.txtCustomNamespace.Name = "txtCustomNamespace"
+        Me.txtCustomNamespace.Size = New System.Drawing.Size(190, 20)
+        Me.txtCustomNamespace.TabIndex = 1
+        Me.txtCustomNamespace.Text = "ActiveLock3"
         '
         'frmMain
         '
@@ -1114,7 +1114,7 @@ Partial Class frmMain
         Me.MaximizeBox = False
         Me.MinimizeBox = False
         Me.Name = "frmMain"
-        Me.Text = "Activelock Protection Source Code Generation Wizard V3.6 RC2"
+        Me.Text = "Activelock Protection Source Code Generation Wizard V3.6 RC1"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
         CType(Me.ImageApplicationHelp11, System.ComponentModel.ISupportInitialize).EndInit()

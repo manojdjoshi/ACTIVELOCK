@@ -106,7 +106,7 @@ Module modVB2005
         WriteToFile("             ActivelockValues.AppVersion = MyActiveLock.SoftwareVersion" & vbCrLf)
         WriteToFile("             ActivelockValues.RegisteredLevel = strRegisteredLevel" & vbCrLf)
         WriteToFile("             ' Networked Licenses" & vbCrLf)
-        WriteToFile("             If strLicenseClass = LicFlags.alfMulti Then" & vbCrLf)
+        WriteToFile("             If strLicenseClass = LicFlags.alfMulti.ToString Then" & vbCrLf)
         WriteToFile("                 ActivelockValues.LicenseClass = " & Chr(34) & "Networked" & Chr(34) & vbCrLf)
         WriteToFile("             Else 'If strLicenseType = LicFlags.alfSingle Then" & vbCrLf)
         WriteToFile("                 ActivelockValues.LicenseClass = " & Chr(34) & "Single User" & Chr(34) & vbCrLf)
