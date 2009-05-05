@@ -65,7 +65,7 @@ Attribute VB_Exposed = True
 ' @version 3.0.0
 ' @date 20050421
 '
-'* ///////////////////////////////////////////////////////////////////////
+' * ///////////////////////////////////////////////////////////////////////
 '  /                        MODULE TO DO LIST                            /
 '  ///////////////////////////////////////////////////////////////////////
 '
@@ -103,9 +103,12 @@ Private mstrProductName As String
 Private mstrProductVer As String
 Private mstrLicenseKey As String
 Private mstrLicenseCode As String
-Private mstrExpiration As String
-Private mstrRegisteredDate As String
-Private mstrLastUsed As String
+'* Private mstrExpiration As String
+'* Private mstrRegisteredDate As String
+'* Private mstrLastUsed As String
+Private mstrExpiration As Date '*
+Private mstrRegisteredDate As Date '*
+Private mstrLastUsed As Date '*
 Private mstrHash1 As String ' hash of mstrRegisteredDate
 Private mnMaxCount As Long ' max number of concurrent users
 Private mnLicenseFileType As Long
@@ -384,23 +387,23 @@ End Property
 '===============================================================================
 ' Name: Property Let Expiration
 ' Input:
-'   ByVal strDate As String - Expiration date
+'   ByVal strDate As Date - Expiration date '*
 ' Output: None
 ' Purpose: [INTERNAL] Specifies expiration data.
 ' Remarks: None
 '===============================================================================
-Friend Property Let Expiration(ByVal strDate As String)
+Friend Property Let Expiration(ByVal strDate As Date) '* String)
     mstrExpiration = strDate
 End Property
 '===============================================================================
 ' Name: Property Get Expiration
 ' Input: None
 ' Output:
-'   String - Expiration date
+'   Date - Expiration date '*
 ' Purpose: Returns the expiration date string in "yyyy/MM/dd" format.
 ' Remarks: None
 '===============================================================================
-Public Property Get Expiration() As String
+Public Property Get Expiration() As Date '* String
 Attribute Expiration.VB_Description = "Expiration date string in YYYY/MM/DD format."
     Expiration = mstrExpiration
 End Property
@@ -408,23 +411,23 @@ End Property
 ' Name: Property Get RegisteredDate
 ' Input: None
 ' Output:
-'   String - Product registration date
-' Purpose: Returns the date in "yyyy/MM/dd" format on which the product was registered.
+'   Date - Product registration date '*
+' Purpose: Returns the date on which the product was registered. '*
 ' Remarks: None
 '===============================================================================
-Public Property Get RegisteredDate() As String
+Public Property Get RegisteredDate() As Date '* String
 Attribute RegisteredDate.VB_Description = "Date, in YYYY/MM/DD string format, on which the product was registered."
     RegisteredDate = mstrRegisteredDate
 End Property
 '===============================================================================
 ' Name: Property Let RegisteredDate
 ' Input:
-'   ByVal strDate As String - Product registration date
+'   ByVal strDate As Date - Product registration date '*
 ' Output: None
 ' Purpose: [INTERNAL] Specifies the registered date.
 ' Remarks: None
 '===============================================================================
-Friend Property Let RegisteredDate(ByVal strDate As String)
+Friend Property Let RegisteredDate(ByVal strDate As Date) '* String)
     mstrRegisteredDate = strDate
 End Property
 
@@ -456,11 +459,11 @@ End Property
 ' Name: Property Get LastUsed
 ' Input: None
 ' Output:
-'   String - DateTiem string
-' Purpose: Returns the date and time, in "yyyy/MM/dd" format, when the product was last run.
+'   Date - DateTime string '*
+' Purpose: Returns the date when the product was last run.
 ' Remarks: None
 '===============================================================================
-Public Property Get LastUsed() As String
+Public Property Get LastUsed() As Date '* String
 Attribute LastUsed.VB_Description = "The date and time, in YYYY/MM/DD HH:MM:SS format, when the product was last run."
     LastUsed = mstrLastUsed
 End Property
@@ -469,15 +472,14 @@ End Property
 '===============================================================================
 ' Name: Property Let LastUsed
 ' Input:
-'   ByVal strDateTime As String - Date and time string
+'   ByVal strDateTime As Date '*
 ' Output: None
 ' Purpose: [INTERNAL] Sets the last used date.
 ' Remarks: None
 '===============================================================================
-Friend Property Let LastUsed(ByVal strDateTime As String)
+Friend Property Let LastUsed(ByVal strDateTime As Date) '* String)
     mstrLastUsed = strDateTime
 End Property
-
 
 '===============================================================================
 ' Name: Property Get Hash1
@@ -514,7 +516,7 @@ End Property
 '===============================================================================
 Public Function ToString() As String
 Attribute ToString.VB_Description = "Returns a line-feed delimited string encoding of this object's properties."
-ToString = ProductName & vbCrLf & _
+'* ToString = ProductName & vbCrLf & _
             ProductVer & vbCrLf & _
             LicenseClass & vbCrLf & _
             LicenseType & vbCrLf & _
@@ -522,6 +524,16 @@ ToString = ProductName & vbCrLf & _
             RegisteredLevel & vbCrLf & _
             RegisteredDate & vbCrLf & _
             Expiration & vbCrLf & _
+            MaxCount
+'* remember to save the dates as doubles!
+ToString = ProductName & vbCrLf & _
+            ProductVer & vbCrLf & _
+            LicenseClass & vbCrLf & _
+            LicenseType & vbCrLf & _
+            Licensee & vbCrLf & _
+            RegisteredLevel & vbCrLf & _
+            DateToDblString(RegisteredDate) & vbCrLf & _
+            DateToDblString(Expiration) & vbCrLf & _
             MaxCount
 End Function
 '===============================================================================
@@ -564,6 +576,10 @@ Attribute Load.VB_Description = "Loads the license from a formatted string creat
     LicenseType = CLng(arrParts(3))
     Licensee = arrParts(4)
     RegisteredLevel = arrParts(5)
+    '* RegisteredDate = arrParts(6)
+    '* Expiration = arrParts(7)
+    RegisteredDate = DblStringToDate(arrParts(6)) '*
+    Expiration = DblStringToDate(arrParts(7)) '*
     RegisteredDate = arrParts(6)
     Expiration = arrParts(7)
     MaxCount = CLng(arrParts(8))
@@ -585,3 +601,10 @@ Attribute Save.VB_Description = "Saves the license into a formatted string."
     strOut = ToString() & vbCrLf & LicenseKey 'add License Key at the end
     strOut = modBase64.Base64_Encode(strOut)
 End Sub
+
+Private Sub Class_Initialize()
+mstrRegisteredDate = #1/1/1900#
+mstrExpiration = #1/1/1900#
+mstrLastUsed = #1/1/1900#
+End Sub
+

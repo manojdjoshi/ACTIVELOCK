@@ -67,7 +67,7 @@ Attribute VB_Exposed = True
 ' @version 3.0.0
 ' @date 20050808
 '
-'* ///////////////////////////////////////////////////////////////////////
+' * ///////////////////////////////////////////////////////////////////////
 '  /                        MODULE TO DO LIST                            /
 '  ///////////////////////////////////////////////////////////////////////
 ' @todo GetLicTypeString().  Currently only supports &#34;Single&#34;.  Need to implement the rest.
@@ -248,7 +248,7 @@ Case 0   'create container
         cryptSession.DestroyContainer containerName
         cryptSession.SessionEnd
         Set cryptSession = Nothing
-        Set_locale regionalSymbol
+        ' * Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE & "[0]"
     End If
     Set cryptSession = Nothing
@@ -282,7 +282,7 @@ Case 1   'generate exchange or signature key
         cryptSession.DestroyContainer containerName
         cryptSession.SessionEnd
         Set cryptSession = Nothing
-        Set_locale regionalSymbol
+        ' * Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE & "[1]"
     End If
     Set cryptSession = Nothing
@@ -300,7 +300,7 @@ Case 2    'destroy container
         cryptSession.DestroyContainer containerName
         cryptSession.SessionEnd
         Set cryptSession = Nothing
-        Set_locale regionalSymbol
+        ' * Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE & "[2]"
     End If
     Set cryptSession = Nothing
@@ -332,7 +332,7 @@ Case 3   'encrypt/decrypt
         cryptSession.DestroyContainer containerName
         cryptSession.SessionEnd
         Set cryptSession = Nothing
-        Set_locale regionalSymbol
+        ' * Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE & "[3]"
     End If
     Set cryptSession = Nothing
@@ -341,7 +341,7 @@ Case 4    'sign the key
     If plainText = "" Then
         cryptSession.DestroyContainer containerName
         cryptSession.SessionEnd
-        Set_locale regionalSymbol
+        ' * Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE & "[4]"
     End If
     Set cryptSession = New clsCryptoAPI
@@ -385,7 +385,7 @@ Case 5   'validate the key
             cryptSession.DestroyContainer containerName
             cryptSession.SessionEnd
             Set cryptSession = Nothing
-            Set_locale regionalSymbol
+            ' * Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE & "[5-1]"
         End If
 OutputDebugString "Before ValidateString"
@@ -399,7 +399,7 @@ OutputDebugString "inputText: " & inputText
             cryptSession.DestroyContainer containerName
             cryptSession.SessionEnd
             Set cryptSession = Nothing
-            Set_locale regionalSymbol
+            ' * Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE & "[5-2]"
         End If
         
@@ -451,7 +451,7 @@ End Function
 ' <p>If <code>LicType</code> is <i>Permanent</i>, then <code>Expiration</code> date parameter will be ignored.
 ' Remarks: None
 '===============================================================================
-Public Function CreateProductLicense(ByVal name As String, _
+'* Public Function CreateProductLicense(ByVal name As String, _
                                      ByVal Ver As String, _
                                      ByVal Code As String, _
                                      ByVal Flags As ActiveLock3.LicFlags, _
@@ -461,6 +461,20 @@ Public Function CreateProductLicense(ByVal name As String, _
                                      ByVal Expiration As String, _
                                      Optional ByVal LicKey As String, _
                                      Optional ByVal RegisteredDate As String, _
+                                     Optional ByVal Hash1 As String, _
+                                     Optional ByVal MaxUsers As Integer = 1, _
+                                     Optional ByVal LicenseCode As String _
+                                     ) As ProductLicense
+Public Function CreateProductLicense(ByVal name As String, _
+                                     ByVal Ver As String, _
+                                     ByVal Code As String, _
+                                     ByVal Flags As ActiveLock3.LicFlags, _
+                                     ByVal LicType As ActiveLock3.ALLicType, _
+                                     ByVal Licensee As String, _
+                                     ByVal RegisteredLevel As String, _
+                                     ByVal Expiration As Date, _
+                                     Optional ByVal LicKey As String, _
+                                     Optional ByVal RegisteredDate As Date = #1/1/1900#, _
                                      Optional ByVal Hash1 As String, _
                                      Optional ByVal MaxUsers As Integer = 1, _
                                      Optional ByVal LicenseCode As String _
@@ -482,7 +496,9 @@ Public Function CreateProductLicense(ByVal name As String, _
         If Not IsMissing(LicKey) Then
             .LicenseKey = LicKey
         End If
-        If Not IsMissing(RegisteredDate) Then
+        'IsMissing() was changed to IsNothing()
+        '*If Not IsNothing(RegisteredDate) Then
+        If RegisteredDate > #1/1/1900# Then '*
             .RegisteredDate = RegisteredDate
         End If
         If Not IsMissing(Hash1) Then

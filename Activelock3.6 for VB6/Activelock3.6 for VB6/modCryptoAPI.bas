@@ -408,14 +408,14 @@ Public Sub gRaiseError(ByRef ClassName As String, _
                        Optional ByVal Number As Long)
 
 If Err.Number = 0 Then
-    Set_locale regionalSymbol
+    ' * Set_locale regionalSymbol
     Err.Raise Number, ClassName & "." & MethodName, Description
 Else
     If Len(Description) = 0 Then
-        Set_locale regionalSymbol
+        ' * Set_locale regionalSymbol
         Err.Raise Err.Number, ClassName & "." & MethodName & vbCrLf & Err.Source, Err.Description
     Else
-        Set_locale regionalSymbol
+        ' * Set_locale regionalSymbol
         Err.Raise Err.Number, ClassName & "." & MethodName & vbCrLf & Err.Source, Description & vbCrLf & Err.Description
     End If
 End If

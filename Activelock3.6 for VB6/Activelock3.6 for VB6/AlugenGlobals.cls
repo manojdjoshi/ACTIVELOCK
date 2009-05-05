@@ -65,11 +65,11 @@ Attribute VB_Exposed = True
 ' @version 3.0.0
 ' @date 08.05.2005
 '
-'* ///////////////////////////////////////////////////////////////////////
+' * ///////////////////////////////////////////////////////////////////////
 '  /                        MODULE TO DO LIST                            /
 '  ///////////////////////////////////////////////////////////////////////
 
-'* ///////////////////////////////////////////////////////////////////////
+' * ///////////////////////////////////////////////////////////////////////
 '  /                        MODULE CHANGE LOG                            /
 '  ///////////////////////////////////////////////////////////////////////
 ' @history
@@ -118,7 +118,7 @@ Case ProductsStoreType.alsMDBFile
   'Case ProductsStoreType.alsMSSQL
   '  Set GeneratorInstance = New MSSQLGenerator
 Case Else
-    Set_locale regionalSymbol
+    ' * Set_locale regionalSymbol
     Err.Raise ActiveLockErrCodeConstants.alerrNotImplemented, ACTIVELOCKSTRING, STRNOTIMPLEMENTED
 End Select
 End Function

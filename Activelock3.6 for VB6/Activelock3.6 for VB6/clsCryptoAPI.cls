@@ -600,7 +600,7 @@ Dim lngReturnValue As Long
            )
         'and if the new key container fails...raise the error
         If lngReturnValue = 0 Then
-            Set_locale regionalSymbol
+            ' * Set_locale regionalSymbol
             Err.Raise Err.LastDllError, Err.Source, _
             "DLL error code shown above.  " & vbCrLf & _
             "Error during CryptAcquireContext for key container: " & sKeyCon
@@ -627,7 +627,7 @@ Dim lngReturnValue As Long
                )
             'and if the new key container fails...raise the error
             If lngReturnValue = 0 Then
-                Set_locale regionalSymbol
+                ' * Set_locale regionalSymbol
                 Err.Raise Err.LastDllError, Err.Source, _
                 "DLL error code shown above.  " & vbCrLf & _
                 "Error during CryptAcquireContext for key container: " & sKeyCon
@@ -727,7 +727,7 @@ Dim abKeyBlob() As Byte
     ' Added by Ismail
     
     If Not (lngPubBlobLength > 0 And UBound(abPublicBlob) = lngPubBlobLength - 1) Then
-        Set_locale regionalSymbol
+        ' * Set_locale regionalSymbol
         Err.Raise vbObjectError + 1, , "The Public blob must hold a valid key"
     End If
     ReDim abKeyBlob(lngPubBlobLength)
@@ -738,7 +738,7 @@ Dim abKeyBlob() As Byte
     lngReturnValue = CryptImportKey( _
         hCryptProv, abKeyBlob(0), lngLength, 0, lngType, hKeyPair)
     If lngReturnValue = 0 Then
-        Set_locale regionalSymbol
+        ' * Set_locale regionalSymbol
         Err.Raise Err.LastDllError, , "DLL error code shown above. " & "Could not import the Public key"
     End If
     If hSessionKey <> 0 Then CryptDestroyKey hSessionKey
@@ -767,7 +767,7 @@ Dim lLen As Long
     
     If Not (lngPvtBlobLength > 0 And UBound(abPrivateBlob) = lngPvtBlobLength - 1) Or _
             sPassPhrase = vbNullString Then
-        Set_locale regionalSymbol
+        ' * Set_locale regionalSymbol
         Err.Raise vbObjectError + 1, , "The Private blob must hold a valid key and Passphrase parameter must not be null"
     End If
     
@@ -1754,14 +1754,14 @@ abText = abData
 'Create a hash object to sign/validate
 lngReturnValue = CryptCreateHash(hCryptProv, CALG_SHA, 0, 0, hHash)
 If lngReturnValue = 0 Then
-    Set_locale regionalSymbol
+    ' * Set_locale regionalSymbol
     Err.Raise Err.LastDllError, , "DLL error code shown above. Could not create a Hash Object (CryptCreateHash API)"
 End If
 'Hash the data
 lngW = UBound(abText) + 1
 lngReturnValue = CryptHashData(hHash, abText(0), lngW, 0)
 If lngReturnValue = 0 Then
-    Set_locale regionalSymbol
+    ' * Set_locale regionalSymbol
     Err.Raise Err.LastDllError, , "DLL error code shown above. Could not calculate a Hash Value (CryptHashData API)"
 End If
 
@@ -1771,7 +1771,7 @@ If bSigned Then
     'get a handle to the signature key pair
     lngReturnValue = CryptGetUserKey(hCryptProv, AT_SIGNATURE, hKeyPair)
     If lngReturnValue = 0 Then
-        Set_locale regionalSymbol
+        ' * Set_locale regionalSymbol
         Err.Raise Err.LastDllError, , "DLL error code shown above. Could not obtain key pair"
     End If
     'Determine the size of the signature
@@ -1780,7 +1780,7 @@ If bSigned Then
     'Sign the hash object
     lngReturnValue = CryptSignHash(hHash, AT_SIGNATURE, 0, 0, abSig(0), lngSigLength)
     If lngReturnValue = 0 Then
-        Set_locale regionalSymbol
+        ' * Set_locale regionalSymbol
         Err.Raise Err.LastDllError, , "DLL error code shown above. Could not sign the hash"
     End If
     ' the signature is now available
