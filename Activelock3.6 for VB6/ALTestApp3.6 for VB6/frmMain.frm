@@ -1077,13 +1077,14 @@ Private Sub Form_Load()
     txtRegStatus.Text = "Registered"
     txtUsedDays.Text = strUsedDays                          'MyActiveLock.UsedDays
     
-    Dim LCID As Long, strSD As String
+    '* Dim LCID As Long, strSD As String
     'get the system's locale ID. Where the
     'user's locale ID is required, call
     'GetUserLocaleLCID instead.
-    LCID = GetSystemDefaultLCID()
-    strSD = GetUserLocaleInfo(LCID, LOCALE_SSHORTDATE)
-    txtExpiration.Text = Format(strExpirationDate, strSD)                 'MyActiveLock.ExpirationDate
+    '* LCID = GetSystemDefaultLCID()
+    '* strSD = GetUserLocaleInfo(LCID, LOCALE_SSHORTDATE)
+    '* txtExpiration.Text = Format(strExpirationDate, strSD)                 'MyActiveLock.ExpirationDate
+    txtExpiration.Text = strExpirationDate
     If txtExpiration.Text = "" Then txtExpiration.Text = "Permanent" 'App has a permanent license
     
     Dim arrProdVer() As String
