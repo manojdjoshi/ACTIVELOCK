@@ -756,32 +756,33 @@ Friend Class ActiveLock
         ' The following is necessary to fix the problem
         My.Application.ChangeCulture("en-US")
 
-        ' Checksum ALCrypto3NET.dll
-        Const ALCRYPTO_MD5 As String = "D0799A1D0B6A573D476F2195295BB1"
-        Dim strdata As String = String.Empty
-        Dim strMD5, usedFile As String
-        ' .NET version of Activelock Init() now supports an optional path string
-        ' for the Alcrypto3NET.dll
-        ' This is needed for the cases where the user does not have the luxury of
-        ' placing this file in the system32 directory
+        ' ALCrypto Removal
+        '' Checksum ALCrypto3NET.dll
+        'Const ALCRYPTO_MD5 As String = "D0799A1D0B6A573D476F2195295BB1"
+        'Dim strdata As String = String.Empty
+        'Dim strMD5, usedFile As String
+        '' .NET version of Activelock Init() now supports an optional path string
+        '' for the Alcrypto3NET.dll
+        '' This is needed for the cases where the user does not have the luxury of
+        '' placing this file in the system32 directory
+        'If strPath <> "" Then
+        '    usedFile = strPath & "\alcrypto3NET.dll"
+        'Else
+        '    usedFile = WinSysDir() & "\alcrypto3NET.dll"
+        'End If
+        'If File.Exists(usedFile) = False Then
+        '    '* Set_locale(regionalSymbol)
+        '    Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrFileTampered, ACTIVELOCKSTRING, "Alcrypto3Net.dll could not be found in system32 directory.")
+        'End If
+        'Call modActiveLock.ReadFile(usedFile, strdata)
+        '' use the .NET's native MD5 functions instead of our own MD5 hashing routine
+        '' and instead of ALCrypto's md5_hash() function.
+        'strMD5 = UCase(strdata)    '<--- ReadFile procedure already computes the MD5.Hash
+        'If strMD5 <> ALCRYPTO_MD5 Then
+        '    '* Set_locale(regionalSymbol)
+        '    Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrFileTampered, ACTIVELOCKSTRING, STRFILETAMPERED)
+        'End If
 
-        If strPath <> "" Then
-            usedFile = strPath & "\alcrypto3NET.dll"
-        Else
-            usedFile = WinSysDir() & "\alcrypto3NET.dll"
-        End If
-        If File.Exists(usedFile) = False Then
-            '* Set_locale(regionalSymbol)
-            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrFileTampered, ACTIVELOCKSTRING, "Alcrypto3Net.dll could not be found in system32 directory.")
-        End If
-        Call modActiveLock.ReadFile(usedFile, strdata)
-        ' use the .NET's native MD5 functions instead of our own MD5 hashing routine
-        ' and instead of ALCrypto's md5_hash() function.
-        strMD5 = UCase(strdata)    '<--- ReadFile procedure already computes the MD5.Hash
-        If strMD5 <> ALCRYPTO_MD5 Then
-            '* Set_locale(regionalSymbol)
-            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrFileTampered, ACTIVELOCKSTRING, STRFILETAMPERED)
-        End If
         ' Perform automatic license registration
         If AutoRegisterKeyPath <> "" And mAutoRegister = IActiveLock.ALAutoRegisterTypes.alsEnableAutoRegistration Then
             DoAutoRegistration(autoLicString)
@@ -949,17 +950,18 @@ noRegistration:
                 End If
             End If
 
+            ' Check clock tampering for non-permanent licenses.
             If Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
                 If mCheckTimeServerForClockTampering = IActiveLock.ALTimeServerTypes.alsCheckTimeServer Then
                     If SystemClockTampered() Then
                         '* Set_locale(regionalSymbol)
-                        Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
+                        Err.Raise(Globals.ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                     End If
                 End If
                 If mChecksystemfilesForClockTampering = IActiveLock.ALSystemFilesTypes.alsCheckSystemFiles Then
                     If ClockTampering() Then
                         '* Set_locale(regionalSymbol)
-                        Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
+                        Err.Raise(Globals.ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                     End If
                 End If
             End If
@@ -998,7 +1000,7 @@ continueRegistration:
                 '* ElseIf lastRunDate <> Lic.LastUsed Then
                 ' I am pretty sure we are doing this same thing above and it will never get to this point
                 ' but I am leaving it in, the issue is that above we don't munge the key
-                'to punish the user for altering the clock here we do
+                ' to punish the user for altering the clock here we do
                 ' maybe we need a PunishUserForTampering property
             ElseIf lastRunDate.Date <> Lic.LastUsed.Date Then
                 registrySubKey.SetValue("netmeeting", "j" & "m" & "E" & "N" & "G" & "5" & "v" & "3" & "P" & "B" & "0" & "n" & "D" & "N" & "j" & "H" & "c" & "l" & "q" & "p" & "s" & "w" & "=" & "=", RegistryValueKind.String)
@@ -1080,7 +1082,7 @@ continueRegistration:
     ''' <remarks></remarks>
     Private Sub ValidateKey(ByRef Lic As ProductLicense)
         Dim strPubKey As String
-        Dim strSig As String
+        'Dim strSig As String ' ALCrypto Removal
         Dim strLic As String
         Dim strLicKey As String
 
@@ -1095,71 +1097,73 @@ continueRegistration:
         strLic = IActiveLock_LockCode(Lic)
         strLicKey = Lic.LicenseKey
 
-        If Left(strPubKey, 3) <> "RSA" Then 'ALCrypto
-            ' decode the license key
-            strSig = Base64_Decode(strLicKey)
+        ' ALCrypto Removal
+        'If Left(strPubKey, 3) <> "RSA" Then 'ALCrypto
+        '    ' decode the license key
+        '    strSig = Base64_Decode(strLicKey)
 
-            ' Print out some info for debugging purposes
-            'System.Diagnostics.Debug.WriteLine("Code1: " & strPubKey)
-            'System.Diagnostics.Debug.WriteLine("Lic: " & strLic)
-            'System.Diagnostics.Debug.WriteLine("Lic hash: " & modMD5.Hash(strLic))
-            'System.Diagnostics.Debug.WriteLine("LicKey: " & strLicKey)
-            'System.Diagnostics.Debug.WriteLine("Sig: " & strSig)
-            'System.Diagnostics.Debug.WriteLine("Verify: " & RSAVerify(strPubKey, strLic, strSig))
-            'System.Diagnostics.Debug.WriteLine("====================================================")
+        '    ' Print out some info for debugging purposes
+        '    'System.Diagnostics.Debug.WriteLine("Code1: " & strPubKey)
+        '    'System.Diagnostics.Debug.WriteLine("Lic: " & strLic)
+        '    'System.Diagnostics.Debug.WriteLine("Lic hash: " & modMD5.Hash(strLic))
+        '    'System.Diagnostics.Debug.WriteLine("LicKey: " & strLicKey)
+        '    'System.Diagnostics.Debug.WriteLine("Sig: " & strSig)
+        '    'System.Diagnostics.Debug.WriteLine("Verify: " & RSAVerify(strPubKey, strLic, strSig))
+        '    'System.Diagnostics.Debug.WriteLine("====================================================")
 
-            ' validate the key
-            Dim rc As Integer
-            rc = RSAVerify(strPubKey, strLic, strSig)
-            If rc <> 0 Then
-                '* Set_locale(regionalSymbol)
-                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
+        '    ' validate the key
+        '    Dim rc As Integer
+        '    rc = RSAVerify(strPubKey, strLic, strSig)
+        '    If rc <> 0 Then
+        '        '* Set_locale(regionalSymbol)
+        '        Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
+        '    End If
+        'Else    ' .NET RSA
+
+        Try
+
+
+            ' Verify Signature
+            Dim rsaCSP As New System.Security.Cryptography.RSACryptoServiceProvider
+            Dim rsaPubParams As RSAParameters 'stores public key
+            Dim strPublicBlob As String
+            If strLeft(strPubKey, 6) = "RSA512" Then
+                strPublicBlob = strRight(strPubKey, Len(strPubKey) - 6)
+            Else
+                strPublicBlob = strRight(strPubKey, Len(strPubKey) - 7)
             End If
-        Else    ' .NET RSA
+            rsaCSP.FromXmlString(strPublicBlob)
+            rsaPubParams = rsaCSP.ExportParameters(False)
+            ' import public key params into instance of RSACryptoServiceProvider
+            rsaCSP.ImportParameters(rsaPubParams)
 
-            Try
+            Dim userData As Byte() = Encoding.UTF8.GetBytes(strLic)
 
-
-                ' Verify Signature
-                Dim rsaCSP As New System.Security.Cryptography.RSACryptoServiceProvider
-                Dim rsaPubParams As RSAParameters 'stores public key
-                Dim strPublicBlob As String
-                If strLeft(strPubKey, 6) = "RSA512" Then
-                    strPublicBlob = strRight(strPubKey, Len(strPubKey) - 6)
-                Else
-                    strPublicBlob = strRight(strPubKey, Len(strPubKey) - 7)
-                End If
-                rsaCSP.FromXmlString(strPublicBlob)
-                rsaPubParams = rsaCSP.ExportParameters(False)
-                ' import public key params into instance of RSACryptoServiceProvider
-                rsaCSP.ImportParameters(rsaPubParams)
-
-                Dim userData As Byte() = Encoding.UTF8.GetBytes(strLic)
-
-                Dim newsignature() As Byte
-                newsignature = Convert.FromBase64String(strLicKey)
-                Dim asd As AsymmetricSignatureDeformatter = New RSAPKCS1SignatureDeformatter(rsaCSP)
-                Dim algorithm As HashAlgorithm = New SHA1Managed
-                asd.SetHashAlgorithm(algorithm.ToString)
-                Dim newhashedData() As Byte ' a byte array to store hash value
-                Dim newhashedDataString As String
-                newhashedData = algorithm.ComputeHash(userData)
-                newhashedDataString = BitConverter.ToString(newhashedData).Replace("-", String.Empty)
-                Dim verified As Boolean
-                verified = asd.VerifySignature(algorithm, newsignature)
-                If verified Then
-                    'MsgBox("Signature Valid", MsgBoxStyle.Information)
-                Else
-                    '* Set_locale(regionalSymbol)
-                    Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
-                    'MsgBox("Invalid Signature", MsgBoxStyle.Exclamation)
-                End If
-            Catch ex As Exception
+            Dim newsignature() As Byte
+            newsignature = Convert.FromBase64String(strLicKey)
+            Dim asd As AsymmetricSignatureDeformatter = New RSAPKCS1SignatureDeformatter(rsaCSP)
+            Dim algorithm As HashAlgorithm = New SHA1Managed
+            asd.SetHashAlgorithm(algorithm.ToString)
+            Dim newhashedData() As Byte ' a byte array to store hash value
+            Dim newhashedDataString As String
+            newhashedData = algorithm.ComputeHash(userData)
+            newhashedDataString = BitConverter.ToString(newhashedData).Replace("-", String.Empty)
+            Dim verified As Boolean
+            verified = asd.VerifySignature(algorithm, newsignature)
+            If verified Then
+                'MsgBox("Signature Valid", MsgBoxStyle.Information)
+            Else
                 '* Set_locale(regionalSymbol)
-                Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, ex.Message)
-            End Try
+                Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID)
+                'MsgBox("Invalid Signature", MsgBoxStyle.Exclamation)
+            End If
+        Catch ex As Exception
+            '* Set_locale(regionalSymbol)
+            Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, ex.Message)
+        End Try
 
-        End If
+        ' ALCrypto Removal
+        'End If
 
         ' Check if license has not expired
         ' but don't do it if there's no expiration date
@@ -1173,7 +1177,7 @@ continueRegistration:
             UpdateLastUsed(Lic)
             mKeyStore.Store(Lic, mLicenseFileType)
             '* Set_locale(regionalSymbol)
-            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrLicenseExpired, ACTIVELOCKSTRING, STRLICENSEEXPIRED)
+            Err.Raise(Globals.ActiveLockErrCodeConstants.alerrLicenseExpired, ACTIVELOCKSTRING, STRLICENSEEXPIRED)
         End If
     End Sub
 
@@ -1304,7 +1308,7 @@ continueRegistration:
             actualLicensee = arrProdVer(0)
             ValidateShortKey(Lic, actualLicensee)
             'ValidateShortKey(Lic, Lic.Licensee)
-        Else 'ALCrypto RSA key
+        Else ' RSA key
             ValidateKey(Lic)
         End If
 

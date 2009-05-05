@@ -287,7 +287,7 @@ ExitLabel:
     ''' <returns>True if the license key checks out, False otherwise.</returns>
     ''' <remarks>See code for important notes!</remarks>
     Friend Function ValidateShortKey(ByVal LicenseKey As String, ByVal SerialNumber As String, ByVal Licensee As String, ByVal ProductCode As Integer, Optional ByRef ExpireDate As Date = #1/1/1970#, Optional ByRef UserData As Short = 0, Optional ByRef RegisteredLevel As Integer = 0) As Boolean
-        '*******************************************************************************
+        ' *******************************************************************************
         '   IMPORTANT       This function is where the most care must be given.
         '                   You should assume that a cracker has seen this code and can
         '                   recognize it from ASM listings, and should be changed.
@@ -297,7 +297,7 @@ ExitLabel:
         '                   - Do not do things in this routine that are being monitored
         '                     (registry calls, file-system access, phone home w/TCP).
         '                   - Remove the UCase$ statements (just pass serial in ucase).
-        '*******************************************************************************
+        ' *******************************************************************************
 
         Dim KeySegs As Object = Nothing
         Dim nCrc1 As Integer

@@ -64,7 +64,7 @@ Module modHardware
     ' Modified: 03.25.2006
     '===============================================================================
 
-    '****** SMART DECLARATIONS ******
+    ' ****** SMART DECLARATIONS ******
     Private Declare Function GetVersionEx Lib "kernel32" Alias "GetVersionExA" (ByRef LpVersionInformation As OSVERSIONINFO) As Integer
     Private Declare Function CreateFile Lib "kernel32" Alias "CreateFileA" (ByVal lpFileName As String, ByVal dwDesiredAccess As Integer, ByVal dwShareMode As Integer, ByVal lpSecurityAttributes As Integer, ByVal dwCreationDisposition As Integer, ByVal dwFlagsAndAttributes As Integer, ByVal hTemplateFile As Integer) As Integer
     Private Declare Function CloseHandle Lib "kernel32" (ByVal hObject As Integer) As Integer
@@ -146,7 +146,7 @@ Module modHardware
         ATTR_READ_ERROR_RETRY_RATE = 250
     End Enum
 
-    '***** SMART DECLARATIONS *****
+    ' ***** SMART DECLARATIONS *****
 
     'HDD firmware serial number
     Private Const GENERIC_READ As Integer = &H80000000
@@ -357,19 +357,21 @@ Module modHardware
     Public Declare Sub ZeroMemory Lib "kernel32" Alias "RtlZeroMemory" (ByRef dest As Integer, ByVal numBytes As Integer)
     Private Declare Function DeviceIoControl Lib "kernel32" (ByVal hDevice As Integer, ByVal dwIoControlCode As Integer, ByRef lpInBuffer As Object, ByVal nInBufferSize As Integer, ByRef lpOutBuffer As Object, ByVal nOutBufferSize As Integer, ByRef lpBytesReturned As Integer, ByRef lpOverlapped As Integer) As Integer
 
-    ' The following UDT and the DLL function is for getting
-    ' the serial number from a C++ DLL in case the VB6 APIs fail
-    ' Currently, VB code cannot handle the serial numbers
-    ' coming from computers with non-admin rights; in those
-    ' cases the C++ DLL function "getHardDriveFirmware" should
-    ' work properly.
-    ' Neither of the two methods work for the SATA and SCSI drives
-    ' ialkan - 8312005
-    Private Structure MyUDT2
-        <VBFixedString(30), System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.ByValTStr, SizeConst:=30)> Public myStr As String
-        Dim mL As Integer
-    End Structure
-    Private Declare Function getHardDriveFirmware Lib "ALCrypto3NET.dll" (ByRef myU As MyUDT2) As Integer
+    ' ALCrypto Removal
+    '' The following UDT and the DLL function is for getting
+    '' the serial number from a C++ DLL in case the VB6 APIs fail
+    '' Currently, VB code cannot handle the serial numbers
+    '' coming from computers with non-admin rights; in those
+    '' cases the C++ DLL function "getHardDriveFirmware" should
+    '' work properly.
+    '' Neither of the two methods work for the SATA and SCSI drives
+    '' ialkan - 8312005
+    'Private Structure MyUDT2
+    '    <VBFixedString(30), System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.ByValTStr, SizeConst:=30)> Public myStr As String
+    '    Dim mL As Integer
+    'End Structure
+    'ALCrypto Removal
+    'Private Declare Function getHardDriveFirmware Lib "ALCrypto3NET.dll" (ByRef myU As MyUDT2) As Integer
 
     'MAC Address
     Public Const NCBASTAT As Integer = &H33S
@@ -574,13 +576,14 @@ GetHDSeriAlerror:
         Dim jj As Short
         Dim drvNumber As Integer
         ' We just need the Primary Master Drive ID - ialkan 8312005
-        Dim mU As MyUDT2 = Nothing
+        'ALCrypto Removal
+        'Dim mU As MyUDT2 = Nothing
         Dim a As String
         On Error GoTo GetHDSerialFirmwareError
         GetHDSerialFirmware = ""
         a = ""
 
-        '************** METHOD 1 **************
+        ' ************** METHOD 1 **************
         ' ialkan 2-12-06
         ' Pure VB6 version of the code found in several online resources
         ' described in GetHDSerialFirmwareVB6 function
@@ -599,23 +602,24 @@ GetHDSeriAlerror:
             End If
         Next
 
-        '************** METHOD 2 **************
-        ' Still nothing... Use ALCrypto DLL
-        Call getHardDriveFirmware(mU)
-        If mU.myStr <> "" Then a = StripControlChars(mU.myStr, False)
-        If a <> "" Then GetHDSerialFirmware = a.Trim
-        If GetHDSerialFirmware <> "" Then
-            Exit Function
-        End If
+        ' ALCrypto Removal
+        '' ************** METHOD 2 **************
+        '' Still nothing... Use ALCrypto DLL
+        'Call getHardDriveFirmware(mU)
+        'If mU.myStr <> "" Then a = StripControlChars(mU.myStr, False)
+        'If a <> "" Then GetHDSerialFirmware = a.Trim
+        'If GetHDSerialFirmware <> "" Then
+        '    Exit Function
+        'End If
 
-        '************** METHOD 3 **************
+        ' ************** METHOD 3 **************
         a = GetDriveInfo(IDE_DRIVE_NUMBER.PRIMARY_MASTER)
         If a <> "" Then GetHDSerialFirmware = a.Trim
         If GetHDSerialFirmware <> "" Then
             Exit Function
         End If
 
-        '************** METHOD 4 **************
+        ' ************** METHOD 4 **************
         a = GetHDSerialFirmwareWMI()
         If a <> "" Then GetHDSerialFirmware = a.Trim
         If GetHDSerialFirmware <> "" Then
@@ -668,9 +672,9 @@ GetHDSerialFirmwareError:
         StripControlChars = Replace(System.Text.UnicodeEncoding.Unicode.GetString(bytes), vbNullChar, "")
     End Function
 
-    '***************************************************************************
+    ' ***************************************************************************
     ' Open SMART to allow DeviceIoControl communications. Return SMART handle
-    '***************************************************************************
+    ' ***************************************************************************
     Private Function OpenSmart(ByRef drv_num As IDE_DRIVE_NUMBER) As Integer
         If IsWindowsNT() Then
             OpenSmart = CreateFile("\\.\PhysicalDrive" & CStr(drv_num), GENERIC_READ Or GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0, OPEN_EXISTING, 0, 0)
@@ -680,11 +684,11 @@ GetHDSerialFirmwareError:
     End Function
 
 
-    '****************************************************************************
+    ' ****************************************************************************
     ' ReadAttributesCmd
     ' FUNCTION: Send a SMART_READ_ATTRIBUTE_VALUES command to the drive
     ' bDriveNum = 0-3
-    '***************************************************************************}
+    ' ***************************************************************************}
     Private Function ReadAttributesCmd(ByVal hDrive As Integer, ByRef DriveNum As IDE_DRIVE_NUMBER) As Boolean
         Dim READ_ATTRIBUTE_BUFFER_SIZE As Object = Nothing
         Dim cbBytesReturned As Integer
@@ -1087,6 +1091,10 @@ GetBiosVersionerror:
                 ' Strip any periods
                 bytes = System.Text.UnicodeEncoding.Unicode.GetBytes(GetMotherboardSerial)
                 GetMotherboardSerial = Replace(System.Text.UnicodeEncoding.Unicode.GetString(bytes), ".", "")
+                GetMotherboardSerial = GetMotherboardSerial.Trim
+                If GetMotherboardSerial = "" Then
+                    GetMotherboardSerial = "Not Available"
+                End If
                 Exit Function
             End If
         Next obj
@@ -1418,8 +1426,11 @@ GetIPaddressError:
         fp.UseBiosID = True
         fp.UseBaseID = True
         fp.UseDiskID = True
-        fp.UseVideoID = True
-        fp.UseMacID = True
+        ' Do not use the Video ID and MAC Address in Fingerprint
+        ' since these are not very reliable and might change
+        ' from admin to limited user accounts
+        fp.UseVideoID = False
+        fp.UseMacID = False
         fp.ReturnLength = 8
         GetFingerprint = fp.Value
     End Function

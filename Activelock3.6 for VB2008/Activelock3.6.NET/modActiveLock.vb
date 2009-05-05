@@ -62,7 +62,7 @@ Module modActiveLock
     ' @version 3.3.0
     ' @date 03.25.2006
     '
-    '* ///////////////////////////////////////////////////////////////////////
+    ' * ///////////////////////////////////////////////////////////////////////
     '  /                        MODULE TO DO LIST                            /
     '  ///////////////////////////////////////////////////////////////////////
     '
@@ -108,37 +108,40 @@ Module modActiveLock
     Public Const STRNOLICENSEFILE As String = "License does not exist"
     Public Const STREXPIREDPERMANENTLY As String = "This license has expired permanently. Obtain new key."
 
-    ''' <summary>
-    ''' RSA encrypts the data.
-    ''' </summary>
-    ''' <param name="CryptType">0 for public&#59; 1 for private</param>
-    ''' <param name="data">Data to be encrypted</param>
-    ''' <param name="dLen">[in/out] Length of data, in bytes. This parameter will contain length of encrypted data when returned.</param>
-    ''' <param name="ptrKey">Key to be used for encryption</param>
-    ''' <returns>Integer - ?Not Documented</returns>
-    ''' <remarks></remarks>
-    Public Declare Function rsa_encrypt Lib "ALCrypto3NET" (ByVal CryptType As Integer, ByVal data As String, ByRef dLen As Integer, ByRef ptrKey As RSAKey) As Integer
+    '''' <summary>
+    '''' RSA encrypts the data.
+    '''' </summary>
+    '''' <param name="CryptType">0 for public&#59; 1 for private</param>
+    '''' <param name="data">Data to be encrypted</param>
+    '''' <param name="dLen">[in/out] Length of data, in bytes. This parameter will contain length of encrypted data when returned.</param>
+    '''' <param name="ptrKey">Key to be used for encryption</param>
+    '''' <returns>Integer - ?Not Documented</returns>
+    '''' <remarks></remarks>
+    ' ALCrypto Removal
+    'Public Declare Function rsa_encrypt Lib "ALCrypto3NET" (ByVal CryptType As Integer, ByVal data As String, ByRef dLen As Integer, ByRef ptrKey As RSAKey) As Integer
 
-    ''' <summary>
-    ''' RSA decrypts the data.
-    ''' </summary>
-    ''' <param name="CryptType">0 for public&#59; 1 for private</param>
-    ''' <param name="data">Data to be decrypted</param>
-    ''' <param name="dLen">[in/out] Length of data, in bytes. This parameter will contain length of decrypted data when returned.</param>
-    ''' <param name="ptrKey">Key to be used for encryption</param>
-    ''' <returns>Integer - ?Not Documented!</returns>
-    ''' <remarks></remarks>
-    Public Declare Function rsa_decrypt Lib "ALCrypto3NET" (ByVal CryptType As Integer, ByVal data As String, ByRef dLen As Integer, ByRef ptrKey As RSAKey) As Integer
+    '''' <summary>
+    '''' RSA decrypts the data.
+    '''' </summary>
+    '''' <param name="CryptType">0 for public&#59; 1 for private</param>
+    '''' <param name="data">Data to be decrypted</param>
+    '''' <param name="dLen">[in/out] Length of data, in bytes. This parameter will contain length of decrypted data when returned.</param>
+    '''' <param name="ptrKey">Key to be used for encryption</param>
+    '''' <returns>Integer - ?Not Documented!</returns>
+    '''' <remarks></remarks>
+    ' ALCrypto Removal
+    'Public Declare Function rsa_decrypt Lib "ALCrypto3NET" (ByVal CryptType As Integer, ByVal data As String, ByRef dLen As Integer, ByRef ptrKey As RSAKey) As Integer
 	
-    ''' <summary>
-    ''' Computes an MD5 hash from the data.
-    ''' </summary>
-    ''' <param name="inData">Data to be hashed</param>
-    ''' <param name="nDataLen">Length of inData</param>
-    ''' <param name="outData">[out] 32-byte Computed hash code</param>
-    ''' <returns>Integer - ?Undocumented!</returns>
-    ''' <remarks></remarks>
-    Public Declare Function md5_hash Lib "ALCrypto3NET" (ByVal inData As String, ByVal nDataLen As Integer, ByVal outData As String) As Integer
+    '''' <summary>
+    '''' Computes an MD5 hash from the data.
+    '''' </summary>
+    '''' <param name="inData">Data to be hashed</param>
+    '''' <param name="nDataLen">Length of inData</param>
+    '''' <param name="outData">[out] 32-byte Computed hash code</param>
+    '''' <returns>Integer - ?Undocumented!</returns>
+    '''' <remarks></remarks>
+    ' ALCrypto Removal
+    'Public Declare Function md5_hash Lib "ALCrypto3NET" (ByVal inData As String, ByVal nDataLen As Integer, ByVal outData As String) As Integer
 
     ''' <summary>
     ''' ActiveLock Encryption Key
@@ -259,6 +262,13 @@ Module modActiveLock
     ''' <returns></returns>
     ''' <remarks></remarks>
     Private Declare Function SHGetSpecialFolderPath Lib "SHELL32.DLL" Alias "SHGetSpecialFolderPathA" (ByVal hWnd As IntPtr, ByVal lpszPath As String, ByVal nFolder As Integer, ByVal fCreate As Boolean) As Boolean
+
+    ' Related with system32 directory name under 64-bit systems
+    Private Declare Function GetProcAddress Lib "kernel32" (ByVal hModule As Integer, ByVal lpProcName As String) As Integer
+    Private Declare Function GetModuleHandle Lib "kernel32" Alias "GetModuleHandleA" (ByVal lpModuleName As String) As Integer
+    Private Declare Function GetCurrentProcess Lib "kernel32" () As Integer
+    Private Declare Function IsWow64Process Lib "kernel32" (ByVal hProcess As Integer, ByRef Wow64Process As Integer) As Integer
+    Private Declare Function GetSystemWow64Directory Lib "kernel32" Alias "GetSystemWow64DirectoryA" (ByVal lpBuffer As String, ByVal uSize As Integer) As Integer
 
     ''' <summary>
     ''' Specifies a date and time, using individual members for the month, day, year, weekday, hour, minute, second, and millisecond. The time is either in coordinated universal time (UTC) or local time, depending on the function that is being called.
@@ -717,17 +727,18 @@ Hell:
         Err.Raise(Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext)
     End Function
 
-    ''' <summary>
-    ''' [INTERNAL] Call-back routine used by ALCrypto3NET.dll during key generation process.
-    ''' </summary>
-    ''' <param name="param">Long - TBD</param>
-    ''' <param name="action">Long - Action being performed</param>
-    ''' <param name="phase">Long - Current phase</param>
-    ''' <param name="iprogress">Long - Percent complete</param>
-    ''' <remarks></remarks>
-    Public Sub CryptoProgressUpdate(ByVal param As Integer, ByVal action As Integer, ByVal phase As Integer, ByVal iprogress As Integer)
-        System.Diagnostics.Debug.WriteLine("Progress Update received " & param & ", action: " & action & ", iprogress: " & iprogress)
-    End Sub
+    '''' <summary>
+    '''' [INTERNAL] Call-back routine used by ALCrypto3NET.dll during key generation process.
+    '''' </summary>
+    '''' <param name="param">Long - TBD</param>
+    '''' <param name="action">Long - Action being performed</param>
+    '''' <param name="phase">Long - Current phase</param>
+    '''' <param name="iprogress">Long - Percent complete</param>
+    '''' <remarks></remarks>
+    ' ALCrypto Removal
+    'Public Sub CryptoProgressUpdate(ByVal param As Integer, ByVal action As Integer, ByVal phase As Integer, ByVal iprogress As Integer)
+    '    System.Diagnostics.Debug.WriteLine("Progress Update received " & param & ", action: " & action & ", iprogress: " & iprogress)
+    'End Sub
 
     ''' <summary>
     ''' This is a dummy sub. Used to circumvent the End statement restriction in COM DLLs.
@@ -841,71 +852,73 @@ Hell:
         End If
     End Function
 
-    ''' <summary>
-    ''' Performs RSA signing of <code>strData</code> using the specified key.
-    ''' </summary>
-    ''' <param name="strPub">RSA Public key blob</param>
-    ''' <param name="strPriv">RSA Private key blob</param>
-    ''' <param name="strdata">String - Data to be signed</param>
-    ''' <returns>String - Signature string</returns>
-    ''' <remarks>05.13.05    - alkan  - Removed the modActiveLock references</remarks>
-    Public Function RSASign(ByVal strPub As String, ByVal strPriv As String, ByVal strdata As String) As String
-        Dim KEY As RSAKey = Nothing
-        ' create the key from the key blobs
-        If rsa_createkey(strPub, Len(strPub), strPriv, Len(strPriv), KEY) = RETVAL_ON_ERROR Then
-            '* Set_locale(regionalSymbol)
-            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-        End If
+    '''' <summary>
+    '''' Performs RSA signing of <code>strData</code> using the specified key.
+    '''' </summary>
+    '''' <param name="strPub">RSA Public key blob</param>
+    '''' <param name="strPriv">RSA Private key blob</param>
+    '''' <param name="strdata">String - Data to be signed</param>
+    '''' <returns>String - Signature string</returns>
+    '''' <remarks>05.13.05    - alkan  - Removed the modActiveLock references</remarks>
+    ' ALCrypto Removal
+    'Public Function RSASign(ByVal strPub As String, ByVal strPriv As String, ByVal strdata As String) As String
+    '    Dim KEY As RSAKey = Nothing
+    '    ' create the key from the key blobs
+    '    If rsa_createkey(strPub, Len(strPub), strPriv, Len(strPriv), KEY) = RETVAL_ON_ERROR Then
+    '        '* Set_locale(regionalSymbol)
+    '        Err.Raise(Globals.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+    '    End If
 
-        ' sign the data using the created key
-        Dim sLen As Integer
-        If rsa_sign(KEY, strdata, Len(strdata), vbNullString, sLen) = RETVAL_ON_ERROR Then
-            '* Set_locale(regionalSymbol)
-            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-        End If
-        Dim strSig As String : strSig = New String(Chr(0), sLen)
-        If rsa_sign(KEY, strdata, Len(strdata), strSig, sLen) = RETVAL_ON_ERROR Then
-            '* Set_locale(regionalSymbol)
-            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-        End If
-        ' throw away the key
-        If rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-            '* Set_locale(regionalSymbol)
-            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-        End If
-        RSASign = strSig
-    End Function
+    '    ' sign the data using the created key
+    '    Dim sLen As Integer
+    '    If rsa_sign(KEY, strdata, Len(strdata), vbNullString, sLen) = RETVAL_ON_ERROR Then
+    '        '* Set_locale(regionalSymbol)
+    '        Err.Raise(Globals.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+    '    End If
+    '    Dim strSig As String : strSig = New String(Chr(0), sLen)
+    '    If rsa_sign(KEY, strdata, Len(strdata), strSig, sLen) = RETVAL_ON_ERROR Then
+    '        '* Set_locale(regionalSymbol)
+    '        Err.Raise(Globals.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+    '    End If
+    '    ' throw away the key
+    '    If rsa_freekey(KEY) = RETVAL_ON_ERROR Then
+    '        '* Set_locale(regionalSymbol)
+    '        Err.Raise(Globals.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+    '    End If
+    '    RSASign = strSig
+    'End Function
 
-    '===============================================================================
-    ''' <summary>
-    ''' Verifies an RSA signature.
-    ''' </summary>
-    ''' <param name="strPub">String - Public key blob</param>
-    ''' <param name="strdata">String - Data to be signed</param>
-    ''' <param name="strSig">String - Private key blob</param>
-    ''' <returns>Long - Zero if verification is successful, non-zero otherwise.</returns>
-    ''' <remarks></remarks>
-    Public Function RSAVerify(ByVal strPub As String, ByVal strdata As String, ByVal strSig As String) As Integer
-        Dim KEY As RSAKey = Nothing
-        Dim rc As Integer
-        ' create the key from the public key blob
-        If rsa_createkey(strPub, Len(strPub), vbNullString, 0, KEY) = RETVAL_ON_ERROR Then
-            '* Set_locale(regionalSymbol)
-            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-        End If
-        ' validate the key
-        rc = rsa_verifysig(KEY, strSig, Len(strSig), strdata, Len(strdata))
-        If rc = RETVAL_ON_ERROR Then
-            '* Set_locale(regionalSymbol)
-            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-        End If
-        ' de-allocate memory used by the key
-        If rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-            '* Set_locale(regionalSymbol)
-            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-        End If
-        RSAVerify = rc
-    End Function
+    ''===============================================================================
+    '''' <summary>
+    '''' Verifies an RSA signature.
+    '''' </summary>
+    '''' <param name="strPub">String - Public key blob</param>
+    '''' <param name="strdata">String - Data to be signed</param>
+    '''' <param name="strSig">String - Private key blob</param>
+    '''' <returns>Long - Zero if verification is successful, non-zero otherwise.</returns>
+    '''' <remarks></remarks>
+    ' ALCrypto Removal
+    'Public Function RSAVerify(ByVal strPub As String, ByVal strdata As String, ByVal strSig As String) As Integer
+    '    Dim KEY As RSAKey = Nothing
+    '    Dim rc As Integer
+    '    ' create the key from the public key blob
+    '    If rsa_createkey(strPub, Len(strPub), vbNullString, 0, KEY) = RETVAL_ON_ERROR Then
+    '        '* Set_locale(regionalSymbol)
+    '        Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+    '    End If
+    '    ' validate the key
+    '    rc = rsa_verifysig(KEY, strSig, Len(strSig), strdata, Len(strdata))
+    '    If rc = RETVAL_ON_ERROR Then
+    '        '* Set_locale(regionalSymbol)
+    '        Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+    '    End If
+    '    ' de-allocate memory used by the key
+    '    If rsa_freekey(KEY) = RETVAL_ON_ERROR Then
+    '        '* Set_locale(regionalSymbol)
+    '        Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+    '    End If
+    '    RSAVerify = rc
+    'End Function
 
     ''' <summary>
     ''' Retrieves the error text for the specified Windows error code
@@ -943,8 +956,12 @@ Hell:
     ''' <returns>String - Windows system directory path</returns>
     ''' <remarks></remarks>
     Public Function WinSysDir() As String
-        WinSysDir = System.Environment.GetFolderPath(Environment.SpecialFolder.System)
-        ' or could use WinSysDir = System.Environment.SystemDirectory
+        If (IntPtr.Size = 4 And IsWow64() = True) Then ' 32-bit DLL on 64-bit OS
+            WinSysDir = GetSysWow64Folder() ' Returns syswow64 folder on 64-bit systems
+        Else ' 32-bit DLL on 32-bit OS or 64-bit DLL on 64-bit OS
+            WinSysDir = System.Environment.GetFolderPath(Environment.SpecialFolder.System)
+            ' or could use WinSysDir = System.Environment.SystemDirectory
+        End If
     End Function
 
     ''' <summary>
@@ -1772,6 +1789,40 @@ Hell:
             End Select
         End If
 
+    End Function
+    Public Function IsWow64() As Boolean
+        Dim ret As Integer
+
+        IsWow64 = False
+
+        ' Now check to see if IsWow64Process function exists, might not on older OS's
+        If GetProcAddress(GetModuleHandle("kernel32.dll"), "IsWow64Process") > 0 Then
+            ' Now use the function to determine if
+            ' we are running under Wow64.
+            IsWow64Process(GetCurrentProcess(), ret)
+
+            IsWow64 = (ret <> 0)
+        End If
+    End Function
+
+    Public Function GetSysWow64Folder() As String
+        Dim Ret As Long
+        Dim Trash As String
+        Trash = Space$(260)
+
+        GetSysWow64Folder = ""
+
+        If (GetProcAddress(GetModuleHandle("kernel32.dll"), "GetSystemWow64DirectoryA") > 0) Then
+            Ret = GetSystemWow64Directory(Trash, Len(Trash))
+            If Trim$(Trash) <> Chr(0) Then
+                Trash = Left$(Trash, InStr(Trash, Chr(0)) - 1)
+            End If
+            GetSysWow64Folder = Trash
+        Else
+            GetSysWow64Folder = ActivelockGetSpecialFolder(37) ' Return system32 folder if non-64-bit system
+        End If
+
+        Return GetSysWow64Folder
     End Function
 
 End Module
