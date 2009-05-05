@@ -52,7 +52,7 @@ Attribute VB_Name = "modActiveLock"
 ' @version 3.0.0
 ' @date 20050421
 '
-'* ///////////////////////////////////////////////////////////////////////
+' * ///////////////////////////////////////////////////////////////////////
 '  /                        MODULE TO DO LIST                            /
 '  ///////////////////////////////////////////////////////////////////////
 '
@@ -129,7 +129,8 @@ Public Const STREXPIREDPERMANENTLY As String = "This license has expired permane
 ' @param Data   Data to be encrypted
 ' @param dLen   [in/out] Length of data, in bytes. This parameter will contain length of encrypted data when returned.
 ' @param ptrKey Key to be used for encryption
-Public Declare Function rsa_encrypt Lib "ALCrypto3" (ByVal CryptType As Long, ByVal data As String, dLen As Long, ptrKey As RSAKey) As Long
+' ALCrypto Removal
+'Public Declare Function rsa_encrypt Lib "ALCrypto3" (ByVal CryptType As Long, ByVal data As String, dLen As Long, ptrKey As RSAKey) As Long
 
 
 ' RSA decrypts the data.
@@ -137,14 +138,16 @@ Public Declare Function rsa_encrypt Lib "ALCrypto3" (ByVal CryptType As Long, By
 ' @param Data   Data to be encrypted
 ' @param dLen   [in/out] Length of data, in bytes. This parameter will contain length of encrypted data when returned.
 ' @param ptrKey Key to be used for encryption
-Public Declare Function rsa_decrypt Lib "ALCrypto3" (ByVal CryptType As Long, ByVal data As String, dLen As Long, ptrKey As RSAKey) As Long
+' ALCrypto Removal
+'Public Declare Function rsa_decrypt Lib "ALCrypto3" (ByVal CryptType As Long, ByVal data As String, dLen As Long, ptrKey As RSAKey) As Long
 
 
 ' Computes an MD5 hash from the data.
 ' @param inData Data to be hashed
 ' @param nDataLen   Length of inData
 ' @param outData    [out] 32-byte Computed hash code
-Public Declare Function md5_hash Lib "ALCrypto3" (ByVal inData As String, ByVal nDataLen As Long, ByVal outData As String) As Long
+' ALCrypto Removal
+'Public Declare Function md5_hash Lib "ALCrypto3" (ByVal inData As String, ByVal nDataLen As Long, ByVal outData As String) As Long
 
 ' System time structure
 Type SYSTEMTIME
@@ -412,23 +415,23 @@ WebTest = InternetGetConnectedState(dwFlags, 0&)
 'End Select
 IsWebConnected = WebTest
 End Function
-Public Sub Get_locale() ' Retrieve the regional setting
-    Dim Symbol As String
-    Dim iRet1 As Long
-    Dim iRet2 As Long
-    Dim lpLCDataVar As String
-    Dim Pos As Integer
-    Dim Locale As Long
-    Locale = GetUserDefaultLCID()
-    iRet1 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, lpLCDataVar, 0)
-    Symbol = String$(iRet1, 0)
-    iRet2 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol, iRet1)
-    Pos = InStr(Symbol, Chr$(0))
-    If Pos > 0 Then
-         Symbol = Left$(Symbol, Pos - 1)
-         If Symbol <> "yyyy/MM/dd" Then regionalSymbol = Symbol
-    End If
-End Sub
+' * Public Sub Get_locale() ' Retrieve the regional setting
+'    Dim Symbol As String
+'    Dim iRet1 As Long
+'    Dim iRet2 As Long
+'    Dim lpLCDataVar As String
+'    Dim Pos As Integer
+'    Dim Locale As Long
+'    Locale = GetUserDefaultLCID()
+'    iRet1 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, lpLCDataVar, 0)
+'    Symbol = String$(iRet1, 0)
+'    iRet2 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol, iRet1)
+'    Pos = InStr(Symbol, Chr$(0))
+'    If Pos > 0 Then
+'         Symbol = Left$(Symbol, Pos - 1)
+'         If Symbol <> "yyyy/MM/dd" Then regionalSymbol = Symbol
+'    End If
+'End Sub
 
 Public Function IsNumberIncluded(ByVal n1 As Long, ByVal n2 As Long) As Boolean
 ' n1 = the larger number which may include n2
@@ -1253,19 +1256,19 @@ If dwData <> 0 Then
     End If
 End If
 End Function
-Public Sub Set_locale(Optional ByVal localSymbol As String = "") 'Change the regional setting
-    Dim Symbol As String
-    Dim iRet As Long
-    Dim Locale As Long
-    Locale = GetUserDefaultLCID() 'Get user Locale ID
-    If localSymbol = "" Then
-      Symbol = "yyyy/MM/dd" 'New character for the locale
-    Else
-      Symbol = localSymbol
-    End If
-    
-    iRet = SetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol)
-End Sub
+'* Public Sub '* Set_locale(Optional ByVal localSymbol As String = "") 'Change the regional setting
+'    Dim Symbol As String
+'    Dim iRet As Long
+'    Dim Locale As Long
+'    Locale = GetUserDefaultLCID() 'Get user Locale ID
+'    If localSymbol = "" Then
+'      Symbol = "yyyy/MM/dd" 'New character for the locale
+'    Else
+'      Symbol = localSymbol
+'    End If
+'
+'    iRet = SetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol)
+'End Sub
 Public Function CheckStreamCapability() As Boolean
 'Checks if the current File System supports NTFS
 Dim name As String * 256
@@ -1286,7 +1289,7 @@ On Error Resume Next
 'Reads a stream into a buffer
 hFile = CreateFileW(StrPtr(StreamName), AccessRead, ShareRead, 0&, OpenExisting, 0&, 0&)
 If hFile = -1 Then
-    Set_locale regionalSymbol
+    ' * '* Set_locale regionalSymbol
     Err.Raise ActiveLockErrCodeConstants.alerrLicenseTampered, ACTIVELOCKSTRING, STRLICENSETAMPERED
 End If
 Size = GetFileSize(hFile, 0&)
@@ -1364,7 +1367,7 @@ Public Function ReadFile(ByVal sPath As String, ByRef sData As String) As Long
     Exit Function
 Hell:
     Close #hFile
-    Set_locale regionalSymbol
+    ' * '* Set_locale regionalSymbol
     Err.Raise Err.Number, "Activelock", Err.Description
 End Function
 
@@ -1380,9 +1383,9 @@ End Function
 ' Purpose: [INTERNAL] Call-back routine used by ALCrypto3.dll during key generation process.
 ' Remarks: None
 '===============================================================================
-Public Sub CryptoProgressUpdate(ByVal param As Long, ByVal action As Long, ByVal phase As Long, ByVal iprogress As Long)
-    Debug.Print "Progress Update received " & param & ", action: " & action & ", iprogress: " & iprogress
-End Sub
+'Public Sub CryptoProgressUpdate(ByVal param As Long, ByVal action As Long, ByVal phase As Long, ByVal iprogress As Long)
+'    Debug.Print "Progress Update received " & param & ", action: " & action & ", iprogress: " & iprogress
+'End Sub
 
 '===============================================================================
 ' Name: Sub EndSub
@@ -1404,11 +1407,11 @@ End Sub
 ' Purpose: Computes an MD5 hash of the type library containing the object.
 ' Remarks: None
 '===============================================================================
-Public Function MD5HashTypeLib(obj As IUnknown) As String
-    Dim strDllPath As String
-    strDllPath = GetTypeLibPathFromObject(obj)
-    MD5HashTypeLib = MD5HashFile(strDllPath)
-End Function
+'Public Function MD5HashTypeLib(obj As IUnknown) As String
+'    Dim strDllPath As String
+'    strDllPath = GetTypeLibPathFromObject(obj)
+'    MD5HashTypeLib = MD5HashFile(strDllPath)
+'End Function
 
 
 '===============================================================================
@@ -1459,17 +1462,17 @@ End Function
 ' Purpose: Computes an MD5 hash of the specified file.
 ' Remarks: None
 '===============================================================================
-Public Function MD5HashFile(ByVal strPath As String) As String
-Debug.Print "Hashing file " & strPath
-Debug.Print "File Date: " & FileDateTime(strPath)
-    ' read and hash the content
-    Dim sData As String, nFileLen
-    nFileLen = ReadFile(strPath, sData)
-    Dim sHash As String: sHash = String(32, 0)
-    ' hash it
-    md5_hash sData, nFileLen, sHash
-    MD5HashFile = sHash
-End Function
+'Public Function MD5HashFile(ByVal strPath As String) As String
+'Debug.Print "Hashing file " & strPath
+'Debug.Print "File Date: " & FileDateTime(strPath)
+'    ' read and hash the content
+'    Dim sData As String, nFileLen
+'    nFileLen = ReadFile(strPath, sData)
+'    Dim sHash As String: sHash = String(32, 0)
+'    ' hash it
+'    md5_hash sData, nFileLen, sHash
+'    MD5HashFile = sHash
+'End Function
 
 
 '===============================================================================
@@ -1651,32 +1654,33 @@ End Function
 ' Purpose: Performs RSA signing of <code>strData</code> using the specified key.
 ' Remarks: 05.13.05    - alkan  - Removed the modActiveLock references
 '===============================================================================
-Public Function RSASign(ByVal strPub As String, ByVal strPriv As String, ByVal strdata As String) As String
-    Dim Key As RSAKey
-    ' create the key from the key blobs
-    If rsa_createkey(strPub, Len(strPub), strPriv, Len(strPriv), Key) = RETVAL_ON_ERROR Then
-        Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
-    End If
-
-    ' sign the data using the created key
-    Dim sLen&
-    If rsa_sign(Key, strdata, Len(strdata), vbNullString, sLen) = RETVAL_ON_ERROR Then
-        Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
-    End If
-    Dim strSig As String: strSig = String(sLen, 0)
-    If rsa_sign(Key, strdata, Len(strdata), strSig, sLen) = RETVAL_ON_ERROR Then
-        Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
-    End If
-    ' throw away the key
-    If rsa_freekey(Key) = RETVAL_ON_ERROR Then
-        Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
-    End If
-    RSASign = strSig
-End Function
+' ALCrypto Removal
+'Public Function RSASign(ByVal strPub As String, ByVal strPriv As String, ByVal strdata As String) As String
+'    Dim Key As RSAKey
+'    ' create the key from the key blobs
+'    If rsa_createkey(strPub, Len(strPub), strPriv, Len(strPriv), Key) = RETVAL_ON_ERROR Then
+'        ' * '* Set_locale regionalSymbol
+'        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
+'    End If
+'
+'    ' sign the data using the created key
+'    Dim sLen&
+'    If rsa_sign(Key, strdata, Len(strdata), vbNullString, sLen) = RETVAL_ON_ERROR Then
+'        ' * '* Set_locale regionalSymbol
+'        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
+'    End If
+'    Dim strSig As String: strSig = String(sLen, 0)
+'    If rsa_sign(Key, strdata, Len(strdata), strSig, sLen) = RETVAL_ON_ERROR Then
+'        ' * '* Set_locale regionalSymbol
+'        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
+'    End If
+'    ' throw away the key
+'    If rsa_freekey(Key) = RETVAL_ON_ERROR Then
+'        ' * '* Set_locale regionalSymbol
+'        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
+'    End If
+'    RSASign = strSig
+'End Function
 
 '===============================================================================
 ' Name: Function RSAVerify
@@ -1689,27 +1693,28 @@ End Function
 ' Purpose: Verifies an RSA signature.
 ' Remarks: None
 '===============================================================================
-Public Function RSAVerify(ByVal strPub As String, ByVal strdata As String, ByVal strSig As String) As Long
-    Dim Key As RSAKey
-    Dim rc As Long
-    ' create the key from the public key blob
-    If rsa_createkey(strPub, Len(strPub), vbNullString, 0, Key) = RETVAL_ON_ERROR Then
-        Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
-    End If
-    ' validate the key
-    rc = rsa_verifysig(Key, strSig, Len(strSig), strdata, Len(strdata))
-    If rc = RETVAL_ON_ERROR Then
-        Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
-    End If
-    ' de-allocate memory used by the key
-    If rsa_freekey(Key) = RETVAL_ON_ERROR Then
-        Set_locale regionalSymbol
-        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
-    End If
-    RSAVerify = rc
-End Function
+' ALCrypto Removal
+'Public Function RSAVerify(ByVal strPub As String, ByVal strdata As String, ByVal strSig As String) As Long
+'    Dim Key As RSAKey
+'    Dim rc As Long
+'    ' create the key from the public key blob
+'    If rsa_createkey(strPub, Len(strPub), vbNullString, 0, Key) = RETVAL_ON_ERROR Then
+'        ' * '* Set_locale regionalSymbol
+'        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
+'    End If
+'    ' validate the key
+'    rc = rsa_verifysig(Key, strSig, Len(strSig), strdata, Len(strdata))
+'    If rc = RETVAL_ON_ERROR Then
+'        ' * '* Set_locale regionalSymbol
+'        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
+'    End If
+'    ' de-allocate memory used by the key
+'    If rsa_freekey(Key) = RETVAL_ON_ERROR Then
+'        ' * '* Set_locale regionalSymbol
+'        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
+'    End If
+'    RSAVerify = rc
+'End Function
 
 '===============================================================================
 ' Name: Function WinError

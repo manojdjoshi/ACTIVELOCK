@@ -1,8 +1,8 @@
 VERSION 5.00
 Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "Mscomctl.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmMain 
    Appearance      =   0  'Flat
    BorderStyle     =   1  'Fixed Single
@@ -1372,9 +1372,9 @@ End Sub
 
 Private Sub cmbLicType_Click()
 ' Get the current date format and save it to regionalSymbol variable
-Get_locale
+'* Get_locale
 ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
-Set_locale ("")
+'* Set_locale ("")
     
 ' enable the days edit box
 If cmbLicType = "Periodic" Or cmbLicType = "Time Locked" Then
@@ -1396,9 +1396,14 @@ Else
     lblDays.Caption = "Day(s)"
 End If
 
-Set_locale regionalSymbol
+'* Set_locale regionalSymbol
 
 End Sub
+
+'* Convenience function converts Expire date to string
+Private Function GetExpirationString() As String '*
+    GetExpirationString = CStr(GetExpirationDate) '*
+End Function '*
 
 ''
 ' Normalizes date format to yyyy/MM/dd
@@ -1501,9 +1506,9 @@ DoEvents
 On Error GoTo Done
 
 ' Get the current date format and save it to regionalSymbol variable
-Get_locale
+'* Get_locale
 ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
-Set_locale ("")
+'* Set_locale ("")
 
 ' ALCrypto DLL with 1024-bit strength
 If optStrength(0).Value = True Then
@@ -1511,33 +1516,33 @@ If optStrength(0).Value = True Then
     Dim progress As ProgressType
     ' generate the key
     If modALUGEN.rsa_generate(Key, 1024, AddressOf CryptoProgressUpdate, VarPtr(progress)) = RETVAL_ON_ERROR Then
-        Set_locale regionalSymbol
+        '* Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
     ' extract private and public key blobs
     Dim strBlob As String
     Dim blobLen As Long
     If rsa_public_key_blob(Key, vbNullString, blobLen) = RETVAL_ON_ERROR Then
-        Set_locale regionalSymbol
+        '* Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
     If blobLen > 0 Then
         strBlob = String(blobLen, 0)
         If rsa_public_key_blob(Key, strBlob, blobLen) = RETVAL_ON_ERROR Then
-            Set_locale regionalSymbol
+            '* Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
         End If
         Debug.Print "Public blob: " & strBlob
         txtCode1.Text = strBlob
     End If
     If modALUGEN.rsa_private_key_blob(Key, vbNullString, blobLen) = RETVAL_ON_ERROR Then
-        Set_locale regionalSymbol
+        '* Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
     If blobLen > 0 Then
         strBlob = String(blobLen, 0)
         If modALUGEN.rsa_private_key_blob(Key, strBlob, blobLen) = RETVAL_ON_ERROR Then
-            Set_locale regionalSymbol
+            '* Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
         End If
         Debug.Print "Private blob: " & strBlob
@@ -1545,7 +1550,7 @@ If optStrength(0).Value = True Then
     End If
     ' done with the key - throw it away
     If modALUGEN.rsa_freekey(Key) = RETVAL_ON_ERROR Then
-        Set_locale regionalSymbol
+        '* Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
     ' Test generated key for correctness by recreating it from the blobs
@@ -1557,12 +1562,12 @@ If optStrength(0).Value = True Then
     ' you'll get a valid keyset that no longer crashes.
     Dim strdata$: strdata = "This is a test string to be encrypted."
     If modALUGEN.rsa_createkey(txtCode1, Len(txtCode1), txtCode2, Len(txtCode2), Key) = RETVAL_ON_ERROR Then
-        Set_locale regionalSymbol
+        '* Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
     ' It worked! We're all set to go.
     If modALUGEN.rsa_freekey(Key) = RETVAL_ON_ERROR Then
-        Set_locale regionalSymbol
+        '* Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
 
@@ -1589,7 +1594,7 @@ Else  ' CryptoAPI - RSA with given strength
 End If
 
 Done:
-    Set_locale regionalSymbol
+    '* Set_locale regionalSymbol
     Screen.MousePointer = vbDefault
     Enabled = True
 End Sub
@@ -1625,14 +1630,14 @@ If SSTab1.Tab <> 1 Then Exit Sub ' our tab not active - do nothing
 If Len(txtReqCodeIn.Text) < 8 Then Exit Sub
 
 ' Get the current date format and save it to regionalSymbol variable
-Get_locale
+'* Get_locale
 ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
-Set_locale ("")
+'* Set_locale ("")
 
 If cmbLicType = "Time Locked" Then
     ' Check to see if there's a valid expiration date
     If CDate(ActiveLockDateFormat(txtDays.Text)) < CDate(Format(Now, "yyyy/MM/dd")) Then
-        Set_locale regionalSymbol
+        '* Set_locale regionalSymbol
         MsgBox "Entered date occurs in the past.", vbExclamation
         Exit Sub
     End If
@@ -1678,8 +1683,10 @@ Else
     varLicType = allicNone
 End If
 
-strExpire = GetExpirationDate()
-strRegDate = Format(UTC(Now), "yyyy/MM/dd")
+'* strExpire = GetExpirationDate()
+strExpire = GetExpirationString()
+'* strRegDate = Format(UTC(Now), "yyyy/MM/dd")
+strRegDate = UTC(Now)
 
 'Take care of the networked licenses
 If chkNetworkedLicense.Value = vbChecked Then
@@ -1690,7 +1697,9 @@ End If
 maximumUsers = CInt(txtMaxCount.Text)
 
 ' Create a product license object without the product key or license key
-Set Lic = ActiveLock3.CreateProductLicense(strName, strVer, "", licFlag, varLicType, "", IIf(chkItemData.Value = vbUnchecked, cmbRegisteredLevel.List(cmbRegisteredLevel.ListIndex), cmbRegisteredLevel.ItemData(cmbRegisteredLevel.ListIndex)), strExpire, , strRegDate, , maximumUsers)
+Set Lic = ActiveLock3.CreateProductLicense(strName, strVer, "", licFlag, varLicType, "", IIf(chkItemData.Value = vbUnchecked, cmbRegisteredLevel.List(cmbRegisteredLevel.ListIndex), cmbRegisteredLevel.ItemData(cmbRegisteredLevel.ListIndex)), _
+    GetExpirationDate, , UTC(Now), , maximumUsers)
+    '* strExpire, , strRegDate, , maximumUsers)
 
 If Len(txtReqCodeIn.Text) = 8 Then  'Short Key License
     For i = 1 To gridProds.Rows
@@ -1699,7 +1708,11 @@ If Len(txtReqCodeIn.Text) = 8 Then  'Short Key License
             Exit For
         End If
     Next
-    strLibKey = ActiveLock.GenerateShortKey(usedVCode, txtReqCodeIn.Text, Trim(txtUser.Text), strExpire, varLicType, cmbRegisteredLevel.ListIndex + 200, maximumUsers)
+    '* this generates the key we send to the person (short key)
+    '* strLibKey = ActiveLock.GenerateShortKey(usedVCode, txtReqCodeIn.Text, Trim(txtUser.Text), strExpire, varLicType, cmbRegisteredLevel.ListIndex + 200, maximumUsers)
+    strLibKey = ActiveLock.GenerateShortKey(usedVCode, txtReqCodeIn.Text, _
+        Trim(txtUser.Text), GetExpirationString(), varLicType, _
+        cmbRegisteredLevel.ListIndex + 200, maximumUsers)
     txtLibKey.Text = strLibKey
 Else 'ALCrypto License Key
     ' Pass it to IALUGenerator to generate the key
@@ -1782,11 +1795,11 @@ Label5.Visible = True
 txtLibFile.Visible = True
 cmdBrowse.Visible = True
 cmdSave.Visible = True
-Set_locale regionalSymbol
+'* Set_locale regionalSymbol
 Exit Sub
 
 ErrHandler:
-    Set_locale regionalSymbol
+    '* Set_locale regionalSymbol
     UpdateStatus "Error: " + Err.Description
     Screen.MousePointer = vbNormal
 End Sub
@@ -1810,11 +1823,12 @@ Private Function Make64ByteChunks(strdata As String) As String
     Make64ByteChunks = sResult
 End Function
 
-Private Function GetExpirationDate() As String
+Private Function GetExpirationDate() As Date
     If cmbLicType = "Time Locked" Then
-        GetExpirationDate = txtDays
+        '* GetExpirationDate = txtDays.Text
+        GetExpirationDate = CDate(txtDays.Text) '*
     Else
-        GetExpirationDate = ActiveLockDateFormat(Now + CInt(txtDays))
+        GetExpirationDate = DateAdd("d", CDbl(txtDays.Text), UTC(Now))
     End If
 End Function
 
@@ -1953,16 +1967,16 @@ If txtCode1.Text = "" And txtCode2.Text = "" Then
 End If
 
 ' Get the current date format and save it to regionalSymbol variable
-Get_locale
+'* Get_locale
 ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
-Set_locale ("")
+'* Set_locale ("")
 
 ' ALCrypto DLL with 1024-bit strength
 If Left(txtCode1.Text, 3) <> "RSA" Then
     ' Validate to keyset to make sure it's valid.
     UpdateStatus "Validating keyset..."
     If modALUGEN.rsa_createkey(txtCode1.Text, Len(txtCode1), txtCode2.Text, Len(txtCode2), Key) = RETVAL_ON_ERROR Then
-        Set_locale regionalSymbol
+        '* Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
     ' sign it
@@ -1975,7 +1989,7 @@ If Left(txtCode1.Text, 3) <> "RSA" Then
     End If
     ' It worked! We're all set to go.
     If modALUGEN.rsa_freekey(Key) = RETVAL_ON_ERROR Then
-        Set_locale regionalSymbol
+        '* Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
     End If
 Else
@@ -2004,12 +2018,12 @@ Else
     UpdateStatus gridProds.TextMatrix(gridProds.Row, 0) & " (" + gridProds.TextMatrix(gridProds.Row, 1) + ") validated successfully."
 
 End If
-Set_locale regionalSymbol
+'* Set_locale regionalSymbol
 Screen.MousePointer = vbDefault
 Exit Sub
 
 exitValidate:
-Set_locale regionalSymbol
+'* Set_locale regionalSymbol
 UpdateStatus gridProds.TextMatrix(gridProds.Row, 0) & " (" + gridProds.TextMatrix(gridProds.Row, 1) + ") GCode-VCode mismatch!"
 Screen.MousePointer = vbDefault
 

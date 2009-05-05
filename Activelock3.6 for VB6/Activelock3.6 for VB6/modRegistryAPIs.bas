@@ -654,7 +654,7 @@ Select Case valueType
         GetRegistryValue = resString
     Case Else
         RegCloseKey handle
-        Set_locale regionalSymbol
+        ' * Set_locale regionalSymbol
         Err.Raise 1001, ACTIVELOCKSTRING, "Unsupported value type"
 End Select
 
@@ -715,7 +715,7 @@ Public Function SetRegistryValue(ByVal hKey As Long, ByVal KeyName As String, _
                 binValue(LBound(binValue)), Length)
         Case Else
             RegCloseKey handle
-            Set_locale regionalSymbol
+            ' * Set_locale regionalSymbol
             Err.Raise 1001, ACTIVELOCKSTRING, "Unsupported value type"
     End Select
     
@@ -914,7 +914,7 @@ Const REG_OPENED_EXISTING_KEY = &H2
     Dim SEC As SECURITY_ATTRIBUTES
     
     If RegCreateKeyEx(hKey, KeyName, 0, 0, 0, 0, SEC, handle, disposition) Then
-        Set_locale regionalSymbol
+        ' * Set_locale regionalSymbol
         Err.Raise 1001, ACTIVELOCKSTRING, "Unable to create the registry key"
     Else
         ' Return True if the key already existed.

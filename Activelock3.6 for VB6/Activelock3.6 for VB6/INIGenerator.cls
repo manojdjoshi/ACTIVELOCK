@@ -63,7 +63,7 @@ Attribute VB_Exposed = False
 ' @version 3.0.0
 ' @date 20030815
 '
-'* ///////////////////////////////////////////////////////////////////////
+' * ///////////////////////////////////////////////////////////////////////
 '  /                        MODULE TO DO LIST                            /
 '  ///////////////////////////////////////////////////////////////////////
 '
@@ -204,7 +204,7 @@ Private Function IALUGenerator_RetrieveProduct(ByVal name As String, ByVal Ver A
         ProdInfo.GCode = .Values("GCode")
     End With
     If ProdInfo.VCode = "" Or ProdInfo.GCode = "" Then
-        Set_locale regionalSymbol
+        ' * Set_locale regionalSymbol
         Err.Raise ALUGENErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, "Product code set is invalid."
     End If
     Set IALUGenerator_RetrieveProduct = ProdInfo
@@ -273,8 +273,8 @@ GetLockAndUserFromInstallCode strReq, strLock, strUser
 Lic.Licensee = strUser
 ' registered level
 Lic.RegisteredLevel = RegisteredLevel
-' registration date
-strRegDate = Lic.RegisteredDate
+'* strRegDate = Lic.RegisteredDate
+strRegDate = DateToDblString(Lic.RegisteredDate) '*
 
 ' @todo Rethink this bit about encrypting the dates.
 ' We need to keep in mind that the app does not have access to the private key, so and any decryption that requires private key
@@ -294,27 +294,28 @@ Lic.ProductKey = ProdInfo.VCode
 strLic = Lic.ToString() & vbLf & strLock
 Debug.Print "strLic: " & vbCrLf & strLic
 
-If Left(ProdInfo.VCode, 3) <> "RSA" Then
-    ' sign it
-    strSig = String(1024, 0)
-    ' 05.13.05 - ialkan Modified to merge DLLs into one. Moved RSASign into a module
-    strSig = RSASign(ProdInfo.VCode, ProdInfo.GCode, strLic)
-    
-    ' Create liberation key.  This will be a base-64 encoded string of the whole license.
-    ' 05.13.05 - ialkan Modified to merge DLLs into one
-    strLicKey = Base64_Encode(strSig)
-    ' update Lic with license key
-    Lic.LicenseKey = strLicKey
-    
-    ' Print some info for debugging purposes
-    Debug.Print "VCode: " & ProdInfo.VCode
-    Debug.Print "Lic: " & strLic
-    Debug.Print "Lic hash: " & modMD5.Hash(strLic)
-    Debug.Print "LicKey: " & strLicKey
-    Debug.Print "Sig: " & strSig
-    Debug.Print "Verify: " & RSAVerify(ProdInfo.VCode, strLic, Base64_Decode(strLicKey))
-    Debug.Print "===================================================="
-Else
+' ALCrypto Removal
+'If Left(ProdInfo.VCode, 3) <> "RSA" Then
+'    ' sign it
+'    strSig = String(1024, 0)
+'    ' 05.13.05 - ialkan Modified to merge DLLs into one. Moved RSASign into a module
+'    strSig = RSASign(ProdInfo.VCode, ProdInfo.GCode, strLic)
+'
+'    ' Create liberation key.  This will be a base-64 encoded string of the whole license.
+'    ' 05.13.05 - ialkan Modified to merge DLLs into one
+'    strLicKey = Base64_Encode(strSig)
+'    ' update Lic with license key
+'    Lic.LicenseKey = strLicKey
+'
+'    ' Print some info for debugging purposes
+'    Debug.Print "VCode: " & ProdInfo.VCode
+'    Debug.Print "Lic: " & strLic
+'    Debug.Print "Lic hash: " & modMD5.Hash(strLic)
+'    Debug.Print "LicKey: " & strLicKey
+'    Debug.Print "Sig: " & strSig
+'    Debug.Print "Verify: " & RSAVerify(ProdInfo.VCode, strLic, Base64_Decode(strLicKey))
+'    Debug.Print "===================================================="
+'Else
     
     Dim MyGlobals As Globals
     Dim ok As String, strPrivateBlob As String, modulus As Long
@@ -339,7 +340,8 @@ Else
     ' update Lic with license key
     Lic.LicenseKey = strLicKey
 
-End If
+' ALCrypto Removal
+'End If
 
 ' Serialize it into a formatted string
 Lic.Save strLibKey

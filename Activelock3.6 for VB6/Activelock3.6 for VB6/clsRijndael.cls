@@ -182,7 +182,7 @@ Private Function LShift(ByVal lValue As Long, _
         End If
         Exit Function
     ElseIf iShiftBits < 0 Or iShiftBits > 31 Then
-        Set_locale regionalSymbol
+        ' * Set_locale regionalSymbol
         Err.Raise 6
     End If
     
@@ -211,7 +211,7 @@ Private Function RShift(ByVal lValue As Long, _
         End If
         Exit Function
     ElseIf iShiftBits < 0 Or iShiftBits > 31 Then
-        Set_locale regionalSymbol
+        ' * Set_locale regionalSymbol
         Err.Raise 6
     End If
     
@@ -238,7 +238,7 @@ Private Function LShiftByte(ByVal bytValue As Byte, _
         End If
         Exit Function
     ElseIf bytShiftBits < 0 Or bytShiftBits > 7 Then
-        Set_locale regionalSymbol
+        ' * Set_locale regionalSymbol
         Err.Raise 6
     End If
     
@@ -262,7 +262,7 @@ Private Function RShiftByte(ByVal bytValue As Byte, _
         End If
         Exit Function
     ElseIf bytShiftBits < 0 Or bytShiftBits > 7 Then
-        Set_locale regionalSymbol
+        ' * Set_locale regionalSymbol
         Err.Raise 6
     End If
     
@@ -794,18 +794,18 @@ Public Function EncryptData(bytMessage() As Byte, _
     ReDim bytOut(lEncodedLength - 1)
     
     ' Put the length on the front
-    '* Unpack lLength, bytIn
+    ' * Unpack lLength, bytIn
     CopyMemory VarPtr(bytIn(0)), VarPtr(lLength), 4
     ' Put the rest of the message after it
-    '* CopyBytesASP bytIn, 4, bytMessage, 0, lLength
+    ' * CopyBytesASP bytIn, 4, bytMessage, 0, lLength
     CopyMemory VarPtr(bytIn(4)), VarPtr(bytMessage(0)), lLength
 
     ' Encrypt a block at a time
     For lCount = 0 To lEncodedLength - 1 Step 32
-        '* CopyBytesASP bytTemp, 0, bytIn, lCount, 32
+        ' * CopyBytesASP bytTemp, 0, bytIn, lCount, 32
         CopyMemory VarPtr(bytTemp(0)), VarPtr(bytIn(lCount)), 32
         Encrypt bytTemp
-        '* CopyBytesASP bytOut, lCount, bytTemp, 0, 32
+        ' * CopyBytesASP bytOut, lCount, bytTemp, 0, 32
         CopyMemory VarPtr(bytOut(lCount)), VarPtr(bytTemp(0)), 32
     Next
     
@@ -857,15 +857,15 @@ Public Function DecryptData(bytIn() As Byte, _
     
     ' Decrypt a block at a time
     For lCount = 0 To lEncodedLength - 1 Step 32
-        '* CopyBytesASP bytTemp, 0, bytIn, lCount, 32
+        ' * CopyBytesASP bytTemp, 0, bytIn, lCount, 32
         CopyMemory VarPtr(bytTemp(0)), VarPtr(bytIn(lCount)), 32
         Decrypt bytTemp
-        '* CopyBytesASP bytOut, lCount, bytTemp, 0, 32
+        ' * CopyBytesASP bytOut, lCount, bytTemp, 0, 32
         CopyMemory VarPtr(bytOut(lCount)), VarPtr(bytTemp(0)), 32
     Next
 
     ' Get the original length of the string from the first 4 bytes
-    '* lLength = Pack(bytOut)
+    ' * lLength = Pack(bytOut)
     CopyMemory VarPtr(lLength), VarPtr(bytOut(0)), 4
     
     ' Make sure the length is consistent with our data
@@ -875,7 +875,7 @@ Public Function DecryptData(bytIn() As Byte, _
     
     ' Prepare the output message byte array
     ReDim bytMessage(lLength - 1)
-    '* CopyBytesASP bytMessage, 0, bytOut, 4, lLength
+    ' * CopyBytesASP bytMessage, 0, bytOut, 4, lLength
     CopyMemory VarPtr(bytMessage(0)), VarPtr(bytOut(4)), lLength
     
     DecryptData = bytMessage

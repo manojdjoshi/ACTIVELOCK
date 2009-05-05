@@ -93,7 +93,7 @@ Attribute VB_Ext_KEY = "Top_Level" ,"Yes"
 '   CD or any other electronic or physical media, you must notify me in
 '   advance to obtain my express permission.
 '
-'* ///////////////////////////////////////////////////////////////////////
+' * ///////////////////////////////////////////////////////////////////////
 '  /                        MODULE CHANGE LOG                            /
 '  ///////////////////////////////////////////////////////////////////////
 ' @history
@@ -646,7 +646,7 @@ End Property
 Public Property Let File(ByVal rValue As String)
     ' TODO: Check if File exists.
     ' If file not found:
-    ' Set_locale regionalSymbol
+    ' ' * Set_locale regionalSymbol
     ' Err.Raise vbObjectError, , "File not found: " & rValue
     m_sFileName = rValue
     m_sSection = ""       '// clear the section

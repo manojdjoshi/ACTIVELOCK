@@ -63,7 +63,7 @@ Attribute VB_Exposed = False
 ' @version 3.0.0
 ' @date 20050807
 '
-'* ///////////////////////////////////////////////////////////////////////
+' * ///////////////////////////////////////////////////////////////////////
 '  /                        MODULE TO DO LIST                            /
 '  ///////////////////////////////////////////////////////////////////////
 '
@@ -123,7 +123,7 @@ Private Property Let IKeyStoreProvider_KeyStorePath(RHS As String)
         CreateEmptyFile RHS
     Else 'the file exists, but check to see if it has read-only attribute
         If (GetAttr(RHS) And vbReadOnly) Or (GetAttr(RHS) And vbReadOnly And vbArchive) Then
-            Set_locale regionalSymbol
+            ' * Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
         End If
     End If
@@ -171,10 +171,13 @@ Private Sub IKeyStoreProvider_Store(Lic As ProductLicense, mLicenseFileType As A
             mINIFile.Values(KEY_REGISTERED_LEVEL) = EncryptMyString(.RegisteredLevel, PSWD)
             mINIFile.Values(KEY_MAXCOUNT) = EncryptMyString(CStr(.MaxCount), PSWD)
             mINIFile.Values(KEY_LICKEY) = EncryptMyString(.LicenseKey, PSWD)
-            mINIFile.Values(KEY_REGISTERED_DATE) = EncryptMyString(.RegisteredDate, PSWD)
-            mINIFile.Values(KEY_LASTRUN_DATE) = EncryptMyString(.LastUsed, PSWD)
+            '* mINIFile.Values(KEY_REGISTERED_DATE) = EncryptMyString(.RegisteredDate, PSWD)
+            '* mINIFile.Values(KEY_LASTRUN_DATE) = EncryptMyString(.LastUsed, PSWD)
+            mINIFile.Values(KEY_REGISTERED_DATE) = EncryptMyString(DateToDblString(.RegisteredDate), PSWD)
+            mINIFile.Values(KEY_LASTRUN_DATE) = EncryptMyString(DateToDblString(.LastUsed), PSWD)
             mINIFile.Values(KEY_LASTRUN_DATE_HASH) = EncryptMyString(.Hash1, PSWD)
-            mINIFile.Values(KEY_EXP) = EncryptMyString(.Expiration, PSWD)
+            '* mINIFile.Values(KEY_EXP) = EncryptMyString(.Expiration, PSWD)
+            mINIFile.Values(KEY_EXP) = EncryptMyString(DateToDblString(.Expiration), PSWD)
             mINIFile.Values(KEY_REGKEY1) = EncryptMyString(.LicenseCode, PSWD)
         End With
     Else
@@ -186,10 +189,13 @@ Private Sub IKeyStoreProvider_Store(Lic As ProductLicense, mLicenseFileType As A
             mINIFile.Values(KEY_REGISTERED_LEVEL) = .RegisteredLevel
             mINIFile.Values(KEY_MAXCOUNT) = CStr(.MaxCount)
             mINIFile.Values(KEY_LICKEY) = .LicenseKey
-            mINIFile.Values(KEY_REGISTERED_DATE) = .RegisteredDate
-            mINIFile.Values(KEY_LASTRUN_DATE) = .LastUsed
+            '* mINIFile.Values(KEY_REGISTERED_DATE) = .RegisteredDate
+            '* mINIFile.Values(KEY_LASTRUN_DATE) = .LastUsed
+            mINIFile.Values(KEY_REGISTERED_DATE) = DateToDblString(.RegisteredDate)
+            mINIFile.Values(KEY_LASTRUN_DATE) = DateToDblString(.LastUsed)
             mINIFile.Values(KEY_LASTRUN_DATE_HASH) = .Hash1
-            mINIFile.Values(KEY_EXP) = .Expiration
+            '* mINIFile.Values(KEY_EXP) = .Expiration
+            mINIFile.Values(KEY_EXP) = DateToDblString(.Expiration)
             mINIFile.Values(KEY_REGKEY1) = .LicenseCode
         End With
 
@@ -228,7 +234,7 @@ Private Function IKeyStoreProvider_Retrieve(ProductName As String, mLicenseFileT
         astring = fileText
 '    End If
     If inString(LCase(astring), "productversion") = False Then
-        Set_locale regionalSymbol
+        ' * Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREINVALID
     End If
 
@@ -245,9 +251,12 @@ Private Function IKeyStoreProvider_Retrieve(ProductName As String, mLicenseFileT
             .LicenseType = DecryptMyString(mINIFile.GetValue(KEY_LICTYPE), PSWD)
             .LicenseClass = DecryptMyString(mINIFile.GetValue(KEY_LICCLASS), PSWD)
             .LicenseKey = DecryptMyString(mINIFile.GetValue(KEY_LICKEY), PSWD)
-            .Expiration = DecryptMyString(mINIFile.GetValue(KEY_EXP), PSWD)
-            .RegisteredDate = DecryptMyString(mINIFile.Values(KEY_REGISTERED_DATE), PSWD)
-            .LastUsed = DecryptMyString(mINIFile.Values(KEY_LASTRUN_DATE), PSWD)
+            '* .Expiration = DecryptMyString(mINIFile.GetValue(KEY_EXP), PSWD)
+            '* .RegisteredDate = DecryptMyString(mINIFile.Values(KEY_REGISTERED_DATE), PSWD)
+            '* .LastUsed = DecryptMyString(mINIFile.Values(KEY_LASTRUN_DATE), PSWD)
+            .Expiration = DblStringToDate(DecryptMyString(mINIFile.GetValue(KEY_EXP), PSWD)) '*
+            .RegisteredDate = DblStringToDate(DecryptMyString(mINIFile.Values(KEY_REGISTERED_DATE), PSWD)) '*
+            .LastUsed = DblStringToDate(DecryptMyString(mINIFile.Values(KEY_LASTRUN_DATE), PSWD)) '*
             .Hash1 = DecryptMyString(mINIFile.Values(KEY_LASTRUN_DATE_HASH), PSWD)
             .LicenseCode = DecryptMyString(mINIFile.Values(KEY_REGKEY1), PSWD)
         End With
@@ -263,9 +272,12 @@ Private Function IKeyStoreProvider_Retrieve(ProductName As String, mLicenseFileT
             .LicenseType = mINIFile.GetValue(KEY_LICTYPE)
             .LicenseClass = mINIFile.GetValue(KEY_LICCLASS)
             .LicenseKey = mINIFile.GetValue(KEY_LICKEY)
-            .Expiration = mINIFile.GetValue(KEY_EXP)
-            .RegisteredDate = mINIFile.Values(KEY_REGISTERED_DATE)
-            .LastUsed = mINIFile.Values(KEY_LASTRUN_DATE)
+            '* .Expiration = mINIFile.GetValue(KEY_EXP)
+            '* .RegisteredDate = mINIFile.Values(KEY_REGISTERED_DATE)
+            '* .LastUsed = mINIFile.Values(KEY_LASTRUN_DATE)
+            .Expiration = DblStringToDate(mINIFile.GetValue(KEY_EXP)) '*
+            .RegisteredDate = DblStringToDate(mINIFile.Values(KEY_REGISTERED_DATE)) '*
+            .LastUsed = DblStringToDate(mINIFile.Values(KEY_LASTRUN_DATE)) '*
             .Hash1 = mINIFile.Values(KEY_LASTRUN_DATE_HASH)
             .LicenseCode = mINIFile.Values(KEY_REGKEY1)
         End With
@@ -275,6 +287,6 @@ Private Function IKeyStoreProvider_Retrieve(ProductName As String, mLicenseFileT
     Exit Function
 
 InvalidValue:
-    Set_locale regionalSymbol
+    ' * Set_locale regionalSymbol
     Err.Raise ActiveLockErrCodeConstants.alerrKeyStoreInvalid, ACTIVELOCKSTRING, STRKEYSTOREINVALID
 End Function

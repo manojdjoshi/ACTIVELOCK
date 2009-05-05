@@ -301,19 +301,20 @@ Private Type BufferType
      myBuffer(559) As Byte
 End Type
 
-' The following UDT and the DLL function is for getting
-' the serial number from a C++ DLL in case the VB6 APIs fail
-' Currently, VB code cannot handle the serial numbers
-' coming from computers with non-admin rights; in those
-' cases the C++ DLL function "getHardDriveFirmware" should
-' work properly.
-' Neither of the two methods work for the SATA and SCSI drives
-' ialkan - 8312005
-Private Type MyUDT2
-    myStr As String * 30
-    mL As Long
-End Type
-Private Declare Function getHardDriveFirmware Lib "ALCrypto3.dll" (myU As MyUDT2) As Long
+' ALCrypto Removal
+'' The following UDT and the DLL function is for getting
+'' the serial number from a C++ DLL in case the VB6 APIs fail
+'' Currently, VB code cannot handle the serial numbers
+'' coming from computers with non-admin rights; in those
+'' cases the C++ DLL function "getHardDriveFirmware" should
+'' work properly.
+'' Neither of the two methods work for the SATA and SCSI drives
+'' ialkan - 8312005
+'Private Type MyUDT2
+'    myStr As String * 30
+'    mL As Long
+'End Type
+'Private Declare Function getHardDriveFirmware Lib "ALCrypto3.dll" (myU As MyUDT2) As Long
 
 'MAC Address
 Public Const NCBASTAT As Long = &H33
@@ -561,8 +562,8 @@ test = GetHDSerial
 If test <> "Not Available" Then S = S & test
 test = GetBaseboardID
 If test <> "Not Available" Then S = S & test
-test = GetVideoID
-If test <> "Not Available" Then S = S & test
+'test = GetVideoID
+'If test <> "Not Available" Then S = S & test
 'test = GetMACAddress
 'If test <> "Not Available" Then S = S & test
 ' Now pack them
@@ -942,12 +943,13 @@ For jj = 0 To 15 ' Controller index
     If GetHDSerialFirmware <> "" Then Exit Function
 Next
    
-' ******* METHOD 2 - ALCRYPTO *******
-' Use ALCrypto DLL
-Dim mU As MyUDT2
-Call getHardDriveFirmware(mU)
-GetHDSerialFirmware = Trim(StripControlChars(mU.myStr, False))
-If GetHDSerialFirmware <> "" Then Exit Function
+' ALCrypto Removal
+'' ******* METHOD 2 - ALCRYPTO *******
+'' Use ALCrypto DLL
+'Dim mU As MyUDT2
+'Call getHardDriveFirmware(mU)
+'GetHDSerialFirmware = Trim(StripControlChars(mU.myStr, False))
+'If GetHDSerialFirmware <> "" Then Exit Function
 
 ' ******* METHOD 3 - SMART *******
 Dim di As DRIVE_INFO
@@ -1687,7 +1689,10 @@ For Each obj In MotherboardSet
         ' Strip any periods
         Dim Bytes() As Byte
         Bytes() = GetMotherboardSerial
-        GetMotherboardSerial = VBA.Replace(Bytes(), ".", "")
+        GetMotherboardSerial = Trim(VBA.Replace(Bytes(), ".", ""))
+        If GetMotherboardSerial = "" Then
+            GetMotherboardSerial = "Not Available"
+        End If
         Exit Function
     End If
 Next
@@ -1710,7 +1715,7 @@ Public Function GetIPaddress() As String
 On Error GoTo GetIPaddressError
 
 If IsWebConnected() = False Then
-    Set_locale (regionalSymbol)
+    ' * Set_locale (regionalSymbol)
     Err.Raise ActiveLockErrCodeConstants.alerrNotInitialized, ACTIVELOCKSTRING, STRINTERNETNOTCONNECTED
 End If
 
