@@ -18,13 +18,13 @@ Begin VB.Form frmSplash
    Begin VB.Label Label16 
       Alignment       =   2  'Center
       BackStyle       =   0  'Transparent
-      Caption         =   "Activelock V3"
+      Caption         =   "Activelock v3.6"
       ForeColor       =   &H00FF0000&
       Height          =   165
-      Left            =   1350
+      Left            =   1260
       TabIndex        =   1
       Top             =   1980
-      Width           =   1065
+      Width           =   1155
    End
    Begin VB.Image Image1 
       Height          =   825
