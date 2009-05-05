@@ -1,33 +1,33 @@
-'*   ActiveLock
-'*   Copyright 1998-2002 Nelson Ferraz
-'*   Copyright 2003-2008 The ActiveLock Software Group (ASG)
-'*   All material is the property of the contributing authors.
-'*
-'*   Redistribution and use in source and binary forms, with or without
-'*   modification, are permitted provided that the following conditions are
-'*   met:
-'*
-'*     [o] Redistributions of source code must retain the above copyright
-'*         notice, this list of conditions and the following disclaimer.
-'*
-'*     [o] Redistributions in binary form must reproduce the above
-'*         copyright notice, this list of conditions and the following
-'*         disclaimer in the documentation and/or other materials provided
-'*         with the distribution.
-'*
-'*   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-'*   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-'*   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-'*   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-'*   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-'*   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-'*   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-'*   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-'*   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-'*   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-'*   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-'*
-'*
+' *   ActiveLock
+' *   Copyright 1998-2002 Nelson Ferraz
+' *   Copyright 2003-2008 The ActiveLock Software Group (ASG)
+' *   All material is the property of the contributing authors.
+' *
+' *   Redistribution and use in source and binary forms, with or without
+' *   modification, are permitted provided that the following conditions are
+' *   met:
+' *
+' *     [o] Redistributions of source code must retain the above copyright
+' *         notice, this list of conditions and the following disclaimer.
+' *
+' *     [o] Redistributions in binary form must reproduce the above
+' *         copyright notice, this list of conditions and the following
+' *         disclaimer in the documentation and/or other materials provided
+' *         with the distribution.
+' *
+' *   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+' *   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+' *   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+' *   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+' *   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+' *   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+' *   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+' *   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+' *   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+' *   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+' *   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+' *
+' *
 Option Strict On
 Option Explicit On
 Imports System
@@ -2089,11 +2089,10 @@ noInfo:
 
         Make64ByteChunks = sResult
     End Function
-    '* Convenience function coverts Expire date to string
+    '* Convenience function converts Expire date to string
     Private Function GetExpirationString() As String '*
         Return GetExpirationDate().ToString '*
     End Function '*
-
 
     Private Function GetExpirationDate() As Date
         If cboLicType.Text = "Time Locked" Then
@@ -2104,7 +2103,6 @@ noInfo:
             GetExpirationDate = Date.UtcNow.AddDays(CShort(txtDays.Text)) '*.ToString("yyyy/MM/dd")
         End If
     End Function
-
 
     Private Sub SaveLicenseKey(ByVal sLibKey As String, ByVal sFileName As String)
         Dim hFile As Integer
@@ -3841,10 +3839,10 @@ exitValidate:
         UpdateStatus(txtName.Text & " (" & txtVer.Text & ") GCode-VCode mismatch!")
         Cursor = Cursors.Default
     End Sub
-    '********************************************************
-    '* HexToBytes: Converts a hex-encoded string to a
-    '*             byte array
-    '********************************************************
+    ' ********************************************************
+    ' * HexToBytes: Converts a hex-encoded string to a
+    ' *             byte array
+    ' ********************************************************
     Private Shared Function HexToBytes(ByVal Hex As String) As Byte()
         Dim numBytes As Integer = CType(Hex.Length / 2, Integer)  ' CType not necessary in VB 2008
         Dim bytes(numBytes - 1) As Byte
@@ -3854,10 +3852,10 @@ exitValidate:
         Next
         Return bytes
     End Function
-    '********************************************************
-    '* BytesToHex: Converts a byte array to a hex-encoded
-    '*             string
-    '********************************************************
+    ' ********************************************************
+    ' * BytesToHex: Converts a byte array to a hex-encoded
+    ' *             string
+    ' ********************************************************
     Private Shared Function BytesToHex(ByVal bytes() As Byte) As String
         Dim hex As New StringBuilder
         For n As Integer = 0 To bytes.Length - 1

@@ -1099,35 +1099,6 @@ ActiveLock3_6Net
  Not Documented!
  </summary>
 	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.modActiveLock.rsa_encrypt(System.Int32,System.String,System.Int32@,ActiveLock3_6NET.modALUGEN.RSAKey@)">
-	<summary>
- RSA encrypts the data.
- </summary>
-	<param name="CryptType">0 for public; 1 for private</param>
-	<param name="data">Data to be encrypted</param>
-	<param name="dLen">[in/out] Length of data, in bytes. This parameter will contain length of encrypted data when returned.</param>
-	<param name="ptrKey">Key to be used for encryption</param>
-	<returns>Integer - ?Not Documented</returns>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.modActiveLock.rsa_decrypt(System.Int32,System.String,System.Int32@,ActiveLock3_6NET.modALUGEN.RSAKey@)">
-	<summary>
- RSA decrypts the data.
- </summary>
-	<param name="CryptType">0 for public; 1 for private</param>
-	<param name="data">Data to be decrypted</param>
-	<param name="dLen">[in/out] Length of data, in bytes. This parameter will contain length of decrypted data when returned.</param>
-	<param name="ptrKey">Key to be used for encryption</param>
-	<returns>Integer - ?Not Documented!</returns>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.modActiveLock.md5_hash(System.String,System.Int32,System.String)">
-	<summary>
- Computes an MD5 hash from the data.
- </summary>
-	<param name="inData">Data to be hashed</param>
-	<param name="nDataLen">Length of inData</param>
-	<param name="outData">[out] 32-byte Computed hash code</param>
-	<returns>Integer - ?Undocumented!</returns>
-	<remarks></remarks>
 </member><member name="F:ActiveLock3_6NET.modActiveLock.ENCRYPT_KEY">
 	<summary>
  ActiveLock Encryption Key
@@ -1592,15 +1563,6 @@ ActiveLock3_6Net
 	<param name="sData">String - Output parameter contains the data that has been read</param>
 	<returns>Long - Number of bytes read, 0 if no file was read</returns>
 	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.modActiveLock.CryptoProgressUpdate(System.Int32,System.Int32,System.Int32,System.Int32)">
-	<summary>
- [INTERNAL] Call-back routine used by ALCrypto3NET.dll during key generation process.
- </summary>
-	<param name="param">Long - TBD</param>
-	<param name="action">Long - Action being performed</param>
-	<param name="phase">Long - Current phase</param>
-	<param name="iprogress">Long - Percent complete</param>
-	<remarks></remarks>
 </member><member name="M:ActiveLock3_6NET.modActiveLock.EndSub">
 	<summary>
  This is a dummy sub. Used to circumvent the End statement restriction in COM DLLs.
@@ -1626,24 +1588,6 @@ ActiveLock3_6Net
  </summary>
 	<param name="returnType">TimeZoneReturn - Type of time zone information being requested</param>
 	<returns>Variant - Return type varies depending on returnValue parameter.</returns>
-	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.modActiveLock.RSASign(System.String,System.String,System.String)">
-	<summary>
- Performs RSA signing of <code>strData</code> using the specified key.
- </summary>
-	<param name="strPub">RSA Public key blob</param>
-	<param name="strPriv">RSA Private key blob</param>
-	<param name="strdata">String - Data to be signed</param>
-	<returns>String - Signature string</returns>
-	<remarks>05.13.05    - alkan  - Removed the modActiveLock references</remarks>
-</member><member name="M:ActiveLock3_6NET.modActiveLock.RSAVerify(System.String,System.String,System.String)">
-	<summary>
- Verifies an RSA signature.
- </summary>
-	<param name="strPub">String - Public key blob</param>
-	<param name="strdata">String - Data to be signed</param>
-	<param name="strSig">String - Private key blob</param>
-	<returns>Long - Zero if verification is successful, non-zero otherwise.</returns>
 	<remarks></remarks>
 </member><member name="M:ActiveLock3_6NET.modActiveLock.WinError(System.Int32)">
 	<summary>
@@ -1879,7 +1823,7 @@ ActiveLock3_6Net
 	<remarks>Values can be combined (OR ed) together.</remarks>
 </member><member name="F:ActiveLock3_6NET.IActiveLock.ALLicenseKeyTypes.alsRSA">
 	<summary>
- 1024-bit Long keys by RSA via ALCrypto DLL
+ RSA Keys from .NET Classes
  </summary>
 	<remarks></remarks>
 </member><member name="F:ActiveLock3_6NET.IActiveLock.ALLicenseKeyTypes.alsShortKeyMD5">

@@ -368,66 +368,68 @@ RetrieveProductsError:
         strLic = Lic.ToString_Renamed() & vbLf & strLock
         'System.Diagnostics.Debug.WriteLine("strLic: " & vbCrLf & strLic)
 
-        If strLeft(ProdInfo.VCode, 3) <> "RSA" Then
-            ' sign it
-            Dim strSig As String
-            strSig = New String(Chr(0), 1024)
-            ' 05.13.05 - ialkan Modified to merge DLLs into one. Moved RSASign into a module
-            strSig = RSASign(ProdInfo.VCode, ProdInfo.GCode, strLic)
+        ' ALCrypto Removal
+        'If strLeft(ProdInfo.VCode, 3) <> "RSA" Then
+        '    ' sign it
+        '    Dim strSig As String
+        '    strSig = New String(Chr(0), 1024)
+        '    ' 05.13.05 - ialkan Modified to merge DLLs into one. Moved RSASign into a module
+        '    strSig = RSASign(ProdInfo.VCode, ProdInfo.GCode, strLic)
 
-            ' Create liberation key.  This will be a base-64 encoded string of the whole license.
-            Dim strLicKey As String
-            ' 05.13.05 - ialkan Modified to merge DLLs into one
-            strLicKey = Base64_Encode(strSig)
-            ' update Lic with license key
-            Lic.LicenseKey = strLicKey
-            ' Print some info for debugging purposes
-            System.Diagnostics.Debug.WriteLine("VCode: " & ProdInfo.VCode)
-            System.Diagnostics.Debug.WriteLine("Lic: " & strLic)
-            System.Diagnostics.Debug.WriteLine("Lic hash: " & modMD5.Hash(strLic))
-            System.Diagnostics.Debug.WriteLine("LicKey: " & strLicKey)
-            System.Diagnostics.Debug.WriteLine("Sig: " & strSig)
-            System.Diagnostics.Debug.WriteLine("Verify: " & RSAVerify(ProdInfo.VCode, strLic, Base64_Decode(strLicKey)))
-            System.Diagnostics.Debug.WriteLine("====================================================")
-        Else
+        '    ' Create liberation key.  This will be a base-64 encoded string of the whole license.
+        '    Dim strLicKey As String
+        '    ' 05.13.05 - ialkan Modified to merge DLLs into one
+        '    strLicKey = Base64_Encode(strSig)
+        '    ' update Lic with license key
+        '    Lic.LicenseKey = strLicKey
+        '    ' Print some info for debugging purposes
+        '    System.Diagnostics.Debug.WriteLine("VCode: " & ProdInfo.VCode)
+        '    System.Diagnostics.Debug.WriteLine("Lic: " & strLic)
+        '    System.Diagnostics.Debug.WriteLine("Lic hash: " & modMD5.Hash(strLic))
+        '    System.Diagnostics.Debug.WriteLine("LicKey: " & strLicKey)
+        '    System.Diagnostics.Debug.WriteLine("Sig: " & strSig)
+        '    System.Diagnostics.Debug.WriteLine("Verify: " & RSAVerify(ProdInfo.VCode, strLic, Base64_Decode(strLicKey)))
+        '    System.Diagnostics.Debug.WriteLine("====================================================")
+        'Else
 
-            Try
-                Dim rsaCSP As New System.Security.Cryptography.RSACryptoServiceProvider
-                Dim strPublicBlob, strPrivateBlob As String
+        Try
+            Dim rsaCSP As New System.Security.Cryptography.RSACryptoServiceProvider
+            Dim strPublicBlob, strPrivateBlob As String
 
-                strPublicBlob = ProdInfo.VCode
-                strPrivateBlob = ProdInfo.GCode
+            strPublicBlob = ProdInfo.VCode
+            strPrivateBlob = ProdInfo.GCode
 
-                If strLeft(ProdInfo.GCode, 6) = "RSA512" Then
-                    strPrivateBlob = strRight(ProdInfo.GCode, Len(ProdInfo.GCode) - 6)
-                Else
-                    strPrivateBlob = strRight(ProdInfo.GCode, Len(ProdInfo.GCode) - 7)
-                End If
-                ' import private key params into instance of RSACryptoServiceProvider
-                rsaCSP.FromXmlString(strPrivateBlob)
-                Dim rsaPrivateParams As RSAParameters 'stores private key
-                rsaPrivateParams = rsaCSP.ExportParameters(True)
-                rsaCSP.ImportParameters(rsaPrivateParams)
+            If strLeft(ProdInfo.GCode, 6) = "RSA512" Then
+                strPrivateBlob = strRight(ProdInfo.GCode, Len(ProdInfo.GCode) - 6)
+            Else
+                strPrivateBlob = strRight(ProdInfo.GCode, Len(ProdInfo.GCode) - 7)
+            End If
+            ' import private key params into instance of RSACryptoServiceProvider
+            rsaCSP.FromXmlString(strPrivateBlob)
+            Dim rsaPrivateParams As RSAParameters 'stores private key
+            rsaPrivateParams = rsaCSP.ExportParameters(True)
+            rsaCSP.ImportParameters(rsaPrivateParams)
 
-                Dim userData As Byte() = Encoding.UTF8.GetBytes(strLic)
-                Dim asf As AsymmetricSignatureFormatter = New RSAPKCS1SignatureFormatter(rsaCSP)
-                Dim algorithm As HashAlgorithm = New SHA1Managed
-                asf.SetHashAlgorithm(algorithm.ToString)
-                Dim myhashedData() As Byte ' a byte array to store hash value
-                Dim myhashedDataString As String
-                myhashedData = algorithm.ComputeHash(userData)
-                myhashedDataString = BitConverter.ToString(myhashedData).Replace("-", String.Empty)
-                Dim mysignature As Byte() ' holds signatures
-                mysignature = asf.CreateSignature(algorithm)
-                Dim mySignatureBlock As String
-                mySignatureBlock = Convert.ToBase64String(mysignature)
-                Lic.LicenseKey = mySignatureBlock
-            Catch ex As Exception
-                '* Set_locale(regionalSymbol)
-                Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, ex.Message)
-            End Try
+            Dim userData As Byte() = Encoding.UTF8.GetBytes(strLic)
+            Dim asf As AsymmetricSignatureFormatter = New RSAPKCS1SignatureFormatter(rsaCSP)
+            Dim algorithm As HashAlgorithm = New SHA1Managed
+            asf.SetHashAlgorithm(algorithm.ToString)
+            Dim myhashedData() As Byte ' a byte array to store hash value
+            Dim myhashedDataString As String
+            myhashedData = algorithm.ComputeHash(userData)
+            myhashedDataString = BitConverter.ToString(myhashedData).Replace("-", String.Empty)
+            Dim mysignature As Byte() ' holds signatures
+            mysignature = asf.CreateSignature(algorithm)
+            Dim mySignatureBlock As String
+            mySignatureBlock = Convert.ToBase64String(mysignature)
+            Lic.LicenseKey = mySignatureBlock
+        Catch ex As Exception
+            '* Set_locale(regionalSymbol)
+            Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, ex.Message)
+        End Try
 
-        End If
+        ' ALCrypto Removal
+        'End If
 
         ' Serialize it into a formatted string
         Dim strLibKey As String = String.Empty

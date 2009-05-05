@@ -44,7 +44,7 @@ Option Explicit On
 #End Region
 
 Friend Class clsShortSerial
-	'*******************************************************************************
+    ' *******************************************************************************
 	' MODULE:       clsShortSerial based on clsOwnerRegistration originally
 	' FILENAME:     clsShortSerial.cls
 	' AUTHOR:       Phil Fresle
@@ -103,7 +103,7 @@ Friend Class clsShortSerial
 	' 1.0       27-May-2001
 	'           Phil Fresle
 	'           Initial Version
-	'*******************************************************************************
+    ' *******************************************************************************
 	
 	' 32 Numerics and alphas - we are missing I, O, S and Z not just because
 	' we only want 32 characters but also because I could be mistaken for
@@ -113,7 +113,7 @@ Friend Class clsShortSerial
 	Private Const RANDOM_LOWER As Integer = 0
 	Private Const RANDOM_UPPER As Integer = 31
 	
-	'*******************************************************************************
+    ' *******************************************************************************
 	' Function GenerateKey
 	'
 	' PARAMETERS:
@@ -127,7 +127,7 @@ Friend Class clsShortSerial
 	' Generates a short serial number by taking the app name, adding the app version
 	' number and the app password, creating an MD5 digest, and using the digest to select
 	' the 8 characters for our serial.
-	'*******************************************************************************
+    ' *******************************************************************************
 	Public Function GenerateKey(ByRef sAppNameVersionPassword As String, ByRef sHDDfirmwareSerial As String) As String
 		Dim lChar As Integer
         Dim lCount As Integer
@@ -160,7 +160,7 @@ Friend Class clsShortSerial
 		GenerateKey = sKey
 	End Function
 	
-	'*******************************************************************************
+    ' *******************************************************************************
 	' IsKeyOK (FUNCTION)
 	'
 	' PARAMETERS:
@@ -173,7 +173,7 @@ Friend Class clsShortSerial
 	'
 	' DESCRIPTION:
 	' Takes the key, recalculates the MD5 part and tests for equality.
-	'*******************************************************************************
+    ' *******************************************************************************
 	Public Function IsKeyOK(ByRef sKey As String, ByRef sAppNameVersionPassword As String, ByRef sHDDfirmwareSerial As String) As Boolean
 
 		Dim lChar As Integer

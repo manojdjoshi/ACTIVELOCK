@@ -715,10 +715,10 @@ Public Class Crypto
 #End Region
 
 #Region "Utility Functions"
-    '********************************************************
-    '* BytesToHex: Converts a byte array to a hex-encoded
-    '*             string
-    '********************************************************
+    ' ********************************************************
+    ' * BytesToHex: Converts a byte array to a hex-encoded
+    ' *             string
+    ' ********************************************************
     Private Shared Function BytesToHex(ByVal bytes() As Byte) As String
         Dim hex As New StringBuilder
         For n As Integer = 0 To bytes.Length - 1
@@ -727,10 +727,10 @@ Public Class Crypto
         Return hex.ToString
     End Function
 
-    '********************************************************
-    '* HexToBytes: Converts a hex-encoded string to a
-    '*             byte array
-    '********************************************************
+    ' ********************************************************
+    ' * HexToBytes: Converts a hex-encoded string to a
+    ' *             byte array
+    ' ********************************************************
     Private Shared Function HexToBytes(ByVal Hex As String) As Byte()
         Dim numBytes As Integer = CType(Hex.Length / 2, Integer)  ' CType not necessary in VB 2005
         Dim bytes(numBytes - 1) As Byte
@@ -741,10 +741,10 @@ Public Class Crypto
         Return bytes
     End Function
 
-    '********************************************************
-    '* ClearBuffer: Clears a byte array to ensure
-    '*              that it cannot be read from memory
-    '********************************************************
+    ' ********************************************************
+    ' * ClearBuffer: Clears a byte array to ensure
+    ' *              that it cannot be read from memory
+    ' ********************************************************
     Private Shared Sub ClearBuffer(ByVal bytes() As Byte)
         If bytes Is Nothing Then Exit Sub
         For n As Integer = 0 To bytes.Length - 1
@@ -752,11 +752,11 @@ Public Class Crypto
         Next
     End Sub
 
-    '********************************************************
-    '* GenerateSalt: No, this is not a culinary routine. This
-    '*               generates a random salt value for
-    '*               password generation
-    '********************************************************
+    ' ********************************************************
+    ' * GenerateSalt: No, this is not a culinary routine. This
+    ' *               generates a random salt value for
+    ' *               password generation
+    ' ********************************************************
     Private Shared Function GenerateSalt(ByVal saltLength As Integer) As Byte()
         Dim salt() As Byte
         If saltLength > 0 Then
@@ -770,10 +770,10 @@ Public Class Crypto
         Return salt
     End Function
 
-    '********************************************************
-    '* DerivePassword: This takes the original plain text key
-    '*                 and creates a secure key using SALT
-    '********************************************************
+    ' ********************************************************
+    ' * DerivePassword: This takes the original plain text key
+    ' *                 and creates a secure key using SALT
+    ' ********************************************************
     Private Shared Function DerivePassword(ByVal originalPassword As String, ByVal passwordLength As Integer) As Byte()
 
         ' The following section works with VB 2005 only
@@ -785,11 +785,11 @@ Public Class Crypto
 
     End Function
 
-    '********************************************************
-    '* ValidateRSAKeys: Checks for the existence of a public
-    '*                  and private key file and creates them
-    '*                  if they do not exist
-    '********************************************************
+    ' ********************************************************
+    ' * ValidateRSAKeys: Checks for the existence of a public
+    ' *                  and private key file and creates them
+    ' *                  if they do not exist
+    ' ********************************************************
     Private Shared Sub ValidateRSAKeys()
         If Not File.Exists(KEY_PRIVATE) OrElse Not File.Exists(KEY_PUBLIC) Then
             'Dim rsa As New RSACryptoServiceProvider
@@ -808,9 +808,9 @@ Public Class Crypto
         End If
     End Sub
 
-    '********************************************************
-    '* GetTextFromFile: Reads the text from a file
-    '********************************************************
+    ' ********************************************************
+    ' * GetTextFromFile: Reads the text from a file
+    ' ********************************************************
     Private Shared Function GetTextFromFile(ByVal fileName As String) As String
         If File.Exists(fileName) Then
             Dim textFile As StreamReader = File.OpenText(fileName)

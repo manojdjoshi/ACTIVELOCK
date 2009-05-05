@@ -44,12 +44,12 @@ Option Explicit On
 #End Region
 
 #Region "Changes"
-'* Reserverd for documenting changes
-'*
-'* japreja - March 03, 2009 - Updated comments for Intellisense & Object browser
-'*                            Comments should now be available when referancing the DLL
-'*                            Updated SVN Between 12:30PM and 1:30PM
-'*
+' * Reserverd for documenting changes
+' *
+' * japreja - March 03, 2009 - Updated comments for Intellisense & Object browser
+' *                            Comments should now be available when referancing the DLL
+' *                            Updated SVN Between 12:30PM and 1:30PM
+' *
 #End Region
 
 ''' <summary>
@@ -371,7 +371,7 @@ End Interface
     ''' <remarks></remarks>
     Public Enum ALLicenseKeyTypes
         ''' <summary>
-        ''' 1024-bit Long keys by RSA via ALCrypto DLL
+        ''' RSA Keys from .NET Classes
         ''' </summary>
         ''' <remarks></remarks>
         alsRSA = 0

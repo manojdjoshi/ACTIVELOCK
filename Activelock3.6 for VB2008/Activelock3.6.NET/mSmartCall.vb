@@ -175,10 +175,10 @@ Module mSmartCall
     Private Const INVALID_HANDLE_VALUE As Integer = -1
 
 
-    '***************************************************************************
+    ' ***************************************************************************
     ' Open SMART to allow DeviceIoControl communications. Return SMART handle
 
-    '***************************************************************************
+    ' ***************************************************************************
     Private Function OpenSmart(ByVal drv_num As IDE_DRIVE_NUMBER) As Integer
 
         OpenSmart = CreateFile(String.Format("\\.\PhysicalDrive{0}", Convert.ToInt32(drv_num)), GENERIC_READ Or GENERIC_WRITE, FILE_SHARE_READ Or FILE_SHARE_WRITE, 0&, OPEN_EXISTING, 0, 0)
@@ -186,12 +186,12 @@ Module mSmartCall
     End Function
 
 
-    '****************************************************************************
+    ' ****************************************************************************
     ' CheckSMARTEnable - Check if SMART enable
     ' FUNCTION: Send a SMART_ENABLE_SMART_OPERATIONS command to the drive
     ' bDriveNum = 0-3
 
-    '***************************************************************************
+    ' ***************************************************************************
     Private Function CheckSMARTEnable(ByVal hDrive As Integer, ByVal DriveNum As IDE_DRIVE_NUMBER) As Boolean
         'Set up data structures for Enable SMART Command.
         Dim SCIP As SENDCMDINPARAMS = Nothing
@@ -213,12 +213,12 @@ Module mSmartCall
     End Function
 
 
-    '***************************************************************************
+    ' ***************************************************************************
     ' DoIdentify
     ' Function: Send an IDENTIFY command to the drive
     ' DriveNum = 0-3
     ' IDCmd = IDE_ID_FUNCTION or IDE_ATAPI_ID
-    '***************************************************************************
+    ' ***************************************************************************
     Private Function IdentifyDrive(ByVal hDrive As Integer, ByVal IDCmd As Byte) As String
         Dim SCIP As SENDCMDINPARAMS = Nothing
         Dim bArrOut(OUTPUT_DATA_SIZE - 1) As Byte
@@ -249,11 +249,11 @@ Module mSmartCall
         SwapBytes = bTemp
     End Function
 
-    '***************************************************************************
+    ' ***************************************************************************
     ' ReadAttributesCmd
     ' FUNCTION: Send a SMART_READ_ATTRIBUTE_VALUES command to the drive
     ' bDriveNum = 0-3
-    '***************************************************************************
+    ' ***************************************************************************
 
     Public Function GetDriveInfo(ByVal DriveNum As IDE_DRIVE_NUMBER) As String
         Dim hDrive As Integer
