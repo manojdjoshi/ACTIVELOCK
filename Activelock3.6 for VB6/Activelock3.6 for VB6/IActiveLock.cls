@@ -378,17 +378,6 @@ Public Property Get LastUsed() As String
 
 End Property
 
-'===============================================================================
-' Name: Property Get UsedLockType
-' Input: None
-' Output:
-'   ALLockTypes - Used lock type object corresponding to the lock type(s) currently used
-' Purpose: Returns the Used Lock Type in this instance.
-' Remarks: None
-'===============================================================================
-Public Property Get UsedLockType() As Long
-
-End Property
 
 '===============================================================================
 ' Name: Property Get TrialHideType
@@ -699,7 +688,7 @@ End Sub
 ' <p>If no valid license can be found, an appropriate error will be raised, specifying the cause.
 ' Remarks: None
 '===============================================================================
-Public Sub Acquire(Optional ByRef strMsg As String = "", Optional ByRef strRemainingTrialDays As String = "", Optional ByRef strRemainingTrialRuns As String = "", Optional ByRef strTrialLength As String = "", Optional ByRef strUsedDays As String = "", Optional ByRef strExpirationDate As String = "", Optional ByRef strRegisteredUser As String = "", Optional ByRef strRegisteredLevel As String = "", Optional ByRef strLicenseClass As String = "", Optional ByRef strMaxCount As String = "", Optional ByRef strLicenseFileType As String = "", Optional ByRef strLicenseType As String = "", Optional ByRef strUsedLockType As String = "")
+Public Sub Acquire(Optional ByRef strMsg As String = "", Optional ByRef strRemainingTrialDays As String = "", Optional ByRef strRemainingTrialRuns As String = "", Optional ByRef strTrialLength As String = "", Optional ByRef strUsedDays As String = "", Optional ByRef strExpirationDate As String = "", Optional ByRef strRegisteredUser As String = "", Optional ByRef strRegisteredLevel As String = "", Optional ByRef strLicenseClass As String = "", Optional ByRef strMaxCount As String = "", Optional ByRef strLicenseFileType As String = "", Optional ByRef strLicenseType As String = "")
 Attribute Acquire.VB_Description = "Attempts to acquire a valid license token."
 
 End Sub

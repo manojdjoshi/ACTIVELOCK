@@ -798,7 +798,7 @@ If hOpenUrl <> 0 Then InternetCloseHandle (hOpenUrl)
 If hOpen <> 0 Then InternetCloseHandle (hOpen)
 
 GetIPaddressError:
-If GetExternalIP = "" Then
+If GetExternalIP = "" Or inString(GetExternalIP, "HTML") Or inString(GetExternalIP, "Transitional") Or inString(GetExternalIP, "DOC") Then
     GetExternalIP = "Not Available"
 End If
 
