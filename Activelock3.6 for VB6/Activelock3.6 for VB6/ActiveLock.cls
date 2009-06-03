@@ -135,7 +135,6 @@ Private mSoftwarePassword As String
 Private mSoftwareCode As String
 Private mLockTypes As ALLockTypes
 Private mLicenseKeyTypes As ALLicenseKeyTypes
-Private mUsedLockTypes() As ALLockTypes
 Private mTrialType As Long
 Private mTrialLength As Long
 Private mRemainingTrialDays As Long
@@ -150,7 +149,6 @@ Private mCheckSystemFilesForClockTampering As ALSystemFilesTypes
 Private mLicenseFileType As ALLicenseFileTypes
 Private mAutoRegister As ALAutoRegisterTypes
 Private mTrialWarning As ALTrialWarningTypes
-Private mUsedLockType As Long
 Private dontValidateLicense As Boolean
 Private mLastUsed As String
 
@@ -159,56 +157,6 @@ Private Const AL_REGISTRY_HIVE$ = "Software\ActiveLock Software Group\ActiveLock
 
 ' Transients
 Private mfInit As Boolean   ' flag to indicate that ActiveLock has been initialized
-Private Function GetUsedLockType() As Long
-Dim Lic As ProductLicense
-
-Lic = mKeyStore.Retrieve(mSoftwareName, mLicenseFileType)
-
-If Lic Is Nothing Then
-    ' * Set_locale regionalSymbol
-    Err.Raise ActiveLockErrCodeConstants.alerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE
-End If
-
-' validate the license
-If dontValidateLicense = False Then Call ValidateLic(Lic)
-
-If Lic.LicenseCode = "Short Key" Then
-    GetUsedLockType = 0
-Else
-    
-    Dim usedcode As String
-    If Left(Lic.LicenseCode, 1) = "+" Then
-        usedcode = modBase64.Base64_Decode(Mid(Lic.LicenseCode, 2))
-    Else
-        usedcode = modBase64.Base64_Decode((Lic.LicenseCode))
-    End If
-    Dim Index, i As Integer
-    Index = 0: i = 1
-    ' Get to the last vbLf, which denotes the ending of the lock code and beginning of user name.
-    Do While i > 0
-        i = InStr(Index + 1, usedcode, vbLf)
-        If i > 0 Then Index = i
-    Loop
-
-    If Index <= 0 Then Exit Function
-    ' lockcode is from beginning to Index-1
-    usedcode = Left(usedcode, Index - 1)
-    If Left(usedcode, 1) = "+" Then
-        usedcode = Right(usedcode, Len(usedcode) - 1)
-    End If
-    Dim MyArray() As String
-    Dim counter As Integer
-    MyArray = Split(usedcode, vbLf)
-    For i = 0 To UBound(MyArray)
-        If MyArray(i) <> "nokey" Then
-            counter = counter + 2 ^ i
-        End If
-    Next
-    GetUsedLockType = counter
-End If
-
-End Function
-
 '===============================================================================
 ' Name: Function AppendLockString
 ' Input:
@@ -484,7 +432,7 @@ End Sub
 '<p>This is the main method that retrieves an Activelock license, validates it, and ends the trial license if it exists.
 ' Remarks: None
 '===============================================================================
-Private Sub IActiveLock_Acquire(Optional ByRef strMsg As String = "", Optional ByRef strRemainingTrialDays As String = "", Optional ByRef strRemainingTrialRuns As String = "", Optional ByRef strTrialLength As String = "", Optional ByRef strUsedDays As String = "", Optional ByRef strExpirationDate As String = "", Optional ByRef strRegisteredUser As String = "", Optional ByRef strRegisteredLevel As String = "", Optional ByRef strLicenseClass As String = "", Optional ByRef strMaxCount As String = "", Optional ByRef strLicenseFileType As String = "", Optional ByRef strLicenseType As String = "", Optional ByRef strUsedLockType As String = "")
+Private Sub IActiveLock_Acquire(Optional ByRef strMsg As String = "", Optional ByRef strRemainingTrialDays As String = "", Optional ByRef strRemainingTrialRuns As String = "", Optional ByRef strTrialLength As String = "", Optional ByRef strUsedDays As String = "", Optional ByRef strExpirationDate As String = "", Optional ByRef strRegisteredUser As String = "", Optional ByRef strRegisteredLevel As String = "", Optional ByRef strLicenseClass As String = "", Optional ByRef strMaxCount As String = "", Optional ByRef strLicenseFileType As String = "", Optional ByRef strLicenseType As String = "")
     Dim adsText As String
     Dim strStream As String
     Dim Lic As ProductLicense
@@ -673,11 +621,6 @@ continueRegistration:
     strMaxCount = Lic.MaxCount
     strLicenseFileType = Lic.LicenseFileType
     strLicenseType = Lic.LicenseType
-    If mLicenseKeyTypes = alsShortKeyMD5 Then
-        strUsedLockType = "Short Key"
-    Else
-        strUsedLockType = CStr(IActiveLock_UsedLockType)
-    End If
     
     dontValidateLicense = False
     
@@ -695,21 +638,6 @@ For k = 1 To Len(S)
     End Select
 Next k
 End Function
-'===============================================================================
-' Name: Sub IActiveLock_AddLockCode
-' Input:
-'   ByVal LockType As ALLockTypes _ to be added to array
-'   ByRef Byref LockTypes() As ALLockTypes - array of used LockTypes being built up
-'   ByRef SizeLT as Integer - size of array of used LockTypes being built up
-' Output:
-' Purpose: Helper function to build up array of used LockType s
-' Remarks:
-'===============================================================================
-Private Sub IActiveLock_AddLockCode(ByVal LockType As ALLockTypes, ByRef SizeLT As Integer)
-  ReDim Preserve mUsedLockTypes(SizeLT)
-  mUsedLockTypes(SizeLT) = LockType
-  SizeLT = SizeLT + 1
-End Sub
 
 '===============================================================================
 ' Name: Property Get IActiveLock_RegisteredDate
@@ -1155,21 +1083,6 @@ End Property
 Private Property Let IActiveLock_TrialWarning(ByVal RHS As ALTrialWarningTypes)
     mTrialWarning = RHS
 End Property
-
-'===============================================================================
-' Name: Property Get IActiveLock_UsedLockType
-' Input: None
-' Output:
-'   Integer - Used Lock types type
-' Purpose: Gets the Integer type
-' Remarks: None
-'===============================================================================
-Private Property Get IActiveLock_UsedLockType() As Long
-    Dim dummy As Long
-    dummy = IActiveLock_UsedDays
-    IActiveLock_UsedLockType = mUsedLockType
-End Property
-
 '===============================================================================
 ' Name: Property Get IActiveLock_TrialHideType
 ' Input: None
@@ -1774,15 +1687,10 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
         ' The modified Installation Code is also stored in the license file
         ' otherwise we'd never know which hardware leys were used to lock the license
         
-        ReDim mUsedLockTypes(0)  ' remove all previous
-        Dim SizeLockType As Integer  ' use to build up LockCode.
-        SizeLockType = 0
-    
         If Lic.LicenseCode <> "" Then
             If Left(Lic.LicenseCode, 1) = "+" Then
                 usedcode = modBase64.Base64_Decode(Mid(Lic.LicenseCode, 2))
                 'bLockNone = True ' per David Weatherall
-                IActiveLock_AddLockCode lockNone, SizeLockType   'dw1 build up lockTypes - start with lockNone
             Else
                 usedcode = modBase64.Base64_Decode(Lic.LicenseCode)
                 'bLockNone = False ' per David Weatherall
@@ -1794,7 +1702,6 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                 If Left(astring, 1) = "+" Then astring = Mid(astring, 2)
                 If j = LBound(a) Then
                     If astring <> noKey Then
-                        IActiveLock_AddLockCode lockMAC, SizeLockType
                         If astring <> modHardware.GetMACAddress() Then
                             ' Ok MAC address did not match
                             ' Maybe the laptop owner turned on the wireless connection
@@ -1808,7 +1715,6 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                     End If
                 ElseIf j = LBound(a) + 1 Then
                     If astring <> noKey Then
-                        IActiveLock_AddLockCode lockComp, SizeLockType 'dw1 build up lockTypes
                         If astring <> modHardware.GetComputerName() Then
                             ' * Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
@@ -1816,7 +1722,6 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                     End If
                 ElseIf j = LBound(a) + 2 Then
                     If astring <> noKey Then
-                        IActiveLock_AddLockCode lockHD, SizeLockType  'dw1 build up lockTypes
                         If astring <> modHardware.GetHDSerial() Then
                             ' * Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
@@ -1824,7 +1729,6 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                     End If
                 ElseIf j = LBound(a) + 3 Then
                     If astring <> noKey Then
-                        IActiveLock_AddLockCode lockHDFirmware, SizeLockType  'dw1 build up lockTypes
                         If astring <> modHardware.GetHDSerialFirmware() Then
                             ' * Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
@@ -1832,7 +1736,6 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                     End If
                 ElseIf j = LBound(a) + 4 Then
                     If astring <> noKey Then
-                        IActiveLock_AddLockCode lockWindows, SizeLockType  'dw1 build up lockTypes
                         If astring <> modHardware.GetWindowsSerial() Then
                             ' * Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
@@ -1840,7 +1743,6 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                     End If
                 ElseIf j = LBound(a) + 5 Then
                     If astring <> noKey Then
-                        IActiveLock_AddLockCode lockBIOS, SizeLockType  'dw1 build up lockTypes
                         If astring <> modHardware.GetBiosVersion() Then
                             ' * Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
@@ -1848,7 +1750,6 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                     End If
                 ElseIf j = LBound(a) + 6 Then
                     If astring <> noKey Then
-                        IActiveLock_AddLockCode lockMotherboard, SizeLockType  'dw1 build up lockTypes
                         If astring <> modHardware.GetMotherboardSerial() Then
                             ' * Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
@@ -1856,7 +1757,6 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                     End If
                 ElseIf j = LBound(a) + 7 Then
                     If astring <> noKey Then
-                        IActiveLock_AddLockCode lockIP, SizeLockType  'dw1 build up lockTypes
                         If astring <> modHardware.GetIPaddress() Then
                             ' * Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
@@ -1865,7 +1765,6 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                 
                 ElseIf j = LBound(a) + 8 Then
                     If astring <> noKey Then
-                        IActiveLock_AddLockCode lockExternalIP, SizeLockType  'dw1 build up lockTypes
                         If astring <> modHardware.GetExternalIP() Then
                             ' * Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
@@ -1873,7 +1772,6 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                     End If
                 ElseIf j = LBound(a) + 9 Then
                     If astring <> noKey Then
-                        IActiveLock_AddLockCode lockFingerprint, SizeLockType  'dw1 build up lockTypes
                         If astring <> modHardware.GetFingerprint() Then
                             ' * Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
@@ -1881,7 +1779,6 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                     End If
                 ElseIf j = LBound(a) + 10 Then
                     If astring <> noKey Then
-                        IActiveLock_AddLockCode lockMemory, SizeLockType  'dw1 build up lockTypes
                         If astring <> modHardware.GetMemoryID() Then
                             ' * Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
@@ -1889,7 +1786,6 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                     End If
                 ElseIf j = LBound(a) + 11 Then
                     If astring <> noKey Then
-                        IActiveLock_AddLockCode lockCPUID, SizeLockType  'dw1 build up lockTypes
                         If astring <> modHardware.GetCPUID() Then
                             ' * Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
@@ -1897,7 +1793,6 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                     End If
                 ElseIf j = LBound(a) + 12 Then
                     If astring <> noKey Then
-                        IActiveLock_AddLockCode lockBaseboardID, SizeLockType  'dw1 build up lockTypes
                         If astring <> modHardware.GetBaseboardID() Then
                             ' * Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
@@ -1905,7 +1800,6 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                     End If
                 ElseIf j = LBound(a) + 13 Then
                     If astring <> noKey Then
-                        IActiveLock_AddLockCode lockvideoID, SizeLockType  'dw1 build up lockTypes
                         If astring <> modHardware.GetVideoID() Then
                             ' * Set_locale regionalSymbol
                             Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
@@ -2044,43 +1938,41 @@ Private Property Get IActiveLock_UsedDays() As Long
         ' * Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
     End If
-    If Lic.LicenseCode = "Short Key" Then
-        mUsedLockType = "Short Key"
-    Else
-
-        Dim usedcode As String
-        If Left(Lic.LicenseCode, 1) = "+" Then
-            usedcode = modBase64.Base64_Decode(Mid(Lic.LicenseCode, 2))
-        Else
-            usedcode = modBase64.Base64_Decode((Lic.LicenseCode))
-        End If
-        Dim Index, i As Integer
-        Index = 0: i = 1
-        ' Get to the last vbLf, which denotes the ending of the lock code and beginning of user name.
-        Do While i > 0
-            i = InStr(Index + 1, usedcode, vbLf)
-            If i > 0 Then Index = i
-        Loop
-
-        If Index <= 0 Then
-            mUsedLockType = 0
-            GoTo continue
-        End If
-        ' lockcode is from beginning to Index-1
-        usedcode = Left(usedcode, Index - 1)
-        If Left(usedcode, 1) = "+" Then
-            usedcode = Right(usedcode, Len(usedcode) - 1)
-        End If
-        Dim MyArray() As String
-        Dim counter As Integer
-        MyArray = Split(usedcode, vbLf)
-        For i = 0 To UBound(MyArray)
-            If MyArray(i) <> "nokey" Then
-                counter = counter + 2 ^ i
-            End If
-        Next
-        mUsedLockType = CStr(counter)
-    End If
+'    If Lic.LicenseCode = "Short Key" Then
+'
+'    Else
+'
+'        Dim usedcode As String
+'        If Left(Lic.LicenseCode, 1) = "+" Then
+'            usedcode = modBase64.Base64_Decode(Mid(Lic.LicenseCode, 2))
+'        Else
+'            usedcode = modBase64.Base64_Decode((Lic.LicenseCode))
+'        End If
+'        Dim Index, i As Integer
+'        Index = 0: i = 1
+'        ' Get to the last vbLf, which denotes the ending of the lock code and beginning of user name.
+'        Do While i > 0
+'            i = InStr(Index + 1, usedcode, vbLf)
+'            If i > 0 Then Index = i
+'        Loop
+'
+'        If Index <= 0 Then
+'            GoTo continue
+'        End If
+'        ' lockcode is from beginning to Index-1
+'        usedcode = Left(usedcode, Index - 1)
+'        If Left(usedcode, 1) = "+" Then
+'            usedcode = Right(usedcode, Len(usedcode) - 1)
+'        End If
+'        Dim MyArray() As String
+'        Dim counter As Integer
+'        MyArray = Split(usedcode, vbLf)
+'        For i = 0 To UBound(MyArray)
+'            If MyArray(i) <> "nokey" Then
+'                counter = counter + 2 ^ i
+'            End If
+'        Next
+'    End If
 continue:
 
 End Property
