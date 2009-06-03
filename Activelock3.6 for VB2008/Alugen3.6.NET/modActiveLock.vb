@@ -50,21 +50,6 @@ Module modActiveLock
     ' @version 3.3.0
     ' @date 03.25.2006
 	'
-    ' * ///////////////////////////////////////////////////////////////////////
-	'  /                        MODULE TO DO LIST                            /
-	'  ///////////////////////////////////////////////////////////////////////
-	'
-	' @bug rsa_createkey() sometimes causes crash.  This is due to a bug in
-	'      ALCrypto3.dll in which a bad keyset is sometimes generated
-	'      (either caused by <code>rsa_generate()</code> or one of <code>rsa_private_key_blob()</code>
-	'      and <code>rsa_public_key_blob()</code>--we're not sure which is the culprit yet.
-	'      This causes the <code>rsa_createkey()</code> call encryption routines to crash.
-	'      The work-around for the time being is to keep regenerating the keyset
-	'      until eventually you'll get a valid keyset that no longer causes a crash.
-	'      You only need to go through this keyset generation step once.
-	'      Once you have a valid keyset, you should store it inside your app for later use.
-	'
-
     Public Const STRRSAERROR As String = "Internal RSA Error."
     Public Const RETVAL_ON_ERROR As Integer = -999
     Public Const STRWRONGIPADDRESS As String = "Wrong IP Address."
@@ -76,78 +61,6 @@ Module modActiveLock
     Const LOCALE_SSHORTDATE As Short = &H1FS
     Public regionalSymbol As String
 
-    '===============================================================================
-    ' Name: Function RSASign
-    ' Input:
-    '   ByVal strPub As String - RSA Public key blob
-    '   ByVal strPriv As String - RSA Private key blob
-    '   ByVal strdata As String - Data to be signed
-    ' Output:
-    '   String - Signature string
-    ' Purpose: Performs RSA signing of <code>strData</code> using the specified key.
-    ' Remarks: 05.13.05    - alkan  - Removed the modActiveLock references
-    '===============================================================================
-    Public Function RSASign(ByVal strPub As String, ByVal strPriv As String, ByVal strdata As String) As String
-        Dim KEY As RSAKey = Nothing
-
-        ' create the key from the key blobs
-        If rsa_createkey(strPub, Len(strPub), strPriv, Len(strPriv), KEY) = RETVAL_ON_ERROR Then
-            'Set_locale(regionalSymbol)
-            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-        End If
-
-        ' sign the data using the created key
-        Dim sLen As Integer
-        If rsa_sign(KEY, strdata, Len(strdata), vbNullString, sLen) = RETVAL_ON_ERROR Then
-            'Set_locale(regionalSymbol)
-            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-        End If
-        Dim strSig As String : strSig = New String(Chr(0), sLen)
-        If rsa_sign(KEY, strdata, Len(strdata), strSig, sLen) = RETVAL_ON_ERROR Then
-            'Set_locale(regionalSymbol)
-            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-        End If
-        ' throw away the key
-        If rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-            'Set_locale(regionalSymbol)
-            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-        End If
-
-        RSASign = strSig
-    End Function
-    '===============================================================================
-    ' Name: Function RSAVerify
-    ' Input:
-    '   ByVal strPub As String - Public key blob
-    '   ByVal strdata As String - Data to be signed
-    '   ByVal strSig As String - Private key blob
-    ' Output:
-    '   Long - Zero if verification is successful, non-zero otherwise.
-    ' Purpose: Verifies an RSA signature.
-    ' Remarks: None
-    '===============================================================================
-    Public Function RSAVerify(ByVal strPub As String, ByVal strdata As String, ByVal strSig As String) As Integer
-        Dim KEY As RSAKey = Nothing
-        Dim rc As Integer
-        ' create the key from the public key blob
-        If rsa_createkey(strPub, Len(strPub), vbNullString, 0, KEY) = RETVAL_ON_ERROR Then
-            'Set_locale(regionalSymbol)
-            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-        End If
-        ' validate the key
-        rc = rsa_verifysig(KEY, strSig, Len(strSig), strdata, Len(strdata))
-        If rc = RETVAL_ON_ERROR Then
-            'Set_locale(regionalSymbol)
-            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-        End If
-        ' de-allocate memory used by the key
-        If rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-            'Set_locale(regionalSymbol)
-            Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-        End If
-
-        RSAVerify = rc
-    End Function
     '===============================================================================
     ' Name: Function WinDir
     ' Input: None

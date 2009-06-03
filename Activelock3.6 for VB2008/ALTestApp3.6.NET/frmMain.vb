@@ -1189,7 +1189,7 @@ Friend Class frmMain
 
         ' Check the existence of necessary files to run this application
         ' This is not necessary if you're not using these controls in your app.
-        Call CheckForResources("#Alcrypto3NET.dll", "#ActiveLock3_6Net.dll", "comctl32.ocx", "tabctl32.ocx")
+        Call CheckForResources("#ActiveLock3_6Net.dll", "comctl32.ocx", "tabctl32.ocx")
 
         On Error GoTo NotRegistered
 
@@ -1234,9 +1234,8 @@ Friend Class frmMain
             .SoftwarePassword = Chr(99) & Chr(111) & Chr(111) & Chr(108)
 
             ' Set whether the software/application will use a short key or RSA method
-            ' alsRSA covers both ALCrypto and RSA native classes approach.
+            ' alsRSA covers RSA native classes approach.
             ' RSA classes in .NET allows you to pick from several cipher strengths
-            ' however ALCrypto uses 1024 bit strength key only.
             ' alsShortKeyMD5 is for short key protection only
             ' WARNING: Short key licenses use the lockFingerprint by default
             '.LicenseKeyType = ActiveLock3_6NET.IActiveLock.ALLicenseKeyTypes.alsShortKeyMD5
@@ -1416,17 +1415,6 @@ Friend Class frmMain
             ActiveLockEventSink = .EventNotifier
 
             ' Initialize Activelock 
-            ' This is for handling the ALCrypto DLL used by Activelock. 
-            ' Init() method below checkes the ALCrypto CRC, and registeres the 
-            ' application if an ALL file was used.
-            ' Important: If you're not going to put Alcrypto3NET.dll under
-            ' the system32 directory, you should pass the path of the exe
-            ' to the Init() method otherwise this call will fail
-            ' Putting Alcrypto3NET.dll under the system32 is a problem with the ASP.NET apps
-            ' Since Activelock3NET can be used by ASP.NET apps, setting the first arguments below,
-            ' will help you put the ALcrypto DLL into a location you want; mostly the app folder.
-            ' This is particularly useful for hosted ASP.NET apps where 
-            ' you don't have the server control (no system32 access)
             ' Use the following with ASP.NET applications
             ' MyActiveLock.Init(Application.StartupPath & "\bin")
             ' Use the following with VB.NET applications
@@ -1452,7 +1440,7 @@ Friend Class frmMain
         ' In case the Acquire method generates an error, so no license and no trial:
         ' If InStr(1, Err.Description, "No valid license") > 0 Or InStr(1, Err.Description, "license invalid") > 0 Then '-2147221503 & -2147221502
 
-        MyActiveLock.Acquire(strMsg, strRemainingTrialDays, strRemainingTrialRuns, strTrialLength, strUsedDays, strExpirationDate, strRegisteredUser, strRegisteredLevel, strLicenseClass, strMaxCount, strLicenseFileType, strLicenseType, strUsedLockType)
+        MyActiveLock.Acquire(strMsg, strRemainingTrialDays, strRemainingTrialRuns, strTrialLength, strUsedDays, strExpirationDate, strRegisteredUser, strRegisteredLevel, strLicenseClass, strMaxCount, strLicenseFileType)
         ' strMsg is to get the trial status
         ' All other parameters are Optional and you can actually get all of them
         ' using MyActivelock.Property usage, but keep in mind that 
@@ -1812,7 +1800,7 @@ checkForResourcesError:
         System.Windows.Forms.Cursor.Current = System.Windows.Forms.Cursors.WaitCursor
         If Mid(LibKey, 5, 1) = "-" And Mid(LibKey, 10, 1) = "-" And Mid(LibKey, 15, 1) = "-" And Mid(LibKey, 20, 1) = "-" Then
             MyActiveLock.Register(LibKey, txtUser.Text) 'YOU MUST SPECIFY THE USER NAME WITH SHORT KEYS !!!
-        Else    ' ALCRYPTO RSA
+        Else    ' RSA
             MyActiveLock.Register(LibKey)
         End If
         MsgBox(modMain.Dec("386.457.46D.483.4F1.4FC.4E6.42B.4FC.483.4C5.4BA.160.4F1.507.441.441.457.4F1.4F1.462.507.4A4.16B"), MsgBoxStyle.Information) ' "Registration successful!"

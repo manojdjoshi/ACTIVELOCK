@@ -218,7 +218,6 @@ Friend Class frmMain
     Friend WithEvents chkNetworkedLicense As System.Windows.Forms.CheckBox
     Friend WithEvents txtMaxCount As System.Windows.Forms.TextBox
     Friend WithEvents lblConcurrentUsers As System.Windows.Forms.Label
-    Friend WithEvents optStrength0 As System.Windows.Forms.RadioButton
     Friend WithEvents optStrength1 As System.Windows.Forms.RadioButton
     Friend WithEvents Label1 As System.Windows.Forms.Label
     Friend WithEvents optStrength2 As System.Windows.Forms.RadioButton
@@ -278,7 +277,6 @@ Friend Class frmMain
         Me.optStrength2 = New System.Windows.Forms.RadioButton
         Me.Label1 = New System.Windows.Forms.Label
         Me.optStrength1 = New System.Windows.Forms.RadioButton
-        Me.optStrength0 = New System.Windows.Forms.RadioButton
         Me.grpCodes = New System.Windows.Forms.GroupBox
         Me.txtGCode = New System.Windows.Forms.TextBox
         Me.lblGCode = New System.Windows.Forms.Label
@@ -344,6 +342,7 @@ Friend Class frmMain
         Me.grpProductsList.SuspendLayout()
         Me.fraProdNew.SuspendLayout()
         Me.grpCodes.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
         Me._SSTab1_TabPage1.SuspendLayout()
         Me.frmKeyGen.SuspendLayout()
         CType(Me.mainStatusBarPanel, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -454,7 +453,7 @@ Friend Class frmMain
         Me.lstvwProducts.Location = New System.Drawing.Point(3, 16)
         Me.lstvwProducts.MultiSelect = False
         Me.lstvwProducts.Name = "lstvwProducts"
-        Me.lstvwProducts.Size = New System.Drawing.Size(657, 347)
+        Me.lstvwProducts.Size = New System.Drawing.Size(657, 346)
         Me.lstvwProducts.Sorting = System.Windows.Forms.SortOrder.Ascending
         Me.lstvwProducts.TabIndex = 10
         Me.ToolTip1.SetToolTip(Me.lstvwProducts, "Products list")
@@ -938,7 +937,7 @@ Friend Class frmMain
         Me._SSTab1_TabPage0.Controls.Add(Me.fraProdNew)
         Me._SSTab1_TabPage0.Location = New System.Drawing.Point(4, 22)
         Me._SSTab1_TabPage0.Name = "_SSTab1_TabPage0"
-        Me._SSTab1_TabPage0.Size = New System.Drawing.Size(671, 631)
+        Me._SSTab1_TabPage0.Size = New System.Drawing.Size(671, 630)
         Me._SSTab1_TabPage0.TabIndex = 0
         Me._SSTab1_TabPage0.Text = "Product Code Generator"
         '
@@ -950,7 +949,7 @@ Friend Class frmMain
         Me.grpProductsList.Controls.Add(Me.lstvwProducts)
         Me.grpProductsList.Location = New System.Drawing.Point(4, 262)
         Me.grpProductsList.Name = "grpProductsList"
-        Me.grpProductsList.Size = New System.Drawing.Size(663, 366)
+        Me.grpProductsList.Size = New System.Drawing.Size(663, 365)
         Me.grpProductsList.TabIndex = 1
         Me.grpProductsList.TabStop = False
         Me.grpProductsList.Text = " Products list "
@@ -960,15 +959,9 @@ Friend Class frmMain
         Me.fraProdNew.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.fraProdNew.BackColor = System.Drawing.SystemColors.Control
-        Me.fraProdNew.Controls.Add(Me.optStrength4)
         Me.fraProdNew.Controls.Add(Me.cmdStartWizard)
         Me.fraProdNew.Controls.Add(Me.cmdValidate2)
-        Me.fraProdNew.Controls.Add(Me.optStrength3)
-        Me.fraProdNew.Controls.Add(Me.optStrength5)
-        Me.fraProdNew.Controls.Add(Me.optStrength2)
         Me.fraProdNew.Controls.Add(Me.Label1)
-        Me.fraProdNew.Controls.Add(Me.optStrength1)
-        Me.fraProdNew.Controls.Add(Me.optStrength0)
         Me.fraProdNew.Controls.Add(Me.cmdProductsStorage)
         Me.fraProdNew.Controls.Add(Me.picALBanner2)
         Me.fraProdNew.Controls.Add(Me.grpCodes)
@@ -993,7 +986,7 @@ Friend Class frmMain
         '
         'optStrength4
         '
-        Me.optStrength4.Location = New System.Drawing.Point(404, 76)
+        Me.optStrength4.Location = New System.Drawing.Point(75, 11)
         Me.optStrength4.Name = "optStrength4"
         Me.optStrength4.Size = New System.Drawing.Size(65, 20)
         Me.optStrength4.TabIndex = 76
@@ -1019,7 +1012,7 @@ Friend Class frmMain
         '
         'optStrength3
         '
-        Me.optStrength3.Location = New System.Drawing.Point(339, 76)
+        Me.optStrength3.Location = New System.Drawing.Point(146, 10)
         Me.optStrength3.Name = "optStrength3"
         Me.optStrength3.Size = New System.Drawing.Size(65, 20)
         Me.optStrength3.TabIndex = 72
@@ -1027,7 +1020,7 @@ Friend Class frmMain
         '
         'optStrength5
         '
-        Me.optStrength5.Location = New System.Drawing.Point(469, 76)
+        Me.optStrength5.Location = New System.Drawing.Point(7, 11)
         Me.optStrength5.Name = "optStrength5"
         Me.optStrength5.Size = New System.Drawing.Size(62, 20)
         Me.optStrength5.TabIndex = 71
@@ -1035,7 +1028,7 @@ Friend Class frmMain
         '
         'optStrength2
         '
-        Me.optStrength2.Location = New System.Drawing.Point(274, 76)
+        Me.optStrength2.Location = New System.Drawing.Point(217, 11)
         Me.optStrength2.Name = "optStrength2"
         Me.optStrength2.Size = New System.Drawing.Size(65, 20)
         Me.optStrength2.TabIndex = 69
@@ -1056,21 +1049,11 @@ Friend Class frmMain
         '
         'optStrength1
         '
-        Me.optStrength1.Location = New System.Drawing.Point(208, 76)
+        Me.optStrength1.Location = New System.Drawing.Point(288, 11)
         Me.optStrength1.Name = "optStrength1"
         Me.optStrength1.Size = New System.Drawing.Size(66, 20)
         Me.optStrength1.TabIndex = 67
         Me.optStrength1.Text = "4096-bit"
-        '
-        'optStrength0
-        '
-        Me.optStrength0.Checked = True
-        Me.optStrength0.Location = New System.Drawing.Point(88, 76)
-        Me.optStrength0.Name = "optStrength0"
-        Me.optStrength0.Size = New System.Drawing.Size(116, 20)
-        Me.optStrength0.TabIndex = 66
-        Me.optStrength0.TabStop = True
-        Me.optStrength0.Text = "ALCrypto-1024-bit"
         '
         'grpCodes
         '
@@ -1165,10 +1148,15 @@ Friend Class frmMain
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.optStrength4)
+        Me.GroupBox1.Controls.Add(Me.optStrength5)
+        Me.GroupBox1.Controls.Add(Me.optStrength3)
+        Me.GroupBox1.Controls.Add(Me.optStrength1)
+        Me.GroupBox1.Controls.Add(Me.optStrength2)
         Me.GroupBox1.Font = New System.Drawing.Font("Arial", 7.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.GroupBox1.Location = New System.Drawing.Point(204, 65)
+        Me.GroupBox1.Location = New System.Drawing.Point(86, 65)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(328, 36)
+        Me.GroupBox1.Size = New System.Drawing.Size(441, 36)
         Me.GroupBox1.TabIndex = 74
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = ".NET CLR RSA"
@@ -1512,8 +1500,6 @@ Friend Class frmMain
         '
         'dtpExpireDate
         '
-        '* Me.dtpExpireDate.CustomFormat = "yyyy/MM/dd"
-        '* Me.dtpExpireDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom
         Me.dtpExpireDate.CustomFormat = ""
         Me.dtpExpireDate.Format = System.Windows.Forms.DateTimePickerFormat.[Short]
         Me.dtpExpireDate.Location = New System.Drawing.Point(88, 52)
@@ -1858,6 +1844,7 @@ Friend Class frmMain
         Me.fraProdNew.PerformLayout()
         Me.grpCodes.ResumeLayout(False)
         Me.grpCodes.PerformLayout()
+        Me.GroupBox1.ResumeLayout(False)
         Me._SSTab1_TabPage1.ResumeLayout(False)
         Me.frmKeyGen.ResumeLayout(False)
         Me.frmKeyGen.PerformLayout()
@@ -2271,8 +2258,6 @@ noInfo:
             cboProducts_Array(cboProducts.Items.Count - 1) = "2048"
         ElseIf productVCode.Contains("RSA4096") Then
             cboProducts_Array(cboProducts.Items.Count - 1) = "4096"
-        Else ' ALCrypto 1024-bit
-            cboProducts_Array(cboProducts.Items.Count - 1) = "0"
         End If
 
         Dim mainListItem As New ListViewItem(productName)
@@ -2624,9 +2609,6 @@ noInfo:
         'initialize RegisteredLevels
         strRegisteredLevelDBName = AddBackSlash(Application.StartupPath) & "RegisteredLevelDB.dat"
 
-        ' Check the existence of necessary files to run this application
-        Call CheckForResources("#Alcrypto3NET.dll")
-
         'load RegisteredLevels
         If Not File.Exists(strRegisteredLevelDBName) Then
 
@@ -2797,7 +2779,6 @@ noInfo:
         txtMaxCount.Text = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtMaxCount", CStr(5))
         'txtDays.Text = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtDays", CStr(365))
 
-        optStrength0.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength0", "1"))
         optStrength1.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength1", "0"))
         optStrength2.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength2", "0"))
         optStrength3.Checked = CBool(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optStrength3", "0"))
@@ -2896,7 +2877,6 @@ InitForm_Error:
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtMaxCount", txtMaxCount.Text)
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtDays", txtDays.Text)
 
-        mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optstrength0", CStr(optStrength0.Checked))
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optstrength1", CStr(optStrength1.Checked))
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optstrength2", CStr(optStrength2.Checked))
         mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "optstrength3", CStr(optStrength3.Checked))
@@ -3045,8 +3025,6 @@ SaveFormSettings_Error:
             lblKeyStrength.Text = "[Key Strength: CryptoAPI RSA 2048-bit]"
         ElseIf cboProducts_Array(cboProducts.SelectedIndex) = "4096" Then
             lblKeyStrength.Text = "[Key Strength: CryptoAPI RSA 4096-bit]"
-        ElseIf cboProducts_Array(cboProducts.SelectedIndex) = "0" Then
-            lblKeyStrength.Text = "[Key Strength: ALCrypto 1024-bit]"
         End If
 
     End Sub
@@ -3099,136 +3077,55 @@ SaveFormSettings_Error:
         Application.DoEvents()
 
         Try
-            ' ALCrypto DLL with 1024-bit strength
-            If optStrength0.Checked = True Then
-                Dim KEY As RSAKey
-                ReDim KEY.data(32)
-                'Dim progress As ProgressType
-                ' generate the key
-                'VarPtr function is not supported in VB.NET
-                'VB6 equivalent function is used instead - ialkan
-                'Adding a delegate for AddressOf CryptoProgressUpdate did not work
-                'for now. Modified alcrypto3NET.dll to create a second generate function
-                'rsa_generate2 that does not deal with progress monitoring
+            ' CryptoAPI - RSA with given strength
 
-                ' Get the current date format and save it to regionalSymbol variable
-                '* Get_Locale()
-                ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
-                '* Set_locale("")
+            Dim strPublicBlob As String, strPrivateBlob As String
+            Dim imodulus As Integer
 
-                If modALUGEN.rsa_generate2(KEY, 1024) = RETVAL_ON_ERROR Then
-                    '* Set_locale(regionalSymbol)
-                    Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-                End If
-                ' extract private and public key blobs
-                Dim strBlob As String
-                Dim blobLen As Integer
-                If rsa_public_key_blob(KEY, vbNullString, blobLen) = RETVAL_ON_ERROR Then
-                    '* Set_locale(regionalSymbol)
-                    Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-                End If
-
-                If blobLen > 0 Then
-                    strBlob = New String(Chr(0), blobLen)
-                    If rsa_public_key_blob(KEY, strBlob, blobLen) = RETVAL_ON_ERROR Then
-                        '* Set_locale(regionalSymbol)
-                        Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-                    End If
-
-                    System.Diagnostics.Debug.WriteLine("Public blob: " & strBlob)
-                    txtVCode.Text = strBlob
-                End If
-
-                If modALUGEN.rsa_private_key_blob(KEY, vbNullString, blobLen) = RETVAL_ON_ERROR Then
-                    '* Set_locale(regionalSymbol)
-                    Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-                End If
-
-                If blobLen > 0 Then
-                    strBlob = New String(Chr(0), blobLen)
-                    If modALUGEN.rsa_private_key_blob(KEY, strBlob, blobLen) = RETVAL_ON_ERROR Then
-                        '* Set_locale(regionalSymbol)
-                        Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-                    End If
-
-                    System.Diagnostics.Debug.WriteLine("Private blob: " & strBlob)
-                    txtGCode.Text = strBlob
-                End If
-                ' done with the key - throw it away
-                If modALUGEN.rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-                    '* Set_locale(regionalSymbol)
-                    Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-                End If
-
-                ' Test generated key for correctness by recreating it from the blobs
-                ' Note:
-                ' ====
-                ' Due to an outstanding bug in ALCrypto.dll, sometimes this step will crash the app because
-                ' the generated keyset is bad.
-                ' The work-around for the time being is to keep regenerating the keyset until eventually
-                ' you'll get a valid keyset that no longer crashes.
-                Dim strdata As String : strdata = "This is a test string to be encrypted."
-                If modALUGEN.rsa_createkey(txtVCode.Text, txtVCode.Text.Length, txtGCode.Text, txtGCode.Text.Length, KEY) = RETVAL_ON_ERROR Then
-                    '* Set_locale(regionalSymbol)
-                    Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-                End If
-
-                ' It worked! We're all set to go.
-                If modALUGEN.rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-                    '* Set_locale(regionalSymbol)
-                    Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
-                End If
-
-            Else  ' CryptoAPI - RSA with given strength
-
-                Dim strPublicBlob As String, strPrivateBlob As String
-                Dim imodulus As Integer
-
-                If optStrength1.Checked = True Then
-                    imodulus = 4096
-                ElseIf optStrength2.Checked = True Then
-                    imodulus = 2048
-                ElseIf optStrength3.Checked = True Then
-                    imodulus = 1536
-                ElseIf optStrength4.Checked = True Then
-                    imodulus = 1024
-                ElseIf optStrength5.Checked = True Then
-                    imodulus = 512
-                End If
-
-                'create new instance of RSACryptoServiceProvider
-                'Dim cspParam As CspParameters = New CspParameters
-                'cspParam.Flags = CspProviderFlags.UseMachineKeyStore
-                'cspParam.KeyContainerName = txtName.Text & txtVer.Text
-                'cspParam.KeyNumber = 2 'signature key pair
-                ''Set the CSP Provider Type PROV_RSA_FULL
-                'cspParam.ProviderType = 1
-                ''Set the CSP Provider Name
-                'cspParam.ProviderName = "Microsoft Base Cryptographic Provider v1.0"
-
-                'create new instance of RSACryptoServiceProvider
-                Dim rsaCSP As New System.Security.Cryptography.RSACryptoServiceProvider(imodulus)   ', cspParam)
-
-                'Generate public and private key data and allowing their exporting.
-                'True to include private parameters; otherwise, false
-
-                Dim rsaPubParams As RSAParameters       'stores public key
-                Dim rsaPrivateParams As RSAParameters   'stores private key
-                rsaPrivateParams = rsaCSP.ExportParameters(True)
-                rsaPubParams = rsaCSP.ExportParameters(False)
-
-                strPrivateBlob = rsaCSP.ToXmlString(True)
-                strPublicBlob = rsaCSP.ToXmlString(False)
-
-                'ok = ActiveLock3Globals_definst.ContainerChange(txtName.Text & txtVer.Text)
-                'ok = ActiveLock3Globals_definst.CryptoAPIAction(1, txtName.Text & txtVer.Text, "", "", strPublicBlob, strPrivateBlob, modulus)
-                txtVCode.Text = "RSA" & imodulus & strPublicBlob
-                txtGCode.Text = "RSA" & imodulus & strPrivateBlob
-
-                rsaPubParams = Nothing
-                rsaPrivateParams = Nothing
-                rsaCSP = Nothing
+            If optStrength1.Checked = True Then
+                imodulus = 4096
+            ElseIf optStrength2.Checked = True Then
+                imodulus = 2048
+            ElseIf optStrength3.Checked = True Then
+                imodulus = 1536
+            ElseIf optStrength4.Checked = True Then
+                imodulus = 1024
+            ElseIf optStrength5.Checked = True Then
+                imodulus = 512
             End If
+
+            'create new instance of RSACryptoServiceProvider
+            'Dim cspParam As CspParameters = New CspParameters
+            'cspParam.Flags = CspProviderFlags.UseMachineKeyStore
+            'cspParam.KeyContainerName = txtName.Text & txtVer.Text
+            'cspParam.KeyNumber = 2 'signature key pair
+            ''Set the CSP Provider Type PROV_RSA_FULL
+            'cspParam.ProviderType = 1
+            ''Set the CSP Provider Name
+            'cspParam.ProviderName = "Microsoft Base Cryptographic Provider v1.0"
+
+            'create new instance of RSACryptoServiceProvider
+            Dim rsaCSP As New System.Security.Cryptography.RSACryptoServiceProvider(imodulus)   ', cspParam)
+
+            'Generate public and private key data and allowing their exporting.
+            'True to include private parameters; otherwise, false
+
+            Dim rsaPubParams As RSAParameters       'stores public key
+            Dim rsaPrivateParams As RSAParameters   'stores private key
+            rsaPrivateParams = rsaCSP.ExportParameters(True)
+            rsaPubParams = rsaCSP.ExportParameters(False)
+
+            strPrivateBlob = rsaCSP.ToXmlString(True)
+            strPublicBlob = rsaCSP.ToXmlString(False)
+
+            'ok = ActiveLock3Globals_definst.ContainerChange(txtName.Text & txtVer.Text)
+            'ok = ActiveLock3Globals_definst.CryptoAPIAction(1, txtName.Text & txtVer.Text, "", "", strPublicBlob, strPrivateBlob, modulus)
+            txtVCode.Text = "RSA" & imodulus & strPublicBlob
+            txtGCode.Text = "RSA" & imodulus & strPrivateBlob
+
+            rsaPubParams = Nothing
+            rsaPrivateParams = Nothing
+            rsaCSP = Nothing
             '* Set_locale(regionalSymbol)
 
         Catch ex As Exception
@@ -3378,7 +3275,7 @@ SaveFormSettings_Error:
                 Trim(txtUser.Text), GetExpirationString(), varLicType, _
                 cboRegisteredLevel.SelectedIndex + 200, maximumUsers)
                 txtLicenseKey.Text = strLibKey
-            Else 'ALCrypto License Key
+            Else 'RSA License Key
                 ' Pass it to IALUGenerator to generate the key
                 Dim selectedRegisteredLevel As String
                 Dim mList As Mylist
@@ -3559,9 +3456,7 @@ continueHere:
     End Sub
 
     Private Sub cmdValidate_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdValidate.Click
-        Dim KEY As RSAKey = Nothing
         Dim strdata As String
-        Dim strSig As String, rc As Integer
 
         Cursor = Cursors.WaitCursor
         If txtVCode.Text = "" And txtGCode.Text = "" Then
@@ -3577,259 +3472,232 @@ continueHere:
         ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
         '* Set_locale("")
 
-        ' ALCrypto DLL with 1024-bit strength
-        If strLeft(txtVCode.Text, 3) <> "RSA" Then
-            ' Validate to keyset to make sure it's valid.
-            UpdateStatus("Validating keyset...")
-            rc = modALUGEN.rsa_createkey(txtVCode.Text, txtVCode.Text.Length, txtGCode.Text, txtGCode.Text.Length, KEY)
-            If rc = RETVAL_ON_ERROR Then
-                '* Set_locale(regionalSymbol)
-                MessageBox.Show("Code not valid! " & vbCrLf & STRRSAERROR, ACTIVELOCKSTRING, MessageBoxButtons.OK, MessageBoxIcon.Error)
-                UpdateStatus(txtName.Text & " (" & txtVer.Text & ") " & STRRSAERROR)
-                Exit Sub
-            End If
+        '.NET RSA
 
-            ' sign it
-            strSig = RSASign(txtVCode.Text, txtGCode.Text, strdata)
-            rc = RSAVerify(txtVCode.Text, strdata, strSig)
-            If rc = 0 Then
+        Try
+            ' ------------------ begin Message from Ismail ------------------
+            ' This code block is used to Encrypt/Sign and then Validate/Decrypt
+            ' a small size text.
+            ' This code uses "I love Activelock" to validate the given Public/Private key pair
+            ' If you try to do the same with a much longer string, these routines will fail
+            ' with a "Bad Length" error
+            ' Increasing the cpher strength (say from 1024 to 2048-bits) will allow you to
+            ' run this code with much longer data strings
+            ' Activelock DLL uses a different algorithm to sign/validate
+            ' This section is functional, but more than that it's provided here
+            ' as the entire solution for a typical RSA signing/validation algorithm
+            ' ------------------ end Message from Ismail ------------------
+
+            Dim rsaCSP As New System.Security.Cryptography.RSACryptoServiceProvider
+            Dim rsaPubParams As RSAParameters 'stores public key
+            Dim strPublicBlob, strPrivateBlob As String
+
+            strPublicBlob = txtVCode.Text
+            strPrivateBlob = txtGCode.Text
+
+            ' ENCRYPT PLAIN TEXT USING THE PUBLIC KEY
+            ' Convert the data string to a byte array.
+            Dim toEncrypt As Byte()     ' Holds message in bytes
+            Dim enc As New UTF8Encoding ' new instance of Unicode8 instance
+            Dim encrypted As Byte() ' holds encrypted data
+            Dim encryptedPlainText As String
+
+            If strLeft(txtVCode.Text, 6) = "RSA512" Then
+                strPublicBlob = strRight(txtVCode.Text, Len(txtVCode.Text) - 6)
+            Else
+                strPublicBlob = strRight(txtVCode.Text, Len(txtVCode.Text) - 7)
+            End If
+            rsaCSP.FromXmlString(strPublicBlob)
+            rsaPubParams = rsaCSP.ExportParameters(False)
+            ' import public key params into instance of RSACryptoServiceProvider
+            rsaCSP.ImportParameters(rsaPubParams)
+            toEncrypt = enc.GetBytes(strdata)
+
+
+            '' The following Encrypt method works for long and short strings
+            '' =============================== ACTIVATE FOR LONG AND SHORT STRINGS =============================
+            ''The RSA algorithm works on individual blocks of unencoded bytes. In this case, the
+            ''maximum is 58 bytes. Therefore, we are required to break up the text into blocks and
+            ''encrypt each one individually. Each encrypted block will give us an output of 128 bytes.
+            ''If we do not break up the blocks in this manner, we will throw a "key not valid for use
+            ''in specified state" exception
+
+            ''Get the size of the final block
+            'Const RSA_BLOCKSIZE As Integer = 58
+            'Dim lastBlockLength As Integer = toEncrypt.Length Mod RSA_BLOCKSIZE
+            'Dim blockCount As Integer = CType(Math.Floor(toEncrypt.Length / RSA_BLOCKSIZE), Integer) ' CType not necessary in VB 2008
+            'Dim hasLastBlock As Boolean = False
+            'If Not lastBlockLength.Equals(0) Then
+            '    'We need to create a final block for the remaining characters
+            '    blockCount += 1
+            '    hasLastBlock = True
+            'End If
+
+            ''Initialize the result buffer
+            'Dim result() As Byte = New Byte() {}
+
+            ''Initialize the RSA Service Provider with the public key
+            ''rsaCSP.FromXmlString(strPublicBlob) 'This was taken care of already
+
+            ''Break the text into blocks and work on each block individually
+            'For blockIndex As Integer = 0 To blockCount - 1
+            '    Dim thisBlockLength As Integer
+
+            '    'If this is the last block and we have a remainder, then set the length accordingly
+            '    If blockCount.Equals(blockIndex + 1) AndAlso hasLastBlock Then
+            '        thisBlockLength = lastBlockLength
+            '    Else
+            '        thisBlockLength = RSA_BLOCKSIZE
+            '    End If
+            '    Dim startChar As Integer = blockIndex * RSA_BLOCKSIZE
+
+            '    'Define the block that we will be working on
+            '    Dim currentBlock(thisBlockLength - 1) As Byte
+            '    Array.Copy(toEncrypt, startChar, currentBlock, 0, thisBlockLength)
+
+            '    'Encrypt the current block and append it to the result stream
+            '    Dim encryptedBlock() As Byte = rsaCSP.Encrypt(currentBlock, False)
+            '    Dim originalResultLength As Integer = result.Length
+
+            '    ReDim Preserve result(originalResultLength + encryptedBlock.Length) ' This is for VB 2008
+            '    'Array.Resize(result, originalResultLength + encryptedBlock.Length)
+
+            '    encryptedBlock.CopyTo(result, originalResultLength)
+            'Next
+
+            'encrypted = result
+            ' =============================================================================================
+
+            ' The following Encrypt method works only for short strings
+            encrypted = rsaCSP.Encrypt(toEncrypt, False)
+            encryptedPlainText = Convert.ToBase64String(encrypted) ' convert to base64/Radix output
+
+            ' HASH AND SIGN THE SIGNATURE
+            ' GENERATE SIGNATURE BLOCK USING SENDER'S PRIVATE KEY
+            Dim signatureBlock As String
+            ' Hash the encrypted data and generate a signature block on the hash
+            ' using the sender's private key. (Signature Block)
+            ' create new instance of SHA1 hash algorithm to compute hash
+            Dim hash As New SHA1Managed
+            Dim hashedData() As Byte ' a byte array to store hash value
+            If strLeft(txtGCode.Text, 6) = "RSA512" Then
+                strPrivateBlob = strRight(txtGCode.Text, Len(txtGCode.Text) - 6)
+            Else
+                strPrivateBlob = strRight(txtGCode.Text, Len(txtGCode.Text) - 7)
+            End If
+            ' import private key params into instance of RSACryptoServiceProvider
+            rsaCSP.FromXmlString(strPrivateBlob)
+            Dim rsaPrivateParams As RSAParameters 'stores private key
+            rsaPrivateParams = rsaCSP.ExportParameters(True)
+            rsaCSP.ImportParameters(rsaPrivateParams)
+            ' compute hash with algorithm specified as here we have SHA1
+            hashedData = hash.ComputeHash(encrypted)
+            ' Sign Data using private key and  OID is simple name of the algorithm for which to get the object identifier (OID)
+            Dim signature As Byte() ' holds signatures
+            signature = rsaCSP.SignHash(hashedData, CryptoConfig.MapNameToOID("SHA1"))
+            ' convert to base64/Radix output
+            signatureBlock = Convert.ToBase64String(signature)
+
+            ' VERIFY SIGNATURE BLOCK USING THE SENDER'S PUBLIC KEY
+            ' VALIDATE THE STRING WITH THE PUBLIC/PRIVATE KEY PAIR
+            ' Verify the signature is authentic using the sender's public key(decrypt Signature block)
+            Dim myencrypted() As Byte
+            Dim mysignature() As Byte
+            myencrypted = Convert.FromBase64String(encryptedPlainText)
+            mysignature = Convert.FromBase64String(signatureBlock)
+            ' create new instance of SHA1 hash algorithm to compute hash
+            Dim sha1hash As New SHA1Managed
+            Dim sha1hashedData() As Byte ' a byte array to store hash value
+            ' import  public key params into instance of RSACryptoServiceProvider
+            rsaCSP.ImportParameters(rsaPubParams)
+            ' compute hash with algorithm specified as here we have SHA1
+            sha1hashedData = sha1hash.ComputeHash(myencrypted)
+            ' Sign Data using public key and  OID is simple name of the algorithm for which to get the object identifier (OID)
+            Dim verified As Boolean
+            verified = rsaCSP.VerifyHash(sha1hashedData, CryptoConfig.MapNameToOID("SHA1"), mysignature)
+            If verified Then
                 UpdateStatus(txtName.Text & " (" & txtVer.Text & ") validated successfully.")
+                'MsgBox("Signature Valid", MsgBoxStyle.Information)
             Else
                 UpdateStatus(txtName.Text & " (" & txtVer.Text & ") GCode-VCode mismatch!")
+                'MsgBox("Invalid Signature", MsgBoxStyle.Exclamation)
             End If
-            ' It worked! We're all set to go.
-            If modALUGEN.rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-                '* Set_locale(regionalSymbol)
-                Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
+
+            ' THE FOLLOWING CODE BLOCK IS USED TO RETRIEVE THE ORIGINAL
+            ' STRING strData BUT IS NOT NEEDED FOR THE VALIDATION PROCESS
+            ' IT'S BEEN SHOWN HERE FOR DEMONSTRATION PURPOSES
+            ' This works for short strings only
+            Dim newencrypted() As Byte
+            newencrypted = Convert.FromBase64String(encryptedPlainText)
+            Dim fromEncrypt() As Byte ' a byte array to store decrypted bytes
+            Dim roundTrip As String ' holds original message
+            ' import  private key params into instance of RSACryptoServiceProvider
+            rsaCSP.ImportParameters(rsaPrivateParams)
+
+
+            '' The following Decrypt method works for long and short strings
+            '' It's currently not functioning correctly
+            '' =============================== ACTIVATE FOR LONG AND SHORT STRINGS =============================
+            ''When we encrypt a string using RSA, it works on individual blocks of up to
+            ''58 bytes. Each block generates an output of 128 encrypted bytes. Therefore, to
+            ''decrypt the message, we need to break the encrypted stream into individual
+            ''chunks of 128 bytes and decrypt them individually
+
+            ''Determine how many bytes are in the encrypted stream. The input is in hex format,
+            ''so we have to divide it by 2
+            'Const RSA_DECRYPTBLOCKSIZE As Integer = 128
+            'Dim maxBytes As Integer = CType(encryptedPlainText.Length / 2, Integer)  ' CType not necessary in VB 2008
+
+            ''Ensure that the length of the encrypted stream is divisible by 128
+            'If Not (maxBytes Mod RSA_DECRYPTBLOCKSIZE).Equals(0) Then
+            '    Throw New System.Security.Cryptography.CryptographicException("Encrypted text is an invalid length")
+            'End If
+
+            ''Calculate the number of blocks we will have to work on
+            'Dim blockCount2 As Integer = CType(maxBytes / RSA_DECRYPTBLOCKSIZE, Integer)
+
+            ''Initialize the result buffer
+            'Dim result2() As Byte = New Byte() {}
+
+            ''rsaCSP.FromXmlString(strPrivateBlob) ' This was done already
+
+            ''Iterate through each block and decrypt it
+            'For blockIndex As Integer = 0 To blockCount2 - 1
+            '    'Get the current block to work on
+            '    Dim currentBlockHex As String = encryptedPlainText.Substring(blockIndex * (RSA_DECRYPTBLOCKSIZE * 2), RSA_DECRYPTBLOCKSIZE * 2)
+            '    Dim currentBlockBytes As Byte() = HexToBytes(currentBlockHex)
+
+            '    'Decrypt the current block and append it to the result stream
+            '    Dim currentBlockDecrypted() As Byte = rsaCSP.Decrypt(currentBlockBytes, False)
+            '    Dim originalResultLength As Integer = result2.Length
+
+            '    ReDim Preserve result2(originalResultLength + currentBlockDecrypted.Length)
+            '    'Array.Resize(result, originalResultLength + currentBlockDecrypted.Length) ' This is for VB 2008
+
+            '    currentBlockDecrypted.CopyTo(result2, originalResultLength)
+            'Next
+            'fromEncrypt = result2
+            ' =============================================================================================
+
+
+            ' The following Decrypt works for short strings only
+            'store decrypted data into byte array
+            fromEncrypt = rsaCSP.Decrypt(newencrypted, False)
+
+            'convert bytes to string
+            roundTrip = enc.GetString(fromEncrypt)
+            If roundTrip <> strdata Then
+                UpdateStatus(txtName.Text & " (" & txtVer.Text & ") GCode-VCode mismatch!")
             End If
-        Else  '.NET RSA
 
-            Try
-                ' ------------------ begin Message from Ismail ------------------
-                ' This code block is used to Encrypt/Sign and then Validate/Decrypt
-                ' a small size text.
-                ' This code uses "I love Activelock" to validate the given Public/Private key pair
-                ' If you try to do the same with a much longer string, these routines will fail
-                ' with a "Bad Length" error
-                ' Increasing the cpher strength (say from 1024 to 2048-bits) will allow you to
-                ' run this code with much longer data strings
-                ' Activelock DLL uses a different algorithm to sign/validate
-                ' This section is functional, but more than that it's provided here
-                ' as the entire solution for a typical RSA signing/validation algorithm
-                ' ------------------ end Message from Ismail ------------------
+            'Release any resources held by the RSA Service Provider
+            rsaCSP.Clear()
+            '* Set_locale(regionalSymbol)
 
-                Dim rsaCSP As New System.Security.Cryptography.RSACryptoServiceProvider
-                Dim rsaPubParams As RSAParameters 'stores public key
-                Dim strPublicBlob, strPrivateBlob As String
-
-                strPublicBlob = txtVCode.Text
-                strPrivateBlob = txtGCode.Text
-
-                ' ENCRYPT PLAIN TEXT USING THE PUBLIC KEY
-                ' Convert the data string to a byte array.
-                Dim toEncrypt As Byte()     ' Holds message in bytes
-                Dim enc As New UTF8Encoding ' new instance of Unicode8 instance
-                Dim encrypted As Byte() ' holds encrypted data
-                Dim encryptedPlainText As String
-
-                If strLeft(txtVCode.Text, 6) = "RSA512" Then
-                    strPublicBlob = strRight(txtVCode.Text, Len(txtVCode.Text) - 6)
-                Else
-                    strPublicBlob = strRight(txtVCode.Text, Len(txtVCode.Text) - 7)
-                End If
-                rsaCSP.FromXmlString(strPublicBlob)
-                rsaPubParams = rsaCSP.ExportParameters(False)
-                ' import public key params into instance of RSACryptoServiceProvider
-                rsaCSP.ImportParameters(rsaPubParams)
-                toEncrypt = enc.GetBytes(strdata)
-
-
-                '' The following Encrypt method works for long and short strings
-                '' =============================== ACTIVATE FOR LONG AND SHORT STRINGS =============================
-                ''The RSA algorithm works on individual blocks of unencoded bytes. In this case, the
-                ''maximum is 58 bytes. Therefore, we are required to break up the text into blocks and
-                ''encrypt each one individually. Each encrypted block will give us an output of 128 bytes.
-                ''If we do not break up the blocks in this manner, we will throw a "key not valid for use
-                ''in specified state" exception
-
-                ''Get the size of the final block
-                'Const RSA_BLOCKSIZE As Integer = 58
-                'Dim lastBlockLength As Integer = toEncrypt.Length Mod RSA_BLOCKSIZE
-                'Dim blockCount As Integer = CType(Math.Floor(toEncrypt.Length / RSA_BLOCKSIZE), Integer) ' CType not necessary in VB 2008
-                'Dim hasLastBlock As Boolean = False
-                'If Not lastBlockLength.Equals(0) Then
-                '    'We need to create a final block for the remaining characters
-                '    blockCount += 1
-                '    hasLastBlock = True
-                'End If
-
-                ''Initialize the result buffer
-                'Dim result() As Byte = New Byte() {}
-
-                ''Initialize the RSA Service Provider with the public key
-                ''rsaCSP.FromXmlString(strPublicBlob) 'This was taken care of already
-
-                ''Break the text into blocks and work on each block individually
-                'For blockIndex As Integer = 0 To blockCount - 1
-                '    Dim thisBlockLength As Integer
-
-                '    'If this is the last block and we have a remainder, then set the length accordingly
-                '    If blockCount.Equals(blockIndex + 1) AndAlso hasLastBlock Then
-                '        thisBlockLength = lastBlockLength
-                '    Else
-                '        thisBlockLength = RSA_BLOCKSIZE
-                '    End If
-                '    Dim startChar As Integer = blockIndex * RSA_BLOCKSIZE
-
-                '    'Define the block that we will be working on
-                '    Dim currentBlock(thisBlockLength - 1) As Byte
-                '    Array.Copy(toEncrypt, startChar, currentBlock, 0, thisBlockLength)
-
-                '    'Encrypt the current block and append it to the result stream
-                '    Dim encryptedBlock() As Byte = rsaCSP.Encrypt(currentBlock, False)
-                '    Dim originalResultLength As Integer = result.Length
-
-                '    ReDim Preserve result(originalResultLength + encryptedBlock.Length) ' This is for VB 2008
-                '    'Array.Resize(result, originalResultLength + encryptedBlock.Length)
-
-                '    encryptedBlock.CopyTo(result, originalResultLength)
-                'Next
-
-                'encrypted = result
-                ' =============================================================================================
-
-                ' The following Encrypt method works only for short strings
-                encrypted = rsaCSP.Encrypt(toEncrypt, False)
-                encryptedPlainText = Convert.ToBase64String(encrypted) ' convert to base64/Radix output
-
-                ' HASH AND SIGN THE SIGNATURE
-                ' GENERATE SIGNATURE BLOCK USING SENDER'S PRIVATE KEY
-                Dim signatureBlock As String
-                ' Hash the encrypted data and generate a signature block on the hash
-                ' using the sender's private key. (Signature Block)
-                ' create new instance of SHA1 hash algorithm to compute hash
-                Dim hash As New SHA1Managed
-                Dim hashedData() As Byte ' a byte array to store hash value
-                If strLeft(txtGCode.Text, 6) = "RSA512" Then
-                    strPrivateBlob = strRight(txtGCode.Text, Len(txtGCode.Text) - 6)
-                Else
-                    strPrivateBlob = strRight(txtGCode.Text, Len(txtGCode.Text) - 7)
-                End If
-                ' import private key params into instance of RSACryptoServiceProvider
-                rsaCSP.FromXmlString(strPrivateBlob)
-                Dim rsaPrivateParams As RSAParameters 'stores private key
-                rsaPrivateParams = rsaCSP.ExportParameters(True)
-                rsaCSP.ImportParameters(rsaPrivateParams)
-                ' compute hash with algorithm specified as here we have SHA1
-                hashedData = hash.ComputeHash(encrypted)
-                ' Sign Data using private key and  OID is simple name of the algorithm for which to get the object identifier (OID)
-                Dim signature As Byte() ' holds signatures
-                signature = rsaCSP.SignHash(hashedData, CryptoConfig.MapNameToOID("SHA1"))
-                ' convert to base64/Radix output
-                signatureBlock = Convert.ToBase64String(signature)
-
-                ' VERIFY SIGNATURE BLOCK USING THE SENDER'S PUBLIC KEY
-                ' VALIDATE THE STRING WITH THE PUBLIC/PRIVATE KEY PAIR
-                ' Verify the signature is authentic using the sender's public key(decrypt Signature block)
-                Dim myencrypted() As Byte
-                Dim mysignature() As Byte
-                myencrypted = Convert.FromBase64String(encryptedPlainText)
-                mysignature = Convert.FromBase64String(signatureBlock)
-                ' create new instance of SHA1 hash algorithm to compute hash
-                Dim sha1hash As New SHA1Managed
-                Dim sha1hashedData() As Byte ' a byte array to store hash value
-                ' import  public key params into instance of RSACryptoServiceProvider
-                rsaCSP.ImportParameters(rsaPubParams)
-                ' compute hash with algorithm specified as here we have SHA1
-                sha1hashedData = sha1hash.ComputeHash(myencrypted)
-                ' Sign Data using public key and  OID is simple name of the algorithm for which to get the object identifier (OID)
-                Dim verified As Boolean
-                verified = rsaCSP.VerifyHash(sha1hashedData, CryptoConfig.MapNameToOID("SHA1"), mysignature)
-                If verified Then
-                    UpdateStatus(txtName.Text & " (" & txtVer.Text & ") validated successfully.")
-                    'MsgBox("Signature Valid", MsgBoxStyle.Information)
-                Else
-                    UpdateStatus(txtName.Text & " (" & txtVer.Text & ") GCode-VCode mismatch!")
-                    'MsgBox("Invalid Signature", MsgBoxStyle.Exclamation)
-                End If
-
-                ' THE FOLLOWING CODE BLOCK IS USED TO RETRIEVE THE ORIGINAL
-                ' STRING strData BUT IS NOT NEEDED FOR THE VALIDATION PROCESS
-                ' IT'S BEEN SHOWN HERE FOR DEMONSTRATION PURPOSES
-                ' This works for short strings only
-                Dim newencrypted() As Byte
-                newencrypted = Convert.FromBase64String(encryptedPlainText)
-                Dim fromEncrypt() As Byte ' a byte array to store decrypted bytes
-                Dim roundTrip As String ' holds original message
-                ' import  private key params into instance of RSACryptoServiceProvider
-                rsaCSP.ImportParameters(rsaPrivateParams)
-
-
-                '' The following Decrypt method works for long and short strings
-                '' It's currently not functioning correctly
-                '' =============================== ACTIVATE FOR LONG AND SHORT STRINGS =============================
-                ''When we encrypt a string using RSA, it works on individual blocks of up to
-                ''58 bytes. Each block generates an output of 128 encrypted bytes. Therefore, to
-                ''decrypt the message, we need to break the encrypted stream into individual
-                ''chunks of 128 bytes and decrypt them individually
-
-                ''Determine how many bytes are in the encrypted stream. The input is in hex format,
-                ''so we have to divide it by 2
-                'Const RSA_DECRYPTBLOCKSIZE As Integer = 128
-                'Dim maxBytes As Integer = CType(encryptedPlainText.Length / 2, Integer)  ' CType not necessary in VB 2008
-
-                ''Ensure that the length of the encrypted stream is divisible by 128
-                'If Not (maxBytes Mod RSA_DECRYPTBLOCKSIZE).Equals(0) Then
-                '    Throw New System.Security.Cryptography.CryptographicException("Encrypted text is an invalid length")
-                'End If
-
-                ''Calculate the number of blocks we will have to work on
-                'Dim blockCount2 As Integer = CType(maxBytes / RSA_DECRYPTBLOCKSIZE, Integer)
-
-                ''Initialize the result buffer
-                'Dim result2() As Byte = New Byte() {}
-
-                ''rsaCSP.FromXmlString(strPrivateBlob) ' This was done already
-
-                ''Iterate through each block and decrypt it
-                'For blockIndex As Integer = 0 To blockCount2 - 1
-                '    'Get the current block to work on
-                '    Dim currentBlockHex As String = encryptedPlainText.Substring(blockIndex * (RSA_DECRYPTBLOCKSIZE * 2), RSA_DECRYPTBLOCKSIZE * 2)
-                '    Dim currentBlockBytes As Byte() = HexToBytes(currentBlockHex)
-
-                '    'Decrypt the current block and append it to the result stream
-                '    Dim currentBlockDecrypted() As Byte = rsaCSP.Decrypt(currentBlockBytes, False)
-                '    Dim originalResultLength As Integer = result2.Length
-
-                '    ReDim Preserve result2(originalResultLength + currentBlockDecrypted.Length)
-                '    'Array.Resize(result, originalResultLength + currentBlockDecrypted.Length) ' This is for VB 2008
-
-                '    currentBlockDecrypted.CopyTo(result2, originalResultLength)
-                'Next
-                'fromEncrypt = result2
-                ' =============================================================================================
-
-
-                ' The following Decrypt works for short strings only
-                'store decrypted data into byte array
-                fromEncrypt = rsaCSP.Decrypt(newencrypted, False)
-
-                'convert bytes to string
-                roundTrip = enc.GetString(fromEncrypt)
-                If roundTrip <> strdata Then
-                    UpdateStatus(txtName.Text & " (" & txtVer.Text & ") GCode-VCode mismatch!")
-                End If
-
-                'Release any resources held by the RSA Service Provider
-                rsaCSP.Clear()
-                '* Set_locale(regionalSymbol)
-
-            Catch ex As Exception
-                '* Set_locale(regionalSymbol)
-                UpdateStatus(ex.Message)
-            End Try
-
-        End If
+        Catch ex As Exception
+            '* Set_locale(regionalSymbol)
+            UpdateStatus(ex.Message)
+        End Try
 
         Cursor = Cursors.Default
         Exit Sub
@@ -4380,7 +4248,7 @@ exitValidate:
             cmdSave.Visible = False
             Exit Sub
 
-        Else 'ALCrypto
+        Else 'RSA
 
             chkLockMACaddress.Visible = True
             chkLockComputer.Visible = True

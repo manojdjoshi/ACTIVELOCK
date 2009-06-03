@@ -53,68 +53,6 @@ Module modALUGEN
     Public ActiveLock3Globals_definst As New Globals
     Public storage() As storageType
 
-    ' RSA Key Structure
-    ' @param bits   Key length in bits
-    ' @param data   Key data
-    <StructLayout(LayoutKind.Sequential, CharSet:=CharSet.Ansi)> Structure RSAKey ' 36-byte structure
-        Dim bits As Integer
-        <MarshalAs(UnmanagedType.ByValArray, SizeConst:=32)> Dim data() As Byte
-        Public Sub Initialize()
-            ReDim data(32)
-        End Sub
-    End Structure
-    ' Generates an RSA key set
-    ' @param ptrKey RSA key structure
-    ' @param bits   key length in bits
-    ' @param pfn    TBD
-    ' @param pfnparam    TBD
-    Public Declare Function rsa_generate Lib "ALCrypto3NET" (ByRef ptrKey As RSAKey, ByVal bits As Integer, ByVal pfn As Integer, ByVal pfnparam As Integer) As Integer
-
-    ' Generates an RSA key set without showing any progress
-    ' needed for the VB.NET build
-    ' @param ptrKey RSA key structure
-    ' @param bits   key length in bits
-    Public Declare Function rsa_generate2 Lib "ALCrypto3NET" (ByRef ptrKey As RSAKey, ByVal bits As Long) As Long
-
-    ' Returns the public key blob fro the specified key.
-    ' @param ptrKey RSA key structure
-    ' @param blob   [Output] Key bob to be returned
-    ' @param blobLen    Length of the key blob, in bytes
-    Public Declare Function rsa_public_key_blob Lib "ALCrypto3NET" (ByRef ptrKey As RSAKey, ByVal blob As String, ByRef blobLen As Integer) As Integer
-
-    ' Returns the private key blob fro the specified key.
-    ' @param ptrKey RSA key structure
-    ' @param blob   [Output] Key bob to be returned
-    ' @param blobLen    Length of the key blob, in bytes
-    Public Declare Function rsa_private_key_blob Lib "ALCrypto3NET" (ByRef ptrKey As RSAKey, ByVal blob As String, ByRef blobLen As Integer) As Integer
-
-    ' Creates a new RSAKey from the specified key blobs.
-    ' @param pub_blob   Public key blob
-    ' @param pub_len    Length of public key blob, in bytes
-    ' @param priv_blob  Private key blob
-    ' @param priv_len   Length of private key blob, in bytes
-    ' @param ptrKey     [out] RSA key to be returned.
-    Public Declare Function rsa_createkey Lib "ALCrypto3NET" (ByVal pub_blob As String, ByVal pub_len As Integer, ByVal priv_blob As String, ByVal priv_len As Integer, ByRef ptrKey As RSAKey) As Integer
-
-    ' Release memory allocated by rsa_createkey() to store the key.
-    ' @param ptrKey     RSA key
-    Public Declare Function rsa_freekey Lib "ALCrypto3NET" (ByRef ptrKey As RSAKey) As Integer
-
-    ' Signs the data using the specified RSA private key.
-    ' @param ptrKey Key to be used for signing
-    ' @param data   Data to be signed
-    ' @param dLen   Data length
-    ' @param sig    [out] Signature
-    ' @param sLen   Signature length
-    Public Declare Function rsa_sign Lib "ALCrypto3NET" (ByRef ptrKey As RSAKey, ByVal data As String, ByVal dLen As Integer, ByVal sig As String, ByRef sLen As Integer) As Integer
-
-    ' Verifies an RSA signature.
-    ' @param ptrKey Key to be used for signing
-    ' @param sig    [out] Signature
-    ' @param sLen   Signature length
-    ' @param data   Data with which to verify
-    ' @param dLen   Data length
-    Public Declare Function rsa_verifysig Lib "ALCrypto3NET" (ByRef ptrKey As RSAKey, ByVal sig As String, ByVal sLen As Integer, ByVal data As String, ByVal dLen As Integer) As Integer
 
     Public Structure PhaseType
         Dim exponential As Byte

@@ -159,13 +159,6 @@ ActiveLock3_6Net
 	<value>ByVal RHS As ALLockTypes - ALLockTypes type</value>
 	<returns>ALLockTypes - Lock types type</returns>
 	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.IActiveLock_AddLockCode(ActiveLock3_6NET.IActiveLock.ALLockTypes,System.Int32@)">
-	<summary>
- Helper function to build up array of used LockType s
- </summary>
-	<param name="LockType"><para>ByVal LockType As ALLockTypes _ to be added to array.</para><para>ByRef Byref LockTypes() As ALLockTypes - array of used LockTypes being built up.</para></param>
-	<param name="SizeLT">ByRef SizeLT as Integer - size of array of used LockTypes being built up</param>
-	<remarks></remarks>
 </member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_TrialHideType">
 	<summary>
  Gets the ALTrialHideTypes type
@@ -261,13 +254,6 @@ ActiveLock3_6Net
 	<value></value>
 	<returns>Integer - ?</returns>
 	<remarks></remarks>
-</member><member name="P:ActiveLock3_6NET.ActiveLock.IActiveLock_UsedLockType">
-	<summary>
- Gets the Lock Type selected in Alugen.
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
 </member><member name="M:ActiveLock3_6NET.ActiveLock.Class_Initialize_Renamed">
 	<summary>
  Not documented!
@@ -301,7 +287,7 @@ ActiveLock3_6Net
 	<param name="sFileName">ByVal sFileName As String - File name to read the liberation key from.</param>
 	<param name="strLibKey">ByRef strLibKey As String -  Liberation key returned</param>
 	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.IActiveLock_Acquire(System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@)">
+</member><member name="M:ActiveLock3_6NET.ActiveLock.IActiveLock_Acquire(System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@)">
 	<summary>
 		<para>Acquires an Activelock License.</para>
 		<para>This is the main method that retrieves an Activelock license, validates it, and ends the trial license if it exists.</para>
@@ -318,7 +304,6 @@ ActiveLock3_6Net
 	<param name="strMaxCount"></param>
 	<param name="strLicenseFileType"></param>
 	<param name="strLicenseType"></param>
-	<param name="strUsedLockType"></param>
 	<remarks></remarks>
 </member><member name="M:ActiveLock3_6NET.ActiveLock.CheckStreamCapability">
 	<summary>
@@ -2026,13 +2011,6 @@ ActiveLock3_6Net
 	<value></value>
 	<returns>String - LicenseClass</returns>
 	<remarks>None</remarks>
-</member><member name="P:ActiveLock3_6NET.IActiveLock.UsedLockType">
-	<summary>
- UsedLockType - Read Only - Returns the Current Lock Type being used in this instance.
- </summary>
-	<value></value>
-	<returns>ALLockTypes - lock type object corresponding to the current lock type(s) being used</returns>
-	<remarks>None</remarks>
 </member><member name="P:ActiveLock3_6NET.IActiveLock.InstallationCode(System.String,ActiveLock3_6NET.ProductLicense)">
 	<summary>
  InstallationCode - Read Only - Returns the installation-specific code needed to obtain the liberation key.
@@ -2256,7 +2234,7 @@ ActiveLock3_6Net
 	<param name="strPath">Optional - ?Undocumented!</param>
 	<param name="autoLicString">Optional - autoLicString As String - license key if autoregister is successful</param>
 	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.IActiveLock.Acquire(System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@)">
+</member><member name="M:ActiveLock3_6NET.IActiveLock.Acquire(System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@,System.String@)">
 	<summary>
 		<para>Acquires a valid license token.</para>
 		<para>If no valid license can be found, an appropriate error will be raised, specifying the cause.</para>
@@ -2273,7 +2251,6 @@ ActiveLock3_6Net
 	<param name="strMaxCount">Optional - ?Undocumented!</param>
 	<param name="strLicenseFileType">Optional - ?Undocumented!</param>
 	<param name="strLicenseType">Optional - ?Undocumented!</param>
-	<param name="strUsedLockType">Optional - ?Undocumented!</param>
 	<remarks></remarks>
 </member><member name="M:ActiveLock3_6NET.IActiveLock.ResetTrial">
 	<summary>

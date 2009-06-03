@@ -1416,6 +1416,9 @@ GetIPaddressError:
             Dim regexIP As System.Text.RegularExpressions.Regex
             regexIP = New System.Text.RegularExpressions.Regex("\b\d{1,3}.\d{1,3}.\d{1,3}.\d{1,3}\b")
             strIP = regexIP.Match(strHTML).Value
+            If strIP.Contains("HTML") Or strIP.Contains("DOC") Or strIP.Contains("Transitional") Then
+                strIP = "Not Available"
+            End If
             Return strIP
         Catch ex As Exception
             GetExternalIP = "Not Available"
