@@ -67,7 +67,6 @@ Public Interface _IActiveLock
     ReadOnly Property LicenseClass() As String
     Property LockType() As IActiveLock.ALLockTypes
     WriteOnly Property LicenseKeyType() As IActiveLock.ALLicenseKeyTypes
-    ReadOnly Property UsedLockType() As Integer
     Property TrialHideType() As IActiveLock.ALTrialHideTypes
     Property TrialType() As IActiveLock.ALTrialTypes
     Property TrialLength() As Integer
@@ -90,7 +89,7 @@ Public Interface _IActiveLock
     Sub KillLicense(ByVal SoftwareNameAndVersion As String, ByVal LicPath As String)
     Function Transfer(ByVal InstallCode As String) As String
     Sub Init(Optional ByVal strPath As String = "", Optional ByRef autoLicString As String = "")
-    Sub Acquire(Optional ByRef strMsg As String = "", Optional ByRef strRemainingTrialDays As String = "", Optional ByRef strRemainingTrialRuns As String = "", Optional ByRef strTrialLength As String = "", Optional ByRef strUsedDays As String = "", Optional ByRef strExpirationDate As String = "", Optional ByRef strRegisteredUser As String = "", Optional ByRef strRegisteredLevel As String = "", Optional ByRef strLicenseClass As String = "", Optional ByRef strMaxCount As String = "", Optional ByRef strLicenseFileType As String = "", Optional ByRef strLicenseType As String = "", Optional ByRef strUsedLockType As String = "")
+    Sub Acquire(Optional ByRef strMsg As String = "", Optional ByRef strRemainingTrialDays As String = "", Optional ByRef strRemainingTrialRuns As String = "", Optional ByRef strTrialLength As String = "", Optional ByRef strUsedDays As String = "", Optional ByRef strExpirationDate As String = "", Optional ByRef strRegisteredUser As String = "", Optional ByRef strRegisteredLevel As String = "", Optional ByRef strLicenseClass As String = "", Optional ByRef strMaxCount As String = "", Optional ByRef strLicenseFileType As String = "", Optional ByRef strLicenseType As String = "")
     Sub ResetTrial()
     Sub KillTrial()
     Function GenerateShortSerial(ByVal HDDfirmwareSerial As String) As String
@@ -629,18 +628,6 @@ End Interface
     End Property
 
     ''' <summary>
-    ''' UsedLockType - Read Only - Returns the Current Lock Type being used in this instance.
-    ''' </summary>
-    ''' <value></value>
-    ''' <returns>ALLockTypes - lock type object corresponding to the current lock type(s) being used</returns>
-    ''' <remarks>None</remarks>
-    Public ReadOnly Property UsedLockType() As Integer Implements _IActiveLock.UsedLockType
-        Get
-
-        End Get
-    End Property
-
-    ''' <summary>
     ''' InstallationCode - Read Only - Returns the installation-specific code needed to obtain the liberation key.
     ''' </summary>
     ''' <param name="User">Optional - String - User</param>
@@ -1061,9 +1048,8 @@ End Interface
     ''' <param name="strMaxCount">Optional - ?Undocumented!</param>
     ''' <param name="strLicenseFileType">Optional - ?Undocumented!</param>
     ''' <param name="strLicenseType">Optional - ?Undocumented!</param>
-    ''' <param name="strUsedLockType">Optional - ?Undocumented!</param>
     ''' <remarks></remarks>
-    Public Sub Acquire(Optional ByRef strMsg As String = "", Optional ByRef strRemainingTrialDays As String = "", Optional ByRef strRemainingTrialRuns As String = "", Optional ByRef strTrialLength As String = "", Optional ByRef strUsedDays As String = "", Optional ByRef strExpirationDate As String = "", Optional ByRef strRegisteredUser As String = "", Optional ByRef strRegisteredLevel As String = "", Optional ByRef strLicenseClass As String = "", Optional ByRef strMaxCount As String = "", Optional ByRef strLicenseFileType As String = "", Optional ByRef strLicenseType As String = "", Optional ByRef strUsedLockType As String = "") Implements _IActiveLock.Acquire
+    Public Sub Acquire(Optional ByRef strMsg As String = "", Optional ByRef strRemainingTrialDays As String = "", Optional ByRef strRemainingTrialRuns As String = "", Optional ByRef strTrialLength As String = "", Optional ByRef strUsedDays As String = "", Optional ByRef strExpirationDate As String = "", Optional ByRef strRegisteredUser As String = "", Optional ByRef strRegisteredLevel As String = "", Optional ByRef strLicenseClass As String = "", Optional ByRef strMaxCount As String = "", Optional ByRef strLicenseFileType As String = "", Optional ByRef strLicenseType As String = "") Implements _IActiveLock.Acquire
 
     End Sub
 

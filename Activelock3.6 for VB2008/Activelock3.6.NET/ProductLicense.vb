@@ -80,7 +80,6 @@ Option Explicit On
 	Private mnMaxCount As Integer ' max number of concurrent users
     Private mnUsedDays As Integer ' number of days the license was used
     Private mnLicenseFileType As Integer ' type of License file; 0 for Plain, 1 for encrypted
-    '    Private mnUsedLockType As Integer
 
     ' License Flags.  Values can be combined (OR&#39;ed) together.
     '
@@ -458,22 +457,6 @@ Option Explicit On
             mnUsedDays = Value
         End Set
     End Property
-    '===============================================================================
-    ' Name: Property Get UsedLockType
-    ' Input: None
-    ' Output:
-    '   Integer - Used Lock type in Alugen
-    ' Purpose: Returns Used Lock type in Alugen
-    ' Remarks: None
-    '===============================================================================
-    'Public Property UsedLockType() As Integer
-    '    Get
-    '        Return mnUsedLockType
-    '    End Get
-    '    Set(ByVal Value As Integer)
-    '        mnUsedLockType = Value
-    '    End Set
-    'End Property
 
     '===============================================================================
     ' Name: Property Get LastUsed
