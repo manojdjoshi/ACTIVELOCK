@@ -6,7 +6,7 @@ AppPublisher=Activelock Software Group
 Uninstallable=true
 ; set installation folder based on target Windows version
 DefaultDirName={code:SetInstallDir}\Activelock_VB6_3.6
-OutputBaseFilename=Activelock_VB6_Setup_3.6_May_11_2009
+OutputBaseFilename=Activelock_VB6_Setup_3.6_June_2_2009
 OutputDir=.
 DefaultGroupName=Activelock Software Group
 WizardImageFile=C:\ActiveLockCommunity\Images\big-side.bmp
@@ -78,7 +78,7 @@ Source: C:\ActiveLockCommunity\Redistribution\msflxgrd.ocx; DestDir: "{app}\Redi
 Source: C:\ActiveLockCommunity\Redistribution\mswinsck.ocx; DestDir: "{app}\Redistribution"; Flags: ignoreversion
 
 ;Src_v3 folder for Activelock source files - including Alugen - for Classic VB6 only
-Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\Activelock3.6.dll; DestDir: "{sys}"; Flags: restartreplace sharedfile regserver ignoreversion; Components: bin sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\Activelock3.6.dll; DestDir: "{sys}"; Flags: restartreplace sharedfile regserver; Components: bin sourcecode
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\ActiveLock3.res; DestDir: "{app}\Activelock3.6 for VB6"; Flags: ignoreversion; Components: sourcecode
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\ActiveLock3.vbp; DestDir: "{app}\Activelock3.6 for VB6"; Flags: ignoreversion; Components: sourcecode
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB6\ActiveLock.cls; DestDir: "{app}\Activelock3.6 for VB6"; Flags: ignoreversion; Components: sourcecode
