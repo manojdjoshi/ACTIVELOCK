@@ -766,7 +766,7 @@ Private Sub Form_Load()
     
     ' Check the existence of necessary files to run this application
     ' This is not necessary if you're not using these controls in your app.
-    Call CheckForResources("alcrypto3.dll", "activelock3.6.dll", "mscomctl.ocx")
+    Call CheckForResources("activelock3.6.dll", "mscomctl.ocx")
 
     ' Check if the Activelock DLL is registered. If not no need to continue.
     ' Since Actvelock DLL is a COM DLL, it must be registered via the
@@ -815,9 +815,8 @@ Private Sub Form_Load()
         .SoftwarePassword = Chr(99) & Chr(111) & Chr(111) & Chr(108)
         
         ' Set whether the software/application will use a short key or RSA method
-        ' alsRSA covers both ALCrypto and RSA native classes approach.
+        ' alsRSA covers RSA native classes approach.
         ' RSA classes in .NET allows you to pick from several cipher strengths
-        ' however ALCrypto uses 1024 bit strength key only.
         ' alsShortKeyMD5 is for short key protection only
         ' WARNING: Short key licenses use the lockFingerprint by default
         '.LicenseKeyType = alsShortKeyMD5
@@ -987,10 +986,8 @@ Private Sub Form_Load()
         Set ActiveLockEventSink = .EventNotifier
         
         ' Initialize Activelock
-        ' This is for handling the ALCrypto DLL used by Activelock.
-        ' Init() method below checkes the ALCrypto CRC, and registeres the
+        ' Init() method below registeres the
         ' application if an ALL file was used.
-        ' Note that ALCrypto DLL must be placed inside the system32 along with the Activelock DLL
         .Init strAutoRegisterKeyPath
         If FileExist(strKeyStorePath) And boolAutoRegisterKeyPath = True And strAutoRegisterKeyPath <> "" Then
             ' This means, an ALL file existed and was used to create a LIC file
@@ -1015,7 +1012,7 @@ Private Sub Form_Load()
     ' In case the Acquire method generates an error, so no license and no trial:
     ' If InStr(1, Err.Description, "No valid license") > 0 Or InStr(1, Err.Description, "license invalid") > 0 Then '-2147221503 & -2147221502
 
-    MyActiveLock.Acquire strMsg, strRemainingTrialDays, strRemainingTrialRuns, strTrialLength, strUsedDays, strExpirationDate, strRegisteredUser, strRegisteredLevel, strLicenseClass, strMaxCount, strLicenseFileType, strLicenseType, strUsedLockType
+    MyActiveLock.Acquire strMsg, strRemainingTrialDays, strRemainingTrialRuns, strTrialLength, strUsedDays, strExpirationDate, strRegisteredUser, strRegisteredLevel, strLicenseClass, strMaxCount, strLicenseFileType, strLicenseType
     ' strMsg is to get the trial status
     ' All other parameters are Optional and you can actually get all of them
     ' using MyActivelock.Property usage, but keep in mind that
@@ -1465,7 +1462,7 @@ Private Sub cmdRegister_Click()
     LibKey = txtLibKeyIn.Text
     If Mid(LibKey, 5, 1) = "-" And Mid(LibKey, 10, 1) = "-" And Mid(LibKey, 15, 1) = "-" And Mid(LibKey, 20, 1) = "-" Then
         MyActiveLock.Register LibKey, txtUser.Text 'YOU MUST SPECIFY THE USER NAME WITH SHORT KEYS !!!
-    Else    ' ALCRYPTO RSA
+    Else    ' RSA
         MyActiveLock.Register LibKey
     End If
     MsgBox modMain.Dec("386.457.46D.483.4F1.4FC.4E6.42B.4FC.483.4C5.4BA.160.4F1.507.441.441.457.4F1.4F1.462.507.4A4.16B"), vbInformation ' "Registration successful!"
