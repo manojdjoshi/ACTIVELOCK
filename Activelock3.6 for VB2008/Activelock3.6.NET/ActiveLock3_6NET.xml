@@ -18,7 +18,7 @@ ActiveLock3_6Net
 </member><member name="M:ActiveLock3_6NET.modTrial.DblStringToDate(System.String@)">
 * <summary>
 * Function is used to convert doubles stored in strings to dates
-* useful becuase whenever we store dates we convert them (to doubles and then strings)
+* useful because whenever we store dates we convert them (to doubles and then strings)
 * in case the user changes the locale in between storage and retrieval.
 * minor handling of actual date strings for some semblance of backward 
 * compatibility
