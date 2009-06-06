@@ -204,7 +204,7 @@ Private Function IALUGenerator_RetrieveProduct(ByVal name As String, ByVal Ver A
         ProdInfo.GCode = .Values("GCode")
     End With
     If ProdInfo.VCode = "" Or ProdInfo.GCode = "" Then
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise ALUGENErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, "Product code set is invalid."
     End If
     Set IALUGenerator_RetrieveProduct = ProdInfo

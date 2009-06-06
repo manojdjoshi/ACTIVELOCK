@@ -276,7 +276,13 @@ Private Declare Function GetLocaleInfo Lib "kernel32" Alias "GetLocaleInfoA" (By
 Private Declare Function SetLocaleInfo Lib "kernel32" Alias "SetLocaleInfoA" (ByVal Locale As Long, ByVal LCType As Long, ByVal lpLCData As String) As Boolean
 Private Declare Function GetUserDefaultLCID% Lib "kernel32" ()
 Const LOCALE_SSHORTDATE = &H1F
+Const LOCALE_SDECIMAL As Long = &HE        'decimal separator
+Const LOCALE_STHOUSAND = &HF        'thousand separator
 Public regionalSymbol As String
+Public old_LOCALE_SDECIMAL As String
+Public old_LOCALE_STHOUSAND As String
+Const HWND_BROADCAST As Long = &HFFFF&
+Const WM_SETTINGCHANGE As Long = &H1A
 
 ' For debugging via DBGVIEW.EXE, etc.
 Public Declare Sub OutputDebugString Lib "kernel32" Alias "OutputDebugStringA" (ByVal lpOutputString As String)
@@ -415,23 +421,24 @@ WebTest = InternetGetConnectedState(dwFlags, 0&)
 'End Select
 IsWebConnected = WebTest
 End Function
-' * Public Sub Get_locale() ' Retrieve the regional setting
-'    Dim Symbol As String
-'    Dim iRet1 As Long
-'    Dim iRet2 As Long
-'    Dim lpLCDataVar As String
-'    Dim Pos As Integer
-'    Dim Locale As Long
-'    Locale = GetUserDefaultLCID()
-'    iRet1 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, lpLCDataVar, 0)
-'    Symbol = String$(iRet1, 0)
-'    iRet2 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol, iRet1)
-'    Pos = InStr(Symbol, Chr$(0))
-'    If Pos > 0 Then
-'         Symbol = Left$(Symbol, Pos - 1)
-'         If Symbol <> "yyyy/MM/dd" Then regionalSymbol = Symbol
-'    End If
-'End Sub
+Public Sub Get_locale() ' Retrieve the regional setting
+    Dim iRet1 As Long
+    Dim iRet2 As Long
+    Dim Pos As Integer
+    Dim Locale As Long
+    Dim LCID As Long, iRet As Long, lpLCDataVar As String, Symbol As String
+    
+    Locale = GetUserDefaultLCID()
+    iRet1 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, lpLCDataVar, 0)
+    Symbol = String$(iRet1, 0)
+    iRet2 = GetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol, iRet1)
+    Pos = InStr(Symbol, Chr$(0))
+    If Pos > 0 Then
+         Symbol = Left$(Symbol, Pos - 1)
+         If Symbol <> "yyyy/MM/dd" Then regionalSymbol = Symbol
+    End If
+    
+End Sub
 
 Public Function IsNumberIncluded(ByVal n1 As Long, ByVal n2 As Long) As Boolean
 ' n1 = the larger number which may include n2
@@ -1256,19 +1263,68 @@ If dwData <> 0 Then
     End If
 End If
 End Function
-'* Public Sub '* Set_locale(Optional ByVal localSymbol As String = "") 'Change the regional setting
-'    Dim Symbol As String
-'    Dim iRet As Long
-'    Dim Locale As Long
-'    Locale = GetUserDefaultLCID() 'Get user Locale ID
-'    If localSymbol = "" Then
-'      Symbol = "yyyy/MM/dd" 'New character for the locale
-'    Else
-'      Symbol = localSymbol
-'    End If
-'
-'    iRet = SetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol)
-'End Sub
+Public Sub Set_locale(Optional ByVal localSymbol As String = "") 'Change the regional setting
+    Dim Locale As Long, iRet2 As Long
+    Dim LCID As Long, iRet As Long, lpLCDataVar As String, Symbol As String
+    Dim Pos As Integer
+    
+    Locale = GetUserDefaultLCID() 'Get user Locale ID
+    If localSymbol = "" Then
+        iRet = SetLocaleInfo(Locale, LOCALE_SSHORTDATE, "yyyy/MM/dd")
+        Call PostMessage(HWND_BROADCAST, WM_SETTINGCHANGE, 0&, ByVal 0&)
+        ' read decimal separator
+        LCID = GetUserDefaultLCID()
+        iRet = GetLocaleInfo(LCID, LOCALE_SDECIMAL, lpLCDataVar, 0)
+        Symbol = String$(iRet, 0)
+        iRet2 = GetLocaleInfo(LCID, LOCALE_SDECIMAL, Symbol, iRet)
+        Pos = InStr(Symbol, Chr$(0))
+        If Pos > 0 Then
+            Symbol = Left$(Symbol, Pos - 1)
+        End If
+        If Symbol <> "." Then
+            'change decimal separator
+            old_LOCALE_SDECIMAL = Symbol
+            LCID = GetUserDefaultLCID()
+            Call SetLocaleInfo(LCID, LOCALE_SDECIMAL, ".")
+            Call PostMessage(HWND_BROADCAST, WM_SETTINGCHANGE, 0&, ByVal 0&)
+        End If
+    
+        ' read thousand separator
+        LCID = GetUserDefaultLCID()
+        iRet = GetLocaleInfo(LCID, LOCALE_STHOUSAND, lpLCDataVar, 0)
+        Symbol = String$(iRet, 0)
+        iRet2 = GetLocaleInfo(LCID, LOCALE_STHOUSAND, Symbol, iRet)
+        Pos = InStr(Symbol, Chr$(0))
+        If Pos > 0 Then
+            Symbol = Left$(Symbol, Pos - 1)
+        End If
+        If Symbol <> "," Then
+            'change thousand separator
+            old_LOCALE_STHOUSAND = Symbol
+            LCID = GetUserDefaultLCID()
+            Call SetLocaleInfo(LCID, LOCALE_STHOUSAND, ",")
+            Call PostMessage(HWND_BROADCAST, WM_SETTINGCHANGE, 0&, ByVal 0&)
+        End If
+    Else
+        iRet = SetLocaleInfo(Locale, LOCALE_SSHORTDATE, localSymbol)
+        Call PostMessage(HWND_BROADCAST, WM_SETTINGCHANGE, 0&, ByVal 0&)
+        'restore the original settings in cp
+        If old_LOCALE_SDECIMAL <> vbNullString Then
+        ' restore decimal symbols
+            LCID = GetUserDefaultLCID()
+            Call SetLocaleInfo(LCID, LOCALE_SDECIMAL, old_LOCALE_SDECIMAL)
+            Call PostMessage(HWND_BROADCAST, WM_SETTINGCHANGE, 0&, ByVal 0&)
+        End If
+        If old_LOCALE_STHOUSAND <> vbNullString Then
+        ' restore thousand separator
+            LCID = GetUserDefaultLCID()
+            Call SetLocaleInfo(LCID, LOCALE_STHOUSAND, old_LOCALE_STHOUSAND)
+            Call PostMessage(HWND_BROADCAST, WM_SETTINGCHANGE, 0&, ByVal 0&)
+        End If
+    End If
+
+    
+End Sub
 Public Function CheckStreamCapability() As Boolean
 'Checks if the current File System supports NTFS
 Dim name As String * 256
@@ -1289,7 +1345,7 @@ On Error Resume Next
 'Reads a stream into a buffer
 hFile = CreateFileW(StrPtr(StreamName), AccessRead, ShareRead, 0&, OpenExisting, 0&, 0&)
 If hFile = -1 Then
-    ' * '* Set_locale regionalSymbol
+    Set_locale regionalSymbol
     Err.Raise ActiveLockErrCodeConstants.alerrLicenseTampered, ACTIVELOCKSTRING, STRLICENSETAMPERED
 End If
 Size = GetFileSize(hFile, 0&)
@@ -1367,7 +1423,7 @@ Public Function ReadFile(ByVal sPath As String, ByRef sData As String) As Long
     Exit Function
 Hell:
     Close #hFile
-    ' * '* Set_locale regionalSymbol
+    Set_locale regionalSymbol
     Err.Raise Err.Number, "Activelock", Err.Description
 End Function
 
@@ -1659,24 +1715,24 @@ End Function
 '    Dim Key As RSAKey
 '    ' create the key from the key blobs
 '    If rsa_createkey(strPub, Len(strPub), strPriv, Len(strPriv), Key) = RETVAL_ON_ERROR Then
-'        ' * '* Set_locale regionalSymbol
+'        Set_locale regionalSymbol
 '        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
 '    End If
 '
 '    ' sign the data using the created key
 '    Dim sLen&
 '    If rsa_sign(Key, strdata, Len(strdata), vbNullString, sLen) = RETVAL_ON_ERROR Then
-'        ' * '* Set_locale regionalSymbol
+'        Set_locale regionalSymbol
 '        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
 '    End If
 '    Dim strSig As String: strSig = String(sLen, 0)
 '    If rsa_sign(Key, strdata, Len(strdata), strSig, sLen) = RETVAL_ON_ERROR Then
-'        ' * '* Set_locale regionalSymbol
+'        Set_locale regionalSymbol
 '        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
 '    End If
 '    ' throw away the key
 '    If rsa_freekey(Key) = RETVAL_ON_ERROR Then
-'        ' * '* Set_locale regionalSymbol
+'        Set_locale regionalSymbol
 '        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
 '    End If
 '    RSASign = strSig
@@ -1699,18 +1755,18 @@ End Function
 '    Dim rc As Long
 '    ' create the key from the public key blob
 '    If rsa_createkey(strPub, Len(strPub), vbNullString, 0, Key) = RETVAL_ON_ERROR Then
-'        ' * '* Set_locale regionalSymbol
+'        Set_locale regionalSymbol
 '        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
 '    End If
 '    ' validate the key
 '    rc = rsa_verifysig(Key, strSig, Len(strSig), strdata, Len(strdata))
 '    If rc = RETVAL_ON_ERROR Then
-'        ' * '* Set_locale regionalSymbol
+'        Set_locale regionalSymbol
 '        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
 '    End If
 '    ' de-allocate memory used by the key
 '    If rsa_freekey(Key) = RETVAL_ON_ERROR Then
-'        ' * '* Set_locale regionalSymbol
+'        Set_locale regionalSymbol
 '        Err.Raise ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR
 '    End If
 '    RSAVerify = rc

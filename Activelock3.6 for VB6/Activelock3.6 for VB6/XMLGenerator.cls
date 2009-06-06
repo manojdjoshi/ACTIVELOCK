@@ -76,7 +76,7 @@ Private Sub IALUGenerator_SaveProduct(ProdInfo As ProductInfo)
     'Set MyXMLDoc.schemas = schemaCache
     'Set result = MyXMLDoc.Validate
     'If result.errorCode = 0 Then
-    '    ' * Set_locale regionalSymbol
+    '    Set_locale regionalSymbol
     '    Err.Raise ("XML Validation Error:" & result.reason)
     'End If
 
@@ -151,7 +151,7 @@ Private Function IALUGenerator_RetrieveProduct(ByVal name As String, ByVal Ver A
       End With
     Next
     If ProdInfo.VCode = "" Or ProdInfo.GCode = "" Then
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise ALUGENErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, "Product code set is invalid."
     End If
     Set IALUGenerator_RetrieveProduct = ProdInfo

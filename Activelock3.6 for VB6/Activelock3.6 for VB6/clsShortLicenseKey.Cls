@@ -386,14 +386,14 @@ Friend Sub AddSwapBits(ByVal Word1 As Long, ByVal Bit1 As Long, _
     ' This implementation hardcodes keys that are 8 bytes/4 words
     If Word1 < 0 Or Word1 > 3 _
     Or Word2 < 0 Or Word2 > 3 Then
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise 5, Module, "Word specification is not within 0-3."
     End If
 
     ' There are only 16 bits to a word.
     If Bit1 < 0 Or Bit1 > 15 _
     Or Bit2 < 0 Or Bit2 > 15 Then
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise 5, Module, "Bit specification is not within 0-15."
     End If
 

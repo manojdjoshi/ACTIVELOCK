@@ -361,7 +361,7 @@ End Function
 Public Function DblStringToDate(ByRef Dstr As String) As Date
         
 On Error GoTo DblStringToDateError
-        
+       
 If Dstr <> "" Then
     Dim Dbl As Double
     Dbl = CDbl(Dstr)
@@ -580,7 +580,7 @@ DateGood = False
 
 If TrialSteganographyExists(TrialHideTypes) Then
     If DateGoodSteganography(numDays, daysLeft2) = False Then
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS
         Exit Function
     End If
@@ -588,7 +588,7 @@ If TrialSteganographyExists(TrialHideTypes) Then
 End If
 If TrialHiddenFolderExists(TrialHideTypes) Then
     If DateGoodHiddenFolder(numDays, daysLeft3) = False Then
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS
         Exit Function
     End If
@@ -596,7 +596,7 @@ If TrialHiddenFolderExists(TrialHideTypes) Then
 End If
 If TrialRegistryPerUserExists(TrialHideTypes) Then
     If DateGoodRegistry(numDays, daysLeft4) = False Then
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS
         Exit Function
     End If
@@ -634,7 +634,7 @@ RunsGood = False
 
 If TrialSteganographyExists(TrialHideTypes) Then
     If RunsGoodSteganography(numRuns, runsLeft2) = False Then
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS
         Exit Function
     End If
@@ -643,7 +643,7 @@ End If
 
 If TrialHiddenFolderExists(TrialHideTypes) Then
     If RunsGoodHiddenFolder(numRuns, runsLeft3) = False Then
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS
         Exit Function
     End If
@@ -652,7 +652,7 @@ End If
 
 If TrialRegistryPerUserExists(TrialHideTypes) Then
     If RunsGoodRegistry(numRuns, runsLeft4) = False Then
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS
         Exit Function
     End If
@@ -2013,10 +2013,10 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
     End If
     
     If alockDays = 0 And trialPeriod = True Then
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrInvalidTrialDays, ACTIVELOCKSTRING, STRINVALIDTRIALDAYS
     ElseIf alockRuns = 0 And trialRuns = True Then
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrInvalidTrialRuns, ACTIVELOCKSTRING, STRINVALIDTRIALRUNS
     End If
     
@@ -2034,16 +2034,16 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
     ' I am removing these from v3.6 - ialkan 12-27-2008
     ' Check to see if any of the hidden signatures say the trial is expired
     'If IsRegistryExpired1() = True Then
-    '    ' * Set_locale regionalSymbol
+    '    Set_locale regionalSymbol
     '    Err.Raise ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG
     'End If
     'If IsRegistryExpired2() = True Then
-    '    ' * Set_locale regionalSymbol
+    '    Set_locale regionalSymbol
     '    Err.Raise ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG
     'End If
     
     If IsEncryptedFileExpired() = True Then
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG
     End If
     
@@ -2051,7 +2051,7 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
     ' Well... nothing was found
     ' Check the last indicator
     'If IsFolderStampExpired() = True Then
-    '    ' * Set_locale regionalSymbol
+    '    Set_locale regionalSymbol
     '    Err.Raise -10100, , TEXTMSG
     'End If
         
@@ -2059,7 +2059,7 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
     If TrialRegistryPerUserExists(TrialHideTypes) Then
         ' Main trial hiding locations
         If IsRegistryExpired() = True Then
-            ' * Set_locale regionalSymbol
+            Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG
         End If
     End If
@@ -2068,14 +2068,14 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
         OutputDebugString "Before IsSteganographyExpired"
         If IsSteganographyExpired() = True Then
             OutputDebugString "After IsSteganographyExpired"
-            ' * Set_locale regionalSymbol
+            Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG
         End If
     End If
     OutputDebugString "Before TrialHiddenFolderExists"
     If TrialHiddenFolderExists(TrialHideTypes) Then
         If IsHiddenFolderExpired() = True Then
-            ' * Set_locale regionalSymbol
+            Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG
         End If
     End If
@@ -2085,7 +2085,7 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
          If Not DateGood(alockDays, daysLeft, TrialHideTypes) Then
             ExpireTrial SoftwareName, SoftwareVer, TrialType, TrialLength, TrialHideTypes, SoftwarePassword
             ' Trial Period has expired
-            ' * Set_locale regionalSymbol
+            Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS
          Else
             OutputDebugString "Before GetSteganographyFile"
@@ -2094,13 +2094,13 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
                 dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
                 If mCheckTimeServerForClockTampering = alsCheckTimeServer Then
                     If SystemClockTampered Then
-                        ' * Set_locale regionalSymbol
+                        Set_locale regionalSymbol
                         Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
                     End If
                 End If
                 If mCheckSystemFilesForClockTampering = alsCheckSystemFiles Then
                     If ClockTampering Then
-                        ' * Set_locale regionalSymbol
+                        Set_locale regionalSymbol
                         Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
                     End If
                 End If
@@ -2119,7 +2119,7 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
         If Not RunsGood(alockRuns, runsLeft, TrialHideTypes) Then
             ExpireTrial SoftwareName, SoftwareVer, TrialType, TrialLength, TrialHideTypes, SoftwarePassword
             ' Trial Runs have expired
-            ' * Set_locale regionalSymbol
+            Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS
         Else
             If fileExist(GetSteganographyFile()) = False And _
@@ -2127,13 +2127,13 @@ Public Function ActivateTrial(ByVal SoftwareName As String, ByVal SoftwareVer As
                 dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
                 If mCheckTimeServerForClockTampering = alsCheckTimeServer Then
                     If SystemClockTampered Then
-                        ' * Set_locale regionalSymbol
+                        Set_locale regionalSymbol
                         Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
                     End If
                 End If
                 If mCheckSystemFilesForClockTampering = alsCheckSystemFiles Then
                     If ClockTampering Then
-                        ' * Set_locale regionalSymbol
+                        Set_locale regionalSymbol
                         Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED
                     End If
                 End If
@@ -2521,7 +2521,7 @@ If FileLen(tmpDir & Trim(CStr(xF)) & ".txt") > 30 Then
         'MsgBox xSoft & " does not exist on this machine."  EVERYTHING OK
     ElseIf InStr(1, xFile, "requested pause or stop is not valid") > 0 Then
         'MsgBox xSoft & " is installed AND RUNNING"
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
     ElseIf InStr(1, xFile, "service is not started") > 0 Then
         'MsgBox xSoft & " is installed but not running at the moment."   EVERYTHING OK
@@ -3129,7 +3129,7 @@ Public Function SystemClockTampered() As Boolean
 If IsWebConnected() = False Then
     SystemClockTampered = False
     Exit Function
-    '' * Set_locale (regionalSymbol)
+    'Set_locale (regionalSymbol)
     'Err.Raise ActiveLockErrCodeConstants.alerrNotInitialized, ACTIVELOCKSTRING, STRINTERNETNOTCONNECTED
 End If
 

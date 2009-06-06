@@ -118,7 +118,7 @@ Case ProductsStoreType.alsMDBFile
   'Case ProductsStoreType.alsMSSQL
   '  Set GeneratorInstance = New MSSQLGenerator
 Case Else
-    ' * Set_locale regionalSymbol
+    Set_locale regionalSymbol
     Err.Raise ActiveLockErrCodeConstants.alerrNotImplemented, ACTIVELOCKSTRING, STRNOTIMPLEMENTED
 End Select
 End Function

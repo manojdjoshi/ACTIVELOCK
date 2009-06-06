@@ -1655,14 +1655,6 @@ End Function
 Public Function GetBiosVersion() As String
 GetBiosVersion = GetWmiDeviceSingleValue("Win32_BIOS", "Version")
 GetBiosVersion = Replace(GetBiosVersion, " ", "")
-'Dim BiosSet As Object
-'Dim obj As Object
-'On Error GoTo GetBiosVersionError
-'Set BiosSet = GetObject("WinMgmts:{impersonationLevel=impersonate}").InstancesOf("Win32_BIOS")
-'For Each obj In BiosSet
-'    GetBiosVersion = obj.Version
-'    If GetBiosVersion <> "" Then Exit Function
-'Next
 GetBiosVersionError:
 If GetBiosVersion = "" Then
     GetBiosVersion = "Not Available"
@@ -1715,7 +1707,7 @@ Public Function GetIPaddress() As String
 On Error GoTo GetIPaddressError
 
 If IsWebConnected() = False Then
-    ' * Set_locale (regionalSymbol)
+    Set_locale (regionalSymbol)
     Err.Raise ActiveLockErrCodeConstants.alerrNotInitialized, ACTIVELOCKSTRING, STRINTERNETNOTCONNECTED
 End If
 

@@ -248,7 +248,7 @@ Case 0   'create container
         cryptSession.DestroyContainer containerName
         cryptSession.SessionEnd
         Set cryptSession = Nothing
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE & "[0]"
     End If
     Set cryptSession = Nothing
@@ -282,7 +282,7 @@ Case 1   'generate exchange or signature key
         cryptSession.DestroyContainer containerName
         cryptSession.SessionEnd
         Set cryptSession = Nothing
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE & "[1]"
     End If
     Set cryptSession = Nothing
@@ -300,7 +300,7 @@ Case 2    'destroy container
         cryptSession.DestroyContainer containerName
         cryptSession.SessionEnd
         Set cryptSession = Nothing
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE & "[2]"
     End If
     Set cryptSession = Nothing
@@ -332,7 +332,7 @@ Case 3   'encrypt/decrypt
         cryptSession.DestroyContainer containerName
         cryptSession.SessionEnd
         Set cryptSession = Nothing
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE & "[3]"
     End If
     Set cryptSession = Nothing
@@ -341,7 +341,7 @@ Case 4    'sign the key
     If plainText = "" Then
         cryptSession.DestroyContainer containerName
         cryptSession.SessionEnd
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE & "[4]"
     End If
     Set cryptSession = New clsCryptoAPI
@@ -385,7 +385,7 @@ Case 5   'validate the key
             cryptSession.DestroyContainer containerName
             cryptSession.SessionEnd
             Set cryptSession = Nothing
-            ' * Set_locale regionalSymbol
+            Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE & "[5-1]"
         End If
 OutputDebugString "Before ValidateString"
@@ -399,7 +399,7 @@ OutputDebugString "inputText: " & inputText
             cryptSession.DestroyContainer containerName
             cryptSession.SessionEnd
             Set cryptSession = Nothing
-            ' * Set_locale regionalSymbol
+            Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrCryptoAPIError, ACTIVELOCKSTRING, STRCRYPTOAPIINVALIDSIGNATURE & "[5-2]"
         End If
         

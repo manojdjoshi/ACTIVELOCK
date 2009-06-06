@@ -365,7 +365,7 @@ End Function
 '* Private helpers
 '******************************************************************************
 Private Sub ErrRaise(ByVal MethodName As String, Optional ByVal Description As String)
-    ' * Set_locale regionalSymbol
+    Set_locale regionalSymbol
     Err.Raise 5, mcClassName & "." & MethodName, Description
 End Sub
 
