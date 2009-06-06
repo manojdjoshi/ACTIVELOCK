@@ -1113,7 +1113,7 @@ DateGoodSteganographyError:
 
     '''* <summary>
     '''* Function is used to convert doubles stored in strings to dates
-    '''* useful becuase whenever we store dates we convert them (to doubles and then strings)
+    '''* useful because whenever we store dates we convert them (to doubles and then strings)
     '''* in case the user changes the locale in between storage and retrieval.
     '''* minor handling of actual date strings for some semblance of backward 
     '''* compatibility
@@ -1129,7 +1129,7 @@ DateGoodSteganographyError:
         ' culture to ensure we do this the same way everytime
         Dim Dr As Double
         Dim Drd As Date
-        Dim culture As Globalization.CultureInfo = Globalization.CultureInfo.CurrentUICulture
+        Dim culture As Globalization.CultureInfo = Globalization.CultureInfo.GetCultureInfo("en-US") 'CurrentUICulture
 
         If Double.TryParse(Dstr, Globalization.NumberStyles.Float, culture, Dr) Then
             Return Date.FromOADate(Dr)

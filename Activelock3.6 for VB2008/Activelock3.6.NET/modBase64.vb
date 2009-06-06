@@ -70,25 +70,31 @@ Module modBase64
 	' Remarks: None
 	'===============================================================================
 	Public Function Base64_Encode(ByRef DecryptedText As String) As String
-        Dim c1, c2, c3 As Integer
-        Dim w1 As Short
-        Dim w2 As Short
-        Dim w3 As Short
-        Dim w4 As Short
-        Dim N As Short
-        Dim retry As String = String.Empty
 
-        For N = 1 To Len(DecryptedText) Step 3
-            c1 = Asc(Mid(DecryptedText, N, 1))
-            c2 = Asc(Mid(DecryptedText, N + 1, 1) & Chr(0))
-            c3 = Asc(Mid(DecryptedText, N + 2, 1) & Chr(0))
-            w1 = Int(c1 / 4)
-            w2 = CShort(c1 And 3) * 16 + Int(c2 / 16)
-            If Len(DecryptedText) >= N + 1 Then w3 = CShort(c2 And 15) * 4 + Int(c3 / 64) Else w3 = -1
-            If Len(DecryptedText) >= N + 2 Then w4 = c3 And 63 Else w4 = -1
-            retry = retry & mimeencode(w1) & mimeencode(w2) & mimeencode(w3) & mimeencode(w4)
-        Next
-        Base64_Encode = retry
+        Dim byt As Byte() = System.Text.Encoding.UTF8.GetBytes(DecryptedText)
+        ' convert the byte array to a Base64 string
+        Base64_Encode = Convert.ToBase64String(byt)
+
+        'Dim c1, c2, c3 As Integer
+        'Dim w1 As Short
+        'Dim w2 As Short
+        'Dim w3 As Short
+        'Dim w4 As Short
+        'Dim N As Short
+        'Dim retry As String = String.Empty
+
+        'For N = 1 To Len(DecryptedText) Step 3
+        '    c1 = Asc(Mid(DecryptedText, N, 1))
+        '    c2 = Asc(Mid(DecryptedText, N + 1, 1) & Chr(0))
+        '    c3 = Asc(Mid(DecryptedText, N + 2, 1) & Chr(0))
+        '    w1 = Int(c1 / 4)
+        '    w2 = CShort(c1 And 3) * 16 + Int(c2 / 16)
+        '    If Len(DecryptedText) >= N + 1 Then w3 = CShort(c2 And 15) * 4 + Int(c3 / 64) Else w3 = -1
+        '    If Len(DecryptedText) >= N + 2 Then w4 = c3 And 63 Else w4 = -1
+        '    retry = retry & mimeencode(w1) & mimeencode(w2) & mimeencode(w3) & mimeencode(w4)
+        'Next
+        'Base64_Encode = retry
+
     End Function
 
     '===============================================================================
@@ -101,23 +107,28 @@ Module modBase64
     ' Remarks: None
     '===============================================================================
     Public Function Base64_Decode(ByRef a As String) As String
-        Dim w1 As Short
-        Dim w2 As Short
-        Dim w3 As Short
-        Dim w4 As Short
-        Dim N As Short
-        Dim retry As String = String.Empty
 
-        For N = 1 To Len(a) Step 4
-            w1 = mimedecode(Mid(a, N, 1))
-            w2 = mimedecode(Mid(a, N + 1, 1))
-            w3 = mimedecode(Mid(a, N + 2, 1))
-            w4 = mimedecode(Mid(a, N + 3, 1))
-            If w2 >= 0 Then retry = retry & Chr((w1 * 4 + Int(w2 / 16)) And 255)
-            If w3 >= 0 Then retry = retry & Chr((w2 * 16 + Int(w3 / 4)) And 255)
-            If w4 >= 0 Then retry = retry & Chr((w3 * 64 + w4) And 255)
-        Next
-        Base64_Decode = retry
+        Dim b As Byte() = Convert.FromBase64String(a)
+        Base64_Decode = System.Text.Encoding.UTF8.GetString(b)
+
+        'Dim w1 As Short
+        'Dim w2 As Short
+        'Dim w3 As Short
+        'Dim w4 As Short
+        'Dim N As Short
+        'Dim retry As String = String.Empty
+
+        'For N = 1 To Len(a) Step 4
+        '    w1 = mimedecode(Mid(a, N, 1))
+        '    w2 = mimedecode(Mid(a, N + 1, 1))
+        '    w3 = mimedecode(Mid(a, N + 2, 1))
+        '    w4 = mimedecode(Mid(a, N + 3, 1))
+        '    If w2 >= 0 Then retry = retry & Chr((w1 * 4 + Int(w2 / 16)) And 255)
+        '    If w3 >= 0 Then retry = retry & Chr((w2 * 16 + Int(w3 / 4)) And 255)
+        '    If w4 >= 0 Then retry = retry & Chr((w3 * 64 + w4) And 255)
+        'Next
+        'Base64_Decode = retry
+
     End Function
 
     '===============================================================================

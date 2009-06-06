@@ -682,7 +682,7 @@ Friend Class ActiveLock
 #If CBool(AL_DEBUG) <> False Then
 		GoTo Done
 #End If
-        ' ALL file generatiand software usage on PCs with different cultures 
+        ' ALL file generated software usage on PCs with different cultures 
         ' does not work due to the usage of Chr() function in Base64_Decode in
         ' modBase64.vb
         ' The following is necessary to fix the problem
@@ -1626,7 +1626,7 @@ ErrHandler:
                 Else
                     AppendLockString(strLock, noKey)
                 End If
-                If IsNumberIncluded(mLockTypes, IActiveLock.ALLockTypes.lockVideoID) Then
+                If IsNumberIncluded(mLockTypes, IActiveLock.ALLockTypes.lockvideoID) Then
                     AppendLockString(strLock, modHardware.GetVideoID())
                 Else
                     AppendLockString(strLock, noKey)

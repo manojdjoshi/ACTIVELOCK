@@ -270,13 +270,8 @@ Friend Class frmMain
         Me._SSTab1_TabPage0 = New System.Windows.Forms.TabPage
         Me.grpProductsList = New System.Windows.Forms.GroupBox
         Me.fraProdNew = New System.Windows.Forms.GroupBox
-        Me.optStrength4 = New System.Windows.Forms.RadioButton
         Me.cmdStartWizard = New System.Windows.Forms.Button
-        Me.optStrength3 = New System.Windows.Forms.RadioButton
-        Me.optStrength5 = New System.Windows.Forms.RadioButton
-        Me.optStrength2 = New System.Windows.Forms.RadioButton
         Me.Label1 = New System.Windows.Forms.Label
-        Me.optStrength1 = New System.Windows.Forms.RadioButton
         Me.grpCodes = New System.Windows.Forms.GroupBox
         Me.txtGCode = New System.Windows.Forms.TextBox
         Me.lblGCode = New System.Windows.Forms.Label
@@ -284,6 +279,11 @@ Friend Class frmMain
         Me.Label2 = New System.Windows.Forms.Label
         Me.Label3 = New System.Windows.Forms.Label
         Me.GroupBox1 = New System.Windows.Forms.GroupBox
+        Me.optStrength4 = New System.Windows.Forms.RadioButton
+        Me.optStrength5 = New System.Windows.Forms.RadioButton
+        Me.optStrength3 = New System.Windows.Forms.RadioButton
+        Me.optStrength1 = New System.Windows.Forms.RadioButton
+        Me.optStrength2 = New System.Windows.Forms.RadioButton
         Me._SSTab1_TabPage1 = New System.Windows.Forms.TabPage
         Me.frmKeyGen = New System.Windows.Forms.Panel
         Me.lblKeyStrength = New System.Windows.Forms.Label
@@ -984,14 +984,6 @@ Friend Class frmMain
         Me.fraProdNew.TabStop = False
         Me.fraProdNew.Text = " Product details "
         '
-        'optStrength4
-        '
-        Me.optStrength4.Location = New System.Drawing.Point(75, 11)
-        Me.optStrength4.Name = "optStrength4"
-        Me.optStrength4.Size = New System.Drawing.Size(65, 20)
-        Me.optStrength4.TabIndex = 76
-        Me.optStrength4.Text = "1024-bit"
-        '
         'cmdStartWizard
         '
         Me.cmdStartWizard.Anchor = CType((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
@@ -1010,30 +1002,6 @@ Friend Class frmMain
         Me.cmdStartWizard.TextAlign = System.Drawing.ContentAlignment.MiddleRight
         Me.cmdStartWizard.UseVisualStyleBackColor = False
         '
-        'optStrength3
-        '
-        Me.optStrength3.Location = New System.Drawing.Point(146, 10)
-        Me.optStrength3.Name = "optStrength3"
-        Me.optStrength3.Size = New System.Drawing.Size(65, 20)
-        Me.optStrength3.TabIndex = 72
-        Me.optStrength3.Text = "1536-bit"
-        '
-        'optStrength5
-        '
-        Me.optStrength5.Location = New System.Drawing.Point(7, 11)
-        Me.optStrength5.Name = "optStrength5"
-        Me.optStrength5.Size = New System.Drawing.Size(62, 20)
-        Me.optStrength5.TabIndex = 71
-        Me.optStrength5.Text = "512-bit"
-        '
-        'optStrength2
-        '
-        Me.optStrength2.Location = New System.Drawing.Point(217, 11)
-        Me.optStrength2.Name = "optStrength2"
-        Me.optStrength2.Size = New System.Drawing.Size(65, 20)
-        Me.optStrength2.TabIndex = 69
-        Me.optStrength2.Text = "2048-bit"
-        '
         'Label1
         '
         Me.Label1.BackColor = System.Drawing.SystemColors.Control
@@ -1046,14 +1014,6 @@ Friend Class frmMain
         Me.Label1.Size = New System.Drawing.Size(55, 18)
         Me.Label1.TabIndex = 68
         Me.Label1.Text = "Strength:"
-        '
-        'optStrength1
-        '
-        Me.optStrength1.Location = New System.Drawing.Point(288, 11)
-        Me.optStrength1.Name = "optStrength1"
-        Me.optStrength1.Size = New System.Drawing.Size(66, 20)
-        Me.optStrength1.TabIndex = 67
-        Me.optStrength1.Text = "4096-bit"
         '
         'grpCodes
         '
@@ -1160,6 +1120,46 @@ Friend Class frmMain
         Me.GroupBox1.TabIndex = 74
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = ".NET CLR RSA"
+        '
+        'optStrength4
+        '
+        Me.optStrength4.Location = New System.Drawing.Point(75, 11)
+        Me.optStrength4.Name = "optStrength4"
+        Me.optStrength4.Size = New System.Drawing.Size(65, 20)
+        Me.optStrength4.TabIndex = 76
+        Me.optStrength4.Text = "1024-bit"
+        '
+        'optStrength5
+        '
+        Me.optStrength5.Location = New System.Drawing.Point(7, 11)
+        Me.optStrength5.Name = "optStrength5"
+        Me.optStrength5.Size = New System.Drawing.Size(62, 20)
+        Me.optStrength5.TabIndex = 71
+        Me.optStrength5.Text = "512-bit"
+        '
+        'optStrength3
+        '
+        Me.optStrength3.Location = New System.Drawing.Point(146, 10)
+        Me.optStrength3.Name = "optStrength3"
+        Me.optStrength3.Size = New System.Drawing.Size(65, 20)
+        Me.optStrength3.TabIndex = 72
+        Me.optStrength3.Text = "1536-bit"
+        '
+        'optStrength1
+        '
+        Me.optStrength1.Location = New System.Drawing.Point(288, 11)
+        Me.optStrength1.Name = "optStrength1"
+        Me.optStrength1.Size = New System.Drawing.Size(66, 20)
+        Me.optStrength1.TabIndex = 67
+        Me.optStrength1.Text = "4096-bit"
+        '
+        'optStrength2
+        '
+        Me.optStrength2.Location = New System.Drawing.Point(217, 11)
+        Me.optStrength2.Name = "optStrength2"
+        Me.optStrength2.Size = New System.Drawing.Size(65, 20)
+        Me.optStrength2.TabIndex = 69
+        Me.optStrength2.Text = "2048-bit"
         '
         '_SSTab1_TabPage1
         '
@@ -1538,7 +1538,7 @@ Friend Class frmMain
         Me.chkLockMotherboard.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkLockMotherboard.Size = New System.Drawing.Size(279, 18)
         Me.chkLockMotherboard.TabIndex = 23
-        Me.chkLockMotherboard.Text = "Lock to Motherboard Serial"
+        Me.chkLockMotherboard.Text = "Lock to BIOS/System Serial"
         Me.chkLockMotherboard.UseVisualStyleBackColor = False
         '
         'chkLockBIOS
@@ -3325,7 +3325,7 @@ SaveFormSettings_Error:
                 End If
                 If chkLockMotherboard.CheckState = CheckState.Checked Then
                     If lockTypesString <> "" Then lockTypesString = lockTypesString & "+"
-                    lockTypesString = lockTypesString & "Motherboard Serial"
+                    lockTypesString = lockTypesString & "BIOS/System Serial"
                 End If
                 If chkLockIP.CheckState = CheckState.Checked Then
                     If lockTypesString <> "" Then lockTypesString = lockTypesString & "+"
@@ -4309,7 +4309,7 @@ exitValidate:
                 chkLockBIOS.Enabled = True
                 chkLockBIOS.Text = "Lock to BIOS Version"
                 chkLockMotherboard.Enabled = True
-                chkLockMotherboard.Text = "Lock to Motherboard Serial"
+                chkLockMotherboard.Text = "Lock to BIOS/System Serial"
                 chkLockIP.Enabled = True
                 chkLockIP.Text = "Lock to Local IP Address"
                 chkLockExternalIP.Enabled = True
