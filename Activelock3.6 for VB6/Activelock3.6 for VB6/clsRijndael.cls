@@ -182,7 +182,7 @@ Private Function LShift(ByVal lValue As Long, _
         End If
         Exit Function
     ElseIf iShiftBits < 0 Or iShiftBits > 31 Then
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise 6
     End If
     
@@ -211,7 +211,7 @@ Private Function RShift(ByVal lValue As Long, _
         End If
         Exit Function
     ElseIf iShiftBits < 0 Or iShiftBits > 31 Then
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise 6
     End If
     
@@ -238,7 +238,7 @@ Private Function LShiftByte(ByVal bytValue As Byte, _
         End If
         Exit Function
     ElseIf bytShiftBits < 0 Or bytShiftBits > 7 Then
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise 6
     End If
     
@@ -262,7 +262,7 @@ Private Function RShiftByte(ByVal bytValue As Byte, _
         End If
         Exit Function
     ElseIf bytShiftBits < 0 Or bytShiftBits > 7 Then
-        ' * Set_locale regionalSymbol
+        Set_locale regionalSymbol
         Err.Raise 6
     End If
     

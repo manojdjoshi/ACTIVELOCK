@@ -46,10 +46,11 @@ Begin VB.Form frmMain
       _ExtentY        =   18098
       _Version        =   393216
       Tabs            =   2
+      Tab             =   1
       TabHeight       =   520
       TabCaption(0)   =   "Pro&duct Code Generator"
       TabPicture(0)   =   "frmMain3.frx":0CCA
-      Tab(0).ControlEnabled=   -1  'True
+      Tab(0).ControlEnabled=   0   'False
       Tab(0).Control(0)=   "Label1"
       Tab(0).Control(0).Enabled=   0   'False
       Tab(0).Control(1)=   "Label17"
@@ -67,14 +68,16 @@ Begin VB.Form frmMain
       Tab(0).ControlCount=   7
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
-      Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "cmdViewArchive"
-      Tab(1).Control(1)=   "frmKeyGen"
+      Tab(1).ControlEnabled=   -1  'True
+      Tab(1).Control(0)=   "frmKeyGen"
+      Tab(1).Control(0).Enabled=   0   'False
+      Tab(1).Control(1)=   "cmdViewArchive"
+      Tab(1).Control(1).Enabled=   0   'False
       Tab(1).ControlCount=   2
       Begin VB.CommandButton cmdValidate 
          Caption         =   "&Validate"
          Height          =   315
-         Left            =   8520
+         Left            =   -66480
          TabIndex        =   39
          Top             =   4755
          Width           =   1005
@@ -86,7 +89,7 @@ Begin VB.Form frmMain
          BorderStyle     =   0  'None
          ForeColor       =   &H80000008&
          Height          =   825
-         Left            =   8730
+         Left            =   -66270
          Picture         =   "frmMain3.frx":0D02
          ScaleHeight     =   825
          ScaleWidth      =   825
@@ -97,7 +100,7 @@ Begin VB.Form frmMain
       Begin VB.CommandButton cmdViewArchive 
          Caption         =   "&View License Database"
          Height          =   315
-         Left            =   -73515
+         Left            =   1485
          TabIndex        =   36
          ToolTipText     =   "View License Archive"
          Top             =   9855
@@ -107,7 +110,7 @@ Begin VB.Form frmMain
          Caption         =   "&Remove"
          Enabled         =   0   'False
          Height          =   315
-         Left            =   8520
+         Left            =   -66480
          TabIndex        =   11
          Top             =   5175
          Width           =   1000
@@ -115,7 +118,7 @@ Begin VB.Form frmMain
       Begin VB.Frame frmKeyGen 
          BorderStyle     =   0  'None
          Height          =   9735
-         Left            =   -74865
+         Left            =   135
          TabIndex        =   13
          Top             =   450
          Width           =   9495
@@ -291,7 +294,7 @@ Begin VB.Form frmMain
             Width           =   7095
          End
          Begin VB.CheckBox chkLockMotherboard 
-            Caption         =   "Lock to Motherboard Serial Number:"
+            Caption         =   "Lock to BIOS/System Serial Number:"
             BeginProperty Font 
                Name            =   "Microsoft Sans Serif"
                Size            =   8.25
@@ -671,7 +674,7 @@ Begin VB.Form frmMain
       End
       Begin VB.Frame fraProdNew 
          Height          =   2835
-         Left            =   135
+         Left            =   -74865
          TabIndex        =   12
          Top             =   360
          Width           =   9495
@@ -888,7 +891,7 @@ Begin VB.Form frmMain
       End
       Begin MSFlexGridLib.MSFlexGrid gridProds 
          Height          =   6540
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   10
          Top             =   3585
          Width           =   8265
@@ -915,7 +918,7 @@ Begin VB.Form frmMain
          Caption         =   "Activelock V3"
          ForeColor       =   &H00FF0000&
          Height          =   165
-         Left            =   8610
+         Left            =   -66390
          TabIndex        =   38
          Top             =   7335
          Width           =   1065
@@ -923,7 +926,7 @@ Begin VB.Form frmMain
       Begin VB.Label Label1 
          Caption         =   "&Product List:"
          Height          =   255
-         Left            =   135
+         Left            =   -74865
          TabIndex        =   30
          Top             =   3330
          Width           =   1215
@@ -1366,9 +1369,9 @@ End Sub
 
 Private Sub cmbLicType_Click()
 ' Get the current date format and save it to regionalSymbol variable
-'* Get_locale
+Get_locale
 ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
-'* Set_locale ("")
+Set_locale ("")
     
 ' enable the days edit box
 If cmbLicType = "Periodic" Or cmbLicType = "Time Locked" Then
@@ -1390,7 +1393,7 @@ Else
     lblDays.Caption = "Day(s)"
 End If
 
-'* Set_locale regionalSymbol
+Set_locale regionalSymbol
 
 End Sub
 
@@ -1498,9 +1501,9 @@ DoEvents
 On Error GoTo Done
 
 ' Get the current date format and save it to regionalSymbol variable
-'* Get_locale
+Get_locale
 ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
-'* Set_locale ("")
+Set_locale ("")
 
 ' CryptoAPI - RSA with given strength
 Dim strPublicBlob As String, strPrivateBlob As String
@@ -1523,7 +1526,7 @@ txtCode1.Text = strPublicBlob
 txtCode2.Text = strPrivateBlob
 
 Done:
-    '* Set_locale regionalSymbol
+    Set_locale regionalSymbol
     Screen.MousePointer = vbDefault
     Enabled = True
 End Sub
@@ -1559,14 +1562,14 @@ If SSTab1.Tab <> 1 Then Exit Sub ' our tab not active - do nothing
 If Len(txtReqCodeIn.Text) < 8 Then Exit Sub
 
 ' Get the current date format and save it to regionalSymbol variable
-'* Get_locale
+Get_locale
 ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
-'* Set_locale ("")
+Set_locale ("")
 
 If cmbLicType = "Time Locked" Then
     ' Check to see if there's a valid expiration date
     If CDate(ActiveLockDateFormat(txtDays.Text)) < CDate(Format(Now, "yyyy/MM/dd")) Then
-        '* Set_locale regionalSymbol
+        Set_locale regionalSymbol
         MsgBox "Entered date occurs in the past.", vbExclamation
         Exit Sub
     End If
@@ -1682,7 +1685,7 @@ If MsgBox("Would you like to save the new license in the License Database?", vbY
     End If
     If chkLockMotherboard.Value = vbChecked Then
         If lockTypesString <> "" Then lockTypesString = lockTypesString & "+"
-        lockTypesString = lockTypesString & "Motherboard Serial"
+        lockTypesString = lockTypesString & "BIOS/System Serial"
     End If
     If chkLockIP.Value = vbChecked Then
         If lockTypesString <> "" Then lockTypesString = lockTypesString & "+"
@@ -1724,11 +1727,11 @@ Label5.Visible = True
 txtLibFile.Visible = True
 cmdBrowse.Visible = True
 cmdSave.Visible = True
-'* Set_locale regionalSymbol
+Set_locale regionalSymbol
 Exit Sub
 
 ErrHandler:
-    '* Set_locale regionalSymbol
+    Set_locale regionalSymbol
     UpdateStatus "Error: " + Err.Description
     Screen.MousePointer = vbNormal
 End Sub
@@ -1896,9 +1899,9 @@ If txtCode1.Text = "" And txtCode2.Text = "" Then
 End If
 
 ' Get the current date format and save it to regionalSymbol variable
-'* Get_locale
+Get_locale
 ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
-'* Set_locale ("")
+Set_locale ("")
 
 On Error GoTo exitValidate
 
@@ -1924,12 +1927,12 @@ End If
 ok = Globals.CryptoAPIAction(5, txtName.Text & txtVer.Text, strdata, strSig, strPublicBlob, "", 0)
 UpdateStatus gridProds.TextMatrix(gridProds.Row, 0) & " (" + gridProds.TextMatrix(gridProds.Row, 1) + ") validated successfully."
 
-'* Set_locale regionalSymbol
+Set_locale regionalSymbol
 Screen.MousePointer = vbDefault
 Exit Sub
 
 exitValidate:
-'* Set_locale regionalSymbol
+Set_locale regionalSymbol
 UpdateStatus gridProds.TextMatrix(gridProds.Row, 0) & " (" + gridProds.TextMatrix(gridProds.Row, 1) + ") GCode-VCode mismatch!"
 Screen.MousePointer = vbDefault
 
@@ -2645,7 +2648,7 @@ Else ' RSA
         chkLockBIOS.Enabled = True
         chkLockBIOS.Caption = "Lock to BIOS Version:"
         chkLockMotherboard.Enabled = True
-        chkLockMotherboard.Caption = "Lock to Motherboard Serial Number:"
+        chkLockMotherboard.Caption = "Lock to BIOS/System Serial Number:"
         chkLockIP.Enabled = True
         chkLockIP.Caption = "Lock to Local IP Address:"
         chkLockExternalIP.Enabled = True
@@ -2889,10 +2892,10 @@ If usedLockNone = True Then
             chkLockWindows.Caption = "Lock to Windows Serial Number:           " & WindowsSerial
         ElseIf i = LBound(a) + 5 Then
             BIOSserial = aString
-            chkLockBIOS.Caption = "Lock to BIOS Version:                           " & BIOSserial
+            chkLockBIOS.Caption = "Lock to BIOS Version:                            " & BIOSserial
         ElseIf i = LBound(a) + 6 Then
             MotherboardSerial = aString
-            chkLockMotherboard.Caption = "Lock to Motherboard Serial Number:     " & MotherboardSerial
+            chkLockMotherboard.Caption = "Lock to BIOS/System Serial Number:    " & MotherboardSerial
         ElseIf i = LBound(a) + 7 Then
             IPaddress = aString
             chkLockIP.Caption = "Lock to Local IP Address:                     " & IPaddress
@@ -2972,11 +2975,11 @@ Else '"+" was not used, therefore one or more lockTypes were specified in the ap
             chkLockWindows.Value = vbChecked
         ElseIf i = (LBound(a) + 5) And aString <> noKey Then
             BIOSserial = aString
-            chkLockBIOS.Caption = "Lock to BIOS Version:                           " & BIOSserial
+            chkLockBIOS.Caption = "Lock to BIOS Version:                            " & BIOSserial
             chkLockBIOS.Value = vbChecked
         ElseIf i = (LBound(a) + 6) And aString <> noKey Then
             MotherboardSerial = aString
-            chkLockMotherboard.Caption = "Lock to Motherboard Serial Number:     " & MotherboardSerial
+            chkLockMotherboard.Caption = "Lock to BIOS/System Serial Number:    " & MotherboardSerial
             chkLockMotherboard.Value = vbChecked
         ElseIf i = (LBound(a) + 7) And aString <> noKey Then
             IPaddress = aString

@@ -80,3 +80,5 @@ Type RSAKey  ' 36-byte structure
     data(32) As Byte
 End Type
 
+Public Declare Function PostMessage Lib "user32" Alias "PostMessageA" (ByVal hwnd As Long, ByVal wMsg As Long, ByVal wParam As Long, lParam As Any) As Long
+
