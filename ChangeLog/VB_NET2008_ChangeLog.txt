@@ -101,6 +101,17 @@ This is essentially a computer fingerprint computed as the combination of many d
 - UPDATE: All source files have been revisited to update the Copyright info for Activelock.
 - UPDATE: Added "Permissions: everyone-full" to the ISS file, suggested by David.
 - UPDATE: Some additional files have been added to the source directories.
+v3.6 RC2
+- NEW: Removed ALCRYPTO !!!! This was a major breakthrough in the history of this program. It was obvious that ALCrypto.DLL contents are no longer needed by Activelock. Besides, it was creating confusion and chaos in terms of use and distribution, and it contained code that was redundant.
+- UPDATE: Activelock VB2008 and VB6 versions now handle dates as strings; Thanks to Bill, the entire .NET version has been revised to remove all "Set_Locale " and "Get_Locale" functions, which changed the system short date settings to the yyy/MM/dd format even though it was during the method/function executions only.
+- UPDATE: All .NET projects are now compiled with TargetCPU=AnyCPU except Alugen.NET. This is under further investigation.
+- FIX: Removed the "MsgBox" statement from the GetHDFirmwareSerial function.
+- FIX: Thanks to Robert, the Trial feature will be now functional under Windows 2003 Server.
+- FIX: Prevented the cases where Motherboard Serial Number returns an empty string. It now returns "Not Available" string.
+- FIX: GetExternalIP function was returning an HTML error message when the code failed. This was reported by Adlancas. Added various checks to detect such HTML page errors and return "Not Available" instead of an error. Apparently, this was happening while the user did not login in case of access via proxy servers.
+- UPDATE: Removed UsedLockType property from Activelock; it was polluting the code base and was not needed aymore (at least even David Weatherall who has originally requested it is not using it).
+- UPDATE: lock to BIOS Version remains the same since Motherboard serial was actually the BIOS/System Serial Number. Therefore renamed "Motherboard Serial" as "BIOS/System Serial Number". Baseboard ID, which actually is the Motherboard Serial Number remained the same.
+
 
 
 
