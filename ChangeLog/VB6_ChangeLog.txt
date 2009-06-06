@@ -115,8 +115,18 @@ Root: HKLM; ValueType: string; Subkey: Software\Microsoft\Windows NT\CurrentVers
 - UPDATE: All source files have been revisited to update the Copyright info for Activelock.
 - UPDATE: Added "Permissions: everyone-full" to the ISS file, suggested by David.
 - UPDATE: Some additional files have been added to the source directories.
-- UPDATE: Removed ALCRYPTO !!!! This was a major breakthrough in the history of this program. It was obvious that ALCrypto.DLL contents are no longer needed by Activelock. Besides, it was creating confusion and chaos in terms of use and distribution, and it contained code that was redundant.
-- UPDATE: Date Handling is now dones via doubles in Activelock. All dates are stored as doubles and are used as doubles eliminating the need for Activelock to change the system short date to yyyy/MM/dd everytime a date related function was used.
+v3.6 RC2
+- NEW: Removed ALCRYPTO !!!! This was a major breakthrough in the history of this program. It was obvious that ALCrypto.DLL contents are no longer needed by Activelock. Besides, it was creating confusion and chaos in terms of use and distribution, and it contained code that was redundant.
+- UPDATE: Date Handling is now dones via doubles in Activelock. All dates are stored as doubles and are used as doubles. VB6 version of Activelock still (briefly) changes the system short date to yyyy/MM/dd, decimal separator to "." and the thousands separator to "," everytime a date related function/method is used.
+- FIX: Thanks to Robert, the Trial feature will be now functional under Windows 2003 Server.
+- FIX: Prevented the cases where Motherboard Serial Number returns an empty string. It now returns "Not Available" string.
+- FIX: DetectICEcode in VB6 version of Activelock was creating a "C:\Temp" folder on the fly if it did not exist. Now the code accesses the temp directory from the environment variable and uses it for ICE detection.
+- FIX: GetExternalIP function was returning an HTML error message when the code failed. This was reported by Adlancas. Added various checks to detect such HTML page errors and return "Not Available" instead of an error. Apparently, this was happening while the user did not login in case of access via proxy servers.
+- UPDATE: Removed UsedLockType property from Activelock; it was polluting the code base and was not needed aymore (at least even David Weatherall who has originally requested it is not using it).
+- FIX: When switched from one regional settings to another, VB6 version of Activelock was not honoring the existing license. This was introduced in RC2 but was updated with RC2-1
+- UPDATE: lock to BIOS Version remains the same since Motherboard serial was actually the BIOS/System Serial Number. Therefore renamed "Motherboard Serial" as "BIOS/System Serial Number". Baseboard ID, which actually is the Motherboard Serial Number remained the same.
+
+
 
 
 
