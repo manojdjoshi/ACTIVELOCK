@@ -52,19 +52,12 @@ Begin VB.Form frmMain
       TabPicture(0)   =   "frmMain3.frx":0CCA
       Tab(0).ControlEnabled=   0   'False
       Tab(0).Control(0)=   "Label1"
-      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).Control(1)=   "Label17"
-      Tab(0).Control(1).Enabled=   0   'False
       Tab(0).Control(2)=   "gridProds"
-      Tab(0).Control(2).Enabled=   0   'False
       Tab(0).Control(3)=   "fraProdNew"
-      Tab(0).Control(3).Enabled=   0   'False
       Tab(0).Control(4)=   "cmdRemove"
-      Tab(0).Control(4).Enabled=   0   'False
       Tab(0).Control(5)=   "Picture1"
-      Tab(0).Control(5).Enabled=   0   'False
       Tab(0).Control(6)=   "cmdValidate"
-      Tab(0).Control(6).Enabled=   0   'False
       Tab(0).ControlCount=   7
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
@@ -498,7 +491,6 @@ Begin VB.Form frmMain
             Width           =   3615
          End
          Begin VB.TextBox txtDays 
-            Alignment       =   1  'Right Justify
             BackColor       =   &H8000000F&
             Height          =   315
             Left            =   1305
@@ -506,7 +498,7 @@ Begin VB.Form frmMain
             TabIndex        =   17
             Text            =   "365"
             Top             =   810
-            Width           =   1755
+            Width           =   2115
          End
          Begin VB.TextBox txtReqCodeIn 
             Height          =   315
@@ -666,10 +658,10 @@ Begin VB.Form frmMain
                Strikethrough   =   0   'False
             EndProperty
             Height          =   255
-            Left            =   3120
+            Left            =   3480
             TabIndex        =   29
             Top             =   855
-            Width           =   1935
+            Width           =   1575
          End
       End
       Begin VB.Frame fraProdNew 
@@ -1385,7 +1377,7 @@ Else
 End If
 If cmbLicType = "Time Locked" Then
     lblExpiry.Caption = "&Expires on Date:"
-    txtDays.Text = Format(Now, "yyyy/MM/dd")
+    txtDays.Text = Format(DateAdd("d", 365, Now), "yyyy/MM/dd")
     lblDays.Caption = "yyyy/MM/dd"
 Else
     lblExpiry.Caption = "&Expires after:"
@@ -1618,7 +1610,7 @@ End If
 '* strExpire = GetExpirationDate()
 strExpire = GetExpirationString()
 '* strRegDate = Format(UTC(Now), "yyyy/MM/dd")
-strRegDate = UTC(Now)
+strRegDate = Format(Now, "yyyy/MM/dd")   'UTC(Now)
 
 'Take care of the networked licenses
 If chkNetworkedLicense.Value = vbChecked Then
@@ -1630,7 +1622,8 @@ maximumUsers = CInt(txtMaxCount.Text)
 
 ' Create a product license object without the product key or license key
 Set Lic = ActiveLock3.CreateProductLicense(strName, strVer, "", licFlag, varLicType, "", IIf(chkItemData.Value = vbUnchecked, cmbRegisteredLevel.List(cmbRegisteredLevel.ListIndex), cmbRegisteredLevel.ItemData(cmbRegisteredLevel.ListIndex)), _
-    GetExpirationDate, , UTC(Now), , maximumUsers)
+    GetExpirationDate, , Now, , maximumUsers)
+    'GetExpirationDate, , UTC(Now), , maximumUsers)
     '* strExpire, , strRegDate, , maximumUsers)
 
 If Len(txtReqCodeIn.Text) = 8 Then  'Short Key License
@@ -1760,7 +1753,7 @@ Private Function GetExpirationDate() As Date
         '* GetExpirationDate = txtDays.Text
         GetExpirationDate = CDate(txtDays.Text) '*
     Else
-        GetExpirationDate = DateAdd("d", CDbl(txtDays.Text), UTC(Now))
+        GetExpirationDate = DateAdd("d", CDbl(txtDays.Text), Now)    'UTC(Now))
     End If
 End Function
 

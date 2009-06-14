@@ -492,6 +492,8 @@ Public Function CreateProductLicense(ByVal name As String, _
         ' ignore expiration date if license type is "permanent"
         If LicType <> allicPermanent Then
             .Expiration = Expiration
+        Else
+            .Expiration = #1/1/9999#
         End If
         If Not IsMissing(LicKey) Then
             .LicenseKey = LicKey
