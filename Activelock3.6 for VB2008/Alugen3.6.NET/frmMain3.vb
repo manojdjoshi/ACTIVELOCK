@@ -2315,7 +2315,7 @@ noInfo:
         ' Initialize the GUI
 
         txtLicenseKey.Text = ""
-        cboLicType.Text = "Periodic"
+        'cboLicType.Text = "Periodic"
 
         cboProducts.DisplayMember = "ProductNameVersion"
         cboProducts.ValueMember = "ProductNameVersion"
@@ -2996,8 +2996,8 @@ SaveFormSettings_Error:
         End If
         If cboLicType.Text = "Time Locked" Then
             lblExpiry.Text = "&Expires on Date:"
-            txtDays.Text = Date.Now.AddDays(365).ToString("yyyy/MM/dd")
-            lblDays.Text = "yyyy/MM/dd"
+            txtDays.Text = Date.Now.AddDays(365).ToString   '("yyyy/MM/dd")
+            lblDays.Text = "" '"yyyy/MM/dd"
             txtDays.Visible = False
             dtpExpireDate.Visible = True
             'walter'wrongdate'dtpExpireDate.Value = Now.UtcNow.AddDays(30)
@@ -3175,7 +3175,7 @@ SaveFormSettings_Error:
 
         If cboLicType.Text = "Time Locked" Then
             ' Check to see if there's a valid expiration date
-            If CDate(CType(dtpExpireDate.Value, DateTime).ToString("yyyy/MM/dd")) < CDate(Format(Date.Now, "yyyy/MM/dd")) Then
+            If dtpExpireDate.Value < Date.Now Then
                 '* Set_locale(regionalSymbol)
                 MsgBox("Entered date occurs in the past.", vbExclamation)
                 Exit Sub

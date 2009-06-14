@@ -476,7 +476,7 @@ DateGoodRegistryError:
         '*TmpFRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
         TmpLRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
         TmpFRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
-        runsLeft = Int(CDbl(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2(CStr(numRuns - 1))))))
+        runsLeft = Int(CDbl(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2(CStr(numRuns - 1)))))) - 1
         If TmpLRD = "#12:00:00 AM#" Then
             TmpLRD = CDate(INITIALDATE)
             TmpFRD = CDate(INITIALDATE)
@@ -492,7 +492,7 @@ DateGoodRegistryError:
             If TmpLRD = CDate(INITIALDATE) Then
                 SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2(CStr(numRuns - 1)))
             Else
-                SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2(CStr(runsLeft - 1)))
+                SaveSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2(CStr(runsLeft)))
             End If
             RunsGoodRegistry = True
         Else
@@ -946,7 +946,7 @@ DateGoodHiddenFolderError:
         '* If b(2) <> "" Then TmpFRD = CDate(b(2))
         If b(1) <> "" Then TmpLRD = DblStringToDate(b(1)) '*
         If b(2) <> "" Then TmpFRD = DblStringToDate(b(2)) '*
-        runsLeft = CShort(b(3))
+        runsLeft = Int(CDbl(b(3))) - 1
         If b(0) <> LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD Then
             RunsGoodHiddenFolder = False
             Exit Function
@@ -974,8 +974,8 @@ DateGoodHiddenFolderError:
                 '*  PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(numRuns - 1), PSWD))
                 PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(Date.UtcNow) & "_" & DateToDblString(TmpFRD) & "_" & CStr(numRuns - 1), PSWD)) '*
             Else
-                '* PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(runsLeft - 1), PSWD))
-                PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(Date.UtcNow) & "_" & DateToDblString(TmpFRD) & "_" & CStr(runsLeft - 1), PSWD)) '*
+                '* PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(runsLeft), PSWD))
+                PrintLine(intFF, EncryptString128Bit(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(Date.UtcNow) & "_" & DateToDblString(TmpFRD) & "_" & CStr(runsLeft), PSWD)) '*
             End If
             FileClose(intFF)
             RunsGoodHiddenFolder = True
@@ -1229,7 +1229,7 @@ DateGoodSteganographyError:
         '* If b(2) <> "" Then TmpFRD = CDate(b(2))
         If b(1) <> "" Then TmpLRD = DblStringToDate(b(1)) '*
         If b(2) <> "" Then TmpFRD = DblStringToDate(b(2)) '*
-        runsLeft = CShort(b(3))
+        runsLeft = Int(CDbl(b(3))) - 1
         If b(0) <> LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD Then
             RunsGoodSteganography = False
             Exit Function
@@ -1250,8 +1250,8 @@ DateGoodSteganographyError:
                 '*SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(numRuns - 1))
                 SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(Date.UtcNow) & "_" & DateToDblString(TmpFRD) & "_" & CStr(numRuns - 1)) '*
             Else
-                '*SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(runsLeft - 1))
-                SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(Date.UtcNow) & "_" & DateToDblString(TmpFRD) & "_" & CStr(numRuns - 1)) '*
+                '*SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(Date.UtcNow) & "_" & TmpFRD & "_" & CStr(runsLeft))
+                SteganographyEmbed(strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(Date.UtcNow) & "_" & DateToDblString(TmpFRD) & "_" & CStr(runsLeft)) '*
             End If
             RunsGoodSteganography = True
         Else

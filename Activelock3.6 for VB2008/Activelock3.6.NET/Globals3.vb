@@ -183,6 +183,8 @@ Imports System.IO
             ' ignore expiration date if license type is "permanent"
             If LicType <> ProductLicense.ALLicType.allicPermanent Then
                 .Expiration = Expiration
+            Else
+                .Expiration = #1/1/9999#
             End If
             'IsMissing() was changed to IsNothing()
             If Not IsNothing(LicKey) Then
