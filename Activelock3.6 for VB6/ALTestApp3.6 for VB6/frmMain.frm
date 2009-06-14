@@ -829,6 +829,7 @@ Private Sub Form_Load()
         ' Set the trial type property
         ' this is either trialDays, or trialRuns or trialNone.
         .TrialType = trialDays
+        '.TrialType = trialRuns
         
         ' Set the Trial Length property.
         ' This number represents the number of days or the number of runs (whichever is applicable).
