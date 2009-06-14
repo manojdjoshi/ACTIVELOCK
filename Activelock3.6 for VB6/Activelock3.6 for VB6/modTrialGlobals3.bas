@@ -536,7 +536,7 @@ End If
 '* TmpFRD = dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90")) '1/1/2000
 TmpLRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
 TmpFRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
-runsLeft = Int(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2(CStr(numRuns - 1)))))
+runsLeft = Int(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2(CStr(numRuns - 1))))) - 1
 If TmpLRD = vbEmpty Then
     TmpLRD = INITIALDATE
     TmpFRD = INITIALDATE
@@ -552,7 +552,7 @@ ElseIf numRuns >= runsLeft Then 'Everything OK write the remaining number of run
     If TmpLRD = INITIALDATE Then
         SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2(CStr(numRuns - 1))
     Else
-        SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2(CStr(runsLeft - 1))
+        SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2(CStr(runsLeft))
     End If
     RunsGoodRegistry = True
 Else
@@ -924,7 +924,7 @@ b = Split(strMyString, "_")
 '* TmpFRD = b(2)
 If b(1) <> "" Then TmpLRD = DblStringToDate(b(1)) '*
 If b(2) <> "" Then TmpFRD = DblStringToDate(b(2)) '*
-runsLeft = b(3)
+runsLeft = b(3) - 1
 If b(0) <> LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD Then
     RunsGoodHiddenFolder = False
     Exit Function
@@ -952,8 +952,8 @@ ElseIf numRuns >= runsLeft Then 'Everything OK write the remaining number of run
             '* Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(numRuns - 1), PSWD)
             Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(UTC(Now)) & "_" & DateToDblString(TmpFRD) & "_" & CStr(numRuns - 1), PSWD)
         Else
-            '* Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(runsLeft - 1), PSWD)
-            Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(UTC(Now)) & "_" & DateToDblString(TmpFRD) & "_" & CStr(runsLeft - 1), PSWD)
+            '* Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(runsLeft), PSWD)
+            Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(UTC(Now)) & "_" & DateToDblString(TmpFRD) & "_" & CStr(runsLeft), PSWD)
         End If
     Close #intFF
     RunsGoodHiddenFolder = True
@@ -1165,7 +1165,7 @@ b = Split(SteganographyPull(strSource), "_")
 '* TmpFRD = b(2)
 If b(1) <> "" Then TmpLRD = DblStringToDate(b(1)) '*
 If b(2) <> "" Then TmpFRD = DblStringToDate(b(2)) '*
-runsLeft = b(3)
+runsLeft = b(3) - 1
 If b(0) <> LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD Then
     RunsGoodSteganography = False
     Exit Function
@@ -1186,8 +1186,8 @@ ElseIf numRuns >= runsLeft Then 'Everything OK write the remaining number of run
         '* SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(numRuns - 1)
         SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(UTC(Now)) & "_" & DateToDblString(TmpFRD) & "_" & CStr(numRuns - 1)
     Else
-        '* SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(runsLeft - 1)
-        SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(UTC(Now)) & "_" & DateToDblString(TmpFRD) & "_" & CStr(runsLeft - 1)
+        '* SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(runsLeft)
+        SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(UTC(Now)) & "_" & DateToDblString(TmpFRD) & "_" & CStr(runsLeft)
     End If
     RunsGoodSteganography = True
 Else
