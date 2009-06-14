@@ -1223,7 +1223,7 @@ Friend Class frmMain
             ' THE FOLLOWING IS A SAMPLE USAGE
             ' WARNING *** WARNING *** DO NOT USE App.Major & "." & App.Minor & "." & App.Revision
             '.SoftwareVersion = "1.3.2"   
-            .SoftwareVersion = "3" ' WARNING *** WARNING *** DO NOT USE App.Major & "." & App.Minor & "." & App.Revision
+            .SoftwareVersion = "3.6" ' WARNING *** WARNING *** DO NOT USE App.Major & "." & App.Minor & "." & App.Revision
             txtVersion.Text = .SoftwareVersion
 
             ' Set the software/application password
@@ -1247,12 +1247,12 @@ Friend Class frmMain
 
             ' Set the trial type property
             ' this is either trialDays, or trialRuns or trialNone.
-            '.TrialType = ActiveLock3_6NET.IActiveLock.ALTrialTypes.trialRuns
-            .TrialType = ActiveLock3_6NET.IActiveLock.ALTrialTypes.trialDays
+            .TrialType = ActiveLock3_6NET.IActiveLock.ALTrialTypes.trialRuns
+            '.TrialType = ActiveLock3_6NET.IActiveLock.ALTrialTypes.trialDays
 
             ' Set the Trial Length property.
             ' This number represents the number of days or the number of runs (whichever is applicable).
-            .TrialLength = 2
+            .TrialLength = 10
             If .TrialType <> ActiveLock3_6NET.IActiveLock.ALTrialTypes.trialNone And .TrialLength = 0 Then
                 ' In such cases Activelock automatically generates errors -11001100 or -11001101
                 ' to indicate that you're using the trial feature but, trial length was not specified
@@ -1265,7 +1265,8 @@ Friend Class frmMain
             ' is controlled that user's own registry hive.
             ' This means initiating a trial with one user does not initiate a trial for another user.
             ' trialHiddenFolder and trialSteganography are for "All Users"
-            .TrialHideType = ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialHiddenFolder Or ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialRegistryPerUser Or ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialSteganography
+            '.TrialHideType = ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialHiddenFolder Or ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialRegistryPerUser Or ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialSteganography
+            .TrialHideType = ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialSteganography
 
             ' Use the following if you'd like to make the trial warning message persistent 
             ' until a license is registered.
@@ -1281,7 +1282,8 @@ Friend Class frmMain
             ' It's up to you to encrypt it; just makes it more secure
             ' Enc encodes, Dec decodes the public key (VCode)
             ' Change Enc() and Dec(0 the way you want.
-            .SoftwareCode = Dec(PUB_KEY)
+            '.SoftwareCode = Dec(PUB_KEY)
+            .SoftwareCode = PUB_KEY
 
             ' uncomment the following when unmanaged Activelock3NET.dll is used
             '.LockType = ActiveLock3.ALLockTypes.lockNone
