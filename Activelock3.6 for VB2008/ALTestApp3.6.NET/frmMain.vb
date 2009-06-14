@@ -1189,7 +1189,7 @@ Friend Class frmMain
 
         ' Check the existence of necessary files to run this application
         ' This is not necessary if you're not using these controls in your app.
-        Call CheckForResources("#ActiveLock3_6Net.dll", "comctl32.ocx", "tabctl32.ocx")
+        Call CheckForResources("#ActiveLock3_6Net.dll")
 
         On Error GoTo NotRegistered
 

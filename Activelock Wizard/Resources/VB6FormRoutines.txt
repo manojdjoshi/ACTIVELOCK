@@ -99,6 +99,16 @@ Public Function Encrypt(strdata As String) As String
     Encrypt = sResult
 End Function
 
+Public Function FolderExists(ByVal sFolder As String) As Boolean
+Dim sResult As String
+
+On Error Resume Next
+sResult = Dir(sFolder, vbDirectory)
+
+On Error GoTo 0
+FolderExists = sResult <> ""
+End Function
+
 Function FileExist(ByVal TestFileName As String) As Boolean
 'This function checks for the existance of a given
 'file name. The function returns a TRUE or FALSE value.
@@ -332,11 +342,22 @@ MsgBox "Free Trial has been Killed." & vbCrLf & _
 End Sub
 
 Public Sub KillTheLic()
+
+MsgBox "This feature is not intended to be sent to the end user." & vbCrLf & _
+    "Because it removes all traces of a license from a machine." & vbCrLf & vbCrLf & _
+    "The best way to terminate a license in an end-user's machine is to" & vbCrLf & _
+    "just delete his LIC file and send him a new build of your app with" & vbCrLf & _
+    "a new revision number (or upgrade in other terms).", vbInformation
+
+On Error GoTo errorTrap
     Dim licFile As String
     licFile = App.Path & "\" & MyActiveLock.SoftwareName & ".lic"
     If FileExist(licFile) Then
         If FileLen(licFile) <> 0 Then
-            Kill licFile
+            MyActiveLock.KillLicense MyActiveLock.SoftwareName & MyActiveLock.SoftwareVersion, licFile
+
+			' Use the following in an end-user's machine.
+			'Kill licFile
             MsgBox "Your license has been killed." & vbCrLf & _
                 "You need to get a new license for this application if you want to use it.", vbInformation
         Else
@@ -345,6 +366,8 @@ Public Sub KillTheLic()
     Else
         MsgBox "There's no license to kill.", vbInformation
     End If
+errorTrap:    
+    'TODO: replace with your own main forms name
     frmMain.Form_Load
 End Sub
 

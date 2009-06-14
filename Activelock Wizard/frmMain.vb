@@ -39,6 +39,46 @@ Public Class frmMain
 
 #Region "Form Button Routines"
 
+    Private Sub txtSoftwareName_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtSoftwareName.Enter
+        SelectOnEnterTextBox(sender)
+    End Sub
+
+    Private Sub txtSoftwareName_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtSoftwareName.KeyPress
+        If Char.IsControl(e.KeyChar) = False Then
+            If Char.IsLetter(e.KeyChar) = False And Char.IsNumber(e.KeyChar) = False Then
+                If e.KeyChar <> "." And e.KeyChar <> "_" And e.KeyChar <> " " Then
+                    e.Handled = True
+                End If
+            Else
+            End If
+        End If
+    End Sub
+
+    Private Sub txtSoftwareVersion_Enter(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtSoftwareVersion.Enter
+        SelectOnEnterTextBox(sender)
+    End Sub
+
+    Private Sub txtSoftwareVersion_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtSoftwareVersion.KeyPress
+        If Char.IsControl(e.KeyChar) = False Then
+            If Char.IsLetter(e.KeyChar) = False And Char.IsNumber(e.KeyChar) = False Then
+                If e.KeyChar <> "." And e.KeyChar <> "_" And e.KeyChar <> " " Then
+                    e.Handled = True
+                End If
+            Else
+            End If
+        End If
+    End Sub
+
+    Private Sub SelectOnEnterTextBox(ByRef sender As Object)
+        'select all text in a textbox
+        CType(sender, TextBox).SelectionStart = 0
+        CType(sender, TextBox).SelectionLength = CType(sender, TextBox).Text.Length
+    End Sub
+
+    Private Sub btnDLLPath_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDLLPath.Click
+        OpenFileDialog1.ShowDialog()
+    End Sub
+
     Private Sub rbtnTrialTypeNone_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles rbtnTrialTypeNone.CheckedChanged
         If rbtnTrialTypeNone.Checked = True Then
             txtTrialLength.Enabled = False
@@ -229,6 +269,15 @@ Public Class frmMain
            chkLicenseLockTypeFingerprint.Checked = False And _
            chkLicenseLockTypeExternalID.Checked = False Then
             chkLicenseLockTypeNone.Checked = True
+        End If
+    End Sub
+
+    Private Sub chkUseDefaultNameSpace_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkUseDefaultNameSpace.CheckedChanged
+        If chkUseDefaultNameSpace.Checked = True Then
+            txtCustomNamespace.Text = "ActiveLock3"
+            txtCustomNamespace.Enabled = False
+        Else
+            txtCustomNamespace.Enabled = True
         End If
     End Sub
 
@@ -627,19 +676,5 @@ Public Class frmMain
     End Function
 
 #End Region
-
-    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDLLPath.Click
-        OpenFileDialog1.ShowDialog()
-    End Sub
-
-    Private Sub chkUseDefaultNameSpace_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkUseDefaultNameSpace.CheckedChanged
-        If chkUseDefaultNameSpace.Checked = True Then
-            txtCustomNamespace.Text = "ActiveLock3"
-            txtCustomNamespace.Enabled = False
-        Else
-            txtCustomNamespace.Enabled = True
-        End If
-    End Sub
-
 
 End Class

@@ -379,6 +379,11 @@ Dim CanRun As Boolean
 CanRun = InitActivelock
 If CanRun = True Then
 'Valid Trial Or Valid License
+Command2.Enabled = True
+If ActivelockValues.RegisteredLevel = "Full Version - USA" Then
+Command3.Enabled = True
+End If
+
 Else
 'Trial Or License Expired or Tampered
 'Disable everything and ask to register

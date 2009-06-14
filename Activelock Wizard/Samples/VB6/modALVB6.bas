@@ -44,10 +44,10 @@ Attribute VB_Name = "modALVB6"
 '* ----------+--------+----------------+----------------------------------------*'
 '*  05.01.09 |  ZP    | 1.0.3          | added CRC Check.                       *'
 '* ----------+--------+----------------+----------------------------------------*'
-'*  28.03.09 |  WS    | 1.0.4          | added Activelock 3.6 Features          *'
+'*  28.03.09 |  WS    | 3.6            | added Activelock 3.6 Features          *'
 '* ----------+--------+----------------+----------------------------------------*'
 '********************************************************************************'
-'*              This Module was Created By ActiveLock Wizard V1.0.4             *'
+'*              This Module was Created By ActiveLock Wizard V3.6               *'
 '*                     For Use With Activelock VB6 V3.6                         *'
 '********************************************************************************'
 
@@ -108,7 +108,6 @@ Public Declare Function FormatMessage Lib "kernel32" Alias "FormatMessageA" (ByV
 'Windows and System directory API
 Private Declare Function GetSystemDirectory Lib "kernel32" Alias "GetSystemDirectoryA" (ByVal lpBuffer As String, ByVal nSize As Long) As Long
 Private Declare Function GetWindowsDirectory Lib "kernel32" Alias "GetWindowsDirectoryA" (ByVal lpBuffer As String, ByVal nSize As Long) As Long
-Public MyActiveLock As ActiveLock3.IActiveLock
 
 Public ActivelockValues As ActivelockValues_t
 Public Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
@@ -116,8 +115,11 @@ Public Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
 Dim expireTrialLicense As Boolean
 Dim strKeyStorePath As String
 Dim strAutoRegisterKeyPath As String
+Public MyActiveLock As ActiveLock3.IActiveLock
+
+Private Const MyDLLName As String = "activelock3.6.dll"
 Private Const CrcPartValue As Long = 711000
-Private Const PUB_KEY As String = "386.391.2CB.21B.210.226.23C.2D6.46D.323.2CB.2CB.2CB.2CB.499.2CB.2CB.2D6.391.3A7.210.2F7.528.2CB.2CB.37B.2CB.2CB.2CB.2F7.2CB.2CB.37B.2E1.2D6.441.51D.339.4D0.273.4D0.21B.4E6.499.37B.478.3DE.533.528.39C.457.386.2F7.478.273.2F7.34F.226.25D.231.51D.2D6.4DB.4D0.365.2EC.391.1D9.339.344.499.457.507.205.528.4BA.205.37B.210.1D9.51D.268.507.478.2D6.37B.462.3DE.4DB.268.462.205.4F1.44C.386.462.344.1D9.391.247.344.323.2D6.323.4FC.365.512.210.4C5.499.30D.23C.226.4AF.339.441.42B.35A.499.210.4AF.386.4C5.391.4C5.32E.499.3A7.370.34F.4E6.386.4D0.23C.231.48E.268.4BA.2CB.339.3B2.2E1.4AF.386.4E6.2EC.25D.4D0.3DE.21B.2EC.4C5.231.507.318.34F.23C.391.48E.533.44C.344.3D3.210.4C5.4AF.457.339.268.512.365.2E1.533.3DE.226.3BD.4A4.44C.3D3.533.210.323.528.51D.46D.37B.48E.35A.4DB.34F.318.344.507.30D.21B.4E6.2E1.46D.21B.2EC.386.23C.1D9.247.46D.29F.29F"
+Public Const PUB_KEY As String = "386.391.2CB.21B.210.226.23C.2D6.46D.323.2CB.2CB.2CB.2CB.499.2CB.2CB.2D6.391.3A7.210.2F7.528.2CB.2CB.37B.2CB.2CB.2CB.2F7.2CB.2CB.37B.2E1.2D6.441.51D.339.4D0.273.4D0.21B.4E6.499.37B.478.3DE.533.528.39C.457.386.2F7.478.273.2F7.34F.226.25D.231.51D.2D6.4DB.4D0.365.2EC.391.1D9.339.344.499.457.507.205.528.4BA.205.37B.210.1D9.51D.268.507.478.2D6.37B.462.3DE.4DB.268.462.205.4F1.44C.386.462.344.1D9.391.247.344.323.2D6.323.4FC.365.512.210.4C5.499.30D.23C.226.4AF.339.441.42B.35A.499.210.4AF.386.4C5.391.4C5.32E.499.3A7.370.34F.4E6.386.4D0.23C.231.48E.268.4BA.2CB.339.3B2.2E1.4AF.386.4E6.2EC.25D.4D0.3DE.21B.2EC.4C5.231.507.318.34F.23C.391.48E.533.44C.344.3D3.210.4C5.4AF.457.339.268.512.365.2E1.533.3DE.226.3BD.4A4.44C.3D3.533.210.323.528.51D.46D.37B.48E.35A.4DB.34F.318.344.507.30D.21B.4E6.2E1.46D.21B.2EC.386.23C.1D9.247.46D.29F.29F"
 
 Public Function InitActivelock() As Boolean
    Dim autoRegisterKey As String
@@ -127,23 +129,33 @@ Public Function InitActivelock() As Boolean
    
    On Error GoTo DLLnotRegistered
    ' Check the existence of necessary files to run this application
-   Call CheckForResources("Alcrypto3.dll", "comctl32.ocx", "tabctl32.ocx")
-   ' Check if the Activelock3.dll is registered. If not no need to continue.
+   Call CheckForResources("activelock3.6.dll", "mscomctl.ocx")
+   ' Check if the ActiveLock3.dll is registered. If not no need to continue.
    If CheckIfDLLIsRegistered = False Then End
    On Error GoTo NotRegistered
+   Dim ret As Long
+   Dim AppfilePath As String
+   AppfilePath = Space$(260)
+   ret = SHGetSpecialFolderPath(0, AppfilePath, 46, False) ' 46 is for ...\All Users\Documents folder.
+   If Trim(AppfilePath) <> Chr(0) Then
+   AppfilePath = Left(AppfilePath, InStr(AppfilePath, Chr(0)) - 1)
+   End If
    ' Obtain AL instance and initialize its properties
    Set MyActiveLock = ActiveLock3.NewInstance()
    With MyActiveLock
-       .SoftwareName = "WalterTest"
-       .SoftwareVersion = "1"
+       .SoftwareName = "WalterAppVB6"
+       .SoftwareVersion = "1.0.3"
        .SoftwarePassword = Chr(99) & Chr(111) & Chr(111) & Chr(108)
        .LicenseKeyType = alsRSA
        .TrialType = trialRuns
-       .TrialLength = 10
-       .TrialHideType = trialHiddenFolder Or trialRegistryPerUser
+       .TrialLength = 3
+       .TrialHideType = trialRegistryPerUser Or trialSteganography
        .SoftwareCode = Dec(PUB_KEY)
        .LockType = lockFingerprint
-       strAutoRegisterKeyPath = App.Path & "\" & .SoftwareName & ".all"
+       If FolderExists("c:\temp") = False Then
+          MkDir ("c:\temp")
+       End If
+       strAutoRegisterKeyPath = "c:\temp\" & .SoftwareName & .SoftwareVersion & ".all"
        .AutoRegister = alsDisableAutoRegistration
        .AutoRegisterKeyPath = strAutoRegisterKeyPath
        If FileExist(strAutoRegisterKeyPath) Then boolAutoRegisterKeyPath = True
@@ -157,7 +169,10 @@ Public Function InitActivelock() As Boolean
    ' Initialize the keystore. We use a File keystore in this case.
    MyActiveLock.KeyStoreType = alsFile
    ' Path to the license file
-   strKeyStorePath = App.Path & "\" & .SoftwareName & ".lic"
+   If FolderExists(AppfilePath & "\" & .SoftwareName & .SoftwareVersion) = False Then
+       MkDir (AppfilePath & "\" & .SoftwareName & .SoftwareVersion)
+   End If
+   strKeyStorePath = AppfilePath & "\" & .SoftwareName & .SoftwareVersion & "\" & .SoftwareName & .SoftwareVersion & ".lic"
    MyActiveLock.KeyStorePath = strKeyStorePath
    End With
    ' Obtain the EventNotifier so that we can receive notifications from AL.
@@ -185,7 +200,7 @@ Public Function InitActivelock() As Boolean
    Dim strLicenseFileType As String
    Dim strLicenseType As String
    Dim strUsedLockType As String
-   MyActiveLock.Acquire strMsg, strRemainingTrialDays, strRemainingTrialRuns, strTrialLength, strUsedDays, strExpirationDate, strRegisteredUser, strRegisteredLevel, strLicenseClass, strMaxCount, strLicenseFileType, strLicenseType, strUsedLockType
+   MyActiveLock.Acquire strMsg, strRemainingTrialDays, strRemainingTrialRuns, strTrialLength, strUsedDays, strExpirationDate, strRegisteredUser, strRegisteredLevel, strLicenseClass, strMaxCount, strLicenseFileType, strLicenseType
    If strMsg <> "" Then 'There's a trial
        A = Split(strMsg, vbCrLf)
        ActivelockValues.RegStatus = A(0)
@@ -481,10 +496,10 @@ CheckIfDLLIsRegistered = True
 strDllPath = GetTypeLibPathFromObject()
 Result = IsDLLAvailable(strDllPath)
 If Result Then
-    ' MsgBox "Activelock3.6.dll is Registered !"
+    ' MsgBox MyDLLName & " is Registered !"
     ' Just quietly proceed
 Else
-    MsgBox "Activelock3.6.dll is Not Registered!"
+    MsgBox MyDLLName & " is Not Registered!"
     CheckIfDLLIsRegistered = False
 End If
 
@@ -492,7 +507,7 @@ End Function
 
 Public Function GetTypeLibPathFromObject() As String
     Dim strDllPath As String
-    GetTypeLibPathFromObject = WinSysDir() & "\activelock3.6.dll"
+    GetTypeLibPathFromObject = WinSysDir() & "\" & MyDLLName
 End Function
 
 Private Function IsDLLAvailable(ByVal DllFilename As String) As Boolean
@@ -583,11 +598,22 @@ MsgBox "Free Trial has been Killed." & vbCrLf & _
 End Sub
 
 Public Sub KillTheLic()
+
+MsgBox "This feature is not intended to be sent to the end user." & vbCrLf & _
+    "Because it removes all traces of a license from a machine." & vbCrLf & vbCrLf & _
+    "The best way to terminate a license in an end-user's machine is to" & vbCrLf & _
+    "just delete his LIC file and send him a new build of your app with" & vbCrLf & _
+    "a new revision number (or upgrade in other terms).", vbInformation
+
+On Error GoTo errorTrap
     Dim licFile As String
     licFile = App.Path & "\" & MyActiveLock.SoftwareName & ".lic"
     If FileExist(licFile) Then
         If FileLen(licFile) <> 0 Then
-            Kill licFile
+            MyActiveLock.KillLicense MyActiveLock.SoftwareName & MyActiveLock.SoftwareVersion, licFile
+
+            ' Use the following in an end-user's machine.
+            'Kill licFile
             MsgBox "Your license has been killed." & vbCrLf & _
                 "You need to get a new license for this application if you want to use it.", vbInformation
         Else
@@ -596,6 +622,8 @@ Public Sub KillTheLic()
     Else
         MsgBox "There's no license to kill.", vbInformation
     End If
+errorTrap:
+    'TODO: replace with your own main forms name
     frmMain.Form_Load
 End Sub
 

@@ -16,6 +16,7 @@ Module modActiveLockVb2008
         Public RegisteredLevel As String
         Public LicenseClass As String
         Public MaxCount As Integer
+        Public Checksum As String
     End Structure
 #End Region '"Structures"
 
@@ -34,4 +35,5 @@ Module modActiveLockVb2008
     Private WithEvents ActiveLockEventSink As ActiveLock3_6NET.ActiveLockEventNotifier
     Private Declare Function GetSystemDirectory Lib "kernel32" Alias "GetSystemDirectoryA" (ByVal lpBuffer As String, ByVal nSize As Integer) As Integer
     Private Declare Function GetWindowsDirectory Lib "kernel32" Alias "GetWindowsDirectoryA" (ByVal lpBuffer As String, ByVal nSize As Integer) As Integer
+    Private Declare Function SHGetSpecialFolderPath Lib "SHELL32.DLL" Alias "SHGetSpecialFolderPathA" (ByVal hWnd As IntPtr, ByVal lpszPath As String, ByVal nFolder As Integer, ByVal fCreate As Boolean) As Boolean
     
