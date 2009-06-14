@@ -70,7 +70,7 @@ Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\ALTestApp3.6.NET\Activel
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\ALTestApp3.6.NET\ALTestApp3.6.NET.exe; DestDir: "{app}\ALTestApp3.6 NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\ALTestApp3.6.NET\ALTestApp3.6.NET.sln; DestDir: "{app}\ALTestApp3.6 NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\ALTestApp3.6.NET\ALTestApp3.6.NET.vbproj; DestDir: "{app}\ALTestApp3.6 NET"; Flags: ignoreversion; Components: examples
-Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\ALTestApp3.6.NET\ALTestApp3.6.NET.vbproj.user; DestDir: "{app}\ALTestApp3.6 NET"; Flags: ignoreversion; Components: examples
+;Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\ALTestApp3.6.NET\ALTestApp3.6.NET.vbproj.user; DestDir: "{app}\ALTestApp3.6 NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\ALTestApp3.6.NET\ALTestApp3.6.NET.vshost.exe; DestDir: "{app}\ALTestApp3.6 NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\ALTestApp3.6.NET\ALTestApp3.6.NET.vshost.exe.manifest; DestDir: "{app}\ALTestApp3.6 NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\ALTestApp3.6.NET\ALTestApp3.6.NET.xml; DestDir: "{app}\ALTestApp3.6 NET"; Flags: ignoreversion; Components: examples
@@ -96,7 +96,7 @@ Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Alugen3.6.NET\Activelock
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Alugen3.6.NET\ALCrypto3NET.dll; DestDir: "{app}\Alugen3.6.NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Alugen3.6.NET\Alugen3.6NET.sln; DestDir: "{app}\Alugen3.6.NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Alugen3.6.NET\Alugen3NET.vbproj; DestDir: "{app}\Alugen3.6.NET"; Flags: ignoreversion; Components: examples
-Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Alugen3.6.NET\Alugen3NET.vbproj.user; DestDir: "{app}\Alugen3.6.NET"; Flags: ignoreversion; Components: examples
+;Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Alugen3.6.NET\Alugen3NET.vbproj.user; DestDir: "{app}\Alugen3.6.NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Alugen3.6.NET\Alugen3_6NET.vshost.exe; DestDir: "{app}\Alugen3.6.NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Alugen3.6.NET\Alugen3_6NET.vshost.exe.manifest; DestDir: "{app}\Alugen3.6.NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Alugen3.6.NET\Alugen3_6NET.exe; DestDir: "{app}\Alugen3.6.NET"; Flags: ignoreversion; Components: examples
@@ -145,7 +145,7 @@ Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Alugen3.6.NET\My Project
 ;Src_v3\Activelock3_6NET folder
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6.NET\Activelock3.6.NET.sln; DestDir: "{app}\Activelock3.6.NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6.NET\Activelock3.6.NET.vbproj; DestDir: "{app}\Activelock3.6.NET"; Flags: ignoreversion; Components: examples
-Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6.NET\Activelock3.6.NET.vbproj.user; DestDir: "{app}\Activelock3.6.NET"; Flags: ignoreversion; Components: examples
+;Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6.NET\Activelock3.6.NET.vbproj.user; DestDir: "{app}\Activelock3.6.NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6.NET\Activelock3_6NET.dll; DestDir: "{app}\Activelock3.6.NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6.NET\Activelock.vb; DestDir: "{app}\Activelock3.6.NET"; Flags: ignoreversion; Components: examples
 Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6.NET\ActivelockEventNotifier.vb; DestDir: "{app}\Activelock3.6.NET"; Flags: ignoreversion; Components: examples
