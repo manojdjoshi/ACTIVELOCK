@@ -1,4 +1,4 @@
-﻿'********************************************************************************'
+'********************************************************************************'
 '*   ActiveLock                                                                 *'
 '*   Copyright 1998-2002 Nelson Ferraz                                          *'
 '*   Copyright 2003-2007 The ActiveLock Software Group (ASG)                    *'
@@ -43,10 +43,10 @@
 '* ----------+--------+----------------+----------------------------------------*'
 '*  05.01.09 |  ZP    | 1.0.3          | added CRC Check.                       *'
 '* ----------+--------+----------------+----------------------------------------*'
-'*  28.03.09 |  WS    | 1.0.4          | added Activelock 3.6 Features          *'
+'*  28.03.09 |  WS    | 3.6            | added Activelock 3.6 Features          *'
 '* ----------+--------+----------------+----------------------------------------*'
 '********************************************************************************'
-'*              This Module was Created By ActiveLock Wizard V1.0.4             *'
+'*              This Module was Created By ActiveLock Wizard V3.6               *'
 '*                     For Use With Activelock VB2005/8 V3.6                    *'
 '********************************************************************************'
 
@@ -96,6 +96,7 @@ Module modActiveLockVb2008
         Public RegisteredLevel As String
         Public LicenseClass As String
         Public MaxCount As Integer
+        Public Checksum As String
     End Structure
 #End Region '"Structures"
 
@@ -114,8 +115,10 @@ Module modActiveLockVb2008
     Private WithEvents ActiveLockEventSink As ActiveLock3_6NET.ActiveLockEventNotifier
     Private Declare Function GetSystemDirectory Lib "kernel32" Alias "GetSystemDirectoryA" (ByVal lpBuffer As String, ByVal nSize As Integer) As Integer
     Private Declare Function GetWindowsDirectory Lib "kernel32" Alias "GetWindowsDirectoryA" (ByVal lpBuffer As String, ByVal nSize As Integer) As Integer
-    Private Const CrcDataEnc As String = "226.252.247.247.252.2CB.273.226"
-Private Const PUB_KEY as string = "2CB.2CB.2CB.2CB.2D6.231.35A.53E.42B.2E1.21B.533.441.226.2F7.2CB.2CB.2CB.2CB.2D6.32E.37B.2CB.2CB.2CB.323.2E1.3C8.1D9.46D.231.4AF.35A.4E6.1D9.210.2F7.391.323.533.44C.34F.365.34F.4D0.37B.2CB.441.23C.4A4.441.457.1D9.4FC.318.441.273.4E6.441.512.457.4AF.53E.1D9.21B.4DB.4E6.478.4E6.365.533.273.2F7.4AF.4E6.507.507.37B.3BD.3B2.51D.3BD.2D6.323.4DB.4AF.2CB.344.512.48E.3B2.436.1D9.370.391.37B.23C.25D.226.48E.386.3DE.302.2EC.4A4.42B.302.507.226.4A4.226.268.2EC.436.478.3BD.205.23C.4A4.39C.462.483.3A7.339.2D6.3BD.44C.4DB.23C.318.457.339.2E1.4E6.46D.252.226.2CB.35A.23C.2F7.44C.37B.51D.4C5.3C8.507.35A.273.436.39C.4AF.441.4E6.21B.3B2.42B.302.365.2EC.4FC.302.441.205.4A4.2F7.4C5.323.386.48E.53E.268.4A4.48E.34F.3DE.35A.507.37B.53E.533.1D9.302.3A7.268.23C.226.4AF.499.268.344.37B.3DE.48E.3C8.4DB.436.51D.29F.29F"
+    Private Declare Function SHGetSpecialFolderPath Lib "SHELL32.DLL" Alias "SHGetSpecialFolderPathA" (ByVal hWnd As IntPtr, ByVal lpszPath As String, ByVal nFolder As Integer, ByVal fCreate As Boolean) As Boolean
+    Private Const MyDLLName As String = "ActiveLock3_6Net.dll"
+    Private Const CrcDataEnc As String = "25D.268.23C.21B.25D.247.2E1.21B"
+    Private Const PUB_KEY As String = "386.391.2CB.21B.210.226.23C.294.386.391.2CB.339.457.533.3B2.42B.4A4.507.457.2AA.294.34F.4C5.44C.507.4A4.507.4F1.2AA.533.318.533.370.4C5.2F7.462.512.318.3C8.23C.4C5.3D3.2CB.4D0.4E6.252.247.2EC.323.2CB.51D.441.4C5.23C.273.3B2.483.436.391.3DE.252.34F.533.457.35A.4BA.499.247.441.323.2F7.302.2CB.436.3D3.39C.46D.302.533.30D.46D.4FC.210.3D3.457.4C5.4FC.34F.4FC.2E1.51D.499.436.226.499.252.512.302.2D6.25D.4F1.4A4.3B2.344.344.344.339.533.205.441.247.318.462.268.478.4FC.323.25D.32E.3DE.4BA.4BA.3BD.4E6.32E.4DB.1D9.302.51D.365.3A7.457.34F.370.4A4.323.499.32E.34F.51D.252.386.268.323.252.370.3C8.34F.2F7.323.44C.533.512.441.462.53E.3A7.3A7.2EC.370.247.2CB.273.318.512.53E.21B.210.2D6.483.4DB.4E6.4E6.2EC.231.21B.1D9.441.478.2D6.4DB.39C.37B.21B.3D3.231.4BA.365.21B.39C.210.2CB.499.528.3B2.30D.441.4E6.3B2.210.29F.294.205.34F.4C5.44C.507.4A4.507.4F1.2AA.294.2F7.528.4D0.4C5.4BA.457.4BA.4FC.2AA.2CB.37B.2CB.2D6.294.205.2F7.528.4D0.4C5.4BA.457.4BA.4FC.2AA.294.205.386.391.2CB.339.457.533.3B2.42B.4A4.507.457.2AA"
 #End Region '"Local Declare"
 
 #Region "Global Routines"
@@ -129,84 +132,95 @@ Private Const PUB_KEY as string = "2CB.2CB.2CB.2CB.2D6.231.35A.53E.42B.2E1.21B.5
         Dim A() As String
         On Error GoTo NotRegistered
         'CheckForResources("comctl32.ocx", "tabctl32.ocx")
+        Call CheckForResources("#ActiveLock3_6Net.dll")
+        Dim Ret As Long
+        Dim AppfilePath As String
+        AppfilePath = Space$(260)
+        Ret = SHGetSpecialFolderPath(0, AppfilePath, 46, False) ' 46 is for ...\All Users\Documents folder.
+        If AppfilePath.Trim <> Chr(0) Then
+            AppfilePath = Strings.Left(AppfilePath, InStr(AppfilePath, Chr(0)) - 1)
+        End If
         MyActiveLock = MyAL.NewInstance()
         With MyActiveLock
-             .SoftwareName = "WalterApp"
-             .SoftwareVersion = "1.0.0"
-             .SoftwarePassword = Chr(119) & Chr(97) & Chr(108) & Chr(116) & Chr(101) & Chr(114) & Chr(115) & Chr(101) & Chr(110) & Chr(101) & Chr(107) & Chr(97) & Chr(108)
-             .LicenseKeyType = ActiveLock3_6NET.IActiveLock.ALLicenseKeyTypes.alsShortKeyMD5
-             .TrialType = ActiveLock3_6NET.IActiveLock.ALTrialTypes.trialRuns
-             .TrialLength = 10
-             .TrialHideType = ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialHiddenFolder Or ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialRegistryPerUser Or ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialSteganography Or ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialIsolatedStorage
-             .SoftwareCode = Dec(PUB_KEY)
-             .LockType = IActiveLock.ALLockTypes.lockFingerprint
-             .AutoRegister = ActiveLock3_6NET.IActiveLock.ALAutoRegisterTypes.alsEnableAutoRegistration
-             strAutoRegisterKeyPath = AppPath() & "\" & .SoftwareName & ".all"
-             .AutoRegisterKeyPath = strAutoRegisterKeyPath
-             If File.Exists(strAutoRegisterKeyPath) Then boolAutoRegisterKeyPath = True
-             .CheckTimeServerForClockTampering = ActiveLock3_6NET.IActiveLock.ALTimeServerTypes.alsDontCheckTimeServer
-             .CheckSystemFilesForClockTampering = ActiveLock3_6NET.IActiveLock.ALSystemFilesTypes.alsDontCheckSystemFiles
-             .LicenseFileType = ActiveLock3_6NET.IActiveLock.ALLicenseFileTypes.alsLicenseFileEncrypted
-             VerifyActiveLockNETdll()
-             .KeyStoreType = ActiveLock3_6NET.IActiveLock.LicStoreType.alsFile
-             strKeyStorePath = AppPath() & "\" & .SoftwareName & ".lic"
-             .KeyStorePath = strKeyStorePath
-             ActiveLockEventSink = .EventNotifier
-             'Use the following with ASP.NET applications
-             'MyActiveLock.Init(Application.StartupPath & "\bin")
-             'Use the following with VB.NET applications
-             '.Init()
-             'Or if alcrypto3NET.dll is the same directory
-             .Init(Application.StartupPath, strKeyStorePath)
-             Dim strRemainingTrialDays As String = Nothing
-             Dim strRemainingTrialRuns As String = Nothing
-             Dim strTrialLength As String = Nothing
-             Dim strUsedDays As String = Nothing
-             Dim strExpirationDate As String = Nothing
-             Dim strRegisteredUser As String = Nothing
-             Dim strRegisteredLevel As String = Nothing
-             Dim strLicenseClass As String = Nothing
-             Dim strMaxCount As String = Nothing
-             Dim strLicenseFileType As String = Nothing
-             Dim strLicenseType As String = Nothing
-             Dim strUsedLockType As String = Nothing
-             .Acquire(strMsg, strRemainingTrialDays, strRemainingTrialRuns, strTrialLength, strUsedDays, strExpirationDate, strRegisteredUser, strRegisteredLevel, strLicenseClass, strMaxCount, strLicenseFileType, strLicenseType, strUsedLockType)
-             If strMsg <> "" Then 'There's a trial
-                 A = Split(strMsg, vbCrLf)
-                 ActivelockValues.RegStatus = A(0)
-                 ActivelockValues.UsedDaysOrRuns = A(1)
-                 ActivelockValues.ValidTrial = True
-                 ActivelockValues.LicenceType = "Free Trial"
-                 Return True
-             Else
-                 ActivelockValues.ValidTrial = False
-                 ActivelockValues.LicenceType = "No Trial"
-             End If
-             ActivelockValues.LicenceType = "Registered"
-             ActivelockValues.UsedDaysOrRuns = strUsedDays
-             ActivelockValues.ExpirationDate = strExpirationDate
-             If ActivelockValues.ExpirationDate = "" Then ActivelockValues.ExpirationDate = "Permanent"
-             ActivelockValues.RegisteredUser = .RegisteredUser
-             ActivelockValues.AppName = MyActiveLock.SoftwareName
-             ActivelockValues.AppVersion = MyActiveLock.SoftwareVersion
-             ActivelockValues.RegisteredLevel = strRegisteredLevel
-             ' Networked Licenses
-             If strLicenseClass = LicFlags.alfMulti Then
-                 ActivelockValues.LicenseClass = "Networked"
-             Else 'If strLicenseType = LicFlags.alfSingle Then
-                 ActivelockValues.LicenseClass = "Single User"
-             End If
-             ActivelockValues.MaxCount = strMaxCount
-             'determine the license type
-             If strLicenseType = "allicTimeLocked" Then
-                 ActivelockValues.LicenceType = "Time Limited"
-             ElseIf strLicenseType = "allicPeriodic" Then
-                 ActivelockValues.LicenceType = "Periodic"
-             ElseIf strLicenseType = "allicPermanent" Then
-                 ActivelockValues.LicenceType = "Permanent"
-             Else
-                 ActivelockValues.LicenceType = "None"
-             End If
+            .SoftwareName = "WalterApp"
+            .SoftwareVersion = "1.0.1"
+            .SoftwarePassword = Chr(99) & Chr(111) & Chr(111) & Chr(108)
+            .LicenseKeyType = ActiveLock3_6NET.IActiveLock.ALLicenseKeyTypes.alsRSA
+            .TrialType = ActiveLock3_6NET.IActiveLock.ALTrialTypes.trialRuns
+            .TrialLength = 3
+            .TrialHideType = ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialRegistryPerUser Or ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialSteganography
+            .SoftwareCode = Dec(PUB_KEY)
+            .LockType = IActiveLock.ALLockTypes.lockFingerprint
+            .AutoRegister = ActiveLock3_6NET.IActiveLock.ALAutoRegisterTypes.alsDisableAutoRegistration
+            If Directory.Exists(AppfilePath & " \ " & .SoftwareName & .SoftwareVersion) = False Then
+                MkDir(AppfilePath & " \ " & .SoftwareName & .SoftwareVersion)
+            End If
+            strAutoRegisterKeyPath = AppfilePath & "\" & .SoftwareName & .SoftwareVersion & "\" & .SoftwareName & .SoftwareVersion & ".all"
+            .AutoRegisterKeyPath = strAutoRegisterKeyPath
+            If File.Exists(strAutoRegisterKeyPath) Then boolAutoRegisterKeyPath = True
+            .CheckTimeServerForClockTampering = ActiveLock3_6NET.IActiveLock.ALTimeServerTypes.alsDontCheckTimeServer
+            .CheckSystemFilesForClockTampering = ActiveLock3_6NET.IActiveLock.ALSystemFilesTypes.alsDontCheckSystemFiles
+            .LicenseFileType = ActiveLock3_6NET.IActiveLock.ALLicenseFileTypes.alsLicenseFileEncrypted
+            ActivelockValues.Checksum = VerifyActiveLockNETdll()
+            .KeyStoreType = ActiveLock3_6NET.IActiveLock.LicStoreType.alsFile
+            strKeyStorePath = AppPath() & "\" & .SoftwareName & ".lic"
+            .KeyStorePath = strKeyStorePath
+            ActiveLockEventSink = .EventNotifier
+            'Use the following with ASP.NET applications
+            'MyActiveLock.Init(Application.StartupPath & "\bin")
+            'Use the following with VB.NET applications
+            '.Init()
+            'Or if alcrypto3NET.dll is the same directory
+            .Init(Application.StartupPath, strKeyStorePath)
+            Dim strRemainingTrialDays As String = Nothing
+            Dim strRemainingTrialRuns As String = Nothing
+            Dim strTrialLength As String = Nothing
+            Dim strUsedDays As String = Nothing
+            Dim strExpirationDate As String = Nothing
+            Dim strRegisteredUser As String = Nothing
+            Dim strRegisteredLevel As String = Nothing
+            Dim strLicenseClass As String = Nothing
+            Dim strMaxCount As String = Nothing
+            Dim strLicenseFileType As String = Nothing
+            Dim strLicenseType As String = Nothing
+            Dim strUsedLockType As String = Nothing
+            .Acquire(strMsg, strRemainingTrialDays, strRemainingTrialRuns, strTrialLength, strUsedDays, strExpirationDate, strRegisteredUser, strRegisteredLevel, strLicenseClass, strMaxCount, strLicenseFileType, strLicenseType)
+            If strMsg <> "" Then 'There's a trial
+                A = Split(strMsg, vbCrLf)
+                ActivelockValues.RegStatus = A(0)
+                ActivelockValues.UsedDaysOrRuns = A(1)
+                ActivelockValues.ValidTrial = True
+                ActivelockValues.LicenceType = "Free Trial"
+                Return True
+            Else
+                ActivelockValues.ValidTrial = False
+                ActivelockValues.LicenceType = "No Trial"
+            End If
+            ActivelockValues.LicenceType = "Registered"
+            ActivelockValues.UsedDaysOrRuns = strUsedDays
+            ActivelockValues.ExpirationDate = strExpirationDate
+            If ActivelockValues.ExpirationDate = "" Then ActivelockValues.ExpirationDate = "Permanent"
+            ActivelockValues.RegisteredUser = .RegisteredUser
+            ActivelockValues.AppName = MyActiveLock.SoftwareName
+            ActivelockValues.AppVersion = MyActiveLock.SoftwareVersion
+            ActivelockValues.RegisteredLevel = strRegisteredLevel
+            ' Networked Licenses
+            If strLicenseClass = LicFlags.alfMulti.ToString Then
+                ActivelockValues.LicenseClass = "Networked"
+            Else 'If strLicenseType = LicFlags.alfSingle Then
+                ActivelockValues.LicenseClass = "Single User"
+            End If
+            ActivelockValues.MaxCount = strMaxCount
+            'determine the license type
+            If strLicenseType = "allicTimeLocked" Then
+                ActivelockValues.LicenceType = "Time Limited"
+            ElseIf strLicenseType = "allicPeriodic" Then
+                ActivelockValues.LicenceType = "Periodic"
+            ElseIf strLicenseType = "allicPermanent" Then
+                ActivelockValues.LicenceType = "Permanent"
+            Else
+                ActivelockValues.LicenceType = "None"
+            End If
         End With
         Return True
 NotRegistered:
@@ -228,18 +242,23 @@ NotRegistered:
 
     'Kills The Current Licence of the program
     Public Sub KillTheLic()
+        MsgBox("This feature is not intended to be sent to the end user." & vbCrLf & _
+       "Because it removes all traces of a license from a machine." & vbCrLf & vbCrLf & _
+       "The best way to terminate a license in an end-user's machine is to" & vbCrLf & _
+       "just delete his LIC file and send him a new build of your app with" & vbCrLf & _
+       "a new revision number (or upgrade in other terms).", vbInformation)
         Dim licFile As String
         licFile = strKeyStorePath
-        If File.Exists(licFile) Then
-            If FileLen(licFile) <> 0 Then
-                Kill(licFile)
-                MsgBox("Your license has been killed." & vbCrLf & "You need to get a new license for this application if you want to use it.", MsgBoxStyle.Information)
-            Else
-                MsgBox("There's no license to kill.", MsgBoxStyle.Information)
-            End If
-        Else
+        Try
+            MyActiveLock.KillLicense(MyActiveLock.SoftwareName & MyActiveLock.SoftwareVersion, licFile)
+
+            ' Use the following in an end-user's machine.
+            'File.Delete(strKeyStorePath)
+
+            MsgBox("Your license has been killed." & vbCrLf & "You need to get a new license for this application if you want to use it.", MsgBoxStyle.Information)
+        Catch ex As Exception
             MsgBox("There's no license to kill.", MsgBoxStyle.Information)
-        End If
+        End Try
     End Sub
 
     'Kills The Trial Period for the program
@@ -286,7 +305,7 @@ errHandler:
         ' the method below is very suitable for .NET and more appropriate
         Dim c As New CRC32
         Dim crc As Integer = 0
-        Dim fileName As String = AppPath() & "\ActiveLock3_6NET.dll"
+        Dim fileName As String = AppPath() & "\" & MyDLLName
         If File.Exists(fileName) Then
             Dim f As FileStream = New FileStream(fileName, FileMode.Open, FileAccess.Read, FileShare.Read, 8192)
             crc = c.GetCrc32(f)

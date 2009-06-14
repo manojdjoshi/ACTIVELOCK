@@ -1,16 +1,22 @@
 Change Log For Activelock Wizard 
-Last Updated: 03 April 2008 
+Last Updated: 14 June 2008 
 
-Activelock Wizard V3.6 Updates:
+Activelock Wizard V3.6 RC2 Updates:
+- Added: Checksum to the ActivelockValues_t structure
+- Added: Check for bad characters in appname and appversion
+- Updated: InitActivelock to be compatible with the Activelock DLL 3.6 RC2
+- Updated: KillLic Routine with the new KillLicense Routine
+
+Activelock Wizard V3.6 RC1 Updates:
 - Added: More License Locking types as was needed in V3.6
--	Added: Isolated Storage as new Trial Hiding Type
--	Updated: Some functions was using vb6.compatibility library, now it only uses the dot net framework
--	Updated: Inside the Control Init Routine it is now using all the .Acquire parameters, this speed up the init phase
--	Updated: Cleaned UP the code some   
--	Added: Support for the VB6 project creation
--	Fixed: CRC calculation for VB6 project
--	Added: Check for Trial Hiding Types   
--	Removed: Support For Isolated Storage\
+- Added: Isolated Storage as new Trial Hiding Type
+- Updated: Some functions was using vb6.compatibility library, now it only uses the dot net framework
+- Updated: Inside the Control Init Routine it is now using all the .Acquire parameters, this speed up the init phase
+- Updated: Cleaned UP the code some   
+- Added: Support for the VB6 project creation
+- Fixed: CRC calculation for VB6 project
+- Added: Check for Trial Hiding Types   
+- Removed: Support For Isolated Storage\
 - Added: You can specify your own dll name to use
 - Added: You can specify your own namespace of the DLL to use (only for VB6) 
 

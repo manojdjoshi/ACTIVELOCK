@@ -10,6 +10,7 @@ Option Explicit
          RegisteredLevel As String
          LicenseClass As String
          MaxCount As Integer
+         Checksum As String
 End Type
 
 Private Declare Function MapFileAndCheckSum Lib "imagehlp" Alias "MapFileAndCheckSumA" (ByVal FileName As String, HeaderSum As Long, CheckSum As Long) As Long
@@ -29,6 +30,7 @@ Public Declare Function FormatMessage Lib "kernel32" Alias "FormatMessageA" (ByV
 'Windows and System directory API
 Private Declare Function GetSystemDirectory Lib "kernel32" Alias "GetSystemDirectoryA" (ByVal lpBuffer As String, ByVal nSize As Long) As Long
 Private Declare Function GetWindowsDirectory Lib "kernel32" Alias "GetWindowsDirectoryA" (ByVal lpBuffer As String, ByVal nSize As Long) As Long
+Private Declare Function SHGetSpecialFolderPath Lib "SHELL32.DLL" Alias "SHGetSpecialFolderPathA" (ByVal hWnd As Long, ByVal lpszPath As String, ByVal nFolder As Integer, ByVal fCreate As Boolean) As Boolean
 
 Public ActivelockValues As ActivelockValues_t
 Public Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
