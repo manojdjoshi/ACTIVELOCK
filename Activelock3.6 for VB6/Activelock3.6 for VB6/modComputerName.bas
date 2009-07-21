@@ -562,10 +562,6 @@ test = GetHDSerial
 If test <> "Not Available" Then S = S & test
 test = GetBaseboardID
 If test <> "Not Available" Then S = S & test
-'test = GetVideoID
-'If test <> "Not Available" Then S = S & test
-'test = GetMACAddress
-'If test <> "Not Available" Then S = S & test
 ' Now pack them
 ' This is different then what I've done in VB.NET
 ' ismail - 2009
@@ -1450,13 +1446,13 @@ End Function
 '===============================================================================
 Public Function GetMACAddress() As String
 
-' ******* METHOD 1 *******
-' v3.5 introduces the use of the GetIfTable method which
-' works very fast
-If IsWinNT4Plus = True Then
-    GetMACAddress = GetMACs_IfTable
-    If GetMACAddress <> "" Then Exit Function
-End If
+'' ******* METHOD 1 *******
+'' v3.5 introduces the use of the GetIfTable method which
+'' works very fast
+'If IsWinNT4Plus = True Then
+'    GetMACAddress = GetMACs_IfTable
+'    If GetMACAddress <> "" Then Exit Function
+'End If
 
 ' ******* METHOD 2 *******
 ' This was causing problems and therefore was commented out
@@ -1516,22 +1512,84 @@ End If
 'HeapFree GetProcessHeap(), 0, pASTAT
 'GetMACAddress = tmp
 
+'' ******* METHOD 3 *******
+''another user provided the code below that seems to work well
+''if the adapter card is "Ethernet 802.3", then the code below will work
+'Dim objset, obj
+'Set objset = GetObject("winmgmts:{impersonationLevel=impersonate}").InstancesOf("Win32_NetworkAdapter")
+'For Each obj In objset
+'    On Error Resume Next
+'    If Not IsNull(obj.MACAddress) Then
+'        If obj.AdapterType = "Ethernet 802.3" Then
+'            If InStr(obj.PNPDeviceID, "PCI\") <> 0 Then
+'                GetMACAddress = Replace(obj.MACAddress, ":", "-")
+'                Exit Function
+'            End If
+'        End If
+'    End If
+'Next
+
+Dim foundOne As Boolean
+
+' ******* METHOD 1 *******
+' Replacement for the abandoned method
+' Here we are assuming that the user is NOT running .NET in a Win98/Me machine...
+Dim nicSet As SWbemObjectSet
+Dim nic As SWbemObject
+On Error Resume Next
+Set nicSet = GetObject("winmgmts:{impersonationLevel=impersonate}").InstancesOf("Win32_NetworkAdapterConfiguration")
+Dim strO As String
+For Each nic In nicSet
+    If nic.IPEnabled Then
+        strO = nic.MACAddress
+        'Get all the MAC addresses separated by a +++
+        If GetMACAddress = "" Then
+            GetMACAddress = strO
+        Else
+            GetMACAddress = GetMACAddress & "___" & strO
+        End If
+        If strO <> "00-00-00-00-00-00" And strO <> "000000000000" And strO <> "" Then foundOne = True
+    End If
+Next nic
+Set nicSet = Nothing
+Set nic = Nothing
+
+If foundOne Then Exit Function
+
+' ******* METHOD 2 *******
+' v3.5 introduces the use of the GetIfTable method which
+' works very fast
+If IsWinNT4Plus = True Then
+    GetMACAddress = GetMACs_IfTable(foundOne)
+    If GetMACAddress <> "" Then Exit Function
+End If
+
+If foundOne Then Exit Function
+
 ' ******* METHOD 3 *******
 'another user provided the code below that seems to work well
 'if the adapter card is "Ethernet 802.3", then the code below will work
-Dim objset, obj
-Set objset = GetObject("winmgmts:{impersonationLevel=impersonate}").InstancesOf("Win32_NetworkAdapter")
+Dim objset, obj As Object
+Dim strT As String
+objset = GetObject("winmgmts:{impersonationLevel=impersonate}").InstancesOf("Win32_NetworkAdapter")
 For Each obj In objset
     On Error Resume Next
     If Not IsNull(obj.MACAddress) Then
         If obj.AdapterType = "Ethernet 802.3" Then
             If InStr(obj.PNPDeviceID, "PCI\") <> 0 Then
-                GetMACAddress = Replace(obj.MACAddress, ":", "-")
-                Exit Function
+                strT = Replace(obj.MACAddress, ":", "-")
+                If GetMACAddress = "" Then
+                    GetMACAddress = strT
+                Else
+                    If strT <> "" Then GetMACAddress = GetMACAddress & "___" & strT
+                End If
+                If strT <> "00-00-00-00-00-00" And strT <> "000000000000" And strT <> "" Then foundOne = True
             End If
         End If
     End If
-Next
+Next obj
+Set objset = Nothing
+Set obj = Nothing
 
 GetMACAddressError:
 If GetMACAddress = "" Then
@@ -1566,7 +1624,8 @@ End Function
 '
 ' Note: GetIfTable returns information also about the virtual loopback adapter
 '-----------------------------------------------------------------------------------
-Public Function GetMACs_IfTable() As String
+Public Function GetMACs_IfTable(foundOne As Boolean) As String
+    foundOne = False
 
     Dim NumAdapts As Long, nRowSize As Long, i%, retStr As String
     Dim IfInfo As MIB_IFROW, IPinfoBuf() As Byte, bufLen As Long, sts As Long
@@ -1594,8 +1653,13 @@ Public Function GetMACs_IfTable() As String
         ' Take adapter address if correct type
         With IfInfo
             'retStr = retStr & vbCrLf & "[" & i & "] " & Left$(.bDescr, .dwDescrLen - 1) & vbCrLf
-            If (.dwType = MIB_IF_TYPE_ETHERNET And .dwOperStatus = MIB_IF_OPER_STATUS_OPERATIONAL) Then
-                retStr = MAC2String(.bPhysAddr) 'retStr & vbTab & MAC2String(.bPhysAddr) & vbCrLf
+            If (.dwType = MIB_IF_TYPE_ETHERNET) Then    ' And .dwOperStatus = MIB_IF_OPER_STATUS_OPERATIONAL) Then
+                If retStr = "" Then
+                    retStr = MAC2String(.bPhysAddr) 'retStr & vbTab & MAC2String(.bPhysAddr) & vbCrLf
+                Else
+                    retStr = retStr & "___" & MAC2String(.bPhysAddr)
+                End If
+                If retStr <> "00-00-00-00-00-00" And retStr <> "000000000000" And retStr <> "" Then foundOne = True
             End If
         End With
     Next i
