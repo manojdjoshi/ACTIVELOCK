@@ -4,6 +4,7 @@ Option Explicit On
 Imports System.IO
 Imports System.Security.Cryptography
 Imports System.Text
+Imports System.Globalization
 
 
 #Region "Copyright"
@@ -595,7 +596,8 @@ Module modActiveLock
     Private Declare Function SetLocaleInfo Lib "kernel32" Alias "SetLocaleInfoA" (ByVal Locale As Integer, ByVal LCType As Integer, ByVal lpLCData As String) As Boolean
     Private Declare Function GetUserDefaultLCID Lib "kernel32" () As Short
     Const LOCALE_SSHORTDATE As Short = &H1FS
-    Public regionalSymbol As String
+    Public current_culture As System.Globalization.CultureInfo
+    Public current_culture_name As String
 
     ' Internet connection constants
     ''' <summary>
@@ -723,7 +725,7 @@ Module modActiveLock
         ReadFile = Len(sData)
         Exit Function
 Hell:
-        '* Set_locale(regionalSymbol)
+        Change_Culture("")
         Err.Raise(Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext)
     End Function
 
@@ -865,24 +867,24 @@ Hell:
     '    Dim KEY As RSAKey = Nothing
     '    ' create the key from the key blobs
     '    If rsa_createkey(strPub, Len(strPub), strPriv, Len(strPriv), KEY) = RETVAL_ON_ERROR Then
-    '        '* Set_locale(regionalSymbol)
+    '        Change_Culture("")
     '        Err.Raise(Globals.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
     '    End If
 
     '    ' sign the data using the created key
     '    Dim sLen As Integer
     '    If rsa_sign(KEY, strdata, Len(strdata), vbNullString, sLen) = RETVAL_ON_ERROR Then
-    '        '* Set_locale(regionalSymbol)
+    '        Change_Culture("")
     '        Err.Raise(Globals.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
     '    End If
     '    Dim strSig As String : strSig = New String(Chr(0), sLen)
     '    If rsa_sign(KEY, strdata, Len(strdata), strSig, sLen) = RETVAL_ON_ERROR Then
-    '        '* Set_locale(regionalSymbol)
+    '        Change_Culture("")
     '        Err.Raise(Globals.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
     '    End If
     '    ' throw away the key
     '    If rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-    '        '* Set_locale(regionalSymbol)
+    '        Change_Culture("")
     '        Err.Raise(Globals.ActiveLockErrCodeConstants.alerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
     '    End If
     '    RSASign = strSig
@@ -903,18 +905,18 @@ Hell:
     '    Dim rc As Integer
     '    ' create the key from the public key blob
     '    If rsa_createkey(strPub, Len(strPub), vbNullString, 0, KEY) = RETVAL_ON_ERROR Then
-    '        '* Set_locale(regionalSymbol)
+    '        Change_Culture("")
     '        Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
     '    End If
     '    ' validate the key
     '    rc = rsa_verifysig(KEY, strSig, Len(strSig), strdata, Len(strdata))
     '    If rc = RETVAL_ON_ERROR Then
-    '        '* Set_locale(regionalSymbol)
+    '        Change_Culture("")
     '        Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
     '    End If
     '    ' de-allocate memory used by the key
     '    If rsa_freekey(KEY) = RETVAL_ON_ERROR Then
-    '        '* Set_locale(regionalSymbol)
+    '        Change_Culture("")
     '        Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrRSAError, ACTIVELOCKSTRING, STRRSAERROR)
     '    End If
     '    RSAVerify = rc
@@ -1061,6 +1063,22 @@ Hell:
 
     '*    iRet = SetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol)
     '* End Sub
+    Public Sub Change_Culture(ByVal c As String) 'Change the regional setting
+        If c = "en-US" Then
+            'current_culture = System.Threading.Thread.CurrentThread.CurrentCulture
+            'Dim us_culture As New System.Globalization.CultureInfo("en-US")
+            'System.Threading.Thread.CurrentThread.CurrentCulture = us_culture
+            If System.Threading.Thread.CurrentThread.CurrentCulture.Name <> "en-US" Then
+                current_culture_name = System.Threading.Thread.CurrentThread.CurrentCulture.Name
+                My.Application.ChangeCulture("en-US")
+            End If
+        Else
+            'System.Threading.Thread.CurrentThread.CurrentCulture = current_culture
+            If current_culture_name <> "en-US" And current_culture_name <> Nothing Then
+                My.Application.ChangeCulture(current_culture_name)
+            End If
+            End If
+    End Sub
 
     ''' <summary>
     ''' Gets special folders...

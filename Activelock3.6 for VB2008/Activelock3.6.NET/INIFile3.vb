@@ -586,7 +586,7 @@ catch_Renamed:
     Set(ByVal Value As String)
       ' TODO: Check if File exists.
             ' If file not found: 
-            ' '* Set_locale(regionalSymbol)
+            ' Change_Culture("")
             ' Err.Raise(vbObjectError, , "File not found: " & rValue)
       m_sFileName = Value
       m_sSection = "" '// clear the section

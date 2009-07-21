@@ -875,123 +875,213 @@ GetHDSerialFirmwareError:
     ' Remarks: None
     '===============================================================================
     Public Function GetMACAddress() As String
+
+        '' ******* METHOD 1 *******
+        '' This was causing problems and therefore was commented out
+
+        ''On Error Resume Next
+        ''Dim tmp As String
+        ''Dim pASTAT As Integer
+        ''Dim NCB As NET_CONTROL_BLOCK
+        ''Dim AST As ASTAT
+
+        ' ''The IBM NetBIOS 3.0 specifications defines four basic
+        ' ''NetBIOS environments under the NCBRESET command. Win32
+        ' ''follows the OS/2 Dynamic Link Routine (DLR) environment.
+        ' ''This means that the first NCB issued by an application
+        ' ''must be a NCBRESET, with the exception of NCBENUM.
+        ' ''The Windows NT implementation differs from the IBM
+        ' ''NetBIOS 3.0 specifications in the NCB_CALLNAME field.
+        ''NCB.ncb_command = NCBRESET
+        ''Call Netbios(NCB)
+
+        ' ''To get the Media Access Control (MAC) address for an
+        ' ''ethernet adapter programmatically, use the Netbios()
+        ' ''NCBASTAT command and provide a "*" as the name in the
+        ' ''NCB.ncb_CallName field (in a 16-chr string).
+        ''NCB.ncb_callname = "*               "
+        ''NCB.ncb_command = NCBASTAT
+
+        ' ''For machines with multiple network adapters you need to
+        ' ''enumerate the LANA numbers and perform the NCBASTAT
+        ' ''command on each. Even when you have a single network
+        ' ''adapter, it is a good idea to enumerate valid LANA numbers
+        ' ''first and perform the NCBASTAT on one of the valid LANA
+        ' ''numbers. It is considered bad programming to hardcode the
+        ' ''LANA number to 0 (see the comments section below).
+        ''NCB.ncb_lana_num = 0
+        ''NCB.ncb_length = Len(AST)
+
+        ''pASTAT = HeapAlloc(GetProcessHeap(), HEAP_GENERATE_EXCEPTIONS Or HEAP_ZERO_MEMORY, NCB.ncb_length)
+
+        ''If pASTAT = 0 Then
+        ''    System.Diagnostics.Debug.WriteLine("memory allocation failed!")
+        ''    Exit Function
+        ''End If
+
+        ''NCB.ncb_buffer = pASTAT
+        ''Call Netbios(NCB)
+
+        ''CopyMemory(AST, NCB.ncb_buffer, Len(AST))
+
+        ''tmp = Right("00" & Hex(AST.adapt.adapter_address(0)), 2) & " " & Right("00" & Hex(AST.adapt.adapter_address(1)), 2) & " " & Right("00" & Hex(AST.adapt.adapter_address(2)), 2) & " " & Right("00" & Hex(AST.adapt.adapter_address(3)), 2) & " " & Right("00" & Hex(AST.adapt.adapter_address(4)), 2) & " " & Right("00" & Hex(AST.adapt.adapter_address(5)), 2)
+
+        ''HeapFree(GetProcessHeap(), 0, pASTAT)
+
+        ' ''GetMACAddress = Replace(tmp, " ", "")
+        ''GetMACAddress = tmp
+        'Dim foundOne As Boolean = False
+
+        '' ******* METHOD 2 *******
+        '' Replacement for the abandoned method
+        '' Here we are assuming that the user is NOT running .NET in a Win98/Me machine...
+        'Dim mc As New System.Management.ManagementClass("Win32_NetworkAdapterConfiguration")
+        'Dim moc As System.Management.ManagementObjectCollection = mc.GetInstances
+        'Dim mo As System.Management.ManagementObject
+        'For Each mo In moc
+        '    If mo("IPEnabled").ToString = "True" Then
+        '        'Get all the MAC addresses separated by a +++
+        '        If GetMACAddress = "" Then
+        '            GetMACAddress = mo("MACAddress").ToString.Replace(":", "-")
+        '        Else
+        '            GetMACAddress = GetMACAddress & "-" & mo("MACAddress").ToString.Replace(":", "-")
+        '        End If
+        '        If mo("MACAddress").ToString.Replace(":", "-") <> "00-00-00-00-00-00" Then foundOne = True
+        '    End If
+        'Next mo
+
+        'If foundOne Then Exit Function
+
+        '' ******* METHOD 3 *******
+        'Dim netInfo As New clsNetworkStats
+        'Dim netStruct As clsNetworkStats.IFROW_HELPER
+        'netStruct = netInfo.GetAdapter
+        'GetMACAddress = netStruct.PhysAddr.ToString()
+        'If GetMACAddress <> "00-00-00-00-00-00" Then Exit Function
+
+        ' '' ******* METHOD 3 *******
+        ' '' Here we are assuming that the user is NOT running .NET in a Win98/Me machine...
+        ''Dim mc As ManagementClass
+        ''Dim mo As ManagementObject
+        ''mc = New ManagementClass("Win32_NetworkAdapterConfiguration")
+        ''Dim moc As ManagementObjectCollection = mc.GetInstances()
+        ''For Each mo In moc
+        ''    If mo.Item("IPEnabled").ToString() = "True" Then
+        ''        GetMACAddress = mo.Item("MacAddress").ToString().Replace(":", "-")
+        ''        If GetMACAddress <> "00-00-00-00-00-00" Then Exit Function
+        ''    End If
+        ''Next
+
+        '' ******* METHOD 4 *******
+        'Dim objMOS As ManagementObjectSearcher
+        'Dim objMOC As Management.ManagementObjectCollection
+        'Dim objMO As Management.ManagementObject
+        'objMOS = New ManagementObjectSearcher("Select * From Win32_NetworkAdapter")
+        'objMOC = objMOS.Get
+        'For Each objMO In objMOC
+        '    GetMACAddress = objMO("MACAddress").ToString
+        '    If GetMACAddress <> "00-00-00-00-00-00" Then Exit Function
+        'Next
+        'objMOS.Dispose()
+        'objMOS = Nothing
+        'objMO = Nothing
+
+        '' ******* METHOD 5 *******
+        'Dim nic As System.Net.NetworkInformation.NetworkInterface = Nothing
+        'For Each nic In System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces
+        '    GetMACAddress = nic.GetPhysicalAddress().ToString
+        '    If GetMACAddress <> "" And GetMACAddress <> "00-00-00-00-00-00" Then
+        '        nic = Nothing
+        '        Exit Function
+        '    End If
+        'Next
+
+        '' ******* METHOD 6 *******
+        ''another user provided the code below that seems to work well
+        ''if the adapter card is "Ethernet 802.3", then the code below will work
+        'Dim objset, obj As Object
+        'objset = GetObject("winmgmts:{impersonationLevel=impersonate}").InstancesOf("Win32_NetworkAdapter")
+        'For Each obj In objset
+        '    On Error Resume Next
+        '    If Not IsDBNull(obj.MACAddress) Then
+        '        If obj.AdapterType = "Ethernet 802.3" Then
+        '            If InStr(obj.PNPDeviceID, "PCI\") <> 0 Then
+        '                GetMACAddress = Replace_Renamed(obj.MACAddress, ":", "-")
+        '                Exit Function
+        '            End If
+        '        End If
+        '    End If
+        'Next obj
+
         GetMACAddress = String.Empty
+        Dim foundOne As Boolean = False
 
         ' ******* METHOD 1 *******
-        ' This was causing problems and therefore was commented out
+        ' Replacement for the abandoned method
+        ' Here we are assuming that the user is NOT running .NET in a Win98/Me machine...
+        Dim mc As New System.Management.ManagementClass("Win32_NetworkAdapterConfiguration")
+        Dim moc As System.Management.ManagementObjectCollection = mc.GetInstances
+        Dim mo As System.Management.ManagementObject
+        Dim strO As String = ""
+        For Each mo In moc
+            If mo("IPEnabled").ToString = "True" Then
+                strO = mo("MACAddress").ToString.Replace(":", "-")
+                'Get all the MAC addresses separated by a +++
+                If GetMACAddress = "" Then
+                    GetMACAddress = strO
+                Else
+                    GetMACAddress = GetMACAddress & "___" & strO
+                End If
+                If strO <> "00-00-00-00-00-00" And strO <> "000000000000" And strO <> "" Then foundOne = True
+            End If
+        Next mo
+        moc.Dispose()
+        moc = Nothing
+        mo = Nothing
 
-        'On Error Resume Next
-        'Dim tmp As String
-        'Dim pASTAT As Integer
-        'Dim NCB As NET_CONTROL_BLOCK
-        'Dim AST As ASTAT
-
-        ''The IBM NetBIOS 3.0 specifications defines four basic
-        ''NetBIOS environments under the NCBRESET command. Win32
-        ''follows the OS/2 Dynamic Link Routine (DLR) environment.
-        ''This means that the first NCB issued by an application
-        ''must be a NCBRESET, with the exception of NCBENUM.
-        ''The Windows NT implementation differs from the IBM
-        ''NetBIOS 3.0 specifications in the NCB_CALLNAME field.
-        'NCB.ncb_command = NCBRESET
-        'Call Netbios(NCB)
-
-        ''To get the Media Access Control (MAC) address for an
-        ''ethernet adapter programmatically, use the Netbios()
-        ''NCBASTAT command and provide a "*" as the name in the
-        ''NCB.ncb_CallName field (in a 16-chr string).
-        'NCB.ncb_callname = "*               "
-        'NCB.ncb_command = NCBASTAT
-
-        ''For machines with multiple network adapters you need to
-        ''enumerate the LANA numbers and perform the NCBASTAT
-        ''command on each. Even when you have a single network
-        ''adapter, it is a good idea to enumerate valid LANA numbers
-        ''first and perform the NCBASTAT on one of the valid LANA
-        ''numbers. It is considered bad programming to hardcode the
-        ''LANA number to 0 (see the comments section below).
-        'NCB.ncb_lana_num = 0
-        'NCB.ncb_length = Len(AST)
-
-        'pASTAT = HeapAlloc(GetProcessHeap(), HEAP_GENERATE_EXCEPTIONS Or HEAP_ZERO_MEMORY, NCB.ncb_length)
-
-        'If pASTAT = 0 Then
-        '    System.Diagnostics.Debug.WriteLine("memory allocation failed!")
-        '    Exit Function
-        'End If
-
-        'NCB.ncb_buffer = pASTAT
-        'Call Netbios(NCB)
-
-        'CopyMemory(AST, NCB.ncb_buffer, Len(AST))
-
-        'tmp = Right("00" & Hex(AST.adapt.adapter_address(0)), 2) & " " & Right("00" & Hex(AST.adapt.adapter_address(1)), 2) & " " & Right("00" & Hex(AST.adapt.adapter_address(2)), 2) & " " & Right("00" & Hex(AST.adapt.adapter_address(3)), 2) & " " & Right("00" & Hex(AST.adapt.adapter_address(4)), 2) & " " & Right("00" & Hex(AST.adapt.adapter_address(5)), 2)
-
-        'HeapFree(GetProcessHeap(), 0, pASTAT)
-
-        ''GetMACAddress = Replace(tmp, " ", "")
-        'GetMACAddress = tmp
+        If foundOne Then Exit Function
 
         ' ******* METHOD 2 *******
-        Dim netInfo As New clsNetworkStats
-        Dim netStruct As clsNetworkStats.IFROW_HELPER
-        netStruct = netInfo.GetAdapter
-        GetMACAddress = netStruct.PhysAddr.ToString()
-        If GetMACAddress <> "00-00-00-00-00-00" Then Exit Function
+        Dim nic As System.Net.NetworkInformation.NetworkInterface = Nothing
+        Dim strM As String = ""
+        For Each nic In System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces
+            strM = nic.GetPhysicalAddress().ToString
+            'Get all the MAC addresses separated by a +++
+            If GetMACAddress = "" Then
+                GetMACAddress = strM
+            Else
+                If strM <> "" Then GetMACAddress = GetMACAddress & "___" & strM
+            End If
+            If strM <> "00-00-00-00-00-00" And strM <> "000000000000" And strM <> "" Then foundOne = True
+        Next
+        nic = Nothing
+
+        If foundOne Then Exit Function
 
         ' ******* METHOD 3 *******
-        ' Here we are assuming that the user is NOT running .NET in a Win98/Me machine...
-        Dim mc As ManagementClass
-        Dim mo As ManagementObject
-        mc = New ManagementClass("Win32_NetworkAdapterConfiguration")
-        Dim moc As ManagementObjectCollection = mc.GetInstances()
-        For Each mo In moc
-            If mo.Item("IPEnabled").ToString() = "True" Then
-                GetMACAddress = mo.Item("MacAddress").ToString().Replace(":", "-")
-                If GetMACAddress <> "00-00-00-00-00-00" Then Exit Function
-            End If
-        Next
-
-        ' ******* METHOD 4 *******
-        Dim objMOS As ManagementObjectSearcher
-        Dim objMOC As Management.ManagementObjectCollection
-        Dim objMO As Management.ManagementObject
-        objMOS = New ManagementObjectSearcher("Select * From Win32_NetworkAdapter")
-        objMOC = objMOS.Get
-        For Each objMO In objMOC
-            GetMACAddress = objMO("MACAddress").ToString
-            If GetMACAddress <> "00-00-00-00-00-00" Then Exit Function
-        Next
-        objMOS.Dispose()
-        objMOS = Nothing
-        objMO = Nothing
-
-        ' ******* METHOD 5 *******
-        Dim nic As System.Net.NetworkInformation.NetworkInterface = Nothing
-        For Each nic In System.Net.NetworkInformation.NetworkInterface.GetAllNetworkInterfaces
-            GetMACAddress = nic.GetPhysicalAddress().ToString
-            If GetMACAddress <> "" And GetMACAddress <> "00-00-00-00-00-00" Then
-                nic = Nothing
-                Exit Function
-            End If
-        Next
-
-        ' ******* METHOD 6 *******
         'another user provided the code below that seems to work well
         'if the adapter card is "Ethernet 802.3", then the code below will work
         Dim objset, obj As Object
+        Dim strT As String = ""
         objset = GetObject("winmgmts:{impersonationLevel=impersonate}").InstancesOf("Win32_NetworkAdapter")
         For Each obj In objset
             On Error Resume Next
             If Not IsDBNull(obj.MACAddress) Then
                 If obj.AdapterType = "Ethernet 802.3" Then
                     If InStr(obj.PNPDeviceID, "PCI\") <> 0 Then
-                        GetMACAddress = Replace_Renamed(obj.MACAddress, ":", "-")
-                        Exit Function
+                        strT = Replace(obj.MACAddress, ":", "-")
+                        If GetMACAddress = "" Then
+                            GetMACAddress = strT
+                        Else
+                            If strT <> "" Then GetMACAddress = GetMACAddress & "___" & strT
+                        End If
+                        If strT <> "00-00-00-00-00-00" And strT <> "000000000000" And strT <> "" Then foundOne = True
                     End If
                 End If
             End If
         Next obj
+        objset = Nothing
+        obj = Nothing
 
 GetMACAddressError:
         If GetMACAddress = "" Then

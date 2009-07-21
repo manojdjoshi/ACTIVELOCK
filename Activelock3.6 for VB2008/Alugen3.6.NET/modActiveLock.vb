@@ -60,6 +60,9 @@ Module modActiveLock
     Private Declare Function GetUserDefaultLCID Lib "kernel32" () As Short
     Const LOCALE_SSHORTDATE As Short = &H1FS
     Public regionalSymbol As String
+    Public current_culture As System.Globalization.CultureInfo
+    Public current_culture_name As String
+
 
     '===============================================================================
     ' Name: Function WinDir
@@ -145,5 +148,21 @@ Module modActiveLock
 
     '    iRet = SetLocaleInfo(Locale, LOCALE_SSHORTDATE, Symbol)
     'End Sub
+    Public Sub Change_Culture(ByVal c As String) 'Change the regional setting
+        If c = "en-US" Then
+            'current_culture = System.Threading.Thread.CurrentThread.CurrentCulture
+            'Dim us_culture As New System.Globalization.CultureInfo("en-US")
+            'System.Threading.Thread.CurrentThread.CurrentCulture = us_culture
+            If System.Threading.Thread.CurrentThread.CurrentCulture.Name <> "en-US" Then
+                current_culture_name = System.Threading.Thread.CurrentThread.CurrentCulture.Name
+                My.Application.ChangeCulture("en-US")
+            End If
+        Else
+            'System.Threading.Thread.CurrentThread.CurrentCulture = current_culture
+            If current_culture_name <> "en-US" And current_culture_name <> Nothing Then
+                My.Application.ChangeCulture(current_culture_name)
+            End If
+        End If
+    End Sub
 
 End Module

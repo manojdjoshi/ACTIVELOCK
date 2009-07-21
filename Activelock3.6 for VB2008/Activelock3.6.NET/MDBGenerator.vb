@@ -243,7 +243,7 @@ Friend Class MDBGenerator
     End Try
 
     If ProdInfo.VCode = "" Or ProdInfo.GCode = "" Then
-            '* Set_locale(regionalSymbol)
+            Change_Culture("")
             Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, "Product code set is invalid.")
         End If
         IALUGenerator_RetrieveProduct = ProdInfo
@@ -386,7 +386,7 @@ Friend Class MDBGenerator
             mySignatureBlock = Convert.ToBase64String(mysignature)
             Lic.LicenseKey = mySignatureBlock
         Catch ex As Exception
-            '* Set_locale(regionalSymbol)
+            Change_Culture("")
             Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, ex.Message)
         End Try
 
@@ -397,6 +397,7 @@ Friend Class MDBGenerator
         Dim strLibKey As String = String.Empty
         Lic.Save(strLibKey)
         IALUGenerator_GenKey = strLibKey
+        Change_Culture("")
     End Function
     '===============================================================================
     ' Name: Sub GetLockAndUserFromInstallCode

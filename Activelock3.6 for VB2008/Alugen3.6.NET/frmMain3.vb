@@ -1634,7 +1634,7 @@ Friend Class frmMain
         Me.chkLockMACaddress.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.chkLockMACaddress.Size = New System.Drawing.Size(279, 18)
         Me.chkLockMACaddress.TabIndex = 17
-        Me.chkLockMACaddress.Text = "Lock to MAC Address"
+        Me.chkLockMACaddress.Text = "Lock to IPEnabled MAC Addresses"
         Me.chkLockMACaddress.UseVisualStyleBackColor = False
         '
         'chkItemData
@@ -2400,7 +2400,7 @@ noInfo:
                 aString = a(i)
                 If i = LBound(a) Then
                     MACaddress = aString
-                    lblLockMacAddress.Text = MACaddress
+                    lblLockMacAddress.Text = MACaddress.Replace("___", " && ")
                 ElseIf i = LBound(a) + 1 Then
                     ComputerName = aString
                     lblLockComputer.Text = ComputerName
@@ -2477,7 +2477,7 @@ noInfo:
                 aString = a(i)
                 If i = LBound(a) And aString <> noKey Then
                     MACaddress = aString
-                    lblLockMacAddress.Text = MACaddress
+                    lblLockMacAddress.Text = MACaddress.Replace("___", " && ")
                     chkLockMACaddress.CheckState = CheckState.Checked
                 ElseIf i = (LBound(a) + 1) And aString <> noKey Then
                     ComputerName = aString
@@ -3126,10 +3126,10 @@ SaveFormSettings_Error:
             rsaPubParams = Nothing
             rsaPrivateParams = Nothing
             rsaCSP = Nothing
-            '* Set_locale(regionalSymbol)
+            Change_Culture("")
 
         Catch ex As Exception
-            '* Set_locale(regionalSymbol)
+            Change_Culture("")
             MessageBox.Show(ex.Message, ACTIVELOCKSTRING, MessageBoxButtons.OK, MessageBoxIcon.Error)
         Finally
             'update controls
@@ -3139,7 +3139,7 @@ SaveFormSettings_Error:
             Cursor = Cursors.Default
             Enabled = True
             fDisableNotifications = False
-            '* Set_locale(regionalSymbol)
+            Change_Culture("")
         End Try
     End Sub
 
@@ -3166,17 +3166,22 @@ SaveFormSettings_Error:
         Dim licFlag As ActiveLock3_6NET.ProductLicense.LicFlags, maximumUsers As Short
 
         If txtInstallCode.Text.Length < 8 Then Exit Sub
+        If cboLicType.Text = "Periodic" And (txtDays.Text.Contains(".") Or txtDays.Text.Contains("-") Or txtDays.Text.Contains(",") Or txtDays.Text.Contains("/")) Then
+            MsgBox("You must enter an integer Number of Days for Periodic Licenses.", vbExclamation)
+            Exit Sub
+        End If
 
         If SSTab1.SelectedIndex <> 1 Then Exit Sub ' our tab not active - do nothing
         ' Get the current date format and save it to regionalSymbol variable
         '* Get_Locale()
         ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
         '* Set_locale("")
+        Change_Culture("en-US")
 
         If cboLicType.Text = "Time Locked" Then
             ' Check to see if there's a valid expiration date
             If dtpExpireDate.Value < Date.Now Then
-                '* Set_locale(regionalSymbol)
+                Change_Culture("")
                 MsgBox("Entered date occurs in the past.", vbExclamation)
                 Exit Sub
             End If
@@ -3364,12 +3369,12 @@ SaveFormSettings_Error:
             txtLicenseFile.Visible = True
             cmdBrowse.Visible = True
             cmdSave.Visible = True
-            '* Set_locale(regionalSymbol)
+            Change_Culture("")
         Catch ex As Exception
-            '* Set_locale(regionalSymbol)
+            Change_Culture("")
             UpdateStatus("Error: " & ex.Message)
         Finally
-            '* Set_locale(regionalSymbol)
+            Change_Culture("")
             Cursor = Cursors.Default
         End Try
     End Sub
@@ -3471,6 +3476,7 @@ continueHere:
         '* Get_Locale()
         ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
         '* Set_locale("")
+        Change_Culture("en-US")
 
         '.NET RSA
 
@@ -3692,10 +3698,10 @@ continueHere:
 
             'Release any resources held by the RSA Service Provider
             rsaCSP.Clear()
-            '* Set_locale(regionalSymbol)
+            Change_Culture("")
 
         Catch ex As Exception
-            '* Set_locale(regionalSymbol)
+            Change_Culture("")
             UpdateStatus(ex.Message)
         End Try
 
@@ -3703,7 +3709,7 @@ continueHere:
         Exit Sub
 
 exitValidate:
-        '* Set_locale(regionalSymbol)
+        Change_Culture("")
         UpdateStatus(txtName.Text & " (" & txtVer.Text & ") GCode-VCode mismatch!")
         Cursor = Cursors.Default
     End Sub
@@ -3969,6 +3975,7 @@ exitValidate:
         '* Get_Locale()
         ' Use this trick to temporarily set the date format to "yyyy/MM/dd"
         '* Set_locale("")
+        Change_Culture("en-US")
 
         If strLeft(txtVCode.Text, 3) = "RSA" Then
 
@@ -4041,10 +4048,10 @@ exitValidate:
 
                 'Release any resources held by the RSA Service Provider
                 rsaCSP.Clear()
-                '* Set_locale(regionalSymbol)
+                Change_Culture("")
 
             Catch ex As Exception
-                '* Set_locale(regionalSymbol)
+                Change_Culture("")
                 UpdateStatus(ex.Message)
             End Try
         End If
@@ -4303,7 +4310,7 @@ exitValidate:
                 chkLockHDfirmware.Enabled = True
                 chkLockHDfirmware.Text = "Lock to HDD Firmware Serial"
                 chkLockMACaddress.Enabled = True
-                chkLockMACaddress.Text = "Lock to MAC Address"
+                chkLockMACaddress.Text = "Lock to IPEnabled MAC Addresses"
                 chkLockWindows.Enabled = True
                 chkLockWindows.Text = "Lock to Windows Serial"
                 chkLockBIOS.Enabled = True
@@ -4315,7 +4322,7 @@ exitValidate:
                 chkLockExternalIP.Enabled = True
                 chkLockExternalIP.Text = "Lock to External IP Address"
                 chkLockFingerprint.Enabled = True
-                chkLockFingerprint.Text = "Lock to Computer Fingerprint [VB.NET]"
+                chkLockFingerprint.Text = "Lock to Computer Fingerprint"
                 chkLockMemory.Enabled = True
                 chkLockMemory.Text = "Lock to Memory"
                 chkLockCPUID.Enabled = True

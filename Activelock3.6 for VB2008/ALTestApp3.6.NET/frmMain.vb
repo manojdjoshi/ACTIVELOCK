@@ -1202,8 +1202,6 @@ Friend Class frmMain
             AppfilePath = VB.Left(AppfilePath, InStr(AppfilePath, Chr(0)) - 1)
         End If
 
-        Dim strSD As String = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern
-
         'The second line is used when unmanaged Activelock3NET.dll is used
         Dim MyAL As New ActiveLock3_6NET.Globals
         'Dim MyAL As New ActiveLock3.Globals
@@ -1294,8 +1292,8 @@ Friend Class frmMain
             ' You can combine any lockType(s) using OR as above
             ' WARNING: Short key licenses use the lockFingerprint by default
             ' WARNING: This has no effect for short key licenses
-            '.LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockNone
-            .LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockFingerprint
+            .LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockNone
+            '.LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockFingerprint
             '.LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockIP Or _
             'ActiveLock3_6NET.IActiveLock.ALLockTypes.lockComp
 
@@ -1510,8 +1508,10 @@ Friend Class frmMain
         'MyActiveLock.ExpirationDate
 
         ' This will display the date in user's locale short date format
-        '* changed the following back to how it was, sorry but I deleted the orignal in my rush to check it
-        txtExpiration.Text = strExpirationDate '*
+        Dim strSD As String = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern
+        Dim strST As String = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern
+
+        txtExpiration.Text = Convert.ToDateTime(strExpirationDate).ToString(strSD & " " & strST)
         If txtExpiration.Text = "" Then
             txtExpiration.Text = "Permanent" 'App has a permanent license
         End If
