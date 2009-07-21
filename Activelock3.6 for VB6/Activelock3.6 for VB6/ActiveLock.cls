@@ -1571,7 +1571,7 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
     Dim noKey As String
     Dim userFromInstallCode As String, usedcode As String
     Dim a() As String, astring As String
-    Dim j As Integer
+    Dim j As Integer, ii As Integer
     
     noKey = Chr(110) & Chr(111) & Chr(107) & Chr(101) & Chr(121)
     If Lic Is Nothing Then
@@ -1702,16 +1702,29 @@ Private Function IActiveLock_LockCode(Optional Lic As ProductLicense = Nothing) 
                 If Left(astring, 1) = "+" Then astring = Mid(astring, 2)
                 If j = LBound(a) Then
                     If astring <> noKey Then
-                        If astring <> modHardware.GetMACAddress() Then
-                            ' Ok MAC address did not match
-                            ' Maybe the laptop owner turned on the wireless connection
-                            ' and it wasn't on when the license was registered
-                            If CheckMACaddress(astring) = False Then
-                                ' we truly failed
+                        Dim succeeded As Boolean
+                        Dim Cc As Variant
+                        Cc = Split(astring, "___")
+                        'If astring <> modHardware.GetMACAddress() Then
+                            For ii = LBound(Cc) To UBound(Cc)
+                                If InStr(UCase(modHardware.GetMACAddress), UCase(Cc(ii))) > 0 Then
+                                    succeeded = True
+                                    Exit For
+                                End If
+                            Next ii
+                            If Not succeeded Then
                                 Set_locale regionalSymbol
                                 Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
                             End If
-                        End If
+                            ' Ok MAC address did not match
+                            ' Maybe the laptop owner turned on the wireless connection
+                            ' and it wasn't on when the license was registered
+                            'If CheckMACaddress(astring) = False Then
+                            '    ' we truly failed
+                            '    Set_locale regionalSymbol
+                            '    Err.Raise ActiveLockErrCodeConstants.alerrLicenseInvalid, ACTIVELOCKSTRING, STRLICENSEINVALID
+                            'End If
+                        'End If
                     End If
                 ElseIf j = LBound(a) + 1 Then
                     If astring <> noKey Then

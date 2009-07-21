@@ -1,8 +1,8 @@
 VERSION 5.00
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.ocx"
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "COMDLG32.OCX"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "Mscomctl.ocx"
 Begin VB.Form frmMain 
    Appearance      =   0  'Flat
    BorderStyle     =   1  'Fixed Single
@@ -389,7 +389,7 @@ Begin VB.Form frmMain
             Width           =   7095
          End
          Begin VB.CheckBox chkLockMACaddress 
-            Caption         =   "Lock to MAC Address:"
+            Caption         =   "Lock to IPEnabled MAC Addresses:"
             BeginProperty Font 
                Name            =   "Microsoft Sans Serif"
                Size            =   8.25
@@ -1552,6 +1552,10 @@ Dim strLibKey As String, i As Integer
 
 If SSTab1.Tab <> 1 Then Exit Sub ' our tab not active - do nothing
 If Len(txtReqCodeIn.Text) < 8 Then Exit Sub
+If cmbLicType = "Periodic" And inString(txtDays.Text, "/", "-", ",", ".") = True Then
+    MsgBox "You must anter an integer Number of Days for Periodic Licenses.", vbExclamation
+    Exit Sub
+End If
 
 ' Get the current date format and save it to regionalSymbol variable
 Get_locale
@@ -2635,7 +2639,7 @@ Else ' RSA
         chkLockHDfirmware.Enabled = True
         chkLockHDfirmware.Caption = "Lock to HDD Firmware Serial Number:"
         chkLockMACaddress.Enabled = True
-        chkLockMACaddress.Caption = "Lock to MAC Address:"
+        chkLockMACaddress.Caption = "Lock to IPEnabled MAC Addresses:"
         chkLockWindows.Enabled = True
         chkLockWindows.Caption = "Lock to Windows Serial Number:"
         chkLockBIOS.Enabled = True
@@ -2870,7 +2874,7 @@ If usedLockNone = True Then
         aString = a(i)  'aString & A(i) & vbCrLf
         If i = LBound(a) Then
             MACaddress = aString
-            chkLockMACaddress.Caption = "Lock to MAC Address:                           " & MACaddress
+            chkLockMACaddress.Caption = "Lock to MAC IPEnabled Addresses:      " & Replace(MACaddress, "___", " && ")
         ElseIf i = LBound(a) + 1 Then
             ComputerName = aString
             chkLockComputer.Caption = "Lock to Computer Name:                       " & ComputerName
@@ -2948,7 +2952,7 @@ Else '"+" was not used, therefore one or more lockTypes were specified in the ap
         
         If i = LBound(a) And aString <> noKey Then
             MACaddress = aString
-            chkLockMACaddress.Caption = "Lock to MAC Address:                           " & MACaddress
+            chkLockMACaddress.Caption = "Lock to MAC IPEnabled Addresses:      " & Replace(MACaddress, "___", " && ")
             chkLockMACaddress.Value = vbChecked
         ElseIf i = (LBound(a) + 1) And aString <> noKey Then
             ComputerName = aString
