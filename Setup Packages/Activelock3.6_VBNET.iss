@@ -6,7 +6,7 @@ AppPublisher=Activelock Software Group
 Uninstallable=true
 ; set installation folder based on target Windows version
 DefaultDirName={code:SetInstallDir}\Activelock_VB2008_3.6
-OutputBaseFilename=Activelock_VB2008_Setup_3.6_June_13_2009
+OutputBaseFilename=Activelock_VB2008_Setup_3.6_Final_July_17_2009
 OutputDir=.
 DefaultGroupName=Activelock Software Group
 WizardImageFile=C:\ActiveLockCommunity\Images\big-side.bmp
@@ -219,7 +219,7 @@ if NetFrameWorkInstalled = true then
   //the .Net Framework from the web
   if NetFrameWorkInstalled = false then
     begin
-    Result1 := MsgBox('This setup requires the .NET Framework. Please download and install the .NET Framework and run this setup again. Do you want to download the .NET Framework now?', mbConfirmation, MB_YESNO) = idYes;
+    Result1 := MsgBox('This setup requires the .NET Framework v2.0 Please download and install the .NET Framework v2.0 and run this setup again. Do you want to download the .NET Framework now?', mbConfirmation, MB_YESNO) = idYes;
     if Result1 =false then
       begin
       Result:=false;
@@ -227,8 +227,7 @@ if NetFrameWorkInstalled = true then
     else
       begin
       Result:=false;
-      //Exec('http://download.microsoft.com/download/a/a/c/aac39226-8825-44ce-90e3-bf8203e74006/dotnetfx.exe','','',SW_SHOWNORMAL,ewWaitUntilTerminated,ErrorCode);
-      ShellExec('open', ExpandConstant('http://download.microsoft.com/download/a/a/c/aac39226-8825-44ce-90e3-bf8203e74006/dotnetfx.exe'),'', '', SW_SHOW, ewWaitUntilTerminated, ErrorCode);
+      ShellExec('open', ExpandConstant('http://download.microsoft.com/download/5/6/7/567758a3-759e-473e-bf8f-52154438565a/dotnetfx.exe'),'', '', SW_SHOW, ewWaitUntilTerminated, ErrorCode);
     end;
   end;
 end;
