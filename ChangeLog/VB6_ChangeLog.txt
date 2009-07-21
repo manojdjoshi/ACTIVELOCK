@@ -1,5 +1,5 @@
 Change Log For Activelock VB6 
-Last Updated: 28 December 2008 
+Last Updated: 17 July 2009 
 
 v3.6 Updates:
 - FIX: Alugen restricts the use illegal and non-standard characters for the software name and version number fields. Only alphanumeric characters, the decimal point, and backspace are allowed.
@@ -125,7 +125,8 @@ v3.6 RC2
 - UPDATE: Removed UsedLockType property from Activelock; it was polluting the code base and was not needed aymore (at least even David Weatherall who has originally requested it is not using it).
 - FIX: When switched from one regional settings to another, VB6 version of Activelock was not honoring the existing license. This was introduced in RC2 but was updated with RC2-1
 - UPDATE: lock to BIOS Version remains the same since Motherboard serial was actually the BIOS/System Serial Number. Therefore renamed "Motherboard Serial" as "BIOS/System Serial Number". Baseboard ID, which actually is the Motherboard Serial Number remained the same.
-
+v3.6 Final
+- NEW: Activelock now supports locking to multiple MAC addresses and if one of the cards are removed or become available at a later time, the license does not fail. Note added to Alugen that the shown MACs are IPEnabled addresses. (Thanks Shawn)
 
 
 
