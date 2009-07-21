@@ -1,5 +1,5 @@
 Change Log For Activelock VB2008 
-Last Updated: 4 December 2008 
+Last Updated: 17 July 2009 
 
 VB2008 v3.6 Updates:
 - UPDATE: Compressed the setup package which reduced the package size substantially.
@@ -111,7 +111,10 @@ v3.6 RC2
 - FIX: GetExternalIP function was returning an HTML error message when the code failed. This was reported by Adlancas. Added various checks to detect such HTML page errors and return "Not Available" instead of an error. Apparently, this was happening while the user did not login in case of access via proxy servers.
 - UPDATE: Removed UsedLockType property from Activelock; it was polluting the code base and was not needed aymore (at least even David Weatherall who has originally requested it is not using it).
 - UPDATE: lock to BIOS Version remains the same since Motherboard serial was actually the BIOS/System Serial Number. Therefore renamed "Motherboard Serial" as "BIOS/System Serial Number". Baseboard ID, which actually is the Motherboard Serial Number remained the same.
-
+v3.6 Final
+- FIX: Activelock VB2008 edition now honors the current culture and restores the user's culture upon executing the Register, Validate, and Generate Key methods. This latest update also allows users run Alugen in users' own short date system and shows the expiration date with also the current locale date settings.
+- FIX: Activelock VB2008 edition now checks the existence of the .NET v2.0 in user's system and downloads it if it's not available. Priorr setup packages were checking for v1.1 instead (somehow)
+- NEW: Activelock VB2008 now supports locking to multiple MAC addresses and if one of the cards are removed or become available at a later time, the license does not fail. Note added to Alugen that the shown MACs are IPEnabled addresses. (Thanks Shawn)
 
 
 
