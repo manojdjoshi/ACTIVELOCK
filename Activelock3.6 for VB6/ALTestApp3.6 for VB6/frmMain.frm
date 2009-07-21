@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "Mscomctl.ocx"
 Begin VB.Form frmMain 
    BorderStyle     =   1  'Fixed Single
    Caption         =   "ALTestApp - ActiveLock3 Test Application"
@@ -888,6 +888,7 @@ Private Sub Form_Load()
         ' But you won't be able to uncheck/check any of them while in Alugen (too late at that point).
         ' WARNING: Short key licenses use the lockFingerprint by default
         ' WARNING: This has no effect for short key licenses
+        '.LockType = lockMAC
         .LockType = lockNone
         
         ' USAGE OF .ALL (AUTO-REGISTER) FILES
