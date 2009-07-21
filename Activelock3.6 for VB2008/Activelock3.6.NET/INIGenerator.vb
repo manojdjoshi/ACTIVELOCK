@@ -194,7 +194,7 @@ RetrieveProductsError:
         End With
         If ProdInfo.VCode = "" Or ProdInfo.GCode = "" Then
             'ACTIVELOCKSTRING could be replaced by System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location).ProductName
-            '* Set_locale(regionalSymbol)
+            Change_Culture("")
             Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, "Product code set is invalid.")
         End If
         IALUGenerator_RetrieveProduct = ProdInfo
@@ -321,7 +321,7 @@ RetrieveProductsError:
             mySignatureBlock = Convert.ToBase64String(mysignature)
             Lic.LicenseKey = mySignatureBlock
         Catch ex As Exception
-            '* Set_locale(regionalSymbol)
+            Change_Culture("")
             Err.Raise(AlugenGlobals.alugenErrCodeConstants.alugenProdInvalid, ACTIVELOCKSTRING, ex.Message)
         End Try
 

@@ -562,7 +562,7 @@ Module modRegistry
                 GetRegistryValue = resString
 			Case Else
 				RegCloseKey(handle)
-                '* Set_locale(regionalSymbol)
+                Change_Culture("")
                 Err.Raise(1001, ACTIVELOCKSTRING, "Unsupported value type")
         End Select
 
@@ -620,7 +620,7 @@ Module modRegistry
                 retVal = RegSetValueEx(handle, ValueName, 0, REG_BINARY, binValue(LBound(binValue)), Length)
             Case Else
                 RegCloseKey(handle)
-                '* Set_locale(regionalSymbol)
+                Change_Culture("")
                 Err.Raise(1001, ACTIVELOCKSTRING, "Unsupported value type")
         End Select
 
@@ -822,7 +822,7 @@ Module modRegistry
         Dim SEC As SECURITY_ATTRIBUTES
 
         If RegCreateKeyEx(hKey, KeyName, 0, CStr(0), 0, 0, SEC, handle, disposition) Then
-            '* Set_locale(regionalSymbol)
+            Change_Culture("")
             Err.Raise(1001, ACTIVELOCKSTRING, "Unable to create the registry key")
         Else
             ' Return True if the key already existed.

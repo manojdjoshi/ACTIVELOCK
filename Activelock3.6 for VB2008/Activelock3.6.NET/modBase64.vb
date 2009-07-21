@@ -108,26 +108,34 @@ Module modBase64
     '===============================================================================
     Public Function Base64_Decode(ByRef a As String) As String
 
-        Dim b As Byte() = Convert.FromBase64String(a)
-        Base64_Decode = System.Text.Encoding.UTF8.GetString(b)
+        Try
+            Dim b As Byte() = Convert.FromBase64String(a)
+            Base64_Decode = System.Text.Encoding.UTF8.GetString(b)
 
-        'Dim w1 As Short
-        'Dim w2 As Short
-        'Dim w3 As Short
-        'Dim w4 As Short
-        'Dim N As Short
-        'Dim retry As String = String.Empty
+            'Dim w1 As Short
+            'Dim w2 As Short
+            'Dim w3 As Short
+            'Dim w4 As Short
+            'Dim N As Short
+            'Dim retry As String = String.Empty
 
-        'For N = 1 To Len(a) Step 4
-        '    w1 = mimedecode(Mid(a, N, 1))
-        '    w2 = mimedecode(Mid(a, N + 1, 1))
-        '    w3 = mimedecode(Mid(a, N + 2, 1))
-        '    w4 = mimedecode(Mid(a, N + 3, 1))
-        '    If w2 >= 0 Then retry = retry & Chr((w1 * 4 + Int(w2 / 16)) And 255)
-        '    If w3 >= 0 Then retry = retry & Chr((w2 * 16 + Int(w3 / 4)) And 255)
-        '    If w4 >= 0 Then retry = retry & Chr((w3 * 64 + w4) And 255)
-        'Next
-        'Base64_Decode = retry
+            'For N = 1 To Len(a) Step 4
+            '    w1 = mimedecode(Mid(a, N, 1))
+            '    w2 = mimedecode(Mid(a, N + 1, 1))
+            '    w3 = mimedecode(Mid(a, N + 2, 1))
+            '    w4 = mimedecode(Mid(a, N + 3, 1))
+            '    If w2 >= 0 Then retry = retry & Chr((w1 * 4 + Int(w2 / 16)) And 255)
+            '    If w3 >= 0 Then retry = retry & Chr((w2 * 16 + Int(w3 / 4)) And 255)
+            '    If w4 >= 0 Then retry = retry & Chr((w3 * 64 + w4) And 255)
+            'Next
+            'Base64_Decode = retry
+        Catch ex As Exception
+            Change_Culture("")
+            Return ""
+        Finally
+
+
+        End Try
 
     End Function
 

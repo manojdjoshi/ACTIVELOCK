@@ -520,7 +520,7 @@ RunsGoodRegistryError:
 
         If TrialSteganographyExists(TrialHideTypes) Then
             If DateGoodSteganography(numDays, daysLeft2) = False Then
-                '* Set_locale(regionalSymbol)
+                Change_Culture("")
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
                 'MsgBox "DateGoodSteganography " & daysLeft2
                 Exit Function
@@ -529,7 +529,7 @@ RunsGoodRegistryError:
         End If
         If TrialHiddenFolderExists(TrialHideTypes) Then
             If DateGoodHiddenFolder(numDays, daysLeft3) = False Then
-                '* Set_locale(regionalSymbol)
+                Change_Culture("")
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
                 'MsgBox "DateGoodHiddenFolder " & daysLeft3
                 Exit Function
@@ -538,7 +538,7 @@ RunsGoodRegistryError:
         End If
         If TrialRegistryPerUserExists(TrialHideTypes) Then
             If DateGoodRegistry(numDays, daysLeft4) = False Then
-                '* Set_locale(regionalSymbol)
+                Change_Culture("")
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
                 'MsgBox "DateGoodRegistry " & daysLeft4
                 Exit Function
@@ -580,7 +580,7 @@ RunsGoodRegistryError:
 
         If TrialSteganographyExists(TrialHideTypes) Then
             If RunsGoodSteganography(numRuns, runsLeft2) = False Then
-                '* Set_locale(regionalSymbol)
+                Change_Culture("")
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
                 'MsgBox "RunsGoodSteganography " & runsLeft2
                 Exit Function
@@ -590,7 +590,7 @@ RunsGoodRegistryError:
 
         If TrialHiddenFolderExists(TrialHideTypes) Then
             If RunsGoodHiddenFolder(numRuns, runsLeft3) = False Then
-                '* Set_locale(regionalSymbol)
+                Change_Culture("")
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
                 'MsgBox "RunsGoodHiddenFolder " & runsLeft3
                 Exit Function
@@ -600,7 +600,7 @@ RunsGoodRegistryError:
 
         If TrialRegistryPerUserExists(TrialHideTypes) Then
             If RunsGoodRegistry(numRuns, runsLeft4) = False Then
-                '* Set_locale(regionalSymbol)
+                Change_Culture("")
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
                 'MsgBox "RunsGoodRegistry " & runsLeft4
                 Exit Function
@@ -2095,10 +2095,10 @@ IsHiddenFolderExpiredError:
         End If
 
         If alockDays = 0 And trialPeriod = True Then
-            '* Set_locale(regionalSymbol)
+            Change_Culture("")
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrInvalidTrialDays, ACTIVELOCKSTRING, STRINVALIDTRIALDAYS)
         ElseIf alockRuns = 0 And trialRuns = True Then
-            '* Set_locale(regionalSymbol)
+            Change_Culture("")
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrInvalidTrialRuns, ACTIVELOCKSTRING, STRINVALIDTRIALRUNS)
         End If
 
@@ -2116,29 +2116,29 @@ IsHiddenFolderExpiredError:
         ' A regular user account cannot have write access to these two registry hives
         ' I am removing these from v3.6 - ialkan 12-27-2008
         'If IsRegistryExpired1() = True Then
-        '    '* Set_locale(regionalSymbol)
+        '    Change_Culture("")
         '    Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
         'End If
         'If IsRegistryExpired2() = True Then
-        '    '* Set_locale(regionalSymbol)
+        '    Change_Culture("")
         '    Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
         'End If
         If IsEncryptedFileExpired() = True Then
-            '* Set_locale(regionalSymbol)
+            Change_Culture("")
             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
         End If
         ' *** We are disabling folder date stamp in v3.2 since it's not application specific ***
         ' Well... nothing was found
         ' Check the last indicator
         'If IsFolderStampExpired() = True Then
-        '    '* Set_locale(regionalSymbol)
+        '    Change_Culture("")
         '    Err.Raise -10100, , TEXTMSG
         'End If
 
         ' Must check Registry for Trial
         If TrialRegistryPerUserExists(TrialHideTypes) Then
             If IsRegistryExpired() = True Then
-                '* Set_locale(regionalSymbol)
+                Change_Culture("")
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
             End If
         End If
@@ -2146,7 +2146,7 @@ IsHiddenFolderExpiredError:
         ' Must check picture for Trial
         If TrialSteganographyExists(TrialHideTypes) Then
             If IsSteganographyExpired() = True Then
-                '* Set_locale(regionalSymbol)
+                Change_Culture("")
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
             End If
         End If
@@ -2154,7 +2154,7 @@ IsHiddenFolderExpiredError:
         ' Must check folder for Trial
         If TrialHiddenFolderExists(TrialHideTypes) Then
             If IsHiddenFolderExpired() = True Then
-                '* Set_locale(regionalSymbol)
+                Change_Culture("")
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialInvalid, ACTIVELOCKSTRING, TEXTMSG)
             End If
         End If
@@ -2164,19 +2164,19 @@ IsHiddenFolderExpiredError:
             If Not DateGood(alockDays, daysLeft, TrialHideTypes) Then
                 ExpireTrial(SoftwareName, SoftwareVer, TrialType, TrialLength, TrialHideTypes, SoftwarePassword)
                 ' Trial Period has expired
-                '* Set_locale(regionalSymbol)
+                Change_Culture("")
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialDaysExpired, ACTIVELOCKSTRING, TEXTMSG_DAYS)
             Else
                 If fileExist(GetSteganographyFile()) = False And Directory.Exists(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD)) = False And dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
                     If mCheckTimeServerForClockTampering = IActiveLock.ALTimeServerTypes.alsCheckTimeServer Then
                         If SystemClockTampered() Then
-                            '* Set_locale(regionalSymbol)
+                            Change_Culture("")
                             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                         End If
                     End If
                     If mChecksystemfilesForClockTampering = IActiveLock.ALSystemFilesTypes.alsCheckSystemFiles Then
                         If ClockTampering() Then
-                            '* Set_locale(regionalSymbol)
+                            Change_Culture("")
                             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                         End If
                     End If
@@ -2193,18 +2193,18 @@ IsHiddenFolderExpiredError:
             If Not RunsGood(alockRuns, runsLeft, TrialHideTypes) Then
                 ExpireTrial(SoftwareName, SoftwareVer, TrialType, TrialLength, TrialHideTypes, SoftwarePassword)
                 ' Trial Runs have expired
-                '* Set_locale(regionalSymbol)
+                Change_Culture("")
                 Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrTrialRunsExpired, ACTIVELOCKSTRING, TEXTMSG_RUNS)
             Else
                 If fileExist(GetSteganographyFile()) = False And Directory.Exists(ActivelockGetSpecialFolder(46) & DecryptString128Bit(myDir, PSWD)) = False And dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) = dec2("93.8D.93.8D.96.90.90.90") Then
                     If mCheckTimeServerForClockTampering = IActiveLock.ALTimeServerTypes.alsCheckTimeServer Then
                         If SystemClockTampered() Then
-                            '* Set_locale(regionalSymbol)
+                            Change_Culture("")
                             Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                         End If
                     End If
                     If ClockTampering() Then
-                        '* Set_locale(regionalSymbol)
+                        Change_Culture("")
                         Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
                     End If
                 End If
@@ -2328,7 +2328,7 @@ exitGracefully:
             'If fileExist(strSource) = False Then VB6.LoadResPicture(101, VB6.LoadResConstants.ResBitmap).Save(strSource)
             GetSteganographyFile = strSource
         Catch ex As Exception
-            '* Set_locale(regionalSymbol)
+            Change_Culture("")
             Err.Raise(Err.Number, Err.Source, Err.Description, Err.HelpFile, Err.HelpContext)
         End Try
 
@@ -3071,7 +3071,7 @@ minusAttributesError:
         If IsWebConnected() = False Then
             SystemClockTampered = False
             Exit Function
-            ''* Set_locale(regionalSymbol)
+            'Change_Culture("")
             'Err.Raise(Globals.ActiveLockErrCodeConstants.AlerrInternetConnectionError, ACTIVELOCKSTRING, STRINTERNETNOTCONNECTED)
         End If
 

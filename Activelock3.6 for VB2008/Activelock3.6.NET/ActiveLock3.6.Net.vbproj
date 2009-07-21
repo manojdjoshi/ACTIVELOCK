@@ -137,9 +137,6 @@
     <Compile Include="CCoder.vb">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="clsGetMACs_IfTable.vb">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="clsShortLicenseKey.vb">
       <SubType>Code</SubType>
     </Compile>
