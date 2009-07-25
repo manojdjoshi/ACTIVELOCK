@@ -1245,8 +1245,8 @@ Friend Class frmMain
 
             ' Set the trial type property
             ' this is either trialDays, or trialRuns or trialNone.
-            .TrialType = ActiveLock3_6NET.IActiveLock.ALTrialTypes.trialRuns
-            '.TrialType = ActiveLock3_6NET.IActiveLock.ALTrialTypes.trialDays
+            '.TrialType = ActiveLock3_6NET.IActiveLock.ALTrialTypes.trialRuns
+            .TrialType = ActiveLock3_6NET.IActiveLock.ALTrialTypes.trialDays
 
             ' Set the Trial Length property.
             ' This number represents the number of days or the number of runs (whichever is applicable).
@@ -1477,8 +1477,10 @@ Friend Class frmMain
             ' User must chosse one option for the form to close
             'MyActiveLock.RemainingTrialDays
             remainingDays = CInt(strRemainingTrialDays)
+            remainingRuns = CInt(strRemainingTrialRuns)
             'MyActiveLock.TrialLength
             totalDays = CInt(strTrialLength)
+            totalRuns = CInt(strTrialLength)
             Dim frmsplash1 As New frmSplash1
             frmsplash1.Visible = False
             frmsplash1.ShowDialog()
@@ -1810,6 +1812,8 @@ checkForResourcesError:
         strMsg = String.Empty
         remainingDays = 0
         totalDays = 0
+        remainingRuns = 0
+        totalRuns = 0
         txtReqCodeGen.Text = String.Empty
         txtLibKeyIn.Text = String.Empty
         frmMain_Load(Me, New System.EventArgs)
