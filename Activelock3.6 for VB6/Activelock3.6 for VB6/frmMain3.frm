@@ -51,13 +51,13 @@ Begin VB.Form frmMain
       TabCaption(0)   =   "Pro&duct Code Generator"
       TabPicture(0)   =   "frmMain3.frx":0CCA
       Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "Label1"
-      Tab(0).Control(1)=   "Label17"
-      Tab(0).Control(2)=   "gridProds"
+      Tab(0).Control(0)=   "cmdValidate"
+      Tab(0).Control(1)=   "Picture1"
+      Tab(0).Control(2)=   "cmdRemove"
       Tab(0).Control(3)=   "fraProdNew"
-      Tab(0).Control(4)=   "cmdRemove"
-      Tab(0).Control(5)=   "Picture1"
-      Tab(0).Control(6)=   "cmdValidate"
+      Tab(0).Control(4)=   "gridProds"
+      Tab(0).Control(5)=   "Label17"
+      Tab(0).Control(6)=   "Label1"
       Tab(0).ControlCount=   7
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
@@ -1377,7 +1377,7 @@ Else
 End If
 If cmbLicType = "Time Locked" Then
     lblExpiry.Caption = "&Expires on Date:"
-    txtDays.Text = Format(DateAdd("d", 365, Now), "yyyy/MM/dd")
+    txtDays.Text = Format(DateAdd("d", 365, UTC(Now)), "yyyy/MM/dd")
     lblDays.Caption = "yyyy/MM/dd"
 Else
     lblExpiry.Caption = "&Expires after:"
@@ -1614,7 +1614,7 @@ End If
 '* strExpire = GetExpirationDate()
 strExpire = GetExpirationString()
 '* strRegDate = Format(UTC(Now), "yyyy/MM/dd")
-strRegDate = Format(Now, "yyyy/MM/dd")   'UTC(Now)
+strRegDate = Format(UTC(Now), "yyyy/MM/dd")   'UTC(Now)
 
 'Take care of the networked licenses
 If chkNetworkedLicense.Value = vbChecked Then
@@ -1626,7 +1626,7 @@ maximumUsers = CInt(txtMaxCount.Text)
 
 ' Create a product license object without the product key or license key
 Set Lic = ActiveLock3.CreateProductLicense(strName, strVer, "", licFlag, varLicType, "", IIf(chkItemData.Value = vbUnchecked, cmbRegisteredLevel.List(cmbRegisteredLevel.ListIndex), cmbRegisteredLevel.ItemData(cmbRegisteredLevel.ListIndex)), _
-    GetExpirationDate, , Now, , maximumUsers)
+    GetExpirationDate, , UTC(Now), , maximumUsers)
     'GetExpirationDate, , UTC(Now), , maximumUsers)
     '* strExpire, , strRegDate, , maximumUsers)
 
@@ -1757,7 +1757,7 @@ Private Function GetExpirationDate() As Date
         '* GetExpirationDate = txtDays.Text
         GetExpirationDate = CDate(txtDays.Text) '*
     Else
-        GetExpirationDate = DateAdd("d", CDbl(txtDays.Text), Now)    'UTC(Now))
+        GetExpirationDate = DateAdd("d", CDbl(txtDays.Text), UTC(Now))    'UTC(Now))
     End If
 End Function
 

@@ -444,50 +444,50 @@ Dim TmpFRD As Date
 
 On Error GoTo DateGoodRegistryError
 
-'* TmpCRD = ActiveLockDate(UTC(Now))
-TmpCRD = UTC(Now)
-'* TmpLRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
-'* TmpFRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
-TmpLRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
-TmpFRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+TmpCRD = ActiveLockDate(UTC(Now))
+'TmpCRD = UTC(Now)
+TmpLRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+TmpFRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+'TmpLRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+'TmpFRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
 DateGoodRegistry = False
 
 'If this is the applications first load, write initial settings
 'to the registry
 If TmpLRD = dec2("93.8D.93.8D.96.90.90.90") Then '1/1/2000
-    '* SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(CStr(TmpCRD))
-    '* SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", enc2(CStr(TmpCRD))
-    SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(DateToDblString(TmpCRD))
-    SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", enc2(DateToDblString(TmpCRD))
+    SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(CStr(TmpCRD))
+    SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", enc2(CStr(TmpCRD))
+    'SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(DateToDblString(TmpCRD))
+    'SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", enc2(DateToDblString(TmpCRD))
     SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2("0")
 End If
 'Read LRD and FRD from registry
-'* TmpLRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
-'* TmpFRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
-TmpLRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
-TmpFRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+TmpLRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+TmpFRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+'TmpLRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+'TmpFRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
 
-'* If ActiveLockDate(TmpFRD) > ActiveLockDate(TmpCRD) Then 'System clock rolled back
-If TmpFRD > TmpCRD Then 'System clock rolled back
+If ActiveLockDate(TmpFRD) > ActiveLockDate(TmpCRD) Then 'System clock rolled back
+'If TmpFRD > TmpCRD Then 'System clock rolled back
     DateGoodRegistry = False
-'* ElseIf ActiveLockDate(UTC(Now)) > DateAdd("d", numDays, ActiveLockDate(TmpFRD)) Then 'trial expired
-ElseIf UTC(Now) > DateAdd("d", numDays, TmpFRD) Then 'trial expired
+ElseIf ActiveLockDate(UTC(Now)) > DateAdd("d", numDays, ActiveLockDate(TmpFRD)) Then 'trial expired
+'ElseIf UTC(Now) > DateAdd("d", numDays, TmpFRD) Then 'trial expired
     SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & EXPIRED_DAYS & "_" & EXPIRED_DAYS & "_" & EXPIRED_RUNS)
     DateGoodRegistry = False
-'* ElseIf ActiveLockDate(TmpCRD) > ActiveLockDate(TmpLRD) Then 'Everything OK write New LRD date
-ElseIf TmpCRD > TmpLRD Then 'Everything OK write New LRD date
-    '* SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(CStr(TmpCRD))
-    SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(DateToDblString(TmpCRD))
+ElseIf ActiveLockDate(TmpCRD) > ActiveLockDate(TmpLRD) Then 'Everything OK write New LRD date
+'ElseIf TmpCRD > TmpLRD Then 'Everything OK write New LRD date
+    SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(CStr(TmpCRD))
+    'SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(DateToDblString(TmpCRD))
     DateGoodRegistry = True
-'* ElseIf ActiveLockDate(TmpCRD) = ActiveLockDate(TmpLRD) Then
-ElseIf TmpCRD = TmpLRD Then
+ElseIf ActiveLockDate(TmpCRD) = ActiveLockDate(TmpLRD) Then
+'ElseIf TmpCRD = TmpLRD Then
     DateGoodRegistry = True
 Else
     DateGoodRegistry = False
 End If
 If DateGoodRegistry Then
-    '* daysLeft = DateAdd("d", numDays, ActiveLockDate(TmpFRD)) - ActiveLockDate(UTC(Now))
-    daysLeft = DateAdd("d", numDays, TmpFRD) - UTC(Now)
+    daysLeft = DateAdd("d", numDays, ActiveLockDate(TmpFRD)) - ActiveLockDate(UTC(Now))
+    'daysLeft = DateAdd("d", numDays, TmpFRD) - UTC(Now)
 Else
     daysLeft = 0
 End If
@@ -515,28 +515,32 @@ Dim TmpLRD As Date
 Dim TmpFRD As Date
 
 TmpCRD = INITIALDATE
-'* TmpLRD = dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) '1/1/2000
-'* TmpFRD = dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90")) '1/1/2000
-TmpLRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
-TmpFRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+TmpLRD = dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) '1/1/2000
+TmpFRD = dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90")) '1/1/2000
+'TmpLRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+'TmpFRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
 runsLeft = Int(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2(CStr(numRuns - 1))))) - 1
 RunsGoodRegistry = False
 
 'If this is the applications first load, write initial settings
 'to the registry
 If TmpLRD = dec2("93.8D.93.8D.96.90.90.90") Then '1/1/2000
-    '* SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(CStr(Now))
-    '* SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", enc2(CStr(TmpCRD))
-    SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(DateToDblString(Now))
-    SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", enc2(DateToDblString(TmpCRD))
+    SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(CStr(Now))
+    SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", enc2(CStr(TmpCRD))
+    'SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", enc2(DateToDblString(Now))
+    'SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", enc2(DateToDblString(TmpCRD))
     SaveSetting enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2(CStr(numRuns - 1))
 End If
 'Read LRD and FRD from registry
-'* TmpLRD = dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) '1/1/2000
-'* TmpFRD = dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90")) '1/1/2000
-TmpLRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
-TmpFRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
-runsLeft = Int(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2(CStr(numRuns - 1))))) - 1
+If TmpLRD = dec2("93.8D.93.8D.96.90.90.90") Then
+    runsLeft = Int(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2(CStr(numRuns - 1)))))
+Else
+    runsLeft = Int(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2(CStr(numRuns - 1))))) - 1
+End If
+TmpLRD = dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90")) '1/1/2000
+TmpFRD = dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90")) '1/1/2000
+'TmpLRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+'TmpFRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
 If TmpLRD = vbEmpty Then
     TmpLRD = INITIALDATE
     TmpFRD = INITIALDATE
@@ -731,10 +735,10 @@ If fileExist(strSource) Then
     Close #intFF
     If strMyString <> "" Then
         a = Split(strMyString, "_")
-        '* TmpLRD = a(1)
-        '* TmpFRD = a(2)
-        If a(1) <> "" Then TmpLRD = DblStringToDate(a(1))
-        If a(2) <> "" Then TmpFRD = DblStringToDate(a(2))
+        If a(1) <> "" Then TmpLRD = a(1)
+        If a(2) <> "" Then TmpFRD = a(2)
+        'If a(1) <> "" Then TmpLRD = DblStringToDate(a(1))
+        'If a(2) <> "" Then TmpFRD = DblStringToDate(a(2))
         If a(0) <> LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD Then
             DateGoodHiddenFolder = False
             Exit Function
@@ -756,8 +760,8 @@ If TmpLRD = INITIALDATE Then
     ' Write to the file...
     intFF = FreeFile
     Open strSource For Output As #intFF
-    '* Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & TmpLRD & "_" & TmpFRD & "_" & "0", PSWD)
-    Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(TmpLRD) & "_" & DateToDblString(TmpFRD) & "_" & "0", PSWD)
+    Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & TmpLRD & "_" & TmpFRD & "_" & "0", PSWD)
+    'Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(TmpLRD) & "_" & DateToDblString(TmpFRD) & "_" & "0", PSWD)
     Close #intFF
 End If
 'Read LRD and FRD from Hidden Folder
@@ -773,10 +777,10 @@ Open strSource For Input As #intFF
     strMyString = DecryptMyString(strMyString, PSWD)
 Close #intFF
 b = Split(strMyString, "_")
-'* TmpLRD = b(1)
-'* TmpFRD = b(2)
-If b(1) <> "" Then TmpLRD = DblStringToDate(b(1))
-If b(2) <> "" Then TmpFRD = DblStringToDate(b(2))
+If b(1) <> "" Then TmpLRD = b(1)
+If b(2) <> "" Then TmpFRD = b(2)
+'If b(1) <> "" Then TmpLRD = DblStringToDate(b(1))
+'If b(2) <> "" Then TmpFRD = DblStringToDate(b(2))
 If b(0) <> LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD Then
     DateGoodHiddenFolder = False
     Exit Function
@@ -784,28 +788,28 @@ End If
 If TmpLRD = vbEmpty Then TmpLRD = INITIALDATE
 If TmpFRD = vbEmpty Then TmpFRD = INITIALDATE
 
-'* If ActiveLockDate(TmpFRD) > ActiveLockDate(TmpCRD) Then 'System clock rolled back
-If TmpFRD > TmpCRD Then 'System clock rolled back
+If ActiveLockDate(TmpFRD) > ActiveLockDate(TmpCRD) Then 'System clock rolled back
+'If TmpFRD > TmpCRD Then 'System clock rolled back
     DateGoodHiddenFolder = False
-'* ElseIf ActiveLockDate(UTC(Now)) > DateAdd("d", numDays, ActiveLockDate(TmpFRD)) Then 'Trial expired
-ElseIf UTC(Now) > DateAdd("d", numDays, TmpFRD) Then 'Trial expired
+ElseIf ActiveLockDate(UTC(Now)) > DateAdd("d", numDays, ActiveLockDate(TmpFRD)) Then 'Trial expired
+'ElseIf UTC(Now) > DateAdd("d", numDays, TmpFRD) Then 'Trial expired
     ' Write to the file...
     intFF = FreeFile
     Open strSource For Output As #intFF
         Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & EXPIRED_DAYS & "_" & EXPIRED_DAYS & "_" & EXPIRED_RUNS, PSWD)
     Close #intFF
     DateGoodHiddenFolder = False
-'* ElseIf ActiveLockDate(TmpCRD) > ActiveLockDate(TmpLRD) Then 'Everything OK write New LRD date
-ElseIf TmpCRD > TmpLRD Then 'Everything OK write New LRD date
+ElseIf ActiveLockDate(TmpCRD) > ActiveLockDate(TmpLRD) Then 'Everything OK write New LRD date
+'ElseIf TmpCRD > TmpLRD Then 'Everything OK write New LRD date
     ' Write to the file...
     intFF = FreeFile
     Open strSource For Output As #intFF
-    '* Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & TmpCRD & "_" & TmpFRD & "_" & "0", PSWD)
-    Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(TmpCRD) & "_" & DateToDblString(TmpFRD) & "_" & "0", PSWD)
+    Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & TmpCRD & "_" & TmpFRD & "_" & "0", PSWD)
+    'Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(TmpCRD) & "_" & DateToDblString(TmpFRD) & "_" & "0", PSWD)
     Close #intFF
     DateGoodHiddenFolder = True
-'* ElseIf ActiveLockDate(TmpCRD) = ActiveLockDate(TmpLRD) Then
-ElseIf TmpCRD = TmpLRD Then
+ElseIf ActiveLockDate(TmpCRD) = ActiveLockDate(TmpLRD) Then
+'ElseIf TmpCRD = TmpLRD Then
     DateGoodHiddenFolder = True
 Else
     DateGoodHiddenFolder = False
@@ -815,8 +819,8 @@ SetAttr strSource, vbReadOnly + vbHidden + vbSystem
 PlusAttributes
 
 If DateGoodHiddenFolder Then
-    '* daysLeft = DateAdd("d", numDays, ActiveLockDate(TmpFRD)) - ActiveLockDate(UTC(Now))
-    daysLeft = DateAdd("d", numDays, TmpFRD) - UTC(Now)
+    daysLeft = DateAdd("d", numDays, ActiveLockDate(TmpFRD)) - ActiveLockDate(UTC(Now))
+    'daysLeft = DateAdd("d", numDays, TmpFRD) - UTC(Now)
 Else
     daysLeft = 0
 End If
@@ -872,10 +876,10 @@ If fileExist(strSource) Then
     If strMyString <> "" Then
         On Error GoTo continue
         a = Split(strMyString, "_")
-        '* TmpLRD = a(1)
-        '* TmpFRD = a(2)
-        If a(1) <> "" Then TmpLRD = DblStringToDate(a(1)) '*
-        If a(2) <> "" Then TmpFRD = DblStringToDate(a(2)) '*
+        If a(1) <> "" Then TmpLRD = a(1)
+        If a(2) <> "" Then TmpFRD = a(2)
+        'If a(1) <> "" Then TmpLRD = DblStringToDate(a(1)) '*
+        'If a(2) <> "" Then TmpFRD = DblStringToDate(a(2)) '*
         runsLeft = Int(a(3)) - 1
         If a(0) <> LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD Then
             RunsGoodHiddenFolder = False
@@ -903,8 +907,8 @@ If TmpLRD = INITIALDATE Then
     ' Write to the file...
     intFF = FreeFile
     Open strSource For Output As #intFF
-    '* Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(numRuns - 1), PSWD)
-    Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(UTC(Now)) & "_" & DateToDblString(TmpFRD) & "_" & CStr(numRuns - 1), PSWD)
+    Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(numRuns - 1), PSWD)
+    'Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(UTC(Now)) & "_" & DateToDblString(TmpFRD) & "_" & CStr(numRuns - 1), PSWD)
     Close #intFF
 End If
 'Read LRD and FRD from Hidden Folder
@@ -920,11 +924,15 @@ Open strSource For Input As #intFF
     strMyString = DecryptMyString(strMyString, PSWD)
 Close #intFF
 b = Split(strMyString, "_")
-'* TmpLRD = b(1)
-'* TmpFRD = b(2)
-If b(1) <> "" Then TmpLRD = DblStringToDate(b(1)) '*
-If b(2) <> "" Then TmpFRD = DblStringToDate(b(2)) '*
-runsLeft = b(3) - 1
+If TmpLRD = INITIALDATE Then
+    runsLeft = b(3)
+Else
+    runsLeft = b(3) - 1
+End If
+If b(1) <> "" Then TmpLRD = b(1)
+If b(2) <> "" Then TmpFRD = b(2)
+'If b(1) <> "" Then TmpLRD = DblStringToDate(b(1)) '*
+'If b(2) <> "" Then TmpFRD = DblStringToDate(b(2)) '*
 If b(0) <> LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD Then
     RunsGoodHiddenFolder = False
     Exit Function
@@ -949,11 +957,11 @@ ElseIf numRuns >= runsLeft Then 'Everything OK write the remaining number of run
     intFF = FreeFile
     Open strSource For Output As #intFF
         If TmpLRD = INITIALDATE Then
-            '* Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(numRuns - 1), PSWD)
-            Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(UTC(Now)) & "_" & DateToDblString(TmpFRD) & "_" & CStr(numRuns - 1), PSWD)
+            Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(numRuns - 1), PSWD)
+            'Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(UTC(Now)) & "_" & DateToDblString(TmpFRD) & "_" & CStr(numRuns - 1), PSWD)
         Else
-            '* Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(runsLeft), PSWD)
-            Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(UTC(Now)) & "_" & DateToDblString(TmpFRD) & "_" & CStr(runsLeft), PSWD)
+            Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(runsLeft), PSWD)
+            'Print #intFF, EncryptMyString(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(UTC(Now)) & "_" & DateToDblString(TmpFRD) & "_" & CStr(runsLeft), PSWD)
         End If
     Close #intFF
     RunsGoodHiddenFolder = True
@@ -990,17 +998,17 @@ If strSource = "" Then
     Exit Function
 End If
 
-'* TmpCRD = ActiveLockDate(UTC(Now))
-TmpCRD = UTC(Now)
+TmpCRD = ActiveLockDate(UTC(Now))
+'TmpCRD = UTC(Now)
 Dim a() As String, aa As String
 aa = SteganographyPull(strSource)
 If aa <> "" Then
     On Error GoTo continue
     a = Split(aa, "_")
-    '* TmpLRD = a(1)
-    '* TmpFRD = a(2)
-    If a(1) <> "" Then TmpLRD = DblStringToDate(a(1)) '*
-    If a(2) <> "" Then TmpFRD = DblStringToDate(a(2)) '*
+    If a(1) <> "" Then TmpLRD = a(1)
+    If a(2) <> "" Then TmpFRD = a(2)
+    'If a(1) <> "" Then TmpLRD = DblStringToDate(a(1)) '*
+    'If a(2) <> "" Then TmpFRD = DblStringToDate(a(2)) '*
     If a(0) <> LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD Then
         DateGoodSteganography = False
         Exit Function
@@ -1016,17 +1024,17 @@ DateGoodSteganography = False
 If TmpLRD = INITIALDATE Then
     TmpLRD = TmpCRD
     TmpFRD = TmpCRD
-    '* SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & TmpCRD & "_" & TmpFRD & "_" & "0"
-    SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(TmpCRD) & "_" & DateToDblString(TmpFRD) & "_" & "0"
+    SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & TmpCRD & "_" & TmpFRD & "_" & "0"
+    'SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(TmpCRD) & "_" & DateToDblString(TmpFRD) & "_" & "0"
 End If
 'Read LRD and FRD from the hidden text in the image
 Dim b() As String, bb As String
 bb = SteganographyPull(strSource)
 b = Split(bb, "_")
-'* TmpLRD = b(1)
-'* TmpFRD = b(2)
-If b(1) <> "" Then TmpLRD = DblStringToDate(b(1)) '*
-If b(2) <> "" Then TmpFRD = DblStringToDate(b(2)) '*
+If b(1) <> "" Then TmpLRD = b(1)
+If b(2) <> "" Then TmpFRD = b(2)
+'If b(1) <> "" Then TmpLRD = DblStringToDate(b(1)) '*
+'If b(2) <> "" Then TmpFRD = DblStringToDate(b(2)) '*
 If b(0) <> LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD Then
     DateGoodSteganography = False
     Exit Function
@@ -1034,27 +1042,27 @@ End If
 If TmpLRD = vbEmpty Then TmpLRD = INITIALDATE
 If TmpFRD = vbEmpty Then TmpFRD = INITIALDATE
 
-'* If ActiveLockDate(TmpFRD) > ActiveLockDate(TmpCRD) Then 'System clock rolled back
-If TmpFRD > TmpCRD Then 'System clock rolled back
+If ActiveLockDate(TmpFRD) > ActiveLockDate(TmpCRD) Then 'System clock rolled back
+'If TmpFRD > TmpCRD Then 'System clock rolled back
     DateGoodSteganography = False
-'* ElseIf ActiveLockDate(UTC(Now)) > DateAdd("d", numDays, ActiveLockDate(TmpFRD)) Then 'Trial expired
-ElseIf UTC(Now) > DateAdd("d", numDays, TmpFRD) Then 'Trial expired
+ElseIf ActiveLockDate(UTC(Now)) > DateAdd("d", numDays, ActiveLockDate(TmpFRD)) Then 'Trial expired
+'ElseIf UTC(Now) > DateAdd("d", numDays, TmpFRD) Then 'Trial expired
     SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & EXPIRED_DAYS & "_" & EXPIRED_DAYS & "_" & EXPIRED_RUNS
     DateGoodSteganography = False
-'* ElseIf ActiveLockDate(TmpCRD) > ActiveLockDate(TmpLRD) Then 'Everything OK write New LRD date
-ElseIf TmpCRD > TmpLRD Then 'Everything OK write New LRD date
-    '* SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & TmpCRD & "_" & TmpFRD & "_" & "0"
-    SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(TmpCRD) & "_" & DateToDblString(TmpFRD) & "_" & "0"
+ElseIf ActiveLockDate(TmpCRD) > ActiveLockDate(TmpLRD) Then 'Everything OK write New LRD date
+'ElseIf TmpCRD > TmpLRD Then 'Everything OK write New LRD date
+    SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & TmpCRD & "_" & TmpFRD & "_" & "0"
+    'SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(TmpCRD) & "_" & DateToDblString(TmpFRD) & "_" & "0"
     DateGoodSteganography = True
-'* ElseIf ActiveLockDate(TmpCRD) = ActiveLockDate(TmpLRD) Then
-ElseIf TmpCRD = TmpLRD Then
+ElseIf ActiveLockDate(TmpCRD) = ActiveLockDate(TmpLRD) Then
+'ElseIf TmpCRD = TmpLRD Then
     DateGoodSteganography = True
 Else
     DateGoodSteganography = False
 End If
 If DateGoodSteganography Then
-    '* daysLeft = DateAdd("d", numDays, ActiveLockDate(TmpFRD)) - ActiveLockDate(UTC(Now))
-    daysLeft = DateAdd("d", numDays, TmpFRD) - UTC(Now)
+    daysLeft = DateAdd("d", numDays, ActiveLockDate(TmpFRD)) - ActiveLockDate(UTC(Now))
+    'daysLeft = DateAdd("d", numDays, TmpFRD) - UTC(Now)
 Else
     daysLeft = 0
 End If
@@ -1132,10 +1140,10 @@ aa = SteganographyPull(strSource)
 If aa <> "" Then
     On Error GoTo continue
     a = Split(aa, "_")
-    '* TmpLRD = a(1)
-    '* TmpFRD = a(2)
-    If a(1) <> "" Then TmpLRD = DblStringToDate(a(1)) '*
-    If a(2) <> "" Then TmpFRD = DblStringToDate(a(2)) '*
+    If a(1) <> "" Then TmpLRD = a(1)
+    If a(2) <> "" Then TmpFRD = a(2)
+    'If a(1) <> "" Then TmpLRD = DblStringToDate(a(1)) '*
+    'If a(2) <> "" Then TmpFRD = DblStringToDate(a(2)) '*
     runsLeft = Int(a(3)) - 1
     If a(0) <> LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD Then
         RunsGoodSteganography = False
@@ -1155,17 +1163,21 @@ RunsGoodSteganography = False
 If TmpLRD = INITIALDATE Then
     TmpFRD = INITIALDATE
     runsLeft = numRuns - 1
-    '* SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(numRuns - 1)
-    SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(UTC(Now)) & "_" & DateToDblString(TmpFRD) & "_" & CStr(numRuns - 1)
+    SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(numRuns - 1)
+    'SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(UTC(Now)) & "_" & DateToDblString(TmpFRD) & "_" & CStr(numRuns - 1)
 End If
 'Read LRD and FRD from the hidden text in the image
 Dim b() As String
 b = Split(SteganographyPull(strSource), "_")
-'* TmpLRD = b(1)
-'* TmpFRD = b(2)
-If b(1) <> "" Then TmpLRD = DblStringToDate(b(1)) '*
-If b(2) <> "" Then TmpFRD = DblStringToDate(b(2)) '*
-runsLeft = b(3) - 1
+If TmpLRD = INITIALDATE Then
+    runsLeft = b(3)
+Else
+    runsLeft = b(3) - 1
+End If
+If b(1) <> "" Then TmpLRD = b(1)
+If b(2) <> "" Then TmpFRD = b(2)
+'If b(1) <> "" Then TmpLRD = DblStringToDate(b(1)) '*
+'If b(2) <> "" Then TmpFRD = DblStringToDate(b(2)) '*
 If b(0) <> LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD Then
     RunsGoodSteganography = False
     Exit Function
@@ -1183,11 +1195,11 @@ ElseIf runsLeft > numRuns Then 'Trial runs expired
     RunsGoodSteganography = False
 ElseIf numRuns >= runsLeft Then 'Everything OK write the remaining number of runs
     If TmpLRD = INITIALDATE Then
-        '* SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(numRuns - 1)
-        SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(UTC(Now)) & "_" & DateToDblString(TmpFRD) & "_" & CStr(numRuns - 1)
+        SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(numRuns - 1)
+        'SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(UTC(Now)) & "_" & DateToDblString(TmpFRD) & "_" & CStr(numRuns - 1)
     Else
-        '* SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(runsLeft)
-        SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(UTC(Now)) & "_" & DateToDblString(TmpFRD) & "_" & CStr(runsLeft)
+        SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & ActiveLockDate(UTC(Now)) & "_" & TmpFRD & "_" & CStr(runsLeft)
+        'SteganographyEmbed strSource, LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD & "_" & DateToDblString(UTC(Now)) & "_" & DateToDblString(TmpFRD) & "_" & CStr(runsLeft)
     End If
     RunsGoodSteganography = True
 Else
@@ -1893,6 +1905,7 @@ embedMe = embedMe & Chr(255)
 Gamma = 255
 
 If Dir(FileName) = "" Then SteganographyEmbed = 1: Exit Function
+
 Limit = FileLen(FileName)
 fNum = FreeFile
 Open FileName For Binary As #fNum
@@ -2489,10 +2502,7 @@ Dim tmpDir As String
 
 ' This should work in all versions of Windows including Vista
 tmpDir = Environ("Temp")  ' instead of "c:\tmp"
-If Dir(tmpDir) = 0 Then tmpDir = "c:\tmp"
-
 Randomize
-If Dir(tmpDir) = 0 Then MkDir tmpDir
 xF = CLng(Rnd * 29999)
 X = Shell("cmd.exe /c net stop " & xVersion & " > \nul 2>" & tmpDir & Trim(CStr(xF)) & ".txt", vbHide)
 xtime = Timer
