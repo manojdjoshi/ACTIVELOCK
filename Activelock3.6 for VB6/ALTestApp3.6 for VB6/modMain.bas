@@ -288,8 +288,8 @@ Public strMsg As String
 Public strRemainingTrialDays As String, strRemainingTrialRuns As String, strTrialLength As String
 Public strUsedDays As String, strExpirationDate As String, strRegisteredUser As String, strRegisteredLevel As String
 Public strLicenseClass As String, strMaxCount As String, strLicenseFileType As String, strLicenseType As String
-Public remainingDays As Integer
-Public totalDays As Integer
+Public remainingDays As Integer, remainingRuns As Integer
+Public totalDays As Integer, totalRuns As Integer
 
 ' Verifies the checksum of the typelib containing the specified object.
 ' Returns the checksum.
@@ -345,7 +345,7 @@ End Function
 ' Returns the expected CRC value of ActiveLock3.dll
 '
 Private Property Get Value() As Long
-    Value = 950000 + 967       ' compute it so that it can't be easily spotted via a Hex Editor
+    Value = 941000 + 285       ' compute it so that it can't be easily spotted via a Hex Editor
 End Property
 
 ' Callback function for rsa_generate()
