@@ -474,9 +474,13 @@ DateGoodRegistryError:
         'Read LRD and FRD from registry
         '*TmpLRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
         '*TmpFRD = CDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
+        If TmpLRD = CDate(dec2("93.8D.93.8D.96.90.90.90")) Then
+            runsLeft = Int(CDbl(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2(CStr(numRuns - 1))))))
+        Else
+            runsLeft = Int(CDbl(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2(CStr(numRuns - 1)))))) - 1
+        End If
         TmpLRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor1", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
         TmpFRD = DblStringToDate(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor2", "93.8D.93.8D.96.90.90.90"))) '1/1/2000
-        runsLeft = Int(CDbl(dec2(GetSetting(enc2(LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD), "param", "factor3", enc2(CStr(numRuns - 1)))))) - 1
         If TmpLRD = "#12:00:00 AM#" Then
             TmpLRD = CDate(INITIALDATE)
             TmpFRD = CDate(INITIALDATE)
@@ -944,9 +948,13 @@ DateGoodHiddenFolderError:
         b = strMyString.Split("_")
         '* If b(1) <> "" Then TmpLRD = CDate(b(1))
         '* If b(2) <> "" Then TmpFRD = CDate(b(2))
+        If TmpLRD = CDate(INITIALDATE) Then
+            runsLeft = Int(CDbl(b(3)))
+        Else
+            runsLeft = Int(CDbl(b(3))) - 1
+        End If
         If b(1) <> "" Then TmpLRD = DblStringToDate(b(1)) '*
         If b(2) <> "" Then TmpFRD = DblStringToDate(b(2)) '*
-        runsLeft = Int(CDbl(b(3))) - 1
         If b(0) <> LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD Then
             RunsGoodHiddenFolder = False
             Exit Function
@@ -1227,9 +1235,13 @@ DateGoodSteganographyError:
         b = SteganographyPull(strSource).Split("_")
         '* If b(1) <> "" Then TmpLRD = CDate(b(1))
         '* If b(2) <> "" Then TmpFRD = CDate(b(2))
+        If TmpLRD = CDate(INITIALDATE) Then
+            runsLeft = Int(CDbl(b(3)))
+        Else
+            runsLeft = Int(CDbl(b(3))) - 1
+        End If
         If b(1) <> "" Then TmpLRD = DblStringToDate(b(1)) '*
         If b(2) <> "" Then TmpFRD = DblStringToDate(b(2)) '*
-        runsLeft = Int(CDbl(b(3))) - 1
         If b(0) <> LICENSE_SOFTWARE_NAME & LICENSE_SOFTWARE_VERSION & LICENSE_SOFTWARE_PASSWORD Then
             RunsGoodSteganography = False
             Exit Function
