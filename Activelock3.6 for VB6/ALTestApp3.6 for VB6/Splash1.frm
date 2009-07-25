@@ -178,9 +178,12 @@ End Sub
 Private Sub Form_Load()
 lblVersion.Caption = "Version " & App.Major & "." & App.Minor & "." & App.Revision
 lblProductName.Caption = App.Title
-If strMsg <> "" And totalDays <> 0 Then
+If InStr(strMsg, "Trial Period") > 0 And totalDays <> 0 Then
     ProgressBar1.Value = (1 - remainingDays / totalDays) * 100
     If remainingDays > 0 Then lblInfo.Caption = CStr(totalDays - remainingDays) & " day(s) used out of " & CStr(totalDays) & " trial days"
+ElseIf InStr(strMsg, "Trial Runs") > 0 And totalRuns <> 0 Then
+    ProgressBar1.Value = (1 - remainingRuns / totalRuns) * 100
+    If remainingRuns > 0 Then lblInfo.Caption = CStr(totalRuns - remainingRuns) & " run(s) used out of " & CStr(totalRuns) & " trial days"
 End If
  
 End Sub

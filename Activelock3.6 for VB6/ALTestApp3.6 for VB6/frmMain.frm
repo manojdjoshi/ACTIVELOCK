@@ -1050,6 +1050,8 @@ Private Sub Form_Load()
         ' User must chosse one option for the form to close
         remainingDays = strRemainingTrialDays       'MyActiveLock.RemainingTrialDays
         totalDays = strTrialLength                  'MyActiveLock.TrialLength
+        remainingRuns = strRemainingTrialRuns       'MyActiveLock.RemainingTrialRuns
+        totalRuns = strTrialLength                  'MyActiveLock.TrialLength
         frmSplash1.Show vbModal
         
         cmdKillTrial.Visible = True
@@ -1474,6 +1476,8 @@ Private Sub cmdRegister_Click()
     strMsg = ""
     remainingDays = 0
     totalDays = 0
+    remainingRuns = 0
+    totalRuns = 0
     Form_Load
     Me.Visible = True
     Screen.MousePointer = vbDefault
