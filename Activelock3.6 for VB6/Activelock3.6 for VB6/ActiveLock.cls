@@ -528,6 +528,11 @@ Private Sub IActiveLock_Acquire(Optional ByRef strMsg As String = "", Optional B
         GoTo continueRegistration
 
 noRegistration:
+        Dim ret As Long
+        ret = FileLen(mKeyStorePath)
+        If ret = 0 Then
+            Kill mKeyStorePath
+        End If
         Set_locale regionalSymbol
         Err.Raise ActiveLockErrCodeConstants.alerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE
     
@@ -623,7 +628,8 @@ continueRegistration:
     strLicenseType = Lic.LicenseType
     
     dontValidateLicense = False
-    
+    Set_locale regionalSymbol
+   
 End Sub
 Private Function specialChar(ByVal S As String) As Boolean
 Dim k As Integer
