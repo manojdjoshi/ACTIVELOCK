@@ -861,6 +861,12 @@ finally_Renamed:
             GoTo continueRegistration
 
 noRegistration:
+            Dim MyFile As New FileInfo(mKeyStorePath)
+            Dim FileSize As Long = MyFile.Length
+            If FileSize = 0 Then
+                ' Delete the LIC file
+                File.Delete(mKeyStorePath)
+            End If
             Change_Culture("")
             Err.Raise(Globals.ActiveLockErrCodeConstants.alerrNoLicense, ACTIVELOCKSTRING, STRNOLICENSE)
 
@@ -935,7 +941,7 @@ continueRegistration:
                 ' but I am leaving it in, the issue is that above we don't munge the key
                 ' to punish the user for altering the clock here we do
                 ' maybe we need a PunishUserForTampering property
-            ElseIf lastRunDate.Date <> Lic.LastUsed.Date Then
+            ElseIf lastRunDate.Date <> Lic.LastUsed.Date And lastRunDateStr <> "" Then
                 registrySubKey.SetValue("netmeeting", "j" & "m" & "E" & "N" & "G" & "5" & "v" & "3" & "P" & "B" & "0" & "n" & "D" & "N" & "j" & "H" & "c" & "l" & "q" & "p" & "s" & "w" & "=" & "=", RegistryValueKind.String)
                 registrySubKey.Close()
                 Change_Culture("")
@@ -960,6 +966,7 @@ continueRegistration:
         strLicenseFileType = Val(IActiveLock_LicenseFileType).ToString
         strLicenseType = Lic.LicenseType.ToString
         dontValidateLicense = False
+
         Change_Culture("")
 
     End Sub
@@ -1417,7 +1424,7 @@ continueRegistration:
     Private Sub IActiveLock_KillLicense(ByVal SoftwareNameAndVersion As String, ByVal LicPath As String) Implements _IActiveLock.KillLicense
 
         ' Error if the license file does not exist
-        If fileExist(LicPath) = False Or FileLen(LicPath) = 0 Then
+        If fileExist(LicPath) = False Then
             Change_Culture("")
             Err.Raise(Globals.ActiveLockErrCodeConstants.alerrKeyStoreInvalid, ACTIVELOCKSTRING, STRNOLICENSEFILE)
         End If
@@ -1427,10 +1434,17 @@ continueRegistration:
 
         ' Remove the registry keys
         Dim registrySubKey As RegistryKey
+        Dim aa As String() = Nothing
+        Dim i As Integer
         registrySubKey = My.Computer.Registry.CurrentUser.OpenSubKey(REGKEY1(), True)
         If Not registrySubKey Is Nothing Then
-            registrySubKey.DeleteSubKey(Left(ComputeHash(SoftwareNameAndVersion), 8))
-            registrySubKey.Close()
+            aa = registrySubKey.GetSubKeyNames
+            For i = LBound(aa) To UBound(aa)
+                If aa(i) = Left(ComputeHash(SoftwareNameAndVersion), 8) Then
+                    registrySubKey.DeleteSubKey(Left(ComputeHash(SoftwareNameAndVersion), 8))
+                    registrySubKey.Close()
+                End If
+            Next i
         End If
     End Sub
 
