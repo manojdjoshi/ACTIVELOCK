@@ -602,7 +602,7 @@ continueRegistration:
             '* licenseRegistryKey = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "netmeeting", EncryptMyString(ActiveLockDate(UTC(Now)), PSWD))
             licenseRegistryKey = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "netmeeting", EncryptMyString(DateToDblString(UTC(Now)), PSWD))
         '* ElseIf lastRunDate <> CDate(Lic.LastUsed) Then
-        ElseIf CDate(lastRunDate) <> CDate(Lic.LastUsed) Then
+        ElseIf CDate(lastRunDate) <> CDate(Lic.LastUsed) And lastRunDateStr <> "" Then
             licenseRegistryKey = SaveString(HKEY_CURRENT_USER, REGKEY1 & Left(oMD5.CalculateMD5(mSoftwareName & mSoftwareVer), 8), "netmeeting", "20C57BF3E3E3B3FD6FD5471724CA4A5C62802EB682E7A11D9469DB67162D47A8")
             Set_locale regionalSymbol
             Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STREXPIREDPERMANENTLY
