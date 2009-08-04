@@ -1,5 +1,10 @@
 Change Log For Activelock VB6 
-Last Updated: 17 July 2009 
+Last Updated: 30 July 2009 
+
+v3.6.0.3 Updates:
+- FIX: KillLicense really kills a license. Does not leave a LIC file behind occasionally.
+- UPDATE: Activelock no longer leaves an empty (zero length) LIC file behind no matter what.
+- FIX: Multiple users can run a single LIC file without re-registering. It does not matter whether the LIC file was created by and admin account or a limited user account.
 
 v3.6 Updates:
 - FIX: Alugen restricts the use illegal and non-standard characters for the software name and version number fields. Only alphanumeric characters, the decimal point, and backspace are allowed.
