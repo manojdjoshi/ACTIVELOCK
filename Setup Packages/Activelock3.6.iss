@@ -1,12 +1,12 @@
 [Setup]
-AppName=Activelock VB6 3.6.0.2
-AppVersion=3.6.0.2
-AppVerName=Activelock VB6 3.6.0.2
+AppName=Activelock VB6 3.6.0.3
+AppVersion=3.6.0.3
+AppVerName=Activelock VB6 3.6.0.3
 AppPublisher=Activelock Software Group
 Uninstallable=true
 ; set installation folder based on target Windows version
 DefaultDirName={code:SetInstallDir}\Activelock_VB6_3.6
-OutputBaseFilename=Activelock_VB6_Setup_3.6.0.2_July_23_2009
+OutputBaseFilename=Activelock_VB6_Setup_3.6.0.3_July_30_2009
 OutputDir=.
 DefaultGroupName=Activelock Software Group
 WizardImageFile=C:\ActiveLockCommunity\Images\big-side.bmp
