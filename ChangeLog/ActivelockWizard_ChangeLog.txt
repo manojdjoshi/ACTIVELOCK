@@ -1,5 +1,8 @@
 Change Log For Activelock Wizard 
-Last Updated: 14 June 2008 
+Last Updated: 04 August 2008 
+
+Activelock Wizard V3.6 Updates:
+- Changed version to release
 
 Activelock Wizard V3.6 RC2 Updates:
 - Added: Checksum to the ActivelockValues_t structure
