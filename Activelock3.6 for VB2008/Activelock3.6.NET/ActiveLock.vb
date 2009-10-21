@@ -917,14 +917,14 @@ noRegistration:
                 Dim dt1 As DateTime = DblStringToDate(adsText) '*Dim dt1 As DateTime = Convert.ToDateTime(adsText)
                 dt2 = Date.UtcNow '* dt2 = ActiveLockDate(Date.UtcNow)
                 Dim span As TimeSpan = dt2.Subtract(dt1)
-                If span.TotalHours < 0 Then
+                If span.TotalHours < 0 And (dt2 < Lic.RegisteredDate Or dt2 > Lic.Expiration) Then
                     Change_Culture("")
-                    Err.Raise(Globals.ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED)
+                    Err.Raise(Globals.ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED & Chr(32) & Chr(79) & Chr(98) & Chr(116) & Chr(97) & Chr(105) & Chr(110) & Chr(32) & Chr(110) & Chr(101) & Chr(119) & Chr(32) & Chr(108) & Chr(105) & Chr(99) & Chr(101) & Chr(110) & Chr(115) & Chr(101) & Chr(46))
                 End If
                 Dim ok As Integer
                 ok = ADSFile.Write(DateToDblString(Date.UtcNow), mKeyStorePath, strStream) '* ok = ADSFile.Write(ActiveLockDate(Date.UtcNow), mKeyStorePath, strStream)
                 GoTo continueRegistration
-            End If
+        End If
         End If
 
 continueRegistration:
