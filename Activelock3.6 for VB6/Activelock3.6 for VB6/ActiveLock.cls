@@ -577,9 +577,9 @@ noRegistration:
             dt1 = DblStringToDate(adsText)
             '* dt2 = ActiveLockDate(UTC(Now))
             dt2 = UTC(Now)
-            If dt2 < dt1 Then
+            If dt2 < dt1 And (dt2 < Lic.RegisteredDate Or dt2 > Lic.Expiration) Then
                 Set_locale regionalSymbol
-                Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED & " [1]"
+                Err.Raise ActiveLockErrCodeConstants.alerrClockChanged, ACTIVELOCKSTRING, STRCLOCKCHANGED & " [1]" & Chr(32) & Chr(79) & Chr(98) & Chr(116) & Chr(97) & Chr(105) & Chr(110) & Chr(32) & Chr(110) & Chr(101) & Chr(119) & Chr(32) & Chr(108) & Chr(105) & Chr(99) & Chr(101) & Chr(110) & Chr(115) & Chr(101) & Chr(46)
             End If
             '* Call ADS_Write_Info(mKeyStorePath & ":" & strStream, ActiveLockDate(UTC(Now)))
             Call ADS_Write_Info(mKeyStorePath & ":" & strStream, DateToDblString(UTC(Now)))
