@@ -1,5 +1,8 @@
 Change Log For Activelock VB2008 
-Last Updated: 30 July 2009 
+Last Updated: 10 Oct 2009 
+
+VB2008 v3.6.0.4 Updates:
+- FIX: Maintenance update to cover clock tampering related issues
 
 VB2008 v3.6.0.3 Updates:
 - FIX: KillLicense really kills a license. Does not leave a LIC file behind occasionally.
