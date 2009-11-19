@@ -905,7 +905,7 @@ noRegistration:
                 End If
             End If
 
-            If CheckStreamCapability() And Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
+            If CheckStreamCapability(mKeyStorePath) And Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
                 Dim fi As New FileInfo(mKeyStorePath)
                 If fi.Length = 0 Then GoTo continueRegistration
                 adsText = ADSFile.Read(mKeyStorePath, strStream)
@@ -924,7 +924,7 @@ noRegistration:
                 Dim ok As Integer
                 ok = ADSFile.Write(DateToDblString(Date.UtcNow), mKeyStorePath, strStream) '* ok = ADSFile.Write(ActiveLockDate(Date.UtcNow), mKeyStorePath, strStream)
                 GoTo continueRegistration
-        End If
+            End If
         End If
 
 continueRegistration:
@@ -977,7 +977,7 @@ continueRegistration:
     ''' </summary>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Function CheckStreamCapability() As Boolean
+    Public Function CheckStreamCapability(ByVal mKeyStorePath As String) As Boolean
         ' The following WMI call also works but it seems to be a bit slower than the GetVolumeInformation
         ' especially when it checks the A: drive
         ' METHOD 1 - WMI
@@ -999,17 +999,21 @@ continueRegistration:
         'End If
 
         ' METHOD 2 - GetVolumeInformation API
-        Dim lsRootPathName As String = IO.Directory.GetDirectoryRoot(Application.StartupPath)
-        Const MAX_PATH As Integer = 260
-        Dim iSerial As Integer
-        Dim iLength As Integer
-        Dim iFlags As Integer
-        Dim sbVol As New StringBuilder(MAX_PATH)
-        Dim sbFil As New StringBuilder(MAX_PATH)
-        GetVolumeInformation("c:\", sbVol, MAX_PATH, iSerial, iLength, iFlags, sbFil, MAX_PATH)
-        If sbFil.ToString = "NTFS" Then
-            CheckStreamCapability = True
-        End If
+        Try
+            Dim lsRootPathName As String = IO.Directory.GetDirectoryRoot(Application.StartupPath)
+            Const MAX_PATH As Integer = 260
+            Dim iSerial As Integer
+            Dim iLength As Integer
+            Dim iFlags As Integer
+            Dim sbVol As New StringBuilder(MAX_PATH)
+            Dim sbFil As New StringBuilder(MAX_PATH)
+            GetVolumeInformation(mKeyStorePath.Substring(0, 3), sbVol, MAX_PATH, iSerial, iLength, iFlags, sbFil, MAX_PATH)
+            If sbFil.ToString = "NTFS" Then
+                CheckStreamCapability = True
+            End If
+        Catch ex As Exception
+            CheckStreamCapability = False
+        End Try
 
     End Function
 
@@ -1396,7 +1400,7 @@ continueRegistration:
         mKeyStore.Store(Lic, mLicenseFileType)
 
         ' This works under NTFS and is needed to prevent clock tampering
-        If CheckStreamCapability() And Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
+        If CheckStreamCapability(mKeyStorePath) And Lic.LicenseType <> ProductLicense.ALLicType.allicPermanent Then
             ' Write the current date and time into the ads
             Dim ok As Integer
             Dim strStream As String = String.Empty
