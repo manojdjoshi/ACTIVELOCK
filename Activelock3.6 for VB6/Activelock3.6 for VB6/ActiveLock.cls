@@ -564,7 +564,7 @@ noRegistration:
             End If
         End If
         
-        If CheckStreamCapability() And Lic.LicenseType <> allicPermanent Then
+        If CheckStreamCapability(mKeyStorePath) And Lic.LicenseType <> allicPermanent Then
             If FileLen(mKeyStorePath) = 0 Then GoTo continueRegistration
             
             adsText = ADS_Read_Info(mKeyStorePath & ":" & strStream)
@@ -1184,7 +1184,7 @@ Private Sub IActiveLock_Register(ByVal LibKey As String, Optional user As String
     mKeyStore.Store Lic, mLicenseFileType
         
     ' This works under NTFS and is needed to prevent clock tampering
-    If CheckStreamCapability() And Lic.LicenseType <> allicPermanent Then
+    If CheckStreamCapability(mKeyStorePath) And Lic.LicenseType <> allicPermanent Then
         ' Write the current date and time into the ads
         strStream = mSoftwareName & mSoftwareVer '& mSoftwarePassword
         '* Call ADS_Write_Info(mKeyStorePath & ":" & strStream, ActiveLockDate(UTC(Now)))

@@ -1325,14 +1325,14 @@ Public Sub Set_locale(Optional ByVal localSymbol As String = "") 'Change the reg
 
     
 End Sub
-Public Function CheckStreamCapability() As Boolean
+Public Function CheckStreamCapability(ByVal mKeyStorePath As String) As Boolean
 'Checks if the current File System supports NTFS
 Dim name As String * 256
 Dim FileSystem As String * 256
 Dim SerialNumber As Long, MaxCompLen As Long
 Dim Flags As Long
 Const FILE_NAMED_STREAMS As Long = &H40000
-Call GetVolumeInformation("C:\", name, Len(name), SerialNumber, _
+Call GetVolumeInformation(Left(mKeyStorePath, 3), name, Len(name), SerialNumber, _
     MaxCompLen, Flags, FileSystem, Len(FileSystem))
 If Flags And FILE_NAMED_STREAMS Then
     CheckStreamCapability = True
