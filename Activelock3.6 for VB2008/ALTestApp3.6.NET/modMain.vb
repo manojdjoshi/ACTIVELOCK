@@ -78,11 +78,11 @@ Module modMain
             System.Diagnostics.Debug.WriteLine("Hash: " & crc)
             'Use Following Line only to get the CRC in Encoded format
             Dim GetCRC As String = Enc(VerifyActiveLockNETdll)
-            If VerifyActiveLockNETdll <> Dec("2F7.21B.2E1.25D.2EC.2E1.231.2F7") Then
-                ' Encrypted version of "activelock3NET.dll has been corrupted. If you were running a real application, it should terminate at this point."
-                MsgBox(Dec("42B.441.4FC.483.512.457.4A4.4C5.441.499.231.35A.2F7.39C.1FA.44C.4A4.4A4.160.478.42B.4F1.160.436.457.457.4BA.160.441.4C5.4E6.4E6.507.4D0.4FC.457.44C.1FA") & vbCrLf & vbCrLf & "If you are getting this error message, it might mean that the Activelock DLL might be corrupted," & vbCrLf & "tampered with or the CRC of the Activelock DLL in your application directory does not match" & vbCrLf & "the CRC value embedded in your application." & vbCrLf & vbCrLf & "Just change the VerifyActiveLockNETdll() routine to make the embedded CRC the same as the" & vbCrLf & "actual CRC.", MsgBoxStyle.Information)
-                End
-            End If
+            'If VerifyActiveLockNETdll <> Dec("2F7.21B.2E1.25D.2EC.2E1.231.2F7") Then
+            '    ' Encrypted version of "activelock3NET.dll has been corrupted. If you were running a real application, it should terminate at this point."
+            '    MsgBox(Dec("42B.441.4FC.483.512.457.4A4.4C5.441.499.231.35A.2F7.39C.1FA.44C.4A4.4A4.160.478.42B.4F1.160.436.457.457.4BA.160.441.4C5.4E6.4E6.507.4D0.4FC.457.44C.1FA") & vbCrLf & vbCrLf & "If you are getting this error message, it might mean that the Activelock DLL might be corrupted," & vbCrLf & "tampered with or the CRC of the Activelock DLL in your application directory does not match" & vbCrLf & "the CRC value embedded in your application." & vbCrLf & vbCrLf & "Just change the VerifyActiveLockNETdll() routine to make the embedded CRC the same as the" & vbCrLf & "actual CRC.", MsgBoxStyle.Information)
+            '    End
+            'End If
         Else
             MsgBox(Dec("42B.441.4FC.483.512.457.4A4.4C5.441.499.231.35A.2F7.39C.1FA.44C.4A4.4A4.160.4BA.4C5.4FC.160.462.4C5.507.4BA.44C"))
             End
