@@ -305,7 +305,7 @@ ActiveLock3_6Net
 	<param name="strLicenseFileType"></param>
 	<param name="strLicenseType"></param>
 	<remarks></remarks>
-</member><member name="M:ActiveLock3_6NET.ActiveLock.CheckStreamCapability">
+</member><member name="M:ActiveLock3_6NET.ActiveLock.CheckStreamCapability(System.String)">
 	<summary>
  Not Documented!
  </summary>
