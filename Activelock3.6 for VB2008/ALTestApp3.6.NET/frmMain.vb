@@ -1263,8 +1263,8 @@ Friend Class frmMain
             ' is controlled that user's own registry hive.
             ' This means initiating a trial with one user does not initiate a trial for another user.
             ' trialHiddenFolder and trialSteganography are for "All Users"
-            '.TrialHideType = ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialHiddenFolder Or ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialRegistryPerUser Or ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialSteganography
-            .TrialHideType = ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialSteganography
+            .TrialHideType = ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialHiddenFolder Or ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialRegistryPerUser Or ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialSteganography
+            '.TrialHideType = ActiveLock3_6NET.IActiveLock.ALTrialHideTypes.trialSteganography
 
             ' Use the following if you'd like to make the trial warning message persistent 
             ' until a license is registered.
