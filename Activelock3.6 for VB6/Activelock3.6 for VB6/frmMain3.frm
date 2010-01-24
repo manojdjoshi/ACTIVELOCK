@@ -46,31 +46,35 @@ Begin VB.Form frmMain
       _ExtentY        =   18098
       _Version        =   393216
       Tabs            =   2
-      Tab             =   1
       TabHeight       =   520
       TabCaption(0)   =   "Pro&duct Code Generator"
       TabPicture(0)   =   "frmMain3.frx":0CCA
-      Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "cmdValidate"
-      Tab(0).Control(1)=   "Picture1"
-      Tab(0).Control(2)=   "cmdRemove"
+      Tab(0).ControlEnabled=   -1  'True
+      Tab(0).Control(0)=   "Label1"
+      Tab(0).Control(0).Enabled=   0   'False
+      Tab(0).Control(1)=   "Label17"
+      Tab(0).Control(1).Enabled=   0   'False
+      Tab(0).Control(2)=   "gridProds"
+      Tab(0).Control(2).Enabled=   0   'False
       Tab(0).Control(3)=   "fraProdNew"
-      Tab(0).Control(4)=   "gridProds"
-      Tab(0).Control(5)=   "Label17"
-      Tab(0).Control(6)=   "Label1"
+      Tab(0).Control(3).Enabled=   0   'False
+      Tab(0).Control(4)=   "cmdRemove"
+      Tab(0).Control(4).Enabled=   0   'False
+      Tab(0).Control(5)=   "Picture1"
+      Tab(0).Control(5).Enabled=   0   'False
+      Tab(0).Control(6)=   "cmdValidate"
+      Tab(0).Control(6).Enabled=   0   'False
       Tab(0).ControlCount=   7
       TabCaption(1)   =   "License KeyGen"
       TabPicture(1)   =   "frmMain3.frx":0CE6
-      Tab(1).ControlEnabled=   -1  'True
+      Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "frmKeyGen"
-      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).Control(1)=   "cmdViewArchive"
-      Tab(1).Control(1).Enabled=   0   'False
       Tab(1).ControlCount=   2
       Begin VB.CommandButton cmdValidate 
          Caption         =   "&Validate"
          Height          =   315
-         Left            =   -66480
+         Left            =   8520
          TabIndex        =   39
          Top             =   4755
          Width           =   1005
@@ -82,7 +86,7 @@ Begin VB.Form frmMain
          BorderStyle     =   0  'None
          ForeColor       =   &H80000008&
          Height          =   825
-         Left            =   -66270
+         Left            =   8730
          Picture         =   "frmMain3.frx":0D02
          ScaleHeight     =   825
          ScaleWidth      =   825
@@ -93,7 +97,7 @@ Begin VB.Form frmMain
       Begin VB.CommandButton cmdViewArchive 
          Caption         =   "&View License Database"
          Height          =   315
-         Left            =   1485
+         Left            =   -73515
          TabIndex        =   36
          ToolTipText     =   "View License Archive"
          Top             =   9855
@@ -103,7 +107,7 @@ Begin VB.Form frmMain
          Caption         =   "&Remove"
          Enabled         =   0   'False
          Height          =   315
-         Left            =   -66480
+         Left            =   8520
          TabIndex        =   11
          Top             =   5175
          Width           =   1000
@@ -111,7 +115,7 @@ Begin VB.Form frmMain
       Begin VB.Frame frmKeyGen 
          BorderStyle     =   0  'None
          Height          =   9735
-         Left            =   135
+         Left            =   -74865
          TabIndex        =   13
          Top             =   450
          Width           =   9495
@@ -666,7 +670,7 @@ Begin VB.Form frmMain
       End
       Begin VB.Frame fraProdNew 
          Height          =   2835
-         Left            =   -74865
+         Left            =   135
          TabIndex        =   12
          Top             =   360
          Width           =   9495
@@ -883,7 +887,7 @@ Begin VB.Form frmMain
       End
       Begin MSFlexGridLib.MSFlexGrid gridProds 
          Height          =   6540
-         Left            =   -74880
+         Left            =   120
          TabIndex        =   10
          Top             =   3585
          Width           =   8265
@@ -910,7 +914,7 @@ Begin VB.Form frmMain
          Caption         =   "Activelock V3"
          ForeColor       =   &H00FF0000&
          Height          =   165
-         Left            =   -66390
+         Left            =   8610
          TabIndex        =   38
          Top             =   7335
          Width           =   1065
@@ -918,7 +922,7 @@ Begin VB.Form frmMain
       Begin VB.Label Label1 
          Caption         =   "&Product List:"
          Height          =   255
-         Left            =   -74865
+         Left            =   135
          TabIndex        =   30
          Top             =   3330
          Width           =   1215
@@ -2524,7 +2528,7 @@ End Sub
 
 Private Sub txtName_KeyPress(KeyAscii As Integer)
   Select Case KeyAscii
-    Case 32, 46, 48 To 57, 8, 65 To 90, 95, 97 To 122
+    Case 32, 46, 48 To 57, 8, 65 To 90, 97 To 122
       'Valid chars, do nothing.
     Case Else
       'Whatever else, invalid.
@@ -3080,7 +3084,7 @@ End Function
 
 Private Sub txtVer_KeyPress(KeyAscii As Integer)
   Select Case KeyAscii
-    Case 32, 46, 48 To 57, 8, 65 To 90, 95, 97 To 122
+    Case 32, 46, 48 To 57, 8, 65 To 90, 97 To 122
       'Valid chars, do nothing.
     Case Else
       'Whatever else, invalid.
