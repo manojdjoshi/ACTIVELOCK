@@ -1112,7 +1112,9 @@ DateGoodSteganographyError:
     '''* <remarks>can blow up if passed an invalid date?</remarks>
     Public Function DateToDblString(ByRef Dte As Date) As String
 #If VBC_VER > 6.0 Then
-        Return Dte.ToOADate().ToString
+        Dim nfi As System.Globalization.NumberFormatInfo = New System.Globalization.CultureInfo("en-US", False).NumberFormat()
+        Return Dte.ToOADate().ToString(nfi)
+        'Return Dte.ToOADate().ToString
 #Else
         Return CStr(CDbl(Dte))
 #End If
@@ -1146,7 +1148,12 @@ DateGoodSteganographyError:
             If Date.TryParse(Dstr, culture, Globalization.DateTimeStyles.AdjustToUniversal, Drd) Then
                 Return Drd
             Else
-                Return #1/1/1900#
+                Try
+                    Drd = Date.FromOADate(CDbl(Val(Dstr)))
+                Catch ex As Exception
+                    Return #1/1/1900#
+                End Try
+                Return Drd
             End If
         End If
 #Else
