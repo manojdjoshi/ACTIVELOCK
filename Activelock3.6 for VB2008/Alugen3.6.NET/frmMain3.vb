@@ -3806,7 +3806,7 @@ exitValidate:
     Private Sub txtName_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtName.KeyPress
         If Char.IsControl(e.KeyChar) = False Then
             If Char.IsLetter(e.KeyChar) = False And Char.IsNumber(e.KeyChar) = False Then
-                If e.KeyChar <> "." And e.KeyChar <> "_" And e.KeyChar <> " " Then
+                If e.KeyChar <> "." And e.KeyChar <> " " Then
                     e.Handled = True
                 End If
             Else
@@ -3823,7 +3823,7 @@ exitValidate:
     Private Sub txtVer_KeyPress(ByVal sender As Object, ByVal e As System.Windows.Forms.KeyPressEventArgs) Handles txtVer.KeyPress
         If Char.IsControl(e.KeyChar) = False Then
             If Char.IsLetter(e.KeyChar) = False And Char.IsNumber(e.KeyChar) = False Then
-                If e.KeyChar <> "." And e.KeyChar <> "_" And e.KeyChar <> " " Then
+                If e.KeyChar <> "." And e.KeyChar <> " " Then
                     e.Handled = True
                 End If
             Else
