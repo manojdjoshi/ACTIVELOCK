@@ -1,5 +1,9 @@
 Change Log For Activelock VB6 
-Last Updated: 10 Oct 2009 
+Last Updated: 25 Jan 2010 
+
+v3.6.0.5 Updates:
+- FIX: The LIC file can now be used in drives other than c:\
+- FIX: Alugen has been modified to disallow the use of "_" in software names and version numbers. This is an internally used character for text identification and confuses Activelock if used in software name and version strings.
 
 v3.6.0.4 Updates:
 - FIX: Maintenance update to cover clock tampering related issues
