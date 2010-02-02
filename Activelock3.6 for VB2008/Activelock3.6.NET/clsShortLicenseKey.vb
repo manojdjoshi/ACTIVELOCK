@@ -187,12 +187,48 @@ Friend Class clsShortLicenseKey
     '===============================================================================
     '   Declares
     '===============================================================================
+    ''' <summary>
+    ''' Copies a block of memory from one location to another.
+    ''' </summary>
+    ''' <param name="lpDest">A pointer to the starting address of the copied block's destination.</param>
+    ''' <param name="lpSource">A pointer to the starting address of the block of memory to copy.</param>
+    ''' <param name="nBytes">The size of the block of memory to copy, in bytes.</param>
+    ''' <remarks>This function is defined as the RtlCopyMemory function. Its implementation is
+    ''' provided inline. For more information, see Winbase.h and Winnt.h.
+    ''' If the source and destination blocks overlap, the results are undefined. For overlapped
+    ''' blocks, use the MoveMemory function</remarks>
     Private Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (ByVal lpDest As Integer, ByVal lpSource As Integer, ByVal nBytes As Integer)
+    ''' <summary>
+    ''' Computes the checksum of the specified file.
+    ''' </summary>
+    ''' <param name="FileName">The file name of the file for which the checksum is to be computed.</param>
+    ''' <param name="HeaderSum">A pointer to a variable that receives the original checksum from the image file, or zero if there is an error</param>
+    ''' <param name="CheckSum">A pointer to a variable that receives the computed checksum</param>
+    ''' <returns>
+    ''' If the function succeeds, the return value is CHECKSUM_SUCCESS (0).
+    ''' </returns>
+    ''' <remarks>see http://msdn.microsoft.com/en-us/library/ms680355(VS.85).aspx for more information.</remarks>
     Private Declare Function MapFileAndCheckSumA Lib "IMAGEHLP.DLL" (ByVal FileName As String, ByRef HeaderSum As Integer, ByRef CheckSum As Integer) As Integer
 
     ' Note: add a project conditional compile argument "IncludeCreate"
     ' if the CreateShortKey is to be compiled into the application.
     '#If IncludeCreate = 1 Then
+    ''' <summary>
+    ''' Creates a new serial number.
+    ''' </summary>
+    ''' <param name="SerialNumber">The serial number is generated from the app name,
+    ''' version, and password, along with the HDD firmware serial number, which makes
+    ''' it unique for the machine running the app.</param>
+    ''' <param name="Licensee">Name of party to whom this license is issued.</param>
+    ''' <param name="ProductCode">A unique number assigned to this product. This is
+    ''' created from the app private key and is a 4 digit integer.</param>
+    ''' <param name="ExpireDate">Use this field for time-based serial numbers. This allows 
+    ''' serial number to be issued that expire in two weeks or at the end of the year.</param>
+    ''' <param name="UserData">This field is caller defined. Currently we are using
+    ''' the MaxUser and LicType (using a LoByte/HiByte packed field).</param>
+    ''' <param name="RegisteredLevel">This is the Registered Level from Alugen. Long only.</param>
+    ''' <returns>A License Key in the form of "233C-3912-00FF-BE49"</returns>
+    ''' <remarks></remarks>
     Friend Function CreateShortKey(ByVal SerialNumber As String, ByVal Licensee As String, ByVal ProductCode As Integer, ByVal ExpireDate As Date, ByVal UserData As Short, ByVal RegisteredLevel As Integer) As String
         '===============================================================================
         '   CreateShortKey - Creates a new serial number.
@@ -242,6 +278,16 @@ Friend Class clsShortLicenseKey
     '#End If
 
     '#If IncludeCheck = 1 Then
+    ''' <summary>
+    ''' Performs a simple CRC test to ensure the key was entered "correctly". Does NOT
+    ''' validate that the key is VALID. This function allows the caller to "test" the
+    ''' key input by the user, without having to execute the key validation code,
+    ''' making it more work for a cracker to generate a key for your application.
+    ''' </summary>
+    ''' <param name="LicenseKey"></param>
+    ''' <param name="Licensee"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Friend Function TestKey(ByVal LicenseKey As String, ByVal Licensee As String) As Boolean
         '===============================================================================
         '   TestKey - Performs a simple CRC test to ensure the key was entered
@@ -376,6 +422,20 @@ ExitLabel:
     '#End If
 
     '#If IncludeValidate = 1 Or IncludeCreate = 1 Then
+    ''' <summary>
+    ''' This is used to swap various bits in the serial number. It's sole purpose
+    ''' is to alter the output serial number.
+    ''' 
+    ''' This process is "played" forwards during the key creation, and in reverse
+    ''' when validating. This mangling process should be identical for key creation
+    ''' and validation. Add as many combinations as you like.
+    ''' </summary>
+    ''' <param name="Word1"></param>
+    ''' <param name="Bit1"></param>
+    ''' <param name="Word2"></param>
+    ''' <param name="Bit2"></param>
+    ''' <remarks> It is recommended that there be at least 6 combinations in case.
+    ''' the bits being swapped are the same (2 swap bits for words 2, 3, 4). </remarks>
     Friend Sub AddSwapBits(ByVal Word1 As Integer, ByVal Bit1 As Integer, ByVal Word2 As Integer, ByVal Bit2 As Integer)
         '===============================================================================
         '   AddSwapBits - This is used to swap various bits in the serial number. It's
@@ -432,6 +492,14 @@ ExitLabel:
     '#End If
 
     '#If IncludeValidate = 1 Or IncludeCheck = 1 Then
+    ''' <summary>
+    ''' Shared code to massage the input serial number, and slice it into
+    ''' the required number of segments.
+    ''' </summary>
+    ''' <param name="LicenseKey"></param>
+    ''' <param name="KeySegs"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Function SplitKey(ByRef LicenseKey As String, ByRef KeySegs As Object) As Boolean
         '===============================================================================
         '   SplitKey - Shared code to massage the input serial number, and slice it into
@@ -464,6 +532,12 @@ ExitLabel:
     End Function
     '#End If
 
+    ''' <summary>
+    ''' Converts a hex string representation into a 4 byte decimal value.
+    ''' </summary>
+    ''' <param name="HexString"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Function SegmentValue(ByVal HexString As String) As Integer
         '===============================================================================
         '   Converts a hex string representation into a 4 byte decimal value.
@@ -491,8 +565,13 @@ ExitLabel:
 
     End Function
 
-
     '#If IncludeCreate = 1 Or IncludeValidate = 1 Then
+    ''' <summary>
+    ''' Swaps any two bits. The bits can differ as long as they are in the range of 0 and 15.
+    ''' </summary>
+    ''' <param name="BitList"></param>
+    ''' <param name="KeySegs"></param>
+    ''' <remarks></remarks>
     Private Sub SwapBit(ByRef BitList As TBits, ByRef KeySegs As Object)
         '===============================================================================
         '   SwapBit - Swaps any two bits. The bits can differ as long as they are in
@@ -522,6 +601,13 @@ ExitLabel:
     '#End If
 
     ' Generic helper function
+    ''' <summary>
+    ''' Returns a 16-bit CRC value for a data block.
+    ''' </summary>
+    ''' <param name="Buffer"></param>
+    ''' <param name="InputCrc"></param>
+    ''' <returns></returns>
+    ''' <remarks>Refer to CRC-CCITT compute-on-the-fly implementatations for more info.</remarks>
     Private Function CRC(ByRef Buffer() As Byte, Optional ByRef InputCrc As Integer = 0) As Integer
         '===============================================================================
         '   Crc - Returns a 16-bit CRC value for a data block.
@@ -563,6 +649,13 @@ ErrHandler:
 
     End Function
 
+    ''' <summary>
+    ''' Returns a hex string representation of a WORD.
+    ''' </summary>
+    ''' <param name="WORD">The 2 byte value to convert to a hex string.</param>
+    ''' <param name="Prefix">A value such as "0x" or "&amp;H".</param>
+    ''' <returns></returns>
+    ''' <remarks>It's up to the caller to ensure the subject value is a 16-bit number.</remarks>
     Private Function HexWORD(ByVal WORD As Integer, Optional ByVal Prefix As String = "") As String
         '===============================================================================
         '   HexDWORD - Returns a hex string representation of a WORD.
@@ -602,6 +695,14 @@ ErrHandler:
 
     End Function
 
+    ''' <summary>
+    ''' Tests if the supplied file has been altered by computing a checksum for
+    ''' the file and comparing it against the checksum in the executable image.
+    ''' </summary>
+    ''' <param name="FilePath">Full path to file to check. Caller is responsible
+    ''' for ensuring that the path exists, and that it is an executable.</param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Friend Function ExeIsPatched(ByVal FilePath As String) As Boolean
         '===============================================================================
         '   ExeIsPatched - Tests if the supplied file has been altered by computing a

@@ -79,6 +79,10 @@ Public Class Daytime
 
     ' Update this list whenever the server IPs change or new ones are added.
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Shared Servers() As String = { _
           "129.6.15.28" _
         , "129.6.15.29" _
@@ -99,8 +103,15 @@ Public Class Daytime
         , "64.113.32.5" _
     }
 
-
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Shared LastHost As String = ""
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Shared LastSysTime As DateTime
 
     ''' <summary>
@@ -137,11 +148,23 @@ Public Class Daytime
         Return result
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="dt1"></param>
+    ''' <param name="dt2"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Shared Function SecondsDifference(ByVal dt1 As DateTime, ByVal dt2 As DateTime) As Integer
         Dim span As TimeSpan = dt1.Subtract(dt2)
         Return span.Seconds + (span.Minutes * 60) + (span.Hours * 3600)
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Shared Function WindowsClockIncorrect() As Boolean
         Dim nist As DateTime = GetTime()
         If (Math.Abs(SecondsDifference(nist, LastSysTime)) > THRESHOLD_SECONDS) Then
@@ -150,6 +173,12 @@ Public Class Daytime
         Return False
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="host"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Shared Function GetNISTTime(ByVal host As String) As DateTime
         'Returns DateTime.MinValue if host unreachable or does not produce time
         Dim timeStr As String
@@ -196,6 +225,10 @@ Public Class Daytime
 
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     <StructLayout(LayoutKind.Sequential)> _
         Public Structure SYSTEMTIME
         Public wYear As Int16
@@ -208,7 +241,30 @@ Public Class Daytime
         Public wMilliseconds As Int16
     End Structure
 
+    ''' <summary>
+    ''' Retrieves the current system date and time. The system time is expressed in
+    ''' Coordinated Universal Time (UTC).
+    ''' To retrieve the current system date and time in local time, use the
+    ''' GetLocalTime function.
+    ''' </summary>
+    ''' <param name="stru">A pointer to a SYSTEMTIME structure to receive the current system date and time. The lpSystemTime parameter must not be NULL. Using NULL will result in an access violation.</param>
+    ''' <returns>This function does not return a value or provide extended error information.</returns>
+    ''' <remarks>To set the current system date and time, use the SetSystemTime function.</remarks>
     Private Declare Function GetSystemTime Lib "kernel32.dll" (ByRef stru As SYSTEMTIME) As Int32
+    ''' <summary>
+    ''' Sets the current system time and date. The system time is expressed in
+    ''' Coordinated Universal Time (UTC).
+    ''' </summary>
+    ''' <param name="stru">A pointer to a SYSTEMTIME structure that contains the
+    ''' new system date and time. The wDayOfWeek member of the SYSTEMTIME structure
+    ''' is ignored.</param>
+    ''' <returns>If the function succeeds, the return value is nonzero. If the
+    ''' function fails, the return value is zero. To get extended error information,
+    ''' call GetLastError.</returns>
+    ''' <remarks>The calling process must have the SE_SYSTEMTIME_NAME privilege.
+    ''' This privilege is disabled by default. The SetSystemTime function enables the
+    ''' SE_SYSTEMTIME_NAME privilege before changing the system time and disables the
+    ''' privilege before returning. For more information, see Running with Special Privileges.</remarks>
     Private Declare Function SetSystemTime Lib "kernel32.dll" (ByRef stru As SYSTEMTIME) As Int32
 
     ''' <summary>

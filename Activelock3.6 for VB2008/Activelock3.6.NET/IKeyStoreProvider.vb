@@ -49,6 +49,10 @@ Interface _IKeyStoreProvider
     Sub Store(ByRef Lic As ProductLicense, ByVal mLicenseFileType As IActiveLock.ALLicenseFileTypes)
 End Interface
 
+''' <summary>
+''' This is the interface for a class that facilitates storing and retrieving of product license keys.
+''' </summary>
+''' <remarks></remarks>
 Friend Class IKeyStoreProvider
     Implements _IKeyStoreProvider
 

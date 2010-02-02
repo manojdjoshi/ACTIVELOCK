@@ -42,6 +42,13 @@ Option Explicit On
 ' *
 #End Region
 
+''' <summary>
+''' Stores and retrieves product keys
+''' <p>An "object-oriented" approach to using Windows INI files, with some
+''' useful additions.</p>
+''' <p>Klaus H. Probst [kprobst@vbbox.com]</p>
+''' </summary>
+''' <remarks></remarks>
 Friend Class INIFile
 
     '===============================================================================
@@ -72,10 +79,69 @@ Friend Class INIFile
     '  ///////////////////////////////////////////////////////////////////////
 
     'Private Declare Function GetPrivateProfileInt Lib "kernel32" Alias "GetPrivateProfileIntA" (ByVal lpApplicationName As String, ByVal lpKeyName As String, ByVal nDefault As Long, ByVal lpFileName As String) As Long
+    ''' <summary>
+    ''' Retrieves a string from the specified section in an initialization file.
+    ''' <para>
+    ''' Note  This function is provided only for compatibility with 16-bit
+    ''' Windows-based applications. Applications should store initialization
+    ''' information in the registry.
+    ''' </para>
+    ''' </summary>
+    ''' <param name="lpApplicationName">[in] The name of the section containing the key name. If this parameter is NULL, the GetPrivateProfileString function copies all section names in the file to the supplied buffer.</param>
+    ''' <param name="lpKeyName">[in] The name of the key whose associated string is to be retrieved. If this parameter is NULL, all key names in the section specified by the lpAppName parameter are copied to the buffer specified by the lpReturnedString parameter.</param>
+    ''' <param name="lpDefault">[in] A default string. If the lpKeyName key cannot be found in the initialization file, GetPrivateProfileString copies the default string to the lpReturnedString buffer. If this parameter is NULL, the default is an empty string, "". <para>Avoid specifying a default string with trailing blank characters. The function inserts a null character in the lpReturnedString buffer to strip any trailing blanks.</para></param>
+    ''' <param name="lpReturnedString">[out] A pointer to the buffer that receives the retrieved string.</param>
+    ''' <param name="nSize">[in] The size of the buffer pointed to by the lpReturnedString parameter, in characters.</param>
+    ''' <param name="lpFileName">[in] The name of the initialization file. If this parameter does not contain a full path to the file, the system searches for the file in the Windows directory.</param>
+    ''' <returns>The return value is the number of characters copied to the buffer, not including the terminating null character.</returns>
+    ''' <remarks>see http://msdn.microsoft.com/en-us/library/ms724353(VS.85).aspx for more information</remarks>
     Private Declare Function GetPrivateProfileString Lib "kernel32" Alias "GetPrivateProfileStringA" (ByVal lpApplicationName As String, ByVal lpKeyName As String, ByVal lpDefault As String, ByVal lpReturnedString As String, ByVal nSize As Integer, ByVal lpFileName As String) As Integer
+    ''' <summary>
+    ''' Copies a string into the specified section of an initialization file.
+    ''' <para>
+    ''' Note  This function is provided only for compatibility with 16-bit versions of Windows. Applications should store initialization information in the registry.
+    ''' </para>
+    ''' </summary>
+    ''' <param name="lpApplicationName">[in] The name of the section to which the string will be copied. If the section does not exist, it is created. The name of the section is case-independent; the string can be any combination of uppercase and lowercase letters.</param>
+    ''' <param name="lpKeyName">[in] The name of the key to be associated with a string. If the key does not exist in the specified section, it is created. If this parameter is NULL, the entire section, including all entries within the section, is deleted.</param>
+    ''' <param name="lpString">[in] A null-terminated string to be written to the file. If this parameter is NULL, the key pointed to by the lpKeyName parameter is deleted.</param>
+    ''' <param name="lpFileName">[in] The name of the initialization file.</param>
+    ''' <returns>If the function successfully copies the string to the initialization file, the return value is nonzero.</returns>
+    ''' <remarks>see http://msdn.microsoft.com/en-us/library/ms725501(VS.85).aspx for more information</remarks>
     Private Declare Function WritePrivateProfileString Lib "kernel32" Alias "WritePrivateProfileStringA" (ByVal lpApplicationName As String, ByVal lpKeyName As String, ByVal lpString As String, ByVal lpFileName As String) As Integer
+    ''' <summary>
+    ''' Retrieves all the keys and values for the specified section of an initialization file.
+    ''' </summary>
+    ''' <param name="lpAppName">[in] The name of the section in the initialization file.</param>
+    ''' <param name="lpReturnedString">[out] A pointer to a buffer that receives the key name and value pairs associated with the named section. The buffer is filled with one or more null-terminated strings; the last string is followed by a second null character.</param>
+    ''' <param name="nSize">[in] The size of the buffer pointed to by the lpReturnedString parameter, in characters. The maximum profile section size is 32,767 characters.</param>
+    ''' <param name="lpFileName">[in] The name of the initialization file. If this parameter does not contain a full path to the file, the system searches for the file in the Windows directory.</param>
+    ''' <returns>The return value specifies the number of characters copied to the buffer, not including the terminating null character. If the buffer is not large enough to contain all the key name and value pairs associated with the named section, the return value is equal to nSize minus two.</returns>
+    ''' <remarks>see http://msdn.microsoft.com/en-us/library/ms724348(VS.85).aspx for more information</remarks>
     Private Declare Function GetPrivateProfileSection Lib "kernel32" Alias "GetPrivateProfileSectionA" (ByVal lpAppName As String, ByVal lpReturnedString As String, ByVal nSize As Integer, ByVal lpFileName As String) As Integer
+    ''' <summary>
+    ''' Replaces the keys and values for the specified section in an initialization file.
+    ''' <para>
+    ''' Note:  This function is provided only for compatibility with 16-bit versions of Windows. Applications should store initialization information in the registry.
+    ''' </para>
+    ''' </summary>
+    ''' <param name="lpAppName">[in] The name of the section in which data is written. This section name is typically the name of the calling application.</param>
+    ''' <param name="lpString">[in] The new key names and associated values that are to be written to the named section. This string is limited to 65,535 bytes.</param>
+    ''' <param name="lpFileName">[in] The name of the initialization file. If this parameter does not contain a full path for the file, the function searches the Windows directory for the file. If the file does not exist and lpFileName does not contain a full path, the function creates the file in the Windows directory.<para>If the file exists and was created using Unicode characters, the function writes Unicode characters to the file. Otherwise, the function creates a file using ANSI characters.</para></param>
+    ''' <returns>If the function succeeds, the return value is nonzero.</returns>
+    ''' <remarks>see http://msdn.microsoft.com/en-us/library/ms725500(VS.85).aspx for more information</remarks>
     Private Declare Function WritePrivateProfileSection Lib "kernel32" Alias "WritePrivateProfileSectionA" (ByVal lpAppName As String, ByVal lpString As String, ByVal lpFileName As String) As Integer
+    ''' <summary>
+    ''' Retrieves the names of all sections in an initialization file.
+    ''' <para>
+    ''' Note  This function is provided only for compatibility with 16-bit Windows-based applications. Applications should store initialization information in the registry.
+    ''' </para>
+    ''' </summary>
+    ''' <param name="lpszReturnBuffer">[out] A pointer to a buffer that receives the section names associated with the named file. The buffer is filled with one or more null-terminated strings; the last string is followed by a second null character.</param>
+    ''' <param name="nSize">[in] The size of the buffer pointed to by the lpszReturnBuffer parameter, in characters.</param>
+    ''' <param name="lpFileName">The name of the initialization file. If this parameter is NULL, the function searches the Win.ini file. If this parameter does not contain a full path to the file, the system searches for the file in the Windows directory.</param>
+    ''' <returns>The return value specifies the number of characters copied to the specified buffer, not including the terminating null character. If the buffer is not large enough to contain all the section names associated with the specified initialization file, the return value is equal to the size specified by nSize minus two.</returns>
+    ''' <remarks>see http://msdn.microsoft.com/en-us/library/ms724352(VS.85).aspx for more information</remarks>
     Private Declare Function GetPrivateProfileSectionNames Lib "kernel32" Alias "GetPrivateProfileSectionNamesA" (ByVal lpszReturnBuffer As String, ByVal nSize As Integer, ByVal lpFileName As String) As Integer
 
 	Private m_sFileName As String
@@ -100,6 +166,19 @@ Friend Class INIFile
 	' Remarks: None
 	'===============================================================================
     'Default was upgraded to Default_Renamed
+    ''' <summary>
+    ''' Retrieves a value from the passed key (ValueName) and returns it as a variant
+    ''' (String subtype). This proc is useful if your requirements go above that of the
+    ''' Values Get/Let pair. You can specify a Default return value in case the call fails,
+    ''' and you can pass a Boolean variable in the Fail argument.
+    ''' </summary>
+    ''' <param name="ValueName">Passed key</param>
+    ''' <param name="Default_Renamed">Default return value to be used if the call fails</param>
+    ''' <param name="Failed">This will be set to False if everything went well, or True of
+    ''' something went wrong</param>
+    ''' <returns>This will be set to False if everything went well, or True of something went
+    ''' wrong, and the return is the value passed in the Default argument.</returns>
+    ''' <remarks></remarks>
 	Public Function GetValue(ByVal ValueName As String, Optional ByVal Default_Renamed As String = "", Optional ByRef Failed As Boolean = False) As Object
 		Dim sBuffer As String
 		Dim lReturn As Integer
@@ -130,7 +209,15 @@ Friend Class INIFile
 	' why this is here, know that I use it a lot, but I suppose it's
 	' of limited value in most cases.
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Adds an empty section to the current file. If you're wondering
+    ''' why this is here, know that I use it a lot, but I suppose it's
+    ''' of limited value in most cases.
+    ''' </summary>
+    ''' <param name="name">Section name to be added</param>
+    ''' <param name="SetAsCurrent">If True, sets the added section as the current section name</param>
+    ''' <remarks></remarks>
 	Public Sub AddSection(ByVal name As String, Optional ByRef SetAsCurrent As Boolean = False)
 		On Error Resume Next
 		'// to add an empty section, we have to write a dummy
@@ -155,7 +242,19 @@ Friend Class INIFile
 	' <p>If the method fails, the return will be zero, the ArrayResult argument
 	' will be set to Null and you will hit an assert.
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Enumerates the keys (not the Key-Value pairs) under the current section,
+    ''' copies the array of keys into the ArrayResult argument, and returns the
+    ''' number of keys enumerated.
+    ''' <p>For how the class handles buffer sizes on INI calls, please see the Notes
+    ''' section on the [Declarations] section of the class module.</p>
+    ''' <p>If the method fails, the return will be zero, the ArrayResult argument
+    ''' will be set to Null and you will hit an assert.</p>
+    ''' </summary>
+    ''' <param name="ArrayResult">Returned array</param>
+    ''' <returns>Integer - Returns 0 if failure</returns>
+    ''' <remarks></remarks>
 	Public Function EnumSectionKeys(ByRef ArrayResult As Object) As Short
 		Dim sBuffer As String
 		Dim lReturn As Integer
@@ -238,7 +337,18 @@ catch_Renamed:
 	' If the method fails, the return will be zero, the ArrayResult argument
 	' will be set to Null and you will hit an assert.
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' This proc will enumerate just the values contained under a given section
+    ''' and will return them in an array.
+    ''' For how the class handles buffer sizes on INI calls, please see the Notes
+    ''' section on the [Declarations] section of the class module.
+    ''' If the method fails, the return will be zero, the ArrayResult argument
+    ''' will be set to Null and you will hit an assert.
+    ''' </summary>
+    ''' <param name="ArrayResult">Returned array</param>
+    ''' <returns>Integer - Returns 0 if failure</returns>
+    ''' <remarks></remarks>
 	Public Function EnumSectionValues(ByRef ArrayResult As Object) As Short
 		
 		Dim sBuffer As String
@@ -321,7 +431,18 @@ catch_Renamed:
 	' <p>If the method fails, the return will be zero, the ArrayResult argument
 	' will be set to Null and you will hit an assert.
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' This proc will enumerate all the names of the sections of the current INI
+    ''' file and return them in an array.
+    ''' <p>For how the class handles buffer sizes on INI calls, please see the Notes
+    ''' section on the [Declarations] section of the class module.</p>
+    ''' <p>If the method fails, the return will be zero, the ArrayResult argument
+    ''' will be set to Null and you will hit an assert.</p>
+    ''' </summary>
+    ''' <param name="ArrayResult">Returned array</param>
+    ''' <returns>Integer - Returns 0 if failure</returns>
+    ''' <remarks></remarks>
   Public Function EnumSections(ByRef ArrayResult As String()) As Short
     On Error GoTo catch_Renamed
     Dim sBuffer As String
@@ -392,15 +513,20 @@ catch_Renamed:
     System.Diagnostics.Debug.Assert(0, "")
     iCounter = -1
     Resume finally_Renamed
-  End Function
-  '===============================================================================
-  ' Name: Sub DeleteSection
-  ' Input:
-  '   ByVal SectionName As String - Name of the section to be deleted
-  ' Output: None
-  ' Purpose: Deletes a section from the current INI file
-  ' Remarks: None
-  '===============================================================================
+    End Function
+    '===============================================================================
+    ' Name: Sub DeleteSection
+    ' Input:
+    '   ByVal SectionName As String - Name of the section to be deleted
+    ' Output: None
+    ' Purpose: Deletes a section from the current INI file
+    ' Remarks: None
+    '===============================================================================
+    ''' <summary>
+    ''' Deletes a section from the current INI file
+    ''' </summary>
+    ''' <param name="SectionName">Name of the section to be deleted</param>
+    ''' <remarks></remarks>
   Public Sub DeleteSection(ByVal SectionName As String)
         Call WritePrivateProfileString(SectionName, Nothing, Nothing, m_sFileName)
   End Sub
@@ -411,7 +537,12 @@ catch_Renamed:
   ' Output: None
   ' Purpose: Deletes a key (a value pair) from the INI file
   ' Remarks: None
-  '===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Deletes a key (a value pair) from the INI file
+    ''' </summary>
+    ''' <param name="KeyName">Name of the key to be deleted</param>
+    ''' <remarks></remarks>
   Public Sub DeleteKey(ByVal KeyName As String)
     Call WritePrivateProfileString(m_sSection, KeyName, 0, m_sFileName)
   End Sub
@@ -429,7 +560,19 @@ catch_Renamed:
   ' <p>If the method fails, the return will be zero, the ArrayResult argument
   ' will be set to Null and you will hit an assert.
   ' Remarks: None
-  '===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' This proc will enumerate a given section's Key=Value and place them
+    ''' in the passed array as two different arrays. That is:
+    ''' <p>    Array(Array(Keys),Array(Values))</p>
+    ''' <p>For how the class handles buffer sizes on INI calls, please see the Notes
+    ''' section on the [Declarations] section of the class module.</p>
+    ''' <p>If the method fails, the return will be zero, the ArrayResult argument
+    ''' will be set to Null and you will hit an assert.</p>
+    ''' </summary>
+    ''' <param name="ArrayResult">Returned array</param>
+    ''' <returns>Integer - Returns 0 if failure</returns>
+    ''' <remarks></remarks>
   Public Function EnumSectionValuePairs(ByRef ArrayResult As Object) As Short
     On Error GoTo catch_Renamed
 
@@ -515,7 +658,14 @@ catch_Renamed:
   ' is a logical one, not a physical flush. So if you need this type of
   ' thing seriously use the registry instead.
   ' Remarks: None
-  '===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Flushes the INI file cache for the current file. <p>Note that
+    ''' the INI cache in Win32 (and Win16) is notoriously kranky. This flush
+    ''' is a logical one, not a physical flush. So if you need this type of
+    ''' thing seriously use the registry instead.</p>
+    ''' </summary>
+    ''' <remarks></remarks>
   Public Sub Flush()
     Call WritePrivateProfileString(0, 0, 0, m_sFileName)
   End Sub
@@ -540,7 +690,14 @@ catch_Renamed:
   ' to a "True" literal, you'll have to convert the boolean to an integer or
   ' long before calling this method.
   ' Remarks: None
-  '===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Sets/Gets a value from a key as a variant (string subtype) from the current section.
+    ''' </summary>
+    ''' <param name="ValueName">Key name</param>
+    ''' <value></value>
+    ''' <returns>Variant - Key value</returns>
+    ''' <remarks></remarks>
   Public Property Values(ByVal ValueName As String) As Object
     Get
       Dim szBuffer As String
@@ -578,7 +735,13 @@ catch_Renamed:
   ' by default. Note that if the passed string is not a FQP,
   ' the INI file must be in the Windows search path somewhere.
   ' Remarks: None
-  '===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Gets/Sets the current filename
+    ''' </summary>
+    ''' <value>String - File name used</value>
+    ''' <returns>String - Current file name</returns>
+    ''' <remarks></remarks>
   Public Property File() As String
     Get
       File = m_sFileName
@@ -607,7 +770,13 @@ catch_Renamed:
   ' Output: None
   ' Purpose: Sets the name of the current section
   ' Remarks: None
-  '===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Gets/Sets the name of the current section
+    ''' </summary>
+    ''' <value>String - Current section name</value>
+    ''' <returns>String - Name of the current section</returns>
+    ''' <remarks></remarks>
   Public Property Section() As String
     Get
       Section = m_sSection
@@ -629,7 +798,18 @@ catch_Renamed:
   ' <p>where n is a given index of the array. The "=" literal between the
   ' KeyName and Value *must* be present, or the call will fail.
   ' Remarks: None
-  '===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Accepts a variant array and writes the contents to
+    ''' the current section. Note that this will overwrite
+    ''' all of the existing key-value pairs under that section.
+    ''' The array must be structured as follows:
+    ''' <p>    rValue(n) = "KeyName = Value"</p>
+    ''' <p>where n is a given index of the array. The "=" literal between the
+    ''' KeyName and Value *must* be present, or the call will fail.</p>
+    ''' </summary>
+    ''' <param name="rValue">variant array</param>
+    ''' <remarks></remarks>
   Public Sub WriteSection(ByVal rValue As Object)
     Dim sBuffer As String = String.Empty
     Dim a As Integer
