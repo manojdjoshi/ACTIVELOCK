@@ -57,24 +57,88 @@ Friend Class FileKeyStoreProvider
     ' @author activelock-admins
     ' @version 3.3.0
     ' @date 03.24.2006
-	
-	Private mstrPath As String
+
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private mstrPath As String
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
 	Private mINIFile As New INIFile
 	
-	' License File Key names
-	Private Const KEY_PRODKEY As String = "ProductKey"
-	Private Const KEY_PRODNAME As String = "ProductName"
-	Private Const KEY_PRODVER As String = "ProductVersion"
-	Private Const KEY_LICENSEE As String = "Licensee"
-	Private Const KEY_REGISTERED_LEVEL As String = "RegisteredLevel"
-	Private Const KEY_MAXCOUNT As String = "MaxCount" ' Maximum number of users
-	Private Const KEY_LICTYPE As String = "LicenseType"
-	Private Const KEY_LICCLASS As String = "LicenseClass"
-	Private Const KEY_LICKEY As String = "LicenseKey"
-	Private Const KEY_LICCODE As String = "LicenseCode" ' New in v3.1
-	Private Const KEY_EXP As String = "Expiration"
-	Private Const KEY_REGISTERED_DATE As String = "RegisteredDate"
-	Private Const KEY_LASTRUN_DATE As String = "LastUsed" ' date and time stamp
+    ' License File Key names
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Const KEY_PRODKEY As String = "ProductKey"
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Const KEY_PRODNAME As String = "ProductName"
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Const KEY_PRODVER As String = "ProductVersion"
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Const KEY_LICENSEE As String = "Licensee"
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Const KEY_REGISTERED_LEVEL As String = "RegisteredLevel"
+    ''' <summary>
+    ''' Maximum number of users
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Const KEY_MAXCOUNT As String = "MaxCount" ' Maximum number of users
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Const KEY_LICTYPE As String = "LicenseType"
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Const KEY_LICCLASS As String = "LicenseClass"
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Const KEY_LICKEY As String = "LicenseKey"
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks>New in v3.1</remarks>
+    Private Const KEY_LICCODE As String = "LicenseCode" ' New in v3.1
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Const KEY_EXP As String = "Expiration"
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Const KEY_REGISTERED_DATE As String = "RegisteredDate"
+    ''' <summary>
+    ''' date and time stamp
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Const KEY_LASTRUN_DATE As String = "LastUsed" ' date and time stamp
+    ''' <summary>
+    ''' Hash of LastRunDate
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Const KEY_LASTRUN_DATE_HASH As String = "Hash1" ' Hash of LastRunDate
 
     ''' <summary>

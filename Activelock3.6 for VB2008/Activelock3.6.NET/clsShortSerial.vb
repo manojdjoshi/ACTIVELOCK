@@ -128,6 +128,15 @@ Friend Class clsShortSerial
 	' number and the app password, creating an MD5 digest, and using the digest to select
 	' the 8 characters for our serial.
     ' *******************************************************************************
+    ''' <summary>
+    ''' Generates a short serial number by taking the app name, adding the app version
+    ''' number and the app password, creating an MD5 digest, and using the digest to select 
+    ''' the 8 characters for our serial.
+    ''' </summary>
+    ''' <param name="sAppNameVersionPassword">String - Application specific composite string</param>
+    ''' <param name="sHDDfirmwareSerial">String - HDD firmware serial number</param>
+    ''' <returns>String - The key</returns>
+    ''' <remarks></remarks>
 	Public Function GenerateKey(ByRef sAppNameVersionPassword As String, ByRef sHDDfirmwareSerial As String) As String
 		Dim lChar As Integer
         Dim lCount As Integer
@@ -174,6 +183,14 @@ Friend Class clsShortSerial
 	' DESCRIPTION:
 	' Takes the key, recalculates the MD5 part and tests for equality.
     ' *******************************************************************************
+    ''' <summary>
+    ''' Takes the key, recalculates the MD5 part and tests for equality.
+    ''' </summary>
+    ''' <param name="sKey">String - Key to check</param>
+    ''' <param name="sAppNameVersionPassword"></param>
+    ''' <param name="sHDDfirmwareSerial"></param>
+    ''' <returns>Boolean - True if valid</returns>
+    ''' <remarks></remarks>
 	Public Function IsKeyOK(ByRef sKey As String, ByRef sAppNameVersionPassword As String, ByRef sHDDfirmwareSerial As String) As Boolean
 
 		Dim lChar As Integer

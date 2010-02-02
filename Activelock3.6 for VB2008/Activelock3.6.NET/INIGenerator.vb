@@ -45,6 +45,10 @@ Imports System.Text
 ' *
 #End Region
 
+''' <summary>
+''' This is a concrete implementation of the IALUGenerator interface.
+''' </summary>
+''' <remarks></remarks>
 Friend Class INIGenerator
     Implements _IALUGenerator
 
@@ -70,6 +74,12 @@ Friend Class INIGenerator
     ' Purpose: Returns IActiveLock interface
     ' Remarks: None
     '===============================================================================
+    ''' <summary>
+    ''' Returns IActiveLock interface
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns>Returns IActiveLock interface</returns>
+    ''' <remarks></remarks>
     Private ReadOnly Property ActiveLockInterface() As _IActiveLock
         Get
             ActiveLockInterface = MyActiveLock
@@ -83,6 +93,11 @@ Friend Class INIGenerator
     ' Purpose: None
     ' Remarks: None
     '===============================================================================
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <value></value>
+    ''' <remarks></remarks>
     Private WriteOnly Property IALUGenerator_StoragePath() As String Implements _IALUGenerator.StoragePath
         Set(ByVal Value As String)
             Dim hFile As Integer
@@ -96,11 +111,19 @@ Friend Class INIGenerator
         End Set
     End Property
     'Class_Initialize was upgraded to Class_Initialize_Renamed
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Sub Class_Initialize_Renamed()
         ' 05.13.05 - ialkan Modified to merge DLLs into one
         ' Initialize AL
         MyActiveLock = New IActiveLock
     End Sub
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Sub New()
         MyBase.New()
         Class_Initialize_Renamed()
@@ -114,6 +137,12 @@ Friend Class INIGenerator
     ' Purpose: Loads Product Info from the specified INI section.
     ' Remarks: None
     '===============================================================================
+    ''' <summary>
+    ''' Loads Product Info from the specified INI section.
+    ''' </summary>
+    ''' <param name="Section">String - Section Name that contains ProdName and ProdVer in order to be unique.</param>
+    ''' <param name="ProdInfo">ProductInfo - Object containing product information to be saved.</param>
+    ''' <remarks></remarks>
     Private Sub LoadProdInfo(ByRef Section As String, ByRef ProdInfo As ProductInfo)
         With MyIniFile
             .Section = Section
@@ -131,6 +160,11 @@ Friend Class INIGenerator
     ' Purpose: Saves product details in the store file
     ' Remarks: IALUGenerator Interface implementation
     '===============================================================================
+    ''' <summary>
+    ''' Saves product details in the store file
+    ''' </summary>
+    ''' <param name="ProdInfo">ProductInfo - Object containing product information to be saved.</param>
+    ''' <remarks>IALUGenerator Interface implementation</remarks>
     Private Sub IALUGenerator_SaveProduct(ByRef ProdInfo As ProductInfo) Implements _IALUGenerator.SaveProduct
         With MyIniFile
             ' Section name has to contain ProdName and ProdVer in order to be unique
@@ -149,6 +183,11 @@ Friend Class INIGenerator
     ' Purpose: Retrieves all product information from INI.
     ' Remarks: Returns as an array.
     '===============================================================================
+    ''' <summary>
+    ''' Retrieves all product information from INI.
+    ''' </summary>
+    ''' <returns>Product info object</returns>
+    ''' <remarks>Returns as an array.</remarks>
     Private Function IALUGenerator_RetrieveProducts() As ProductInfo() Implements _IALUGenerator.RetrieveProducts
         ' Retrieve all product information from INI.  Return as an array.
         On Error GoTo RetrieveProductsError
@@ -181,6 +220,13 @@ RetrieveProductsError:
     ' Purpose: Retrieves product VCode and GCode from the store file
     ' Remarks: todo Error Handling - Need to return Nothing if store file doesn't contain the product
     '===============================================================================
+    ''' <summary>
+    ''' Retrieves product VCode and GCode from the store file
+    ''' </summary>
+    ''' <param name="Name">String - Product name</param>
+    ''' <param name="Ver">String - Product version</param>
+    ''' <returns></returns>
+    ''' <remarks>todo Error Handling - Need to return Nothing if store file doesn't contain the product</remarks>
     Private Function IALUGenerator_RetrieveProduct(ByVal Name As String, ByVal Ver As String) As ProductInfo Implements _IALUGenerator.RetrieveProduct
         '@todo Error Handling - Need to return Nothing if store file doesn't contain the product
         Dim ProdInfo As New ProductInfo
@@ -208,6 +254,12 @@ RetrieveProductsError:
     ' Purpose: Removes the license keys section from a INI file, i.e. deletes product details in the license database
     ' Remarks: Removes a section from the INI file
     '===============================================================================
+    ''' <summary>
+    ''' Removes the license keys section from a INI file, i.e. deletes product details in the license database
+    ''' </summary>
+    ''' <param name="name">Product name</param>
+    ''' <param name="Ver">Product version</param>
+    ''' <remarks>Removes a section from the INI file</remarks>
     Private Sub IALUGenerator_DeleteProduct(ByVal name As String, ByVal Ver As String) Implements _IALUGenerator.DeleteProduct
         ' Remove the section from INI file
         Call MyIniFile.DeleteSection(name & " " & Ver)
@@ -223,6 +275,14 @@ RetrieveProductsError:
     ' Purpose: Given the Installation Code, generates an Activelock license liberation key.
     ' Remarks: None
     '===============================================================================
+    ''' <summary>
+    ''' Given the Installation Code, generates an Activelock license liberation key.
+    ''' </summary>
+    ''' <param name="Lic">Product license</param>
+    ''' <param name="InstCode">Installation Code sent by the user</param>
+    ''' <param name="RegisteredLevel">Registration Level for the license. Default is "0"</param>
+    ''' <returns>String - Liberation key for the license</returns>
+    ''' <remarks></remarks>
     Private Function IALUGenerator_GenKey(ByRef Lic As ActiveLock3_6NET.ProductLicense, ByVal InstCode As String, Optional ByVal RegisteredLevel As String = "0") As String Implements _IALUGenerator.GenKey
         ' Take request code and decrypt it.
         Dim strReq As String
@@ -343,6 +403,13 @@ RetrieveProductsError:
     ' Purpose: Retrieves lock string and user info from the request string
     ' Remarks: None
     '===============================================================================
+    ''' <summary>
+    ''' Retrieves lock string and user info from the request string
+    ''' </summary>
+    ''' <param name="strReq">strLock combined with user name.</param>
+    ''' <param name="strLock">Generated request code to Lock</param>
+    ''' <param name="strUser">User name</param>
+    ''' <remarks></remarks>
     Private Sub GetLockAndUserFromInstallCode(ByVal strReq As String, ByRef strLock As String, ByRef strUser As String)
         Dim Index, i As Integer
         Index = 0 : i = 1

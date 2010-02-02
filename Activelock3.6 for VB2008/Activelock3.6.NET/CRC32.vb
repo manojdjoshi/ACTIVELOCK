@@ -47,10 +47,28 @@ Option Explicit On
 ' *
 #End Region
 
+''' <summary>
+''' 
+''' </summary>
+''' <remarks></remarks>
 Public Class CRC32
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private crc32Table() As Integer
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Const BUFFER_SIZE As Integer = 1024
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="stream"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Function GetCrc32(ByRef stream As System.IO.Stream) As Integer
 
         Dim crc32Result As Integer
@@ -76,6 +94,10 @@ Public Class CRC32
 
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Sub New()
         ' This is the official polynomial used by CRC32 in PKZip.
         ' Often the polynomial is shown reversed (04C11DB7).

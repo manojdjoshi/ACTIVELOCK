@@ -42,34 +42,116 @@ Imports System
 ' *
 #End Region
 
+''' <summary>
+''' 
+''' </summary>
+''' <remarks></remarks>
 Public Class FingerPrint
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private m_CpuID As String = ""
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private m_BiosID As String = ""
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private m_DiskID As String = ""
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private m_BaseID As String = ""
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private m_VideoID As String = ""
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private m_MacID As String = ""
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private m_UseCpuID As Boolean = True
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private m_UseBiosID As Boolean = True
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private m_UseDiskID As Boolean = True
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private m_UseBaseID As Boolean = True
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private m_UseVideoID As Boolean = True
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private m_UseMacID As Boolean = True
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private m_ReturnLength As Long = 8
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private m_TotalLength As Long = 8
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="Text"></param>
+    ''' <remarks></remarks>
     Public Event StartingWith(ByVal Text As String)
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="Text"></param>
+    ''' <remarks></remarks>
     Public Event DoneWith(ByVal Text As String)
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public ReadOnly Property TotalLength() As Long
         Get
             Return m_TotalLength
         End Get
     End Property
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property ReturnLength() As Long
         Get
             Return m_ReturnLength
@@ -80,6 +162,12 @@ Public Class FingerPrint
         End Set
     End Property
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property UseCpuID() As Boolean
         Get
             Return m_UseCpuID
@@ -89,6 +177,12 @@ Public Class FingerPrint
         End Set
     End Property
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property UseBiosID() As Boolean
         Get
             Return m_UseBiosID
@@ -98,6 +192,12 @@ Public Class FingerPrint
         End Set
     End Property
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property UseDiskID() As Boolean
         Get
             Return m_UseDiskID
@@ -107,6 +207,12 @@ Public Class FingerPrint
         End Set
     End Property
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property UseBaseID() As Boolean
         Get
             Return m_UseBaseID
@@ -116,6 +222,12 @@ Public Class FingerPrint
         End Set
     End Property
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property UseVideoID() As Boolean
         Get
             Return m_UseVideoID
@@ -125,6 +237,12 @@ Public Class FingerPrint
         End Set
     End Property
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Property UseMacID() As Boolean
         Get
             Return m_UseMacID
@@ -134,6 +252,12 @@ Public Class FingerPrint
         End Set
     End Property
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public ReadOnly Property Value() As String
         Get
             RaiseEvent StartingWith("All")
@@ -157,6 +281,14 @@ Public Class FingerPrint
         End Get
     End Property
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="wmiClass"></param>
+    ''' <param name="wmiProperty"></param>
+    ''' <param name="wmiMustBeTrue"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Function Identifier(ByVal wmiClass As String, ByVal wmiProperty As String, ByVal wmiMustBeTrue As String) As String
         'Return a hardware identifier
 
@@ -182,6 +314,13 @@ Public Class FingerPrint
         Return Result
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="wmiClass"></param>
+    ''' <param name="wmiProperty"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Function Identifier(ByVal wmiClass As String, ByVal wmiProperty As String) As String
         'Return a hardware identifier
 
@@ -205,6 +344,11 @@ Public Class FingerPrint
         Return Result
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Function CpuID() As String
         RaiseEvent StartingWith("CpuID")
 
@@ -234,6 +378,11 @@ Public Class FingerPrint
         RaiseEvent DoneWith("CpuID")
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Function BiosID() As String
         RaiseEvent StartingWith("BiosID")
 
@@ -249,6 +398,11 @@ Public Class FingerPrint
         RaiseEvent DoneWith("BiosID")
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Function DiskID() As String
         RaiseEvent StartingWith("DiskID")
 
@@ -262,6 +416,11 @@ Public Class FingerPrint
         RaiseEvent DoneWith("CpuID")
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Function BaseID() As String
         RaiseEvent StartingWith("BaseID")
 
@@ -275,6 +434,11 @@ Public Class FingerPrint
         RaiseEvent DoneWith("BaseID")
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Function VideoID() As String
         RaiseEvent StartingWith("VideoID")
 
@@ -286,6 +450,11 @@ Public Class FingerPrint
         RaiseEvent DoneWith("VideoID")
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Function MacID() As String
         RaiseEvent StartingWith("MacID")
 
@@ -296,6 +465,12 @@ Public Class FingerPrint
         RaiseEvent StartingWith("MacID")
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="Text"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Function Pack(ByVal Text As String) As String
         RaiseEvent StartingWith("Packing")
 

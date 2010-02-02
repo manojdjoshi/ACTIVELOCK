@@ -46,23 +46,69 @@ Imports System.IO
 ' *
 #End Region
 
+''' <summary>
+''' 
+''' </summary>
+''' <remarks></remarks>
 Friend NotInheritable Class EncryptionRoutines
 
 #Region " Private Instance Members "
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private bKey() As Byte
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private bIV() As Byte
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private bInitialised As Boolean = False
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private rijM As RijndaelManaged = Nothing
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private headerString As String = "CRYPTOR"
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private headerBytes(7) As Byte
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Private bCancel As Boolean = False
 #End Region
 #Region " Public Events And Enums "
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="prog"></param>
+    ''' <remarks></remarks>
     Public Event Progress(ByVal prog As Integer)
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="retType"></param>
+    ''' <remarks></remarks>
     Public Event Finished(ByVal retType As ReturnType)
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Enum ReturnType As Integer
         Well = 0
         Badly = 1
@@ -70,10 +116,21 @@ Friend NotInheritable Class EncryptionRoutines
     End Enum
 #End Region
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="strSource"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Function GenerateHash(ByVal strSource As String) As String
         Return System.Convert.ToBase64String(New SHA384Managed().ComputeHash(New UnicodeEncoding().GetBytes(strSource)))
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="sPWH"></param>
+    ''' <remarks></remarks>
     Public Sub Initialise(ByVal sPWH As String)
         'initialise rijM
         rijM = New RijndaelManaged
@@ -98,11 +155,23 @@ Friend NotInheritable Class EncryptionRoutines
         bInitialised = True
     End Sub
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Sub CancelTransform()
         If Not bInitialised Then Return
         bCancel = True
     End Sub
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="sInFile"></param>
+    ''' <param name="sOutFile"></param>
+    ''' <param name="encrypt"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Function TransformFile(ByVal sInFile As String, ByVal sOutFile As String, Optional ByVal encrypt As Boolean = True) As Boolean
         'make sure that all the initialisation has been completed:
         If Not bInitialised Then RaiseEvent Finished(ReturnType.Badly) : Return False
@@ -200,10 +269,22 @@ Friend NotInheritable Class EncryptionRoutines
         bCancel = False
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="sString"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Function ConvertStringToBytes(ByVal sString As String) As Byte()
         Return New UnicodeEncoding().GetBytes(sString)
     End Function
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="bytes"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Function ConvertBytesToString(ByVal bytes() As Byte) As String
         Return New UnicodeEncoding().GetString(bytes)
     End Function
