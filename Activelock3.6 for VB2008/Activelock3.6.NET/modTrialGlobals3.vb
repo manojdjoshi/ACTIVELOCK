@@ -50,6 +50,10 @@ Imports Microsoft.VisualBasic.ControlChars
 ' *
 #End Region
 
+''' <summary>
+''' This module is used by the Trial Period/Runs feature
+''' </summary>
+''' <remarks>Documentation in progress...</remarks>
 Module modTrial
 
     '===============================================================================
@@ -91,6 +95,12 @@ Module modTrial
     Const KEY_ALL_CLASSES As Integer = &HF0063
 
     Const ERROR_SUCCESS As Short = 0
+    ''' <summary>
+    ''' This function returns the length in bytes (ANSI version) or WCHAR values (Unicode version) of the specified string (not including the terminating null character).
+    ''' </summary>
+    ''' <param name="lpString">[in] Pointer to a null-terminated string.</param>
+    ''' <returns>The return value specifies the length of the string, in TCHAR values. This refers to bytes for ANSI versions of the function or WCHAR values for Unicode versions. If lpString is NULL, the return value is 0.</returns>
+    ''' <remarks>For security warning see http://msdn.microsoft.com/en-us/library/ms647492(VS.85).aspx </remarks>
     Public Declare Function lstrlen Lib "kernel32" Alias "lstrlenA" (ByVal lpString As String) As Integer
 
     ' Windows Registry API calls
@@ -127,15 +137,55 @@ Module modTrial
     End Structure
 
     Private Structure WIN32_FIND_DATA
+        ''' <summary>
+        ''' File attributes
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim lngFileAttributes As Integer ' File attributes
+        ''' <summary>
+        ''' Creation time
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim ftCreationTime As FILETIME ' Creation time
+        ''' <summary>
+        ''' Last access time
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim ftLastAccessTime As FILETIME ' Last access time
+        ''' <summary>
+        ''' Last modified time
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim ftLastWriteTime As FILETIME ' Last modified time
+        ''' <summary>
+        ''' Size (high word)
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim lngFileSizeHigh As Integer ' Size (high word)
+        ''' <summary>
+        ''' Size (low word)
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim lngFileSizeLow As Integer ' Size (low word)
+        ''' <summary>
+        ''' reserved
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim lngReserved0 As Integer ' reserved
+        ''' <summary>
+        ''' reserved
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim lngReserved1 As Integer ' reserved
+        ''' <summary>
+        ''' File name
+        ''' </summary>
+        ''' <remarks></remarks>
         <VBFixedString(MAX_PATH), System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.ByValTStr, SizeConst:=MAX_PATH)> Public strFilename As String ' File name
+        ''' <summary>
+        ''' 8.3 name
+        ''' </summary>
+        ''' <remarks></remarks>
         <VBFixedString(14), System.Runtime.InteropServices.MarshalAs(System.Runtime.InteropServices.UnmanagedType.ByValTStr, SizeConst:=14)> Public strAlternate As String ' 8.3 name
     End Structure
 

@@ -265,10 +265,56 @@ Module modActiveLock
     Private Declare Function SHGetSpecialFolderPath Lib "SHELL32.DLL" Alias "SHGetSpecialFolderPathA" (ByVal hWnd As IntPtr, ByVal lpszPath As String, ByVal nFolder As Integer, ByVal fCreate As Boolean) As Boolean
 
     ' Related with system32 directory name under 64-bit systems
+    ''' <summary>
+    ''' Retrieves the address of an exported function or variable from the specified dynamic-link library (DLL).
+    ''' </summary>
+    ''' <param name="hModule">[in] A handle to the DLL module that contains the function or variable. The LoadLibrary, LoadLibraryEx, or GetModuleHandle function returns this handle. 
+    ''' <para>The GetProcAddress function does not retrieve addresses from modules that were loaded using the LOAD_LIBRARY_AS_DATAFILE flag. For more information, see LoadLibraryEx.</para>
+    ''' </param>
+    ''' <param name="lpProcName">[in] The function or variable name, or the function's ordinal value. If this parameter is an ordinal value, it must be in the low-order word; the high-order word must be zero</param>
+    ''' <returns>If the function succeeds, the return value is the address of the exported function or variable.
+    ''' <para>If the function fails, the return value is NULL. To get extended error information, call GetLastError</para>
+    ''' </returns>
+    ''' <remarks>see http://msdn.microsoft.com/en-us/library/ms683212(VS.85).aspx for more information</remarks>
     Private Declare Function GetProcAddress Lib "kernel32" (ByVal hModule As Integer, ByVal lpProcName As String) As Integer
+    ''' <summary>
+    ''' Retrieves a module handle for the specified module. The module must have been loaded by the calling process.
+    ''' <para>To avoid the race conditions described in the Remarks section, use the GetModuleHandleEx function.</para>
+    ''' </summary>
+    ''' <param name="lpModuleName">[in, optional] see http://msdn.microsoft.com/en-us/library/ms683199(VS.85).aspx for more information</param>
+    ''' <returns>If the function succeeds, the return value is a handle to the specified module.
+    ''' <para>If the function fails, the return value is NULL. To get extended error information, call GetLastError</para>
+    ''' </returns>
+    ''' <remarks>see http://msdn.microsoft.com/en-us/library/ms683199(VS.85).aspx for more information</remarks>
     Private Declare Function GetModuleHandle Lib "kernel32" Alias "GetModuleHandleA" (ByVal lpModuleName As String) As Integer
+    ''' <summary>
+    ''' Retrieves a pseudo handle for the current process.
+    ''' </summary>
+    ''' <returns>The return value is a pseudo handle to the current process.</returns>
+    ''' <remarks>see http://msdn.microsoft.com/en-us/library/ms683179(VS.85).aspx for more information</remarks>
     Private Declare Function GetCurrentProcess Lib "kernel32" () As Integer
+    ''' <summary>
+    ''' Determines whether the specified process is running under WOW64.
+    ''' </summary>
+    ''' <param name="hProcess">[in] A handle to the process. The handle must have the PROCESS_QUERY_INFORMATION or PROCESS_QUERY_LIMITED_INFORMATION access right. For more information, see Process Security and Access Rights.
+    ''' <para>Windows Server 2003 and Windows XP:  The handle must have the PROCESS_QUERY_INFORMATION access right.</para>
+    ''' </param>
+    ''' <param name="Wow64Process">[out] A pointer to a value that is set to TRUE if the process is running under WOW64. If the process is running under 32-bit Windows, the value is set to FALSE. If the process is a 64-bit application running under 64-bit Windows, the value is also set to FALSE</param>
+    ''' <returns>If the function succeeds, the return value is a nonzero value.
+    ''' If the function fails, the return value is zero. To get extended error information, call GetLastError.
+    ''' </returns>
+    ''' <remarks>see http://msdn.microsoft.com/en-us/library/ms684139(VS.85).aspx for more information</remarks>
     Private Declare Function IsWow64Process Lib "kernel32" (ByVal hProcess As Integer, ByRef Wow64Process As Integer) As Integer
+    ''' <summary>
+    ''' Retrieves the path of the system directory used by WOW64. This directory is not present on 32-bit Windows.
+    ''' </summary>
+    ''' <param name="lpBuffer">[out] A pointer to the buffer to receive the path. This path does not end with a backslash.</param>
+    ''' <param name="uSize">[in] The maximum size of the buffer, in TCHARs.</param>
+    ''' <returns>If the function succeeds, the return value is the length, in TCHARs, of the string copied to the buffer, not including the terminating null character. If the length is greater than the size of the buffer, the return value is the size of the buffer required to hold the path.
+    ''' <para>If the function fails, the return value is zero. To get extended error information, call GetLastError.</para>
+    ''' <para>On 32-bit Windows, the function always fails, and the extended error is set to ERROR_CALL_NOT_IMPLEMENTED.</para>
+    ''' </returns>
+    ''' <remarks>see http://msdn.microsoft.com/en-us/library/ms724405(VS.85).aspx for more information</remarks>
     Private Declare Function GetSystemWow64Directory Lib "kernel32" Alias "GetSystemWow64DirectoryA" (ByVal lpBuffer As String, ByVal uSize As Integer) As Integer
 
     ''' <summary>
@@ -592,8 +638,32 @@ Module modActiveLock
 #End Region
 
     ' The following constants and declares are used to Get/Set Locale Date format
+    ''' <summary>
+    ''' Retrieves information about a locale specified by identifier
+    ''' <para>Note: For interoperability reasons, the application should prefer the GetLocaleInfoEx function to GetLocaleInfo because Microsoft is migrating toward the use of locale names instead of locale identifiers for new locales. Any application that runs only on Windows Vista and later should use GetLocaleInfoEx.</para>
+    ''' </summary>
+    ''' <param name="Locale"></param>
+    ''' <param name="LCType"></param>
+    ''' <param name="lpLCData"></param>
+    ''' <param name="cchData"></param>
+    ''' <returns></returns>
+    ''' <remarks>see http://msdn.microsoft.com/en-us/library/dd318101(VS.85).aspx for more information</remarks>
     Private Declare Function GetLocaleInfo Lib "kernel32" Alias "GetLocaleInfoA" (ByVal Locale As Integer, ByVal LCType As Integer, ByVal lpLCData As String, ByVal cchData As Integer) As Integer
+    ''' <summary>
+    ''' Sets an item of information in the user override portion of the current locale. This function does not set the system defaults.
+    ''' <para>Caution  Because this function modifies values for all applications, it should only be called by the regional and language options functionality of Control Panel, or a similar utility. If making an international change to system parameters, the calling application must broadcast the WM_SETTINGCHANGE message to avoid causing instabilities in other applications.</para>
+    ''' </summary>
+    ''' <param name="Locale"></param>
+    ''' <param name="LCType"></param>
+    ''' <param name="lpLCData"></param>
+    ''' <returns></returns>
+    ''' <remarks>see http://msdn.microsoft.com/en-us/library/dd374049(VS.85).aspx for more information</remarks>
     Private Declare Function SetLocaleInfo Lib "kernel32" Alias "SetLocaleInfoA" (ByVal Locale As Integer, ByVal LCType As Integer, ByVal lpLCData As String) As Boolean
+    ''' <summary>
+    ''' see http://msdn.microsoft.com/en-us/library/dd318135(VS.85).aspx for more information
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Declare Function GetUserDefaultLCID Lib "kernel32" () As Short
     Const LOCALE_SSHORTDATE As Short = &H1FS
     Public current_culture As System.Globalization.CultureInfo

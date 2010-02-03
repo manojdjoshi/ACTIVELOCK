@@ -51,6 +51,10 @@ Imports System.Security
 ' *
 #End Region
 
+''' <summary>
+''' Gets all the hardware signatures of the current machine
+''' </summary>
+''' <remarks></remarks>
 Module modHardware
 
     '===============================================================================
@@ -65,11 +69,84 @@ Module modHardware
     '===============================================================================
 
     ' ****** SMART DECLARATIONS ******
+    ''' <summary>
+    ''' Retrieves information about the current operating system.
+    ''' </summary>
+    ''' <param name="LpVersionInformation">[in, out] An OSVERSIONINFO or OSVERSIONINFOEX structure that receives the operating system information.
+    ''' <para>Before calling the GetVersionEx function, set the dwOSVersionInfoSize member of the structure as appropriate to indicate which data structure is being passed to this function.</para>
+    ''' </param>
+    ''' <returns>If the function succeeds, the return value is a nonzero value.
+    ''' <para>If the function fails, the return value is zero. To get extended error information, call GetLastError. The function fails if you specify an invalid value for the dwOSVersionInfoSize member of the OSVERSIONINFO or OSVERSIONINFOEX structure.</para>
+    ''' </returns>
+    ''' <remarks>see http://msdn.microsoft.com/en-us/library/ms724451(VS.85).aspx for more information</remarks>
     Private Declare Function GetVersionEx Lib "kernel32" Alias "GetVersionExA" (ByRef LpVersionInformation As OSVERSIONINFO) As Integer
+    ''' <summary>
+    ''' Creates or opens a file or I/O device. The most commonly used I/O devices are as follows: file, file stream, directory, physical disk, volume, console buffer, tape drive, communications resource, mailslot, and pipe. The function returns a handle that can be used to access the file or device for various types of I/O depending on the file or device and the flags and attributes specified.
+    ''' <para>To perform this operation as a transacted operation, which results in a handle that can be used for transacted I/O, use the CreateFileTransacted function</para>
+    ''' </summary>
+    ''' <param name="lpFileName"></param>
+    ''' <param name="dwDesiredAccess"></param>
+    ''' <param name="dwShareMode"></param>
+    ''' <param name="lpSecurityAttributes"></param>
+    ''' <param name="dwCreationDisposition"></param>
+    ''' <param name="dwFlagsAndAttributes"></param>
+    ''' <param name="hTemplateFile"></param>
+    ''' <returns></returns>
+    ''' <remarks>see http://msdn.microsoft.com/en-us/library/aa363858(VS.85).aspx for more information</remarks>
     Private Declare Function CreateFile Lib "kernel32" Alias "CreateFileA" (ByVal lpFileName As String, ByVal dwDesiredAccess As Integer, ByVal dwShareMode As Integer, ByVal lpSecurityAttributes As Integer, ByVal dwCreationDisposition As Integer, ByVal dwFlagsAndAttributes As Integer, ByVal hTemplateFile As Integer) As Integer
+    ''' <summary>
+    ''' Closes an open object handle.
+    ''' </summary>
+    ''' <param name="hObject">[in] A valid handle to an open object.</param>
+    ''' <returns>If the function succeeds, the return value is nonzero.
+    ''' <para>If the function fails, the return value is zero. To get extended error information, call GetLastError.</para>
+    ''' <para>If the application is running under a debugger, the function will throw an exception if it receives either a handle value that is not valid or a pseudo-handle value. This can happen if you close a handle twice, or if you call CloseHandle on a handle returned by the FindFirstFile function instead of calling the FindClose function.</para>
+    ''' </returns>
+    ''' <remarks>see http://msdn.microsoft.com/en-us/library/ms724211(VS.85).aspx for more information</remarks>
     Private Declare Function CloseHandle Lib "kernel32" (ByVal hObject As Integer) As Integer
+    ''' <summary>
+    ''' Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.
+    ''' </summary>
+    ''' <param name="hDevice">[in] A handle to the device on which the operation is to be performed. The device is typically a volume, directory, file, or stream. To retrieve a device handle, use the CreateFile function. For more information, see Remarks.</param>
+    ''' <param name="dwIoControlCode">[in] The control code for the operation. This value identifies the specific operation to be performed and the type of device on which to perform it. 
+    ''' <para>For a list of the control codes, see Remarks. The documentation for each control code provides usage details for the lpInBuffer, nInBufferSize, lpOutBuffer, and nOutBufferSize parameters.</para>
+    ''' </param>
+    ''' <param name="lpInBuffer">[in, optional] A pointer to the input buffer that contains the data required to perform the operation. The format of this data depends on the value of the dwIoControlCode parameter. 
+    ''' <para>This parameter can be NULL if dwIoControlCode specifies an operation that does not require input data.</para>
+    ''' </param>
+    ''' <param name="nInBufferSize">[in] The size of the input buffer, in bytes.</param>
+    ''' <param name="lpOutBuffer">[out, optional] A pointer to the output buffer that is to receive the data returned by the operation. The format of this data depends on the value of the dwIoControlCode parameter. 
+    ''' <para>This parameter can be NULL if dwIoControlCode specifies an operation that does not return data.</para>
+    ''' </param>
+    ''' <param name="nOutBufferSize">[in] The size of the output buffer, in bytes.</param>
+    ''' <param name="lpBytesReturned">see http://msdn.microsoft.com/en-us/library/aa363216(VS.85).aspx for more information</param>
+    ''' <param name="lpOverlapped">see http://msdn.microsoft.com/en-us/library/aa363216(VS.85).aspx for more information</param>
+    ''' <returns>If the operation completes successfully, the return value is nonzero.
+    ''' <para>If the operation fails or is pending, the return value is zero. To get extended error information, call GetLastError.</para>
+    ''' </returns>
+    ''' <remarks>see http://msdn.microsoft.com/en-us/library/aa363216(VS.85).aspx for more information</remarks>
     Private Declare Function DeviceIoControl Lib "kernel32" (ByVal hDevice As Integer, ByVal dwIoControlCode As Integer, ByRef lpInBuffer As SENDCMDINPARAMS, ByVal nInBufferSize As Integer, ByRef lpOutBuffer As Integer, ByVal nOutBufferSize As Integer, ByRef lpBytesReturned As Integer, ByVal lpOverlapped As Integer) As Integer
+    ''' <summary>
+    ''' Copies a block of memory from one location to another.
+    ''' </summary>
+    ''' <param name="Destination">[in] A pointer to the starting address of the copied block's destination.</param>
+    ''' <param name="Source">[in] A pointer to the starting address of the block of memory to copy.</param>
+    ''' <param name="Length">[in] The size of the block of memory to copy, in bytes.</param>
+    ''' <remarks>see http://msdn.microsoft.com/en-us/library/aa366535%28VS.85%29.aspx for more information</remarks>
     Public Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (ByRef Destination As Integer, ByRef Source As Integer, ByVal Length As Integer)
+    ''' <summary>
+    ''' Creates or opens a file or I/O device.
+    ''' <para>see http://msdn.microsoft.com/en-us/library/aa363858(VS.85).aspx for more information</para>
+    ''' </summary>
+    ''' <param name="lpFileName"></param>
+    ''' <param name="dwDesiredAccess"></param>
+    ''' <param name="dwShareMode"></param>
+    ''' <param name="lpSecurityAttributes"></param>
+    ''' <param name="dwCreationDisposition"></param>
+    ''' <param name="dwFlagsAndAttributes"></param>
+    ''' <param name="hTemplateFile"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Public Declare Unicode Function CreateFile2 Lib "kernel32" Alias "CreateFileW" (ByVal lpFileName As String, ByVal dwDesiredAccess As Integer, ByVal dwShareMode As Integer, ByVal lpSecurityAttributes As IntPtr, ByVal dwCreationDisposition As Integer, ByVal dwFlagsAndAttributes As Integer, ByVal hTemplateFile As IntPtr) As IntPtr
     Public Declare Unicode Function CloseHandle2 Lib "kernel32" Alias "CloseHandle" (ByVal hObject As IntPtr) As Boolean
     Public Declare Ansi Function DeviceIoControl2 Lib "kernel32" Alias "DeviceIoControl" (ByVal hDevice As IntPtr, ByVal dwIoControlCode As Integer, ByVal lpInBuffer As IntPtr, ByVal nInBufferSize As Integer, ByVal lpOutBuffer As IntPtr, ByVal nOutBufferSize As Integer, ByRef lpBytesReturned As Integer, ByVal lpOverlapped As IntPtr) As Boolean
@@ -165,12 +242,40 @@ Module modHardware
 
     'GETVERSIONOUTPARAMS contains the data returned
     'from the Get Driver Version function
+    ''' <summary>
+    ''' contains the data returned from the Get Driver Version function
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Structure GETVERSIONOUTPARAMS
+        ''' <summary>
+        ''' Binary driver version.
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim bVersion As Byte 'Binary driver version.
+        ''' <summary>
+        ''' Binary driver revision
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim bRevision As Byte 'Binary driver revision
+        ''' <summary>
+        ''' Not used
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim bReserved As Byte 'Not used
+        ''' <summary>
+        ''' Bit map of IDE devices
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim bIDEDeviceMap As Byte 'Bit map of IDE devices
+        ''' <summary>
+        ''' Bit mask of driver capabilities
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim fCapabilities As Integer 'Bit mask of driver capabilities
+        ''' <summary>
+        ''' For future use
+        ''' </summary>
+        ''' <remarks></remarks>
         <VBFixedArray(3)> Dim dwReserved() As Integer 'For future use
         Public Sub Initialize()
             ReDim dwReserved(3)
@@ -178,25 +283,89 @@ Module modHardware
     End Structure
 
     'IDE registers
+    ''' <summary>
+    ''' IDE registers
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Structure IDEREGS
+        ''' <summary>
+        ''' Used for specifying SMART "commands"
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim bFeaturesReg As Byte 'Used for specifying SMART "commands"
+        ''' <summary>
+        ''' IDE sector count register
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim bSectorCountReg As Byte 'IDE sector count register
+        ''' <summary>
+        ''' IDE sector number register
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim bSectorNumberReg As Byte 'IDE sector number register
+        ''' <summary>
+        ''' IDE low order cylinder value
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim bCylLowReg As Byte 'IDE low order cylinder value
+        ''' <summary>
+        ''' IDE high order cylinder value
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim bCylHighReg As Byte 'IDE high order cylinder value
+        ''' <summary>
+        ''' IDE drive/head register
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim bDriveHeadReg As Byte 'IDE drive/head register
+        ''' <summary>
+        ''' Actual IDE command
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim bCommandReg As Byte 'Actual IDE command
+        ''' <summary>
+        ''' reserved for future use - must be zero
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim bReserved As Byte 'reserved for future use - must be zero
     End Structure
 
     'SENDCMDINPARAMS contains the input parameters for the
     'Send Command to Drive function
+    ''' <summary>
+    ''' contains the input parameters for the Send Command to Drive function
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Structure SENDCMDINPARAMS
+        ''' <summary>
+        ''' Buffer size in bytes
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim cBufferSize As Integer 'Buffer size in bytes
+        ''' <summary>
+        ''' Structure with drive register values.
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim irDriveRegs As IDEREGS 'Structure with drive register values.
+        ''' <summary>
+        ''' Physical drive number to send command to (0,1,2,3).
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim bDriveNumber As Byte 'Physical drive number to send command to (0,1,2,3).
+        ''' <summary>
+        ''' Bytes reserved
+        ''' </summary>
+        ''' <remarks></remarks>
         <VBFixedArray(2)> Dim bReserved() As Byte 'Bytes reserved
+        ''' <summary>
+        ''' DWORDS reserved
+        ''' </summary>
+        ''' <remarks></remarks>
         <VBFixedArray(3)> Dim dwReserved() As Integer 'DWORDS reserved
+        ''' <summary>
+        ''' Input buffer.
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim bBuffer() As Byte 'Input buffer.
         Public Sub Initialize()
             ReDim bReserved(2)
@@ -216,8 +385,20 @@ Module modHardware
     Private Const SMART_CYL_HI As Short = &HC2S
 
     'Status returned from driver
+    ''' <summary>
+    ''' Status returned from driver
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Structure DRIVERSTATUS
+        ''' <summary>
+        ''' Error code from driver, or 0 if no error
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim bDriverError As Byte 'Error code from driver, or 0 if no error
+        ''' <summary>
+        ''' Contents of IDE Error register
+        ''' </summary>
+        ''' <remarks></remarks>
         Dim bIDEStatus As Byte 'Contents of IDE Error register
         'Only valid when bDriverError is SMART_IDE_ERROR
         <VBFixedArray(1)> Dim bReserved() As Byte
@@ -291,6 +472,10 @@ Module modHardware
     Private Const SMART_RETURN_SMART_STATUS As Short = &HDAS
 
     'Status Flags Values
+    ''' <summary>
+    ''' Status Flags Values
+    ''' </summary>
+    ''' <remarks></remarks>
     Public Enum STATUS_FLAGS
         PRE_FAILURE_WARRANTY = &H1S
         ON_LINE_COLLECTION = &H2S
@@ -354,7 +539,27 @@ Module modHardware
             ReDim myBuffer(559)
         End Sub
     End Structure
+    ''' <summary>
+    ''' Fills a block of memory with zeros.
+    ''' <para>To avoid any undesired effects of optimizing compilers, use the SecureZeroMemory function.</para>
+    ''' </summary>
+    ''' <param name="dest">[in] A pointer to the starting address of the block of memory to fill with zeros.</param>
+    ''' <param name="numBytes">[in] The size of the block of memory to fill with zeros, in bytes.</param>
+    ''' <remarks>see http://msdn.microsoft.com/en-us/library/aa366920(VS.85).aspx for more information</remarks>
     Public Declare Sub ZeroMemory Lib "kernel32" Alias "RtlZeroMemory" (ByRef dest As Integer, ByVal numBytes As Integer)
+    ''' <summary>
+    ''' Sends a control code directly to a specified device driver, causing the corresponding device to perform the corresponding operation.
+    ''' </summary>
+    ''' <param name="hDevice"></param>
+    ''' <param name="dwIoControlCode"></param>
+    ''' <param name="lpInBuffer"></param>
+    ''' <param name="nInBufferSize"></param>
+    ''' <param name="lpOutBuffer"></param>
+    ''' <param name="nOutBufferSize"></param>
+    ''' <param name="lpBytesReturned"></param>
+    ''' <param name="lpOverlapped"></param>
+    ''' <returns></returns>
+    ''' <remarks>see http://msdn.microsoft.com/en-us/library/aa363216(VS.85).aspx for more information</remarks>
     Private Declare Function DeviceIoControl Lib "kernel32" (ByVal hDevice As Integer, ByVal dwIoControlCode As Integer, ByRef lpInBuffer As Object, ByVal nInBufferSize As Integer, ByRef lpOutBuffer As Object, ByVal nOutBufferSize As Integer, ByRef lpBytesReturned As Integer, ByRef lpOverlapped As Integer) As Integer
 
     ' ALCrypto Removal
@@ -450,6 +655,7 @@ Module modHardware
     End Structure
 
     'Structure NET_CONTROL_BLOCK may require marshalling attributes to be passed as an argument in this Declare statement
+
     Public Declare Function Netbios Lib "netapi32.dll" (ByRef pncb As NET_CONTROL_BLOCK) As Byte
     Public Declare Sub CopyMemory Lib "kernel32" Alias "RtlMoveMemory" (ByRef hpvDest As Object, ByVal hpvSource As Integer, ByVal cbCopy As Integer)
     Public Declare Function GetProcessHeap Lib "kernel32" () As Integer
@@ -464,6 +670,11 @@ Module modHardware
     '   String - Computer name
     ' Purpose: Gets the computer name on the network
     '===============================================================================
+    ''' <summary>
+    ''' Gets the computer name on the network
+    ''' </summary>
+    ''' <returns>Computer name</returns>
+    ''' <remarks></remarks>
     Public Function GetComputerName() As String
         On Error GoTo GetComputerNameError
         GetComputerName = System.Environment.ExpandEnvironmentVariables("%ComputerName%")
@@ -484,6 +695,12 @@ GetComputerNameError:
     ' Currently works on local drives, mapped drives, and shared drives.
     ' Remarks: TODO: Decide what to to about shared folders and RAID arrays
     '===============================================================================
+    ''' <summary>
+    ''' Function to return the serial number for a hard drive Currently works on local drives, mapped drives, and shared drives.
+    ''' </summary>
+    ''' <param name="path">String - Drive letter</param>
+    ''' <returns>The serial number for the drive alock is on, formatted as "xxxx-xxxx"</returns>
+    ''' <remarks>TODO: Decide what to to about shared folders and RAID arrays</remarks>
     Public Function HDSerial(ByRef path As String) As String
 
         Dim lngDummy2, lngReturn, lngDummy1, lngSerial As Integer
@@ -540,6 +757,11 @@ GetComputerNameError:
     '   Checks windir if it cant get a serial, then c:, then returns 0000-0000
     ' Remarks: I think that this is 99.999999897456284893% effective.
     '===============================================================================
+    ''' <summary>
+    ''' Function to return the serial number for a hard drive. Currently works on local drives, mapped drives, and shared drives. Checks windir if it cant get a serial, then c:, then returns 0000-0000
+    ''' </summary>
+    ''' <returns>The serial number for the drive alock is on, formatted as "xxxx-xxxx"</returns>
+    ''' <remarks>I think that this is 99.999999897456284893% effective.</remarks>
     Public Function GetHDSerial() As String
         Dim strSerial As String
 
@@ -572,6 +794,11 @@ GetHDSeriAlerror:
     ' Purpose: Function to return the HDD Firmware Serial Number (Actual Physical Serial Number)
     ' Remarks: None
     '===============================================================================
+    ''' <summary>
+    ''' Function to return the HDD Firmware Serial Number (Actual Physical Serial Number)
+    ''' </summary>
+    ''' <returns>HDD Firmware Serial Number</returns>
+    ''' <remarks></remarks>
     Function GetHDSerialFirmware() As String
         Dim jj As Short
         Dim drvNumber As Integer
@@ -650,6 +877,13 @@ GetHDSerialFirmwareError:
     ' Purpose: Strips all control characters (ASCII code < 32)
     ' Remarks: None
     '===============================================================================
+    ''' <summary>
+    ''' Strips all control characters (ASCII code &lt; 32)
+    ''' </summary>
+    ''' <param name="Source">String to be stripped off the control characters</param>
+    ''' <param name="KeepCRLF">If the second argument is True or omitted, CR-LF pairs are preserved</param>
+    ''' <returns>String stripped off the control characters</returns>
+    ''' <remarks></remarks>
     Function StripControlChars(ByRef Source As String, Optional ByRef KeepCRLF As Boolean = True) As String
         Dim Index As Integer
         Dim bytes() As Byte
@@ -808,6 +1042,12 @@ GetHDSerialFirmwareError:
     ' Purpose: Given the SMART drive handle, gets the version
     ' Remarks: None
     '===============================================================================
+    ''' <summary>
+    ''' Given the SMART drive handle, gets the version
+    ''' </summary>
+    ''' <param name="hDrive">SMART drive handle</param>
+    ''' <returns>True if successful</returns>
+    ''' <remarks></remarks>
     Private Function SmartGetVersion(ByVal hDrive As Integer) As Boolean
 
         Dim cbBytesReturned As Integer
@@ -826,6 +1066,12 @@ GetHDSerialFirmwareError:
     ' Purpose: Swaps byte arrays
     ' Remarks: None
     '===============================================================================
+    ''' <summary>
+    ''' Swaps byte arrays
+    ''' </summary>
+    ''' <param name="b">Input byte array</param>
+    ''' <returns>Swapped byte array</returns>
+    ''' <remarks>see code for more information</remarks>
     Private Function SwapBytes(ByRef b() As Byte) As Byte()
 
         'Note: VB4-32 and VB5 do not support the
@@ -874,6 +1120,11 @@ GetHDSerialFirmwareError:
     ' Purpose: Retrieves the MAC Address for the network controller installed, returning a formatted string
     ' Remarks: None
     '===============================================================================
+    ''' <summary>
+    ''' Retrieves the MAC Address for the network controller installed, returning a formatted string
+    ''' </summary>
+    ''' <returns>MAC address of the computer NIC</returns>
+    ''' <remarks></remarks>
     Public Function GetMACAddress() As String
 
         '' ******* METHOD 1 *******
@@ -1123,6 +1374,11 @@ GetMACAddressError:
     ' Purpose: Gets the Windows Serial Number
     ' Remarks: .NET way of doing things added
     '===============================================================================
+    ''' <summary>
+    ''' Gets the Windows Serial Number
+    ''' </summary>
+    ''' <returns>Windows serial number</returns>
+    ''' <remarks>.NET way of doing things added</remarks>
     Public Function GetWindowsSerial() As String
         Dim myReg As RegistryKey = Registry.LocalMachine
         Dim MyRegKey As RegistryKey
@@ -1139,6 +1395,11 @@ GetMACAddressError:
     ' Purpose: Gets the BIOS Serial Number
     ' Remarks: Uses the WMI
     '===============================================================================
+    ''' <summary>
+    ''' Gets the BIOS Serial Number
+    ''' </summary>
+    ''' <returns>BIOS serial number</returns>
+    ''' <remarks>Uses the WMI</remarks>
     Public Function GetBiosVersion() As String
         Dim BiosSet As Object
         Dim obj As Object
@@ -1166,6 +1427,11 @@ GetBiosVersionerror:
     ' Purpose: Gets the Motherboard Serial Number
     ' Remarks: Uses the WMI
     '===============================================================================
+    ''' <summary>
+    ''' Gets the Motherboard Serial Number
+    ''' </summary>
+    ''' <returns>Motherboard serial number</returns>
+    ''' <remarks>Uses the WMI</remarks>
     Public Function GetMotherboardSerial() As String
         Dim MotherboardSet As Object
         Dim obj As Object
@@ -1202,6 +1468,11 @@ GetMotherboardSeriAlerror:
     ' Purpose: Gets the IP address
     ' Remarks:
     '===============================================================================
+    ''' <summary>
+    ''' Gets the IP address
+    ''' </summary>
+    ''' <returns>IP address</returns>
+    ''' <remarks></remarks>
     Public Function GetIPaddress() As String
         On Error GoTo GetIPaddressError
         GetIPaddress = String.Empty

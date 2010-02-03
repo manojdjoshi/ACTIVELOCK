@@ -43,6 +43,10 @@ Option Explicit On
 ' *
 #End Region
 
+''' <summary>
+''' This module contains Base-64 encoding and decoding routines.
+''' </summary>
+''' <remarks></remarks>
 Module modBase64
 
     '===============================================================================
@@ -68,7 +72,13 @@ Module modBase64
 	'   String - Base64 encoded string
 	' Purpose: Return the Base64 encoded string
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Return the Base64 encoded string
+    ''' </summary>
+    ''' <param name="DecryptedText">The decrypted string</param>
+    ''' <returns>Base64 encoded string</returns>
+    ''' <remarks></remarks>
 	Public Function Base64_Encode(ByRef DecryptedText As String) As String
 
         Dim byt As Byte() = System.Text.Encoding.UTF8.GetBytes(DecryptedText)
@@ -106,6 +116,12 @@ Module modBase64
     ' Purpose: Return the Base64 decoded string
     ' Remarks: None
     '===============================================================================
+    ''' <summary>
+    ''' Return the Base64 decoded string
+    ''' </summary>
+    ''' <param name="a">The string to be decoded</param>
+    ''' <returns>Base64 decoded string</returns>
+    ''' <remarks></remarks>
     Public Function Base64_Decode(ByRef a As String) As String
 
         Try
@@ -148,6 +164,12 @@ Module modBase64
     ' Purpose: Used by the Base64_encode function
     ' Remarks: None
     '===============================================================================
+    ''' <summary>
+    ''' Used by the Base64_encode function
+    ''' </summary>
+    ''' <param name="w"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Function mimeencode(ByRef w As Short) As String
         If w >= 0 Then mimeencode = Mid(base64, w + 1, 1) Else mimeencode = ""
     End Function
@@ -161,6 +183,12 @@ Module modBase64
     ' Purpose: Used by the Base64_decode function
     ' Remarks: None
     '===============================================================================
+    ''' <summary>
+    ''' Used by the Base64_decode function
+    ''' </summary>
+    ''' <param name="a"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
     Private Function mimedecode(ByRef a As String) As Short
         If Len(a) = 0 Then mimedecode = -1 : Exit Function
         mimedecode = InStr(base64, a) - 1
