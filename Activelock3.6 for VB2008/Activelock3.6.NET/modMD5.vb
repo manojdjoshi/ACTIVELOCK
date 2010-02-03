@@ -46,6 +46,10 @@ Imports System.Security.Cryptography
 ' *
 #End Region
 
+''' <summary>
+''' MD5 Hashing Module
+''' </summary>
+''' <remarks></remarks>
 Module modMD5
 
     '===============================================================================
@@ -68,6 +72,12 @@ Module modMD5
     ' Purpose: MD5 Hash function
     ' Remarks: None
     '===============================================================================
+    ''' <summary>
+    ''' MD5 Hash function
+    ''' </summary>
+    ''' <param name="strMessage">String to be hashed</param>
+    ''' <returns>Hashed string</returns>
+    ''' <remarks></remarks>
 	Public Function Hash(ByRef strMessage As String) As String
         'Create an encoding object to ensure the encoding standard for the source text
         Dim Ue As New UnicodeEncoding
@@ -91,6 +101,12 @@ Module modMD5
     ' to hash strings; it matches the hash generated in the VB6 version
     ' therefore both .NET and VB6 versions generate the same serial number and key
     '===============================================================================
+    ''' <summary>
+    ''' MD5 Hash function
+    ''' </summary>
+    ''' <param name="strMessage">String to be hashed</param>
+    ''' <returns>Hashed string</returns>
+    ''' <remarks>This function is primarily used by the Short Key Function to hash strings; it matches the hash generated in the VB6 version therefore both .NET and VB6 versions generate the same serial number and key</remarks>
     Public Function ComputeHash(ByRef strMessage As String) As String
         Dim hashedDataBytes As Byte()
         Dim encoder As New UTF7Encoding

@@ -43,6 +43,10 @@ Option Explicit On
 ' *
 #End Region
 
+''' <summary>
+''' Facilitates Windows registry access
+''' </summary>
+''' <remarks></remarks>
 Module modRegistry
 
     '===============================================================================
@@ -139,7 +143,14 @@ Module modRegistry
 	'   Long - Return value from the RegDeleteKey function
 	' Purpose: Deletes a registry key
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Deletes a registry key
+    ''' </summary>
+    ''' <param name="lngKey">HKEY</param>
+    ''' <param name="SubKey">Sub key name</param>
+    ''' <returns>Return value from the RegDeleteKey function</returns>
+    ''' <remarks></remarks>
 	Public Function DeleteRegKey(ByRef lngKey As Integer, ByRef SubKey As String) As Integer
 		Dim lngRet As Integer
 		lngRet = RegDeleteKey(lngKey, SubKey)
@@ -155,7 +166,15 @@ Module modRegistry
 	'   Long - Return value from the RegDeleteValue function
 	' Purpose: Deletes a registry value
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Deletes a registry value
+    ''' </summary>
+    ''' <param name="lngKey">HKEY</param>
+    ''' <param name="SubKey">Sub key name</param>
+    ''' <param name="ValueName">Value name</param>
+    ''' <returns>Return value from the RegDeleteValue function</returns>
+    ''' <remarks></remarks>
 	Public Function DeleteRegValue(ByRef lngKey As Integer, ByRef SubKey As String, ByRef ValueName As String) As Integer
 		Dim lngRet As Integer
 		Dim lngKeyRet As Integer
@@ -177,7 +196,16 @@ Module modRegistry
 	' Output: Long
 	' Purpose: Writes a long key value in the registry
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Writes a long key value in the registry
+    ''' </summary>
+    ''' <param name="lngKey">HKEY</param>
+    ''' <param name="SubKey">Sub key name</param>
+    ''' <param name="DataName">Value name</param>
+    ''' <param name="DataValue">Key value</param>
+    ''' <returns>Long</returns>
+    ''' <remarks></remarks>
 	Public Function WriteRegLong(ByRef lngKey As Integer, ByRef SubKey As String, ByRef DataName As String, ByRef DataValue As Integer) As Integer
 		
 		Dim SEC As SECURITY_ATTRIBUTES
@@ -203,7 +231,16 @@ Module modRegistry
 	' Output: Long
 	' Purpose: Writes a string in the registry
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Writes a string in the registry
+    ''' </summary>
+    ''' <param name="lngKey">HKEY</param>
+    ''' <param name="SubKey">Sub key name</param>
+    ''' <param name="DataName">Value name</param>
+    ''' <param name="DataValue">Key value</param>
+    ''' <returns>Long</returns>
+    ''' <remarks></remarks>
 	Public Function WriteStringValue(ByRef lngKey As Integer, ByRef SubKey As String, ByRef DataName As String, ByRef DataValue As String) As Integer
 		
 		Dim SEC As SECURITY_ATTRIBUTES
@@ -229,7 +266,16 @@ Module modRegistry
 	' Output: None
 	' Purpose: Reads a key value from the registry
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Reads a key value from the registry
+    ''' </summary>
+    ''' <param name="lngKey">HKEY</param>
+    ''' <param name="SubKey">Sub key name</param>
+    ''' <param name="DataName">Value name</param>
+    ''' <param name="DefaultData">Default value to be returned</param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
 	Public Function ReadRegVal(ByRef lngKey As Integer, ByRef SubKey As String, ByRef DataName As String, ByRef DefaultData As Object) As Object
 		Dim lngKeyRet As Integer
 		Dim lngData As Integer
@@ -270,7 +316,15 @@ Module modRegistry
 	'   String - Sub key list of a given key (separated by commas)
 	' Purpose: Gets subkeys from a given key separated by commas
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Gets subkeys from a given key separated by commas
+    ''' </summary>
+    ''' <param name="strKey">Key name</param>
+    ''' <param name="SubKey">Sub key name</param>
+    ''' <param name="SubKeyCnt">Number of keys</param>
+    ''' <returns>Sub key list of a given key (separated by commas)</returns>
+    ''' <remarks></remarks>
 	Public Function GetSubKeys(ByRef strKey As String, ByRef SubKey As String, ByRef SubKeyCnt As Integer) As String
 		Dim strValues() As String
         Dim strTemp As String = String.Empty
@@ -311,7 +365,13 @@ Module modRegistry
 	'   String - Returned string free of nulls
 	' Purpose: Strips nulls in a given string
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Strips nulls in a given string
+    ''' </summary>
+    ''' <param name="s">Input string</param>
+    ''' <returns>Returned string free of nulls</returns>
+    ''' <remarks></remarks>
 	Function StripNulls(ByVal s As String) As String
 		Dim i As Short
 		i = InStr(s, Chr(0))
@@ -331,7 +391,15 @@ Module modRegistry
 	'   String - Parsed string
 	' Purpose: String parser
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' String parser
+    ''' </summary>
+    ''' <param name="strIn">Input string</param>
+    ''' <param name="intLoc">Character location</param>
+    ''' <param name="strDelimiter">String delimiter</param>
+    ''' <returns>Parsed string</returns>
+    ''' <remarks></remarks>
 	Public Function ParseString(ByRef strIn As String, ByRef intLoc As Short, ByRef strDelimiter As String) As String
 		Dim intPos As Short
 		Dim intStrt As Short
@@ -364,7 +432,17 @@ Module modRegistry
 	' Output: None
 	' Purpose: Saves a key in the registry. Calls the alSaveSettingReg sub.
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Saves a key in the registry. Calls the alSaveSettingReg sub.
+    ''' </summary>
+    ''' <param name="strRegHive"></param>
+    ''' <param name="strRegPath"></param>
+    ''' <param name="strAppname"></param>
+    ''' <param name="strSection"></param>
+    ''' <param name="strKey"></param>
+    ''' <param name="vData"></param>
+    ''' <remarks></remarks>
 	Public Sub alSaveSetting(ByRef strRegHive As String, ByRef strRegPath As String, ByRef strAppname As String, ByRef strSection As String, ByRef strKey As String, ByRef vData As Object)
 		alSaveSettingReg(strRegHive, strRegPath, strAppname, strSection, strKey, vData)
 	End Sub
@@ -381,7 +459,18 @@ Module modRegistry
 	' Output: Variant
 	' Purpose: Reads a key value from the registry. Calls the alGetSettingReg function to get a registry value
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Reads a key value from the registry. Calls the alGetSettingReg function to get a registry value
+    ''' </summary>
+    ''' <param name="strRegHive">Base registry class</param>
+    ''' <param name="strRegPath">Registry key path under "Software"</param>
+    ''' <param name="strAppname">Application name</param>
+    ''' <param name="strSection">Section name</param>
+    ''' <param name="strKey">Key name</param>
+    ''' <param name="vDefault">Key value</param>
+    ''' <returns>Variant</returns>
+    ''' <remarks></remarks>
 	Public Function alGetSetting(ByRef strRegHive As String, ByRef strRegPath As String, ByRef strAppname As String, ByRef strSection As String, ByRef strKey As String, ByRef vDefault As Object) As Object
         alGetSetting = alGetSettingReg(strRegHive, strRegPath, strAppname, strSection, strKey, vDefault)
 	End Function
@@ -397,7 +486,17 @@ Module modRegistry
 	' Output: None
 	' Purpose: Saves a key in the registry.
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Saves a key in the registry.
+    ''' </summary>
+    ''' <param name="strRegHive">Base registry class</param>
+    ''' <param name="strRegPath">Registry key path under "Software"</param>
+    ''' <param name="strAppname">Application name</param>
+    ''' <param name="strSection">Section name</param>
+    ''' <param name="strKey">Key name</param>
+    ''' <param name="vData">Key value</param>
+    ''' <remarks></remarks>
 	Public Sub alSaveSettingReg(ByRef strRegHive As String, ByRef strRegPath As String, ByRef strAppname As String, ByRef strSection As String, ByRef strKey As String, ByRef vData As Object)
 		Dim lRegistryBase As Integer
 		Select Case Left(UCase(strRegHive), 4)
@@ -423,7 +522,18 @@ Module modRegistry
 	'   Variant - Return value from the ReadRegVal function
 	' Purpose: Reads a key value from the registry
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Reads a key value from the registry
+    ''' </summary>
+    ''' <param name="strRegHive">Base registry class</param>
+    ''' <param name="strRegPath">Registry key path under "Software"</param>
+    ''' <param name="strAppname">Application name</param>
+    ''' <param name="strSection">Section name</param>
+    ''' <param name="strKey">Key name</param>
+    ''' <param name="vDefault">Key value</param>
+    ''' <returns>Variant - Return value from the ReadRegVal function</returns>
+    ''' <remarks></remarks>
 	Public Function alGetSettingReg(ByRef strRegHive As String, ByRef strRegPath As String, ByRef strAppname As String, ByRef strSection As String, ByRef strKey As String, ByRef vDefault As Object) As Object
 		Dim lRegistryBase As Integer
 		Select Case Left(UCase(strRegHive), 4)
@@ -444,7 +554,13 @@ Module modRegistry
 	' Output: None
 	' Purpose: Saves a key in the registry
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Saves a key in the registry
+    ''' </summary>
+    ''' <param name="hKey">HKEY</param>
+    ''' <param name="strPath">Key Name</param>
+    ''' <remarks></remarks>
 	Public Sub Savekey(ByRef hKey As Integer, ByRef strPath As String)
 		Dim keyhand, r As Integer
 		r = RegCreateKey(hKey, strPath, keyhand)
@@ -455,13 +571,21 @@ Module modRegistry
 	' Input:
 	'   ByRef hKey As Long - HKEY
 	'   ByRef strPath As String - Key Name
-	'   ByRef strValue As String - Value Name
+    '   ByRef strValue As String - Value Name
 	' Output:
 	'   String
 	' Purpose: Gets a string from the registry
 	' Remarks:  EXAMPLE:<br>
 	'   text1.text = getstring(HKEY_CURRENT_USER, "Software\VBW\Registry", "String")
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Gets a string from the registry
+    ''' </summary>
+    ''' <param name="hKey">HKEY</param>
+    ''' <param name="strPath">Key Name</param>
+    ''' <param name="strValue">Value Name</param>
+    ''' <returns>The key as a string.</returns>
+    ''' <remarks>see code for an example.</remarks>
 	Public Function GetString(ByRef hKey As Integer, ByRef strPath As String, ByRef strValue As String) As String
 		'EXAMPLE:
 		'
@@ -508,7 +632,16 @@ Module modRegistry
 	'   Variant - Registry value
 	' Purpose: Gets a key value from the registry
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Gets a key value from the registry
+    ''' </summary>
+    ''' <param name="hKey">HKEY</param>
+    ''' <param name="KeyName">Key Name</param>
+    ''' <param name="ValueName">Value Name</param>
+    ''' <param name="defaultValue">Variant - Default value to be returned if the value is missing</param>
+    ''' <returns>Variant - Registry value</returns>
+    ''' <remarks></remarks>
 	Public Function GetRegistryValue(ByVal hKey As Integer, ByVal KeyName As String, ByVal ValueName As String, Optional ByRef defaultValue As Object = Nothing) As Object
 		Dim handle As Integer
 		Dim resLong As Integer
@@ -583,6 +716,16 @@ Module modRegistry
     ' Purpose: Writes or Creates a Registry value
     ' Remarks: Use KeyName = "" for the default value
     '===============================================================================
+    ''' <summary>
+    ''' Writes or Creates a Registry value
+    ''' </summary>
+    ''' <param name="hKey">HKEY</param>
+    ''' <param name="KeyName">Key Name</param>
+    ''' <param name="ValueName">Value Name</param>
+    ''' <param name="Value">Key Value.
+    ''' <para>Value can be an integer value (REG_DWORD), a string (REG_SZ) or an array of binary (REG_BINARY). Raises an error otherwise.</para></param>
+    ''' <returns>True if successful</returns>
+    ''' <remarks>Use KeyName = "" for the default value</remarks>
     Public Function SetRegistryValue(ByVal hKey As Integer, ByVal KeyName As String, ByVal ValueName As String, ByRef Value As Object) As Boolean
         Const KEY_WRITE As Integer = &H20006 '((STANDARD_RIGHTS_WRITE Or KEY_SET_VALUE Or
         ' KEY_CREATE_SUB_KEY) And (Not SYNCHRONIZE))
@@ -630,11 +773,6 @@ Module modRegistry
         SetRegistryValue = (retVal = 0)
     End Function
 
-
-
-
-
-
     '===============================================================================
     ' Name: Function SaveString
     ' Input:
@@ -648,6 +786,15 @@ Module modRegistry
     ' Remarks:  EXAMPLE:<br>
     '   text1.text= savestring(HKEY_CURRENT_USER, "Software\VBW\Registry", "String", text1.text)
     '===============================================================================
+    ''' <summary>
+    ''' Saves a string in the registry
+    ''' </summary>
+    ''' <param name="hKey">HKEY</param>
+    ''' <param name="strPath">Key Name</param>
+    ''' <param name="strValue">Value Name</param>
+    ''' <param name="strdata">Key Value</param>
+    ''' <returns>Variant - Returns "Success" if successful</returns>
+    ''' <remarks>see code for an example</remarks>
     Public Function SaveString(ByRef hKey As Integer, ByRef strPath As String, ByRef strValue As String, ByRef strdata As String) As Boolean
         'EXAMPLE:
         '
@@ -668,8 +815,6 @@ Module modRegistry
 
     End Function
 
-
-
     '===============================================================================
     ' Name: Function Getdword
     ' Input:
@@ -682,6 +827,14 @@ Module modRegistry
     ' Remarks: EXAMPLE:<br>
     '   text1.text = getdword(HKEY_CURRENT_USER, "Software\VBW\Registry", "Dword")
     '===============================================================================
+    ''' <summary>
+    ''' Gets the DWORD of a key from the registry
+    ''' </summary>
+    ''' <param name="hKey">HKEY</param>
+    ''' <param name="strPath">Key Name</param>
+    ''' <param name="strValueName">Value Name</param>
+    ''' <returns>Variant - Returns the DWORD if successful</returns>
+    ''' <remarks>see code for an example</remarks>
     Function Getdword(ByVal hKey As Integer, ByVal strPath As String, ByVal strValueName As String) As Object
         'EXAMPLE:
         '
@@ -714,8 +867,6 @@ Module modRegistry
 
     End Function
 
-
-
     '===============================================================================
     ' Name: Function SaveDword
     ' Input:
@@ -735,6 +886,15 @@ Module modRegistry
     ' @param lData          Value
     ' @return               "Success" if success
     '
+    ''' <summary>
+    ''' Saves a DWORD in the registry
+    ''' </summary>
+    ''' <param name="hKey">HKEY</param>
+    ''' <param name="strPath">Key Name</param>
+    ''' <param name="strValueName">Value Name</param>
+    ''' <param name="lData">Key Value</param>
+    ''' <returns>Variant - Returns "Success" if successful</returns>
+    ''' <remarks>see code for an example</remarks>
     Function SaveDword(ByVal hKey As Integer, ByVal strPath As String, ByVal strValueName As String, ByVal lData As Integer) As Object
         'EXAMPLE"
         '
@@ -769,6 +929,13 @@ Module modRegistry
     ' Remarks: EXAMPLE:<br>
     '   Call DeleteKey(HKEY_CURRENT_USER, "Software\VBW")
     '===============================================================================
+    ''' <summary>
+    ''' Deletes a key in the registry
+    ''' </summary>
+    ''' <param name="hKey">HKEY</param>
+    ''' <param name="strKey">Key Name</param>
+    ''' <returns>Variant - Returns "Success" if successful</returns>
+    ''' <remarks>see code for an example</remarks>
     Public Function DeleteKey(ByVal hKey As Integer, ByVal strKey As String) As Boolean
         'EXAMPLE:
         '
@@ -795,6 +962,13 @@ Module modRegistry
     ' Purpose: Checks a given key in the registry
     ' Remarks: None
     '===============================================================================
+    ''' <summary>
+    ''' Checks a given key in the registry
+    ''' </summary>
+    ''' <param name="hKey">HKEY</param>
+    ''' <param name="KeyName">Key Name</param>
+    ''' <returns>True if the key exists</returns>
+    ''' <remarks></remarks>
     Public Function CheckRegistryKey(ByVal hKey As Integer, ByVal KeyName As String) As Boolean
         Dim handle As Integer
         ' Try to open the key
@@ -816,6 +990,13 @@ Module modRegistry
     ' Purpose: Creates a key in the registry
     ' Remarks: None
     '===============================================================================
+    ''' <summary>
+    ''' Creates a key in the registry
+    ''' </summary>
+    ''' <param name="hKey">HKEY</param>
+    ''' <param name="KeyName">Key Name</param>
+    ''' <returns>True if the key already exists, error if unable to create the key</returns>
+    ''' <remarks></remarks>
     Function CreateRegistryKey(ByVal hKey As Integer, ByVal KeyName As String) As Boolean
         Const REG_OPENED_EXISTING_KEY As Short = &H2S
         Dim handle, disposition As Integer
@@ -843,7 +1024,15 @@ Module modRegistry
 	' Purpose: Deletes a key value in the registry
 	' Remarks: EXAMPLE:<br>
 	'   Call DeleteValue(HKEY_CURRENT_USER, "Software\VBW\Registry", "Dword")
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' Deletes a key value in the registry
+    ''' </summary>
+    ''' <param name="hKey">HKEY</param>
+    ''' <param name="strPath">Key Name</param>
+    ''' <param name="strValue">Value Name</param>
+    ''' <returns>Variant - Returns "Success" if successful</returns>
+    ''' <remarks>see code for an example.</remarks>
 	Public Function DeleteValue(ByVal hKey As Integer, ByVal strPath As String, ByVal strValue As String) As Object
 		'EXAMPLE:
 		'

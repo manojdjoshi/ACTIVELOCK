@@ -43,6 +43,10 @@ Option Explicit On
 ' *
 #End Region
 
+''' <summary>
+''' SHA1 Encryption Module
+''' </summary>
+''' <remarks></remarks>
 Module modSHA1
 
     '===============================================================================
@@ -66,6 +70,13 @@ Module modSHA1
     ' Purpose: [INTERNAL] SHA function
     ' Remarks: None
     '===============================================================================
+    ''' <summary>
+    ''' [INTERNAL] SHA function
+    ''' </summary>
+    ''' <param name="value1"></param>
+    ''' <param name="value2"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
 	Function BigAA1Add(ByVal value1 As String, ByVal value2 As String) As String
         Dim valueans As String = String.Empty
         Dim loopit, tempnum As Short
@@ -98,7 +109,14 @@ Module modSHA1
 	' Output: String
 	' Purpose: [INTERNAL] SHA function
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' [INTERNAL] SHA function
+    ''' </summary>
+    ''' <param name="value1"></param>
+    ''' <param name="value2"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
 	Function BigAA1AND(ByVal value1 As String, ByVal value2 As String) As String
         Dim valueans As String = String.Empty
         Dim loopit, tempnum As Short
@@ -125,7 +143,14 @@ Module modSHA1
 	' Output: String
 	' Purpose: [INTERNAL] SHA function
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' [INTERNAL] SHA function
+    ''' </summary>
+    ''' <param name="value1"></param>
+    ''' <param name="value2"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
 	Function BigAA1Mod32Add(ByVal value1 As String, ByVal value2 As String) As String
 		BigAA1Mod32Add = Right(BigAA1Add(value1, value2), 8)
 	End Function
@@ -136,7 +161,13 @@ Module modSHA1
 	' Output: String
 	' Purpose: [INTERNAL] SHA function
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' [INTERNAL] SHA function
+    ''' </summary>
+    ''' <param name="value1"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
 	Function BigAA1NOT(ByVal value1 As String) As String
         Dim valueans As String = String.Empty
         Dim loopit As Short
@@ -158,7 +189,14 @@ Module modSHA1
 	' Output: String
 	' Purpose: [INTERNAL] SHA function
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' [INTERNAL] SHA function
+    ''' </summary>
+    ''' <param name="value1"></param>
+    ''' <param name="value2"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
 	Function BigAA1OR(ByVal value1 As String, ByVal value2 As String) As String
         Dim valueans As String = Nothing
 		Dim loopit, tempnum As Short
@@ -187,7 +225,14 @@ Module modSHA1
 	' Output: String
 	' Purpose: [INTERNAL] SHA function
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' [INTERNAL] SHA function
+    ''' </summary>
+    ''' <param name="value1"></param>
+    ''' <param name="rots"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
 	Function BigAA1RotLeft(ByVal value1 As String, ByVal rots As Short) As String
 		Dim tempstr As String
 		Dim loopinner, loopit, tempnum As Short
@@ -238,7 +283,14 @@ Module modSHA1
 	' Output: String
 	' Purpose: [INTERNAL] SHA function
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' [INTERNAL] SHA function
+    ''' </summary>
+    ''' <param name="value1"></param>
+    ''' <param name="value2"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
 	Function BigAA1XOR(ByVal value1 As String, ByVal value2 As String) As String
         Dim valueans As String = String.Empty
         Dim loopit, tempnum As Short
@@ -267,7 +319,14 @@ Module modSHA1
 	' Output: String
 	' Purpose: [INTERNAL] SHA function
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' [INTERNAL] SHA function
+    ''' </summary>
+    ''' <param name="value1"></param>
+    ''' <param name="value2"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
 	Function BigAA2Add(ByVal value1 As String, ByVal value2 As String) As String
         Dim valueans As String = String.Empty
         Dim temps1, temps2, tempstr As String
@@ -305,7 +364,14 @@ Module modSHA1
 	' Output: String
 	' Purpose: [INTERNAL] SHA function
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' [INTERNAL] SHA function
+    ''' </summary>
+    ''' <param name="value1"></param>
+    ''' <param name="value2"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
 	Function BigAA2AND(ByVal value1 As String, ByVal value2 As String) As String
         Dim valueans As String = String.Empty
         Dim tempstr As String
@@ -339,7 +405,14 @@ Module modSHA1
 	' Output: String
 	' Purpose: [INTERNAL] SHA function
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' [INTERNAL] SHA function
+    ''' </summary>
+    ''' <param name="value1"></param>
+    ''' <param name="value2"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
 	Function BigAA2Mod32Add(ByVal value1 As String, ByVal value2 As String) As String
 		BigAA2Mod32Add = BigAA1Mod32Add(value1, value2)
 	End Function
@@ -350,7 +423,13 @@ Module modSHA1
 	' Output: String
 	' Purpose: [INTERNAL] SHA function
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' [INTERNAL] SHA function
+    ''' </summary>
+    ''' <param name="value1"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
 	Function BigAA2NOT(ByVal value1 As String) As String
 		Dim valueans As String
 
@@ -372,7 +451,14 @@ Module modSHA1
 	' Output: String
 	' Purpose: [INTERNAL] SHA function
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' [INTERNAL] SHA function
+    ''' </summary>
+    ''' <param name="value1"></param>
+    ''' <param name="value2"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
 	Function BigAA2OR(ByVal value1 As String, ByVal value2 As String) As String
         Dim valueans As String = String.Empty
         Dim tempstr As String
@@ -408,7 +494,14 @@ Module modSHA1
 	' Output: String
 	' Purpose: [INTERNAL] SHA function
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' [INTERNAL] SHA function
+    ''' </summary>
+    ''' <param name="value1"></param>
+    ''' <param name="rots"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
 	Function BigAA2RotLeft(ByVal value1 As String, ByVal rots As Short) As String
 		BigAA2RotLeft = BigAA1RotLeft(value1, rots)
 	End Function
@@ -420,7 +513,14 @@ Module modSHA1
 	' Output: String
 	' Purpose: [INTERNAL] SHA function
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' [INTERNAL] SHA function
+    ''' </summary>
+    ''' <param name="value1"></param>
+    ''' <param name="value2"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
 	Function BigAA2XOR(ByVal value1 As String, ByVal value2 As String) As String
         Dim valueans As String = String.Empty
         Dim tempstr As String
@@ -455,7 +555,13 @@ Module modSHA1
 	' Output: String
 	' Purpose: SHA Hash function
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' SHA Hash function
+    ''' </summary>
+    ''' <param name="hashthis">Input string to be hashed</param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
 	Function SHA1AA1Hash(ByVal hashthis As String) As String
 		Dim buf(4) As String
 		Dim in_(79) As String
@@ -573,7 +679,13 @@ Module modSHA1
 	' Output: String
 	' Purpose: SHA Hash function
 	' Remarks: None
-	'===============================================================================
+    '===============================================================================
+    ''' <summary>
+    ''' SHA Hash function
+    ''' </summary>
+    ''' <param name="hashthis">Input string to be hashed</param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
 	Function SHA1AA2Hash(ByVal hashthis As String) As String
 		Dim buf(4) As String
 		Dim in_(79) As String
