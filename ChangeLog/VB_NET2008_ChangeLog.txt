@@ -1,10 +1,13 @@
 Change Log For Activelock VB2008 
-Last Updated: 25 Jan 2010 
+Last Updated: 12 Feb 2010 
 
 VB2008 v3.6.0.5 Updates:
 - FIX: The LIC file can now be used in drives other than c:\
 - FIX: Fixed the DblStringToDate and DateToDblString functions to make the program work with all cultures other than "english-US".
 - FIX: Alugen has been modified to disallow the use of "_" in software names and version numbers. This is an internally used character for text identification and confuses Activelock if used in software name and version strings.
+- FIX: Added ControlChars.Quote to MinusAttributes and PlusAttributes methods to handle long folder names with possibly spaces in them. The shell command is sensitive to such cases.
+- UPDATE: Interface improvments made on Alugen.NET.
+- UPDATE: More comments and intellisense help added to code.
 
 VB2008 v3.6.0.4 Updates:
 - FIX: Maintenance update to cover clock tampering related issues
