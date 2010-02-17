@@ -345,7 +345,7 @@ End Function
 ' Returns the expected CRC value of ActiveLock3.dll
 '
 Private Property Get Value() As Long
-    Value = 929000 + 82       ' compute it so that it can't be easily spotted via a Hex Editor
+    Value = 917000 + 921       ' compute it so that it can't be easily spotted via a Hex Editor
 End Property
 
 ' Callback function for rsa_generate()
