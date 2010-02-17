@@ -691,7 +691,8 @@ Friend Class frmMain
         'txtUser
         '
         Me.txtUser.AcceptsReturn = True
-        Me.txtUser.Anchor = CType(((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Left) _
+        Me.txtUser.Anchor = CType((((System.Windows.Forms.AnchorStyles.Top Or System.Windows.Forms.AnchorStyles.Bottom) _
+                    Or System.Windows.Forms.AnchorStyles.Left) _
                     Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtUser.BackColor = System.Drawing.SystemColors.Window
         Me.txtUser.Cursor = System.Windows.Forms.Cursors.IBeam
@@ -880,8 +881,6 @@ Friend Class frmMain
         'txtMaxCount
         '
         Me.txtMaxCount.AcceptsReturn = True
-        Me.txtMaxCount.Anchor = CType(((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left) _
-                    Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
         Me.txtMaxCount.BackColor = System.Drawing.SystemColors.Window
         Me.txtMaxCount.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtMaxCount.Font = New System.Drawing.Font("Arial", 8.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
@@ -2669,7 +2668,7 @@ noInfo:
             cboProducts.SelectedIndex = sIndex - 1
         End If
         txtDays.Text = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtDays", CStr(365))
-        Me.Text = "Alugen - ActiveLock v" & My.Application.Info.Version.Major & "." & My.Application.Info.Version.Minor & " Build (" & My.Application.Info.Version.Build & ") Key Generator for VB2008"
+        Me.Text = "Alugen - ActiveLock v" & My.Application.Info.Version.Major & "." & My.Application.Info.Version.Minor & " Key Generator for VB2008"
         CheckIfWizardPresent()
     End Sub
     Private Sub CheckIfWizardPresent()

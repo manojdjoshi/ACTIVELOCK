@@ -3120,13 +3120,13 @@ EndFn:
         On Error GoTo minusAttributesError
         Dim ok As Double
         'Ok, the folder is there, let's change its attributes
-        ok = Shell("ATTRIB -h -s -r " & ActivelockGetSpecialFolder(46) & DecryptString128Bit(HIDDENFOLDER, PSWD), AppWinStyle.Hide)
+        ok = Shell("ATTRIB -h -s -r " & ControlChars.Quote & ActivelockGetSpecialFolder(46) & DecryptString128Bit(HIDDENFOLDER, PSWD) & ControlChars.Quote, AppWinStyle.Hide)
 minusAttributesError:
     End Sub
     Private Sub PlusAttributes()
         Dim ok As Double
         'Ok, the folder is there, let's change its attributes
-        ok = Shell("ATTRIB +h +s +r " & ActivelockGetSpecialFolder(46) & DecryptString128Bit(HIDDENFOLDER, PSWD), AppWinStyle.Hide)
+        ok = Shell("ATTRIB +h +s +r " & ControlChars.Quote & ActivelockGetSpecialFolder(46) & DecryptString128Bit(HIDDENFOLDER, PSWD) & ControlChars.Quote, AppWinStyle.Hide)
     End Sub
     Public Function SystemClockTampered() As Boolean
 
