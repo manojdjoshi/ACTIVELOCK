@@ -3020,13 +3020,13 @@ Private Sub MinusAttributes()
     On Error GoTo minusAttributesError
     Dim ok As Double
     'Ok, the folder is there, let's change its attributes
-    ok = Shell("ATTRIB -h -s -r " & ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD), vbHide)
+    ok = Shell("ATTRIB -h -s -r " & """" & ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD) & """", vbHide)
 minusAttributesError:
 End Sub
 Private Sub PlusAttributes()
     Dim ok As Double
     'Ok, the folder is there, let's change its attributes
-    ok = Shell("ATTRIB +h +s +r " & ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD), vbHide)
+    ok = Shell("ATTRIB +h +s +r " & """" & ActivelockGetSpecialFolder(46) & DecryptMyString(HIDDENFOLDER, PSWD) & """", vbHide)
 End Sub
 
 Public Function DecryptMyString(myStr As String, password As String) As String
