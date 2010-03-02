@@ -3158,17 +3158,21 @@ minusAttributesError:
             ' The fast method above did not do its job
             ' Call an existing Daytime class from "The Code Project"
             ' to check if the system clock was adjusted
-            Dim systemClock As New Daytime
-            If Daytime.WindowsClockIncorrect = True Then
-                Return True
-            End If
+            GoTo [Continue]   'GL 2/28/2010
+            'Dim systemClock As New Daytime
+            'If Daytime.WindowsClockIncorrect = True Then
+            '    Return True
+            'End If
         End If
         blabla = "</b></font><font size=" & """" & "5" & """" & " color=" & """" & "white" & """" & ">"
         i = InStr(ss, blabla)
+        If i = 0 Then GoTo [Continue] 'GL 2/28/20
         ss = Mid(ss, i + Len(blabla))
         i = InStr(ss, "<br>")
+        If i = 0 Then GoTo [Continue] 'GL 2/28/2010
         ss = Left(ss, i - 1)
         i = InStr(1, ss, ",")
+        If i = 0 Then GoTo [Continue] 'GL 2/28/2010
         ss = Mid(ss, i + 1)
         ss = Replace_Renamed(ss, ",", " ")
         ss = ss.Trim
@@ -3184,10 +3188,16 @@ minusAttributesError:
         'Ok, I'll give it a try
         ss = CDate(ss).Date.ToString '*
         aa = Date.UtcNow.ToString '*
-        '*diff = CDate(ss).Subtract(CDate(aa)).Days
         diff = CDate(ss).Date.Subtract(Date.UtcNow).Days '*
 
-        If diff > 1 Then SystemClockTampered = True
+        'If diff > 1 Then SystemClockTampered = True
+        If diff > 1 Then Return True 'GL 2/28/2010
+
+[Continue]:  'GL 2/28/2010
+        Dim systemClock As New Daytime
+        If Daytime.WindowsClockIncorrect = True Then
+            Return True
+        End If
 
     End Function
     Public Function VarPtr(ByVal o As Object) As Integer
