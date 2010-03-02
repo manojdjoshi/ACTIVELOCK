@@ -1,6 +1,11 @@
 Change Log For Activelock VB2008 
 Last Updated: 12 Feb 2010 
 
+VB2008 v3.6.0.6 Updates:
+- UPDATE: The version numbers are now carefully changed. Last version number update was missed.
+- Added the new Web Service package for VB2008 to the .NET package.
+- FIX: made changes in the Fingerprint class to remove the "MaxClockSpeed" property since it was sometimes changing between reboots. Also added GetHDDSerialFirmware to the DiskID section in the same class.
+
 VB2008 v3.6.0.5 Updates:
 - FIX: The LIC file can now be used in drives other than c:\
 - FIX: Fixed the DblStringToDate and DateToDblString functions to make the program work with all cultures other than "english-US".
