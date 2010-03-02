@@ -369,7 +369,8 @@ Public Class FingerPrint
                 End If
 
                 'Add clock speed for extra security
-                RetVal += Identifier("Win32_Processor", "MaxClockSpeed")
+                ' Removed because this property can change between boots on some machines
+                'RetVal += Identifier("Win32_Processor", "MaxClockSpeed")
             End If
         End If
 
@@ -410,7 +411,8 @@ Public Class FingerPrint
 
         Return Identifier("Win32_DiskDrive", "Manufacturer") _
           & Identifier("Win32_DiskDrive", "Signature") _
-          & Identifier("Win32_DiskDrive", "TotalHeads")
+          & Identifier("Win32_DiskDrive", "TotalHeads") _
+          & GetHDSerialFirmware()
         'Identifier("Win32_DiskDrive", "Model") _
 
         RaiseEvent DoneWith("CpuID")
