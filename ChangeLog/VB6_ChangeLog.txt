@@ -1,6 +1,9 @@
 Change Log For Activelock VB6 
 Last Updated: 12 Feb 2010 
 
+v3.6.0.6 Updates:
+- UPDATE: Redesigned Alugen to remove the Tab control and add a menu. Tabctl32.ocx was somehow causing problesm under Windows 7. One less OCX to worry about anyway.
+
 v3.6.0.5 Updates:
 - FIX: The LIC file can now be used in drives other than c:\
 - FIX: Alugen has been modified to disallow the use of "_" in software names and version numbers. This is an internally used character for text identification and confuses Activelock if used in software name and version strings.
