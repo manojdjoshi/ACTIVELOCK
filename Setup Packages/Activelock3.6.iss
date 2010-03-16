@@ -1,12 +1,12 @@
 [Setup]
-AppName=Activelock VB6 3.6.0.5
-AppVersion=3.6.0.5
-AppVerName=Activelock VB6 3.6.0.5
+AppName=Activelock VB6 3.6.0.6
+AppVersion=3.6.0.6
+AppVerName=Activelock VB6 3.6.0.6
 AppPublisher=Activelock Software Group
 Uninstallable=true
 ; set installation folder based on target Windows version
 DefaultDirName={code:SetInstallDir}\Activelock_VB6_3.6
-OutputBaseFilename=Activelock_VB6_Setup_3.6.0.5_Feb_12_2010
+OutputBaseFilename=Activelock_VB6_Setup_3.6.0.6_Mar_20_2010
 OutputDir=.
 DefaultGroupName=Activelock Software Group
 WizardImageFile=C:\ActiveLockCommunity\Images\big-side.bmp
@@ -45,7 +45,7 @@ Name: "sourcecode"; Description: "Source Code"; Types: full custom
 Source: C:\ActiveLockCommunity\Redistribution\Mscomctl.ocx; DestDir: "{sys}"; Flags: restartreplace uninsneveruninstall sharedfile regserver
 Source: C:\ActiveLockCommunity\Redistribution\comdlg32.ocx; DestDir: "{sys}"; Flags: restartreplace uninsneveruninstall sharedfile regserver
 Source: C:\ActiveLockCommunity\Redistribution\comctl32.ocx; DestDir: "{sys}"; Flags: restartreplace uninsneveruninstall sharedfile regserver
-Source: C:\ActiveLockCommunity\Redistribution\tabctl32.ocx; DestDir: "{sys}"; Flags: restartreplace uninsneveruninstall sharedfile regserver
+;Source: C:\ActiveLockCommunity\Redistribution\tabctl32.ocx; DestDir: "{sys}"; Flags: restartreplace uninsneveruninstall sharedfile regserver
 Source: C:\ActiveLockCommunity\Redistribution\msflxgrd.ocx; DestDir: "{sys}"; Flags: restartreplace uninsneveruninstall sharedfile regserver
 Source: C:\ActiveLockCommunity\Redistribution\mswinsck.ocx; DestDir: "{sys}"; Flags: restartreplace uninsneveruninstall sharedfile regserver
 
