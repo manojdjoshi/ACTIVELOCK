@@ -1,84 +1,611 @@
 VERSION 5.00
 Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.ocx"
-Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "tabctl32.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "Mscomctl.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "Comdlg32.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmMain 
    Appearance      =   0  'Flat
    BorderStyle     =   1  'Fixed Single
    Caption         =   "ALUGEN - ActiveLock3 Universal GENerator"
-   ClientHeight    =   10635
-   ClientLeft      =   45
-   ClientTop       =   330
-   ClientWidth     =   9750
+   ClientHeight    =   10335
+   ClientLeft      =   150
+   ClientTop       =   840
+   ClientWidth     =   9825
    Icon            =   "frmMain3.frx":0000
    LinkTopic       =   "Form1"
-   ScaleHeight     =   10635
-   ScaleWidth      =   9750
+   ScaleHeight     =   10335
+   ScaleWidth      =   9825
    StartUpPosition =   3  'Windows Default
    Begin MSComctlLib.StatusBar sbStatus 
       Align           =   2  'Align Bottom
       Height          =   375
       Left            =   0
-      TabIndex        =   69
-      Top             =   10260
-      Width           =   9750
-      _ExtentX        =   17198
+      TabIndex        =   0
+      Top             =   9960
+      Width           =   9825
+      _ExtentX        =   17330
       _ExtentY        =   661
       _Version        =   393216
       BeginProperty Panels {8E3867A5-8586-11D1-B16A-00C0F0283628} 
          NumPanels       =   1
          BeginProperty Panel1 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   1
-            Object.Width           =   17145
+            Object.Width           =   17277
             Text            =   "Ready"
             TextSave        =   "Ready"
          EndProperty
       EndProperty
    End
-   Begin TabDlg.SSTab SSTab1 
-      Height          =   10260
-      Left            =   0
-      TabIndex        =   0
-      Top             =   0
-      Width           =   9735
-      _ExtentX        =   17171
-      _ExtentY        =   18098
-      _Version        =   393216
-      Tabs            =   2
-      TabHeight       =   520
-      TabCaption(0)   =   "Pro&duct Code Generator"
-      TabPicture(0)   =   "frmMain3.frx":0CCA
-      Tab(0).ControlEnabled=   -1  'True
-      Tab(0).Control(0)=   "Label1"
-      Tab(0).Control(0).Enabled=   0   'False
-      Tab(0).Control(1)=   "Label17"
-      Tab(0).Control(1).Enabled=   0   'False
-      Tab(0).Control(2)=   "gridProds"
-      Tab(0).Control(2).Enabled=   0   'False
-      Tab(0).Control(3)=   "fraProdNew"
-      Tab(0).Control(3).Enabled=   0   'False
-      Tab(0).Control(4)=   "cmdRemove"
-      Tab(0).Control(4).Enabled=   0   'False
-      Tab(0).Control(5)=   "Picture1"
-      Tab(0).Control(5).Enabled=   0   'False
-      Tab(0).Control(6)=   "cmdValidate"
-      Tab(0).Control(6).Enabled=   0   'False
-      Tab(0).ControlCount=   7
-      TabCaption(1)   =   "License KeyGen"
-      TabPicture(1)   =   "frmMain3.frx":0CE6
-      Tab(1).ControlEnabled=   0   'False
-      Tab(1).Control(0)=   "frmKeyGen"
-      Tab(1).Control(1)=   "cmdViewArchive"
-      Tab(1).ControlCount=   2
-      Begin VB.CommandButton cmdValidate 
-         Caption         =   "&Validate"
+   Begin VB.Frame fraKeyGen 
+      BorderStyle     =   0  'None
+      Height          =   9915
+      Left            =   90
+      TabIndex        =   1
+      Top             =   45
+      Width           =   9675
+      Begin VB.CheckBox chkLockFingerprint 
+         Caption         =   "Lock to Computer Fingerprint:"
+         BeginProperty Font 
+            Name            =   "Microsoft Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Left            =   1305
+         TabIndex        =   35
+         Top             =   4725
+         Width           =   7095
+      End
+      Begin VB.CheckBox chkLockBaseboardID 
+         Caption         =   "Lock to Baseboard ID:"
+         BeginProperty Font 
+            Name            =   "Microsoft Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Left            =   1305
+         TabIndex        =   34
+         Top             =   5535
+         Width           =   7095
+      End
+      Begin VB.CheckBox chkLockCPUID 
+         Caption         =   "Lock to CPU ID:"
+         BeginProperty Font 
+            Name            =   "Microsoft Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Left            =   1305
+         TabIndex        =   33
+         Top             =   5265
+         Width           =   7095
+      End
+      Begin VB.CheckBox chkLockMemory 
+         Caption         =   "Lock to Memory ID:"
+         BeginProperty Font 
+            Name            =   "Microsoft Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Left            =   1305
+         TabIndex        =   32
+         Top             =   4995
+         Width           =   7095
+      End
+      Begin VB.CheckBox chkLockVideoID 
+         Caption         =   "Lock to Video ID:"
+         BeginProperty Font 
+            Name            =   "Microsoft Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Left            =   1305
+         TabIndex        =   31
+         Top             =   5805
+         Width           =   7095
+      End
+      Begin VB.CheckBox chkLockExternalIP 
+         Caption         =   "Lock to External IP Address:"
+         BeginProperty Font 
+            Name            =   "Microsoft Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Left            =   1305
+         TabIndex        =   30
+         Top             =   4455
+         Width           =   7095
+      End
+      Begin VB.CommandButton cmdUncheckAll 
+         Caption         =   "Uncheck All"
+         Height          =   315
+         Left            =   0
+         TabIndex        =   29
+         ToolTipText     =   "Generate liberation key for the above request code (which should not be blank)."
+         Top             =   2655
+         Width           =   1110
+      End
+      Begin VB.CommandButton cmdCheckAll 
+         Caption         =   "Check All"
+         Height          =   315
+         Left            =   0
+         TabIndex        =   28
+         ToolTipText     =   "Generate liberation key for the above request code (which should not be blank)."
+         Top             =   2250
+         Width           =   1110
+      End
+      Begin VB.ComboBox cmbProds 
+         Height          =   315
+         Left            =   1305
+         Style           =   2  'Dropdown List
+         TabIndex        =   27
+         Top             =   90
+         Width           =   3615
+      End
+      Begin VB.ComboBox cmbRegisteredLevel 
+         Height          =   315
+         Left            =   6480
+         Style           =   2  'Dropdown List
+         TabIndex        =   26
+         Top             =   450
+         Width           =   2625
+      End
+      Begin VB.TextBox txtMaxCount 
+         Height          =   315
+         Left            =   3105
+         MaxLength       =   2
+         TabIndex        =   25
+         Text            =   "5"
+         Top             =   1185
+         Visible         =   0   'False
+         Width           =   315
+      End
+      Begin VB.CheckBox chkNetworkedLicense 
+         Caption         =   "Networked Licence"
+         Height          =   330
+         Left            =   1305
+         TabIndex        =   24
+         Top             =   1170
+         Width           =   1770
+      End
+      Begin VB.CheckBox chkLockIP 
+         Caption         =   "Lock to Local IP Address:"
+         BeginProperty Font 
+            Name            =   "Microsoft Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Left            =   1305
+         TabIndex        =   23
+         Top             =   4185
+         Width           =   7095
+      End
+      Begin VB.CheckBox chkLockMotherboard 
+         Caption         =   "Lock to BIOS/System Serial Number:"
+         BeginProperty Font 
+            Name            =   "Microsoft Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Left            =   1305
+         TabIndex        =   22
+         Top             =   3915
+         Width           =   7095
+      End
+      Begin VB.CheckBox chkLockBIOS 
+         Caption         =   "Lock to BIOS Version:"
+         BeginProperty Font 
+            Name            =   "Microsoft Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Left            =   1305
+         TabIndex        =   21
+         Top             =   3645
+         Width           =   7095
+      End
+      Begin VB.CheckBox chkLockWindows 
+         Caption         =   "Lock to Windows Serial Number:"
+         BeginProperty Font 
+            Name            =   "Microsoft Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Left            =   1305
+         TabIndex        =   20
+         Top             =   3375
+         Width           =   7095
+      End
+      Begin VB.CheckBox chkLockHDfirmware 
+         Caption         =   "Lock to HDD Firmware Serial Number:"
+         BeginProperty Font 
+            Name            =   "Microsoft Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Left            =   1305
+         TabIndex        =   19
+         Top             =   3105
+         Width           =   7095
+      End
+      Begin VB.CheckBox chkLockHD 
+         Caption         =   "Lock to HDD Volume Serial Number:"
+         BeginProperty Font 
+            Name            =   "Microsoft Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Left            =   1305
+         TabIndex        =   18
+         Top             =   2835
+         Width           =   7095
+      End
+      Begin VB.CheckBox chkLockComputer 
+         Caption         =   "Lock to Computer Name:"
+         BeginProperty Font 
+            Name            =   "Microsoft Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Left            =   1305
+         TabIndex        =   17
+         Top             =   2565
+         Width           =   7095
+      End
+      Begin VB.CheckBox chkLockMACaddress 
+         Caption         =   "Lock to IPEnabled MAC Addresses:"
+         BeginProperty Font 
+            Name            =   "Microsoft Sans Serif"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   195
+         Left            =   1305
+         TabIndex        =   16
+         Top             =   2295
+         Width           =   7095
+      End
+      Begin VB.PictureBox Picture2 
+         Appearance      =   0  'Flat
+         AutoSize        =   -1  'True
+         BackColor       =   &H80000005&
+         BorderStyle     =   0  'None
+         ForeColor       =   &H80000008&
+         Height          =   825
+         Left            =   120
+         Picture         =   "frmMain3.frx":0CCA
+         ScaleHeight     =   825
+         ScaleWidth      =   825
+         TabIndex        =   15
+         Top             =   6915
+         Width           =   825
+      End
+      Begin VB.CheckBox chkItemData 
+         Caption         =   "Use ItemData instead of ListIndex"
+         Height          =   330
+         Left            =   6480
+         TabIndex        =   14
+         Top             =   765
+         Width           =   2805
+      End
+      Begin VB.CommandButton cmdCopy 
+         Height          =   345
+         Left            =   8520
+         MaskColor       =   &H8000000F&
+         Picture         =   "frmMain3.frx":3C52
+         Style           =   1  'Graphical
+         TabIndex        =   13
+         Top             =   6435
+         Width           =   345
+      End
+      Begin VB.CommandButton cmdPaste 
+         Height          =   345
+         Left            =   8520
+         Picture         =   "frmMain3.frx":3D9C
+         Style           =   1  'Graphical
+         TabIndex        =   12
+         Top             =   1530
+         Width           =   345
+      End
+      Begin VB.TextBox txtUser 
+         Height          =   315
+         Left            =   1320
+         TabIndex        =   11
+         Top             =   1890
+         Width           =   7095
+      End
+      Begin VB.CommandButton cmdBrowse 
+         Caption         =   "..."
+         Height          =   360
+         Left            =   8040
+         TabIndex        =   10
+         ToolTipText     =   "Generate liberation key for the above request code (which should not be blank)."
+         Top             =   9015
+         Width           =   375
+      End
+      Begin VB.TextBox txtLibFile 
+         Height          =   315
+         Left            =   1320
+         TabIndex        =   9
+         Top             =   9015
+         Width           =   6735
+      End
+      Begin VB.CommandButton cmdSave 
+         Caption         =   "&Save"
+         Enabled         =   0   'False
          Height          =   315
          Left            =   8520
-         TabIndex        =   39
-         Top             =   4755
-         Width           =   1005
+         TabIndex        =   8
+         ToolTipText     =   "Generate liberation key for the above request code (which should not be blank)."
+         Top             =   9015
+         Width           =   975
       End
+      Begin VB.ComboBox cmbLicType 
+         Height          =   315
+         ItemData        =   "frmMain3.frx":40DE
+         Left            =   1320
+         List            =   "frmMain3.frx":40EB
+         Style           =   2  'Dropdown List
+         TabIndex        =   7
+         Top             =   450
+         Width           =   3615
+      End
+      Begin VB.TextBox txtDays 
+         BackColor       =   &H8000000F&
+         Height          =   315
+         Left            =   1305
+         Locked          =   -1  'True
+         TabIndex        =   6
+         Text            =   "365"
+         Top             =   810
+         Width           =   2115
+      End
+      Begin VB.TextBox txtReqCodeIn 
+         Height          =   315
+         Left            =   1320
+         TabIndex        =   5
+         Top             =   1530
+         Width           =   7095
+      End
+      Begin VB.TextBox txtLibKey 
+         BackColor       =   &H8000000F&
+         BeginProperty Font 
+            Name            =   "Courier New"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FF0000&
+         Height          =   2895
+         Left            =   1320
+         Locked          =   -1  'True
+         MultiLine       =   -1  'True
+         ScrollBars      =   2  'Vertical
+         TabIndex        =   4
+         Text            =   "frmMain3.frx":4111
+         Top             =   6075
+         Width           =   7095
+      End
+      Begin VB.CommandButton cmdKeyGen 
+         Caption         =   "&Generate"
+         Enabled         =   0   'False
+         Height          =   315
+         Left            =   8520
+         TabIndex        =   3
+         ToolTipText     =   "Generate liberation key for the above request code (which should not be blank)."
+         Top             =   6075
+         Width           =   975
+      End
+      Begin VB.CommandButton cmdViewArchive 
+         Caption         =   "&View License Database"
+         Height          =   315
+         Left            =   1305
+         TabIndex        =   2
+         ToolTipText     =   "View License Archive"
+         Top             =   9405
+         Width           =   2115
+      End
+      Begin MSComDlg.CommonDialog CommonDlg 
+         Left            =   9000
+         Top             =   1485
+         _ExtentX        =   847
+         _ExtentY        =   847
+         _Version        =   393216
+      End
+      Begin VB.Label lblKeyStrength 
+         ForeColor       =   &H00FF0000&
+         Height          =   255
+         Left            =   4995
+         TabIndex        =   47
+         Top             =   135
+         Width           =   4080
+      End
+      Begin VB.Label Label8 
+         Caption         =   "&Product:"
+         Height          =   255
+         Left            =   0
+         TabIndex        =   46
+         Top             =   150
+         Width           =   975
+      End
+      Begin VB.Label Label15 
+         Caption         =   "Registered Level:"
+         Height          =   255
+         Left            =   5175
+         TabIndex        =   45
+         Top             =   495
+         Width           =   1275
+      End
+      Begin VB.Image cmdViewLevel 
+         Height          =   240
+         Left            =   9180
+         MouseIcon       =   "frmMain3.frx":4154
+         MousePointer    =   99  'Custom
+         Picture         =   "frmMain3.frx":445E
+         Top             =   450
+         Width           =   240
+      End
+      Begin VB.Label lblConcurrentUsers 
+         Caption         =   "Concurrent Users"
+         Height          =   255
+         Left            =   3465
+         TabIndex        =   44
+         Top             =   1260
+         Visible         =   0   'False
+         Width           =   1335
+      End
+      Begin VB.Label Label16 
+         Alignment       =   2  'Center
+         Caption         =   "Activelock V3"
+         ForeColor       =   &H00FF0000&
+         Height          =   165
+         Left            =   0
+         TabIndex        =   43
+         Top             =   7755
+         Width           =   1065
+      End
+      Begin VB.Label Label11 
+         Caption         =   "User Name:"
+         Height          =   255
+         Left            =   0
+         TabIndex        =   42
+         Top             =   1920
+         Width           =   1335
+      End
+      Begin VB.Label Label5 
+         Caption         =   "License &File:"
+         Height          =   255
+         Left            =   0
+         TabIndex        =   41
+         Top             =   9045
+         Width           =   1335
+      End
+      Begin VB.Label lblExpiry 
+         Caption         =   "&Expires After:"
+         Height          =   255
+         Left            =   0
+         TabIndex        =   40
+         Top             =   855
+         Width           =   1335
+      End
+      Begin VB.Label Label6 
+         Caption         =   "License &Type:"
+         Height          =   255
+         Left            =   0
+         TabIndex        =   39
+         Top             =   480
+         Width           =   1335
+      End
+      Begin VB.Label Label7 
+         Caption         =   "Installation C&ode or Serial Number:"
+         Height          =   435
+         Left            =   0
+         TabIndex        =   38
+         Top             =   1530
+         Width           =   1335
+      End
+      Begin VB.Label Label12 
+         Caption         =   "License &Key:"
+         Height          =   255
+         Left            =   0
+         TabIndex        =   37
+         Top             =   6135
+         Width           =   1335
+      End
+      Begin VB.Label lblDays 
+         Caption         =   "days"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   255
+         Left            =   3480
+         TabIndex        =   36
+         Top             =   855
+         Width           =   1575
+      End
+   End
+   Begin VB.Frame fraProdNew 
+      Height          =   9945
+      Left            =   45
+      TabIndex        =   48
+      Top             =   0
+      Width           =   9720
       Begin VB.PictureBox Picture1 
          Appearance      =   0  'Flat
          AutoSize        =   -1  'True
@@ -86,810 +613,198 @@ Begin VB.Form frmMain
          BorderStyle     =   0  'None
          ForeColor       =   &H80000008&
          Height          =   825
-         Left            =   8730
-         Picture         =   "frmMain3.frx":0D02
+         Left            =   8655
+         Picture         =   "frmMain3.frx":49E8
          ScaleHeight     =   825
          ScaleWidth      =   825
-         TabIndex        =   37
-         Top             =   6495
+         TabIndex        =   66
+         Top             =   6030
          Width           =   825
       End
-      Begin VB.CommandButton cmdViewArchive 
-         Caption         =   "&View License Database"
+      Begin VB.CommandButton cmdValidate 
+         Caption         =   "&Validate"
          Height          =   315
-         Left            =   -73515
-         TabIndex        =   36
-         ToolTipText     =   "View License Archive"
-         Top             =   9855
-         Width           =   2115
+         Left            =   8565
+         TabIndex        =   65
+         Top             =   4320
+         Width           =   1005
       End
       Begin VB.CommandButton cmdRemove 
          Caption         =   "&Remove"
          Enabled         =   0   'False
          Height          =   315
-         Left            =   8520
-         TabIndex        =   11
-         Top             =   5175
+         Left            =   8565
+         TabIndex        =   64
+         Top             =   5085
          Width           =   1000
       End
-      Begin VB.Frame frmKeyGen 
-         BorderStyle     =   0  'None
-         Height          =   9735
-         Left            =   -74865
-         TabIndex        =   13
-         Top             =   450
-         Width           =   9495
-         Begin VB.CheckBox chkLockFingerprint 
-            Caption         =   "Lock to Computer Fingerprint:"
-            BeginProperty Font 
-               Name            =   "Microsoft Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   195
-            Left            =   1305
-            TabIndex        =   75
-            Top             =   4725
-            Width           =   7095
-         End
-         Begin VB.CheckBox chkLockBaseboardID 
-            Caption         =   "Lock to Baseboard ID:"
-            BeginProperty Font 
-               Name            =   "Microsoft Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   195
-            Left            =   1305
-            TabIndex        =   74
-            Top             =   5535
-            Width           =   7095
-         End
-         Begin VB.CheckBox chkLockCPUID 
-            Caption         =   "Lock to CPU ID:"
-            BeginProperty Font 
-               Name            =   "Microsoft Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   195
-            Left            =   1305
-            TabIndex        =   73
-            Top             =   5265
-            Width           =   7095
-         End
-         Begin VB.CheckBox chkLockMemory 
-            Caption         =   "Lock to Memory ID:"
-            BeginProperty Font 
-               Name            =   "Microsoft Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   195
-            Left            =   1305
-            TabIndex        =   72
-            Top             =   4995
-            Width           =   7095
-         End
-         Begin VB.CheckBox chkLockVideoID 
-            Caption         =   "Lock to Video ID:"
-            BeginProperty Font 
-               Name            =   "Microsoft Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   195
-            Left            =   1305
-            TabIndex        =   71
-            Top             =   5805
-            Width           =   7095
-         End
-         Begin VB.CheckBox chkLockExternalIP 
-            Caption         =   "Lock to External IP Address:"
-            BeginProperty Font 
-               Name            =   "Microsoft Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   195
-            Left            =   1305
-            TabIndex        =   70
-            Top             =   4455
-            Width           =   7095
-         End
-         Begin VB.CommandButton cmdUncheckAll 
-            Caption         =   "Uncheck All"
-            Height          =   315
-            Left            =   0
-            TabIndex        =   68
-            ToolTipText     =   "Generate liberation key for the above request code (which should not be blank)."
-            Top             =   2655
-            Width           =   1110
-         End
-         Begin VB.CommandButton cmdCheckAll 
-            Caption         =   "Check All"
-            Height          =   315
-            Left            =   0
-            TabIndex        =   67
-            ToolTipText     =   "Generate liberation key for the above request code (which should not be blank)."
-            Top             =   2250
-            Width           =   1110
-         End
-         Begin VB.ComboBox cmbProds 
-            Height          =   315
-            Left            =   1305
-            Style           =   2  'Dropdown List
-            TabIndex        =   59
-            Top             =   90
-            Width           =   3615
-         End
-         Begin VB.ComboBox cmbRegisteredLevel 
-            Height          =   315
-            Left            =   6480
-            Style           =   2  'Dropdown List
-            TabIndex        =   58
-            Top             =   450
-            Width           =   2625
-         End
-         Begin VB.TextBox txtMaxCount 
-            Height          =   315
-            Left            =   3105
-            MaxLength       =   2
-            TabIndex        =   54
-            Text            =   "5"
-            Top             =   1185
-            Visible         =   0   'False
-            Width           =   315
-         End
-         Begin VB.CheckBox chkNetworkedLicense 
-            Caption         =   "Networked Licence"
-            Height          =   330
-            Left            =   1305
-            TabIndex        =   53
-            Top             =   1170
-            Width           =   1770
-         End
-         Begin VB.CheckBox chkLockIP 
-            Caption         =   "Lock to Local IP Address:"
-            BeginProperty Font 
-               Name            =   "Microsoft Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   195
-            Left            =   1305
-            TabIndex        =   51
-            Top             =   4185
-            Width           =   7095
-         End
-         Begin VB.CheckBox chkLockMotherboard 
-            Caption         =   "Lock to BIOS/System Serial Number:"
-            BeginProperty Font 
-               Name            =   "Microsoft Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   195
-            Left            =   1305
-            TabIndex        =   50
-            Top             =   3915
-            Width           =   7095
-         End
-         Begin VB.CheckBox chkLockBIOS 
-            Caption         =   "Lock to BIOS Version:"
-            BeginProperty Font 
-               Name            =   "Microsoft Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   195
-            Left            =   1305
-            TabIndex        =   49
-            Top             =   3645
-            Width           =   7095
-         End
-         Begin VB.CheckBox chkLockWindows 
-            Caption         =   "Lock to Windows Serial Number:"
-            BeginProperty Font 
-               Name            =   "Microsoft Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   195
-            Left            =   1305
-            TabIndex        =   48
-            Top             =   3375
-            Width           =   7095
-         End
-         Begin VB.CheckBox chkLockHDfirmware 
-            Caption         =   "Lock to HDD Firmware Serial Number:"
-            BeginProperty Font 
-               Name            =   "Microsoft Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   195
-            Left            =   1305
-            TabIndex        =   47
-            Top             =   3105
-            Width           =   7095
-         End
-         Begin VB.CheckBox chkLockHD 
-            Caption         =   "Lock to HDD Volume Serial Number:"
-            BeginProperty Font 
-               Name            =   "Microsoft Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   195
-            Left            =   1305
-            TabIndex        =   46
-            Top             =   2835
-            Width           =   7095
-         End
-         Begin VB.CheckBox chkLockComputer 
-            Caption         =   "Lock to Computer Name:"
-            BeginProperty Font 
-               Name            =   "Microsoft Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   195
-            Left            =   1305
-            TabIndex        =   45
-            Top             =   2565
-            Width           =   7095
-         End
-         Begin VB.CheckBox chkLockMACaddress 
-            Caption         =   "Lock to IPEnabled MAC Addresses:"
-            BeginProperty Font 
-               Name            =   "Microsoft Sans Serif"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   195
-            Left            =   1305
-            TabIndex        =   44
-            Top             =   2295
-            Width           =   7095
-         End
-         Begin VB.PictureBox Picture2 
-            Appearance      =   0  'Flat
-            AutoSize        =   -1  'True
-            BackColor       =   &H80000005&
-            BorderStyle     =   0  'None
-            ForeColor       =   &H80000008&
-            Height          =   825
-            Left            =   120
-            Picture         =   "frmMain3.frx":3C8A
-            ScaleHeight     =   825
-            ScaleWidth      =   825
-            TabIndex        =   42
-            Top             =   6915
-            Width           =   825
-         End
-         Begin VB.CheckBox chkItemData 
-            Caption         =   "Use ItemData instead of ListIndex"
-            Height          =   330
-            Left            =   6480
-            TabIndex        =   41
-            Top             =   765
-            Width           =   2805
-         End
-         Begin VB.CommandButton cmdCopy 
-            Height          =   345
-            Left            =   8520
-            MaskColor       =   &H8000000F&
-            Picture         =   "frmMain3.frx":6C12
-            Style           =   1  'Graphical
-            TabIndex        =   35
-            Top             =   6435
-            Width           =   345
-         End
-         Begin VB.CommandButton cmdPaste 
-            Height          =   345
-            Left            =   8520
-            Picture         =   "frmMain3.frx":6D5C
-            Style           =   1  'Graphical
-            TabIndex        =   34
-            Top             =   1530
-            Width           =   345
-         End
-         Begin VB.TextBox txtUser 
-            Height          =   315
-            Left            =   1320
-            TabIndex        =   21
-            Top             =   1890
-            Width           =   7095
-         End
-         Begin VB.CommandButton cmdBrowse 
-            Caption         =   "..."
-            Height          =   360
-            Left            =   8040
-            TabIndex        =   27
-            ToolTipText     =   "Generate liberation key for the above request code (which should not be blank)."
-            Top             =   9015
-            Width           =   375
-         End
-         Begin VB.TextBox txtLibFile 
-            Height          =   315
-            Left            =   1320
-            TabIndex        =   26
-            Top             =   9015
-            Width           =   6735
-         End
-         Begin VB.CommandButton cmdSave 
-            Caption         =   "&Save"
-            Enabled         =   0   'False
-            Height          =   315
-            Left            =   8520
-            TabIndex        =   28
-            ToolTipText     =   "Generate liberation key for the above request code (which should not be blank)."
-            Top             =   9015
-            Width           =   975
-         End
-         Begin VB.ComboBox cmbLicType 
-            Height          =   315
-            ItemData        =   "frmMain3.frx":709E
-            Left            =   1320
-            List            =   "frmMain3.frx":70AB
-            Style           =   2  'Dropdown List
-            TabIndex        =   15
-            Top             =   450
-            Width           =   3615
-         End
-         Begin VB.TextBox txtDays 
-            BackColor       =   &H8000000F&
-            Height          =   315
-            Left            =   1305
-            Locked          =   -1  'True
-            TabIndex        =   17
-            Text            =   "365"
-            Top             =   810
-            Width           =   2115
-         End
-         Begin VB.TextBox txtReqCodeIn 
-            Height          =   315
-            Left            =   1320
-            TabIndex        =   19
-            Top             =   1530
-            Width           =   7095
-         End
-         Begin VB.TextBox txtLibKey 
-            BackColor       =   &H8000000F&
-            BeginProperty Font 
-               Name            =   "Courier New"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            ForeColor       =   &H00FF0000&
-            Height          =   2895
-            Left            =   1320
-            Locked          =   -1  'True
-            MultiLine       =   -1  'True
-            ScrollBars      =   2  'Vertical
-            TabIndex        =   23
-            Text            =   "frmMain3.frx":70D1
-            Top             =   6075
-            Width           =   7095
-         End
-         Begin VB.CommandButton cmdKeyGen 
-            Caption         =   "&Generate"
-            Enabled         =   0   'False
-            Height          =   315
-            Left            =   8520
-            TabIndex        =   24
-            ToolTipText     =   "Generate liberation key for the above request code (which should not be blank)."
-            Top             =   6075
-            Width           =   975
-         End
-         Begin MSComDlg.CommonDialog CommonDlg 
-            Left            =   9000
-            Top             =   1485
-            _ExtentX        =   847
-            _ExtentY        =   847
-            _Version        =   393216
-         End
-         Begin VB.Label lblKeyStrength 
-            ForeColor       =   &H00FF0000&
-            Height          =   255
-            Left            =   4995
-            TabIndex        =   76
-            Top             =   135
-            Width           =   4080
-         End
-         Begin VB.Label Label8 
-            Caption         =   "&Product:"
-            Height          =   255
-            Left            =   0
-            TabIndex        =   57
-            Top             =   150
-            Width           =   975
-         End
-         Begin VB.Label Label15 
-            Caption         =   "Registered Level:"
-            Height          =   255
-            Left            =   5175
-            TabIndex        =   56
-            Top             =   495
-            Width           =   1275
-         End
-         Begin VB.Image cmdViewLevel 
-            Height          =   240
-            Left            =   9180
-            MouseIcon       =   "frmMain3.frx":7114
-            MousePointer    =   99  'Custom
-            Picture         =   "frmMain3.frx":741E
-            Top             =   450
-            Width           =   240
-         End
-         Begin VB.Label lblConcurrentUsers 
-            Caption         =   "Concurrent Users"
-            Height          =   255
-            Left            =   3465
-            TabIndex        =   55
-            Top             =   1260
-            Visible         =   0   'False
-            Width           =   1335
-         End
-         Begin VB.Label Label16 
-            Alignment       =   2  'Center
-            Caption         =   "Activelock V3"
-            ForeColor       =   &H00FF0000&
-            Height          =   165
-            Left            =   0
-            TabIndex        =   43
-            Top             =   7755
-            Width           =   1065
-         End
-         Begin VB.Label Label11 
-            Caption         =   "User Name:"
-            Height          =   255
-            Left            =   0
-            TabIndex        =   20
-            Top             =   1920
-            Width           =   1335
-         End
-         Begin VB.Label Label5 
-            Caption         =   "License &File:"
-            Height          =   255
-            Left            =   0
-            TabIndex        =   25
-            Top             =   9045
-            Width           =   1335
-         End
-         Begin VB.Label lblExpiry 
-            Caption         =   "&Expires After:"
-            Height          =   255
-            Left            =   0
-            TabIndex        =   16
-            Top             =   855
-            Width           =   1335
-         End
-         Begin VB.Label Label6 
-            Caption         =   "License &Type:"
-            Height          =   255
-            Left            =   0
-            TabIndex        =   14
-            Top             =   480
-            Width           =   1335
-         End
-         Begin VB.Label Label7 
-            Caption         =   "Installation C&ode or Serial Number:"
-            Height          =   435
-            Left            =   0
-            TabIndex        =   18
-            Top             =   1530
-            Width           =   1335
-         End
-         Begin VB.Label Label12 
-            Caption         =   "License &Key:"
-            Height          =   255
-            Left            =   0
-            TabIndex        =   22
-            Top             =   6135
-            Width           =   1335
-         End
-         Begin VB.Label lblDays 
-            Caption         =   "days"
-            BeginProperty Font 
-               Name            =   "Arial"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   255
-            Left            =   3480
-            TabIndex        =   29
-            Top             =   855
-            Width           =   1575
-         End
+      Begin VB.Frame Frame1 
+         Appearance      =   0  'Flat
+         Caption         =   "Crypto API"
+         BeginProperty Font 
+            Name            =   "Arial"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         ForeColor       =   &H00FF0000&
+         Height          =   510
+         Left            =   1305
+         TabIndex        =   63
+         Top             =   1035
+         Width           =   5190
       End
-      Begin VB.Frame fraProdNew 
-         Height          =   2835
-         Left            =   135
-         TabIndex        =   12
+      Begin VB.CommandButton cmdAdd 
+         Caption         =   "&Add To Product List"
+         Enabled         =   0   'False
+         Height          =   315
+         Left            =   1320
+         TabIndex        =   62
+         Top             =   2415
+         Width           =   1845
+      End
+      Begin VB.TextBox txtVer 
+         Height          =   315
+         Left            =   1320
+         TabIndex        =   61
+         Top             =   720
+         Width           =   1545
+      End
+      Begin VB.TextBox txtName 
+         Height          =   315
+         Left            =   1320
+         TabIndex        =   60
          Top             =   360
-         Width           =   9495
-         Begin VB.OptionButton optStrength 
-            Caption         =   "4096-bit"
-            Height          =   240
-            Index           =   1
-            Left            =   5265
-            TabIndex        =   64
-            Top             =   1260
-            Width           =   960
-         End
-         Begin VB.OptionButton optStrength 
-            Caption         =   "2048-bit"
-            Height          =   240
-            Index           =   2
-            Left            =   4275
-            TabIndex        =   63
-            Top             =   1260
-            Width           =   1005
-         End
-         Begin VB.OptionButton optStrength 
-            Caption         =   "1536-bit"
-            Height          =   240
-            Index           =   3
-            Left            =   3285
-            TabIndex        =   62
-            Top             =   1260
-            Width           =   1005
-         End
-         Begin VB.OptionButton optStrength 
-            Caption         =   "1024-bit"
-            Height          =   240
-            Index           =   4
-            Left            =   2295
-            TabIndex        =   61
-            Top             =   1260
-            Value           =   -1  'True
-            Width           =   960
-         End
-         Begin VB.OptionButton optStrength 
-            Caption         =   "512-bit"
-            Height          =   240
-            Index           =   5
-            Left            =   1395
-            TabIndex        =   60
-            Top             =   1260
-            Width           =   875
-         End
-         Begin VB.CommandButton cmdProductsStorage 
-            Caption         =   "Products st&orage ..."
-            Height          =   345
-            Left            =   7770
-            TabIndex        =   52
-            Top             =   360
-            Width           =   1575
-         End
-         Begin VB.CommandButton cmdCopyGCode 
-            Height          =   345
-            Left            =   7920
-            Picture         =   "frmMain3.frx":79A8
-            Style           =   1  'Graphical
-            TabIndex        =   40
-            Top             =   2400
-            Width           =   345
-         End
-         Begin VB.CommandButton cmdCopyVCode 
-            Height          =   345
-            Left            =   4680
-            Picture         =   "frmMain3.frx":7AF2
-            Style           =   1  'Graphical
-            TabIndex        =   33
-            Top             =   2400
-            Width           =   345
-         End
-         Begin VB.CommandButton cmdCodeGen 
-            Caption         =   "&Generate"
-            Enabled         =   0   'False
-            Height          =   315
-            Left            =   8400
-            TabIndex        =   8
-            Top             =   1815
-            Width           =   1000
-         End
-         Begin VB.TextBox txtCode2 
-            BackColor       =   &H8000000F&
-            BeginProperty Font 
-               Name            =   "Small Fonts"
-               Size            =   6.75
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   555
-            Left            =   5040
-            Locked          =   -1  'True
-            MultiLine       =   -1  'True
-            TabIndex        =   7
-            Top             =   1815
-            Width           =   3225
-         End
-         Begin VB.TextBox txtCode1 
-            BackColor       =   &H8000000F&
-            BeginProperty Font 
-               Name            =   "Small Fonts"
-               Size            =   6.75
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   555
-            Left            =   1320
-            Locked          =   -1  'True
-            MultiLine       =   -1  'True
-            TabIndex        =   6
-            ToolTipText     =   "Use this code to set ActiveLock's SoftwareCode property within your application."
-            Top             =   1815
-            Width           =   3705
-         End
-         Begin VB.TextBox txtName 
-            Height          =   315
-            Left            =   1320
-            TabIndex        =   2
-            Top             =   360
-            Width           =   3705
-         End
-         Begin VB.TextBox txtVer 
-            Height          =   315
-            Left            =   1320
-            TabIndex        =   4
-            Top             =   720
-            Width           =   1545
-         End
-         Begin VB.CommandButton cmdAdd 
-            Caption         =   "&Add To Product List"
-            Enabled         =   0   'False
-            Height          =   315
-            Left            =   1320
-            TabIndex        =   9
-            Top             =   2415
-            Width           =   1845
-         End
-         Begin VB.Frame Frame1 
-            Appearance      =   0  'Flat
-            Caption         =   "Crypto API"
-            BeginProperty Font 
-               Name            =   "Arial"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            ForeColor       =   &H00FF0000&
-            Height          =   510
-            Left            =   1305
-            TabIndex        =   66
-            Top             =   1035
-            Width           =   5190
-         End
-         Begin VB.Label Label19 
-            Caption         =   "&Strength"
-            Height          =   375
-            Left            =   135
-            TabIndex        =   65
-            Top             =   1215
-            Width           =   1095
-         End
-         Begin VB.Label Label10 
-            Caption         =   "GCode (for the new application)"
-            Height          =   255
-            Left            =   5040
-            TabIndex        =   32
-            Top             =   1575
-            Width           =   3135
-         End
-         Begin VB.Label Label9 
-            Caption         =   "VCode (for the new application)"
-            Height          =   255
-            Left            =   1320
-            TabIndex        =   31
-            Top             =   1575
-            Width           =   3615
-         End
-         Begin VB.Label Label4 
-            Caption         =   "&Code:"
-            Height          =   375
-            Left            =   120
-            TabIndex        =   5
-            Top             =   1815
-            Width           =   1095
-         End
-         Begin VB.Label Label2 
-            Caption         =   "&Name:"
-            Height          =   375
-            Left            =   120
-            TabIndex        =   1
-            Top             =   360
-            Width           =   975
-         End
-         Begin VB.Label Label3 
-            Caption         =   "&Version:"
-            Height          =   375
-            Left            =   120
-            TabIndex        =   3
-            Top             =   720
-            Width           =   1095
-         End
+         Width           =   3705
+      End
+      Begin VB.TextBox txtCode1 
+         BackColor       =   &H8000000F&
+         BeginProperty Font 
+            Name            =   "Small Fonts"
+            Size            =   6.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   555
+         Left            =   1320
+         Locked          =   -1  'True
+         MultiLine       =   -1  'True
+         TabIndex        =   59
+         ToolTipText     =   "Use this code to set ActiveLock's SoftwareCode property within your application."
+         Top             =   1815
+         Width           =   3705
+      End
+      Begin VB.TextBox txtCode2 
+         BackColor       =   &H8000000F&
+         BeginProperty Font 
+            Name            =   "Small Fonts"
+            Size            =   6.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   555
+         Left            =   5040
+         Locked          =   -1  'True
+         MultiLine       =   -1  'True
+         TabIndex        =   58
+         Top             =   1815
+         Width           =   3225
+      End
+      Begin VB.CommandButton cmdCodeGen 
+         Caption         =   "&Generate"
+         Enabled         =   0   'False
+         Height          =   315
+         Left            =   8325
+         TabIndex        =   57
+         Top             =   1800
+         Width           =   1000
+      End
+      Begin VB.CommandButton cmdCopyVCode 
+         Height          =   345
+         Left            =   4680
+         Picture         =   "frmMain3.frx":7970
+         Style           =   1  'Graphical
+         TabIndex        =   56
+         Top             =   2400
+         Width           =   345
+      End
+      Begin VB.CommandButton cmdCopyGCode 
+         Height          =   345
+         Left            =   7920
+         Picture         =   "frmMain3.frx":7ABA
+         Style           =   1  'Graphical
+         TabIndex        =   55
+         Top             =   2400
+         Width           =   345
+      End
+      Begin VB.CommandButton cmdProductsStorage 
+         Caption         =   "Products st&orage ..."
+         Height          =   345
+         Left            =   8010
+         TabIndex        =   54
+         Top             =   360
+         Width           =   1575
+      End
+      Begin VB.OptionButton optStrength 
+         Caption         =   "512-bit"
+         Height          =   240
+         Index           =   5
+         Left            =   1395
+         TabIndex        =   53
+         Top             =   1260
+         Width           =   875
+      End
+      Begin VB.OptionButton optStrength 
+         Caption         =   "1024-bit"
+         Height          =   240
+         Index           =   4
+         Left            =   2295
+         TabIndex        =   52
+         Top             =   1260
+         Value           =   -1  'True
+         Width           =   960
+      End
+      Begin VB.OptionButton optStrength 
+         Caption         =   "1536-bit"
+         Height          =   240
+         Index           =   3
+         Left            =   3285
+         TabIndex        =   51
+         Top             =   1260
+         Width           =   1005
+      End
+      Begin VB.OptionButton optStrength 
+         Caption         =   "2048-bit"
+         Height          =   240
+         Index           =   2
+         Left            =   4275
+         TabIndex        =   50
+         Top             =   1260
+         Width           =   1005
+      End
+      Begin VB.OptionButton optStrength 
+         Caption         =   "4096-bit"
+         Height          =   240
+         Index           =   1
+         Left            =   5265
+         TabIndex        =   49
+         Top             =   1260
+         Width           =   960
       End
       Begin MSFlexGridLib.MSFlexGrid gridProds 
          Height          =   6540
-         Left            =   120
-         TabIndex        =   10
-         Top             =   3585
+         Left            =   135
+         TabIndex        =   67
+         Top             =   3150
          Width           =   8265
          _ExtentX        =   14579
          _ExtentY        =   11536
@@ -907,26 +822,80 @@ Begin VB.Form frmMain
          ScrollBars      =   2
          SelectionMode   =   1
          Appearance      =   0
-         FormatString    =   $"frmMain3.frx":7C3C
+         FormatString    =   $"frmMain3.frx":7C04
+      End
+      Begin VB.Label Label3 
+         Caption         =   "&Version:"
+         Height          =   375
+         Left            =   120
+         TabIndex        =   75
+         Top             =   720
+         Width           =   1095
+      End
+      Begin VB.Label Label2 
+         Caption         =   "&Name:"
+         Height          =   375
+         Left            =   120
+         TabIndex        =   74
+         Top             =   360
+         Width           =   975
+      End
+      Begin VB.Label Label4 
+         Caption         =   "&Code:"
+         Height          =   375
+         Left            =   120
+         TabIndex        =   73
+         Top             =   1815
+         Width           =   1095
+      End
+      Begin VB.Label Label9 
+         Caption         =   "VCode (for the new application)"
+         Height          =   255
+         Left            =   1320
+         TabIndex        =   72
+         Top             =   1575
+         Width           =   3615
+      End
+      Begin VB.Label Label10 
+         Caption         =   "GCode (for the new application)"
+         Height          =   255
+         Left            =   5040
+         TabIndex        =   71
+         Top             =   1575
+         Width           =   3135
+      End
+      Begin VB.Label Label19 
+         Caption         =   "&Strength"
+         Height          =   375
+         Left            =   135
+         TabIndex        =   70
+         Top             =   1215
+         Width           =   1095
+      End
+      Begin VB.Label Label1 
+         Caption         =   "&Product List:"
+         Height          =   255
+         Left            =   135
+         TabIndex        =   69
+         Top             =   2880
+         Width           =   1215
       End
       Begin VB.Label Label17 
          Alignment       =   2  'Center
          Caption         =   "Activelock V3"
          ForeColor       =   &H00FF0000&
          Height          =   165
-         Left            =   8610
-         TabIndex        =   38
-         Top             =   7335
+         Left            =   8520
+         TabIndex        =   68
+         Top             =   6930
          Width           =   1065
       End
-      Begin VB.Label Label1 
-         Caption         =   "&Product List:"
-         Height          =   255
-         Left            =   135
-         TabIndex        =   30
-         Top             =   3330
-         Width           =   1215
-      End
+   End
+   Begin VB.Menu mnuProdKey 
+      Caption         =   "Product Key Generator"
+   End
+   Begin VB.Menu mnuKeyGen 
+      Caption         =   "License Key Generator"
    End
 End
 Attribute VB_Name = "frmMain"
@@ -1424,7 +1393,7 @@ Private Sub cmbProds_Click()
 End Sub
 
 Private Sub cmdAdd_Click()
-    If SSTab1.Tab <> 0 Then Exit Sub ' our tab not active - do nothing
+    If fraProdNew.Visible = False Then Exit Sub ' our tab not active - do nothing
     AddRow txtName, txtVer, txtCode1, txtCode2
     cmdAdd.Enabled = False ' disallow repeated clicking of Add button
     gridProds_EnterCell
@@ -1477,7 +1446,7 @@ Private Sub cmdCheckAll_Click()
 End Sub
 
 Private Sub cmdCodeGen_Click()
-If SSTab1.Tab <> 0 Then Exit Sub ' our tab not active - do nothing
+If fraProdNew.Visible = False Then Exit Sub ' our tab not active - do nothing
 If inString(txtName.Text, "-") Then
     MsgBox "Dash '-' is not allowed in Product Name.", vbInformation
     Exit Sub
@@ -1554,7 +1523,7 @@ Dim strRegDate As String
 Dim Lic As ActiveLock3.ProductLicense
 Dim strLibKey As String, i As Integer
 
-If SSTab1.Tab <> 1 Then Exit Sub ' our tab not active - do nothing
+If fraKeyGen.Visible = False Then Exit Sub ' our tab not active - do nothing
 If Len(txtReqCodeIn.Text) < 8 Then Exit Sub
 If cmbLicType = "Periodic" And inString(txtDays.Text, "/", "-", ",", ".") = True Then
     MsgBox "You must anter an integer Number of Days for Periodic Licenses.", vbExclamation
@@ -1797,7 +1766,7 @@ cmdProductsStorage_Click_Error:
 End Sub
 
 Private Sub cmdRemove_Click()
-    If SSTab1.Tab <> 0 Then Exit Sub ' our tab not active - do nothing
+    If fraProdNew.Visible = False Then Exit Sub ' our tab not active - do nothing
     Dim strName As String
     Dim SelStart%, SelEnd%
     Dim fEnableAdd As Boolean
@@ -2054,6 +2023,7 @@ Public Sub Form_Load()
 End Sub
 
 Private Sub LoadFormSetting()
+Dim tabno As Integer
 'Read the program INI file to retrieve control settings
 On Error GoTo LoadFormSetting_Error
 
@@ -2062,7 +2032,14 @@ If Not blnIsFirstLaunch Then Exit Sub
 PROJECT_INI_FILENAME = App.path & "\Alugen3.ini"
 'On Error Resume Next
 systemEvent = True
-SSTab1.Tab = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", 0))
+tabno = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", 0))
+If tabno = 0 Then
+    fraProdNew.Visible = True
+    fraKeyGen.Visible = False
+Else
+    fraProdNew.Visible = False
+    fraKeyGen.Visible = True
+End If
 'cmbProds.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbProds", 0))
 cmbLicType.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbLicType", 1))
 cmbRegisteredLevel.ListIndex = Val(ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbRegisteredLevel", 0))
@@ -2321,7 +2298,9 @@ Private Sub SaveFormSettings()
 'save form settings
 On Error GoTo SaveFormSettings_Error
 Dim mnReturnValue As Long
-mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", CStr(SSTab1.Tab))
+Dim tabno As Integer
+If fraProdNew.Visible = True Then tabno = 0 Else tabno = 1
+mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "TabNumber", CStr(tabno))
 mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbProds", CStr(cmbProds.ListIndex))
 mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbLicType", CStr(cmbLicType.ListIndex))
 mnReturnValue = SetProfileString32(PROJECT_INI_FILENAME, "Startup Options", "cmbRegisteredLevel", CStr(cmbRegisteredLevel.ListIndex))
@@ -2500,6 +2479,16 @@ End Sub
 
 Private Sub gridProds_RowColChange()
 'Debug.Print "RowColChange!!"
+End Sub
+
+Private Sub mnuKeyGen_Click()
+Me.fraProdNew.Visible = False
+Me.fraKeyGen.Visible = True
+End Sub
+
+Private Sub mnuProdKey_Click()
+Me.fraProdNew.Visible = True
+Me.fraKeyGen.Visible = False
 End Sub
 
 Private Sub txtCode1_GotFocus()
