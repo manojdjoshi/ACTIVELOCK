@@ -6,6 +6,7 @@ VB2008 v3.6.0.6 Updates:
 - Added the new Web Service package for VB2008 to the .NET package.
 - FIX: made changes in the Fingerprint class to remove the "MaxClockSpeed" property since it was sometimes changing between reboots. Also added GetHDDSerialFirmware to the DiskID section in the same class.
 - FIX: SystemClockTampered has been modified to catch the instances when the Time Server returns truncated/bad URLs. This was reported by Geary.
+FIX: Changed System.Text.Encoding.UTF8.GetBytes to System.Text.Encoding.Unicode.GetBytes in Base64_Encode function and System.Text.Encoding.UTF8.Getstring to System.Text.Encoding.Unicode.GetString in Base64_Decode functions so that Activelock can understand Nordic characters, etc.
 
 VB2008 v3.6.0.5 Updates:
 - FIX: The LIC file can now be used in drives other than c:\
