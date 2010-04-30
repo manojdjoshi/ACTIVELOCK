@@ -1,12 +1,12 @@
 [Setup]
-AppName=Activelock VB2008 3.6.0.5
-AppVersion=3.6.0.5
-AppVerName=Activelock VB2008 3.6.0.5
+AppName=Activelock VB2008 3.6.1
+AppVersion=3.6.1
+AppVerName=Activelock VB2008 3.6.1
 AppPublisher=Activelock Software Group
 Uninstallable=true
 ; set installation folder based on target Windows version
 DefaultDirName={code:SetInstallDir}\Activelock_VB2008_3.6
-OutputBaseFilename=Activelock_VB2008_Setup_3.6.0.5_Feb_12_2010
+OutputBaseFilename=Activelock_VB2008_Setup_3.6.1_Apr_30_2010
 OutputDir=.
 DefaultGroupName=Activelock Software Group
 WizardImageFile=C:\ActiveLockCommunity\Images\big-side.bmp
@@ -36,7 +36,7 @@ Name: "sourcecode"; Description: "Source Code"; Types: full custom
 Source: C:\ActiveLockCommunity\Redistribution\Mscomctl.ocx; DestDir: "{sys}"; Flags: restartreplace uninsneveruninstall sharedfile regserver
 Source: C:\ActiveLockCommunity\Redistribution\comdlg32.ocx; DestDir: "{sys}"; Flags: restartreplace uninsneveruninstall sharedfile regserver
 Source: C:\ActiveLockCommunity\Redistribution\comctl32.ocx; DestDir: "{sys}"; Flags: restartreplace uninsneveruninstall sharedfile regserver
-Source: C:\ActiveLockCommunity\Redistribution\tabctl32.ocx; DestDir: "{sys}"; Flags: restartreplace uninsneveruninstall sharedfile regserver
+;Source: C:\ActiveLockCommunity\Redistribution\tabctl32.ocx; DestDir: "{sys}"; Flags: restartreplace uninsneveruninstall sharedfile regserver
 Source: C:\ActiveLockCommunity\Redistribution\msflxgrd.ocx; DestDir: "{sys}"; Flags: restartreplace uninsneveruninstall sharedfile regserver
 Source: C:\ActiveLockCommunity\Redistribution\mswinsck.ocx; DestDir: "{sys}"; Flags: restartreplace uninsneveruninstall sharedfile regserver
 
@@ -56,7 +56,7 @@ Source: C:\ActiveLockCommunity\Setup Packages\Activelock3.6_VBNET.iss; DestDir: 
 Source: C:\ActiveLockCommunity\Redistribution\Mscomctl.ocx; DestDir: "{app}\Redistribution"; Flags: ignoreversion
 Source: C:\ActiveLockCommunity\Redistribution\comdlg32.ocx; DestDir: "{app}\Redistribution"; Flags: ignoreversion
 Source: C:\ActiveLockCommunity\Redistribution\comctl32.ocx; DestDir: "{app}\Redistribution"; Flags: ignoreversion
-Source: C:\ActiveLockCommunity\Redistribution\tabctl32.ocx; DestDir: "{app}\Redistribution"; Flags: ignoreversion
+;Source: C:\ActiveLockCommunity\Redistribution\tabctl32.ocx; DestDir: "{app}\Redistribution"; Flags: ignoreversion
 Source: C:\ActiveLockCommunity\Redistribution\msflxgrd.ocx; DestDir: "{app}\Redistribution"; Flags: ignoreversion
 Source: C:\ActiveLockCommunity\Redistribution\mswinsck.ocx; DestDir: "{app}\Redistribution"; Flags: ignoreversion
 
@@ -198,6 +198,66 @@ Source: C:\ActiveLockCommunity\Activelock3.6.NETVB2005\ALTestApp3.6.NETVB2005.vb
 Source: C:\ActiveLockCommunity\Activelock3.6.NETVB2005\Alugen3.6NETVB2005.sln; DestDir: "{app}\Activelock3.6.NETVB2005"; Flags: ignoreversion; Components: sourcecode
 Source: C:\ActiveLockCommunity\Activelock3.6.NETVB2005\Alugen3.6NETVB2005.vbproj; DestDir: "{app}\Activelock3.6.NETVB2005"; Flags: ignoreversion; Components: sourcecode
 Source: C:\ActiveLockCommunity\Activelock3.6.NETVB2005\Alugen3.6NETVB2005.vbproj.user; DestDir: "{app}\Activelock3.6.NETVB2005"; Flags: ignoreversion; Components: sourcecode
+
+; Activelock Web Service and Sample App consuming the web service
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\Form1.Designer.vb; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\My Project\Application.myapp; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\Service References\Activelock36Service\Reference.vb; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\Activelock3_6Service.vbproj; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\App_Data\ASPNETDB.MDF; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+;Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\App_Data\aspnetdb_log.ldf; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\bin\Debug\ActiveLock3_6Net.xml; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\bin\Debug\Activelock3_6_Sample.vshost.exe; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\My Project\Resources.Designer.vb; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\bin\Activelock3_6Service.xml; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\Activelock3_6Service.asmx; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\Service References\Activelock36Service\Activelock3_6Service.disco; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\bin\Debug\Activelock3_6_Sample.vshost.exe.manifest; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\bin\App_Data\licenses.mdb; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\bin\Activelock3_6Service.pdb; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\Activelock3_6Service.asmx.vb; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service.sln; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\bin\Debug\ActiveLock3_6Net.dll; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\Service References\Activelock36Service\Activelock3_6Service.wsdl; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\My Project\Resources.resx; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\Service References\Activelock36Service\Reference.svcmap; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\bin\Activelock3_6Service.dll; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\My Project\Resources.Designer.vb; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\My Project\Settings.settings; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\bin\App_Data\licenses.ini; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\My Project\AssemblyInfo.vb; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\My Project\Settings.Designer.vb; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\bin\ActiveLock3_6Net.xml; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\Form1.vb; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\bin\Debug\Activelock3_6_Sample.xml; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\My Project\Application.Designer.vb; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\Activelock3_6Service.xml; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\My Project\Resources.resx; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\Activelock3_6_Sample.vbproj; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\My Project\MyExtensions\MyWebExtension.vb; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\bin\TestApp.lic; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\App_Data\licenses.mdb; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\bin\Debug\Activelock3_6_Sample.pdb; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\Web.config; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\Activelock3_6Service.Publish.xml; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\Activelock3_6Service.pdb; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\My Project\Settings.settings; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\My Project\AssemblyInfo.vb; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\Form1.resx; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\Service References\Activelock36Service\configuration.svcinfo; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\bin\Debug\Activelock3_6_Sample.vshost.exe.config; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\bin\ActiveLock3_6Net.dll; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\Activelock3_6Service.dll; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\My Project\Settings.Designer.vb; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\Activelock3_6Service.vbproj.user; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\My Project\Application.Designer.vb; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\My Project\Application.myapp; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\bin\Debug\Activelock3_6_Sample.exe; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\ApplicationIdentifier.vb; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6Service\App_Data\licenses.ini; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\Service References\Activelock36Service\configuration91.svcinfo; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\bin\Debug\Activelock3_6_Sample.exe.config; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
+Source: C:\ActiveLockCommunity\Activelock3.6 for VB2008\Activelock3.6Service\Activelock3_6_Sample\app.config; DestDir: "{app}\Activelock3.6Service"; Flags: ignoreversion; Components: sourcecode
 
 [Code]
 function InitializeSetup(): Boolean;
