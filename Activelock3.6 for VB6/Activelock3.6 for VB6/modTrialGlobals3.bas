@@ -3134,6 +3134,7 @@ Public Function SystemClockTampered() As Boolean
 ' Access a good time server to see which day it is :)
 ' Get the date only... compare with the system clock
 ' Die if more than 1 day difference
+' added i=0 checks to catch bad URL data - IA 4-17-2010
 
 ' Obviously, for this function to work, there must be a connection to Internet
 If IsWebConnected() = False Then
@@ -3147,16 +3148,26 @@ Dim ss As String, aa As String
 Dim blabla As String, diff As Integer
 Dim i As Integer
 Dim month1() As String, month2() As String
+
+SystemClockTampered = False
+
 month1() = Split("January;February;March;April;May;June;July;August;September;October;November;December", ";")
 month2() = Split("01;02;03;04;05;06;07;08;09;10;11;12", ";")
 ss = OpenURL(DecryptMyString("6A63FE36308E42DADB2F5BA739581CD40F0AFA9D07EA8B3C333B8E6044709ED3BF93D27EF4019018AC5275E088BF5B0D5A351029369A5F5738175F1FE486B1332D0BBFFC04238760C97910070F91CB9BE3357832BA441A7F4C6A8CCE431481A4", PSWD))    'http://www.time.gov/timezone.cgi?UTC/s/0
 If ss = "" Then Exit Function
+
 blabla = "</b></font><font size=" & """" & "5" & """" & " color=" & """" & "white" & """" & ">"
 i = InStr(ss, blabla)
+If i = 0 Then Exit Function
+
 ss = Mid(ss, i + Len(blabla))
 i = InStr(ss, "<br>")
+If i = 0 Then Exit Function
+
 ss = Left(ss, i - 1)
 i = InStr(1, ss, ",")
+If i = 0 Then Exit Function
+
 ss = Mid(ss, i + 1)
 ss = Replace(ss, ",", " ")
 ss = Trim(ss)
@@ -3169,5 +3180,9 @@ Next
 '* ss = Format(CDate(ss), "yyyy/MM/dd")   '"short date")
 '* aa = Format(UTC(Now), "yyyy/MM/dd")   '"short date")"short date")
 diff = Abs(DateDiff("d", CDate(ss), UTC(Now)))
-If diff > 1 Then SystemClockTampered = True
+If diff > 1 Then
+    SystemClockTampered = True
+    Exit Function
+End If
+
 End Function
