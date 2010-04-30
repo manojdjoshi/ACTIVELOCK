@@ -1176,6 +1176,12 @@ Friend Class frmMain
         txtMaxCount.Text = ""
 
     End Sub
+    Function AppVersion() As String
+        With System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location)
+            Return .FileMajorPart & "." & .FileMinorPart & "." & .FileBuildPart & "." & .FilePrivatePart
+        End With
+    End Function
+
     '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     ' ActiveLock Initialization
     '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
@@ -1185,7 +1191,7 @@ Friend Class frmMain
         On Error GoTo NotRegistered
 
         ' Form's caption
-        Me.Text = "ALTestApp3NET - ActiveLock Test Application for VB2008 - v3.6" '& Application.ProductVersion
+        Me.Text = "ALTestApp3NET - ActiveLock Test Application for VB2008 - v" & AppVersion()
 
         ' Check the existence of necessary files to run this application
         ' This is not necessary if you're not using these controls in your app.
