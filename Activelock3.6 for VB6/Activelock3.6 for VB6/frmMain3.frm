@@ -6,13 +6,13 @@ Begin VB.Form frmMain
    Appearance      =   0  'Flat
    BorderStyle     =   1  'Fixed Single
    Caption         =   "ALUGEN - ActiveLock3 Universal GENerator"
-   ClientHeight    =   10335
+   ClientHeight    =   10395
    ClientLeft      =   150
    ClientTop       =   840
    ClientWidth     =   9825
    Icon            =   "frmMain3.frx":0000
    LinkTopic       =   "Form1"
-   ScaleHeight     =   10335
+   ScaleHeight     =   10395
    ScaleWidth      =   9825
    StartUpPosition =   3  'Windows Default
    Begin MSComctlLib.StatusBar sbStatus 
@@ -20,7 +20,7 @@ Begin VB.Form frmMain
       Height          =   375
       Left            =   0
       TabIndex        =   0
-      Top             =   9960
+      Top             =   10020
       Width           =   9825
       _ExtentX        =   17330
       _ExtentY        =   661
@@ -1959,7 +1959,7 @@ Public Sub Form_Load()
     '</Added by: kirtaph at: 2/16/2006-13.05.40 on machine: KIRTAPHPC>
     
     ' Check the existence of necessary files to run this application
-    Call CheckForResources("comdlg32.ocx", "msflxgrd.ocx", "comctl32.ocx", "tabctl32.ocx")
+    Call CheckForResources("comdlg32.ocx", "msflxgrd.ocx", "comctl32.ocx")
 
     '<Modified by: kirtaph at 2/16/2006-13.06.25 on machine: KIRTAPHPC>
     If Not fileExist(strRegisteredLevelDBName) Then
