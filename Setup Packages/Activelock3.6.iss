@@ -1,12 +1,12 @@
 [Setup]
-AppName=Activelock VB6 3.6.0.6
-AppVersion=3.6.0.6
-AppVerName=Activelock VB6 3.6.0.6
+AppName=Activelock VB6 3.6.1
+AppVersion=3.6.1
+AppVerName=Activelock VB6 3.6.1
 AppPublisher=Activelock Software Group
 Uninstallable=true
 ; set installation folder based on target Windows version
 DefaultDirName={code:SetInstallDir}\Activelock_VB6_3.6
-OutputBaseFilename=Activelock_VB6_Setup_3.6.0.6_Mar_20_2010
+OutputBaseFilename=Activelock_VB6_Setup_3.6.1_Apr_30_2010
 OutputDir=.
 DefaultGroupName=Activelock Software Group
 WizardImageFile=C:\ActiveLockCommunity\Images\big-side.bmp
@@ -73,7 +73,7 @@ Source: C:\ActiveLockCommunity\Redistribution\comcat.dll; DestDir: "{app}\Redist
 Source: C:\ActiveLockCommunity\Redistribution\Mscomctl.ocx; DestDir: "{app}\Redistribution"; Flags: ignoreversion
 Source: C:\ActiveLockCommunity\Redistribution\comdlg32.ocx; DestDir: "{app}\Redistribution"; Flags: ignoreversion
 Source: C:\ActiveLockCommunity\Redistribution\comctl32.ocx; DestDir: "{app}\Redistribution"; Flags: ignoreversion
-Source: C:\ActiveLockCommunity\Redistribution\tabctl32.ocx; DestDir: "{app}\Redistribution"; Flags: ignoreversion
+;Source: C:\ActiveLockCommunity\Redistribution\tabctl32.ocx; DestDir: "{app}\Redistribution"; Flags: ignoreversion
 Source: C:\ActiveLockCommunity\Redistribution\msflxgrd.ocx; DestDir: "{app}\Redistribution"; Flags: ignoreversion
 Source: C:\ActiveLockCommunity\Redistribution\mswinsck.ocx; DestDir: "{app}\Redistribution"; Flags: ignoreversion
 
