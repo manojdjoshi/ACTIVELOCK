@@ -14,7 +14,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("Activelock Key Generator")> 
 <Assembly: AssemblyCompany("The ActiveLock Software Group")>
 <Assembly: AssemblyProduct("ALUGEN")>
-<Assembly: AssemblyCopyright("Copyright ©2003-2009")> 
+<Assembly: AssemblyCopyright("Copyright ©2003-2010")> 
 <Assembly: AssemblyTrademark("")>
 <Assembly: AssemblyCulture("")>
 
@@ -29,6 +29,6 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below
 
 
-<Assembly: AssemblyVersion("3.6.0.0")> 
+<Assembly: AssemblyVersion("3.6.1")> 
 
 
