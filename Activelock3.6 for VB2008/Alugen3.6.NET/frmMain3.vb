@@ -2668,9 +2668,15 @@ noInfo:
             cboProducts.SelectedIndex = sIndex - 1
         End If
         txtDays.Text = ProfileString32(PROJECT_INI_FILENAME, "Startup Options", "txtDays", CStr(365))
-        Me.Text = "Alugen - ActiveLock v" & My.Application.Info.Version.Major & "." & My.Application.Info.Version.Minor & " Key Generator for VB2008"
+        Me.Text = "Alugen - ActiveLock v" & AppVersion() & " Key Generator for VB2008"
         CheckIfWizardPresent()
     End Sub
+    Function AppVersion() As String
+        With System.Diagnostics.FileVersionInfo.GetVersionInfo(System.Reflection.Assembly.GetExecutingAssembly.Location)
+            Return .FileMajorPart & "." & .FileMinorPart & "." & .FileBuildPart & "." & .FilePrivatePart
+        End With
+    End Function
+
     Private Sub CheckIfWizardPresent()
         Dim fileName As String = System.Windows.Forms.Application.StartupPath & "\Activelock Wizard.exe"
         If File.Exists(fileName) Then
