@@ -82,7 +82,7 @@ Module modBase64
 	Public Function Base64_Encode(ByRef DecryptedText As String) As String
 
         'Dim byt As Byte() = System.Text.Encoding.UTF8.GetBytes(DecryptedText)
-        Dim byt As Byte() = System.Text.Encoding.Unicode.GetBytes(DecryptedText)
+        Dim byt As Byte() = System.Text.Encoding.Default.GetBytes(DecryptedText)
         ' convert the byte array to a Base64 string
         Base64_Encode = Convert.ToBase64String(byt)
 
@@ -128,7 +128,7 @@ Module modBase64
         Try
             Dim b As Byte() = Convert.FromBase64String(a)
             'Base64_Decode = System.Text.Encoding.UTF8.GetString(b)
-            Base64_Decode = System.Text.Encoding.Unicode.GetString(b)
+            Base64_Decode = System.Text.Encoding.Default.GetString(b)
 
             'Dim w1 As Short
             'Dim w2 As Short
