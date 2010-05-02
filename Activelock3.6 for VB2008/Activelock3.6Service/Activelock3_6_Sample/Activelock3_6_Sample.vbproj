@@ -99,7 +99,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="Service References\Activelock36Service\Reference.vb">
+    <Compile Include="Service References\Activelock3_6Service\Reference.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -132,20 +132,20 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Service References\Activelock36Service\" />
+    <WCFMetadataStorage Include="Service References\Activelock3_6Service\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\Activelock36Service\Activelock3_6Service.disco" />
-    <None Include="Service References\Activelock36Service\Activelock3_6Service.wsdl" />
+    <None Include="Service References\Activelock3_6Service\Activelock3_6Service.disco" />
+    <None Include="Service References\Activelock3_6Service\Activelock3_6Service.wsdl" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\Activelock36Service\configuration91.svcinfo" />
+    <None Include="Service References\Activelock3_6Service\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\Activelock36Service\configuration.svcinfo" />
+    <None Include="Service References\Activelock3_6Service\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\Activelock36Service\Reference.svcmap">
+    <None Include="Service References\Activelock3_6Service\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.vb</LastGenOutput>
     </None>
