@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="jAp2IL49iWIqy7GPn6+MyyS+N5Y=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="zE+lflnhkcLIv9EvwNMLINXW0bk=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="basicHttpBinding" name="Activelock3_6ServiceSoap">
       <properties>
@@ -100,7 +100,7 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="Activelock3_6ServiceSoap" contract="Activelock36Service.Activelock3_6ServiceSoap" bindingType="basicHttpBinding" address="http://localhost:2486/Activelock3_6Service.asmx" bindingConfiguration="Activelock3_6ServiceSoap">
+    <endpoint name="Activelock3_6ServiceSoap" contract="Activelock3_6Service.Activelock3_6ServiceSoap" bindingType="basicHttpBinding" address="http://localhost:2486/Activelock3_6Service.asmx" bindingConfiguration="Activelock3_6ServiceSoap">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>http://localhost:2486/Activelock3_6Service.asmx</serializedValue>
@@ -115,7 +115,7 @@
           <serializedValue>Activelock3_6ServiceSoap</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>Activelock36Service.Activelock3_6ServiceSoap</serializedValue>
+          <serializedValue>Activelock3_6Service.Activelock3_6ServiceSoap</serializedValue>
         </property>
         <property path="/headers" isComplexType="true" isExplicitlyDefined="false" clrType="System.ServiceModel.Configuration.AddressHeaderCollectionElement, System.ServiceModel, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>System.ServiceModel.Configuration.AddressHeaderCollectionElement</serializedValue>
