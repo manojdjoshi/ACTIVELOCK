@@ -6,22 +6,22 @@ Public Class Form1
 	Public Shared lock As ActiveLock3_6NET._IActiveLock
 
     Private Sub cmdGetTrial_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdGetTrial.Click
-		Using proxy As New Activelock36Service.Activelock3_6ServiceSoapClient
-			txtLicenceCode.Text = proxy.GetTrial(txtInstallCode.Text, _
-				ApplicationIdentifier.ApplicationName, _
-				ApplicationIdentifier.ApplicationVersion)
-		End Using
+        Using proxy As New Activelock3_6Service.Activelock3_6ServiceSoapClient
+            txtLicenceCode.Text = proxy.GetTrial(txtInstallCode.Text, _
+             ApplicationIdentifier.ApplicationName, _
+             ApplicationIdentifier.ApplicationVersion)
+        End Using
 	End Sub
 
     Private Sub Button2_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button2.Click
-        Using proxy As New Activelock36Service.Activelock3_6ServiceSoapClient
+        Using proxy As New Activelock3_6Service.Activelock3_6ServiceSoapClient
             txtLicenceCode.Text = proxy.GetLicense(txtInstallCode.Text, _
                     ApplicationIdentifier.ApplicationName, _
                     ApplicationIdentifier.ApplicationVersion, _
                     "All", _
-                    Activelock36Service.LicFlags.alfSingle, _
+                    Activelock3_6Service.LicFlags.alfSingle, _
                     1, _
-                    Activelock36Service.ALLicType.allicPermanent, _
+                    Activelock3_6Service.ALLicType.allicPermanent, _
                     100)
         End Using
     End Sub
