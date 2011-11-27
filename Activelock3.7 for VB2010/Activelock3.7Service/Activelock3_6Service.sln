@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Activelock3_6Service", "Activelock3_6Service\Activelock3_6Service.vbproj", "{5200B92A-D5BF-4DDD-9A73-70A8381BFC25}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Activelock3_6_Sample", "Activelock3_6_Sample\Activelock3_6_Sample.vbproj", "{D06B9BBA-7459-4D6F-826D-FC3E2BDB7967}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5200B92A-D5BF-4DDD-9A73-70A8381BFC25} = {5200B92A-D5BF-4DDD-9A73-70A8381BFC25}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5200B92A-D5BF-4DDD-9A73-70A8381BFC25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5200B92A-D5BF-4DDD-9A73-70A8381BFC25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5200B92A-D5BF-4DDD-9A73-70A8381BFC25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5200B92A-D5BF-4DDD-9A73-70A8381BFC25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D06B9BBA-7459-4D6F-826D-FC3E2BDB7967}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D06B9BBA-7459-4D6F-826D-FC3E2BDB7967}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D06B9BBA-7459-4D6F-826D-FC3E2BDB7967}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D06B9BBA-7459-4D6F-826D-FC3E2BDB7967}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
