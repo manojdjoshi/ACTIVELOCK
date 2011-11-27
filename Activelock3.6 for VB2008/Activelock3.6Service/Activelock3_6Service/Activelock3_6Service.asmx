@@ -1,1 +1,0 @@
-﻿<%@ WebService Language="VB" CodeBehind="Activelock3_6Service.asmx.vb" Class="Activelock3_6Service.Activelock3_6Service" %>
