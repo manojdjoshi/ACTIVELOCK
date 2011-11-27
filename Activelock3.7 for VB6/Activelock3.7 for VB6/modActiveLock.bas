@@ -11,7 +11,7 @@ Attribute VB_Name = "modActiveLock"
 ' //////////////////////////////////////////////////////////////////////////////////////////
 ' *   ActiveLock
 ' *   Copyright 1998-2002 Nelson Ferraz
-' *   Copyright 2003-2009 The ActiveLock Software Group (ASG)
+' *   Copyright 2003-2012 The ActiveLock Software Group (admin: Ismail Alkan)
 ' *   All material is the property of the contributing authors.
 ' *
 ' *   Redistribution and use in source and binary forms, with or without
