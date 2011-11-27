@@ -298,16 +298,16 @@ Public Function VerifyActiveLockdll() As String
     Dim crc As Long
     crc = CRCCheckSumTypeLib()
     'Debug.Print "Hash: " & crc
-'    If crc <> Value Then
-'        ' Encrypted version of "Activelock DLL has been corrupted." If you were running a real application, it should terminate at this point.
-'        MsgBox Dec("2CB.441.4FC.483.512.457.4A4.4C5.441.499.160.2EC.344.344.160.478.42B.4F1.160.436.457.457.4BA.160.441.4C5.4E6.4E6.507.4D0.4FC.457.44C.1FA") & vbCrLf & vbCrLf & _
-'            "If you are getting this error message, it might mean that the Activelock DLL might be corrupted," & vbCrLf & _
-'            "or tampered with, or the CRC of the Activelock DLL in your system does not match the CRC" & vbCrLf & _
-'            "value embedded in your application." & vbCrLf & vbCrLf & _
-'            "Just change the Value() function to make it the same as the actual CRC." & vbCrLf & _
-'            "Look for CRC <> Value in the code.", vbExclamation
-'        End
-'    End If
+    If crc <> Value Then
+        ' Encrypted version of "Activelock DLL has been corrupted." If you were running a real application, it should terminate at this point.
+        MsgBox Dec("2CB.441.4FC.483.512.457.4A4.4C5.441.499.160.2EC.344.344.160.478.42B.4F1.160.436.457.457.4BA.160.441.4C5.4E6.4E6.507.4D0.4FC.457.44C.1FA") & vbCrLf & vbCrLf & _
+            "If you are getting this error message, it might mean that the Activelock DLL might be corrupted," & vbCrLf & _
+            "or tampered with, or the CRC of the Activelock DLL in your system does not match the CRC" & vbCrLf & _
+            "value embedded in your application." & vbCrLf & vbCrLf & _
+            "Just change the Value() function to make it the same as the actual CRC." & vbCrLf & _
+            "Look for CRC <> Value in the code.", vbExclamation
+        End
+    End If
     VerifyActiveLockdll = CStr(crc)
 End Function
 
@@ -345,7 +345,7 @@ End Function
 ' Returns the expected CRC value of ActiveLock3.dll
 '
 Private Property Get Value() As Long
-    Value = 916000 + 624       ' compute it so that it can't be easily spotted via a Hex Editor
+    Value = 918000 + 156       ' compute it so that it can't be easily spotted via a Hex Editor
 End Property
 
 ' Callback function for rsa_generate()
@@ -365,7 +365,7 @@ Public Function GetTypeLibPathFromObject() As String
 '                                            "", _
 '                                            Dec("42B.441.4FC.483.512.457.4A4.4C5.441.499.231.1FA.226.1FA.44C.4A4.4A4"))
     'Debug.Print "DLL Path: " + strDllPath
-    GetTypeLibPathFromObject = WinSysDir() & "\activelock" & CStr(App.Major) & "." & CStr(App.Minor) & ".dll" 'strDllPath
+    GetTypeLibPathFromObject = App.Path & "\activelock" & CStr(App.Major) & "." & CStr(App.Minor) & ".dll" 'strDllPath
 End Function
 
 '===============================================================================

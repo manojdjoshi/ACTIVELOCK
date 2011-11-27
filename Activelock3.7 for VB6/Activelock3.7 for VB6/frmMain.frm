@@ -765,7 +765,7 @@ Private Sub Form_Load()
     
     ' Check the existence of necessary files to run this application
     ' This is not necessary if you're not using these controls in your app.
-    Call CheckForResources("activelock3.7.dll", "mscomctl.ocx")
+    Call CheckForResources("#activelock3.7.dll", "mscomctl.ocx")
 
     ' Check if the Activelock DLL is registered. If not no need to continue.
     ' Since Actvelock DLL is a COM DLL, it must be registered via the
@@ -1276,7 +1276,7 @@ For Each y In MyArray
     ' Check the Activelock DLL and copy the app.path version to system directory
     ' if the app.path version is newer
     If s = "activelock" & CStr(App.Major) & "." & CStr(App.Minor) & ".dll" Then
-        If FileExist(App.Path & "\" & s) = True Then
+        If FileExist(App.Path & "\" & s) = True And FileExist(WinSysDir & "\" & s) = True Then
             If Get_Latest_File(WinSysDir & "\" & s, App.Path & "\" & s) = App.Path & "\" & s Then
                 MsgBox "The DLL in the application folder: " & App.Path & "\" & s & vbCrLf & "is newer then the system32 version: " & WinSysDir & "\" & s & vbCrLf & vbCrLf & "Copy this newer DLL to your system32 folder.", vbInformation
                 End
