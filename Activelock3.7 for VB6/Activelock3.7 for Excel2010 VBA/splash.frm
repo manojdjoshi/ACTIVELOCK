@@ -11,25 +11,25 @@ Begin VB.Form frmSplash
    MaxButton       =   0   'False
    MinButton       =   0   'False
    PaletteMode     =   1  'UseZOrder
-   Picture         =   "Splash.frx":0000
+   Picture         =   "splash.frx":0000
    ScaleHeight     =   2250
    ScaleWidth      =   3735
    ShowInTaskbar   =   0   'False
    Begin VB.Label Label16 
       Alignment       =   2  'Center
       BackStyle       =   0  'Transparent
-      Caption         =   "Activelock V3"
+      Caption         =   "Activelock v3.7"
       ForeColor       =   &H00FF0000&
       Height          =   165
-      Left            =   1350
+      Left            =   1110
       TabIndex        =   1
       Top             =   1980
-      Width           =   1065
+      Width           =   1425
    End
    Begin VB.Image Image1 
       Height          =   825
       Left            =   1440
-      Picture         =   "Splash.frx":4CC3
+      Picture         =   "splash.frx":4CC3
       Top             =   1125
       Width           =   825
    End
