@@ -1,0 +1,277 @@
+Change Log For Activelock VB2003-VB2010 
+Last Updated: 30 Sept 2011 
+
+VB2010 v3.7 Updates:
+- NEW: Activelock DLL, the keygen and the sample app are all compiled under VB2010.
+- FIX: Some internal code improvements and enhancements as well as bug fixes have been made. For example, VB6.GetPath was replaced with Environment.CurrentDirectory, etc.
+- UPDATE: All projects have been upgraded to .NET v4 framework.
+- FIX: Alugen was not keeping the status of the fingerprint checkmark correctly. Fixed.
+
+
+VB2008 v3.6.1 Updates:
+- UPDATE: The version numbers are now carefully changed. Last version number update was missed.
+- Added the new Web Service package for VB2008 to the .NET package.
+- FIX: made changes in the Fingerprint class to remove the "MaxClockSpeed" property since it was sometimes changing between reboots. Also added GetHDDSerialFirmware to the DiskID section in the same class.
+- FIX: SystemClockTampered has been modified to catch the instances when the Time Server returns truncated/bad URLs. This was reported by Geary.
+- FIX: Changed System.Text.Encoding.UTF8.GetBytes to System.Text.Encoding.Default.GetBytes in Base64_Encode function and System.Text.Encoding.UTF8.Getstring to System.Text.Encoding.Default.GetString in Base64_Decode functions so that Activelock can understand Nordic characters.
+- NEW: Added a new sample for Activelock.NET Web Service and a sample app that consumes this service. Wow !! Thanks Claudiu.
+
+VB2008 v3.6.0.5 Updates:
+- FIX: The LIC file can now be used in drives other than c:\
+- FIX: Fixed the DblStringToDate and DateToDblString functions to make the program work with all cultures other than "english-US".
+- FIX: Alugen has been modified to disallow the use of "_" in software names and version numbers. This is an internally used character for text identification and confuses Activelock if used in software name and version strings.
+- FIX: Added ControlChars.Quote to MinusAttributes and PlusAttributes methods to handle long folder names with possibly spaces in them. The shell command is sensitive to such cases.
+- UPDATE: Interface improvments made on Alugen.NET.
+- UPDATE: More comments and intellisense help added to code.
+
+VB2008 v3.6.0.4 Updates:
+- FIX: Maintenance update to cover clock tampering related issues
+
+VB2008 v3.6.0.3 Updates:
+- FIX: KillLicense really kills a license. Does not leave a LIC file behind occasionally.
+- UPDATE: Activelock no longer leaves an empty (zero length) LIC file behind no matter what.
+- FIX: Multiple users can run a single LIC file without re-registering. It does not matter whether the LIC file was created by and admin account or a limited user account.
+
+VB2008 v3.6 Updates:
+- UPDATE: Compressed the setup package which reduced the package size substantially.
+- NEW: Moved Alugen.ini to the application directory from the Windows directory.
+- FIX: Alugen now restricts the characters in the Software Name and Number textboxes to 0-9,A-B,a-b, and multiple decimal digits.
+- FIX: IsWindowsNT now uses IsWinNTPlus.
+- NEW: HDD firmware serial number detection code has been extended to include WMI. Also checked Vista accounts to make sure the code works under Vista, XP, with IDE, SATA and SCSI devices as well as admin and user accounts. Some SATA drives under Vista with the user accounts seem to give trouble but the new WMI addition takes care of this problem.
+- NEW: Added ActivelockGetSpecialFolder function that gets a desired Windows shell folder. Calls either the XPGetSpecialFolder or VistaGetSpecialFolder depending on the Windows version.
+- UPDATE: Removed the registry key usages for HKEY_CLASSES_ROOT and HKEY_LOCAL_MACHINE since these are not supported for write access in a limited rights Vista user account. Even an admin account cannot write to these keys without an elevated access.
+- UPDATE: Changed the trialRegistry property name to trialRegistryPerUser to indicate that this trial hiding technique will be valid per user.
+- UPDATE: Changed more methods and functions to the .NET native classes, but there are still several to migrate. That's why we still can not remove the "Microsoft.VisualBasic.Compatibility" library from the Activelock DLL.
+- FIX: Due to problems with Vista's handling of the registry keys and files hidden in the admin accessible parts of the file system and registry, the Trial routines have been overhauled to move everything into common shared folders and user accessible registry locations. Obviously system and Windows folders are no longer used; likewise HKLM and HKCR for the registry. Several users reported Trial feature malfunctioning under Vista due to these reasons. Vista is now presenting a big challenge for the trial feature.
+- UPDATE: Added a long description of each property to the Form_Load event. This should address some of the questions asked by the developers during the implementation stage.
+- UPDATE: Reviewed Activelock's short date handling feature, and decided that it's the best approach that could be used to address different locale short date formats.
+- FIX: Fixed the UpdateLastUsed method in Activelock. This was causing problems while switching between different regional settings. Checked both the trial and licensing features to make sure both work correctly while switching between different regional settings such as romanian to English and vice versa.
+- FIX: Fixed the UpdateLastUsed method in Activelock. This was causing problems while switching between different regional settings. Checked both the trial and licensing features to make sure both work correctly while switching between different regional settings such as romanian to English and vice versa. This fix involves adding Set_Locale "" at the beginning of this method. Additionally, the "Set_Locale regionalSymbol" statement at the bottom of the Acquire() method should be moved above the "Validate Lic" statement. Finally, ValidateLic method should start with the following two statements: Get_Locale and Set_Locale "".
+- FIX: Both the Trial and Licensing features work well under both XP and Vista now. Also, checked the program under limited access user account under Vista and everything seems to be Ok.
+- UPDATE: Added better explanation for the "Activelock DLL has been corrupted" message. Most users did not know what to do after seeing this message. Now, the message box gives specific instructions on why this happens and how it can be fixed.
+- UPDATE: Very detailed explanation has been added to the Form_Load event in the test application to fully explain how and when to use each DLL method and property. This should eliminate a lot of forum questions from the new comers.
+- NEW: The LIC and ALL files are now under a path which includes a folder with the software and version. The path is under the public documents folder all users so that it's accessible to all.
+- NEW: The Form_Load event of the sample application includes a new form for Try/Register functionality of the sample. It shows the number of trial days used while in trial mode.
+- NEW: The sample application will be run with the asInvoker mode so that admin account won't be needed under Vista. But Alugen uses requireAdministrator.
+- FIX: Permanent License registration error with short keys reported by vsdlh (http://www.ismailalkan.com/phpBB2/viewtopic.php?t=686) has been fixed.
+- FIX: Admin to admin switch should not break the trial mode anymore because the entire trial folder/hiding technique has been revamped. The problem reported at (http://www.ismailalkan.com/phpBB2/viewtopic.php?p=3715) should be fixed.
+- UPDATE: Alugen was criticized of storing important serial numbers such as Windows Serial Nuber in its database. Since the database is stored only in the developer's or the program owner's machine, there's no problem with that. This is much less sensitive issue than storing credit numbers; however if the developers see it necessary, they can implement their own encryption technique to store such serial numbers that belong to their customers. This is really an extension to the tool.
+- UPDATE: Investigated the need to store the .NET based VCode and GCode with "RSANET" in order to differentiate the keys from the VB6 "RSA" keys. However, these two types are keys already different even at the same cipher strength. Therefore we decided not to alter the current mechanism.
+- UPDATE: Default number of days for licensing has been changed from 30 days to 365 days in Alugen.
+- UPDATE: The SQL string error reported here (http://www.ismailalkan.com/phpBB2/viewtopic.php?t=631) can not be reproduced any more. It seems like it was fixed earlier, or we're unable to regenerate it.
+- FIX: The following change was made for Vista:
+ifhelp.Speed = Convert.ToInt64(pri.dwSpeed) ' Change from ToInt32 to ToInt64 for VISTA
+- FIX: The following change was made for Vista:
+Public Speed As Long ' Change from int to long for VISTA
+- UPDATE: The trialHideTypes detection in the DLL has been improved such that unneeded trial types won't be called anymore wasting the trial execution speed. Future addition of more trial hiding types will be easier to code and manage.
+- FIX: CheckStreamCapability was broken with the latest update. It's been fixed.
+- FIX: Time Server date checks and system file date checks are performed in Acquire, Register and ActivateTrial methods. Some of these were not checking the existence of these properties and were executing these code by default. Fixed.
+- FIX: Alugen now catches the dates that occur in the past before it generates the license key. This is valid for "Time Limited" licenses only.
+- UPDATE: Alugen date handling has been reviewed and synched with Activelock.
+- UPDATE: It was suggested that we write a separate class for the Registry API. After the security related difficulties we're having with Vista; we'll postpone this idea until the next OS.
+- NEW: The Time Server access via wininet.dll has been converted to a managed code. There were also bugs in the OpenURL code accessing the time server for UTC time check. Fixed those bugs and made the feature work.
+- FIX: Improved the speed of the "system files date/time check" code. Concentrating on more available folders across the operating systems.
+- FIX: GetHDDfirmwareSerial works great for the most part, but for there are those rare cases when "not available" is returned. This is not acceptable for some cases such as the short keys which really depend on this hardware key. Therefore, if this key returns "not available" it is now replaced by "NA" & GetHDSerial & GetMotherboardSerial.
+- UPDATE: The sample application now checks whether the LIC file is in plain or encrypted format since the contents can not be parsed to extract the license type from the LIC file if the file is in encrypted format.
+- UPDATE: The test application now clearly states that the "Reset Trial" button feature is provided for the developers only and should definitely be omitted from the final user application.
+- NEW: The LicenseFileType property in Activelock is not WriteOnly property any more, allowing the retrieval of this property in user's application.
+- FIX: Alugen was inserting an extra vbCrlf constant in the license key in every line to make 64-byte chunks. Although Activelock would honor these, the email systems transmitted them erroneously causing registration problems in the form of "Index outside bounds of array" problems. This extra vbCrlf character has been removed from the license key. See "http://activelocksoftware.com/forums/t/211.aspx" for more information.
+- FIX: A new function, IsNumberIncluded checks the hardware key combinations to determine accurately whether the right combination was used for licensing. This function works out the binary representation of the hardware key's representation that's a multiplier of 2, decides whether a given key combination includes a particular key. This should eliminate the IP binding problems experienced in the past.
+- NEW: IsWebConnected function has been added. This function will be used with the Time Server based system clock tampering check and inside the GetIPaddress function (iand insdie the GetExternalIP in the future). GetIPaddress seems to fail when there's no internet connection available, therefore if you locked the machine to local IP, then you must check the internet connection before proceeding. Some users complained that they were getting "Wrong IP address" when the license was registered with IP address and the internet connection was removed before the application was executed (and vice versa).
+- NEW: IsWebConnected has been added to the SystemClockTampered (web based time server checking function) and GetIPaddress functions.
+- UPDATE: When there's no registered license, the test application fills the user name box with the current user name.
+- UPDATE: Machine SID was one of the lock types that was planned to be added as a new Activelock feature. It turns out that this will be available only for the users who access the Active Directory. For local accounts, this is not available. It is probably going to be a nightmare to extract this info under Vista due to all security restraints. This issue will be postponed to a later release.
+- NEW: As of v3.6, the following is the complete list of all hardware signatures used in Activelock:
+Public Enum ALLockTypes
+    lockNone = 0
+    lockMAC = 1
+    lockComp = 2
+    lockHD = 4
+    lockHDFirmware = 8
+    lockWindows = 16
+    lockBIOS = 32
+    lockMotherboard = 64
+    lockIP = 128
+    lockExternalIP = 256          '[v3.6]
+    lockFingerprint = 512         '[v3.6]
+    lockMemory = 1024             '[v3.6]
+    lockCPUID = 2048              '[v3.6]
+    lockBaseboardID = 4096        '[v3.6]
+    lockvideoID = 8192            '[v3.6]
+End Enum
+LockFingerprint is a new lock type introduced in v3.6 It is computed differently for VB6 and VB.NET.
+This is essentially a computer fingerprint computed as the combination of many different computer components, such the hard disk, BIOS, memory, video controller, baseboard, MAC card (removed due to uncertainty), etc.
+- UPDATE: The lockTypes order (as shown above) has been modified and is no longer the same with the previous versions of Activelock.
+- NEW: Short Key Licenses now use the new computer fingerprint instead of the HDD firmware serial number. HDD firmware serial could be problematic under limited user accounts in Vista with some SATA HDDs. In that case the machine fingerprint will still return a pretty reliable machine ID number.
+- FIX: ALL file generatiand software usage on PCs with different cultures does not work due to the usage of Chr() function in Base64_Decode in modBase64.vb. The following is necessary to fix the problem:
+        My.Application.ChangeCulture("en-US")
+- FIX: If there's no binding to user's hardware necessary, then ReconstructedInstallationCode() was never invoked in Alugen. This is fixed.
+- NEW: Activelock v3.6 and above will support this feature. In order to lock your license to a user name alone, and no hardware keys (such as MAC address, HDD serial number, etc.), you must use "LockNone"  as the lock type in your application. Then in Alugen (the key generator), uncheck all Lock Types and then generate the key. You'll be warned that no keys were selected, but the license key will still be created. This type of license might be handy for those cases when you want to limit the execution of your program for a certain number of days (or limit to a certain deadline), but still make it machine independent. Then users can borrow the LIC file from one machine to another and use it freely for the period they are allowed to use your program. This is really a cross between a trial license and a regular license.
+- FIX: Alugen no longer restricts the use of period (".") in software version numbers.
+- UPDATE" Activelock setup packages will never uninstall the Alugen databases such as the INI, MDB or XML files since these might contain some custom data.
+- FIX: When Activelock registered a license, it was using the current date using the Now function. The rest of the dates in Activelock were UTC(Now). This caused some licenses being 1 day old upon registration. Fixed. Reported by Zoenie :)
+- NEW: Alugen now detects the software name and version number in the installation code and then picks the correct item from the listbox by itself. To implement this in Alugen, the software name and version had to be appended to the installation code which caused some significant rewriting in the DLL. Thanks to Alenxandre's comment, Alugen will tell you whether there's the software name and version available in the Alugen products database; if not, either the product was not stored or the name and version was used incorrectly in user's application.
+- UPDATE: This is a real story: A customers takes the ALL file and renames it as a LIC file, and of course Activelock did not work. It took the developer many hours to diagnose the problem. Activelock will now detect this error and will warn the user.
+- UPDATE: Added checks against SoftwarePassword with length>255 characters and illegal characters.
+- UPDATE: Due to the possible uncertainty in the MAC address, it's not included in the Fingerprint class for now (For example in laptops where there's noth wireless and wired network cards, one could switch the wireless on and off changing the obtained MAC address).
+- NEW: The Acquire() method now returns several new optional arguments, such as strRemainingTrialDays, strRemainingTrialRuns, strTrialLength, strUsedDays, strExpirationDate, strRegisteredUser, strRegisteredLevel, strLicenseClas, strMaxCount, strLicenseFileType, strLicenseType, and strUsedLockType. These can be used instead of - for example - MyActivelock.LicenseFileType. This speeds up the form loading process and license checking tremendously since every MyActivelock object property triggers a license validation call and this takes a toll on the application speed.
+- UPDATE: MAC Addresses now use "-" instead of " " in the address string.
+- FIX: Added checks against using dashes "-" in product names and versions since they are causing trouble.
+- FIX: ItemData in VB6 has been made Long.
+- UPDATE: Alugen now shows the key type and strength right next to the selected product on the product key generator tab.
+- UPDATE: Alugen3.NET now displays the version and build info on the form title, suggested by Michael.
+- UPDATE: Time-server IP addresses have been updated and new ones have been added, thanks to japreja.
+- UPDATE: Target CPU has been set to x86 in all v3.6 VB2008 projects, as suggested by David.
+- UPDATE: KillLicense method has been added to Activelock. This new method not only deletes the LIC file but also does other necessary cleanup. KillLicense should be used with caution and is intended to be used by the developers only for their testing of their own application. The preferred method for the end user involves just deleting the LIC file and giving the user a newer (updated) version of the application with a different file version (revision). 
+- UPDATE: Alugen now makes sure that the saved ALL filename has the Software Name and Version appended, otherwise no ALL file is generated.
+- UPDATE: Illegal charcters are no longer allowed inside the software name and version in Alugen. Space, underscore and period are allowed.
+- FIX: Fixed the FormLoadSetting problem in Alugen.
+- UPDATE: Security patch has been applied to stop end-users reusing the saved LIC files.
+- UPDATE: Security patch has been applied to stop end-users reusing the saved license (liberation) keys.
+- UPDATE: Alugen now saves the Number of Days in the form settings file (Alugen.INI)
+- UPDATE: All source files have been revisited to update the Copyright info for Activelock.
+- UPDATE: Added "Permissions: everyone-full" to the ISS file, suggested by David.
+- UPDATE: Some additional files have been added to the source directories.
+v3.6 RC2
+- NEW: Removed ALCRYPTO !!!! This was a major breakthrough in the history of this program. It was obvious that ALCrypto.DLL contents are no longer needed by Activelock. Besides, it was creating confusion and chaos in terms of use and distribution, and it contained code that was redundant.
+- UPDATE: Activelock VB2008 and VB6 versions now handle dates as strings; Thanks to Bill, the entire .NET version has been revised to remove all "Set_Locale " and "Get_Locale" functions, which changed the system short date settings to the yyy/MM/dd format even though it was during the method/function executions only.
+- UPDATE: All .NET projects are now compiled with TargetCPU=AnyCPU except Alugen.NET. This is under further investigation.
+- FIX: Removed the "MsgBox" statement from the GetHDFirmwareSerial function.
+- FIX: Thanks to Robert, the Trial feature will be now functional under Windows 2003 Server.
+- FIX: Prevented the cases where Motherboard Serial Number returns an empty string. It now returns "Not Available" string.
+- FIX: GetExternalIP function was returning an HTML error message when the code failed. This was reported by Adlancas. Added various checks to detect such HTML page errors and return "Not Available" instead of an error. Apparently, this was happening while the user did not login in case of access via proxy servers.
+- UPDATE: Removed UsedLockType property from Activelock; it was polluting the code base and was not needed aymore (at least even David Weatherall who has originally requested it is not using it).
+- UPDATE: lock to BIOS Version remains the same since Motherboard serial was actually the BIOS/System Serial Number. Therefore renamed "Motherboard Serial" as "BIOS/System Serial Number". Baseboard ID, which actually is the Motherboard Serial Number remained the same.
+v3.6 Final
+- FIX: Activelock VB2008 edition now honors the current culture and restores the user's culture upon executing the Register, Validate, and Generate Key methods. This latest update also allows users run Alugen in users' own short date system and shows the expiration date with also the current locale date settings.
+- FIX: Activelock VB2008 edition now checks the existence of the .NET v2.0 in user's system and downloads it if it's not available. Priorr setup packages were checking for v1.1 instead (somehow)
+- NEW: Activelock VB2008 now supports locking to multiple MAC addresses and if one of the cards are removed or become available at a later time, the license does not fail. Note added to Alugen that the shown MACs are IPEnabled addresses. (Thanks Shawn)
+
+
+
+VB.NET 2005 v3.5.5 Updates:
+- FIX: Reading of MAC address caused problems in Windows VISTA, changed some values from 32 bit Integer to a 64 bit Integer
+- FIX: The Steganography file was ready twice (even if you do not want this protection) Now it will only read this file once if it was selected to be read otherwise it will skip this file completely.
+- NEW: Added support for the Activelock Wizard in Alugen
+
+
+VB.NET 2005 v3.5.4 Updates:
+- NEW: Ported to VB2005 from VB2003
+
+*****************************************************************************************************************************
+
+VB.NET 2003 v3.5.4 Updates:
+- FIX: Activelock was changing the Date Format of the target machine and sometimes not returning to the original format. The root of the problem seemed to be any Err.Raise was causing the date format reset to be skipped. Therefore, we've added "Set_locale regionalSymbol" before every Err.Raise in the entire code base. This problem was reported by many people.
+- FIX: Changing the revision number of the software was NOT causing a new Trial Period to begin. Software name alone was. The problem was related with the Rijndael algorithm not changing the first 12 or so characters of the encrypted text when the version number alone is changed. Changed from Rijndael to MD5 which always yields a completely new encrypted with even a minor change in the software name, version number and password combination.
+- User Name should always be entered. Missing user names are no longer allowed.
+- This and the future setup packages will always install new versions of Activelock into separate directories not overwriting the existing versions. This applies to even minor revisions.
+
+
+VB.NET 2003 v3.5.3 Updates:
+- FIX: ReconstructInstallationCode was not implemented in Alugen3.5.NET. Added.
+- FIX: Alugen3.5.NET uses an INI file to store/retrieve control property settings. The name of the INI file was using Application version number which was continuously changing the INI file name after each new build. The control properties were being saved to different files and were never being read. Fixed.
+- FIX: Changed all internal date formats to yyyy/MM/dd to be consistent throughout the program. This also fixed the problem reported by vsdlh. Activelock was causing runtime error 13 with Thailand (and eastern Asian) settings because of different date formats used in the licensing procedures. There was no problem with the Trial feature.
+- FIX: Acquire and Register methods now set the computer date settings to yyyy/MM/dd before anything takes place and set it back to the original date setting upon completion of the methods or any errors that might be encountered.
+
+
+VB.NET 2003 v3.5.2 Updates:
+- FIX: In Alugen, the Save button on the License Key Generator was becoming invisible upon pasting an installation code. Fixed.
+- FIX: In Alugen, clicking on any of the checkboxes before entering the installation code was causing an error. Fixed.
+
+
+VB.NET 2003 v3.5 Updates:
+- FIX: Implemented the changes proposed by David Weatherall in IActivelock_LockCode() have been implemented. This should speed up the process of loading the form while the MAC Address is used as the hardware key and when there's an existing license.
+- Unified storage naming - licenses.ini, licenses.xml, licenses.mdb in Alugen3.5.NET
+- NEW: Short Key Support has been added !!! This was a feature requested by many users. Short keys are not very strong protection like RSA, and there's no key signing/verification involved, however they are still very secure and pretty convenient to use. Short keys can be specified by using the MyActivelock.LicenseKeyType property. The old key type can be accessed via alsALCryptoRSA, while short keys are specified using alsShortKeyMD5.
+- NEW: MyActivelock.UsedLockType returns an array of used lock types instead of a single OR'ed number. Thanks to David Weatherall who supplied the modifications for the code to implement this feature.
+- NEW: Alugen keeps the LockTypes checkbox status in the ini file so that every time the program is loaded, the checkbox values are read from the ini file.
+- NEW: Alugen does not check all LockTypes checkboxes automatically upon pasting a new installation code.
+- FIX: MACaddress code execution speed has been improved drastically.
+- A Note has been added to Alugen to indicate the IP address coming from the protected app might be dynamic in the target computer. This might expire the license unexpectedly when the IP address changes.
+v3.5 will no longer accept cases where the KeyStorePath was not specified. An error alerrKeyStorePathInvalid will be returned by the DLL.
+- SoftwarePassword property is no longer optional. It's now a requirement.
+- NEW: NET RSA based protection added. Implemented the .NET RSA classes and added options to protect using different cypher strengths and the NET RSA classes. The following protection methods are currently available:
+1. ALCrypto3.NET 1024-bit
+2. NET RSA 512-bit
+3. NET RSA 1024-bit
+4. NET RSA 1536-bit
+5. NET RSA 2048-bit
+6. NET RSA 4096-bit (This may not be practical to use since it's very slow)
+- ALCrypto3.NET returns an error code indicating an error, and these are trapped by Activelock. Thanks to Jeroen who has added these traps to ALCrypto3.NET
+- Per request, the HDSerial function in modHardware has been made Public so that it could be accessed directly by external programs.
+- Added cWindows class that consolidates all Windows version detection routines as well as functions for retrieving the Windows and system directories. Written by Dwain Snickles (Thanks Dwain !!!)
+- FIX: Trial per Steganography related problems were causing slow execution of the Trial feature. These have been fixed.
+- FIX: Activelock will no longer accept cases where the KeyStorePath was not specified. An error alerrKeyStorePathInvalid will be returned by the DLL. This should take care of the "Double LIC" file problem with one being blank (observed by David Weatherall)
+- FIX: Alugen was not saving some of the control values properly in the INI file. Fixed.
+- GetBiosSerial function name has been changed to GetBiosVersion to reflect the actual intended use.
+- When the lock to IP address option is used, Alugen now displays the following message: "Warning: Use IP addresses cautiously since they may not be static."
+- NEW: CheckTimeServerForClockTampering property has been added. When this is set to a non-zero value, Activelock checks a well known, stable time server to get the current date and compares this with the system clock, and if the difference is more than one day, it decides that the system clocked has been tampered with. This is an optional property and if not set, its value is zero, meaning the time server is not checked automatically. For the Trial Feature, this is turned on automatically if some of the trial signature files are missing. 
+- FIX: SystemClockTampered() function (Time Server access code) was not working because of an incorrect password used. Fixed.
+- NEW: Aggressive new system clock tampering measures have been added to the program. One of them is the Alternate Data Streams based clock checking. Details are available in the source code. This should prevent the reuse of old lic files with system clock set back. 
+- System Files scan for clock tampering has been modified to include only relevant folders.
+- modMD5 had a major cleanup to include only the NET CLR classes and functions. All VB6 based functions/subs have been removed. However, the VB6 and VB.NET modMD5 modules still give the same hash.
+- UserName is now trimmed of any left/right spaces before it is used by Alugen (Jeroen, are you listening?:)))
+- For Windows 95/98/Me, the Smartvsd code for HDD checking uses the smart vxd drivers which are not always available. In such cases, it was thought that perhaps Activelock would put the necessary file (Smartvsd.vxd) under the \Windows\syetem\IOSubSys folder. However, these systems are fading very quickly, and there's not a big base of these OS's anymore. Even in case this happens, the HDD code simply returns the "not available" which makes it obvious that the serial cannot be retrieved. Therefore, we decided not to pursue such additional development only for Win 95/98/Me systems.
+- NEW: LicenseFileType property gives two options to the user: alsLicenseFileEncrypted and alsLicenseFilePlain.
+- NEW: TrialWarningType property allows the trial expired warnings become persistent. The options are trialWarningPersistent and trialWarningTemporary which is really a one time warning for expired trials.
+- NEW: UsedTrialDays and UsedTrialRuns properties are now available to directly access the number of used number of days/runs for the trial mode.
+
+
+VB.NET 2003 v3.4 Updates:
+- FIX: RefreshProcessList() has been removed since it has been observed to cause problems in some machines.
+- FIX: Used the new Get_Locale() and Set_Locale() functions in the DLL to handle the date formats in the DLL. This hopefully takes care of all date handling problems observed in some Regional Settings such as German.
+- FIX: FnE() function has been eliminated. It was causing problem with some regional settings.
+- FIX: GetSystemTime1() has been revisited to remove hard-coded strings that were not friendly with some regional settings.
+- DoScan() has been added to GetSystemTime1 as an additional security measure.
+- Revamped the Rijndael class in the .NET version of the program. This class works similar to the VB6 cousin but produces encoded strings that are different.
+- FIX: frmC form has been removed from the DLL since it was causing trouble with language settings under different regional settings. This form has also been removed from the setup package.
+- FIX: frmMain3.resX was missing from the setup package. Added.
+- FIX: chkItemData.CheckState was not being preserved between different runs. Fixed.
+- GetTypeLibPathFromObject() has been removed since this does not apply to the .NET version of the program. CRCCheckSumTypeLib() also removed.
+- IActivelock_UsedDays has been modified again to roll back to the original v3.3 form.
+- FIX: Eliminated "HH:MM:SS" from all Date formats. This was causing trouble with some regional settings.
+- FIX: "Registered Level Form" caption has been fixed.
+- NEW: Converted the HDD Firmware Serial Number detection code per the VB6 API to VB.NET 2003.
+- FIX: ItemData > 32767 was causing a crash on the RegisteredLevel form. Fixed to show a warning message whenever necessary.
+- Removed "Sub Release" and "IActivelock_Release()" since they are not being used.
+- Added Trim() to all HDD Firmware Serial Number function output. Some results have to be left trimmed.
+- HDD Firmware Serial Number Detection Routine Updates:
+1. Windows98/Me: VB based SMART VXD based method has been added. This method works fine under Windows98/Me. If this fails due to a missing VXD driver, ALCrypto routine is called. It seems like the VB API fails for these operating systems. Activelock uses the SMART check only with Windows98/Me (also with Windows 2003 server as explained below).
+2. Windows 2000: All methods seemed to run under Windows2K, however SMART VXD approach seems to fail under non-admin accounts. Activelock calls the VB API directly as the first attempt and if this fails then the ALCrypto routine is called. 
+3. Windows XP Pro/Home: All methods work with this operating system although the SMART VXD approach failed under 2 out of 10 cases. That's why Activelock will try the VB API with this OS and will call the ALCrypto routine if the API fails.
+4. Windows 2003 Server: For some reason, the VB API methods failed in some of the cases reported. Activelock starts with calling the VB API, and then calls the ALCrypto if the former method is not successful. It's been observed that the SMART VXD method was successful when the VB API was not, therefore if the ALCrypto method fails, Activelock will call the SMART routines as the last option for this OS.
+Conclusion: It seems like it's necessary to use all available methods to retrieve the HDD Firmware Serial Number. There's always a possibility that all three methods could fail also.
+- FIX: BIOS Serial Number was being obtained using the WMI using Win32_BIOS instance. This always matched the CIM_Chassis instance of the same WinMgmts object. At the same time, some computers did not return anything for the Win32_Baseboard instance for the motherboard object. A search on Internet also revealed that the class that should be used for the motherboard serial number is CIM_Chassis, not Win32_Baseboard. Therefore we've switched the motherboard serial number from Win32_Baseboard to CIM_Chassis. Also, since this value is the same as Win32_BIOS, we'll use the BIOS version instead of its serial number from now on. Using this approach, both BIOS (version) and Motherboard Serial numbers seem to be returned from all tested computers.
+- NEW: Thanks to Salvatore La Porta, Alugen3NET can now save all registered licenses in an MDB database. Searching for a particular record in the database is also possible by specifying the search words. Thanks Salva !!!
+- NEW: ALCrypto3NET.dll has been overhauled based on the work by Jeroen (Zoenie). ALcrypto3NET.dll has been rewritten as an ANSI C++ code and has been recompiled under VS.NET 2003. Nice work done Jeroen !!!
+- FIX: ALCrypto3NET.dll no longer strips the preceding "WD-W" from the HDD firmware serial number since neither the SMART VXD nor the VB.NET API procedure does that. 
+
+
+VB.NET 2003 v3.0.2 Updates:
+- FIX: The Split() function in the unused Trial modules was causing the Permanent license feature to malfunction. Reported by eRoL and fixed.
+- FIX: ValidateLic() method had an unintentional bug causing the Lic file work in different machines. Fixed.
+- FIX: Clock tampering was possible with a saved Liberation Key and by setting the system clock back to the original registration date. Reported by eRoL. Fixed.
+
+VB.NET 2003 v3.0.1 Updates:
+- Removed the BIN directory dependency from the Init() method. If an argument is passed, the DLL verification for Alcrypto3NET.DLL is made with the DLL located in the application path. If no argument is passed, then Activelock3NET.DLL must be put into the system32 directory.
+- Removed the BIN directory as the output path from all projects. All the programs in the setup package come with all DLLs and the EXEs in the application folder only.
+- The scheme has been checked against the upcoming ASPNET3Alugen code base since the ASP.NET version of Activelock uses the same Activelock3NET.DLL used by the VB.NET version. In the ASP.NET version, users will have to pass the \bin folder path as the Init argument to make the DLL verification. Since both Activelock3NET and Alcrypto3NET are in the same directory (bin), ASPNET3Alugen also works properly. Putting the code behind in a bin directory is necessary for the ASP.NET 1.1 applications to work properly.
+
+
+VB.NET 2003 v3.0.0:
+- First version of Activelock3NET for VB.NET
+- Trial feature is not available in this version
+- Alugen3NET does not have the customer license database
+- It is possible to use ALTestApp3NET and Alugen3NET with the unmanaged (classic) Activelock3.
+Just search for the following statements: 
+'comment the following when managed Activelock3NET.dll is used
+Comment this statement when classic Activelock3 is used:
+Private MyActiveLock As ActiveLock3NET._IActiveLock
+Comment this statement when Activelock3NET (managed .NET DLL) is used:
+Private MyActiveLock As ActiveLock3.IActiveLock
+
+
+--------------------------------------------------------------------------------
+Copyright © 2001-2008 Activelock Software Group
+Project Administrator:
+Ismail Alkan
