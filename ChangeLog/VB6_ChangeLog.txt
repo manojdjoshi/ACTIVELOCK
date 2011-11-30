@@ -1,5 +1,10 @@
 Change Log For Activelock VB6 
-Last Updated: 30 Apr 2010 
+Last Updated: Dec 1 2011 
+
+v3.7.0 Updates:
+- UPDATE: Added Sleep 500 to the ValidateLic method that handles the license check better
+- UPDATE: Consolidated all VB6 related projects/samples under the VB6 folder
+- UPDATE: Updated the VB6 vbg file to inlude all projects.
 
 v3.6.1 Updates:
 - UPDATE: Redesigned Alugen to remove the Tab control and add a menu. Tabctl32.ocx was somehow causing problesm under Windows 7. One less OCX to worry about anyway.
