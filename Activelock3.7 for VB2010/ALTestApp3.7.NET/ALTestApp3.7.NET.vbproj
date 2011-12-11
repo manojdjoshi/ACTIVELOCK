@@ -23,7 +23,7 @@
     <OptionExplicit>On</OptionExplicit>
     <OptionStrict>On</OptionStrict>
     <RootNamespace>ALTestApp37Net</RootNamespace>
-    <StartupObject>ALTestApp37Net.frmMain</StartupObject>
+    <StartupObject>ALTestApp37Net.frmSplash1</StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <MyType>WindowsFormsWithCustomSubMain</MyType>

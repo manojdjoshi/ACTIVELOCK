@@ -12,16 +12,25 @@
         End If
 
     End Sub
-
     Private Sub cmdExit_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdExit.Click
-        End
+        Application.Exit()
     End Sub
 
-    Private Sub cmdRefgister_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdRefgister.Click
-        Me.Close()
+    Private Sub cmdRegister_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdRegister.Click
+        MsgBox("Show your registration form here after running Activelock with no Trial or after KillTrial.", vbInformation)
+        useTrial = False
+        Dim frmMain As New frmMain
+        frmMain.Visible = True
+        Me.Hide()
     End Sub
-
     Private Sub cmdTry_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cmdTry.Click
+        MsgBox("Show your main form here after running Activelock with the Trial feature on.", vbInformation)
         Me.Close()
+        useTrial = True
+        Dim frmMain As New frmMain
+        frmMain.Visible = True
+        Application.DoEvents()
+        frmMain.Hide()
+         'Show some other form of your app here
     End Sub
 End Class

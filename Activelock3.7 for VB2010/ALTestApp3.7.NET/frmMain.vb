@@ -1173,7 +1173,7 @@ Friend Class frmMain
     '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
     ' ActiveLock Initialization
     '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-    Private Sub frmMain_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
+    Public Sub frmMain_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
         Dim boolAutoRegisterKeyPath As Boolean
         Dim Msg As String
         On Error GoTo NotRegistered
@@ -1240,7 +1240,11 @@ Friend Class frmMain
             ' Set the trial type property
             ' this is either trialDays, or trialRuns or trialNone.
             '.TrialType = ActiveLock37Net.IActiveLock.ALTrialTypes.trialRuns
-            .TrialType = ActiveLock37Net.IActiveLock.ALTrialTypes.trialDays
+            If useTrial = False Then
+                .TrialType = ActiveLock37Net.IActiveLock.ALTrialTypes.trialNone
+            Else
+                .TrialType = ActiveLock37Net.IActiveLock.ALTrialTypes.trialDays
+            End If
 
             ' Set the Trial Length property.
             ' This number represents the number of days or the number of runs (whichever is applicable).
