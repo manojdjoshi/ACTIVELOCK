@@ -59,70 +59,73 @@ namespace ALTestApp36NET_CS
 
 		private void InitializeComponent()
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(frmSplash));
-			this.Label16 = new System.Windows.Forms.Label();
-			this.Image1 = new System.Windows.Forms.PictureBox();
-			this.lblInfo = new System.Windows.Forms.Label();
-			this.SuspendLayout();
-			// 
-			// Label16
-			// 
-			this.Label16.AutoSize = true;
-			this.Label16.BackColor = System.Drawing.Color.Transparent;
-			this.Label16.Cursor = System.Windows.Forms.Cursors.Default;
-			this.Label16.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.Label16.ForeColor = System.Drawing.Color.Blue;
-			this.Label16.Location = new System.Drawing.Point(83, 132);
-			this.Label16.Name = "Label16";
-			this.Label16.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this.Label16.Size = new System.Drawing.Size(82, 16);
-			this.Label16.TabIndex = 4;
-			this.Label16.Text = "Activelock3_5NET";
-			this.Label16.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			// 
-			// Image1
-			// 
-			this.Image1.Cursor = System.Windows.Forms.Cursors.Default;
-			this.Image1.Image = ((System.Drawing.Image)(resources.GetObject("Image1.Image")));
-			this.Image1.Location = new System.Drawing.Point(96, 72);
-			this.Image1.Name = "Image1";
-			this.Image1.Size = new System.Drawing.Size(55, 55);
-			this.Image1.TabIndex = 5;
-			this.Image1.TabStop = false;
-			// 
-			// lblInfo
-			// 
-			this.lblInfo.BackColor = System.Drawing.Color.Transparent;
-			this.lblInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.lblInfo.Cursor = System.Windows.Forms.Cursors.Default;
-			this.lblInfo.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.lblInfo.ForeColor = System.Drawing.SystemColors.WindowText;
-			this.lblInfo.Location = new System.Drawing.Point(0, 0);
-			this.lblInfo.Name = "lblInfo";
-			this.lblInfo.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this.lblInfo.Size = new System.Drawing.Size(249, 150);
-			this.lblInfo.TabIndex = 3;
-			this.lblInfo.TextAlign = System.Drawing.ContentAlignment.TopCenter;
-			// 
-			// frmSplash
-			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.BackColor = System.Drawing.Color.FromArgb(((System.Byte)(192)), ((System.Byte)(192)), ((System.Byte)(255)));
-			this.ClientSize = new System.Drawing.Size(249, 150);
-			this.ControlBox = false;
-			this.Controls.Add(this.Label16);
-			this.Controls.Add(this.Image1);
-			this.Controls.Add(this.lblInfo);
-			this.Cursor = System.Windows.Forms.Cursors.Default;
-			this.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((System.Byte)(0)));
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-			this.Location = new System.Drawing.Point(83, 132);
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
-			this.Name = "frmSplash";
-			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.ResumeLayout(false);
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSplash));
+            this.Label16 = new System.Windows.Forms.Label();
+            this.Image1 = new System.Windows.Forms.PictureBox();
+            this.lblInfo = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.Image1)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // Label16
+            // 
+            this.Label16.AutoSize = true;
+            this.Label16.BackColor = System.Drawing.Color.Transparent;
+            this.Label16.Cursor = System.Windows.Forms.Cursors.Default;
+            this.Label16.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Label16.ForeColor = System.Drawing.Color.Blue;
+            this.Label16.Location = new System.Drawing.Point(83, 132);
+            this.Label16.Name = "Label16";
+            this.Label16.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.Label16.Size = new System.Drawing.Size(88, 14);
+            this.Label16.TabIndex = 4;
+            this.Label16.Text = "Activelock37NET";
+            this.Label16.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // Image1
+            // 
+            this.Image1.Cursor = System.Windows.Forms.Cursors.Default;
+            this.Image1.Image = ((System.Drawing.Image)(resources.GetObject("Image1.Image")));
+            this.Image1.Location = new System.Drawing.Point(96, 72);
+            this.Image1.Name = "Image1";
+            this.Image1.Size = new System.Drawing.Size(55, 55);
+            this.Image1.TabIndex = 5;
+            this.Image1.TabStop = false;
+            // 
+            // lblInfo
+            // 
+            this.lblInfo.BackColor = System.Drawing.Color.Transparent;
+            this.lblInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblInfo.Cursor = System.Windows.Forms.Cursors.Default;
+            this.lblInfo.Font = new System.Drawing.Font("Arial", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblInfo.ForeColor = System.Drawing.SystemColors.WindowText;
+            this.lblInfo.Location = new System.Drawing.Point(0, 0);
+            this.lblInfo.Name = "lblInfo";
+            this.lblInfo.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.lblInfo.Size = new System.Drawing.Size(249, 150);
+            this.lblInfo.TabIndex = 3;
+            this.lblInfo.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
+            // frmSplash
+            // 
+            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.ClientSize = new System.Drawing.Size(249, 150);
+            this.ControlBox = false;
+            this.Controls.Add(this.Label16);
+            this.Controls.Add(this.Image1);
+            this.Controls.Add(this.lblInfo);
+            this.Cursor = System.Windows.Forms.Cursors.Default;
+            this.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Location = new System.Drawing.Point(83, 132);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "frmSplash";
+            this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            ((System.ComponentModel.ISupportInitialize)(this.Image1)).EndInit();
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 
