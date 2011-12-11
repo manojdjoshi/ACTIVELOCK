@@ -37,7 +37,7 @@ using System.Runtime.CompilerServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly: AssemblyTitle("ALTestApp35NET_CS")]
+[assembly: AssemblyTitle("ALTestApp37NET_CS")]
 [assembly: AssemblyDescription("ActiveLock Test Application")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("ActiveLockSoftware")]

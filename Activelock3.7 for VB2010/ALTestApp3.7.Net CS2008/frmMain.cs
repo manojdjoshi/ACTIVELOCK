@@ -35,7 +35,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Runtime.InteropServices;
-using ActiveLock3_6NET;
+using ActiveLock37Net;
 
 namespace ALTestApp36NET_CS
 {
@@ -1204,7 +1204,7 @@ namespace ALTestApp36NET_CS
 			string strMsg=null;
             string strRemainingTrialDays = null, strRemainingTrialRuns = null, strTrialLength = null, strUsedDays = null, strExpirationDate = null,
                 strRegisteredUser = null, strRegisteredLevel = null, strLicenseClass = null, strMaxCount = null, strLicenseFileType = null,
-                strLicenseType = null, strUsedLockType = null;
+                strLicenseType = null;
 			try
 			{
                 // Form's caption
@@ -1212,7 +1212,7 @@ namespace ALTestApp36NET_CS
                 
                 // Check the existence of necessary files to run this application
                 // This is not necessary if you're not using these controls in your app.
-                CheckForResources("#Alcrypto3NET.dll", "#ActiveLock3_6Net.dll", "comctl32.ocx", "tabctl32.ocx");
+                CheckForResources( "#ActiveLock37Net.dll", "comctl32.ocx", "tabctl32.ocx");
 
                 // Set the path to the license file (LIC) and ALL file (if it exists)
                 StringBuilder sbAppfilePath = new StringBuilder(260);
@@ -1238,8 +1238,8 @@ namespace ALTestApp36NET_CS
                 // however ALCrypto uses 1024 bit strength key only.
                 // alsShortKeyMD5 is for short key protection only
                 // WARNING: Short key licenses use the lockFingerprint by default
-                //.LicenseKeyType = ActiveLock3_6NET.IActiveLock.ALLicenseKeyTypes.alsShortKeyMD5
-                MyActiveLock.LicenseKeyType = ActiveLock3_6NET.IActiveLock.ALLicenseKeyTypes.alsRSA;
+                //.LicenseKeyType = ActiveLock37Net.IActiveLock.ALLicenseKeyTypes.alsShortKeyMD5
+                MyActiveLock.LicenseKeyType = ActiveLock37Net.IActiveLock.ALLicenseKeyTypes.alsRSA;
 
                 // Set the Trial Feature properties
                 // If you don't want to use the trial feature in your app, set the TrialType
@@ -1293,29 +1293,29 @@ namespace ALTestApp36NET_CS
                 // You can combine any lockType(s) using OR as above
                 // WARNING: Short key licenses use the lockFingerprint by default
                 // WARNING: This has no effect for short key licenses
-                //.LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockNone
+                //.LockType = ActiveLock37Net.IActiveLock.ALLockTypes.lockNone
 				MyActiveLock.LockType = IActiveLock.ALLockTypes.lockHDFirmware; 
 
-                //.LockType = ActiveLock3_6NET.IActiveLock.ALLockTypes.lockIP Or _
-                //ActiveLock3_6NET.IActiveLock.ALLockTypes.lockComp
+                //.LockType = ActiveLock37Net.IActiveLock.ALLockTypes.lockIP Or _
+                //ActiveLock37Net.IActiveLock.ALLockTypes.lockComp
 
                 // If you want to lock to any keys explicitly, combine them using OR
                 // But you won't be able to uncheck/check any of them while in Alugen (too late at that point).
                 //.LockType = _
-                // ActiveLock3_6NET.IActiveLock.ALLockTypes.lockBIOS Or _
-                // ActiveLock3_6NET.IActiveLock.ALLockTypes.lockComp Or _
-                // ActiveLock3_6NET.IActiveLock.ALLockTypes.lockHD Or _
-                // ActiveLock3_6NET.IActiveLock.ALLockTypes.lockHDFirmware Or _
-                // ActiveLock3_6NET.IActiveLock.ALLockTypes.lockIP Or _
-                // ActiveLock3_6NET.IActiveLock.ALLockTypes.lockMotherboard Or _
-                // ActiveLock3_6NET.IActiveLock.ALLockTypes.lockWindows Or _
-                // ActiveLock3_6NET.IActiveLock.ALLockTypes.lockMAC Or _
-                // ActiveLock3_6NET.IActiveLock.ALLockTypes.lockExternalIP Or _
-                // ActiveLock3_6NET.IActiveLock.ALLockTypes.lockFingerprint Or _
-                // ActiveLock3_6NET.IActiveLock.ALLockTypes.lockSID Or _
-                // ActiveLock3_6NET.IActiveLock.ALLockTypes.lockCPUID Or _
-                // ActiveLock3_6NET.IActiveLock.ALLockTypes.lockBaseboardID Or _
-                // ActiveLock3_6NET.IActiveLock.ALLockTypes.lockVideoID
+                // ActiveLock37Net.IActiveLock.ALLockTypes.lockBIOS Or _
+                // ActiveLock37Net.IActiveLock.ALLockTypes.lockComp Or _
+                // ActiveLock37Net.IActiveLock.ALLockTypes.lockHD Or _
+                // ActiveLock37Net.IActiveLock.ALLockTypes.lockHDFirmware Or _
+                // ActiveLock37Net.IActiveLock.ALLockTypes.lockIP Or _
+                // ActiveLock37Net.IActiveLock.ALLockTypes.lockMotherboard Or _
+                // ActiveLock37Net.IActiveLock.ALLockTypes.lockWindows Or _
+                // ActiveLock37Net.IActiveLock.ALLockTypes.lockMAC Or _
+                // ActiveLock37Net.IActiveLock.ALLockTypes.lockExternalIP Or _
+                // ActiveLock37Net.IActiveLock.ALLockTypes.lockFingerprint Or _
+                // ActiveLock37Net.IActiveLock.ALLockTypes.lockSID Or _
+                // ActiveLock37Net.IActiveLock.ALLockTypes.lockCPUID Or _
+                // ActiveLock37Net.IActiveLock.ALLockTypes.lockBaseboardID Or _
+                // ActiveLock37Net.IActiveLock.ALLockTypes.lockVideoID
 
                 // Set the .ALL file path if you're using an ALL file.
                 // .ALL is an auto registration file.
@@ -1339,31 +1339,35 @@ namespace ALTestApp36NET_CS
 
                 // Set if auto registration will be used.
                 // Auto registration uses the ALL file for license registration.
-                MyActiveLock.AutoRegister = ActiveLock3_6NET.IActiveLock.ALAutoRegisterTypes.alsEnableAutoRegistration;
+                MyActiveLock.AutoRegister = ActiveLock37Net.IActiveLock.ALAutoRegisterTypes.alsEnableAutoRegistration;
 
                 // Set the Time Server check for Clock Tampering
                 // This is optional but highly recommended.
                 // Although Activelock makes every effort to check if the system clock was tampered,
                 // checking a time server is the guaranteed way of knowing the correct UTC time/day.
                 // This feature might add some delay to your apps start-up time.
-                MyActiveLock.CheckTimeServerForClockTampering = ActiveLock3_6NET.IActiveLock.ALTimeServerTypes.alsDontCheckTimeServer; // use alsCheckTimeServer to enforce time server checks for clock tampering check
-                //.CheckTimeServerForClockTampering = ActiveLock3_6NET.IActiveLock.ALTimeServerTypes.alsCheckTimeServer
+                MyActiveLock.CheckTimeServerForClockTampering = ActiveLock37Net.IActiveLock.ALTimeServerTypes.alsDontCheckTimeServer; // use alsCheckTimeServer to enforce time server checks for clock tampering check
+                //.CheckTimeServerForClockTampering = ActiveLock37Net.IActiveLock.ALTimeServerTypes.alsCheckTimeServer
 
                 // Set the system files clock tampering check
                 // This feature might add some delay to your apps start-up time.
-                MyActiveLock.CheckSystemFilesForClockTampering = ActiveLock3_6NET.IActiveLock.ALSystemFilesTypes.alsDontCheckSystemFiles; // use alsCheckSystemFiles to enforce system files scanning for clock tampering check
-                //.CheckSystemFilesForClockTampering = ActiveLock3_6NET.IActiveLock.ALSystemFilesTypes.alsCheckSystemFiles
+                MyActiveLock.CheckSystemFilesForClockTampering = ActiveLock37Net.IActiveLock.ALSystemFilesTypes.alsDontCheckSystemFiles; // use alsCheckSystemFiles to enforce system files scanning for clock tampering check
+                //.CheckSystemFilesForClockTampering = ActiveLock37Net.IActiveLock.ALSystemFilesTypes.alsCheckSystemFiles
                 
                 // Set the license file format; this could be encrypted or plain
                 // Even in a plain file format, certain keys and dates are still encrypted.
-                MyActiveLock.LicenseFileType = ActiveLock3_6NET.IActiveLock.ALLicenseFileTypes.alsLicenseFilePlain;
+                MyActiveLock.LicenseFileType = ActiveLock37Net.IActiveLock.ALLicenseFileTypes.alsLicenseFilePlain;
 
                 // Verify AL's authenticity
-				txtChecksum.Text = modMain.VerifyActiveLockNETdll(); 
+				txtChecksum.Text = modMain.VerifyActiveLockNETdll();
+                if (txtChecksum.Text == "-1")
+                {
+                    Environment.Exit(0);
+                }
 				
                 // Initialize the keystore. We use a File keystore in this case.
                 // The other type alsRegistry is NOT supported.
-                MyActiveLock.KeyStoreType = ActiveLock3_6NET.IActiveLock.LicStoreType.alsFile;
+                MyActiveLock.KeyStoreType = ActiveLock37Net.IActiveLock.LicStoreType.alsFile;
                 // uncomment the following when unmanaged Activelock3NET.dll is used
                 //MyActiveLock.KeyStoreType = ActiveLock3.LicStoreType.alsFile
 
@@ -1407,7 +1411,7 @@ namespace ALTestApp36NET_CS
                 // If InStr(1, Err.Description, "No valid license") > 0 Or InStr(1, Err.Description, "license invalid") > 0 Then '-2147221503 & -2147221502
                 MyActiveLock.Acquire(ref strMsg, ref strRemainingTrialDays, ref strRemainingTrialRuns, ref strTrialLength,
                     ref strUsedDays, ref strExpirationDate, ref strRegisteredUser, ref strRegisteredLevel, ref strLicenseClass,
-                    ref strMaxCount, ref strLicenseFileType, ref strLicenseType, ref strUsedLockType); 
+                    ref strMaxCount, ref strLicenseFileType, ref strLicenseType); 
                 // strMsg is to get the trial status
                 // All other parameters are Optional and you can actually get all of them
                 // using MyActivelock.Property usage, but keep in mind that 
