@@ -1,6 +1,6 @@
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C# Express 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALTestApp36Net", "ALTestApp36Net.csproj", "{4E72AFBD-8877-431E-8BFE-BBB238064F52}"
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ALTestApp37Net", "ALTestApp37Net.csproj", "{4E72AFBD-8877-431E-8BFE-BBB238064F52}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -110,7 +110,7 @@ namespace ALTestApp36NET_CS
 			string strMessage=null;
 			CRC32 crcObj = new CRC32();
 			int crcSum = 0;
-			string activelockFile = Application.StartupPath + @"\Activelock3_6NET.dll";
+			string activelockFile = Application.StartupPath + @"\ActiveLock37Net.dll";
 			if (File.Exists(activelockFile))
 			{
 				FileStream streamFileActiveLock = new FileStream(activelockFile, FileMode.Open, FileAccess.Read, FileShare.Read, 0x2000);
@@ -121,19 +121,19 @@ namespace ALTestApp36NET_CS
 
 				Debug.WriteLine("Hash: " + crcSum.ToString());
 
-                strActiveLockCrcSum = "2F7.231.273.23C.2F7.2F7.2CB.226"; //crcSum of Activelock
+                strActiveLockCrcSum = "231.268.268.21B.21B.210.2E1.210"; //crcSum of Activelock
 				if (String.Compare(crcSumHEX, modMain.Dec(strActiveLockCrcSum), true)!=0)
 				{
 					strMessage = "42B.441.4FC.483.512.457.4A4.4C5.441.499.231.35A.2F7.39C.1FA.44C.4A4.4A4.160.478.42B.4F1.160.436.457.457.4BA.160.441.4C5.4E6.4E6.507.4D0.4FC.457.44C.1FA";
 					MessageBox.Show(modMain.Dec(strMessage), modMain.MSGBOXCAPTION, MessageBoxButtons.OK);
 					Application.Exit();
-				}
-				return crcSumHEX;
-			}
+                }
+                return crcSumHEX;
+            }
 			strMessage = "42B.441.4FC.483.512.457.4A4.4C5.441.499.231.35A.2F7.39C.1FA.44C.4A4.4A4.160.4BA.4C5.4FC.160.462.4C5.507.4BA.44C";
 			MessageBox.Show(modMain.Dec(strMessage), modMain.MSGBOXCAPTION, MessageBoxButtons.OK, MessageBoxIcon.Information);
 			Application.Exit();
-			return crcSumHEX;
+			return "-1";
 		}
 
 		internal static string AppPath()
