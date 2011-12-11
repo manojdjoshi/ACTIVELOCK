@@ -226,9 +226,9 @@ namespace ALTestApp36NET_CS
             // 
             // SStab1
             // 
-            this.SStab1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.SStab1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.SStab1.Controls.Add(this._SSTab1_TabPage0);
             this.SStab1.Controls.Add(this._SSTab1_TabPage1);
             this.SStab1.Location = new System.Drawing.Point(8, 8);
@@ -250,8 +250,8 @@ namespace ALTestApp36NET_CS
             // 
             // fraRegStatus
             // 
-            this.fraRegStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.fraRegStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.fraRegStatus.BackColor = System.Drawing.SystemColors.Control;
             this.fraRegStatus.Controls.Add(this.txtLicenseType);
             this.fraRegStatus.Controls.Add(this.cmdResetTrial);
@@ -286,8 +286,8 @@ namespace ALTestApp36NET_CS
             // txtLicenseType
             // 
             this.txtLicenseType.AcceptsReturn = true;
-            this.txtLicenseType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtLicenseType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtLicenseType.BackColor = System.Drawing.SystemColors.InactiveBorder;
             this.txtLicenseType.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.txtLicenseType.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -351,8 +351,8 @@ namespace ALTestApp36NET_CS
             // txtRegisteredLevel
             // 
             this.txtRegisteredLevel.AcceptsReturn = true;
-            this.txtRegisteredLevel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtRegisteredLevel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtRegisteredLevel.BackColor = System.Drawing.SystemColors.InactiveBorder;
             this.txtRegisteredLevel.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.txtRegisteredLevel.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -383,8 +383,8 @@ namespace ALTestApp36NET_CS
             // txtVersion
             // 
             this.txtVersion.AcceptsReturn = true;
-            this.txtVersion.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtVersion.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtVersion.BackColor = System.Drawing.SystemColors.InactiveBorder;
             this.txtVersion.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.txtVersion.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -401,8 +401,8 @@ namespace ALTestApp36NET_CS
             // txtName
             // 
             this.txtName.AcceptsReturn = true;
-            this.txtName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtName.BackColor = System.Drawing.SystemColors.InactiveBorder;
             this.txtName.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.txtName.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -419,8 +419,8 @@ namespace ALTestApp36NET_CS
             // txtExpiration
             // 
             this.txtExpiration.AcceptsReturn = true;
-            this.txtExpiration.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtExpiration.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtExpiration.BackColor = System.Drawing.SystemColors.InactiveBorder;
             this.txtExpiration.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.txtExpiration.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -436,8 +436,8 @@ namespace ALTestApp36NET_CS
             // txtUsedDays
             // 
             this.txtUsedDays.AcceptsReturn = true;
-            this.txtUsedDays.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtUsedDays.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUsedDays.BackColor = System.Drawing.SystemColors.InactiveBorder;
             this.txtUsedDays.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.txtUsedDays.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -453,8 +453,8 @@ namespace ALTestApp36NET_CS
             // txtRegStatus
             // 
             this.txtRegStatus.AcceptsReturn = true;
-            this.txtRegStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtRegStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtRegStatus.BackColor = System.Drawing.SystemColors.InactiveBorder;
             this.txtRegStatus.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.txtRegStatus.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -589,9 +589,9 @@ namespace ALTestApp36NET_CS
             // 
             // fraReg
             // 
-            this.fraReg.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.fraReg.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.fraReg.BackColor = System.Drawing.SystemColors.Control;
             this.fraReg.Controls.Add(this.cmdPaste);
             this.fraReg.Controls.Add(this.cmdCopy);
@@ -667,8 +667,8 @@ namespace ALTestApp36NET_CS
             // txtUser
             // 
             this.txtUser.AcceptsReturn = true;
-            this.txtUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtUser.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtUser.BackColor = System.Drawing.SystemColors.Window;
             this.txtUser.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.txtUser.Font = new System.Drawing.Font("Arial", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -700,8 +700,8 @@ namespace ALTestApp36NET_CS
             // txtReqCodeGen
             // 
             this.txtReqCodeGen.AcceptsReturn = true;
-            this.txtReqCodeGen.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtReqCodeGen.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtReqCodeGen.BackColor = System.Drawing.SystemColors.InactiveBorder;
             this.txtReqCodeGen.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.txtReqCodeGen.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -734,9 +734,9 @@ namespace ALTestApp36NET_CS
             // txtLibKeyIn
             // 
             this.txtLibKeyIn.AcceptsReturn = true;
-            this.txtLibKeyIn.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtLibKeyIn.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtLibKeyIn.BackColor = System.Drawing.SystemColors.InactiveBorder;
             this.txtLibKeyIn.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.txtLibKeyIn.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -788,7 +788,7 @@ namespace ALTestApp36NET_CS
             this.Label4.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.Label4.Size = new System.Drawing.Size(89, 17);
             this.Label4.TabIndex = 18;
-            this.Label4.Text = "Liberation Key:";
+            this.Label4.Text = "License Key:";
             // 
             // _SSTab1_TabPage1
             // 
@@ -1208,7 +1208,7 @@ namespace ALTestApp36NET_CS
 			try
 			{
                 // Form's caption
-                this.Text = "ALTestApp3NET - ActiveLock Test Application for VC#2008 - v3.6"; //& Application.ProductVersion
+                this.Text = "ALTestApp3NET - ActiveLock Test Application for VC#2010 - v3.7"; //& Application.ProductVersion
                 
                 // Check the existence of necessary files to run this application
                 // This is not necessary if you're not using these controls in your app.
@@ -1227,7 +1227,7 @@ namespace ALTestApp36NET_CS
 				
                 // Note: Do not use (App.Major & "." & App.Minor & "." & App.Revision)
                 // since the license will fail with version incremented exe builds
-				MyActiveLock.SoftwareVersion = "3"; // WARNING *** WARNING *** DO NOT USE App.Major & "." & App.Minor & "." & App.Revision
+				MyActiveLock.SoftwareVersion = "3.7"; // WARNING *** WARNING *** DO NOT USE App.Major & "." & App.Minor & "." & App.Revision
 				txtVersion.Text = MyActiveLock.SoftwareVersion; 
 				// This should be set to protect yourself against ResetTrial abuse
 				MyActiveLock.SoftwarePassword = Convert.ToChar(99).ToString() + Convert.ToChar(111).ToString() + Convert.ToChar(111).ToString() + Convert.ToChar(108).ToString(); 
@@ -1282,7 +1282,8 @@ namespace ALTestApp36NET_CS
                 // It's up to you to encrypt it; just makes it more secure
                 // Enc encodes, Dec decodes the public key (VCode)
                 // Change Enc() and Dec(0 the way you want.
-                MyActiveLock.SoftwareCode = modMain.Dec(modMain.PUB_KEY); 
+                //MyActiveLock.SoftwareCode = modMain.Dec(modMain.PUB_KEY);
+                MyActiveLock.SoftwareCode = modMain.PUB_KEY; 
 
                 // uncomment the following when unmanaged Activelock3NET.dll is used
                 //.LockType = ActiveLock3.ALLockTypes.lockNone
@@ -1294,7 +1295,7 @@ namespace ALTestApp36NET_CS
                 // WARNING: Short key licenses use the lockFingerprint by default
                 // WARNING: This has no effect for short key licenses
                 //.LockType = ActiveLock37Net.IActiveLock.ALLockTypes.lockNone
-				MyActiveLock.LockType = IActiveLock.ALLockTypes.lockHDFirmware; 
+				MyActiveLock.LockType = IActiveLock.ALLockTypes.lockNone; 
 
                 //.LockType = ActiveLock37Net.IActiveLock.ALLockTypes.lockIP Or _
                 //ActiveLock37Net.IActiveLock.ALLockTypes.lockComp
@@ -1377,7 +1378,13 @@ namespace ALTestApp36NET_CS
 				strKeyStorePath = modMain.AppPath() + "\\" + modMain.SOFTWARENAME + ".lic"; 
 				System.Diagnostics.Debug.WriteLine("License path is " + strKeyStorePath); 
 				MyActiveLock.KeyStorePath = strKeyStorePath; 
-				// Obtain the EventNotifier so that we can receive notifications from AL.
+				
+                if( !Directory.Exists(AppfilePath + @"\" + MyActiveLock.SoftwareName + MyActiveLock.SoftwareVersion) )
+                    Directory.CreateDirectory( AppfilePath + @"\" + MyActiveLock.SoftwareName + MyActiveLock.SoftwareVersion );
+                strKeyStorePath = AppfilePath + @"\" + MyActiveLock.SoftwareName + MyActiveLock.SoftwareVersion +
+                        @"\" + MyActiveLock.SoftwareName + MyActiveLock.SoftwareVersion + ".lic";
+                
+                // Obtain the EventNotifier so that we can receive notifications from AL.
 				ActiveLockEventSink = MyActiveLock.EventNotifier; 
 				
                 // Initialize AL
@@ -1480,7 +1487,8 @@ namespace ALTestApp36NET_CS
 					MessageBox.Show(ex.Message, modMain.MSGBOXCAPTION, MessageBoxButtons.OK, MessageBoxIcon.Error); 
 				} 
 				txtRegStatus.Text = ex.Message; 
-				txtLicenseType.Text = "None"; 
+				txtLicenseType.Text = "None";
+                txtUser.Text = System.Environment.UserName;
 				if (strMsg!=null && strMsg.Length>0) 
 				{ 
 					MessageBox.Show(strMsg, modMain.MSGBOXCAPTION, MessageBoxButtons.OK, MessageBoxIcon.Information); 
