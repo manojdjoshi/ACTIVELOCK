@@ -44,6 +44,7 @@ Module modMain
     Public strLicenseClass, strMaxCount, strLicenseFileType, strLicenseType, strUsedLockType As String
     Public remainingDays, remainingRuns As Integer
     Public totalDays, totalRuns As Integer
+    Public useTrial As Boolean
 
 	' Application Encryption keys:
 	' !!!WARNING!!!

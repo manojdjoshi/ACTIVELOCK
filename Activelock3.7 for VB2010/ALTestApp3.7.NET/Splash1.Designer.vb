@@ -28,7 +28,7 @@ Partial Class frmSplash1
         Me.lblCompanyProduct = New System.Windows.Forms.Label()
         Me.lblProductName = New System.Windows.Forms.Label()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.cmdRefgister = New System.Windows.Forms.Button()
+        Me.cmdRegister = New System.Windows.Forms.Button()
         Me.cmdTry = New System.Windows.Forms.Button()
         Me.ProgressBar1 = New System.Windows.Forms.ProgressBar()
         Me.lblInfo = New System.Windows.Forms.Label()
@@ -82,14 +82,14 @@ Partial Class frmSplash1
         Me.PictureBox1.TabIndex = 4
         Me.PictureBox1.TabStop = False
         '
-        'cmdRefgister
+        'cmdRegister
         '
-        Me.cmdRefgister.Location = New System.Drawing.Point(166, 386)
-        Me.cmdRefgister.Name = "cmdRefgister"
-        Me.cmdRefgister.Size = New System.Drawing.Size(123, 31)
-        Me.cmdRefgister.TabIndex = 5
-        Me.cmdRefgister.Text = "Register"
-        Me.cmdRefgister.UseVisualStyleBackColor = True
+        Me.cmdRegister.Location = New System.Drawing.Point(166, 386)
+        Me.cmdRegister.Name = "cmdRegister"
+        Me.cmdRegister.Size = New System.Drawing.Size(123, 31)
+        Me.cmdRegister.TabIndex = 5
+        Me.cmdRegister.Text = "Register"
+        Me.cmdRegister.UseVisualStyleBackColor = True
         '
         'cmdTry
         '
@@ -123,7 +123,7 @@ Partial Class frmSplash1
         Me.Controls.Add(Me.lblInfo)
         Me.Controls.Add(Me.ProgressBar1)
         Me.Controls.Add(Me.cmdTry)
-        Me.Controls.Add(Me.cmdRefgister)
+        Me.Controls.Add(Me.cmdRegister)
         Me.Controls.Add(Me.PictureBox1)
         Me.Controls.Add(Me.lblProductName)
         Me.Controls.Add(Me.lblCompanyProduct)
@@ -141,7 +141,7 @@ Partial Class frmSplash1
     Friend WithEvents lblCompanyProduct As System.Windows.Forms.Label
     Friend WithEvents lblProductName As System.Windows.Forms.Label
     Friend WithEvents PictureBox1 As System.Windows.Forms.PictureBox
-    Friend WithEvents cmdRefgister As System.Windows.Forms.Button
+    Friend WithEvents cmdRegister As System.Windows.Forms.Button
     Friend WithEvents cmdTry As System.Windows.Forms.Button
     Friend WithEvents ProgressBar1 As System.Windows.Forms.ProgressBar
     Friend WithEvents lblInfo As System.Windows.Forms.Label
