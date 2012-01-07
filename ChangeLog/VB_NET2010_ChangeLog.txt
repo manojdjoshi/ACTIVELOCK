@@ -6,7 +6,8 @@ VB2010 v3.7 Updates:
 - FIX: Some internal code improvements and enhancements as well as bug fixes have been made. For example, VB6.GetPath was replaced with Environment.CurrentDirectory, etc.
 - UPDATE: All projects have been upgraded to .NET v4 framework.
 - FIX: Alugen was not keeping the status of the fingerprint checkmark correctly. Fixed.
-
+- UPDATE: Function Instring was replaced with Contains everywhere. Instring was removed.
+- UPDATE: Function DeleteRegValue was not used anywhere. Deleted.
 
 VB2008 v3.6.1 Updates:
 - UPDATE: The version numbers are now carefully changed. Last version number update was missed.
