@@ -1,0 +1,4 @@
+VBGROUP 5.0
+Project=ActiveLock3.vbp
+Project=ALUGEN.vbp
+StartupProject=ALVB6Sample.vbp
