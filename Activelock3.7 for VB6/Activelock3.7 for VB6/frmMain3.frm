@@ -1,6 +1,6 @@
 VERSION 5.00
-Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "MSFLXGRD.ocx"
-Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "Comdlg32.ocx"
+Object = "{5E9E78A0-531B-11CF-91F6-C2863C385E30}#1.0#0"; "msflxgrd.ocx"
+Object = "{F9043C88-F6F2-101A-A3C9-08002B2F49FB}#1.2#0"; "comdlg32.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmMain 
    Appearance      =   0  'Flat
@@ -8,12 +8,12 @@ Begin VB.Form frmMain
    Caption         =   "ALUGEN - ActiveLock3 Universal GENerator"
    ClientHeight    =   10395
    ClientLeft      =   150
-   ClientTop       =   840
-   ClientWidth     =   9825
+   ClientTop       =   720
+   ClientWidth     =   9900
    Icon            =   "frmMain3.frx":0000
    LinkTopic       =   "Form1"
    ScaleHeight     =   10395
-   ScaleWidth      =   9825
+   ScaleWidth      =   9900
    StartUpPosition =   3  'Windows Default
    Begin MSComctlLib.StatusBar sbStatus 
       Align           =   2  'Align Bottom
@@ -21,15 +21,15 @@ Begin VB.Form frmMain
       Left            =   0
       TabIndex        =   0
       Top             =   10020
-      Width           =   9825
-      _ExtentX        =   17330
+      Width           =   9900
+      _ExtentX        =   17463
       _ExtentY        =   661
       _Version        =   393216
       BeginProperty Panels {8E3867A5-8586-11D1-B16A-00C0F0283628} 
          NumPanels       =   1
          BeginProperty Panel1 {8E3867AB-8586-11D1-B16A-00C0F0283628} 
             AutoSize        =   1
-            Object.Width           =   17277
+            Object.Width           =   17410
             Text            =   "Ready"
             TextSave        =   "Ready"
          EndProperty
@@ -57,7 +57,7 @@ Begin VB.Form frmMain
          Left            =   1305
          TabIndex        =   35
          Top             =   4725
-         Width           =   7095
+         Width           =   8295
       End
       Begin VB.CheckBox chkLockBaseboardID 
          Caption         =   "Lock to Baseboard ID:"
@@ -74,7 +74,7 @@ Begin VB.Form frmMain
          Left            =   1305
          TabIndex        =   34
          Top             =   5535
-         Width           =   7095
+         Width           =   8295
       End
       Begin VB.CheckBox chkLockCPUID 
          Caption         =   "Lock to CPU ID:"
@@ -91,7 +91,7 @@ Begin VB.Form frmMain
          Left            =   1305
          TabIndex        =   33
          Top             =   5265
-         Width           =   7095
+         Width           =   8295
       End
       Begin VB.CheckBox chkLockMemory 
          Caption         =   "Lock to Memory ID:"
@@ -108,7 +108,7 @@ Begin VB.Form frmMain
          Left            =   1305
          TabIndex        =   32
          Top             =   4995
-         Width           =   7095
+         Width           =   8295
       End
       Begin VB.CheckBox chkLockVideoID 
          Caption         =   "Lock to Video ID:"
@@ -125,7 +125,7 @@ Begin VB.Form frmMain
          Left            =   1305
          TabIndex        =   31
          Top             =   5805
-         Width           =   7095
+         Width           =   8295
       End
       Begin VB.CheckBox chkLockExternalIP 
          Caption         =   "Lock to External IP Address:"
@@ -142,7 +142,7 @@ Begin VB.Form frmMain
          Left            =   1305
          TabIndex        =   30
          Top             =   4455
-         Width           =   7095
+         Width           =   8295
       End
       Begin VB.CommandButton cmdUncheckAll 
          Caption         =   "Uncheck All"
@@ -211,7 +211,7 @@ Begin VB.Form frmMain
          Left            =   1305
          TabIndex        =   23
          Top             =   4185
-         Width           =   7095
+         Width           =   8295
       End
       Begin VB.CheckBox chkLockMotherboard 
          Caption         =   "Lock to BIOS/System Serial Number:"
@@ -228,7 +228,7 @@ Begin VB.Form frmMain
          Left            =   1305
          TabIndex        =   22
          Top             =   3915
-         Width           =   7095
+         Width           =   8295
       End
       Begin VB.CheckBox chkLockBIOS 
          Caption         =   "Lock to BIOS Version:"
@@ -245,7 +245,7 @@ Begin VB.Form frmMain
          Left            =   1305
          TabIndex        =   21
          Top             =   3645
-         Width           =   7095
+         Width           =   8295
       End
       Begin VB.CheckBox chkLockWindows 
          Caption         =   "Lock to Windows Serial Number:"
@@ -262,7 +262,7 @@ Begin VB.Form frmMain
          Left            =   1305
          TabIndex        =   20
          Top             =   3375
-         Width           =   7095
+         Width           =   8295
       End
       Begin VB.CheckBox chkLockHDfirmware 
          Caption         =   "Lock to HDD Firmware Serial Number:"
@@ -279,7 +279,7 @@ Begin VB.Form frmMain
          Left            =   1305
          TabIndex        =   19
          Top             =   3105
-         Width           =   7095
+         Width           =   8295
       End
       Begin VB.CheckBox chkLockHD 
          Caption         =   "Lock to HDD Volume Serial Number:"
@@ -296,7 +296,7 @@ Begin VB.Form frmMain
          Left            =   1305
          TabIndex        =   18
          Top             =   2835
-         Width           =   7095
+         Width           =   8295
       End
       Begin VB.CheckBox chkLockComputer 
          Caption         =   "Lock to Computer Name:"
@@ -313,7 +313,7 @@ Begin VB.Form frmMain
          Left            =   1305
          TabIndex        =   17
          Top             =   2565
-         Width           =   7095
+         Width           =   8295
       End
       Begin VB.CheckBox chkLockMACaddress 
          Caption         =   "Lock to IPEnabled MAC Addresses:"
@@ -330,7 +330,7 @@ Begin VB.Form frmMain
          Left            =   1305
          TabIndex        =   16
          Top             =   2295
-         Width           =   7095
+         Width           =   8295
       End
       Begin VB.PictureBox Picture2 
          Appearance      =   0  'Flat
