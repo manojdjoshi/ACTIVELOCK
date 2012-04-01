@@ -818,8 +818,8 @@ Private Sub Form_Load()
         ' RSA classes in .NET allows you to pick from several cipher strengths
         ' alsShortKeyMD5 is for short key protection only
         ' WARNING: Short key licenses use the lockFingerprint by default
-        .LicenseKeyType = alsShortKeyMD5
-        '.LicenseKeyType = alsRSA
+        '.LicenseKeyType = alsShortKeyMD5
+        .LicenseKeyType = alsRSA
         
         ' Set the Trial Feature properties
         ' If you don't want to use the trial feature in your app, set the TrialType
