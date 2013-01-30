@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{FDE10C6C-801E-4E18-8DBD-D97E56883412}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ActiveLock3_6NET</RootNamespace>
+    <AssemblyName>ActiveLock3_6NET</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>ActiveLock.xml</DocumentationFile>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <BaseAddress>285212672</BaseAddress>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>.\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>ActiveLock.xml</DocumentationFile>
+    <RegisterForComInterop>true</RegisterForComInterop>
+    <BaseAddress>285212672</BaseAddress>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="Microsoft.VisualBasic.Compatibility" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ActiveLock.cs" />
+    <Compile Include="ActivelockEventNotifier.cs" />
+    <Compile Include="ADSFile.cs" />
+    <Compile Include="AlugenGlobals.cs" />
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="CCoder.cs" />
+    <Compile Include="clsGetMACs_IfTable.cs" />
+    <Compile Include="clsShortLicenseKey.cs" />
+    <Compile Include="clsShortSerial.cs" />
+    <Compile Include="CRC32.cs" />
+    <Compile Include="Crypto2005.cs" />
+    <Compile Include="Daytime.cs" />
+    <Compile Include="EncryptionRoutines.cs" />
+    <Compile Include="FileKeyStore.cs" />
+    <Compile Include="FingerPrint.cs" />
+    <Compile Include="Globals3.cs" />
+    <Compile Include="IActiveLock.cs" />
+    <Compile Include="IALUGenerator.cs" />
+    <Compile Include="IKeyStoreProvider.cs" />
+    <Compile Include="INIFile3.cs" />
+    <Compile Include="INIGenerator.cs" />
+    <Compile Include="MDBGenerator.cs" />
+    <Compile Include="modALUGEN.cs" />
+    <Compile Include="modBase64.cs" />
+    <Compile Include="modComputerName.cs" />
+    <Compile Include="modIActiveLock.cs" />
+    <Compile Include="modMD5.cs" />
+    <Compile Include="modRegistryAPIs.cs" />
+    <Compile Include="modSHA1.cs" />
+    <Compile Include="modTrialGlobals3.cs" />
+    <Compile Include="mSmartCall.cs" />
+    <Compile Include="OSVersion.cs" />
+    <Compile Include="ProductInfo.cs" />
+    <Compile Include="ProductLicense.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegistryKeyStore.cs" />
+    <Compile Include="XMLGenerator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="frmTrialC_modified.resX" />
+    <EmbeddedResource Include="ProjectResources.resx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="README.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

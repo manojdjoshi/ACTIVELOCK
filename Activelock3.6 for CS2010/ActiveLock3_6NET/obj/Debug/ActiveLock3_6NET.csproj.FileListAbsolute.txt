@@ -1,0 +1,3 @@
+C:\Users\School\Desktop\AL DEV\Activelock3.6 for CS2008\ActiveLock3_6NET\obj\Debug\ActiveLock3_6NET.frmTrialC_modified.resources
+C:\Users\School\Desktop\AL DEV\Activelock3.6 for CS2008\ActiveLock3_6NET\obj\Debug\ActiveLock3_6NET.ProjectResources.resources
+C:\Users\School\Desktop\AL DEV\Activelock3.6 for CS2008\ActiveLock3_6NET\obj\Debug\ActiveLock3_6NET.csproj.GenerateResource.Cache
