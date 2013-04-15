@@ -44,89 +44,94 @@ using System.Windows.Forms;
 /// Global Accessors to ALUGENLib
 /// </summary>
 /// <remarks>Class instancing was changed to public.</remarks>
-[System.Runtime.InteropServices.ProgId("AlugenGlobals_NET.AlugenGlobals")]
-public class AlugenGlobals
+/// 
+namespace ActiveLock3_6NET
 {
+    [System.Runtime.InteropServices.ProgId("AlugenGlobals_NET.AlugenGlobals")]
+    public class AlugenGlobals
+    {
 
-	// Started: 08.15.2003
-	// Modified: 03.23.2006
-	//===============================================================================
-	//
-	// @author activelock-admins
-	// @version 3.3.0
-	// @date 03.23.2006
+        // Started: 08.15.2003
+        // Modified: 03.23.2006
+        //===============================================================================
+        //
+        // @author activelock-admins
+        // @version 3.3.0
+        // @date 03.23.2006
 
-	/// <summary>
-	/// <para>ActiveLock Error Codes.</para>
-	/// <para>These error codes are used for <code>Err.Number</code> whenever ActiveLock raises an error</para>
-	/// </summary>
-	/// <remarks></remarks>
-	public enum alugenErrCodeConstants
-	{
-		/// <summary>
-		/// No error.  Operation was successful.
-		/// </summary>
-		/// <remarks></remarks>
-		alugenOk = 0,
-		// successful
-		/// <summary>
-		/// Product Info is invalid
-		/// </summary>
-		/// <remarks></remarks>
-		alugenProdInvalid = (int)0x80040100
-		// vbObjectError (&H80040000) + &H100
-	}
+        /// <summary>
+        /// <para>ActiveLock Error Codes.</para>
+        /// <para>These error codes are used for <code>Err.Number</code> whenever ActiveLock raises an error</para>
+        /// </summary>
+        /// <remarks></remarks>
+        public enum alugenErrCodeConstants
+        {
+            /// <summary>
+            /// No error.  Operation was successful.
+            /// </summary>
+            /// <remarks></remarks>
+            alugenOk = 0,
+            // successful
+            /// <summary>
+            /// Product Info is invalid
+            /// </summary>
+            /// <remarks></remarks>
+           
+            // vbObjectError (&H80040000) + &H100
+        }
 
-	/// <summary>
-	/// Returns a new Generator instance
-	/// </summary>
-	/// <param name="pProductStorageType">IActiveLock.ProductsStoreType - Storage Type!</param>
-	/// <returns>IALUGenerator - New Generator instance</returns>
-	/// <remarks></remarks>
+        /// <summary>
+        /// Returns a new Generator instance
+        /// </summary>
+        /// <param name="pProductStorageType">IActiveLock.ProductsStoreType - Storage Type!</param>
+        /// <returns>IALUGenerator - New Generator instance</returns>
+        /// <remarks></remarks>
+        public uint alugenProdInvalid = 0x80040100;
+        public _IALUGenerator GeneratorInstance(IActiveLock.ProductsStoreType pProductStorageType)
+        {
+            _IALUGenerator functionReturnValue = null;
+            switch (pProductStorageType)
+            {
+                case IActiveLock.ProductsStoreType.alsINIFile:
+                    functionReturnValue = new INIGenerator();
+                    break;
+                case IActiveLock.ProductsStoreType.alsXMLFile:
+                    functionReturnValue = new XMLGenerator();
+                    break;
+                case IActiveLock.ProductsStoreType.alsMDBFile:
+                    functionReturnValue = new MDBGenerator();
+                    break;
+                //TODO - MSSQLGenerator
+                //Case ProductsStoreType.alsMSSQL
+                //  Set GeneratorInstance = New MSSQLGenerator
+                default:
+                    modActiveLock.Set_Locale(modActiveLock.regionalSymbol);
+                    Err().Raise(Globals.ActiveLockErrCodeConstants.AlerrNotImplemented, modTrial.ACTIVELOCKSTRING, modActiveLock.STRNOTIMPLEMENTED);
+                    functionReturnValue = null;
+                    break;
+            }
+            return functionReturnValue;
+        }
 
-	public _IALUGenerator GeneratorInstance(IActiveLock.ProductsStoreType pProductStorageType)
-	{
-		_IALUGenerator functionReturnValue = null;
-		switch (pProductStorageType) {
-			case IActiveLock.ProductsStoreType.alsINIFile:
-				functionReturnValue = new INIGenerator();
-				break;
-			case IActiveLock.ProductsStoreType.alsXMLFile:
-				functionReturnValue = new XMLGenerator();
-				break;
-			case IActiveLock.ProductsStoreType.alsMDBFile:
-				functionReturnValue = new MDBGenerator();
-				break;
-			//TODO - MSSQLGenerator
-			//Case ProductsStoreType.alsMSSQL
-			//  Set GeneratorInstance = New MSSQLGenerator
-			default:
-				modActiveLock.Set_Locale(modActiveLock.regionalSymbol);
-				Err().Raise(Globals.ActiveLockErrCodeConstants.AlerrNotImplemented, modTrial.ACTIVELOCKSTRING, modActiveLock.STRNOTIMPLEMENTED);
-				functionReturnValue = null;
-				break;
-		}
-		return functionReturnValue;
-	}
-
-	/// <summary>
-	/// Instantiates a new ProductInfo object
-	/// </summary>
-	/// <param name="Name">String - Product name</param>
-	/// <param name="Ver">String - Product version</param>
-	/// <param name="VCode">String - Product VCODE (public key)</param>
-	/// <param name="GCode">String - Product GCODE (private key)</param>
-	/// <returns>ProductInfo - Product information</returns>
-	/// <remarks></remarks>
-	public ProductInfo CreateProductInfo(string Name, string Ver, string VCode, string GCode)
-	{
-		ProductInfo ProdInfo = new ProductInfo();
-		{
-			ProdInfo.Name = Name;
-			ProdInfo.Version = Ver;
-			ProdInfo.VCode = VCode;
-			ProdInfo.GCode = GCode;
-		}
-		return ProdInfo;
-	}
+        /// <summary>
+        /// Instantiates a new ProductInfo object
+        /// </summary>
+        /// <param name="Name">String - Product name</param>
+        /// <param name="Ver">String - Product version</param>
+        /// <param name="VCode">String - Product VCODE (public key)</param>
+        /// <param name="GCode">String - Product GCODE (private key)</param>
+        /// <returns>ProductInfo - Product information</returns>
+        /// <remarks></remarks>
+        public ProductInfo CreateProductInfo(string Name, string Ver, string VCode, string GCode)
+        {
+            ProductInfo ProdInfo = new ProductInfo();
+            {
+                ProdInfo.Name = Name;
+                ProdInfo.Version = Ver;
+                ProdInfo.VCode = VCode;
+                ProdInfo.GCode = GCode;
+            }
+            return ProdInfo;
+        }
+    }
 }

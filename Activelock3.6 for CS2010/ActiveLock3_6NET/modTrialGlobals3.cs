@@ -11,7 +11,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Runtime.InteropServices;
-using Microsoft.VisualBasic.Compatibility;
+using ActiveLock3_6NET;
 static class modTrial
 {
 	//*   ActiveLock
@@ -214,13 +214,13 @@ static class modTrial
 	private const short FILE_CURRENT = 1;
 
 	private const short FILE_END = 2;
-	private const int FILE_FLAG_WRITE_THROUGH = 0x80000000;
-	private const int FILE_FLAG_OVERLAPPED = 0x40000000;
-	private const int FILE_FLAG_NO_BUFFERING = 0x20000000;
-	private const int FILE_FLAG_RANDOM_ACCESS = 0x10000000;
-	private const int FILE_FLAG_SEQUENTIAL_SCAN = 0x8000000;
-	private const int FILE_FLAG_DELETE_ON_CLOSE = 0x4000000;
-	private const int FILE_FLAG_BACKUP_SEMANTICS = 0x2000000;
+	private const uint FILE_FLAG_WRITE_THROUGH = 0x80000000;
+	private const uint FILE_FLAG_OVERLAPPED = 0x40000000;
+	private const uint FILE_FLAG_NO_BUFFERING = 0x20000000;
+	private const uint FILE_FLAG_RANDOM_ACCESS = 0x10000000;
+	private const uint FILE_FLAG_SEQUENTIAL_SCAN = 0x8000000;
+	private const uint FILE_FLAG_DELETE_ON_CLOSE = 0x4000000;
+	private const uint FILE_FLAG_BACKUP_SEMANTICS = 0x2000000;
 
 	private const int FILE_FLAG_POSIX_SEMANTICS = 0x1000000;
 	[DllImport("user32", EntryPoint = "FindWindowA", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
@@ -277,7 +277,7 @@ static class modTrial
 	}
 
 	public const int GENERIC_WRITE = 0x40000000;
-	public const int GENERIC_READ = 0x80000000;
+	public const uint GENERIC_READ = 0x80000000;
 	public const int GENERIC_EXECUTE = 0x20000000;
 	public const int GENERIC_ALL = 0x10000000;
 	public const short FILE_SHARE_READ = 0x1;
@@ -293,7 +293,7 @@ static class modTrial
 
 	public const short FILE_ATTRIBUTE_COMPRESSED = 0x800;
 
-	public const int EAV = 0xc0000005;
+	public const uint EAV = 0xc0000005;
 	public static string[] ProcessName = new string[257];
 	public static int[] ProcessID = new int[257];
 	public static int retVal;

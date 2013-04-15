@@ -7,7 +7,10 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
  // ERROR: Not supported in C#: OptionDeclaration
+namespace ActiveLock3_6NET
+{
 [System.Runtime.InteropServices.ProgId("ProductLicense_NET.ProductLicense")]
+
 public class ProductLicense
 {
 	//*   ActiveLock
@@ -512,4 +515,5 @@ public class ProductLicense
 		//add License Key at the end
 		strOut = modBase64.Base64_Encode(ref strOut);
 	}
+}
 }

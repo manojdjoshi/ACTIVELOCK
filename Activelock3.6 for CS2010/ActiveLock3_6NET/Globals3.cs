@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Security.Cryptography;
 using System.Text;
 using System.IO;
+using ActiveLock3_6NET;
 
 //Class instancing was changed to public
 [System.Runtime.InteropServices.ProgId("Globals_NET.Globals")]
@@ -97,35 +98,36 @@ public class Globals
 	{
 		AlerrOK = 0,
 		// successful
-		AlerrNoLicense = 0x80040001,
-		// vbObjectError (&H80040000) + 1
-		AlerrLicenseInvalid = 0x80040002,
-		AlerrLicenseExpired = 0x80040003,
-		AlerrLicenseTampered = 0x80040004,
-		AlerrClockChanged = 0x80040005,
-		AlerrWrongIPaddress = 0x80040006,
-		AlerrKeyStoreInvalid = 0x80040010,
-		AlerrFileTampered = 0x80040011,
-		AlerrNotInitialized = 0x80040012,
-		AlerrNotImplemented = 0x80040013,
-		AlerrUserNameTooLong = 0x80040014,
-		AlerrInvalidTrialDays = 0x80040020,
-		AlerrInvalidTrialRuns = 0x80040021,
-		AlerrTrialInvalid = 0x80040022,
-		AlerrTrialDaysExpired = 0x80040023,
-		AlerrTrialRunsExpired = 0x80040024,
-		AlerrNoSoftwareName = 0x80040025,
-		AlerrNoSoftwareVersion = 0x80040026,
-		AlerrRSAError = 0x80040027,
-		AlerrKeyStorePathInvalid = 0x80040028,
-		AlerrCryptoAPIError = 0x80040029,
-		AlerrNoSoftwarePassword = 0x80040030,
-		AlerrUndefinedSpecialFolder = 0x80040031,
-		AlerrDateError = 0x80040032,
-		AlerrInternetConnectionError = 0x80040033,
-		AlerrSoftwarePasswordInvalid = 0x80040034
-
+		
 	}
+   private uint AlerrNoLicense = 0x80040001;
+		// vbObjectError (&H80040000) + 1
+		private uint AlerrLicenseInvalid = 0x80040002;
+		private uint AlerrLicenseExpired = 0x80040003;
+		private uint AlerrLicenseTampered = 0x80040004;
+		private uint AlerrClockChanged = 0x80040005;
+		private uint AlerrWrongIPaddress = 0x80040006;
+		private uint AlerrKeyStoreInvalid = 0x80040010;
+		private uint AlerrFileTampered = 0x80040011;
+		private uint AlerrNotInitialized = 0x80040012;
+		private uint AlerrNotImplemented = 0x80040013;
+		private uint AlerrUserNameTooLong = 0x80040014;
+        private uint AlerrInvalidTrialDays = 0x80040020;
+		private uint AlerrInvalidTrialRuns = 0x80040021;
+		private uint AlerrTrialInvalid = 0x80040022;
+		private uint AlerrTrialDaysExpired = 0x80040023;
+		private uint AlerrTrialRunsExpired = 0x80040024;
+		private uint AlerrNoSoftwareName = 0x80040025;
+		private uint AlerrNoSoftwareVersion = 0x80040026;
+		private uint AlerrRSAError = 0x80040027;
+		private uint AlerrKeyStorePathInvalid = 0x80040028;
+		private uint AlerrCryptoAPIError = 0x80040029;
+		private uint AlerrNoSoftwarePassword = 0x80040030;
+		private uint AlerrUndefinedSpecialFolder = 0x80040031;
+		private uint AlerrDateError = 0x80040032;
+		private uint AlerrInternetConnectionError = 0x80040033;
+		private uint AlerrSoftwarePasswordInvalid = 0x80040034;
+
 	private string strCypherText;
 	private bool bCypherOn;
 	//===============================================================================

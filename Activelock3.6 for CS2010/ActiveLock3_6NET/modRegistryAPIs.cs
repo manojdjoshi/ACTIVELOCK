@@ -78,7 +78,7 @@ static class modRegistry
 	public const int STANDARD_RIGHTS_EXECUTE = (READ_CONTROL);
 	public const int STANDARD_RIGHTS_READ = (READ_CONTROL);
 	public const int STANDARD_RIGHTS_REQUIRED = 0xf0000;
-	public const int SYNCHRONIZE = 0x100000;
+	public const uint SYNCHRONIZE = 0x100000;
 	public const bool KEY_READ = ((STANDARD_RIGHTS_READ | KEY_QUERY_VALUE | KEY_ENUMERATE_SUB_KEYS | KEY_NOTIFY) & (!SYNCHRONIZE));
 	public const short KEY_SET_VALUE = 0x2;
 	public const short KEY_CREATE_SUB_KEY = 0x4;

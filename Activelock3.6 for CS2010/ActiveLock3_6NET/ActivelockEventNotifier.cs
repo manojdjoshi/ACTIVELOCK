@@ -47,57 +47,62 @@ using System.Windows.Forms;
 /// </summary>
 /// <remarks>Class instancing was changed to public</remarks>
  // ERROR: Not supported in C#: OptionDeclaration
-[System.Runtime.InteropServices.ProgId("ActiveLockEventNotifier_NET.ActiveLockEventNotifier")]
-public class ActiveLockEventNotifier
+namespace ActiveLock3_6NET
 {
-	// Started: 21.04.2005
-	// Modified: 03.23.2006
-	//===============================================================================
-	//
-	// @author activelock-admins
-	// @version 3.3.0
-	// @date 03.23.2006
-	//
-	// (Optional) Product License Property Value validation event allows the client application
-	// to return the encrypted version of a license property value (such as LastRunDate).
-	// <p>An example, of when <code>ValidateValue</code> event would be used,
-	// can be observed for the <code>LastRunDate</code> property.
-	// For readability, this property is saved in the KeyStore in plain-text format. However, to prevent hackers from
-	// changing this value, an accompanying Hash Code for this value, <code>Hash1</code>, is also stored. This Hash Code
-	// is an MD5 hash of the (possibly) encrypted value of <code>LastRunDate</code>.  The encrypted value is
-	// is user application specific, and is obtained from the user application via the <code>ValidateValue</code> event.
-	// The client will receive this event, encrypt <code>Value</code> using its own encryption algorithm,
-	// and store the result back in <code>Value</code> to be returned to ActiveLock.
-	// <p>Handling of this event is OPTIONAL.  If not handled, it simply means there will be no encryption for
-	// the stored property values.
-	//
-	// @param Value  Property value.
-	/// <summary>
-	/// <para>(Optional) Product License Property Value validation event allows the client application to return the encrypted version of a license property value (such as LastRunDate).</para>
-	/// <para></para>
-	/// </summary>
-	/// <param name="Value"></param>
-	/// <remarks></remarks>
-	public event ValidateValueEventHandler ValidateValue;
-	public delegate void ValidateValueEventHandler(ref string Value);
+    [System.Runtime.InteropServices.ProgId("ActiveLockEventNotifier_NET.ActiveLockEventNotifier")]
+    public class ActiveLockEventNotifier
+    {
+        // Started: 21.04.2005
+        // Modified: 03.23.2006
+        //===============================================================================
+        //
+        // @author activelock-admins
+        // @version 3.3.0
+        // @date 03.23.2006
+        //
+        // (Optional) Product License Property Value validation event allows the client application
+        // to return the encrypted version of a license property value (such as LastRunDate).
+        // <p>An example, of when <code>ValidateValue</code> event would be used,
+        // can be observed for the <code>LastRunDate</code> property.
+        // For readability, this property is saved in the KeyStore in plain-text format. However, to prevent hackers from
+        // changing this value, an accompanying Hash Code for this value, <code>Hash1</code>, is also stored. This Hash Code
+        // is an MD5 hash of the (possibly) encrypted value of <code>LastRunDate</code>.  The encrypted value is
+        // is user application specific, and is obtained from the user application via the <code>ValidateValue</code> event.
+        // The client will receive this event, encrypt <code>Value</code> using its own encryption algorithm,
+        // and store the result back in <code>Value</code> to be returned to ActiveLock.
+        // <p>Handling of this event is OPTIONAL.  If not handled, it simply means there will be no encryption for
+        // the stored property values.
+        //
+        // @param Value  Property value.
+        /// <summary>
+        /// <para>(Optional) Product License Property Value validation event allows the client application to return the encrypted version of a license property value (such as LastRunDate).</para>
+        /// <para></para>
+        /// </summary>
+        /// <param name="Value"></param>
+        /// <remarks></remarks>
+        public event ValidateValueEventHandler ValidateValue;
+        public delegate void ValidateValueEventHandler(ref string Value);
 
-	//ParamArray Args was changed from ByRef to ByVal, and made Args a string
-	/// <summary>
-	/// Handles ActiveLock COM event notifications to the interested observers
-	/// </summary>
-	/// <param name="EventName">String - Event name</param>
-	/// <param name="Args">Variant - Parametric array arguments</param>
-	/// <remarks></remarks>
-	internal void Notify(string EventName, ref string Args)
-	{
-		string Result = null;
-		if (EventName == "ValidateValue") {
-			Result = Args;
-			if (ValidateValue != null) {
-				ValidateValue(Result);
-			}
-			Args = Result;
-			// assign value back to the result
-		}
-	}
+        //ParamArray Args was changed from ByRef to ByVal, and made Args a string
+        /// <summary>
+        /// Handles ActiveLock COM event notifications to the interested observers
+        /// </summary>
+        /// <param name="EventName">String - Event name</param>
+        /// <param name="Args">Variant - Parametric array arguments</param>
+        /// <remarks></remarks>
+        internal void Notify(string EventName, ref string Args)
+        {
+            string Result = null;
+            if (EventName == "ValidateValue")
+            {
+                Result = Args;
+                if (ValidateValue != null)
+                {
+                    ValidateValue(Result);
+                }
+                Args = Result;
+                // assign value back to the result
+            }
+        }
+    }
 }

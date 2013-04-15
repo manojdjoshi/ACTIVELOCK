@@ -6,6 +6,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
+using ActiveLock3_6NET;
 
 #region "Copyright"
 //*   ActiveLock
@@ -54,7 +55,7 @@ public interface _IALUGenerator
 	ProductInfo RetrieveProduct(string name, string Ver);
 	ProductInfo[] RetrieveProducts();
 	void DeleteProduct(string name, string Ver);
-	string GenKey(ref ActiveLock3_6NET.ActiveLock Lic, string InstCode, [System.Runtime.InteropServices.OptionalAttribute, System.Runtime.InteropServices.DefaultParameterValueAttribute("0")]  // ERROR: Optional parameters aren't supported in C#
+	string _AcitveLock3_6Net.GenKey(ref ActiveLock3_6NET.ActiveLock Lic, string InstCode, [System.Runtime.InteropServices.OptionalAttribute, System.Runtime.InteropServices.DefaultParameterValueAttribute("0")]  // ERROR: Optional parameters aren't supported in C#
 string RegisteredLevel);
 }
 
