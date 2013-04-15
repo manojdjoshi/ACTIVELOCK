@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Security.Cryptography;
 using System.Text;
+using ActiveLock3_6NET;
 internal class INIGenerator : _IALUGenerator
 {
 	//*   ActiveLock
@@ -54,7 +55,7 @@ internal class INIGenerator : _IALUGenerator
 	// @date 03.24.2006
 
 	private _IActiveLock MyActiveLock;
-	private ActiveLock3_6NET.INIFile MyIniFile = new ActiveLock3_6NET.INIFile();
+    private ActiveLock3_6NET.INIFile MyIniFile = new ActiveLock3_6NET.INIFile();
 	//===============================================================================
 	// Name: Property Get ActiveLockInterface
 	// Input: None

@@ -162,8 +162,8 @@ static class modHardware
 	//***** SMART DECLARATIONS *****
 
 	//HDD firmware serial number
-	private const int GENERIC_READ = 0x80000000;
-	private const int GENERIC_WRITE = 0x40000000;
+	private const uint GENERIC_READ = 0x80000000;
+	private const uint GENERIC_WRITE = 0x40000000;
 	private const short FILE_SHARE_READ = 0x1;
 	private const short FILE_SHARE_WRITE = 0x2;
 	private const short OPEN_EXISTING = 3;

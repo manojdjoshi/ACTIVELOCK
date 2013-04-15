@@ -8,6 +8,7 @@ using System.Drawing;
 using System.Windows.Forms;
  // ERROR: Not supported in C#: OptionDeclaration
 using System.IO;
+using ActiveLock3_6NET;
 
 #region "Copyright"
 //*   ActiveLock

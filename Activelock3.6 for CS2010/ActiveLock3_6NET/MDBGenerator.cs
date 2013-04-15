@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Data.OleDb;
 using System.Security.Cryptography;
 using System.Text;
+using ActiveLock3_6NET;
 
 internal class MDBGenerator : _IALUGenerator
 {

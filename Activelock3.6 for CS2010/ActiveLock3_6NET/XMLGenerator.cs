@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Security.Cryptography;
 using System.Text;
+using ActiveLock3_6NET;
 
 internal class XMLGenerator : _IALUGenerator
 {

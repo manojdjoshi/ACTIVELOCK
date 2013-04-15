@@ -150,13 +150,13 @@ static class modActiveLock
 	/// ?Not Documented!
 	/// </summary>
 	/// <remarks></remarks>
-	public const int MAGICNUMBER_YES = 0xefcdab89;
+	public const uint MAGICNUMBER_YES = 0xefcdab89;
 	/// <summary>
 	/// ?Not Documented!
 	/// </summary>
 	/// <remarks></remarks>
 
-	public const int MAGICNUMBER_NO = 0x98badcfe;
+	public const uint MAGICNUMBER_NO = 0x98badcfe;
 	/// <summary>
 	/// ?Not Documented!
 	/// </summary>
@@ -434,7 +434,7 @@ static class modActiveLock
 	/// information, call GetLastError.
 	/// </summary>
 	/// <remarks></remarks>
-	private const int TIME_ZONE_ID_INVALID = 0xffffffff;
+	private const uint TIME_ZONE_ID_INVALID = 0xffffffff;
 	/// <summary>
 	/// The system is operating in the range covered by the DaylightDate member of the
 	/// TIME_ZONE_INFORMATION structure.
